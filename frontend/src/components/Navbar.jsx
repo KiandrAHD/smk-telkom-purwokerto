@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import useScrollPosition from '../hooks/useScrollPosition';
 
 const navLinks = [
-  { name: 'Tentang', href: '#tentang' },
+  { name: 'Tentang', href: '/tentang', isRoute: true },
   { name: 'Jurusan', href: '#jurusan' },
   { name: 'Prestasi', href: '#prestasi' },
   { name: 'BKK', href: '#bkk' },
-  { name: 'Berita', href: '#berita' },
-  { name: 'Pengumuman', href: '#pengumuman' },
 ];
 
 const menuVariants = {
@@ -36,12 +35,14 @@ const itemVariants = {
 
 export default function Navbar() {
   const { isScrolled } = useScrollPosition();
+  const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navLinks.map((link) => link.href.slice(1));
+      const hashLinks = navLinks.filter((link) => !link.isRoute);
+      const sections = hashLinks.map((link) => link.href.slice(1));
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section);
         if (element) {
@@ -90,8 +91,8 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <a
-            href="#"
+          <Link
+            to="/"
             className="flex items-center gap-3 group"
           >
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
@@ -107,30 +108,51 @@ export default function Navbar() {
                 Purwokerto
               </p>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  activeSection === link.href
-                    ? 'text-primary'
-                    : 'text-dark-600 hover:text-dark-900'
-                }`}
-              >
-                {link.name}
-                {activeSection === link.href && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute bottom-0 left-3 right-3 h-0.5 bg-primary rounded-full"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </a>
+              link.isRoute ? (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    location.pathname === link.href
+                      ? 'text-primary'
+                      : 'text-dark-600 hover:text-dark-900'
+                  }`}
+                >
+                  {link.name}
+                  {location.pathname === link.href && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute bottom-0 left-3 right-3 h-0.5 bg-primary rounded-full"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    activeSection === link.href
+                      ? 'text-primary'
+                      : 'text-dark-600 hover:text-dark-900'
+                  }`}
+                >
+                  {link.name}
+                  {activeSection === link.href && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute bottom-0 left-3 right-3 h-0.5 bg-primary rounded-full"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </a>
+              )
             ))}
           </div>
 
@@ -142,7 +164,7 @@ export default function Navbar() {
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-full hover:bg-primary-800 transition-all duration-300 shadow-soft hover:shadow-lg hover:scale-105 active:scale-95"
             >
               Masuk PPDB
-              <ChevronDown className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
@@ -184,23 +206,46 @@ export default function Navbar() {
                 <div className="flex-1 overflow-y-auto py-6 px-4">
                   <div className="space-y-1">
                     {navLinks.map((link, i) => (
-                      <motion.a
-                        key={link.name}
-                        href={link.href}
-                        onClick={(e) => handleNavClick(e, link.href)}
-                        custom={i}
-                        variants={itemVariants}
-                        initial="closed"
-                        animate="open"
-                        exit="closed"
-                        className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
-                          activeSection === link.href
-                            ? 'bg-primary-50 text-primary'
-                            : 'text-dark-700 hover:bg-dark-50 hover:text-dark-900'
-                        }`}
-                      >
-                        {link.name}
-                      </motion.a>
+                      link.isRoute ? (
+                        <motion.div
+                          key={link.name}
+                          custom={i}
+                          variants={itemVariants}
+                          initial="closed"
+                          animate="open"
+                          exit="closed"
+                        >
+                          <Link
+                            to={link.href}
+                            onClick={() => setIsMobileOpen(false)}
+                            className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
+                              location.pathname === link.href
+                                ? 'bg-primary-50 text-primary'
+                                : 'text-dark-700 hover:bg-dark-50 hover:text-dark-900'
+                            }`}
+                          >
+                            {link.name}
+                          </Link>
+                        </motion.div>
+                      ) : (
+                        <motion.a
+                          key={link.name}
+                          href={link.href}
+                          onClick={(e) => handleNavClick(e, link.href)}
+                          custom={i}
+                          variants={itemVariants}
+                          initial="closed"
+                          animate="open"
+                          exit="closed"
+                          className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ${
+                            activeSection === link.href
+                              ? 'bg-primary-50 text-primary'
+                              : 'text-dark-700 hover:bg-dark-50 hover:text-dark-900'
+                          }`}
+                        >
+                          {link.name}
+                        </motion.a>
+                      )
                     ))}
                   </div>
 
@@ -211,7 +256,7 @@ export default function Navbar() {
                       className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-primary text-white text-base font-semibold rounded-full hover:bg-primary-800 transition-all duration-300 shadow-soft"
                     >
                       Masuk PPDB
-                      <ChevronDown className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4" />
                     </a>
                   </div>
                 </div>
