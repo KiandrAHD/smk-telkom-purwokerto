@@ -1,127 +1,107 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Mail, Quote } from 'lucide-react';
-import { kepalaSekolah, guruData } from '../../data/dummyData';
+import { useState } from 'react';
+import { ArrowRight, Quote } from 'lucide-react';
+import watermark from '../../assets/landing/watermark-logo.png';
+import { guruData, kepalaSekolah } from '../../data/dummyData';
 
-const LinkedInIcon = ({ className }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-  </svg>
-);
+const PER_PAGE = 4;
 
 const TentangKepalaSekolahSection = () => {
+  const [expanded, setExpanded] = useState(false);
+  const [page, setPage] = useState(0);
+
+  const pages = Math.ceil(guruData.length / PER_PAGE);
+  const shown = guruData.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+
   return (
-    <section className="py-16 lg:py-20 bg-dark-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left - Kepala Sekolah */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="font-heading text-2xl lg:text-3xl font-bold text-dark-900 mb-8">
-              Kepala Sekolah
-            </h2>
+    <section className="relative overflow-hidden bg-white py-8 lg:py-12">
+      <img
+        src={watermark}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-10 top-16 hidden w-28 select-none opacity-40 lg:block"
+      />
+      <img
+        src={watermark}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-10 bottom-10 hidden w-32 select-none opacity-40 lg:block"
+      />
 
-            <div className="bg-white rounded-2xl border border-dark-100 p-6 lg:p-8 shadow-soft">
-              {/* Quote */}
-              <div className="mb-6">
-                <Quote className="w-10 h-10 text-primary/20 mb-3" />
-                <p className="text-dark-600 text-sm lg:text-base leading-relaxed italic">
-                  {kepalaSekolah.quote}
-                </p>
-              </div>
+      <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[38%_1fr] lg:px-8">
+        {/* Kepala Sekolah */}
+        <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
+          <h2 className="font-heading text-base font-extrabold text-primary">Kepala Sekolah</h2>
+          <div className="mt-4 flex gap-4">
+            <img
+              src={kepalaSekolah.image}
+              alt={kepalaSekolah.name}
+              className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-cover object-top"
+            />
+            <div className="min-w-0">
+              <Quote className="h-4 w-4 text-primary" fill="currentColor" />
+              <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600">
+                {expanded ? kepalaSekolah.quoteFull : kepalaSekolah.quote}
+              </p>
+              <p className="mt-2 text-[10px] font-bold text-primary">{kepalaSekolah.name}</p>
+              <p className="text-[9px] text-dark-500">{kepalaSekolah.title}</p>
 
-              {/* Profile */}
-              <div className="flex items-center gap-4 mb-6">
-                <img
-                  src={kepalaSekolah.image}
-                  alt={kepalaSekolah.name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-primary/20"
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                aria-expanded={expanded}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-dark-200 px-3 py-1.5 text-[10px] font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
+              >
+                {expanded ? 'Tutup Sambutan' : kepalaSekolah.ctaText}
+                <ArrowRight
+                  className={`h-3 w-3 transition-transform ${expanded ? 'rotate-90' : ''}`}
                 />
-                <div>
-                  <p className="font-heading font-bold text-dark-900 text-sm">
-                    {kepalaSekolah.name}
-                  </p>
-                  <p className="text-dark-400 text-xs">{kepalaSekolah.title}</p>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Guru & Tenaga Pendidik */}
+        <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
+          <h2 className="font-heading text-base font-extrabold text-primary">
+            Guru &amp; Tenaga Pendidik
+          </h2>
+
+          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {shown.map((guru, i) => (
+              <article key={`${page}-${guru.category}`} className="overflow-hidden rounded-xl">
+                <div className="flex h-28 items-end justify-center overflow-hidden rounded-xl bg-primary">
+                  <img
+                    src={guru.image}
+                    alt={`${guru.title} ${guru.subtitle}`}
+                    className="h-full w-auto object-contain object-bottom"
+                    loading={i < 4 ? 'eager' : 'lazy'}
+                  />
                 </div>
-              </div>
+                <h3 className="mt-2 font-heading text-[11px] font-bold leading-snug text-primary">
+                  {guru.title}
+                  <br />
+                  {guru.subtitle}
+                </h3>
+                <p className="mt-0.5 text-[9px] text-dark-500">{guru.category}</p>
+              </article>
+            ))}
+          </div>
 
-              <a
-                href="#"
-                className="group inline-flex items-center gap-2 text-primary font-semibold text-sm hover:text-primary-800 transition-colors"
-              >
-                {kepalaSekolah.ctaText}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Right - Guru & Tenaga Pendidik */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="font-heading text-2xl lg:text-3xl font-bold text-dark-900">
-                Guru & Tenaga Pendidik
-              </h2>
-              <a
-                href="#"
-                className="group inline-flex items-center gap-1 text-primary font-semibold text-sm hover:text-primary-800 transition-colors"
-              >
-                Lihat Semua
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {guruData.map((guru, i) => (
-                <motion.div
-                  key={guru.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="bg-white rounded-2xl border border-dark-100 overflow-hidden shadow-soft hover:shadow-card transition-all duration-300 group"
-                >
-                  {/* Photo */}
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img
-                      src={guru.image}
-                      alt={guru.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-4">
-                    <p className="font-heading font-bold text-dark-900 text-sm truncate">
-                      {guru.name}
-                    </p>
-                    <p className="text-dark-400 text-xs mb-3 truncate">{guru.position}</p>
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={guru.linkedin}
-                        className="w-7 h-7 bg-dark-50 rounded-lg flex items-center justify-center text-dark-400 hover:bg-primary hover:text-white transition-all duration-200"
-                      >
-                        <LinkedInIcon className="w-3.5 h-3.5" />
-                      </a>
-                      <a
-                        href={`mailto:${guru.email}`}
-                        className="w-7 h-7 bg-dark-50 rounded-lg flex items-center justify-center text-dark-400 hover:bg-primary hover:text-white transition-all duration-200"
-                      >
-                        <Mail className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          {/* Indikator carousel — berfungsi */}
+          <div className="mt-5 flex items-center justify-center gap-2">
+            {Array.from({ length: pages }).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setPage(i)}
+                aria-label={`Halaman guru ${i + 1}`}
+                aria-current={i === page}
+                className={`h-2 rounded-full transition-all ${
+                  i === page ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

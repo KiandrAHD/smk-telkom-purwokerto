@@ -1,53 +1,55 @@
-import { motion } from 'framer-motion';
-import { Code, Network, Camera, Monitor } from 'lucide-react';
-import SectionHeading from './SectionHeading';
+import { ArrowRight } from 'lucide-react';
 import DepartmentCard from './DepartmentCard';
+import watermark from '../assets/landing/watermark-logo.png';
+import { jurusanData } from '../data/dummyData';
 
-const departments = [
-  {
-    icon: Code,
-    name: 'Rekayasa Perangkat Lunak',
-    description: 'Belajar pengembangan aplikasi web, mobile, dan desktop. Menguasai berbagai bahasa pemrograman dan framework terkini.',
-  },
-  {
-    icon: Network,
-    name: 'Teknik Komputer & Jaringan',
-    description: 'Mendalami jaringan komputer, administrasi server, keamanan jaringan, dan infrastruktur TI.',
-  },
-  {
-    icon: Camera,
-    name: 'Multimedia',
-    description: 'Kreatif dalam desain grafis, animasi, video editing, fotografi, dan produksi konten digital.',
-  },
-  {
-    icon: Monitor,
-    name: 'Sistem Informasi',
-    description: 'Mengelola database, sistem informasi perusahaan, dan analisis data untuk kebutuhan bisnis.',
-  },
-];
+const DepartmentsSection = () => (
+  <section id="jurusan" className="relative overflow-hidden bg-white py-8 lg:py-12">
+    {/* Watermark logo dekoratif */}
+    <img
+      src={watermark}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute -left-10 top-24 hidden w-28 select-none opacity-40 lg:block"
+    />
+    <img
+      src={watermark}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute -right-8 top-6 hidden w-24 select-none opacity-40 lg:block"
+    />
+    <img
+      src={watermark}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute -right-12 bottom-4 hidden w-32 select-none opacity-40 lg:block"
+    />
 
-export default function DepartmentsSection() {
-  return (
-    <section id="jurusan" className="relative py-24 lg:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Program Keahlian"
-          title="Pilih JurusanImpianmu"
-          description="Empat jurusan unggulan berbasis Teknologi Informasi dan Komunikasi yang siap membentuk karir masa depanmu."
-        />
+    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p className="text-center text-xs font-bold text-primary">
+        {jurusanData.eyebrow}
+      </p>
+      <h2 className="mt-2 text-center font-heading text-2xl sm:text-3xl font-extrabold text-dark-900">
+        {jurusanData.title}
+      </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {departments.map((dept, i) => (
-            <DepartmentCard
-              key={dept.name}
-              icon={dept.icon}
-              name={dept.name}
-              description={dept.description}
-              index={i}
-            />
-          ))}
-        </div>
+      <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {jurusanData.items.map((item) => (
+          <DepartmentCard key={item.name} {...item} />
+        ))}
       </div>
-    </section>
-  );
-}
+
+      <div className="mt-7 flex justify-center">
+        <a
+          href="#jurusan"
+          className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
+        >
+          {jurusanData.ctaText}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </a>
+      </div>
+    </div>
+  </section>
+);
+
+export default DepartmentsSection;

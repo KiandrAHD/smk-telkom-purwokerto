@@ -1,46 +1,39 @@
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Code2, Gamepad2, Network, RadioTower } from 'lucide-react';
 
-export default function DepartmentCard({ icon: Icon, name, description, image, index = 0 }) {
+const icons = {
+  code: Code2,
+  gamepad: Gamepad2,
+  network: Network,
+  tower: RadioTower,
+};
+
+const DepartmentCard = ({ icon, name, desc, image, href }) => {
+  const Icon = icons[icon];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
-      className="group bg-white rounded-2xl overflow-hidden border border-dark-100 hover:border-primary-100 transition-all duration-300 hover:shadow-card"
-    >
-      {/* Image */}
-      <div className="relative h-48 bg-gradient-to-br from-primary-100 to-dark-100 overflow-hidden">
-        {image ? (
-          <img src={image} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Icon className="w-16 h-16 text-primary-300" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card">
+      <div className="relative">
+        <img src={image} alt={name} className="w-full aspect-[2/1] object-cover" />
+        <span className="absolute -bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-md">
+          <Icon className="h-4 w-4 text-white" />
+        </span>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 -mt-10 relative z-10 border-4 border-white">
-          <Icon className="w-6 h-6 text-primary" />
-        </div>
-        <h3 className="font-heading text-xl font-bold text-dark-900 mb-2 group-hover:text-primary transition-colors">
+      <div className="flex flex-1 flex-col px-4 pb-3 pt-7">
+        <h3 className="font-heading text-[13px] font-bold leading-snug text-dark-900">
           {name}
         </h3>
-        <p className="text-dark-500 text-sm leading-relaxed mb-4 line-clamp-3">
-          {description}
-        </p>
+        <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{desc}</p>
         <a
-          href="#"
-          className="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all"
+          href={href}
+          className="mt-3 inline-flex items-center justify-between gap-2 text-[10px] font-bold text-primary hover:underline"
         >
           Selengkapnya
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="h-3.5 w-3.5" />
         </a>
       </div>
-    </motion.div>
+    </article>
   );
-}
+};
+
+export default DepartmentCard;

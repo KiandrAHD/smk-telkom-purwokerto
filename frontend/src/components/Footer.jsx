@@ -1,173 +1,102 @@
-import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, ChevronRight } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import Logo from './Logo';
+import { footerData } from '../data/dummyData';
 
-const footerLinks = [
-  {
-    title: 'Navigasi',
-    links: [
-      { name: 'Tentang', href: '#tentang' },
-      { name: 'Jurusan', href: '#jurusan' },
-      { name: 'Prestasi', href: '#prestasi' },
-      { name: 'BKK', href: '#bkk' },
-      { name: 'Berita', href: '#berita' },
-      { name: 'PPDB', href: '#ppdb' },
-    ],
-  },
-  {
-    title: 'Program',
-    links: [
-      { name: 'RPL', href: '#' },
-      { name: 'TKJ', href: '#' },
-      { name: 'Multimedia', href: '#' },
-      { name: 'Sistem Informasi', href: '#' },
-    ],
-  },
-  {
-    title: 'Layanan',
-    links: [
-      { name: 'STELA AI', href: '#stela' },
-      { name: 'BKK', href: '#bkk' },
-      { name: 'Perpustakaan', href: '#' },
-      { name: 'E-Learning', href: '#' },
-    ],
-  },
-];
+const socialIcons = {
+  instagram: FaInstagram,
+  youtube: FaYoutube,
+  facebook: FaFacebookF,
+  tiktok: FaTiktok,
+};
 
-const socialLinks = [
-  { name: 'Instagram', href: '#', icon: '📸' },
-  { name: 'YouTube', href: '#', icon: '▶️' },
-  { name: 'Facebook', href: '#', icon: '📘' },
-  { name: 'TikTok', href: '#', icon: '🎵' },
-];
+const LinkColumn = ({ title, links }) => (
+  <div>
+    <h3 className="font-heading text-xs font-bold text-dark-900">{title}</h3>
+    <ul className="mt-3 space-y-2">
+      {links.map((link) => (
+        <li key={link.label}>
+          <Link
+            to={link.href}
+            className="text-[11px] text-dark-500 transition-colors hover:text-primary"
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 
-export default function Footer() {
-  return (
-    <footer className="relative bg-dark-950 border-t border-dark-800">
-      {/* Top decorative gradient line */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary-500 to-primary" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
-            {/* Brand Column */}
-            <div className="lg:col-span-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-heading font-bold text-lg">SMK</span>
-                </div>
-                <div>
-                  <p className="font-heading font-bold text-lg text-white">SMK Telkom</p>
-                  <p className="text-gray-400 text-sm">Purwokerto</p>
-                </div>
-              </div>
-              <p className="text-gray-400 leading-relaxed mb-6 max-w-sm">
-                SMK Telkom Purwokerto adalah sekolah menengah kejuruan berbasis
-                Teknologi Informasi dan Komunikasi yang telah berdiri sejak tahun 2000.
-              </p>
-
-              {/* Social Links */}
-              <div className="flex items-center gap-3">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    className="w-10 h-10 bg-dark-800 hover:bg-primary rounded-xl flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300 group"
-                    aria-label={social.name}
-                  >
-                    <span className="text-sm group-hover:scale-110 transition-transform">
-                      {social.icon}
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Links Columns */}
-            {footerLinks.map((column) => (
-              <div key={column.title} className="lg:col-span-2">
-                <h3 className="font-heading font-bold text-white text-sm mb-4 uppercase tracking-wider">
-                  {column.title}
-                </h3>
-                <ul className="space-y-3">
-                  {column.links.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="text-gray-400 hover:text-primary transition-colors duration-200 text-sm flex items-center gap-1 group"
-                      >
-                        <ChevronRight className="w-3 h-3 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-
-            {/* Contact & Map Column */}
-            <div className="lg:col-span-4">
-              <h3 className="font-heading font-bold text-white text-sm mb-4 uppercase tracking-wider">
-                Kontak & Lokasi
-              </h3>
-
-              <div className="space-y-4 mb-6">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-gray-300 text-sm font-medium">Alamat</p>
-                    <p className="text-gray-400 text-sm">
-                      Jl. DI Panjaitan No. 127, Purwokerto, Jawa Tengah
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-gray-300 text-sm font-medium">Telepon</p>
-                    <p className="text-gray-400 text-sm">(0281) 123456</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-gray-300 text-sm font-medium">Email</p>
-                    <p className="text-gray-400 text-sm">info@smktelkom-pwt.sch.id</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Maps Placeholder */}
-              <div className="rounded-xl overflow-hidden border border-dark-800">
-                <div className="aspect-[16/9] bg-dark-800 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <p className="text-gray-400 text-xs">Google Maps</p>
-                    <p className="text-gray-500 text-xs mt-1">SMK Telkom Purwokerto</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+const Footer = () => (
+  <footer className="bg-white py-7 lg:py-9">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
+        {/* Brand */}
+        <div className="col-span-2 lg:col-span-1">
+          <div className="flex items-center gap-3">
+            <Logo className="h-11 w-11" />
+            <span className="font-heading text-base font-extrabold leading-[1.15] text-dark-900">
+              SMK Telkom
+              <br />
+              Purwokerto
+            </span>
+          </div>
+          <p className="mt-3 max-w-xs text-[11px] leading-relaxed text-dark-500">
+            {footerData.tagline}
+          </p>
+          <div className="mt-4 flex items-center gap-3">
+            {footerData.socials.map((social) => {
+              const Icon = socialIcons[social.icon];
+              return (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  aria-label={social.name}
+                  className="text-dark-500 transition-colors hover:text-primary"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              );
+            })}
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="py-6 border-t border-dark-800">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-sm text-center sm:text-left">
-              &copy; {new Date().getFullYear()} SMK Telkom Purwokerto. All rights reserved.
-            </p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="text-gray-500 hover:text-gray-300 text-sm transition-colors">
-                Kebijakan Privasi
-              </a>
-              <a href="#" className="text-gray-500 hover:text-gray-300 text-sm transition-colors">
-                Syarat & Ketentuan
-              </a>
-            </div>
-          </div>
+        <LinkColumn title="Menu" links={footerData.menu} />
+        <LinkColumn title="Informasi" links={footerData.informasi} />
+
+        {/* Kontak */}
+        <div>
+          <h3 className="font-heading text-xs font-bold text-dark-900">Kontak</h3>
+          <ul className="mt-3 space-y-2 text-[11px] text-dark-500">
+            <li className="flex items-start gap-2">
+              <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
+              {footerData.kontak.address}
+            </li>
+            <li className="flex items-start gap-2">
+              <Phone className="mt-0.5 h-3 w-3 flex-shrink-0" />
+              {footerData.kontak.phone}
+            </li>
+            <li className="flex items-start gap-2">
+              <Mail className="mt-0.5 h-3 w-3 flex-shrink-0" />
+              {footerData.kontak.email}
+            </li>
+          </ul>
+        </div>
+
+        {/* Peta lokasi */}
+        <div className="col-span-2 lg:col-span-1">
+          <img
+            src={footerData.map}
+            alt="Peta lokasi SMK Telkom Purwokerto"
+            loading="lazy"
+            className="w-full rounded-xl border border-dark-100 object-cover"
+          />
         </div>
       </div>
-    </footer>
-  );
-}
+    </div>
+  </footer>
+);
+
+export default Footer;

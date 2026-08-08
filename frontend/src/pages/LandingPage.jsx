@@ -1,30 +1,29 @@
 import MainLayout from '../layouts/MainLayout';
 import HeroSection from '../components/HeroSection';
-import FeatureSection from '../components/FeatureSection';
 import AboutSection from '../components/AboutSection';
+import RibbonDivider from '../components/RibbonDivider';
 import DepartmentsSection from '../components/DepartmentsSection';
 import PartnersSection from '../components/PartnersSection';
 import AchievementsSection from '../components/AchievementsSection';
 import StelaAISection from '../components/StelaAISection';
 import CTASection from '../components/CTASection';
 
-export default function LandingPage() {
-  return (
-    <MainLayout>
-      <HeroSection />
-      <FeatureSection />
-      <AboutSection />
-      <DepartmentsSection />
-      <PartnersSection />
-      <AchievementsSection />
-      <StelaAISection />
-      <CTASection />
+const LandingPage = () => (
+  <MainLayout>
+    <HeroSection />
+    <AboutSection />
+    <RibbonDivider />
+    <DepartmentsSection />
+    <PartnersSection />
+    <AchievementsSection />
+    <StelaAISection />
+    <CTASection />
 
-      {/* Section anchors for navbar links */}
-      <div id="ppdb" className="relative -top-20" />
-      <div id="bkk" className="relative -top-20" />
-      <div id="berita" className="relative -top-20" />
-      <div id="pengumuman" className="relative -top-20" />
-    </MainLayout>
-  );
-}
+    {/* Target anchor untuk link navbar */}
+    <div id="bkk" />
+    <div id="berita" />
+    <div id="pengumuman" />
+  </MainLayout>
+);
+
+export default LandingPage;
