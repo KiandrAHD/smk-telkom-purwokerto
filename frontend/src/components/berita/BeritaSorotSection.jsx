@@ -1,0 +1,80 @@
+import { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { beritaSorot } from '../../data/dummyData';
+
+const BeritaSorotSection = () => {
+  const [active, setActive] = useState(0);
+  const featured = beritaSorot.items[active];
+  const trending = beritaSorot.items
+    .map((item, i) => ({ item, i }))
+    .filter(({ i }) => i !== active)
+    .slice(0, 3);
+
+  return (
+    <section id="berita-sorot" className="bg-white py-8 lg:py-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 items-start gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_38%] lg:px-8">
+        {/* Berita sorotan */}
+        <div className="lg:pl-24">
+          <div className="flex items-center gap-3">
+            <span className="rounded bg-primary-50 px-2.5 py-1 text-[9px] font-bold text-primary">
+              {featured.kategori}
+            </span>
+            <span className="text-[10px] text-dark-500">{featured.date}</span>
+          </div>
+
+          <h2 className="mt-3 max-w-md font-heading text-xl sm:text-2xl font-extrabold leading-snug text-dark-900">
+            {featured.title}
+          </h2>
+          <p className="mt-3 max-w-md text-[11px] leading-relaxed text-dark-500">
+            {featured.desc}
+          </p>
+
+          <a
+            href="#kategori-berita"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+          >
+            {beritaSorot.ctaText}
+          </a>
+        </div>
+
+        {/* Trending — klik untuk menukar berita sorotan di kiri */}
+        <div>
+          <h2 className="font-heading text-lg sm:text-xl font-extrabold text-dark-900">
+            {beritaSorot.trendingTitle}
+          </h2>
+
+          <div className="mt-4 space-y-3">
+            {trending.map(({ item, i }) => (
+              <button
+                key={item.title}
+                type="button"
+                onClick={() => setActive(i)}
+                className="block w-full rounded-xl border border-dark-100 bg-white px-4 py-3 text-left shadow-card transition-all hover:-translate-y-0.5 hover:border-primary"
+              >
+                <span className="inline-block rounded bg-primary-50 px-2 py-0.5 text-[8px] font-bold uppercase text-primary">
+                  {item.kategori}
+                </span>
+                <p className="mt-1.5 font-heading text-[11px] font-bold leading-snug text-dark-900">
+                  {item.title}
+                </p>
+                <p className="mt-1.5 text-[9px] text-dark-400">{item.date}</p>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-5 flex justify-end">
+            <a
+              href="#kategori-berita"
+              className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+            >
+              {beritaSorot.trendingCta}
+              <ArrowRight className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default BeritaSorotSection;

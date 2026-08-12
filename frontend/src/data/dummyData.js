@@ -48,7 +48,7 @@ export const navLinks = [
   { label: 'Jurusan', href: '/jurusan', isRoute: true },
   { label: 'Prestasi', href: '/prestasi', isRoute: true },
   { label: 'BKK', href: '/bkk', isRoute: true },
-  { label: 'Berita', href: '#berita' },
+  { label: 'Berita', href: '/berita', isRoute: true },
   { label: 'Pengumuman', href: '#pengumuman' },
 ];
 
@@ -826,4 +826,227 @@ export const kisahAlumni = {
   ],
 };
 
+/* =========================================================
+   HALAMAN BERITA
+   ========================================================= */
 
+export const beritaHero = {
+  badge: 'Stay Connected with Stematel',
+  title: 'Berita &\nKegiatan',
+  titleAccent: 'Terbaru',
+  description:
+    'Ikuti semua informasi terkini tentang prestasi, kegiatan, event, dan inovasi di SMK Telkom Purwokerto',
+  ctaText: 'Jelajahi Berita',
+  image: heroJurusan,
+};
+
+export const breakingNews = {
+  label: 'Breking News',
+  linkText: 'Lihat Prestasi',
+  items: [
+    {
+      text: 'SMK Telkom Purwokerto Raih Juara 1 LKS Nasional 2025 Bidang Web Technologies!',
+      date: '20 Mei 2025',
+    },
+    {
+      text: 'Lab AI Center resmi dibuka dan langsung dipakai untuk pembelajaran siswa',
+      date: '17 Mei 2025',
+    },
+    {
+      text: 'Tim Robotika membawa pulang Juara 1 KRI Nasional 2025',
+      date: '11 Mei 2025',
+    },
+  ],
+};
+
+export const beritaSorot = {
+  ctaText: 'Baca Cerita Lengkap',
+  trendingTitle: 'Trending News',
+  trendingCta: 'Lihat Semua Trending',
+  items: [
+    {
+      kategori: 'Prestasi',
+      date: '20 Mei 2025',
+      title: 'Juara 1 LKS Nasional 2025 Bidang Web Technologies',
+      desc: 'Tim RPL SMK Telkom Purwokerto berhasil meraih Juara 1 dalam ajang Lomba Kompetensi Siswa (LKS) Nasional 2025 yang diselenggarakan di Jakarta.',
+    },
+    {
+      kategori: 'Kegiatan',
+      date: '18 Mei 2025',
+      title: 'Workshop AI untuk Siswa Bersama Telkom Indonesia',
+      desc: 'Telkom Indonesia menghadirkan praktisi AI untuk membimbing siswa membangun model pembelajaran mesin sederhana selama dua hari penuh.',
+    },
+    {
+      kategori: 'Sekolah',
+      date: '15 Mei 2025',
+      title: 'Kunjungan Industri ke Huawei Indonesia',
+      desc: 'Siswa kelas XI meninjau langsung pusat riset dan laboratorium jaringan Huawei Indonesia sebagai bagian dari pembelajaran berbasis industri.',
+    },
+    {
+      kategori: 'Prestasi',
+      date: '10 Mei 2025',
+      title: '2 Medali Perak di Ajang World Skills Asia 2025',
+      desc: 'Dua siswa membawa pulang medali perak pada kategori Web Technologies dan Network Systems di ajang World Skills Asia 2025.',
+    },
+  ],
+};
+
+export const kategoriBerita = {
+  title: 'Kategori Berita',
+  searchPlaceholder: 'Cari berita...',
+  ctaText: 'Muat Lebih Banyak Berita',
+  perPage: 4,
+  sortOptions: [
+    { value: 'terbaru', label: 'Terbaru' },
+    { value: 'terlama', label: 'Terlama' },
+  ],
+  chips: [
+    'Semua',
+    'Prestasi',
+    'Sekolah',
+    'PPDB',
+    'BKK',
+    'Jurusan',
+    'Teknologi',
+    'Lomba',
+    'Workshop',
+    'Seminar',
+  ],
+  items: [
+    {
+      kategori: 'Prestasi',
+      title: 'Tim Robotika Raih Juara 1 KRI Nasional 2025',
+      date: '11 Mei 2025',
+      iso: '2025-05-11',
+      author: 'Admin',
+      excerpt:
+        'Prestasi membanggakan kembali diraih oleh siswa SMK Telkom Purwokerto di ajang...',
+      image: prestasi2,
+    },
+    {
+      kategori: 'Teknologi',
+      title: 'Lab AI Center Resmi Dibuka Untuk Siswa',
+      date: '17 Mei 2025',
+      iso: '2025-05-17',
+      author: 'Admin',
+      excerpt:
+        'Fasilitas baru berbasis AI dan Machine Learning resmi digunakan untuk pembelajaran...',
+      image: jurusanRpl,
+    },
+    {
+      kategori: 'Sekolah',
+      title: 'MoU dengan PT Telkom Indonesia',
+      date: '15 Mei 2025',
+      iso: '2025-05-15',
+      author: 'Admin',
+      excerpt:
+        'Kerja sama strategis untuk peningkatan kompetensi siswa dalam bidang teknologi...',
+      image: jurusanTkj,
+    },
+    {
+      kategori: 'Kegiatan',
+      title: 'Outing Class ke Borobudur dan Yogyakarta',
+      date: '13 Mei 2025',
+      iso: '2025-05-13',
+      author: 'Admin',
+      excerpt:
+        'Kegiatan outing class siswa kelas XI ke Borobudur dan Malioboro berjalan seru...',
+      image: prestasi1,
+    },
+    {
+      kategori: 'Workshop',
+      title: 'Workshop UI/UX Bersama Praktisi Industri',
+      date: '09 Mei 2025',
+      iso: '2025-05-09',
+      author: 'Admin',
+      excerpt:
+        'Siswa jurusan RPL belajar merancang antarmuka langsung dari desainer produk...',
+      image: jurusanPg,
+    },
+    {
+      kategori: 'Lomba',
+      title: 'Seleksi Internal Menuju Gemastik 2025',
+      date: '06 Mei 2025',
+      iso: '2025-05-06',
+      author: 'Admin',
+      excerpt:
+        'Puluhan tim bersaing di seleksi internal untuk mewakili sekolah di Gemastik...',
+      image: prestasi3,
+    },
+    {
+      kategori: 'PPDB',
+      title: 'PPDB Gelombang 2 Resmi Dibuka',
+      date: '02 Mei 2025',
+      iso: '2025-05-02',
+      author: 'Admin',
+      excerpt:
+        'Pendaftaran siswa baru gelombang kedua dibuka dengan kuota terbatas untuk...',
+      image: jurusanTjat,
+    },
+    {
+      kategori: 'BKK',
+      title: 'Campus Hiring Bersama Mitra Industri',
+      date: '28 April 2025',
+      iso: '2025-04-28',
+      author: 'Admin',
+      excerpt:
+        'Bursa Kerja Khusus menghadirkan enam perusahaan untuk merekrut alumni...',
+      image: prestasi4,
+    },
+  ],
+};
+
+// CATATAN: di Figma judul kolom event dan kolom newsletter dua-duanya tertulis
+// "Kategori Berita" (hasil salin dari section di atasnya). Ditiru sesuai desain.
+export const agendaEvent = {
+  title: 'Kategori Berita',
+  linkText: 'Lihat Semua',
+  ctaText: 'Lihat Semua Event',
+  items: [
+    {
+      day: '24',
+      month: 'Mei',
+      title: 'Semianar Cyber Security bersama Telkom',
+      venue: 'Aula SMK Telkom Purwokerto',
+      tag: 'Event',
+    },
+    {
+      day: '28',
+      month: 'Mei',
+      title: 'Pelatihan UI/UX Design Untuk Siswa',
+      venue: 'Lab Multimedia',
+      tag: 'Workshop',
+    },
+    {
+      day: '02',
+      month: 'Jun',
+      title: 'Campus Hiring Day Telkom Grup',
+      venue: 'Aula SMK Telkom Purwokerto',
+      tag: 'Career',
+    },
+  ],
+};
+
+export const galeriKegiatan = {
+  title: 'Galeri Kegiatan',
+  linkText: 'Lihat Semua',
+  // ponytail: keempat foto ini pengganti — aset asli belum bisa diunduh dari Figma
+  // (batas panggilan MCP paket Starter). Ganti kalau sudah tersedia.
+  items: [
+    { alt: 'Tim siswa berprestasi', image: prestasi1 },
+    { alt: 'Siswa di ruang kelas', image: jurusanRpl },
+    { alt: 'Praktik jaringan siswa', image: jurusanTkj },
+    { alt: 'Siswa mengerjakan proyek', image: prestasi2 },
+  ],
+};
+
+export const newsletterBerita = {
+  title: 'Kategori Berita',
+  heading: 'Dapatkan Berita Terbaru',
+  description:
+    'Berlangganan newsletter kami untuk mendapatkan update berita dan informasi terbaru.',
+  placeholder: 'Masukan email kamu',
+  ctaText: 'Berlangganan',
+  note: 'Kami tidak akan membagikan email kamu ke pihak lain.',
+  successText: 'Terima kasih! Email kamu sudah terdaftar.',
+};
