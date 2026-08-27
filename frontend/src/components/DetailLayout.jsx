@@ -5,7 +5,7 @@ import MainLayout from '../layouts/MainLayout';
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
 // kategori apa pun: seluruh isinya datang dari objek `item` yang dicari lewat
 // slug di halaman detail masing-masing, jadi tidak ada teks yang dipaku di sini.
-const DetailLayout = ({ item, backTo, backLabel }) => (
+const DetailLayout = ({ item, backTo, backLabel, children }) => (
   <MainLayout>
     <article className="bg-white py-8 lg:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,6 +73,8 @@ const DetailLayout = ({ item, backTo, backLabel }) => (
             ))}
           </dl>
         )}
+
+        {children}
 
         <Link
           to={backTo}

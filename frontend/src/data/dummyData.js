@@ -1001,6 +1001,30 @@ export const jurusanDetail = [
       { label: 'Sertifikasi', value: 'Junior Web Developer BNSP' },
       { label: 'Prospek karier', value: 'Software Engineer, Web Developer, QA Engineer' },
     ],
+    kompetensi: [
+      'Dasar pemrograman, algoritma, dan struktur data',
+      'Pengembangan web sisi tampilan maupun sisi server',
+      'Pembuatan aplikasi mobile lintas perangkat',
+      'Perancangan dan pengelolaan basis data relasional',
+      'Pengujian program dan kerja tim dengan Git',
+    ],
+    kurikulum: [
+      { tingkat: 'Kelas X', fokus: 'Dasar pemrograman, algoritma, logika, dan pengenalan basis data. Semua materi dilatih langsung di depan komputer.' },
+      { tingkat: 'Kelas XI', fokus: 'Pengembangan aplikasi web dan mobile dalam tim kecil, dengan alur kerja Git, code review, dan rilis bertahap.' },
+      { tingkat: 'Kelas XII', fokus: 'Praktik Kerja Lapangan di mitra industri, dilanjutkan proyek akhir berupa aplikasi yang benar-benar dipakai pengguna.' },
+    ],
+    fasilitas: [
+      'Laboratorium RPL dengan komputer spesifikasi pengembangan',
+      'Server praktik untuk menaikkan aplikasi buatan siswa',
+      'Akses kelas daring bersertifikat dari mitra industri',
+      'Ruang kerja tim untuk pengerjaan proyek bersama',
+    ],
+    karier: [
+      { role: 'Software Engineer', desc: 'Membangun dan merawat perangkat lunak di perusahaan teknologi.' },
+      { role: 'Web Developer', desc: 'Mengerjakan situs dan aplikasi web dari sisi tampilan sampai server.' },
+      { role: 'Mobile Developer', desc: 'Mengembangkan aplikasi untuk perangkat Android maupun iOS.' },
+      { role: 'Quality Assurance', desc: 'Menguji perangkat lunak agar bebas cacat sebelum sampai ke pengguna.' },
+    ],
   },
   {
     slug: 'pg',
@@ -1020,6 +1044,30 @@ export const jurusanDetail = [
       { label: 'Alat yang dipakai', value: 'Unity, Blender, Aseprite' },
       { label: 'Sertifikasi', value: 'Game Programmer BNSP' },
       { label: 'Prospek karier', value: 'Game Developer, Technical Artist, Level Designer' },
+    ],
+    kompetensi: [
+      'Prinsip desain game: aturan main, tingkat kesulitan, dan umpan balik',
+      'Pemrograman mekanik permainan di dalam game engine',
+      'Pembuatan aset visual 2D dan 3D',
+      'Animasi karakter serta efek visual dan suara',
+      'Pengujian permainan ke pemain sungguhan dan perbaikannya',
+    ],
+    kurikulum: [
+      { tingkat: 'Kelas X', fokus: 'Dasar pemrograman dan prinsip desain game, termasuk cara menyusun aturan main yang terasa adil dan menantang.' },
+      { tingkat: 'Kelas XI', fokus: 'Produksi penuh: bekerja dengan game engine, membuat aset sendiri, menyusun level, lalu menguji ke pemain.' },
+      { tingkat: 'Kelas XII', fokus: 'Menyiapkan satu judul game utuh sampai siap rilis, lengkap dengan materi publikasi, sambil menjalani PKL.' },
+    ],
+    fasilitas: [
+      'Laboratorium game dengan komputer berkartu grafis khusus',
+      'Pen tablet untuk penggambaran aset digital',
+      'Ruang playtest untuk menguji permainan ke pemain',
+      'Lisensi resmi game engine dan perangkat lunak aset',
+    ],
+    karier: [
+      { role: 'Game Developer', desc: 'Memprogram mekanik dan sistem di dalam sebuah permainan.' },
+      { role: 'Technical Artist', desc: 'Menjembatani kebutuhan seniman dan pemrogram dalam produksi game.' },
+      { role: 'Level Designer', desc: 'Merancang tata letak dan alur tantangan di setiap level.' },
+      { role: 'Game Tester', desc: 'Menemukan cacat dan bagian yang membingungkan sebelum game dirilis.' },
     ],
   },
   {
@@ -1041,6 +1089,30 @@ export const jurusanDetail = [
       { label: 'Sertifikasi', value: 'CCNA dan MTCNA' },
       { label: 'Prospek karier', value: 'Network Engineer, System Administrator, NOC Engineer' },
     ],
+    kompetensi: [
+      'Perakitan perangkat dan pemasangan sistem operasi',
+      'Konfigurasi router, switch, dan perangkat nirkabel',
+      'Perancangan topologi jaringan sesuai kebutuhan',
+      'Administrasi server berbasis Linux',
+      'Keamanan jaringan dan penelusuran gangguan lewat log',
+    ],
+    kurikulum: [
+      { tingkat: 'Kelas X', fokus: 'Perakitan perangkat, sistem operasi, dan dasar jaringan. Praktik memakai perangkat yang dipakai industri, bukan simulator saja.' },
+      { tingkat: 'Kelas XI', fokus: 'Konfigurasi router dan switch, perancangan topologi, serta administrasi server Linux.' },
+      { tingkat: 'Kelas XII', fokus: 'Pendalaman keamanan jaringan dan komputasi awan, dilanjutkan PKL sebagai administrator jaringan pendamping.' },
+    ],
+    fasilitas: [
+      'Laboratorium jaringan dengan perangkat Cisco dan MikroTik',
+      'Rak server untuk praktik administrasi dan virtualisasi',
+      'Perangkat nirkabel dan alat ukur jaringan',
+      'Akses kurikulum resmi dari mitra sertifikasi',
+    ],
+    karier: [
+      { role: 'Network Engineer', desc: 'Merancang dan merawat jaringan agar tetap stabil dan aman.' },
+      { role: 'System Administrator', desc: 'Mengelola server serta layanan yang berjalan di atasnya.' },
+      { role: 'NOC Engineer', desc: 'Memantau jaringan dan menangani gangguan sepanjang waktu.' },
+      { role: 'IT Support', desc: 'Menangani kebutuhan perangkat dan jaringan pengguna di kantor.' },
+    ],
   },
   {
     slug: 'tjat',
@@ -1060,6 +1132,30 @@ export const jurusanDetail = [
       { label: 'Alat yang dipakai', value: 'Fusion splicer, OTDR, power meter' },
       { label: 'Sertifikasi', value: 'Teknisi Fiber Optic BNSP' },
       { label: 'Prospek karier', value: 'Fiber Optic Technician, Access Network Engineer, Field Engineer' },
+    ],
+    kompetensi: [
+      'Dasar telekomunikasi dan karakteristik media transmisi',
+      'Penyambungan kabel fiber optic dengan fusion splicer',
+      'Pengukuran redaman jalur memakai OTDR dan power meter',
+      'Instalasi jaringan akses sampai ke sisi pelanggan',
+      'Penelusuran dan perbaikan gangguan pada jalur fiber',
+    ],
+    kurikulum: [
+      { tingkat: 'Kelas X', fokus: 'Dasar telekomunikasi, karakteristik media transmisi, dan cara kerja jaringan akses secara menyeluruh.' },
+      { tingkat: 'Kelas XI', fokus: 'Praktik inti: splicing, pengukuran redaman, dan penelusuran gangguan. Ketelitian di tahap ini menentukan kualitas layanan.' },
+      { tingkat: 'Kelas XII', fokus: 'Proyek simulasi jaringan akses menyeluruh dan PKL langsung di penyedia layanan telekomunikasi.' },
+    ],
+    fasilitas: [
+      'Fusion splicer untuk praktik penyambungan fiber',
+      'OTDR dan power meter untuk pengukuran jalur',
+      'Tiang dan jalur praktik instalasi di area sekolah',
+      'Laboratorium simulasi jaringan FTTH',
+    ],
+    karier: [
+      { role: 'Fiber Optic Technician', desc: 'Memasang dan menyambung jalur fiber optic di lapangan.' },
+      { role: 'Access Network Engineer', desc: 'Merancang jaringan akses yang menghubungkan pelanggan ke jaringan inti.' },
+      { role: 'Field Engineer', desc: 'Menangani pemasangan dan perbaikan perangkat di lokasi pelanggan.' },
+      { role: 'Survey Technician', desc: 'Memetakan jalur dan menghitung kebutuhan material sebelum pemasangan.' },
     ],
   },
 ];
