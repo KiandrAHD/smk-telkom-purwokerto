@@ -1,4 +1,5 @@
 import { Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import bg from '../../assets/landing/partners-bg.png';
 import { mitraIndustri, videoHighlight } from '../../data/dummyData';
 
@@ -37,8 +38,8 @@ const PrestasiDukunganSection = () => (
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
           {videoHighlight.title}
         </h2>
-        <button
-          type="button"
+        <Link
+          to="/galeri"
           className="mt-6 flex w-full items-center gap-4 rounded-xl border border-dark-100 bg-white px-5 py-4 text-left shadow-card transition-colors hover:border-primary"
         >
           <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary">
@@ -52,7 +53,7 @@ const PrestasiDukunganSection = () => (
               {videoHighlight.videoDesc}
             </span>
           </span>
-        </button>
+        </Link>
       </div>
     </div>
   </section>

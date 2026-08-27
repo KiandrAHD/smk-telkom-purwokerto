@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Bot, CheckCircle2, RotateCcw } from 'lucide-react';
-import { jurusanQuiz } from '../../data/dummyData';
+import { Link } from 'react-router-dom';
+import { jurusanData, jurusanQuiz } from '../../data/dummyData';
 
 // Rekomendasi = jurusan dengan skor tertinggi dari opsi yang dipilih.
 const recommend = (picked) => {
@@ -23,6 +24,10 @@ const JurusanQuizSection = () => {
 
   const key = recommend(picked);
   const result = key ? jurusanQuiz.results[key] : null;
+  // Tujuan tombol hasil diambil dari kartu jurusan yang namanya cocok, jadi
+  // rekomendasi selalu mendarat di halaman detail jurusan yang benar.
+  const cocok = jurusanData.items.find((item) => item.name === result?.name);
+  const resultHref = cocok ? `/jurusan/${cocok.slug}` : '/jurusan';
 
   return (
     <section id="quiz-jurusan" className="bg-white py-8 lg:py-12">
@@ -92,18 +97,18 @@ const JurusanQuizSection = () => {
                 </h3>
                 <p className="mt-1 text-[9px] text-dark-500">{jurusanQuiz.resultNote}</p>
                 <div className="mt-3 flex items-center gap-2">
-                  <a
-                    href="#daftar-jurusan"
+                  <Link
+                    to={resultHref}
                     className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
                   >
                     {result.cta}
                     <ArrowRight className="h-2.5 w-2.5" />
-                  </a>
+                  </Link>
                   <button
                     type="button"
                     onClick={() => setPicked([])}
                     aria-label={jurusanQuiz.resetText}
-                    className="text-dark-400 transition-colors hover:text-primary"
+                    className="relative text-dark-400 transition-colors before:absolute before:-inset-2 before:content-[''] hover:text-primary"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
                   </button>

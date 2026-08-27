@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import stelaCard from '../../assets/landing/stela-card.jpg';
 import { jurusanFaq, stelaData } from '../../data/dummyData';
 
@@ -54,17 +55,17 @@ const JurusanFaqSection = () => {
             })}
           </div>
 
-          <a
-            href="#faq-jurusan"
+          <Link
+            to="/jurusan/faq"
             className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
           >
             {jurusanFaq.ctaText}
             <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </div>
 
         {/* Kartu STELA — potongan kiri dari aset kartu penuh, sesuai crop di Figma */}
-        <div className="relative overflow-hidden rounded-2xl">
+        <Link to="/stela" className="relative block overflow-hidden rounded-2xl">
           <img
             src={stelaCard}
             alt=""
@@ -74,7 +75,7 @@ const JurusanFaqSection = () => {
           <span className="sr-only">
             {stelaData.title.replace('\n', ' ')}. {stelaData.description}
           </span>
-        </div>
+        </Link>
       </div>
     </section>
   );

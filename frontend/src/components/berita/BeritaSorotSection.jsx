@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { beritaSorot } from '../../data/dummyData';
 
 const BeritaSorotSection = () => {
@@ -29,12 +30,12 @@ const BeritaSorotSection = () => {
             {featured.desc}
           </p>
 
-          <a
-            href="#kategori-berita"
+          <Link
+            to={`/berita/${featured.slug}`}
             className="mt-6 inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
           >
             {beritaSorot.ctaText}
-          </a>
+          </Link>
         </div>
 
         {/* Trending — klik untuk menukar berita sorotan di kiri */}
@@ -63,13 +64,13 @@ const BeritaSorotSection = () => {
           </div>
 
           <div className="mt-5 flex justify-end">
-            <a
-              href="#kategori-berita"
+            <Link
+              to="/berita/trending"
               className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
               {beritaSorot.trendingCta}
               <ArrowRight className="h-3 w-3" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

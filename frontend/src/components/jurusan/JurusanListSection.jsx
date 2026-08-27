@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Code2, Gamepad2, Network, RadioTower } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { jurusanData, jurusanTags } from '../../data/dummyData';
 
 const icons = { code: Code2, gamepad: Gamepad2, network: Network, tower: RadioTower };
@@ -57,13 +58,13 @@ const JurusanListSection = () => {
                     ))}
                   </div>
 
-                  <a
-                    href={item.href}
+                  <Link
+                    to={`/jurusan/${item.slug}`}
                     className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold text-primary hover:underline"
                   >
                     Selengkapnya
                     <ArrowRight className="h-3 w-3" />
-                  </a>
+                  </Link>
                 </div>
               </article>
             );

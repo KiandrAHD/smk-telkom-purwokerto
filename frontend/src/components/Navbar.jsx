@@ -8,8 +8,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const isActive = (link) =>
-    link.isRoute ? location.pathname === link.href : false;
+  const isActive = (link) => location.pathname === link.href;
 
   const linkClass = (link) =>
     `relative py-1.5 text-sm font-medium transition-colors ${
@@ -37,28 +36,22 @@ const Navbar = () => {
 
           {/* Desktop menu */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) =>
-              link.isRoute ? (
-                <Link key={link.label} to={link.href} className={linkClass(link)}>
-                  {link.label}
-                  {activeBar(link)}
-                </Link>
-              ) : (
-                <a key={link.label} href={link.href} className={linkClass(link)}>
-                  {link.label}
-                </a>
-              )
-            )}
+            {navLinks.map((link) => (
+              <Link key={link.label} to={link.href} className={linkClass(link)}>
+                {link.label}
+                {activeBar(link)}
+              </Link>
+            ))}
           </div>
 
           {/* Desktop CTA */}
-          <a
-            href="#ppdb"
+          <Link
+            to="/ppdb"
             className="hidden lg:inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
           >
             Masuk PPDB
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </Link>
 
           {/* Mobile toggle */}
           <button
@@ -75,35 +68,24 @@ const Navbar = () => {
         {isMobileOpen && (
           <div className="lg:hidden border-t border-dark-100 py-4">
             <div className="flex flex-col gap-1">
-              {navLinks.map((link) =>
-                link.isRoute ? (
-                  <Link
-                    key={link.label}
-                    to={link.href}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
-                  >
-                    {link.label}
-                  </Link>
-                ) : (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
-                  >
-                    {link.label}
-                  </a>
-                )
-              )}
-              <a
-                href="#ppdb"
+              {navLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  onClick={() => setIsMobileOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                to="/ppdb"
                 onClick={() => setIsMobileOpen(false)}
                 className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white"
               >
                 Masuk PPDB
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </div>
         )}

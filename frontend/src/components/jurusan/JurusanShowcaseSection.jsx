@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { projectShowcase } from '../../data/dummyData';
+import { slugify } from '../../utils/slug';
 
 const JurusanShowcaseSection = () => {
   const items = projectShowcase.items;
@@ -39,9 +41,10 @@ const JurusanShowcaseSection = () => {
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {ordered.map((item) => (
-              <article
+              <Link
                 key={item.tag}
-                className="overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
+                to={`/jurusan/project/${slugify(item.title)}`}
+                className="block overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
               >
                 <div className="relative">
                   <img
@@ -58,7 +61,7 @@ const JurusanShowcaseSection = () => {
                 <h3 className="whitespace-pre-line px-4 py-3 font-heading text-xs font-bold leading-snug text-dark-900">
                   {item.title}
                 </h3>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -71,7 +74,7 @@ const JurusanShowcaseSection = () => {
               onClick={() => setStart(i)}
               aria-label={`Mulai dari project ${item.tag}`}
               aria-current={i === start}
-              className={`h-2 rounded-full transition-all ${
+              className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${
                 i === start ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'
               }`}
             />

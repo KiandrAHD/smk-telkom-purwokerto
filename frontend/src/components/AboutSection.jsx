@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { landingAbout } from '../data/dummyData';
 
 const AboutSection = () => (
@@ -5,8 +6,8 @@ const AboutSection = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-[38%_1fr] items-center gap-8 lg:gap-12">
         {/* Video sekolah — tombol play sudah menyatu di aset Figma */}
-        <button
-          type="button"
+        <Link
+          to="/galeri"
           aria-label="Putar video profil sekolah"
           className="block overflow-hidden rounded-2xl transition-transform hover:scale-[1.01]"
         >
@@ -15,7 +16,7 @@ const AboutSection = () => (
             alt="Gedung SMK Telkom Purwokerto"
             className="w-full aspect-[16/9] object-cover"
           />
-        </button>
+        </Link>
 
         {/* Teks + badge */}
         <div>
@@ -42,12 +43,12 @@ const AboutSection = () => (
             ))}
           </div>
 
-          <a
-            href="/tentang"
+          <Link
+            to="/tentang"
             className="mt-5 inline-flex items-center rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
           >
             {landingAbout.ctaText}
-          </a>
+          </Link>
         </div>
       </div>
     </div>

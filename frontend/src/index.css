@@ -49,6 +49,30 @@ body {
   overflow-x: hidden;
 }
 
+/* Umpan balik interaksi untuk SEMUA elemen yang bisa dipencet — satu aturan di
+   layer base, bukan diulang di ratusan className. Sengaja memakai filter, bukan
+   transform, supaya tidak menimpa utility transform yang sudah dipakai kartu
+   (hover:-translate-y-1, -scale-x-100). */
+@layer base {
+  button:not(:disabled),
+  summary,
+  [role='button'],
+  a[href] {
+    cursor: pointer;
+  }
+
+  button:not(:disabled):active,
+  [role='button']:active,
+  a[href]:active {
+    filter: brightness(0.92);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

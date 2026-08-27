@@ -1,4 +1,4 @@
-import AchievementCard from './AchievementCard';
+import PrestasiCarousel from './PrestasiCarousel';
 import watermark from '../assets/landing/watermark-logo.png';
 import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
@@ -44,22 +44,9 @@ const AchievementsSection = () => (
         />
       </div>
 
-      {/* Kartu prestasi */}
-      <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {prestasiData.items.map((item, i) => (
-          <AchievementCard key={item.title} {...item} highlight={i === 0} />
-        ))}
-      </div>
+      {/* Kartu prestasi — carousel horizontal, dot ada di dalamnya */}
+      <PrestasiCarousel />
 
-      {/* Indikator carousel */}
-      <div className="mt-6 flex items-center justify-center gap-2">
-        {prestasiData.items.map((item, i) => (
-          <span
-            key={item.title}
-            className={`h-2 w-2 rounded-full ${i === 0 ? 'bg-primary' : 'bg-dark-200'}`}
-          />
-        ))}
-      </div>
     </div>
   </section>
 );

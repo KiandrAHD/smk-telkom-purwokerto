@@ -1,4 +1,5 @@
 import { ArrowRight, Code2, Gamepad2, Network, RadioTower } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const icons = {
   code: Code2,
@@ -7,7 +8,7 @@ const icons = {
   tower: RadioTower,
 };
 
-const DepartmentCard = ({ icon, name, desc, image, href }) => {
+const DepartmentCard = ({ icon, name, desc, image, slug }) => {
   const Icon = icons[icon];
 
   return (
@@ -24,13 +25,13 @@ const DepartmentCard = ({ icon, name, desc, image, href }) => {
           {name}
         </h3>
         <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{desc}</p>
-        <a
-          href={href}
+        <Link
+          to={`/jurusan/${slug}`}
           className="mt-3 inline-flex items-center justify-between gap-2 text-[10px] font-bold text-primary hover:underline"
         >
           Selengkapnya
           <ArrowRight className="h-3.5 w-3.5" />
-        </a>
+        </Link>
       </div>
     </article>
   );

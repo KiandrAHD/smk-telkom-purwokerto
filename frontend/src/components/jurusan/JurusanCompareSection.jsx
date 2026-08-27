@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ArrowRight, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { jurusanCompare } from '../../data/dummyData';
 
 const Stars = ({ score }) => (
@@ -89,12 +90,12 @@ const JurusanCompareSection = () => {
         </div>
 
         <div className="mt-6 flex justify-center">
-          <a
-            href="#daftar-jurusan"
+          <Link
+            to="/jurusan/perbandingan"
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-6 py-2.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
           >
             {jurusanCompare.ctaText}
-          </a>
+          </Link>
         </div>
       </div>
     </section>

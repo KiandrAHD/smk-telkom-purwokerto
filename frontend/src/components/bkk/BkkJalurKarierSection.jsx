@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Award, BookOpen, Briefcase, Building2, Kanban, Lightbulb } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { jalurKarier } from '../../data/dummyData';
 
 const icons = [BookOpen, Kanban, Building2, Briefcase, Lightbulb, Award];
@@ -65,13 +66,13 @@ const BkkJalurKarierSection = () => {
           </ol>
 
           <div className="mt-8 flex justify-center">
-            <a
-              href="#jalur-karier"
+            <Link
+              to={`/bkk/roadmap/${tab.toLowerCase()}`}
               className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
               {jalurKarier.ctaText}
               <ArrowRight className="h-3 w-3" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

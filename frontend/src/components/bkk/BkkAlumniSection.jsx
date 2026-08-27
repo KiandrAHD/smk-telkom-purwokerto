@@ -1,5 +1,7 @@
 import { ArrowRight, GraduationCap, Lightbulb } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { kisahAlumni } from '../../data/dummyData';
+import { slugify } from '../../utils/slug';
 
 const BkkAlumniSection = () => (
   <section className="bg-white py-8 lg:py-12">
@@ -37,26 +39,26 @@ const BkkAlumniSection = () => (
         <ul className="space-y-4">
           {kisahAlumni.resources.map((item) => (
             <li key={item}>
-              <a
-                href="#lowongan"
+              <Link
+                to={`/bkk/panduan/${slugify(item)}`}
                 className="group flex items-center gap-2.5 text-[10px] text-dark-600 transition-colors hover:text-primary"
               >
                 <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-primary/30">
                   <Lightbulb className="h-3.5 w-3.5 text-primary" />
                 </span>
                 {item}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a
-          href="#lowongan"
+        <Link
+          to="/bkk/panduan"
           aria-label="Lihat semua sumber daya karier"
           className="mt-auto flex items-center justify-end rounded-lg border border-primary/40 px-4 py-2 text-primary transition-colors hover:bg-primary hover:text-white"
         >
           <ArrowRight className="h-3.5 w-3.5" />
-        </a>
+        </Link>
       </div>
     </div>
   </section>

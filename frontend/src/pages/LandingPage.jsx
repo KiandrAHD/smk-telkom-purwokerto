@@ -18,11 +18,6 @@ const LandingPage = () => (
     <AchievementsSection />
     <StelaAISection />
     <CTASection />
-
-    {/* Target anchor untuk link navbar */}
-    <div id="bkk" />
-    <div id="berita" />
-    <div id="pengumuman" />
   </MainLayout>
 );
 

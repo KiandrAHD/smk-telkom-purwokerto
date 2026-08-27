@@ -43,20 +43,20 @@ const HeroSection = () => (
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <a
-                href={landingHero.primaryCta.href}
+              <Link
+                to={landingHero.primaryCta.href}
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
               >
                 {landingHero.primaryCta.label}
                 <ArrowRight className="w-4 h-4" />
-              </a>
-              <a
-                href={landingHero.secondaryCta.href}
+              </Link>
+              <Link
+                to={landingHero.secondaryCta.href}
                 className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
               >
                 {landingHero.secondaryCta.label}
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -87,13 +87,13 @@ const HeroSection = () => (
                     <p className="mt-1 text-[10px] leading-snug text-dark-500">
                       {item.desc}
                     </p>
-                    <a
-                      href={item.href}
+                    <Link
+                      to={item.href}
                       className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-primary hover:underline"
                     >
                       {item.linkLabel}
                       <ArrowRight className="h-3 w-3" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               );

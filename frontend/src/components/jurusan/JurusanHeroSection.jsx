@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { jurusanHero, jurusanStats } from '../../data/dummyData';
 
 const JurusanHeroSection = () => (
@@ -24,13 +25,13 @@ const JurusanHeroSection = () => (
               {jurusanHero.description}
             </p>
 
-            <a
-              href="#daftar-jurusan"
+            <Link
+              to="/ppdb"
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
             >
               {jurusanHero.ctaText}
               <ArrowRight className="h-4 w-4" />
-            </a>
+            </Link>
           </div>
 
           {/* Foto siswa + cuplikan kode + maskot (satu aset dari Figma) */}

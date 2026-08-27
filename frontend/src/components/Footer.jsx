@@ -53,8 +53,10 @@ const Footer = () => (
                 <a
                   key={social.name}
                   href={social.href}
-                  aria-label={social.name}
-                  className="text-dark-500 transition-colors hover:text-primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${social.name} SMK Telkom Purwokerto`}
+                  className="relative text-dark-500 transition-colors hover:text-primary before:absolute before:-inset-2 before:content-['']"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -74,25 +76,45 @@ const Footer = () => (
               <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
               {footerData.kontak.address}
             </li>
-            <li className="flex items-start gap-2">
-              <Phone className="mt-0.5 h-3 w-3 flex-shrink-0" />
-              {footerData.kontak.phone}
+            <li>
+              <a
+                href={`tel:${footerData.kontak.phone.replace(/[^+\d]/g, '')}`}
+                className="flex items-start gap-2 transition-colors hover:text-primary"
+              >
+                <Phone className="mt-0.5 h-3 w-3 flex-shrink-0" />
+                {footerData.kontak.phone}
+              </a>
             </li>
-            <li className="flex items-start gap-2">
-              <Mail className="mt-0.5 h-3 w-3 flex-shrink-0" />
-              {footerData.kontak.email}
+            <li>
+              <a
+                href={`mailto:${footerData.kontak.email}`}
+                className="flex items-start gap-2 transition-colors hover:text-primary"
+              >
+                <Mail className="mt-0.5 h-3 w-3 flex-shrink-0" />
+                {footerData.kontak.email}
+              </a>
             </li>
           </ul>
         </div>
 
         {/* Peta lokasi */}
         <div className="col-span-2 lg:col-span-1">
-          <img
-            src={footerData.map}
-            alt="Peta lokasi SMK Telkom Purwokerto"
-            loading="lazy"
-            className="w-full rounded-xl border border-dark-100 object-cover"
-          />
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+              footerData.kontak.address
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buka lokasi SMK Telkom Purwokerto di Google Maps"
+            className="block overflow-hidden rounded-xl transition-transform hover:scale-[1.01]"
+          >
+            <img
+              src={footerData.map}
+              alt="Peta lokasi SMK Telkom Purwokerto"
+              loading="lazy"
+              className="w-full rounded-xl border border-dark-100 object-cover"
+            />
+          </a>
         </div>
       </div>
     </div>

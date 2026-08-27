@@ -1,15 +1,21 @@
-import { useState } from 'react';
-import { ArrowRight, Mail } from 'lucide-react';
-import { agendaEvent, galeriKegiatan, newsletterBerita } from '../../data/dummyData';
+import { useState } from "react";
+import { Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  agendaEvent,
+  galeriKegiatan,
+  newsletterBerita,
+} from "../../data/dummyData";
+import { slugify } from "../../utils/slug";
 
 const BeritaAgendaSection = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
   const submit = (e) => {
     e.preventDefault();
     setSent(true);
-    setEmail('');
+    setEmail("");
   };
 
   return (
@@ -21,42 +27,49 @@ const BeritaAgendaSection = () => {
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
               {agendaEvent.title}
             </h2>
-            <a href="#kategori-berita" className="text-[10px] font-bold text-primary hover:underline">
+            <Link
+              to="/berita/agenda"
+              className="text-[10px] font-bold text-primary hover:underline"
+            >
               {agendaEvent.linkText}
-            </a>
+            </Link>
           </div>
 
           <ul className="mt-4 space-y-3">
             {agendaEvent.items.map((ev) => (
-              <li
-                key={ev.title}
-                className="flex items-center gap-3 rounded-xl border border-dark-100 px-3 py-2.5 transition-colors hover:border-primary"
-              >
-                <span className="flex w-9 flex-shrink-0 flex-col items-center">
-                  <span className="font-heading text-base font-extrabold leading-none text-primary">
-                    {ev.day}
+              <li key={ev.title}>
+                <Link
+                  to={`/berita/agenda/${slugify(ev.title)}`}
+                  className="flex items-center gap-3 rounded-xl border border-dark-100 px-3 py-2.5 transition-colors hover:border-primary"
+                >
+                  <span className="flex w-9 flex-shrink-0 flex-col items-center">
+                    <span className="font-heading text-base font-extrabold leading-none text-primary">
+                      {ev.day}
+                    </span>
+                    <span className="text-[8px] text-primary">{ev.month}</span>
                   </span>
-                  <span className="text-[8px] text-primary">{ev.month}</span>
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block font-heading text-[10px] font-bold leading-snug text-dark-900">
-                    {ev.title}
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-heading text-[10px] font-bold leading-snug text-dark-900">
+                      {ev.title}
+                    </span>
+                    <span className="block text-[8px] text-dark-400">
+                      {ev.venue}
+                    </span>
                   </span>
-                  <span className="block text-[8px] text-dark-400">{ev.venue}</span>
-                </span>
-                <span className="flex-shrink-0 rounded bg-primary-50 px-2 py-1 text-[8px] font-bold text-primary">
-                  {ev.tag}
-                </span>
+                  <span className="flex-shrink-0 rounded bg-primary-50 px-2 py-1 text-[8px] font-bold text-primary">
+                    {ev.tag}
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
 
-          <a
-            href="#kategori-berita"
+          <Link
+            to="/berita/agenda"
             className="mt-4 inline-block text-[10px] font-bold text-primary hover:underline"
           >
             {agendaEvent.ctaText}
-          </a>
+          </Link>
         </div>
 
         {/* Galeri kegiatan */}
@@ -65,20 +78,28 @@ const BeritaAgendaSection = () => {
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
               {galeriKegiatan.title}
             </h2>
-            <a href="#kategori-berita" className="text-[10px] font-bold text-primary hover:underline">
+            <Link
+              to="/galeri"
+              className="text-[10px] font-bold text-primary hover:underline"
+            >
               {galeriKegiatan.linkText}
-            </a>
+            </Link>
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-3">
             {galeriKegiatan.items.map((g) => (
-              <img
+              <Link
                 key={g.alt}
-                src={g.image}
-                alt={g.alt}
-                loading="lazy"
-                className="aspect-[4/3] w-full rounded-lg object-cover transition-transform hover:scale-[1.03]"
-              />
+                to={`/galeri/${slugify(g.alt)}`}
+                className="block overflow-hidden rounded-lg"
+              >
+                <img
+                  src={g.image}
+                  alt={g.alt}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full rounded-lg object-cover transition-transform hover:scale-[1.03]"
+                />
+              </Link>
             ))}
           </div>
         </div>
@@ -122,9 +143,14 @@ const BeritaAgendaSection = () => {
             </button>
           </form>
 
-          <p aria-live="polite" className="mt-3 text-[8px] leading-relaxed text-dark-400">
+          <p
+            aria-live="polite"
+            className="mt-3 text-[8px] leading-relaxed text-dark-400"
+          >
             {sent ? (
-              <span className="font-semibold text-primary">{newsletterBerita.successText}</span>
+              <span className="font-semibold text-primary">
+                {newsletterBerita.successText}
+              </span>
             ) : (
               newsletterBerita.note
             )}

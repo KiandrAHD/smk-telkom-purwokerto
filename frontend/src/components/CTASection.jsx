@@ -1,4 +1,5 @@
 import { ArrowRight, GraduationCap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { ctaBanner } from '../data/dummyData';
 
 const CTASection = () => (
@@ -19,13 +20,13 @@ const CTASection = () => (
           </div>
         </div>
 
-        <a
-          href={ctaBanner.href}
+        <Link
+          to={ctaBanner.href}
           className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold text-primary transition-colors hover:bg-primary-50"
         >
           {ctaBanner.ctaText}
           <ArrowRight className="h-4 w-4" />
-        </a>
+        </Link>
       </div>
     </div>
   </section>

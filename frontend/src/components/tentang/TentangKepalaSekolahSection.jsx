@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Quote } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { slugify } from '../../utils/slug';
 import watermark from '../../assets/landing/watermark-logo.png';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
 
@@ -68,22 +70,28 @@ const TentangKepalaSekolahSection = () => {
 
           <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {shown.map((guru, i) => (
-              <article key={`${page}-${guru.category}`} className="overflow-hidden rounded-xl">
-                <div className="flex h-28 items-end justify-center overflow-hidden rounded-xl bg-primary">
-                  <img
-                    src={guru.image}
-                    alt={`${guru.title} ${guru.subtitle}`}
-                    className="h-full w-auto object-contain object-bottom"
-                    loading={i < 4 ? 'eager' : 'lazy'}
-                  />
-                </div>
-                <h3 className="mt-2 font-heading text-[11px] font-bold leading-snug text-primary">
-                  {guru.title}
-                  <br />
-                  {guru.subtitle}
-                </h3>
-                <p className="mt-0.5 text-[9px] text-dark-500">{guru.category}</p>
-              </article>
+              <Link
+                key={`${page}-${guru.category}`}
+                to={`/tentang/guru/${slugify(guru.category)}`}
+                className="block overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
+              >
+                <article>
+                  <div className="flex h-28 items-end justify-center overflow-hidden rounded-xl bg-primary">
+                    <img
+                      src={guru.image}
+                      alt={`${guru.title} ${guru.subtitle}`}
+                      className="h-full w-auto object-contain object-bottom"
+                      loading={i < 4 ? 'eager' : 'lazy'}
+                    />
+                  </div>
+                  <h3 className="mt-2 font-heading text-[11px] font-bold leading-snug text-primary">
+                    {guru.title}
+                    <br />
+                    {guru.subtitle}
+                  </h3>
+                  <p className="mt-0.5 text-[9px] text-dark-500">{guru.category}</p>
+                </article>
+              </Link>
             ))}
           </div>
 
@@ -96,7 +104,7 @@ const TentangKepalaSekolahSection = () => {
                 onClick={() => setPage(i)}
                 aria-label={`Halaman guru ${i + 1}`}
                 aria-current={i === page}
-                className={`h-2 rounded-full transition-all ${
+                className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${
                   i === page ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'
                 }`}
               />

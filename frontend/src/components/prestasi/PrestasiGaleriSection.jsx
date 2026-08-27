@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { galeriPrestasi } from '../../data/dummyData';
 
 const PrestasiGaleriSection = () => {
@@ -57,8 +58,9 @@ const PrestasiGaleriSection = () => {
         {shown.length > 0 ? (
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {shown.map((item) => (
-              <article
+              <Link
                 key={item.title}
+                to={`/prestasi/${item.slug}`}
                 className="flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
               >
                 <div className="relative">
@@ -81,7 +83,7 @@ const PrestasiGaleriSection = () => {
                     <ArrowRight className="h-3 w-3 flex-shrink-0 text-primary" />
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         ) : (
@@ -91,13 +93,13 @@ const PrestasiGaleriSection = () => {
         )}
 
         <div className="mt-7 flex justify-center">
-          <a
-            href="#galeri-prestasi"
+          <Link
+            to="/prestasi/galeri"
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-5 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
           >
             {galeriPrestasi.ctaText}
             <ArrowRight className="h-3 w-3" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

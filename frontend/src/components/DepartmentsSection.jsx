@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import DepartmentCard from './DepartmentCard';
 import watermark from '../assets/landing/watermark-logo.png';
 import { jurusanData } from '../data/dummyData';
@@ -40,13 +41,13 @@ const DepartmentsSection = () => (
       </div>
 
       <div className="mt-7 flex justify-center">
-        <a
-          href="#jurusan"
+        <Link
+          to="/jurusan"
           className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
         >
           {jurusanData.ctaText}
           <ArrowRight className="h-3.5 w-3.5" />
-        </a>
+        </Link>
       </div>
     </div>
   </section>

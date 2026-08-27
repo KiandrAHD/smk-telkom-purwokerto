@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { prestasiUnggulan } from '../../data/dummyData';
 
 const PrestasiUnggulanSection = () => {
@@ -28,13 +29,13 @@ const PrestasiUnggulanSection = () => {
             <p className="mt-3 max-w-sm text-[10px] leading-relaxed text-dark-500">
               {featured.desc}
             </p>
-            <a
-              href="#galeri-prestasi"
+            <Link
+              to={`/prestasi/${featured.slug}`}
               className="mt-5 inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
               {prestasiUnggulan.ctaText}
               <ArrowRight className="h-3 w-3" />
-            </a>
+            </Link>
           </div>
 
           {/* Daftar prestasi lain — klik untuk menukar yang tampil di kiri */}

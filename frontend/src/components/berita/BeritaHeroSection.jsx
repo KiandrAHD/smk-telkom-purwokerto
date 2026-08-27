@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Megaphone } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { beritaHero, breakingNews } from '../../data/dummyData';
 
 const BeritaHeroSection = () => {
@@ -68,13 +69,13 @@ const BeritaHeroSection = () => {
             <span className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
             <p className="min-w-0 flex-1 text-[11px] font-semibold text-dark-800">{item.text}</p>
             <span className="text-[10px] text-dark-500">{item.date}</span>
-            <a
-              href="#berita-sorot"
+            <Link
+              to={`/berita/${item.slug}`}
               className="inline-flex items-center gap-1 text-[10px] font-bold text-primary hover:underline"
             >
               {breakingNews.linkText}
               <ArrowRight className="h-3 w-3" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

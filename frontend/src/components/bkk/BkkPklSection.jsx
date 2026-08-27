@@ -1,5 +1,7 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { pklData } from '../../data/dummyData';
+import { slugify } from '../../utils/slug';
 
 const BkkPklSection = () => (
   <section id="pkl" className="bg-white py-8 lg:py-12">
@@ -22,13 +24,13 @@ const BkkPklSection = () => (
               <p className="text-[9px] text-dark-500">{pkl.location}</p>
               <p className="mt-3 text-[10px] font-bold text-primary">{pkl.kuota}</p>
               <p className="mt-0.5 text-[9px] text-primary">{pkl.kota}</p>
-              <a
-                href="#pkl"
+              <Link
+                to={`/bkk/pkl/${slugify(`${pkl.role} ${pkl.company}`)}`}
                 className="mt-3.5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dark-200 px-2.5 py-1.5 text-[8px] font-bold text-dark-500 transition-colors hover:border-primary hover:text-primary"
               >
                 {pklData.ctaText}
                 <ArrowRight className="h-2 w-2" />
-              </a>
+              </Link>
             </article>
           ))}
         </div>
@@ -45,13 +47,13 @@ const BkkPklSection = () => (
           aria-hidden="true"
           className="mt-4 h-28 w-28 rounded-full object-cover"
         />
-        <a
-          href="#stela"
+        <Link
+          to="/stela"
           className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
         >
           {pklData.stela.ctaText}
           <ArrowRight className="h-3.5 w-3.5" />
-        </a>
+        </Link>
       </div>
     </div>
   </section>

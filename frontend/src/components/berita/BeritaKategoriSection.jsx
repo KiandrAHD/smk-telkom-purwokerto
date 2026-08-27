@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { kategoriBerita } from '../../data/dummyData';
 
 const BeritaKategoriSection = () => {
@@ -112,12 +113,12 @@ const BeritaKategoriSection = () => {
                     {n.date} &nbsp;·&nbsp; {n.author}
                   </p>
                   <p className="mt-1.5 text-[9px] leading-relaxed text-dark-500">{n.excerpt}</p>
-                  <a
-                    href="#berita-sorot"
+                  <Link
+                    to={`/berita/${n.slug}`}
                     className="mt-auto pt-3 text-[10px] font-bold text-primary hover:underline"
                   >
                     Baca Selengkapnya
-                  </a>
+                  </Link>
                 </div>
               </article>
             ))}
@@ -135,7 +136,7 @@ const BeritaKategoriSection = () => {
             onClick={() => setShownCount(kategoriBerita.perPage)}
             disabled={shownCount <= kategoriBerita.perPage}
             aria-label="Kembali ke berita awal"
-            className="text-primary transition-opacity disabled:opacity-30"
+            className="relative text-primary transition-opacity before:absolute before:-inset-2 before:content-[''] disabled:opacity-30"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -154,7 +155,7 @@ const BeritaKategoriSection = () => {
             onClick={() => setShownCount((c) => c + kategoriBerita.perPage)}
             disabled={!hasMore}
             aria-label="Berita berikutnya"
-            className="text-primary transition-opacity disabled:opacity-30"
+            className="relative text-primary transition-opacity before:absolute before:-inset-2 before:content-[''] disabled:opacity-30"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

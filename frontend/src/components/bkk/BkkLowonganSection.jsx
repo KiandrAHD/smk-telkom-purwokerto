@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { bkkSearch, lowonganPopuler } from '../../data/dummyData';
+import { slugify } from '../../utils/slug';
 
 const Select = ({ label, value, onChange, options }) => (
   <label className="min-w-0 flex-1">
@@ -142,13 +144,13 @@ const BkkLowonganSection = () => {
 
                 <p className="mt-3 text-[11px] font-bold text-primary">{job.salary}</p>
 
-                <a
-                  href="#lowongan"
+                <Link
+                  to={`/bkk/lowongan/${slugify(`${job.role} ${job.company}`)}`}
                   className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dark-200 px-3 py-2 text-[9px] font-bold text-dark-600 transition-colors hover:border-primary hover:text-primary"
                 >
                   {lowonganPopuler.ctaText}
                   <ArrowRight className="h-2.5 w-2.5" />
-                </a>
+                </Link>
               </article>
             ))}
           </div>

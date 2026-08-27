@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import stelaCard from '../assets/landing/stela-card.jpg';
 import { stelaData } from '../data/dummyData';
 
@@ -28,13 +29,13 @@ const StelaAISection = () => (
 
         {/* sm+ : tombol menimpa kartu sesuai koordinat Figma (x 233/1533, y 372/483).
             mobile: kartu terlalu pendek untuk ditimpa, jadi tombol turun ke bawah gambar. */}
-        <a
-          href="#stela"
+        <Link
+          to="/stela"
           className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white shadow-sm transition-colors sm:absolute sm:left-[5.5%] sm:top-[77%] sm:mt-0 sm:bg-white sm:px-5 sm:py-2.5 sm:text-primary sm:hover:bg-primary-50 lg:px-6 lg:py-3"
         >
           {stelaData.ctaText}
           <ArrowRight className="h-4 w-4" />
-        </a>
+        </Link>
       </div>
     </div>
   </section>
