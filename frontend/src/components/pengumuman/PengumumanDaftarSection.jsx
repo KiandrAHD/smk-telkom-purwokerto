@@ -27,15 +27,15 @@ const PengumumanDaftarSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PengumumanFilterBar chip={chip} onChip={setChip} query={query} onQuery={setQuery} />
 
-        <div className="mt-7">
+        <div className="mt-5">
           <PengumumanTimelineBar />
         </div>
 
         {/* Kolom kartu 65,5% dan sidebar 34,5%, mengikuti pembagian di Figma. */}
-        <div className="mt-9 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_34%] lg:gap-12">
+        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_34%] lg:gap-8">
           <div>
             {shown.length > 0 ? (
-              <div className="space-y-5">
+              <div className="space-y-4">
                 {shown.map((item, i) => (
                   <PengumumanCard key={`${item.title}-${i}`} item={item} />
                 ))}
@@ -46,18 +46,18 @@ const PengumumanDaftarSection = () => {
               </p>
             )}
 
-            <div className="mt-9 flex justify-center">
+            <div className="mt-7 flex justify-center">
               <Link
                 to="/pengumuman/semua"
-                className="inline-flex items-center gap-4 rounded-lg border-2 border-[#bf0d1b] px-10 py-5 font-heading text-[17px] font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
+                className="inline-flex items-center gap-3 rounded-lg border border-[#bf0d1b] px-7 py-3 font-heading text-xs font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
               >
                 {daftarPengumuman.ctaText}
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-5">
             <PengumumanPopulerCard />
             <PengumumanBantuanCard />
           </div>

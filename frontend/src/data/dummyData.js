@@ -24,6 +24,7 @@ import showcaseTkj from '../assets/jurusan/showcase-tkj.jpg';
 import showcaseTjat from '../assets/jurusan/showcase-tjat.jpg';
 
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
+import stelaBot from '../assets/pengumuman/stela-bot.png';
 import profilHero from '../assets/tentang/profil-hero.jpg';
 import profilKepsek from '../assets/tentang/profil-kepsek.png';
 import guru1 from '../assets/tentang/guru-1.png';
@@ -850,7 +851,11 @@ export const pengumumanHero = { ...heroData, image: pengumumanHeroImg };
 export const ppdbBanner = {
   title: 'PPDB 2027',
   titleAccent: 'Resmi Dibuka!',
-  chips: ['20 Mei 2026', 'Deadline 30 Juni 2026'],
+  // Hanya chip tanggal mulai yang berikon kalender di desain.
+  chips: [
+    { label: '20 Mei 2026', icon: true },
+    { label: 'Deadline 30 Juni 2026' },
+  ],
   description:
     'Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 telah resmi dibuka, Segera dafar dan bergabung bersama kami',
   ctaText: '20 Mei 2026',
@@ -871,10 +876,10 @@ export const infoPenting = {
 // Hanya kartu pertama yang punya ikon megafon di dalam lingkarannya; tiga sisanya
 // lingkaran polos, sama seperti di Figma.
 export const pengumumanStats = [
-  { value: '45', label: 'Pengumuman', desc: 'Total Seluruh Pengumuman', icon: true },
-  { value: '12', label: 'Event', desc: 'Event & Kegiatan Sekolah' },
-  { value: '5', label: 'Deadline', desc: 'Batas Waktu Kegiatan' },
-  { value: '8', label: 'Agenda Minggu Ini', desc: 'Agenda & Kegiatan' },
+  { value: '45', label: 'Pengumuman', desc: 'Total Seluruh Pengumuman', icon: 'megaphone' },
+  { value: '12', label: 'Event', desc: 'Event & Kegiatan Sekolah', icon: 'kalender' },
+  { value: '5', label: 'Deadline', desc: 'Batas Waktu Kegiatan', icon: 'alarm' },
+  { value: '8', label: 'Agenda Minggu Ini', desc: 'Agenda & Kegiatan', icon: 'agenda' },
 ];
 
 export const pengumumanFilter = {
@@ -906,7 +911,8 @@ export const daftarPengumuman = {
       kategori: 'PPDB',
       tags: ['PPDB', 'Baru'],
       penting: true,
-      icon: true,
+      icon: 'megaphone',
+      iconColor: 'text-[#cd0b20]',
       thumb: 'bg-[#cd0b20]/20',
     },
     {
@@ -917,6 +923,8 @@ export const daftarPengumuman = {
       date: '20 Mei 2026',
       kategori: 'PPDB',
       tags: ['PPDB'],
+      icon: 'kalender',
+      iconColor: 'text-[#2f9408]',
       thumb: 'bg-[#42cd0b]/20',
     },
     {
@@ -927,6 +935,8 @@ export const daftarPengumuman = {
       date: '20 Mei 2026',
       kategori: 'PPDB',
       tags: ['PPDB'],
+      icon: 'trofi',
+      iconColor: 'text-[#0b11cd]',
       thumb: 'bg-[#0b11cd]/20',
     },
     {
@@ -937,6 +947,8 @@ export const daftarPengumuman = {
       date: '20 Mei 2026',
       kategori: 'PPDB',
       tags: ['PPDB', 'Baru'],
+      icon: 'info',
+      iconColor: 'text-[#0b9ccd]',
       thumb: 'bg-[#0b9ccd]/20',
     },
   ],
@@ -959,7 +971,7 @@ export const butuhBantuan = {
   title: 'Butuh Bantuan?',
   description: 'Tanyakan Informasi Pengumuman Yang kamu butuhkan ke STELA',
   ctaText: 'Tanya STELA',
-  mascot: stelaMascot,
+  mascot: stelaBot,
 };
 
 /* =========================================================
