@@ -189,7 +189,7 @@ export const prestasiData = {
     { title: 'Juara 1\nLKS Nasional 2024', category: 'Web Technologies', image: prestasi1, slug: 'lks-nasional-2024-web-technologies' },
     { title: 'Gold Medal\nIDSEEC 2024', category: 'Network Security', image: prestasi2, slug: 'idseec-2024-network-security' },
     { title: 'Juara 2\nGemastik 2024', category: 'Game Development', image: prestasi3, slug: 'gemastik-2024-game-development' },
-    { title: 'Juara 1\nIoT Challenge 2024', category: 'Smart Agriculture', image: prestasi4, slug: 'iot-challenge-telkom-2024' },
+    { title: 'Juara 1\nIoT Challenge 2024', category: 'Smart Agriculture', image: showcaseTjat, slug: 'iot-challenge-telkom-2024' },
   ],
 };
 
@@ -609,7 +609,7 @@ export const galeriPrestasi = {
       date: '20 Agustus 2024',
       year: 2024,
       tags: ['Nasional', 'LKS', 'Programming'],
-      image: jurusanRpl,
+      image: prestasi1,
     },
     {
       level: 'Interasional',
@@ -618,7 +618,7 @@ export const galeriPrestasi = {
       date: '12 Juni 2024',
       year: 2024,
       tags: ['Interasional', 'Programming'],
-      image: jurusanRpl,
+      image: showcaseTkj,
     },
     {
       level: 'Nasional',
@@ -627,7 +627,7 @@ export const galeriPrestasi = {
       date: '30 September 2024',
       year: 2024,
       tags: ['Nasional', 'Game'],
-      image: jurusanRpl,
+      image: showcasePg,
     },
     {
       level: 'Nasional',
@@ -636,7 +636,7 @@ export const galeriPrestasi = {
       date: '1 Oktober 2024',
       year: 2024,
       tags: ['Nasional', 'AI'],
-      image: jurusanRpl,
+      image: showcaseTjat,
     },
     {
       level: 'Interasional',
@@ -645,7 +645,7 @@ export const galeriPrestasi = {
       date: '25 November 2024',
       year: 2024,
       tags: ['Interasional', 'Robotik', 'UI/UX'],
-      image: jurusanRpl,
+      image: prestasi2,
     },
   ],
 };
@@ -1096,7 +1096,7 @@ export const jurusanDetail = [
     galeri: [
       { image: showcaseRpl, alt: 'Aplikasi web karya siswa RPL' },
       { image: labKomputer, alt: 'Laboratorium RPL dengan komputer spesifikasi pengembangan' },
-      { image: jurusanRpl, alt: 'Siswa RPL mengerjakan proyek secara berkelompok' },
+      { image: heroPanel, alt: 'Siswa RPL mengerjakan proyek secara berkelompok' },
     ],
   },
   {
@@ -1145,7 +1145,7 @@ export const jurusanDetail = [
     galeri: [
       { image: showcasePg, alt: 'Permainan buatan siswa Pengembangan Game' },
       { image: studioMultimedia, alt: 'Studio multimedia tempat aset game diproduksi' },
-      { image: jurusanPg, alt: 'Sesi playtest permainan bersama pemain' },
+      { image: heroPanel, alt: 'Sesi playtest permainan bersama pemain' },
     ],
   },
   {
@@ -1193,7 +1193,7 @@ export const jurusanDetail = [
     ],
     galeri: [
       { image: showcaseTkj, alt: 'Praktik konfigurasi router dan switch' },
-      { image: jurusanTkj, alt: 'Laboratorium jaringan dengan perangkat industri' },
+      { image: heroPanel, alt: 'Siswa TKJ praktik konfigurasi jaringan di kelas' },
       { image: labKomputer, alt: 'Praktik administrasi server oleh siswa TKJ' },
     ],
   },
@@ -1242,7 +1242,7 @@ export const jurusanDetail = [
     ],
     galeri: [
       { image: showcaseTjat, alt: 'Praktik penyambungan kabel fiber optic' },
-      { image: jurusanTjat, alt: 'Pengukuran redaman jalur dengan OTDR' },
+      { image: heroPanel, alt: 'Siswa TJAT berlatih pengukuran jalur fiber' },
       { image: labKomputer, alt: 'Simulasi jaringan akses FTTH di laboratorium' },
     ],
   },
@@ -1279,7 +1279,7 @@ export const prestasiDetail = [
       { tahap: 'Final nasional', isi: 'Tiga hari penilaian di Jakarta, ditutup dengan pengumuman Juara 1 bidang Web Technologies.' },
     ],
     galeri: [
-      { image: prestasi1, alt: 'Tim menerima piala Juara 1 LKS Nasional 2024' },
+      { image: prestasi3, alt: 'Tim menerima piala Juara 1 LKS Nasional 2024' },
       { image: showcaseRpl, alt: 'Aplikasi web yang dilombakan di babak final' },
       { image: labKomputer, alt: 'Latihan rutin di laboratorium RPL sebelum lomba' },
     ],
@@ -1314,7 +1314,7 @@ export const prestasiDetail = [
       { tahap: 'Penjurian IDSEEC', isi: 'Juri menguji ketepatan deteksi dan kesiapan penerapannya, lalu memberikan Gold Medal.' },
     ],
     galeri: [
-      { image: prestasi2, alt: 'Presentasi purwarupa di hadapan juri IDSEEC 2024' },
+      { image: prestasi1, alt: 'Presentasi purwarupa di hadapan juri IDSEEC 2024' },
       { image: jurusanTkj, alt: 'Praktik pemantauan jaringan di laboratorium TKJ' },
       { image: labKomputer, alt: 'Pengujian sistem deteksi pada jaringan sekolah' },
     ],
@@ -1349,7 +1349,7 @@ export const prestasiDetail = [
       { tahap: 'Babak praktik', isi: 'Konfigurasi langsung pada perangkat sungguhan, dinilai berdasarkan ketepatan dan kecepatan.' },
     ],
     galeri: [
-      { image: prestasi2, alt: 'Delegasi sekolah di Huawei ICT Competition 2024' },
+      { image: prestasi1, alt: 'Delegasi sekolah di Huawei ICT Competition 2024' },
       { image: showcaseTkj, alt: 'Konfigurasi perangkat jaringan saat babak praktik' },
       { image: jurusanTkj, alt: 'Persiapan tim di laboratorium jaringan sekolah' },
     ],
@@ -1384,7 +1384,7 @@ export const prestasiDetail = [
       { tahap: 'Playtest dan final', isi: 'Puluhan pemain menguji permainan, hasil masukannya dipakai memperbaiki level sebelum penjurian Gemastik.' },
     ],
     galeri: [
-      { image: prestasi3, alt: 'Tim Pengembangan Game di panggung Gemastik 2024' },
+      { image: prestasi1, alt: 'Tim Pengembangan Game di panggung Gemastik 2024' },
       { image: showcasePg, alt: 'Tangkapan layar game yang dilombakan' },
       { image: studioMultimedia, alt: 'Produksi aset visual di studio multimedia' },
     ],
@@ -1419,7 +1419,7 @@ export const prestasiDetail = [
       { tahap: 'Uji dan lomba', isi: 'Alat diuji langsung di lahan selama dua pekan sebelum dipresentasikan pada IoT Challenge Telkom 2024.' },
     ],
     galeri: [
-      { image: prestasi4, alt: 'Purwarupa perangkat IoT pertanian buatan siswa' },
+      { image: prestasi2, alt: 'Purwarupa perangkat IoT pertanian buatan siswa' },
       { image: showcaseTjat, alt: 'Pemasangan sensor di lahan uji coba' },
       { image: labKomputer, alt: 'Perakitan dan pengujian perangkat di laboratorium' },
     ],
@@ -1454,7 +1454,7 @@ export const prestasiDetail = [
       { tahap: 'Kompetisi Asia', isi: 'Bersaing dengan peserta dari belasan negara dan membawa pulang medali perunggu.' },
     ],
     galeri: [
-      { image: prestasi1, alt: 'Peraih medali World Skills Asia 2024' },
+      { image: prestasi2, alt: 'Peraih medali World Skills Asia 2024' },
       { image: showcaseRpl, alt: 'Hasil kerja peserta pada kategori Web Technologies' },
       { image: heroPanel, alt: 'Sesi pemusatan latihan sebelum berangkat' },
     ],
@@ -1481,7 +1481,7 @@ export const beritaDetail = [
       oleh: 'Pembina tim LKS Web Technologies',
     },
     galeri: [
-      { image: prestasi1, alt: 'Penyerahan piala Juara 1 LKS Nasional 2025' },
+      { image: prestasi3, alt: 'Penyerahan piala Juara 1 LKS Nasional 2025' },
       { image: showcaseRpl, alt: 'Aplikasi web yang dikerjakan selama babak final' },
       { image: labKomputer, alt: 'Latihan tim di laboratorium RPL' },
     ],
@@ -1505,7 +1505,7 @@ export const beritaDetail = [
       oleh: 'Praktisi AI Telkom Indonesia',
     },
     galeri: [
-      { image: showcaseRpl, alt: 'Sesi praktik membangun model pembelajaran mesin' },
+      { image: studioMultimedia, alt: 'Sesi praktik membangun model pembelajaran mesin' },
       { image: labKomputer, alt: 'Siswa mengikuti workshop di laboratorium komputer' },
       { image: guruGroup, alt: 'Pendampingan guru selama sesi berlangsung' },
     ],
@@ -1529,7 +1529,7 @@ export const beritaDetail = [
       oleh: 'Siswa kelas XI TKJ',
     },
     galeri: [
-      { image: jurusanTkj, alt: 'Rombongan siswa di laboratorium jaringan Huawei' },
+      { image: labKomputer, alt: 'Rombongan siswa di laboratorium jaringan Huawei' },
       { image: showcaseTkj, alt: 'Peninjauan perangkat jaringan berskala besar' },
       { image: gedungSekolah, alt: 'Pelepasan rombongan kunjungan industri di sekolah' },
     ],
@@ -1553,7 +1553,7 @@ export const beritaDetail = [
       oleh: 'Peraih medali perak Web Technologies',
     },
     galeri: [
-      { image: prestasi2, alt: 'Dua siswa peraih medali perak World Skills Asia 2025' },
+      { image: prestasi1, alt: 'Dua siswa peraih medali perak World Skills Asia 2025' },
       { image: showcaseRpl, alt: 'Hasil kerja pada kategori Web Technologies' },
       { image: showcaseTkj, alt: 'Praktik kategori Network Systems' },
     ],
@@ -1674,7 +1674,7 @@ export const beritaDetail = [
     },
     galeri: [
       { image: studioMultimedia, alt: 'Sesi workshop UI/UX di studio multimedia' },
-      { image: showcasePg, alt: 'Hasil rancangan antarmuka karya siswa' },
+      { image: jurusanPg, alt: 'Hasil rancangan antarmuka karya siswa' },
       { image: labKomputer, alt: 'Praktik membuat purwarupa antarmuka' },
     ],
   },
@@ -1721,7 +1721,7 @@ export const beritaDetail = [
       oleh: 'Panitia PPDB',
     },
     galeri: [
-      { image: pengumumanHeroImg, alt: 'Sosialisasi PPDB gelombang 2 kepada calon siswa' },
+      { image: heroPanel, alt: 'Sosialisasi PPDB gelombang 2 kepada calon siswa' },
       { image: gedungSekolah, alt: 'Gedung sekolah yang menjadi tujuan pendaftaran' },
       { image: perpustakaan, alt: 'Fasilitas yang bisa dipakai siswa baru' },
     ],
@@ -2111,7 +2111,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Bursa Kerja Khusus menghadirkan enam perusahaan untuk merekrut alumni...',
-      image: prestasi4,
+      image: gedungSekolah,
     },
   ],
 };
