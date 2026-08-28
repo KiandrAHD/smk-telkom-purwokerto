@@ -3,15 +3,16 @@ import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { kategoriBerita } from '../../data/dummyData';
 
-const BeritaKategoriSection = () => {
+const BeritaKategoriSection = ({ items = [] }) => {
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState('terbaru');
   const [shownCount, setShownCount] = useState(kategoriBerita.perPage);
+  const sourceItems = items;
 
   const matched = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = kategoriBerita.items.filter((n) => {
+    const list = sourceItems.filter((n) => {
       const byChip = chip === 'Semua' || n.kategori === chip;
       const byText =
         !q || n.title.toLowerCase().includes(q) || n.excerpt.toLowerCase().includes(q);
@@ -20,7 +21,7 @@ const BeritaKategoriSection = () => {
     return [...list].sort((a, b) =>
       sort === 'terbaru' ? b.iso.localeCompare(a.iso) : a.iso.localeCompare(b.iso)
     );
-  }, [chip, query, sort]);
+  }, [chip, query, sort, sourceItems]);
 
   const shown = matched.slice(0, shownCount);
   const hasMore = shownCount < matched.length;

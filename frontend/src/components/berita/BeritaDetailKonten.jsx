@@ -1,18 +1,13 @@
 import { Link } from 'react-router-dom';
 import { CalendarDays, Quote } from 'lucide-react';
 import GaleriFoto from '../GaleriFoto';
-import { beritaDetail } from '../../data/dummyData';
 
 // Bagian khas halaman detail Berita: yang ditonjolkan dokumentasinya — kutipan
 // narasumber, galeri liputan, lalu berita lain pada kategori yang sama.
-const BeritaDetailKonten = ({ item }) => {
+const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
   // Utamakan berita sekategori; kalau belum cukup tiga, lengkapi dari kategori
   // lain supaya baris rekomendasinya tidak pernah tampil setengah kosong.
-  const kandidat = beritaDetail.filter((b) => b.slug !== item.slug);
-  const terkait = [
-    ...kandidat.filter((b) => b.kategori === item.kategori),
-    ...kandidat.filter((b) => b.kategori !== item.kategori),
-  ].slice(0, 3);
+  const terkait = relatedItems.slice(0, 3);
 
   return (
     <>

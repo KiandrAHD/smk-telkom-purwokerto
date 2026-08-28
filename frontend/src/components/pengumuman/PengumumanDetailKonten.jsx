@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
 import { AlarmClock, ArrowRight, FileText, Phone } from 'lucide-react';
 import Reveal from '../Reveal';
-import { pengumumanDetail } from '../../data/dummyData';
 
 // Bagian khas halaman detail Pengumuman: yang ditonjolkan urgensinya — tenggat
 // dipasang paling atas dan mencolok, disusul langkah yang harus ditempuh serta
 // berkas yang perlu disiapkan. Pembaca pengumuman datang untuk tahu "kapan" dan
 // "harus apa", bukan untuk membaca cerita.
-const PengumumanDetailKonten = ({ item }) => {
-  const lainnya = pengumumanDetail.filter((p) => p.slug !== item.slug).slice(0, 3);
+const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
+  const lainnya = relatedItems.slice(0, 3);
 
   return (
     <>

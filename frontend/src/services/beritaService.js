@@ -13,9 +13,30 @@ export async function getBerita() {
   );
 }
 
+export async function getPublishedBerita() {
+  return throwIfError(
+    await supabase
+      .from('berita')
+      .select(beritaColumns)
+      .eq('status', 'published')
+      .order('created_at', { ascending: false }),
+  );
+}
+
 export async function getBeritaById(id) {
   return throwIfError(
     await supabase.from('berita').select(beritaColumns).eq('id', id).single(),
+  );
+}
+
+export async function getBeritaBySlug(slug) {
+  return throwIfError(
+    await supabase
+      .from('berita')
+      .select(beritaColumns)
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single(),
   );
 }
 
@@ -34,4 +55,3 @@ export async function updateBerita(id, data) {
 export async function deleteBerita(id) {
   return throwIfError(await supabase.from('berita').delete().eq('id', id));
 }
-

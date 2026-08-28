@@ -1,9 +1,9 @@
 import { Search } from 'lucide-react';
 import { pengumumanFilter } from '../../data/dummyData';
 
-const PengumumanFilterBar = ({ chip, onChip, query, onQuery }) => (
+const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = pengumumanFilter.chips }) => (
   <div className="flex flex-wrap items-center gap-2">
-    {pengumumanFilter.chips.map((c) => (
+    {chips.map((c) => (
       <button
         key={c}
         type="button"

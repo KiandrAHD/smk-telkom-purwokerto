@@ -1,8 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { bkkSearch, lowonganPopuler } from '../../data/dummyData';
-import { slugify } from '../../utils/slug';
 
 const Select = ({ label, value, onChange, options }) => (
   <label className="min-w-0 flex-1">
@@ -24,28 +22,32 @@ const Select = ({ label, value, onChange, options }) => (
   </label>
 );
 
-const BkkLowonganSection = () => {
+const BkkLowonganSection = ({ items = [] }) => {
   const [keyword, setKeyword] = useState('');
   const [lokasi, setLokasi] = useState('');
   const [kategori, setKategori] = useState('');
   const [tipe, setTipe] = useState('');
   const [chip, setChip] = useState('Semua');
 
+  const sourceItems = items;
+  const tipeOptions = [...new Set(sourceItems.map((job) => job.tipe_pekerjaan).filter(Boolean))];
+  const chips = ['Semua', ...tipeOptions];
+
   const shown = useMemo(() => {
     const q = keyword.trim().toLowerCase();
-    return lowonganPopuler.items.filter((job) => {
+    return sourceItems.filter((job) => {
       const byText =
         !q ||
         job.role.toLowerCase().includes(q) ||
         job.company.toLowerCase().includes(q) ||
-        job.tags.some((t) => t.toLowerCase().includes(q));
+        job.tags?.some((t) => t.toLowerCase().includes(q));
       const byLokasi = !lokasi || job.location.includes(lokasi);
       const byKategori = !kategori || job.tags.includes(kategori);
       const byTipe = !tipe || job.badges.includes(tipe);
       const byChip = chip === 'Semua' || job.tags.includes(chip);
       return byText && byLokasi && byKategori && byTipe && byChip;
     });
-  }, [keyword, lokasi, kategori, tipe, chip]);
+  }, [keyword, lokasi, kategori, tipe, chip, sourceItems]);
 
   const reset = () => {
     setKeyword('');
@@ -77,8 +79,8 @@ const BkkLowonganSection = () => {
               />
             </label>
             <Select label={bkkSearch.placeholders.lokasi} value={lokasi} onChange={setLokasi} options={bkkSearch.lokasiOptions} />
-            <Select label={bkkSearch.placeholders.kategori} value={kategori} onChange={setKategori} options={bkkSearch.kategoriOptions} />
-            <Select label={bkkSearch.placeholders.tipe} value={tipe} onChange={setTipe} options={bkkSearch.tipeOptions} />
+            <Select label={bkkSearch.placeholders.kategori} value={kategori} onChange={setKategori} options={tipeOptions} />
+            <Select label={bkkSearch.placeholders.tipe} value={tipe} onChange={setTipe} options={tipeOptions} />
             <button
               type="button"
               onClick={reset}
@@ -89,7 +91,7 @@ const BkkLowonganSection = () => {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            {bkkSearch.chips.map((c) => (
+            {chips.map((c) => (
               <button
                 key={c}
                 type="button"
@@ -142,15 +144,18 @@ const BkkLowonganSection = () => {
                   ))}
                 </div>
 
-                <p className="mt-3 text-[11px] font-bold text-primary">{job.salary}</p>
+                <p className="mt-3 text-[11px] font-bold text-primary">{job.deadlineLabel}</p>
 
-                <Link
-                  to={`/bkk/lowongan/${slugify(`${job.role} ${job.company}`)}`}
+                <a
+                  href={job.link_pendaftaran || '#'}
+                  target={job.link_pendaftaran ? '_blank' : undefined}
+                  rel={job.link_pendaftaran ? 'noreferrer' : undefined}
+                  onClick={(event) => { if (!job.link_pendaftaran) event.preventDefault(); }}
                   className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dark-200 px-3 py-2 text-[9px] font-bold text-dark-600 transition-colors hover:border-primary hover:text-primary"
                 >
                   {lowonganPopuler.ctaText}
                   <ArrowRight className="h-2.5 w-2.5" />
-                </Link>
+                </a>
               </article>
             ))}
           </div>

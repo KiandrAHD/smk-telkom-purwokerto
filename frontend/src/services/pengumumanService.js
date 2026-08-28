@@ -13,9 +13,31 @@ export async function getPengumuman() {
   );
 }
 
+export async function getPublishedPengumuman() {
+  return throwIfError(
+    await supabase
+      .from('pengumuman')
+      .select(pengumumanColumns)
+      .eq('status', 'published')
+      .order('tanggal', { ascending: false, nullsFirst: false })
+      .order('created_at', { ascending: false }),
+  );
+}
+
 export async function getPengumumanById(id) {
   return throwIfError(
     await supabase.from('pengumuman').select(pengumumanColumns).eq('id', id).single(),
+  );
+}
+
+export async function getPengumumanBySlug(slug) {
+  return throwIfError(
+    await supabase
+      .from('pengumuman')
+      .select(pengumumanColumns)
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single(),
   );
 }
 
@@ -34,4 +56,3 @@ export async function updatePengumuman(id, data) {
 export async function deletePengumuman(id) {
   return throwIfError(await supabase.from('pengumuman').delete().eq('id', id));
 }
-

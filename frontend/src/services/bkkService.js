@@ -17,6 +17,17 @@ export async function getBkk() {
   );
 }
 
+export async function getActiveBkk() {
+  return throwIfError(
+    await supabase
+      .from('bkk')
+      .select(bkkColumns)
+      .eq('status', 'aktif')
+      .order('deadline', { ascending: true, nullsFirst: false })
+      .order('created_at', { ascending: false }),
+  );
+}
+
 export async function getBkkById(id) {
   return throwIfError(await supabase.from('bkk').select(bkkColumns).eq('id', id).single());
 }
@@ -32,4 +43,3 @@ export async function updateBkk(id, data) {
 export async function deleteBkk(id) {
   return throwIfError(await supabase.from('bkk').delete().eq('id', id));
 }
-

@@ -2,13 +2,12 @@ import { Link } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import GaleriFoto from '../GaleriFoto';
 import Reveal from '../Reveal';
-import { prestasiDetail } from '../../data/dummyData';
 
 // Bagian khas halaman detail Prestasi: yang ditonjolkan adalah momen juaranya —
 // angka sorotan, tahapan menuju podium, lalu foto-fotonya. Seluruh isinya datang
 // dari objek `item`, jadi tiap prestasi menampilkan datanya sendiri.
-const PrestasiDetailKonten = ({ item }) => {
-  const lainnya = prestasiDetail.filter((p) => p.slug !== item.slug).slice(0, 3);
+const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
+  const lainnya = relatedItems.slice(0, 3);
 
   return (
     <>

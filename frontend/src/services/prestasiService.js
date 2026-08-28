@@ -23,6 +23,12 @@ export async function getPrestasiById(id) {
   );
 }
 
+export async function getPrestasiBySlug(slug) {
+  return throwIfError(
+    await supabase.from('prestasi').select(prestasiColumns).eq('slug', slug).single(),
+  );
+}
+
 export async function createPrestasi(data) {
   return throwIfError(
     await supabase.from('prestasi').insert(data).select(prestasiColumns).single(),
@@ -38,4 +44,3 @@ export async function updatePrestasi(id, data) {
 export async function deletePrestasi(id) {
   return throwIfError(await supabase.from('prestasi').delete().eq('id', id));
 }
-
