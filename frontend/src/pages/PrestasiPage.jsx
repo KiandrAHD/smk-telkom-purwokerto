@@ -1,4 +1,5 @@
 import MainLayout from '../layouts/MainLayout';
+import Reveal from '../components/Reveal';
 import PrestasiHeroSection from '../components/prestasi/PrestasiHeroSection';
 import PrestasiUnggulanSection from '../components/prestasi/PrestasiUnggulanSection';
 import RibbonDivider from '../components/RibbonDivider';
@@ -10,12 +11,22 @@ import CTASection from '../components/CTASection';
 const PrestasiPage = () => (
   <MainLayout>
     <PrestasiHeroSection />
-    <PrestasiUnggulanSection />
+    <Reveal>
+      <PrestasiUnggulanSection />
+    </Reveal>
     <RibbonDivider />
-    <PrestasiGaleriSection />
-    <PrestasiPerjalananSection />
-    <PrestasiDukunganSection />
-    <CTASection />
+    <Reveal>
+      <PrestasiGaleriSection />
+    </Reveal>
+    <Reveal>
+      <PrestasiPerjalananSection />
+    </Reveal>
+    <Reveal>
+      <PrestasiDukunganSection />
+    </Reveal>
+    <Reveal>
+      <CTASection />
+    </Reveal>
   </MainLayout>
 );
 

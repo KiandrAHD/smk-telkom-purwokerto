@@ -91,13 +91,13 @@ const BeritaKategoriSection = () => {
             {shown.map((n) => (
               <article
                 key={n.title}
-                className="flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
+                className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
               >
-                <div className="relative">
+                <div className="relative overflow-hidden">
                   <img
                     src={n.image}
                     alt={n.title}
-                    className="w-full aspect-[16/10] object-cover"
+                    className="w-full aspect-[16/10] object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                   <span className="absolute bottom-1.5 left-1.5 rounded bg-primary px-1.5 py-0.5 text-[8px] font-bold text-white">

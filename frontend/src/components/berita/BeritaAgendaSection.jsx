@@ -91,13 +91,13 @@ const BeritaAgendaSection = () => {
               <Link
                 key={g.alt}
                 to={`/galeri/${slugify(g.alt)}`}
-                className="block overflow-hidden rounded-lg"
+                className="group block overflow-hidden rounded-lg"
               >
                 <img
                   src={g.image}
                   alt={g.alt}
                   loading="lazy"
-                  className="aspect-[4/3] w-full rounded-lg object-cover transition-transform hover:scale-[1.03]"
+                  className="aspect-[4/3] w-full rounded-lg object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </Link>
             ))}

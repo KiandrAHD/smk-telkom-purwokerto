@@ -34,6 +34,11 @@
   --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
   --shadow-nav: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  /* Token animasi. Didaftarkan di @theme supaya Tailwind v4 membuatkan utility
+     `animate-masuk-halaman` dan `animate-naik-halus` — tanpa plugin tambahan. */
+  --animate-masuk-halaman: masuk-halaman 0.4s ease-out both;
+  --animate-naik-halus: naik-halus 0.5s ease-out both;
 }
 
 html {
@@ -73,7 +78,84 @@ body {
   }
 }
 
-/* Custom scrollbar */
+/* =========================================================
+   ANIMASI
+   ========================================================= */
+
+@keyframes masuk-halaman {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes naik-halus {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Dipakai komponen <Reveal>. Kelas `.visible` dipasang oleh IntersectionObserver
+   saat elemennya masuk layar, jadi tiap section naik pelan sekali saja — bukan
+   berkedip tiap kali discroll bolak-balik. Jeda antar kartu diatur lewat utility
+   Tailwind `delay-*` dari sisi pemanggil, bukan style inline. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition-property: opacity, transform;
+  transition-duration: 0.55s;
+  transition-timing-function: ease-out;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Saat dicetak, isi harus tampil utuh tanpa menunggu discroll — halaman
+   pengumuman PPDB termasuk yang wajar dicetak sebagai berkas persyaratan. */
+@media print {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hormati setelan sistem: kalau pengguna meminta gerak dikurangi, semua animasi
+   dimatikan dan isinya langsung tampil utuh — bukan tersembunyi selamanya. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition-property: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -89,16 +171,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #991b1b;
-}
-
-/* Smooth reveal animation base */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
 }

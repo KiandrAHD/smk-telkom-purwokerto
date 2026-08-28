@@ -24,18 +24,20 @@ const JurusanListSection = () => {
                 key={item.name}
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
-                className={`flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all ${
+                className={`group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all ${
                   isActive
                     ? '-translate-y-1 border-primary shadow-lg'
                     : 'border-dark-100 hover:border-primary/40'
                 }`}
               >
                 <div className="relative">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full aspect-[2/1] object-cover object-top"
-                  />
+                  <div className="overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full aspect-[2/1] object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
                   <span className="absolute -bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-md">
                     <Icon className="h-4 w-4 text-white" />
                   </span>

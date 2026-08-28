@@ -1,10 +1,13 @@
 import { ArrowLeft, CalendarDays, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
+import Reveal from './Reveal';
+import VideoEmbed from './VideoEmbed';
 
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
 // kategori apa pun: seluruh isinya datang dari objek `item` yang dicari lewat
 // slug di halaman detail masing-masing, jadi tidak ada teks yang dipaku di sini.
+// Penekanan yang berbeda tiap kategori dititipkan lewat `children`.
 const DetailLayout = ({ item, backTo, backLabel, children }) => (
   <MainLayout>
     <article className="bg-white py-8 lg:py-12">
@@ -40,11 +43,13 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
         )}
 
         {item.image && (
-          <img
-            src={item.image}
-            alt={item.title}
-            className="mt-7 w-full rounded-2xl object-cover object-top aspect-[16/9]"
-          />
+          <div className="mt-7 overflow-hidden rounded-2xl">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
+            />
+          </div>
         )}
 
         <p className="mt-7 text-sm sm:text-base font-medium leading-relaxed text-dark-700">
@@ -59,19 +64,34 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           ))}
         </div>
 
+        {/* Slot video per item. Isi `video: { videoId, poster, title, desc }` di
+            dummyData.js pada entri mana pun, dan pemutarnya langsung muncul. */}
+        {item.video && (
+          <Reveal className="mt-8">
+            <VideoEmbed
+              videoId={item.video.videoId}
+              poster={item.video.poster || item.image}
+              title={item.video.title}
+              desc={item.video.desc}
+            />
+          </Reveal>
+        )}
+
         {item.facts && (
-          <dl className="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-dark-100 bg-dark-100 sm:grid-cols-2">
-            {item.facts.map((fakta) => (
-              <div key={fakta.label} className="bg-white px-5 py-4">
-                <dt className="text-[10px] font-bold uppercase tracking-wide text-dark-400">
-                  {fakta.label}
-                </dt>
-                <dd className="mt-1 font-heading text-xs font-bold text-dark-900">
-                  {fakta.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <Reveal>
+            <dl className="mt-8 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-dark-100 bg-dark-100 sm:grid-cols-2">
+              {item.facts.map((fakta) => (
+                <div key={fakta.label} className="bg-white px-5 py-4">
+                  <dt className="text-[10px] font-bold uppercase tracking-wide text-dark-400">
+                    {fakta.label}
+                  </dt>
+                  <dd className="mt-1 font-heading text-xs font-bold text-dark-900">
+                    {fakta.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         )}
 
         {children}

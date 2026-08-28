@@ -1,5 +1,4 @@
-import { Play } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import VideoEmbed from '../VideoEmbed';
 import bg from '../../assets/landing/partners-bg.png';
 import { mitraIndustri, videoHighlight } from '../../data/dummyData';
 
@@ -38,22 +37,14 @@ const PrestasiDukunganSection = () => (
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
           {videoHighlight.title}
         </h2>
-        <Link
-          to="/galeri"
-          className="mt-6 flex w-full items-center gap-4 rounded-xl border border-dark-100 bg-white px-5 py-4 text-left shadow-card transition-colors hover:border-primary"
-        >
-          <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary">
-            <Play className="ml-0.5 h-4 w-4 text-white" fill="currentColor" />
-          </span>
-          <span className="min-w-0">
-            <span className="block whitespace-pre-line font-heading text-[11px] font-bold leading-snug text-dark-900">
-              {videoHighlight.videoTitle}
-            </span>
-            <span className="mt-1 block text-[9px] leading-relaxed text-dark-500">
-              {videoHighlight.videoDesc}
-            </span>
-          </span>
-        </Link>
+        <div className="mt-6">
+          <VideoEmbed
+            videoId={videoHighlight.video.videoId}
+            poster={videoHighlight.video.poster}
+            title={videoHighlight.videoTitle}
+            desc={videoHighlight.videoDesc}
+          />
+        </div>
       </div>
     </div>
   </section>

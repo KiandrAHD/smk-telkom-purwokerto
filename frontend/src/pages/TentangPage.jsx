@@ -1,7 +1,9 @@
 import MainLayout from '../layouts/MainLayout';
+import Reveal from '../components/Reveal';
 import TentangHeroSection from '../components/tentang/TentangHeroSection';
 import TentangStatsSection from '../components/tentang/TentangStatsSection';
 import TentangAboutSection from '../components/tentang/TentangAboutSection';
+import TentangProfilVideoSection from '../components/tentang/TentangProfilVideoSection';
 import TentangVisiMisiSection from '../components/tentang/TentangVisiMisiSection';
 import TentangTimelineSection from '../components/tentang/TentangTimelineSection';
 import RibbonDivider from '../components/RibbonDivider';
@@ -12,14 +14,31 @@ import CTASection from '../components/CTASection';
 const TentangPage = () => (
   <MainLayout>
     <TentangHeroSection />
-    <TentangStatsSection />
-    <TentangAboutSection />
-    <TentangVisiMisiSection />
-    <TentangTimelineSection />
+    <Reveal>
+      <TentangStatsSection />
+    </Reveal>
+    <Reveal>
+      <TentangAboutSection />
+    </Reveal>
+    <Reveal>
+      <TentangProfilVideoSection />
+    </Reveal>
+    <Reveal>
+      <TentangVisiMisiSection />
+    </Reveal>
+    <Reveal>
+      <TentangTimelineSection />
+    </Reveal>
     <RibbonDivider />
-    <TentangKepalaSekolahSection />
-    <StelaAISection />
-    <CTASection />
+    <Reveal>
+      <TentangKepalaSekolahSection />
+    </Reveal>
+    <Reveal>
+      <StelaAISection />
+    </Reveal>
+    <Reveal>
+      <CTASection />
+    </Reveal>
   </MainLayout>
 );
 

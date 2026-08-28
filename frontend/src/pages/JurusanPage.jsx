@@ -1,4 +1,5 @@
 import MainLayout from '../layouts/MainLayout';
+import Reveal from '../components/Reveal';
 import JurusanHeroSection from '../components/jurusan/JurusanHeroSection';
 import JurusanListSection from '../components/jurusan/JurusanListSection';
 import RibbonDivider from '../components/RibbonDivider';
@@ -12,14 +13,28 @@ import CTASection from '../components/CTASection';
 const JurusanPage = () => (
   <MainLayout>
     <JurusanHeroSection />
-    <JurusanListSection />
+    <Reveal>
+      <JurusanListSection />
+    </Reveal>
     <RibbonDivider />
-    <JurusanQuizSection />
-    <PartnersSection />
-    <JurusanCompareSection />
-    <JurusanShowcaseSection />
-    <JurusanFaqSection />
-    <CTASection />
+    <Reveal>
+      <JurusanQuizSection />
+    </Reveal>
+    <Reveal>
+      <PartnersSection />
+    </Reveal>
+    <Reveal>
+      <JurusanCompareSection />
+    </Reveal>
+    <Reveal>
+      <JurusanShowcaseSection />
+    </Reveal>
+    <Reveal>
+      <JurusanFaqSection />
+    </Reveal>
+    <Reveal>
+      <CTASection />
+    </Reveal>
   </MainLayout>
 );
 

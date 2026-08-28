@@ -1,4 +1,5 @@
 import MainLayout from '../layouts/MainLayout';
+import Reveal from '../components/Reveal';
 import BkkHeroSection from '../components/bkk/BkkHeroSection';
 import BkkLowonganSection from '../components/bkk/BkkLowonganSection';
 import BkkPklSection from '../components/bkk/BkkPklSection';
@@ -9,11 +10,21 @@ import CTASection from '../components/CTASection';
 const BkkPage = () => (
   <MainLayout>
     <BkkHeroSection />
-    <BkkLowonganSection />
-    <BkkPklSection />
-    <BkkJalurKarierSection />
-    <BkkAlumniSection />
-    <CTASection />
+    <Reveal>
+      <BkkLowonganSection />
+    </Reveal>
+    <Reveal>
+      <BkkPklSection />
+    </Reveal>
+    <Reveal>
+      <BkkJalurKarierSection />
+    </Reveal>
+    <Reveal>
+      <BkkAlumniSection />
+    </Reveal>
+    <Reveal>
+      <CTASection />
+    </Reveal>
   </MainLayout>
 );
 

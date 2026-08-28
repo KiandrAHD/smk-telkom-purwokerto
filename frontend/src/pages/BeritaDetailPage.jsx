@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
+import BeritaDetailKonten from '../components/berita/BeritaDetailKonten';
 import SegeraHadirPage from './SegeraHadirPage';
 import { beritaDetail } from '../data/dummyData';
 
@@ -12,7 +13,11 @@ const BeritaDetailPage = () => {
 
   if (!item) return <SegeraHadirPage />;
 
-  return <DetailLayout item={item} backTo="/berita" backLabel="Berita" />;
+  return (
+    <DetailLayout item={item} backTo="/berita" backLabel="Berita">
+      <BeritaDetailKonten item={item} />
+    </DetailLayout>
+  );
 };
 
 export default BeritaDetailPage;

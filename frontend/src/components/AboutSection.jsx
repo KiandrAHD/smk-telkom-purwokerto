@@ -1,22 +1,19 @@
 import { Link } from 'react-router-dom';
+import VideoEmbed from './VideoEmbed';
 import { landingAbout } from '../data/dummyData';
 
 const AboutSection = () => (
   <section id="tentang" className="bg-white py-4 lg:py-6">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-[38%_1fr] items-center gap-8 lg:gap-12">
-        {/* Video sekolah — tombol play sudah menyatu di aset Figma */}
-        <Link
-          to="/galeri"
-          aria-label="Putar video profil sekolah"
-          className="block overflow-hidden rounded-2xl transition-transform hover:scale-[1.01]"
-        >
-          <img
-            src={landingAbout.image}
-            alt="Gedung SMK Telkom Purwokerto"
-            className="w-full aspect-[16/9] object-cover"
-          />
-        </Link>
+        {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
+            ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
+        <VideoEmbed
+          videoId={landingAbout.video.videoId}
+          poster={landingAbout.video.poster}
+          title={landingAbout.video.title}
+          desc={landingAbout.video.desc}
+        />
 
         {/* Teks + badge */}
         <div>

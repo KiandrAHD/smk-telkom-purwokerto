@@ -1,15 +1,17 @@
 import { ArrowRight, Briefcase, Check, GraduationCap, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import GaleriFoto from '../GaleriFoto';
+import Reveal from '../Reveal';
 import { jurusanDetail } from '../../data/dummyData';
 
 const Bagian = ({ Icon, judul, children }) => (
-  <section className="mt-9">
+  <Reveal as="section" className="mt-9">
     <h2 className="flex items-center gap-2.5 font-heading text-base font-extrabold text-dark-900">
       <Icon className="h-4 w-4 flex-shrink-0 text-primary" />
       {judul}
     </h2>
     {children}
-  </section>
+  </Reveal>
 );
 
 // Seluruh isinya datang dari objek jurusan yang dicari lewat slug — tidak ada
@@ -68,6 +70,12 @@ const JurusanDetailKonten = ({ item }) => {
         </ul>
       </Bagian>
 
+      <GaleriFoto
+        items={item.galeri}
+        title="Suasana Belajar"
+        description="Ruang praktik dan hasil karya siswa di jurusan ini."
+      />
+
       <Bagian Icon={Briefcase} judul="Prospek Karier">
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {item.karier.map((k) => (
@@ -102,14 +110,24 @@ const JurusanDetailKonten = ({ item }) => {
             <Link
               key={j.slug}
               to={`/jurusan/${j.slug}`}
-              className="rounded-xl border border-dark-100 bg-white px-4 py-3.5 transition-colors hover:border-primary"
+              className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white transition-colors hover:border-primary"
             >
-              <span className="block font-heading text-[11px] font-bold leading-snug text-dark-900">
-                {j.title}
-              </span>
-              <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-primary">
-                Lihat detail
-                <ArrowRight className="h-3 w-3" />
+              <div className="overflow-hidden">
+                <img
+                  src={j.image}
+                  alt={j.title}
+                  loading="lazy"
+                  className="aspect-[2/1] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <span className="px-4 py-3.5">
+                <span className="block font-heading text-[11px] font-bold leading-snug text-dark-900">
+                  {j.title}
+                </span>
+                <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-primary">
+                  Lihat detail
+                  <ArrowRight className="h-3 w-3" />
+                </span>
               </span>
             </Link>
           ))}

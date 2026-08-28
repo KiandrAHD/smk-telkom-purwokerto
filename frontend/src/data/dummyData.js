@@ -31,6 +31,11 @@ import guru1 from '../assets/tentang/guru-1.png';
 import guru2 from '../assets/tentang/guru-2.png';
 import guru3 from '../assets/tentang/guru-3.png';
 import guru4 from '../assets/tentang/guru-4.png';
+import gedungSekolah from '../assets/tentang/school-building.png';
+import labKomputer from '../assets/tentang/lab-komputer.png';
+import perpustakaan from '../assets/tentang/perpustakaan.png';
+import studioMultimedia from '../assets/tentang/studio-multimedia.png';
+import guruGroup from '../assets/tentang/guru-group.png';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -104,11 +109,21 @@ export const quickLinks = [
 ];
 
 // ── Section Tentang (Beranda) ──
+// Video profil resmi sekolah di kanal YouTube SMK Telkom Purwokerto. Disimpan
+// sebagai satu konstanta karena dipakai di tiga halaman — Beranda, Tentang, dan
+// Prestasi. Ganti `videoId` di sini kalau videonya diperbarui.
+export const videoProfilSekolah = {
+  videoId: 'w68QaEXd7iw',
+  title: 'Video Profil SMK Telkom Purwokerto',
+  desc: 'Mengenal program keahlian, fasilitas, dan keseharian belajar di SMK Telkom Purwokerto.',
+};
+
 export const landingAbout = {
   title: 'Tentang SMK Telkom Purwokerto',
   description:
     'Kami adalah sekolah vokasi teknologi informasi dan komunikasi yang berfokus pada pengembangan kompetensi, karakter, dan inovasi untuk menghasilkan lulusan yang siap kerja dan siap berwirausaha',
   image: aboutVideo,
+  video: { ...videoProfilSekolah, poster: aboutVideo },
   badges: [
     { title: 'Akreditasi A', desc: 'BAN – SMK' },
     { title: 'Fasilitas Modern', desc: 'Berstandar Industri' },
@@ -287,6 +302,25 @@ export const nilaiStematel = [
 ];
 
 // ── Timeline ──
+// ── Profil sekolah dalam video + galeri fasilitas ──
+export const profilVideo = {
+  eyebrow: 'Profil Sekolah',
+  title: 'Lihat Langsung Suasananya',
+  description:
+    'Satu video singkat untuk mengenal gedung, laboratorium, dan keseharian belajar di SMK Telkom Purwokerto sebelum kamu datang berkunjung.',
+  video: { ...videoProfilSekolah, poster: gedungSekolah },
+  galeriTitle: 'Fasilitas Sekolah',
+  galeriDesc: 'Ruang belajar dan laboratorium yang dipakai siswa setiap hari.',
+  galeri: [
+    { image: labKomputer, alt: 'Laboratorium komputer dengan perangkat berstandar industri' },
+    { image: studioMultimedia, alt: 'Studio multimedia untuk produksi konten dan game' },
+    { image: perpustakaan, alt: 'Perpustakaan sekolah sebagai ruang baca dan diskusi' },
+    { image: gedungSekolah, alt: 'Gedung utama SMK Telkom Purwokerto' },
+    { image: guruGroup, alt: 'Guru produktif pendamping praktik siswa' },
+    { image: heroPanel, alt: 'Kegiatan belajar siswa di dalam kelas' },
+  ],
+};
+
 export const timelineData = [
   {
     year: '2012',
@@ -644,6 +678,9 @@ export const videoHighlight = {
   title: 'Video Highlight',
   videoTitle: 'Highlight Prestasi SMK Telkom Purwokerto\nTahun 2024',
   videoDesc: 'Perjalanan, kerja keras, dan moment terbaik siswa SMK Telkom Purwokerto',
+  // ponytail: memakai video profil resmi sekolah karena reel khusus prestasi
+  // belum ada. Ganti `videoId` di sini begitu videonya tersedia.
+  video: { ...videoProfilSekolah, poster: prestasi1 },
 };
 
 /* =========================================================
@@ -1025,6 +1062,11 @@ export const jurusanDetail = [
       { role: 'Mobile Developer', desc: 'Mengembangkan aplikasi untuk perangkat Android maupun iOS.' },
       { role: 'Quality Assurance', desc: 'Menguji perangkat lunak agar bebas cacat sebelum sampai ke pengguna.' },
     ],
+    galeri: [
+      { image: showcaseRpl, alt: 'Aplikasi web karya siswa RPL' },
+      { image: labKomputer, alt: 'Laboratorium RPL dengan komputer spesifikasi pengembangan' },
+      { image: jurusanRpl, alt: 'Siswa RPL mengerjakan proyek secara berkelompok' },
+    ],
   },
   {
     slug: 'pg',
@@ -1068,6 +1110,11 @@ export const jurusanDetail = [
       { role: 'Technical Artist', desc: 'Menjembatani kebutuhan seniman dan pemrogram dalam produksi game.' },
       { role: 'Level Designer', desc: 'Merancang tata letak dan alur tantangan di setiap level.' },
       { role: 'Game Tester', desc: 'Menemukan cacat dan bagian yang membingungkan sebelum game dirilis.' },
+    ],
+    galeri: [
+      { image: showcasePg, alt: 'Permainan buatan siswa Pengembangan Game' },
+      { image: studioMultimedia, alt: 'Studio multimedia tempat aset game diproduksi' },
+      { image: jurusanPg, alt: 'Sesi playtest permainan bersama pemain' },
     ],
   },
   {
@@ -1113,6 +1160,11 @@ export const jurusanDetail = [
       { role: 'NOC Engineer', desc: 'Memantau jaringan dan menangani gangguan sepanjang waktu.' },
       { role: 'IT Support', desc: 'Menangani kebutuhan perangkat dan jaringan pengguna di kantor.' },
     ],
+    galeri: [
+      { image: showcaseTkj, alt: 'Praktik konfigurasi router dan switch' },
+      { image: jurusanTkj, alt: 'Laboratorium jaringan dengan perangkat industri' },
+      { image: labKomputer, alt: 'Praktik administrasi server oleh siswa TKJ' },
+    ],
   },
   {
     slug: 'tjat',
@@ -1157,6 +1209,11 @@ export const jurusanDetail = [
       { role: 'Field Engineer', desc: 'Menangani pemasangan dan perbaikan perangkat di lokasi pelanggan.' },
       { role: 'Survey Technician', desc: 'Memetakan jalur dan menghitung kebutuhan material sebelum pemasangan.' },
     ],
+    galeri: [
+      { image: showcaseTjat, alt: 'Praktik penyambungan kabel fiber optic' },
+      { image: jurusanTjat, alt: 'Pengukuran redaman jalur dengan OTDR' },
+      { image: labKomputer, alt: 'Simulasi jaringan akses FTTH di laboratorium' },
+    ],
   },
 ];
 
@@ -1180,6 +1237,21 @@ export const prestasiDetail = [
       { label: 'Penyelenggara', value: 'Kementerian Pendidikan' },
       { label: 'Hasil', value: 'Juara 1' },
     ],
+    sorotan: [
+      { angka: '1', label: 'Peringkat akhir' },
+      { angka: '34', label: 'Provinsi bersaing' },
+      { angka: '4 bulan', label: 'Masa persiapan' },
+    ],
+    perjalanan: [
+      { tahap: 'Seleksi sekolah', isi: 'Dua puluh siswa RPL mengikuti simulasi lomba tertutup, disaring menjadi tiga kandidat.' },
+      { tahap: 'Seleksi provinsi', isi: 'Tim menyelesaikan studi kasus aplikasi web dalam delapan jam dan lolos sebagai wakil Jawa Tengah.' },
+      { tahap: 'Final nasional', isi: 'Tiga hari penilaian di Jakarta, ditutup dengan pengumuman Juara 1 bidang Web Technologies.' },
+    ],
+    galeri: [
+      { image: prestasi1, alt: 'Tim menerima piala Juara 1 LKS Nasional 2024' },
+      { image: showcaseRpl, alt: 'Aplikasi web yang dilombakan di babak final' },
+      { image: labKomputer, alt: 'Latihan rutin di laboratorium RPL sebelum lomba' },
+    ],
   },
   {
     slug: 'idseec-2024-network-security',
@@ -1199,6 +1271,21 @@ export const prestasiDetail = [
       { label: 'Tingkat', value: 'Internasional' },
       { label: 'Penyelenggara', value: 'IDSEEC' },
       { label: 'Hasil', value: 'Gold Medal' },
+    ],
+    sorotan: [
+      { angka: 'Gold', label: 'Medali diraih' },
+      { angka: '0', label: 'Perangkat keras tambahan' },
+      { angka: '1', label: 'Sistem dipakai di sekolah' },
+    ],
+    perjalanan: [
+      { tahap: 'Riset masalah', isi: 'Siswa memetakan gangguan jaringan yang paling sering terjadi di laboratorium sekolah selama satu semester.' },
+      { tahap: 'Bangun purwarupa', isi: 'Pemantau lalu lintas dibuat murni sebagai perangkat lunak agar bisa dipasang tanpa membeli alat baru.' },
+      { tahap: 'Penjurian IDSEEC', isi: 'Juri menguji ketepatan deteksi dan kesiapan penerapannya, lalu memberikan Gold Medal.' },
+    ],
+    galeri: [
+      { image: prestasi2, alt: 'Presentasi purwarupa di hadapan juri IDSEEC 2024' },
+      { image: jurusanTkj, alt: 'Praktik pemantauan jaringan di laboratorium TKJ' },
+      { image: labKomputer, alt: 'Pengujian sistem deteksi pada jaringan sekolah' },
     ],
   },
   {
@@ -1220,6 +1307,21 @@ export const prestasiDetail = [
       { label: 'Penyelenggara', value: 'Huawei' },
       { label: 'Hasil', value: 'Silver Medal' },
     ],
+    sorotan: [
+      { angka: 'Silver', label: 'Medali diraih' },
+      { angka: '3', label: 'Anggota delegasi' },
+      { angka: '2', label: 'Bidang diujikan' },
+    ],
+    perjalanan: [
+      { tahap: 'Babak daring', isi: 'Peserta mengerjakan soal jaringan dan komputasi awan dengan batas waktu ketat dari sekolah masing-masing.' },
+      { tahap: 'Pelatihan intensif', isi: 'Tim mendalami kurikulum resmi Huawei di laboratorium jaringan, dipandu guru bersertifikasi.' },
+      { tahap: 'Babak praktik', isi: 'Konfigurasi langsung pada perangkat sungguhan, dinilai berdasarkan ketepatan dan kecepatan.' },
+    ],
+    galeri: [
+      { image: prestasi2, alt: 'Delegasi sekolah di Huawei ICT Competition 2024' },
+      { image: showcaseTkj, alt: 'Konfigurasi perangkat jaringan saat babak praktik' },
+      { image: jurusanTkj, alt: 'Persiapan tim di laboratorium jaringan sekolah' },
+    ],
   },
   {
     slug: 'gemastik-2024-game-development',
@@ -1239,6 +1341,21 @@ export const prestasiDetail = [
       { label: 'Tingkat', value: 'Nasional' },
       { label: 'Penyelenggara', value: 'Gemastik' },
       { label: 'Hasil', value: 'Juara 2' },
+    ],
+    sorotan: [
+      { angka: '2', label: 'Peringkat akhir' },
+      { angka: '1', label: 'Judul game diproduksi' },
+      { angka: '5 bulan', label: 'Masa produksi' },
+    ],
+    perjalanan: [
+      { tahap: 'Konsep dan pitching', isi: 'Tim menyusun ide permainan, menguji aturan mainnya di atas kertas, lalu memilih satu konsep untuk dikembangkan.' },
+      { tahap: 'Produksi', isi: 'Aset visual, musik, dan mekanik dikerjakan paralel dalam tim kecil dengan tenggat mingguan.' },
+      { tahap: 'Playtest dan final', isi: 'Puluhan pemain menguji permainan, hasil masukannya dipakai memperbaiki level sebelum penjurian Gemastik.' },
+    ],
+    galeri: [
+      { image: prestasi3, alt: 'Tim Pengembangan Game di panggung Gemastik 2024' },
+      { image: showcasePg, alt: 'Tangkapan layar game yang dilombakan' },
+      { image: studioMultimedia, alt: 'Produksi aset visual di studio multimedia' },
     ],
   },
   {
@@ -1260,6 +1377,21 @@ export const prestasiDetail = [
       { label: 'Penyelenggara', value: 'Telkom Indonesia' },
       { label: 'Hasil', value: 'Juara 1' },
     ],
+    sorotan: [
+      { angka: '1', label: 'Peringkat akhir' },
+      { angka: '3', label: 'Sensor terpasang' },
+      { angka: '2 pekan', label: 'Uji coba di lahan' },
+    ],
+    perjalanan: [
+      { tahap: 'Survei lapangan', isi: 'Siswa mendata kebutuhan petani sekitar sekolah agar alat yang dibuat benar-benar terpakai.' },
+      { tahap: 'Rakit purwarupa', isi: 'Sensor kelembapan, suhu, dan cahaya dirangkai lalu dihubungkan ke papan pemantau berbasis web.' },
+      { tahap: 'Uji dan lomba', isi: 'Alat diuji langsung di lahan selama dua pekan sebelum dipresentasikan pada IoT Challenge Telkom 2024.' },
+    ],
+    galeri: [
+      { image: prestasi4, alt: 'Purwarupa perangkat IoT pertanian buatan siswa' },
+      { image: showcaseTjat, alt: 'Pemasangan sensor di lahan uji coba' },
+      { image: labKomputer, alt: 'Perakitan dan pengujian perangkat di laboratorium' },
+    ],
   },
   {
     slug: 'world-skills-asia-2024',
@@ -1280,6 +1412,21 @@ export const prestasiDetail = [
       { label: 'Penyelenggara', value: 'World Skills Asia' },
       { label: 'Hasil', value: 'Bronze Medal' },
     ],
+    sorotan: [
+      { angka: 'Bronze', label: 'Medali diraih' },
+      { angka: 'Asia', label: 'Tingkat kompetisi' },
+      { angka: '2', label: 'Kategori diikuti' },
+    ],
+    perjalanan: [
+      { tahap: 'Penyaringan nasional', isi: 'Peserta terpilih dari hasil LKS Nasional mengikuti pemusatan latihan bersama pelatih nasional.' },
+      { tahap: 'Pemusatan latihan', isi: 'Latihan harian dengan format soal dan batas waktu yang sama persis seperti kompetisi sesungguhnya.' },
+      { tahap: 'Kompetisi Asia', isi: 'Bersaing dengan peserta dari belasan negara dan membawa pulang medali perunggu.' },
+    ],
+    galeri: [
+      { image: prestasi1, alt: 'Peraih medali World Skills Asia 2024' },
+      { image: showcaseRpl, alt: 'Hasil kerja peserta pada kategori Web Technologies' },
+      { image: heroPanel, alt: 'Sesi pemusatan latihan sebelum berangkat' },
+    ],
   },
 ];
 
@@ -1298,6 +1445,15 @@ export const beritaDetail = [
       'Tim menyiapkan diri sejak awal tahun ajaran lewat latihan rutin dua kali seminggu dan simulasi lomba dengan batas waktu yang sama persis seperti aslinya.',
       'Gelar ini menjadi capaian kedua berturut-turut untuk sekolah pada bidang Web Technologies, setelah kemenangan serupa pada LKS Nasional 2024.',
     ],
+    kutipan: {
+      teks: 'Yang paling menentukan bukan kecepatan menulis kode, tapi kebiasaan memeriksa ulang sebelum waktu habis.',
+      oleh: 'Pembina tim LKS Web Technologies',
+    },
+    galeri: [
+      { image: prestasi1, alt: 'Penyerahan piala Juara 1 LKS Nasional 2025' },
+      { image: showcaseRpl, alt: 'Aplikasi web yang dikerjakan selama babak final' },
+      { image: labKomputer, alt: 'Latihan tim di laboratorium RPL' },
+    ],
   },
   {
     slug: 'workshop-ai-bersama-telkom-indonesia',
@@ -1312,6 +1468,15 @@ export const beritaDetail = [
       'Hari pertama diisi pengenalan konsep dasar: bagaimana data dikumpulkan, dibersihkan, dan dibagi menjadi data latih serta data uji.',
       'Hari kedua siswa langsung melatih model klasifikasi gambar sederhana dan mengukur akurasinya. Sebagian tim melanjutkan dengan menghubungkan model itu ke antarmuka web buatan sendiri.',
       'Materi workshop diarsipkan dan kini dipakai sebagai bahan pengayaan di kelas RPL dan Pengembangan Game.',
+    ],
+    kutipan: {
+      teks: 'Siswa tidak dibiarkan berhenti di teori. Hari kedua mereka sudah melatih model sendiri dan melihat akurasinya naik-turun.',
+      oleh: 'Praktisi AI Telkom Indonesia',
+    },
+    galeri: [
+      { image: showcaseRpl, alt: 'Sesi praktik membangun model pembelajaran mesin' },
+      { image: labKomputer, alt: 'Siswa mengikuti workshop di laboratorium komputer' },
+      { image: guruGroup, alt: 'Pendampingan guru selama sesi berlangsung' },
     ],
   },
   {
@@ -1328,6 +1493,15 @@ export const beritaDetail = [
       'Sesi utama membahas arsitektur jaringan berskala besar dan bagaimana gangguan ditangani tanpa memutus layanan pelanggan.',
       'Kunjungan ditutup dengan pemaparan jalur karier di bidang jaringan, termasuk sertifikasi yang bisa mulai diambil sejak masa sekolah.',
     ],
+    kutipan: {
+      teks: 'Melihat langsung bagaimana gangguan ditangani tanpa memutus layanan pelanggan itu pelajaran yang tidak ada di buku.',
+      oleh: 'Siswa kelas XI TKJ',
+    },
+    galeri: [
+      { image: jurusanTkj, alt: 'Rombongan siswa di laboratorium jaringan Huawei' },
+      { image: showcaseTkj, alt: 'Peninjauan perangkat jaringan berskala besar' },
+      { image: gedungSekolah, alt: 'Pelepasan rombongan kunjungan industri di sekolah' },
+    ],
   },
   {
     slug: 'dua-medali-perak-world-skills-asia-2025',
@@ -1342,6 +1516,15 @@ export const beritaDetail = [
       'Keduanya bersaing dengan peserta dari belasan negara dalam rangkaian tugas praktik yang dinilai juri internasional dengan standar seragam.',
       'Pembinaan dilakukan bersama pelatih nasional selama enam bulan, dengan penekanan pada ketelitian dan pengelolaan waktu di bawah tekanan.',
       'Sekolah berencana memperluas program pembinaan ini agar lebih banyak siswa dapat menembus seleksi tingkat Asia pada tahun berikutnya.',
+    ],
+    kutipan: {
+      teks: 'Formatnya sama persis dengan latihan harian kami, jadi yang tersisa di hari lomba tinggal menjaga ketenangan.',
+      oleh: 'Peraih medali perak Web Technologies',
+    },
+    galeri: [
+      { image: prestasi2, alt: 'Dua siswa peraih medali perak World Skills Asia 2025' },
+      { image: showcaseRpl, alt: 'Hasil kerja pada kategori Web Technologies' },
+      { image: showcaseTkj, alt: 'Praktik kategori Network Systems' },
     ],
   },
   {
@@ -1358,6 +1541,15 @@ export const beritaDetail = [
       'Tantangan terbesar muncul saat babak penyisihan ketika sensor jarak sempat terganggu pantulan lantai arena. Tim menyesuaikan ambang batas pembacaan di sela pertandingan dan berhasil lolos.',
       'Kemenangan ini melengkapi rangkaian prestasi sekolah di bidang robotika dan menjadi bekal menuju kompetisi tingkat internasional.',
     ],
+    kutipan: {
+      teks: 'Robot kami sempat gagal di uji coba terakhir. Semalaman diperbaiki, dan besoknya justru jadi yang tercepat.',
+      oleh: 'Ketua tim robotika',
+    },
+    galeri: [
+      { image: prestasi3, alt: 'Tim robotika bersama piala KRI Nasional 2025' },
+      { image: labKomputer, alt: 'Perakitan dan kalibrasi robot sebelum lomba' },
+      { image: studioMultimedia, alt: 'Pengujian lintasan di ruang latihan' },
+    ],
   },
   {
     slug: 'lab-ai-center-resmi-dibuka',
@@ -1372,6 +1564,15 @@ export const beritaDetail = [
       'Laboratorium ini dilengkapi komputer berkemampuan tinggi yang memungkinkan siswa melatih model tanpa harus menunggu berjam-jam.',
       'Ruangan dirancang untuk kerja kelompok: meja disusun melingkar agar diskusi dan peninjauan kode antar-siswa berjalan lebih mudah.',
       'Selain jam pelajaran, lab dibuka untuk kegiatan mandiri di luar jam sekolah dengan pendampingan guru pembimbing.',
+    ],
+    kutipan: {
+      teks: 'Ruang ini dibuka bukan untuk dipamerkan, tapi supaya dipakai siswa setiap hari.',
+      oleh: 'Kepala SMK Telkom Purwokerto',
+    },
+    galeri: [
+      { image: labKomputer, alt: 'Ruang AI Center dengan perangkat berspesifikasi tinggi' },
+      { image: studioMultimedia, alt: 'Area kerja kelompok di dalam AI Center' },
+      { image: gedungSekolah, alt: 'Gedung tempat AI Center berada' },
     ],
   },
   {
@@ -1388,6 +1589,15 @@ export const beritaDetail = [
       'Telkom juga membuka akses ke perangkat dan modul pelatihan yang sebelumnya hanya tersedia untuk karyawan internal.',
       'Angkatan pertama yang memanfaatkan skema ini dijadwalkan berangkat magang pada semester berikutnya.',
     ],
+    kutipan: {
+      teks: 'Kerja sama ini menyangkut tempat magang, materi ajar, sampai jalur rekrutmen lulusan.',
+      oleh: 'Perwakilan PT Telkom Indonesia',
+    },
+    galeri: [
+      { image: gedungSekolah, alt: 'Penandatanganan nota kesepahaman di aula sekolah' },
+      { image: guruGroup, alt: 'Perwakilan sekolah dan mitra industri' },
+      { image: perpustakaan, alt: 'Ruang pertemuan tempat pembahasan kerja sama' },
+    ],
   },
   {
     slug: 'outing-class-borobudur-yogyakarta',
@@ -1402,6 +1612,15 @@ export const beritaDetail = [
       'Kegiatan dirancang bukan sekadar rekreasi: setiap kelompok membawa lembar pengamatan dan menyusun laporan singkat setelah kembali.',
       'Di Borobudur siswa mempelajari teknik konstruksi dan sistem drainase candi, yang kemudian dibahas ulang di kelas sebagai contoh rekayasa masa lalu.',
       'Rangkaian ditutup dengan kunjungan ke sentra kerajinan lokal untuk melihat bagaimana usaha kecil memanfaatkan teknologi digital dalam pemasaran.',
+    ],
+    kutipan: {
+      teks: 'Belajar sejarah di depan bangunannya langsung terasa berbeda dibanding membacanya di kelas.',
+      oleh: 'Peserta outing class kelas X',
+    },
+    galeri: [
+      { image: heroPanel, alt: 'Rombongan siswa saat outing class' },
+      { image: mapImg, alt: 'Rute perjalanan Purwokerto menuju Yogyakarta' },
+      { image: guruGroup, alt: 'Guru pendamping bersama peserta' },
     ],
   },
   {
@@ -1418,6 +1637,15 @@ export const beritaDetail = [
       'Sesi berikutnya membahas hierarki visual, keterbacaan, dan aksesibilitas dasar yang sering terlewat pada karya siswa.',
       'Workshop ditutup dengan uji purwarupa antar-kelompok, di mana setiap tim melihat langsung bagian rancangannya yang membingungkan pengguna.',
     ],
+    kutipan: {
+      teks: 'Desain yang bagus itu yang bisa dipakai orang tanpa dijelaskan lebih dulu.',
+      oleh: 'Praktisi UI/UX pemateri workshop',
+    },
+    galeri: [
+      { image: studioMultimedia, alt: 'Sesi workshop UI/UX di studio multimedia' },
+      { image: showcasePg, alt: 'Hasil rancangan antarmuka karya siswa' },
+      { image: labKomputer, alt: 'Praktik membuat purwarupa antarmuka' },
+    ],
   },
   {
     slug: 'seleksi-internal-gemastik-2025',
@@ -1432,6 +1660,15 @@ export const beritaDetail = [
       'Seleksi dibuka untuk semua jurusan dan dinilai oleh guru produktif bersama alumni yang pernah berlaga di ajang serupa.',
       'Setiap tim mempresentasikan gagasan dan purwarupa awal, lalu menjawab pertanyaan juri mengenai kelayakan teknis karyanya.',
       'Tim terpilih akan menjalani pembinaan intensif sampai babak penyisihan nasional digelar.',
+    ],
+    kutipan: {
+      teks: 'Seleksi internal ini sengaja dibuat lebih berat dari lombanya, supaya tidak ada kejutan di hari H.',
+      oleh: 'Guru pembina Gemastik',
+    },
+    galeri: [
+      { image: showcasePg, alt: 'Peserta seleksi internal mempresentasikan karyanya' },
+      { image: labKomputer, alt: 'Pengerjaan studi kasus dengan batas waktu' },
+      { image: prestasi3, alt: 'Piala Gemastik tahun sebelumnya sebagai target tim' },
     ],
   },
   {
@@ -1448,6 +1685,15 @@ export const beritaDetail = [
       'Berkas yang perlu disiapkan meliputi rapor semester terakhir, kartu keluarga, dan pas foto terbaru.',
       'Kuota gelombang kedua lebih terbatas dibanding gelombang pertama, sehingga pendaftar disarankan tidak menunggu sampai hari terakhir.',
     ],
+    kutipan: {
+      teks: 'Kuota gelombang kedua lebih sedikit, jadi berkas sebaiknya disiapkan jauh sebelum hari terakhir.',
+      oleh: 'Panitia PPDB',
+    },
+    galeri: [
+      { image: pengumumanHeroImg, alt: 'Sosialisasi PPDB gelombang 2 kepada calon siswa' },
+      { image: gedungSekolah, alt: 'Gedung sekolah yang menjadi tujuan pendaftaran' },
+      { image: perpustakaan, alt: 'Fasilitas yang bisa dipakai siswa baru' },
+    ],
   },
   {
     slug: 'campus-hiring-mitra-industri',
@@ -1462,6 +1708,15 @@ export const beritaDetail = [
       'Beberapa perusahaan membuka sesi wawancara di hari yang sama, sehingga peserta bisa mengetahui hasil tahap awal tanpa menunggu lama.',
       'Sebelum acara, BKK mengadakan pendampingan penyusunan CV dan simulasi wawancara bagi seluruh peserta.',
       'Sejumlah siswa menerima tawaran pada hari itu juga, sementara sisanya melanjutkan ke tahap seleksi berikutnya di kantor masing-masing perusahaan.',
+    ],
+    kutipan: {
+      teks: 'Kami datang mencari lulusan yang sudah terbiasa bekerja dalam tim, bukan sekadar hafal teori.',
+      oleh: 'Perekrut mitra industri',
+    },
+    galeri: [
+      { image: gedungSekolah, alt: 'Bursa kerja campus hiring di aula sekolah' },
+      { image: guruGroup, alt: 'Sesi wawancara bersama perekrut' },
+      { image: labKomputer, alt: 'Tes kemampuan teknis bagi pelamar' },
     ],
   },
 ];
@@ -1486,6 +1741,16 @@ export const pengumumanDetail = [
       { label: 'Jalur', value: 'Daring melalui laman PPDB' },
       { label: 'Kategori', value: 'PPDB' },
     ],
+    tenggat: { label: 'Batas akhir pendaftaran', tanggal: '30 Juni 2026', catatan: 'Kuota gelombang 2 lebih terbatas dari gelombang 1.' },
+    langkah: [
+      'Buat akun di laman PPDB resmi sekolah menggunakan surel aktif.',
+      'Isi formulir data diri dan pilih dua program keahlian sesuai urutan minat.',
+      'Unggah seluruh berkas persyaratan dalam format PDF atau JPG.',
+      'Lakukan konfirmasi pendaftaran dan simpan nomor pendaftaran yang diterbitkan.',
+    ],
+    berkas: ['Rapor semester terakhir', 'Kartu keluarga', 'Akta kelahiran', 'Pas foto terbaru'],
+    kontak: { nama: 'Panitia PPDB', detail: 'Ruang Tata Usaha, Senin-Jumat pukul 08.00-15.00' },
+    aksi: { label: 'Buka Laman PPDB', href: '/ppdb' },
   },
   {
     slug: 'ppdb-gelombang-1-dibuka',
@@ -1506,6 +1771,16 @@ export const pengumumanDetail = [
       { label: 'Seleksi', value: 'Nilai rapor dan tes minat' },
       { label: 'Kategori', value: 'PPDB' },
     ],
+    tenggat: { label: 'Periode pendaftaran', tanggal: '15 Mei 2026', catatan: 'Gelombang dengan kuota terbanyak sepanjang masa pendaftaran.' },
+    langkah: [
+      'Daftarkan diri melalui laman PPDB dan lengkapi data rapor.',
+      'Ikuti tes minat daring pada tanggal yang ditentukan panitia.',
+      'Pantau hasil seleksi melalui laman PPDB dan surel terdaftar.',
+      'Lakukan daftar ulang sesuai jadwal bila dinyatakan diterima.',
+    ],
+    berkas: ['Rapor semester 1-5', 'Kartu keluarga', 'Surat keterangan siswa', 'Pas foto terbaru'],
+    kontak: { nama: 'Panitia PPDB', detail: 'Ruang Tata Usaha, Senin-Jumat pukul 08.00-15.00' },
+    aksi: { label: 'Buka Laman PPDB', href: '/ppdb' },
   },
   {
     slug: 'jadwal-ujian-tengah-semester',
@@ -1526,6 +1801,15 @@ export const pengumumanDetail = [
       { label: 'Bentuk', value: 'Tertulis dan praktik' },
       { label: 'Kategori', value: 'Akademik' },
     ],
+    tenggat: { label: 'Pelaksanaan ujian', tanggal: '15 Mei 2026', catatan: 'Hadir lima belas menit sebelum sesi dimulai.' },
+    langkah: [
+      'Unduh jadwal lengkap melalui portal siswa.',
+      'Periksa nomor ruang dan sesi ujian masing-masing.',
+      'Siapkan kartu pelajar sebagai syarat masuk ruang ujian.',
+      'Ajukan ujian susulan lewat wali kelas bila berhalangan hadir.',
+    ],
+    berkas: ['Kartu pelajar', 'Kartu peserta ujian', 'Alat tulis pribadi'],
+    kontak: { nama: 'Wakil Kepala Bidang Kurikulum', detail: 'Ruang Kurikulum, Senin-Jumat pukul 08.00-14.00' },
   },
   {
     slug: 'workshop-ai-untuk-siswa',
@@ -1546,6 +1830,15 @@ export const pengumumanDetail = [
       { label: 'Prasyarat', value: 'Tidak ada' },
       { label: 'Kategori', value: 'Workshop' },
     ],
+    tenggat: { label: 'Batas pendaftaran peserta', tanggal: '18 Mei 2026', catatan: 'Kuota peserta dibatasi agar setiap siswa mendapat pendampingan.' },
+    langkah: [
+      'Daftar melalui wali kelas atau ketua jurusan masing-masing.',
+      'Pastikan laptop pribadi sudah terpasang perangkat lunak yang diumumkan panitia.',
+      'Hadir di laboratorium sesuai sesi yang dibagikan panitia.',
+      'Kumpulkan hasil latihan di akhir hari kedua untuk memperoleh sertifikat.',
+    ],
+    berkas: ['Kartu pelajar', 'Laptop pribadi', 'Formulir pendaftaran peserta'],
+    kontak: { nama: 'Panitia Workshop', detail: 'Laboratorium AI Center, jam istirahat sekolah' },
   },
   {
     slug: 'kunjungan-industri-ke-telkom',
@@ -1566,6 +1859,15 @@ export const pengumumanDetail = [
       { label: 'Penilaian', value: 'Laporan pengamatan kelompok' },
       { label: 'Kategori', value: 'Sekolah' },
     ],
+    tenggat: { label: 'Batas pengumpulan izin orang tua', tanggal: '12 Mei 2026', catatan: 'Peserta tanpa surat izin tidak dapat diberangkatkan.' },
+    langkah: [
+      'Ambil formulir izin orang tua di wali kelas.',
+      'Kembalikan formulir yang sudah ditandatangani sebelum batas waktu.',
+      'Ikuti pengarahan teknis satu hari sebelum keberangkatan.',
+      'Berkumpul di titik keberangkatan sesuai jadwal yang diumumkan.',
+    ],
+    berkas: ['Surat izin orang tua', 'Kartu pelajar', 'Kartu identitas kesehatan'],
+    kontak: { nama: 'Panitia Kunjungan Industri', detail: 'Ruang Hubungan Industri, Senin-Jumat pukul 09.00-14.00' },
   },
   {
     slug: 'pengumuman-kelulusan-kelas-xii',
@@ -1586,6 +1888,15 @@ export const pengumumanDetail = [
       { label: 'Ijazah', value: 'Diambil sesuai jadwal jurusan' },
       { label: 'Kategori', value: 'Akademik' },
     ],
+    tenggat: { label: 'Pengumuman hasil kelulusan', tanggal: '5 Mei 2026', catatan: 'Hasil diumumkan serentak melalui portal siswa.' },
+    langkah: [
+      'Masuk ke portal siswa menggunakan akun masing-masing.',
+      'Periksa status kelulusan pada halaman pengumuman.',
+      'Unduh dan simpan surat keterangan lulus sementara.',
+      'Ikuti jadwal pengambilan ijazah yang diumumkan menyusul.',
+    ],
+    berkas: ['Akun portal siswa', 'Kartu pelajar', 'Bukti bebas tanggungan perpustakaan'],
+    kontak: { nama: 'Ruang Tata Usaha', detail: 'Senin-Jumat pukul 08.00-15.00' },
   },
 ];
 
