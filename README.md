@@ -451,8 +451,8 @@ git push
 
 | Nama | Role | Kontak |
 |------|------|--------|
-| [Nama Ketua Tim] | Project Lead / Frontend | [Email/Discord] |
-| Rainer | Frontend Developer | [Email/Discord] |
+| Kiandra | Backend Developer | - |
+| Rainer | Frontend Developer | rainersimanjuntak59@gmail.com |
 
 ---
 
