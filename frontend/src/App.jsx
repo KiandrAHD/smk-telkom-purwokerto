@@ -59,10 +59,7 @@ const App = () => {
           </Route>
         </Route>
 
-        {/* Semua tujuan yang halamannya belum dibangun (/ppdb, /stela, /pengumuman,
-            /galeri, dan seluruh halaman detail seperti /jurusan/rpl atau
-            /berita/<slug>) mendarat di sini. Tambahkan route halaman aslinya
-            DI ATAS baris ini saat halaman itu sudah jadi. */}
+        {/* Tujuan yang belum memiliki route khusus mendarat di halaman ini. */}
         <Route path="*" element={<SegeraHadirPage />} />
       </Routes>
     </>

@@ -27,32 +27,54 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
   const [masukan, setMasukan] = useState('');
   const [memuat, setMemuat] = useState(false);
   const [galat, setGalat] = useState(null);
+  const [pertanyaanGagal, setPertanyaanGagal] = useState('');
   const bawahRef = useRef(null);
+  const controllerRef = useRef(null);
+  const aktifRef = useRef(true);
+
+  useEffect(() => () => {
+    aktifRef.current = false;
+    controllerRef.current?.abort();
+  }, []);
 
   useEffect(() => {
     bawahRef.current?.scrollIntoView({ block: 'end' });
   }, [riwayat, memuat]);
 
-  const kirim = async (teks) => {
+  const kirim = async (teks, ulang = false) => {
     const pertanyaan = teks.trim();
     if (!pertanyaan || memuat) return;
 
     // Sapaan pembuka tidak ikut dikirim: itu tulisan kita sendiri, bukan bagian
     // percakapan, dan Claude menolak riwayat yang diawali pesan assistant.
-    const percakapan = [...riwayat.slice(1), { role: 'user', content: pertanyaan }];
+    let basis = riwayat.slice(1);
+    const pesanTerakhir = basis[basis.length - 1];
+    if (!ulang && pertanyaanGagal && pesanTerakhir?.role === 'user' && pesanTerakhir.content === pertanyaanGagal) {
+      basis = basis.slice(0, -1);
+    }
+    const percakapan = ulang
+      ? basis
+      : [...basis, { role: 'user', content: pertanyaan }];
 
-    setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);
+    if (!ulang) setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);
     setMasukan('');
     setGalat(null);
     setMemuat(true);
+    const controller = new AbortController();
+    controllerRef.current = controller;
 
     try {
-      const jawaban = await tanyaStela(percakapan);
+      const jawaban = await tanyaStela(percakapan, { signal: controller.signal });
+      if (!aktifRef.current) return;
       setRiwayat((lama) => [...lama, { role: 'assistant', content: jawaban }]);
-    } catch (e) {
-      setGalat(e.message);
+      setPertanyaanGagal('');
+    } catch (error) {
+      if (!aktifRef.current || error?.name === 'AbortError') return;
+      setGalat('STELA sedang mengalami kendala. Silakan coba lagi.');
+      setPertanyaanGagal(pertanyaan);
     } finally {
-      setMemuat(false);
+      if (aktifRef.current) setMemuat(false);
+      if (controllerRef.current === controller) controllerRef.current = null;
     }
   };
 
@@ -92,10 +114,18 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
         )}
 
         {galat && (
-          <p className="flex items-start gap-2 rounded-xl bg-primary-50 px-4 py-3 text-[11px] leading-relaxed text-primary-900">
+          <div role="alert" className="flex items-start gap-2 rounded-xl bg-primary-50 px-4 py-3 text-[11px] leading-relaxed text-primary-900">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
-            {galat}
-          </p>
+            <span className="flex-1">{galat}</span>
+            <button
+              type="button"
+              onClick={() => kirim(pertanyaanGagal, true)}
+              disabled={memuat || !pertanyaanGagal}
+              className="flex-shrink-0 font-semibold text-primary underline disabled:opacity-50"
+            >
+              Coba lagi
+            </button>
+          </div>
         )}
 
         {tampilkanSaran && belumBertanya && !memuat && (
