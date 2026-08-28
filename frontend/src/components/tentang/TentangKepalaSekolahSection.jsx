@@ -71,31 +71,33 @@ const TentangKepalaSekolahSection = () => {
           <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {shown.map((guru, i) => (
               <Link
-                key={`${page}-${guru.category}`}
-                to={`/tentang/guru/${slugify(guru.category)}`}
+                key={guru.nama}
+                to={`/tentang/guru/${slugify(guru.nama)}`}
                 className="block overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
               >
                 <article>
                   <div className="flex h-28 items-end justify-center overflow-hidden rounded-xl bg-primary">
                     <img
                       src={guru.image}
-                      alt={`${guru.title} ${guru.subtitle}`}
+                      alt={`${guru.nama}, ${guru.jabatan}`}
                       className="h-full w-auto object-contain object-bottom"
                       loading={i < 4 ? 'eager' : 'lazy'}
                     />
                   </div>
                   <h3 className="mt-2 font-heading text-[11px] font-bold leading-snug text-primary">
-                    {guru.title}
-                    <br />
-                    {guru.subtitle}
+                    {guru.nama}
                   </h3>
-                  <p className="mt-0.5 text-[9px] text-dark-500">{guru.category}</p>
+                  <p className="mt-0.5 font-heading text-[9px] font-bold leading-snug text-dark-900">
+                    {guru.jabatan}
+                  </p>
+                  <p className="mt-0.5 text-[9px] leading-snug text-dark-500">{guru.bidang}</p>
                 </article>
               </Link>
             ))}
           </div>
 
-          {/* Indikator carousel — berfungsi */}
+          {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
+          {pages > 1 && (
           <div className="mt-5 flex items-center justify-center gap-2">
             {Array.from({ length: pages }).map((_, i) => (
               <button
@@ -110,6 +112,7 @@ const TentangKepalaSekolahSection = () => {
               />
             ))}
           </div>
+          )}
         </div>
       </div>
     </section>

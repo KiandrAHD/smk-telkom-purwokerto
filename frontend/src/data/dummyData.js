@@ -373,21 +373,41 @@ export const kepalaSekolah = {
 };
 
 // ── Guru & Tenaga Pendidik ──
-// CATATAN: di Figma keempat kartu ini memakai teks placeholder hasil salin dari section
-// Prestasi ("Juara 1 / LKS Nasional 2024"), bukan nama guru. Ditiru apa adanya sesuai desain —
-// tinggal ganti title/subtitle/category kalau data guru aslinya sudah ada.
+// Di Figma keempat kartu ini memakai teks placeholder hasil salin dari section Prestasi
+// ("Juara 1 / LKS Nasional 2024"), sehingga di halaman Tentang seolah para guru memenangkan
+// lomba yang sama dengan siswa. Diganti dengan data guru yang semestinya.
+//
+// ponytail: nama di bawah ini masih data dummy — ganti dengan data kepegawaian asli.
+// Jumlah entri sengaja disamakan dengan jumlah foto yang tersedia (4) supaya tidak ada
+// wajah yang sama muncul dengan dua nama berbeda. Tambah entri + foto baru, dan carousel
+// di TentangKepalaSekolahSection otomatis aktif lagi (empat kartu per halaman).
 export const guruData = [
-  { title: 'Juara 1', subtitle: 'LKS Nasional 2024', category: 'Web Technologies', image: guru1 },
-  { title: 'Juara 1', subtitle: 'LKS Nasional 2024', category: 'Network Security', image: guru2 },
-  { title: 'Juara 1', subtitle: 'LKS Nasional 2024', category: 'Game Development', image: guru3 },
-  { title: 'Juara 1', subtitle: 'LKS Nasional 2024', category: 'Smart Agriculture', image: guru4 },
-  { title: 'Juara 2', subtitle: 'Gemastik 2024', category: 'Software Development', image: guru2 },
-  { title: 'Gold Medal', subtitle: 'IDSEEC 2024', category: 'Cyber Security', image: guru4 },
-  { title: 'Juara 1', subtitle: 'IoT Challenge 2024', category: 'Internet of Things', image: guru1 },
-  { title: 'Juara 3', subtitle: 'LKS Provinsi 2024', category: 'Cloud Computing', image: guru3 },
+  {
+    nama: 'Bayu Setiawan, S.Kom.',
+    jabatan: 'Guru Produktif RPL',
+    bidang: 'Pemrograman web dan basis data',
+    image: guru1,
+  },
+  {
+    nama: 'Anindya Larasati, S.Pd.',
+    jabatan: 'Guru Produktif PG',
+    bidang: 'Desain game dan aset visual',
+    image: guru2,
+  },
+  {
+    nama: 'Nurul Hidayah, S.T.',
+    jabatan: 'Guru Produktif TKJ',
+    bidang: 'Administrasi jaringan dan server',
+    image: guru3,
+  },
+  {
+    nama: 'Fajar Nugroho, S.T.',
+    jabatan: 'Guru Produktif TJAT',
+    bidang: 'Fiber optic dan jaringan akses',
+    image: guru4,
+  },
 ];
 
-// ── Footer Data (shared semua halaman) ──
 export const footerData = {
   tagline:
     'Mencetak generasi digital yang kompeten, berkarakter, dan siap bersaing di era teknologi',
