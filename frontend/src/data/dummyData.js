@@ -425,10 +425,10 @@ export const jurusanHero = {
 };
 
 export const jurusanStats = [
-  { value: '4', label: 'Jurusan Unggulan' },
-  { value: '120+', label: 'Mitra Industri' },
-  { value: '98%', label: 'Lulusan Bekerja' },
-  { value: '350+', label: 'Projek Siswa' },
+  { value: '4', label: 'Jurusan Unggulan', icon: 'jurusan' },
+  { value: '120+', label: 'Mitra Industri', icon: 'mitra' },
+  { value: '98%', label: 'Lulusan Bekerja', icon: 'kerja' },
+  { value: '350+', label: 'Projek Siswa', icon: 'projek' },
 ];
 
 // Tag dipakai ulang dari jurusanData (beranda) supaya deskripsi tidak kembar.
@@ -529,10 +529,10 @@ export const prestasiHero = {
 };
 
 export const prestasiStats = [
-  { value: '150+', label: 'Total Prestasi' },
-  { value: '50+', label: 'Tingkat Nasional' },
-  { value: '15+', label: 'Tingkat Internasional' },
-  { value: '100+', label: 'Juara 1' },
+  { value: '150+', label: 'Total Prestasi', icon: 'trofi' },
+  { value: '50+', label: 'Tingkat Nasional', icon: 'nasional' },
+  { value: '15+', label: 'Tingkat Internasional', icon: 'internasional' },
+  { value: '100+', label: 'Juara 1', icon: 'medali' },
 ];
 
 export const prestasiUnggulan = {
@@ -692,10 +692,10 @@ export const videoHighlight = {
 export const bkkHero = { ...prestasiHero };
 
 export const bkkStats = [
-  { value: '250+', label: 'Lowongan Aktif' },
-  { value: '120+', label: 'Mitra Industri' },
-  { value: '95%', label: 'Penyiapan Alumni' },
-  { value: '500+', label: 'Alumni bekerja' },
+  { value: '250+', label: 'Lowongan Aktif', icon: 'lowongan' },
+  { value: '120+', label: 'Mitra Industri', icon: 'mitra' },
+  { value: '95%', label: 'Penyiapan Alumni', icon: 'alumni' },
+  { value: '500+', label: 'Alumni bekerja', icon: 'komunitas' },
 ];
 
 export const bkkSearch = {
