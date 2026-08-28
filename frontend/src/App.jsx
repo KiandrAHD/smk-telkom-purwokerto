@@ -21,6 +21,7 @@ import AdminPlaceholderPage from './pages/admin/AdminPlaceholderPage';
 import AdminBeritaPage from './pages/admin/berita/BeritaPage';
 import AdminPengumumanPage from './pages/admin/pengumuman/PengumumanPage';
 import AdminPrestasiPage from './pages/admin/prestasi/PrestasiPage';
+import AdminBkkPage from './pages/admin/bkk/BkkPage';
 
 const App = () => {
   return (
@@ -51,7 +52,7 @@ const App = () => {
             <Route path="berita" element={<AdminBeritaPage />} />
             <Route path="pengumuman" element={<AdminPengumumanPage />} />
             <Route path="prestasi" element={<AdminPrestasiPage />} />
-            <Route path="bkk" element={<AdminPlaceholderPage title="Kelola BKK" />} />
+            <Route path="bkk" element={<AdminBkkPage />} />
             <Route path="ppdb" element={<AdminPlaceholderPage title="Kelola PPDB" />} />
           </Route>
         </Route>
