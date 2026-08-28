@@ -8,6 +8,8 @@ const MAX_BODY = 6000;
 const MAX_REQUESTS = 20;
 const WINDOW_MS = 5 * 60 * 1000;
 const visits = new Map<string, { count: number; reset: number }>();
+const QUESTION_IDS = ['activity', 'interest', 'project', 'learning', 'problem', 'tool', 'work', 'future'];
+const OPTION_IDS = ['a', 'b', 'c', 'd'];
 
 const allowed = (origin: string | null) => ALLOWED_ORIGINS.includes('*') || (!origin && ALLOWED_ORIGINS.length === 0) || (!!origin && ALLOWED_ORIGINS.includes(origin));
 const cors = (origin: string | null) => ({ 'Access-Control-Allow-Origin': origin && allowed(origin) ? origin : ALLOWED_ORIGINS.includes('*') ? '*' : 'null', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Access-Control-Allow-Methods': 'POST, OPTIONS', Vary: 'Origin' });
@@ -36,7 +38,8 @@ Deno.serve(async (request) => {
     if (raw.length > MAX_BODY) return fail(origin);
     const body = JSON.parse(raw);
     if (!Array.isArray(body.answers) || body.answers.length !== MAX_ANSWERS || !isScoreMap(body.scores) || !isMajor(body.topRecommendation)) return fail(origin);
-    if (body.answers.some((answer: Record<string, unknown>) => typeof answer?.questionId !== 'string' || typeof answer?.optionId !== 'string' || answer.questionId.length > 50 || answer.optionId.length > 2)) return fail(origin);
+    const questionIds = body.answers.map((answer: Record<string, unknown>) => answer?.questionId);
+    if (body.answers.some((answer: Record<string, unknown>) => typeof answer?.questionId !== 'string' || typeof answer?.optionId !== 'string' || answer.questionId.length > 50 || answer.optionId.length > 2 || !QUESTION_IDS.includes(answer.questionId) || !OPTION_IDS.includes(answer.optionId)) || new Set(questionIds).size !== MAX_ANSWERS) return fail(origin);
     const userData = JSON.stringify({ answers: body.answers, scores: body.scores, topRecommendation: body.topRecommendation }).slice(0, MAX_TEXT * 10);
     const response = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01' }, body: JSON.stringify({ model: MODEL, max_tokens: 500, system: systemPrompt, messages: [{ role: 'user', content: `Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n${userData}` }] }) });
     if (!response.ok) return fail(origin);

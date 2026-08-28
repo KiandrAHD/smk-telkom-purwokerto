@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { ensureSupabase } from './supabase';
 
 const bkkColumns = 'id, perusahaan, posisi, deskripsi, lokasi, tipe_pekerjaan, deadline, status, link_pendaftaran, logo_url, created_at, updated_at';
 
@@ -8,6 +8,7 @@ const throwIfError = ({ data, error }) => {
 };
 
 export async function getBkk() {
+  const supabase = ensureSupabase();
   return throwIfError(
     await supabase
       .from('bkk')
@@ -18,6 +19,7 @@ export async function getBkk() {
 }
 
 export async function getActiveBkk() {
+  const supabase = ensureSupabase();
   return throwIfError(
     await supabase
       .from('bkk')
@@ -29,17 +31,21 @@ export async function getActiveBkk() {
 }
 
 export async function getBkkById(id) {
+  const supabase = ensureSupabase();
   return throwIfError(await supabase.from('bkk').select(bkkColumns).eq('id', id).single());
 }
 
 export async function createBkk(data) {
+  const supabase = ensureSupabase();
   return throwIfError(await supabase.from('bkk').insert(data).select(bkkColumns).single());
 }
 
 export async function updateBkk(id, data) {
+  const supabase = ensureSupabase();
   return throwIfError(await supabase.from('bkk').update(data).eq('id', id).select(bkkColumns).single());
 }
 
 export async function deleteBkk(id) {
+  const supabase = ensureSupabase();
   return throwIfError(await supabase.from('bkk').delete().eq('id', id));
 }
