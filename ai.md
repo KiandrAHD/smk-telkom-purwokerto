@@ -214,19 +214,98 @@ Ubah sumber data yang relevan, jalankan generator `npm run stela:konten`, review
 
 Jangan membuat database, tabel, bucket, atau authentication baru hanya untuk STELA jika data existing masih cukup.
 
-## 9. Batasan dan Rencana NextTel
+## 9. NextTel
 
-NextTel harus dikembangkan sebagai sistem terpisah dengan prinsip berikut:
+NextTel adalah sistem rekomendasi jurusan, bukan chatbot informasi umum. STELA tetap
+menjawab profil sekolah, berita, pengumuman, BKK, PPDB, dan fasilitas; NextTel hanya
+membantu calon siswa membaca kecenderungan minat terhadap jurusan.
 
-- Endpoint dan Edge Function berbeda dari STELA.
-- Prompt dan knowledge berbeda dari STELA.
-- State chat/rekomendasi berbeda dari STELA.
-- Data utama dapat berasal dari Jurusan dan preferensi pengguna setelah kontrak datanya ditentukan.
-- Hasil harus menjelaskan dasar rekomendasi.
-- Hasil tidak boleh dianggap sebagai keputusan penerimaan siswa.
-- NextTel tidak boleh mengubah perilaku STELA atau menggunakan nama STELA.
+### Struktur
 
-Sebelum implementasi NextTel, tentukan kontrak input, aturan scoring, sumber data jurusan, format output, dan pengujian bias secara terpisah.
+- `frontend/src/pages/NextTelPage.jsx`: state questionnaire, scoring, dan alur hasil.
+- `frontend/src/components/nexttel/`: intro, progress, pertanyaan, dan hasil.
+- `frontend/src/services/nexttel.js`: satu-satunya pemanggil Edge Function NextTel.
+- `supabase/functions/nexttel/index.ts`: validasi request dan penjelasan AI server-side.
+
+NextTel tidak menggunakan service, endpoint, state, atau system prompt STELA.
+
+### Cara menggunakan
+
+Buka `/nexttel`, tekan “Mulai sekarang”, lalu jawab 8 pertanyaan. Setelah selesai,
+halaman menampilkan jurusan utama, skor semua jurusan, alternatif, penjelasan AI, dan
+tips belajar. Tombol kembali, mulai ulang, retry, dan state loading/error tersedia.
+
+Jurusan resmi yang digunakan hanya:
+
+- Rekayasa Perangkat Lunak (RPL)
+- Pengembangan Game (PG)
+- Teknik Komputer dan Jaringan (TKJ)
+- Teknik Jaringan Akses Telekomunikasi (TJAT)
+
+### Scoring deterministic
+
+Scoring dilakukan di browser dan tidak diserahkan kepada model AI. Setiap jawaban
+memiliki satu jurusan utama dengan bobot `+3` dan satu jurusan yang beririsan dengan
+bobot `+1`:
+
+| Jawaban | Skor |
+| --- | --- |
+| A | RPL +3, PG +1 |
+| B | PG +3, RPL +1 |
+| C | TKJ +3, TJAT +1 |
+| D | TJAT +3, TKJ +1 |
+
+Jika skor seri, urutan prioritas tetap adalah RPL, PG, TKJ, lalu TJAT. Input yang
+sama selalu menghasilkan rekomendasi yang sama.
+
+### Edge Function dan kontrak
+
+Frontend mengirim `answers`, `scores`, dan `topRecommendation` ke
+`/functions/v1/nexttel`. Edge Function hanya meminta model membuat:
+
+- `explanation`
+- `strengths`
+- `learningSuggestions`
+
+Model tidak boleh menghitung ulang skor, mengubah rekomendasi, menambah jurusan,
+menjanjikan penerimaan, atau mengaku sebagai panitia PPDB. Response hanya berupa JSON
+yang sudah divalidasi dan dipangkas ukurannya.
+
+Konfigurasi Supabase Edge Function:
+
+- `NEXTTEL_ANTHROPIC_API_KEY`: secret API Anthropic khusus NextTel.
+- `NEXTTEL_MODEL`: model ID yang tersedia pada akun Anthropic.
+- `NEXTTEL_ALLOWED_ORIGINS`: daftar origin frontend dipisahkan koma.
+
+Frontend hanya memakai `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` untuk memanggil
+function. API key Anthropic tidak boleh berada di React, `.env` frontend,
+localStorage, response, atau log.
+
+### Keamanan dan batasan
+
+Request divalidasi sebagai JSON, dibatasi 8 jawaban dan ukuran body, hanya menerima
+empat kode jurusan, dan dilindungi allowlist CORS serta rate limit in-memory. Tidak
+ada database atau penyimpanan hasil rekomendasi. Error internal selalu dinormalisasi
+menjadi:
+
+```text
+NextTel sedang mengalami kendala. Silakan coba lagi.
+```
+
+Rekomendasi NextTel adalah panduan berdasarkan minat, bukan keputusan resmi
+penerimaan siswa.
+
+### Pengembangan dan testing
+
+Perubahan pertanyaan atau bobot dilakukan di `NextTelPage.jsx`; pertahankan kode
+jurusan, matriks scoring, dan tie-break agar hasil tetap deterministic. Perubahan
+request dilakukan di `frontend/src/services/nexttel.js`, sedangkan prompt dan validasi
+server dilakukan di Edge Function.
+
+Uji minimal: empat skenario mayoritas RPL/PG/TKJ/TJAT, jawaban campuran, input yang
+sama menghasilkan skor yang sama, retry, restart, request malformed, origin tidak
+terdaftar, model/API key tidak tersedia, dan static scan agar secret tidak masuk
+frontend. Jalankan `npm run lint` dan `npm run build` dari folder `frontend`.
 
 ## 10. Testing dan Troubleshooting
 

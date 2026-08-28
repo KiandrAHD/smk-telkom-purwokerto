@@ -23,6 +23,7 @@ import AdminPrestasiPage from './pages/admin/prestasi/PrestasiPage';
 import AdminBkkPage from './pages/admin/bkk/BkkPage';
 import PPDBPage from './pages/PPDBPage';
 import AdminPPDBPage from './pages/admin/ppdb/PPDBPage';
+import NextTelPage from './pages/NextTelPage';
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
         <Route path="/pengumuman/:slug" element={<PengumumanDetailPage />} />
 
         <Route path="/stela" element={<StelaPage />} />
+        <Route path="/nexttel" element={<NextTelPage />} />
 
         <Route path="/login" element={<Login />} />
 
