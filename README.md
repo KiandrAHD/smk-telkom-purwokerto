@@ -1,9 +1,9 @@
 # 🏫 SMK Telkom Purwokerto — Digital Smart School Platform
 
 <div align="center">
-  <img src="./public/favicon.svg" alt="SMK Telkom Purwokerto" width="120" />
+  <img src="./frontend/public/favicon.svg" alt="SMK Telkom Purwokerto" width="120" />
   <br /><br />
-  <p><strong>Website resmi SMK Telkom Purwokerto</strong> — Dibangun dengan UI/UX modern, performa tinggi, dan berbasis Artificial Intelligence.</p>
+  <p><strong>Website resmi SMK Telkom Purwokerto</strong> — Dibangun dengan UI/UX modern, performa tinggi, dan asisten berbasis AI.</p>
   <p>Proyek ini dibuat untuk mengikuti <strong>Lomba Website Sekolah</strong>.</p>
 </div>
 
@@ -17,19 +17,18 @@
 - [Teknologi](#-teknologi)
 - [Struktur Proyek](#-struktur-proyek)
 - [Cara Menjalankan](#-cara-menjalankan)
-- [Progress Saat Ini](#-progress-saat-ini)
-- [Yang Belum Dibuat](#-yang-belum-dibuat)
+- [Daftar Halaman](#-daftar-halaman)
+- [STELA — Asisten AI](#-stela--asisten-ai)
+- [Status Fitur](#-status-fitur)
 - [Panduan Git](#-panduan-git)
-- [Tugas Reiner](#-tugas-reiner)
 - [Aturan Proyek](#-aturan-proyek)
-- [Target Akhir](#-target-akhir)
 - [Kontak](#-kontak)
 
 ---
 
 ## 🎯 Tentang Proyek
 
-**SMK Telkom Purwokerto — Digital Smart School Platform** adalah website sekolah modern yang dibangun dari awal (rebuild total) dengan tujuan:
+**SMK Telkom Purwokerto — Digital Smart School Platform** adalah website sekolah modern yang dibangun dari awal dengan tujuan:
 
 - ✅ Menghadirkan wajah baru SMK Telkom Purwokerto di era digital
 - ✅ Memberikan pengalaman pengguna (UX) setara website perusahaan teknologi
@@ -53,31 +52,38 @@
 | 👨‍🏫 Guru | Informasi internal, pengumuman |
 | 🏢 Admin Sekolah | Dashboard, kelola konten, data PPDB |
 
+### Program Keahlian
+
+Empat jurusan yang tersedia: **RPL** (Rekayasa Perangkat Lunak), **PG** (Pengembangan Game), **TKJ** (Teknik Komputer dan Jaringan), dan **TJAT** (Teknik Jaringan Akses Telekomunikasi).
+
 ---
 
 ## 🛠 Teknologi
 
-### Frontend (Saat Ini)
+### Frontend
+
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| [React](https://react.dev/) | 19 | Library UI |
+| [Vite](https://vite.dev/) | 8 | Build tool dan dev server |
+| [Tailwind CSS](https://tailwindcss.com/) | 4 | Styling. Tanpa berkas config — token tema didefinisikan di blok `@theme` pada `src/index.css` |
+| [React Router](https://reactrouter.com/) | 7 | Routing dan navigasi halaman |
+| [Lucide React](https://lucide.dev/) | 1 | Icon set |
+| [React Icons](https://react-icons.github.io/react-icons/) | 5 | Ikon tambahan (logo media sosial) |
+| [@supabase/supabase-js](https://supabase.com/docs/reference/javascript) | 2 | Klien Supabase untuk auth dan CRUD admin |
+
+> **Catatan:** proyek ini **tidak** memakai pustaka animasi eksternal. Seluruh animasi memakai CSS dan `IntersectionObserver` bawaan browser (lihat `components/Reveal.jsx`). Permintaan HTTP memakai `fetch` bawaan, bukan Axios.
+
+### Backend
 
 | Teknologi | Kegunaan |
 |-----------|----------|
-| [React 19](https://react.dev/) | Library JavaScript untuk membangun user interface |
-| [Vite](https://vitejs.dev/) | Build tool cepat untuk pengembangan React |
-| [Tailwind CSS v4](https://tailwindcss.com/) | Utility-first CSS framework untuk styling cepat |
-| [React Router v7](https://reactrouter.com/) | Routing dan navigasi halaman |
-| [Framer Motion](https://www.framer.com/motion/) | Library animasi React yang powerful |
-| [Lucide React](https://lucide.dev/) | Icon set modern dan konsisten |
-| [Axios](https://axios-http.com/) | HTTP client untuk request ke API/Supabase |
-
-### Backend (Rencana)
-
-| Teknologi | Kegunaan |
-|-----------|----------|
-| [Supabase](https://supabase.com/) | Backend-as-a-Service (BaaS) open-source |
-| Supabase Auth | Autentikasi pengguna (admin, guru, siswa) |
-| Supabase Database | PostgreSQL untuk menyimpan data |
-| Supabase Storage | Penyimpanan file (gambar, dokumen) |
-| Row Level Security | Keamanan data level baris |
+| [Supabase](https://supabase.com/) | Backend-as-a-Service |
+| Supabase Auth | Autentikasi admin |
+| Supabase Database | PostgreSQL — tabel `admins`, `berita`, `pengumuman`, `prestasi`, `bkk`, `ppdb` |
+| Supabase Storage | Penyimpanan gambar dan dokumen |
+| Supabase Edge Functions | Menjalankan chatbot STELA (Deno) |
+| Row Level Security | Keamanan data per peran |
 
 ### Design System
 
@@ -87,78 +93,97 @@
 | **Warna Secondary** | Putih |
 | **Warna Accent** | Hitam |
 | **Font Utama** | Inter (body), Poppins (heading) |
-| **Style** | Minimalis, clean, Apple/Google style |
-| **Animasi** | Framer Motion — smooth, fade, slide, scroll reveal |
+| **Style** | Minimalis, clean |
+| **Animasi** | CSS transition + `IntersectionObserver` — fade/slide saat discroll, transisi antar halaman, zoom foto saat hover |
+| **Aksesibilitas** | Animasi dimatikan otomatis saat `prefers-reduced-motion`, konten tetap utuh saat dicetak |
 
 ---
 
 ## 📁 Struktur Proyek
 
 ```
-frontend/
+smk-telkom-purwokerto/
 │
-├── public/                          # File statis (favicon, dll)
+├── frontend/                             # Aplikasi React
+│   ├── public/                           # favicon.svg, icons.svg
+│   ├── scripts/
+│   │   └── buat-konten-stela.mjs         # Menghasilkan basis pengetahuan STELA dari dummyData.js
+│   │
+│   ├── src/
+│   │   ├── assets/                       # Gambar per halaman (landing, jurusan, tentang, bkk, pengumuman)
+│   │   │
+│   │   ├── components/                   # Komponen bersama
+│   │   │   ├── Navbar.jsx                # Sticky, blur, drawer mobile, highlight menu aktif
+│   │   │   ├── Footer.jsx
+│   │   │   ├── HeroSection.jsx
+│   │   │   ├── HeroStatsBar.jsx          # Bilah statistik hero (dipakai Jurusan, Prestasi, BKK)
+│   │   │   ├── DetailLayout.jsx          # Kerangka bersama semua halaman detail
+│   │   │   ├── Reveal.jsx                # Animasi muncul saat discroll
+│   │   │   ├── VideoEmbed.jsx            # Pemutar YouTube, iframe dimuat setelah diklik
+│   │   │   ├── GaleriFoto.jsx            # Galeri + penampil layar penuh (elemen <dialog>)
+│   │   │   ├── ScrollToTop.jsx
+│   │   │   ├── ... (20 komponen tingkat atas)
+│   │   │   │
+│   │   │   ├── berita/                   # 5 komponen section
+│   │   │   ├── bkk/                      # 5 komponen section
+│   │   │   ├── jurusan/                  # 7 komponen section
+│   │   │   ├── pengumuman/               # 10 komponen section
+│   │   │   ├── prestasi/                 # 6 komponen section
+│   │   │   ├── stela/                    # StelaChat.jsx, StelaWidget.jsx
+│   │   │   └── tentang/                  # 7 komponen section
+│   │   │
+│   │   ├── pages/                        # Halaman publik + halaman detail
+│   │   │   └── admin/                    # Dashboard dan CRUD
+│   │   │       ├── berita/               # Page, Table, Modal, Form
+│   │   │       ├── pengumuman/
+│   │   │       └── prestasi/
+│   │   │
+│   │   ├── page/Login/Login.jsx          # Halaman login admin
+│   │   ├── layouts/MainLayout.jsx        # Navbar + konten + Footer + widget STELA
+│   │   ├── router/ProtectedRoute.jsx     # Penjaga rute admin
+│   │   ├── context/AuthContext.jsx       # Sesi Supabase
+│   │   │
+│   │   ├── services/                     # Lapisan komunikasi data
+│   │   │   ├── supabase.js               # Klien Supabase (aman saat env kosong)
+│   │   │   ├── stela.js                  # Pemanggil Edge Function STELA
+│   │   │   └── beritaService.js, pengumumanService.js, prestasiService.js
+│   │   │
+│   │   ├── data/dummyData.js             # 61 export — seluruh isi situs
+│   │   ├── hooks/useScrollPosition.js
+│   │   ├── utils/slug.js
+│   │   ├── App.jsx                       # Definisi seluruh route
+│   │   ├── main.jsx
+│   │   └── index.css                     # Token tema Tailwind + animasi global
+│   │
+│   ├── .env                              # TIDAK ikut git — buat sendiri
+│   ├── package.json
+│   └── vite.config.js
 │
-├── src/
-│   ├── assets/                      # Gambar, ikon, dan file statis
-│   │   └── hero.png                 # Hero section image
-│   │
-│   ├── components/                  # Komponen reusable (specific)
-│   │   ├── Navbar.jsx               # Navigasi utama
-│   │   ├── HeroSection.jsx          # Hero section landing page
-│   │   ├── FeatureCard.jsx          # Card fitur reusable
-│   │   ├── FeatureSection.jsx       # Section fitur layanan
-│   │   ├── SectionHeading.jsx       # Heading section reusable
-│   │   ├── AboutSection.jsx         # Tentang sekolah
-│   │   ├── DepartmentCard.jsx       # Card jurusan reusable
-│   │   ├── DepartmentsSection.jsx   # Section jurusan
-│   │   ├── PartnersSection.jsx      # Partner industri (auto slider)
-│   │   ├── AchievementCard.jsx      # Card prestasi reusable
-│   │   ├── AchievementsSection.jsx  # Section prestasi
-│   │   ├── StelaAISection.jsx       # AI Assistant STELA
-│   │   ├── CTASection.jsx           # Call to action PPDB
-│   │   └── Footer.jsx               # Footer utama
-│   │
-│   ├── layouts/                     # Layout wrapper
-│   │   └── MainLayout.jsx           # Layout utama (Navbar + content + Footer)
-│   │
-│   ├── pages/                       # Halaman aplikasi
-│   │   └── LandingPage.jsx          # Halaman utama landing page
-│   │
-│   ├── hooks/                       # Custom React hooks
-│   │   └── useScrollPosition.js     # Hook untuk deteksi scroll
-│   │
-│   ├── services/                    # Service layer (API, Supabase)
-│   │   └── supabase.js              # Konfigurasi dan client Supabase
-│   │
-│   ├── data/                        # Data statis / dummy data
-│   │
-│   ├── utils/                       # Fungsi utility
-│   │
-│   ├── App.jsx                      # Entry point aplikasi
-│   ├── main.jsx                     # Root render
-│   └── index.css                    # Global styles + Tailwind config
+├── supabase/
+│   ├── migrations/001_initial_schema.sql # Tabel, index, trigger, RLS, bucket Storage
+│   ├── functions/stela/                  # Edge Function chatbot
+│   │   ├── index.ts
+│   │   ├── konten-sekolah.ts             # DIHASILKAN OTOMATIS — jangan diedit manual
+│   │   └── README.md                     # Panduan pemasangan STELA
+│   └── README.md                         # Dokumentasi database
 │
-├── .env                             # Environment variables
-├── .gitignore                       # File yang diabaikan Git
-├── index.html                       # HTML template
-├── package.json                     # Dependencies dan scripts
-├── vite.config.js                   # Konfigurasi Vite
-└── README.md                        # Dokumentasi project (file ini)
+└── README.md                             # Berkas ini
 ```
 
 ### Penjelasan Folder
 
 | Folder | Fungsi |
 |--------|--------|
-| `components/` | Berisi komponen React yang spesifik dan reusable. Setiap komponen memiliki file sendiri. |
-| `layouts/` | Layout wrapper yang membungkus halaman. `MainLayout` berisi Navbar dan Footer. |
-| `pages/` | Halaman utama aplikasi. Setiap halaman di-render oleh router. |
-| `hooks/` | Custom React hooks untuk logic yang reusable (contoh: scroll detection). |
-| `services/` | Layer komunikasi dengan backend/Supabase. |
-| `data/` | Data statis atau dummy data untuk pengembangan. |
-| `utils/` | Fungsi utility kecil yang bisa digunakan di banyak tempat. |
-| `assets/` | Gambar, ikon, dan file aset lainnya. |
+| `components/` | Komponen React reusable. Setiap section punya berkasnya sendiri, dikelompokkan per halaman. |
+| `layouts/` | Pembungkus halaman. `MainLayout` memuat Navbar, Footer, dan widget STELA. |
+| `pages/` | Halaman yang dirender router, termasuk halaman detail dinamis dan area admin. |
+| `router/` | Penjaga rute — `ProtectedRoute` menahan halaman admin dari pengunjung yang belum login. |
+| `context/` | State global. `AuthContext` menyimpan sesi Supabase. |
+| `services/` | Lapisan komunikasi dengan Supabase dan Edge Function. |
+| `data/` | Data dummy seluruh situs, dipisah dari komponen. |
+| `hooks/` | Custom hooks. |
+| `utils/` | Fungsi utility kecil. |
+| `assets/` | Gambar dan aset statis. |
 
 ---
 
@@ -166,150 +191,203 @@ frontend/
 
 ### Prasyarat
 
-- Node.js versi 18 atau lebih baru
-- npm versi 9 atau lebih baru
+- **Node.js `^20.19.0` atau `>=22.12.0`** (persyaratan Vite 8)
+- npm 9 atau lebih baru
 
-### Langkah-langkah
-
-#### 1. Clone Repository
+### 1. Clone dan masuk ke folder frontend
 
 ```bash
 git clone <url-repository>
-cd smk_project/frontend
 ```
 
-#### 2. Install Dependencies
+```bash
+cd smk-telkom-purwokerto/frontend
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-#### 3. Setup Environment Variables
+### 3. Buat berkas `.env`
 
-Buat file `.env` di folder `frontend/`:
+Buat `frontend/.env` dengan isi:
 
 ```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGci...
 ```
 
-> **Catatan:** Untuk development awal, file `.env` sudah tersedia. Jika belum ada, minta ke ketua tim.
+> ⚠️ **Penting soal keamanan**
+>
+> - Ambil nilainya sendiri dari Supabase Dashboard → **Settings → API**. Jangan meminta berkas `.env` dikirimkan lewat chat, dan jangan pernah men-commit-nya.
+> - Pakai **anon/publishable key**, **bukan** service key. Semua variabel berawalan `VITE_` ikut dibundel ke browser dan bisa dibaca siapa pun lewat DevTools — service key di sana berarti seluruh database terbuka.
+> - Situs publik tetap berjalan normal tanpa `.env`; yang terkunci hanya area admin dan STELA.
 
-#### 4. Jalankan Development Server
+### 4. Jalankan development server
 
 ```bash
 npm run dev
 ```
 
-Akses website di **http://localhost:5173**
+Akses di **http://localhost:5173**
 
-#### 5. Build untuk Production
+### 5. Build untuk production
 
 ```bash
 npm run build
 ```
 
-Hasil build akan tersimpan di folder `dist/`.
+Hasilnya tersimpan di `frontend/dist/`.
+
+### Perintah lain
+
+| Perintah | Kegunaan |
+|----------|----------|
+| `npm run dev` | Menjalankan dev server |
+| `npm run build` | Build production |
+| `npm run preview` | Melihat hasil build secara lokal |
+| `npm run lint` | Memeriksa kode dengan ESLint |
+| `npm run stela:konten` | Memperbarui basis pengetahuan STELA dari `dummyData.js` |
+
+### Menyiapkan database
+
+Lihat [`supabase/README.md`](./supabase/README.md) untuk menjalankan migration.
 
 ---
 
-## ✅ Progress Saat Ini
+## 🗺 Daftar Halaman
 
-### Sudah Selesai
+### Halaman publik
 
-| Bagian | Status | Keterangan |
-|--------|--------|------------|
-| Setup React + Vite | ✅ Selesai | Project scaffold dengan React 19 |
-| Setup Tailwind CSS | ✅ Selesai | Tailwind CSS v4 dengan custom theme |
-| Setup Supabase | ✅ Selesai | Client Supabase siap digunakan |
-| Setup GitHub Repository | ✅ Selesai | Repository sudah terhubung |
-| **Landing Page** | ✅ **Selesai** | **Semua section sudah jadi** |
+| Route | Halaman |
+|-------|---------|
+| `/` | Beranda |
+| `/tentang` | Profil sekolah |
+| `/jurusan` | Daftar jurusan |
+| `/prestasi` | Prestasi dan galeri |
+| `/bkk` | Bursa Kerja Khusus |
+| `/berita` | Berita dan kegiatan |
+| `/pengumuman` | Pengumuman resmi |
+| `/stela` | Chatbot STELA |
 
-### Landing Page — Detail Section
+### Halaman detail dinamis
 
-| Section | Status | Komponen |
-|---------|--------|----------|
-| Navbar | ✅ Selesai | `Navbar.jsx` — Sticky, blur, mobile drawer, active highlight |
-| Hero | ✅ Selesai | `HeroSection.jsx` — Dua kolom, stats, animasi |
-| Feature | ✅ Selesai | `FeatureSection.jsx` — 4 card layanan |
-| Tentang | ✅ Selesai | `AboutSection.jsx` — Profil sekolah, highlights |
-| Jurusan | ✅ Selesai | `DepartmentsSection.jsx` — 4 jurusan (RPL, TKJ, MM, SI) |
-| Partner Industri | ✅ Selesai | `PartnersSection.jsx` — Auto slider infinite |
-| Prestasi | ✅ Selesai | `AchievementsSection.jsx` — 4 card prestasi |
-| STELA AI | ✅ Selesai | `StelaAISection.jsx` — Chat preview, dark theme |
-| CTA | ✅ Selesai | `CTASection.jsx` — Background merah, call to action |
-| Footer | ✅ Selesai | `Footer.jsx` — Dark theme, links, kontak, maps |
+| Route | Jumlah entri |
+|-------|--------------|
+| `/jurusan/:slug` | 4 |
+| `/prestasi/:slug` | 6 |
+| `/berita/:slug` | 12 |
+| `/pengumuman/:slug` | 6 |
+
+Isi setiap halaman detail diambil dari `dummyData.js` berdasarkan slug di URL — tidak ada teks yang ditulis langsung di komponen. Slug yang belum punya data akan mendarat di halaman **Segera Hadir**, sama seperti seluruh rute yang belum dibangun (`/ppdb`, `/galeri`, dan lain-lain).
+
+### Area admin
+
+| Route | Halaman |
+|-------|---------|
+| `/login` | Login admin |
+| `/dashboard` | Ringkasan |
+| `/dashboard/berita` | CRUD berita |
+| `/dashboard/pengumuman` | CRUD pengumuman |
+| `/dashboard/prestasi` | CRUD prestasi |
+| `/dashboard/bkk` | Placeholder |
+| `/dashboard/ppdb` | Placeholder |
 
 ---
 
-## 📋 Yang Belum Dibuat
+## 🤖 STELA — Asisten AI
 
-### Halaman Frontend
+**STELA** (Stematel Learning Asistant) adalah chatbot yang menjawab pertanyaan pengunjung seputar sekolah. Tersedia sebagai halaman penuh di `/stela` dan gelembung mengambang di seluruh halaman publik.
 
-| Halaman | Prioritas | Keterangan |
-|---------|-----------|------------|
-| Profil Sekolah | 🔴 Tinggi | Informasi detail tentang sekolah |
-| Jurusan Detail | 🔴 Tinggi | Halaman detail masing-masing jurusan |
-| Prestasi | 🔴 Tinggi | Galeri prestasi lengkap |
-| Berita | 🔴 Tinggi | Daftar berita dan artikel |
-| Pengumuman | 🔴 Tinggi | Pengumuman resmi sekolah |
-| BKK | 🔴 Tinggi | Bursa Kerja Khusus |
-| PPDB | 🔴 Tinggi | Pendaftaran Peserta Didik Baru |
+### Cara kerjanya
 
-### Dashboard Admin
+```
+Widget chat (React)  →  Supabase Edge Function  →  Claude API
+                        ↑ API key hanya di sini
+```
 
-| Fitur | Prioritas | Keterangan |
-|-------|-----------|------------|
-| Login Admin | 🔴 Tinggi | Autentikasi admin |
-| Dashboard | 🔴 Tinggi | Overview data sekolah |
-| Sidebar Navigation | 🔴 Tinggi | Navigasi sidebar dashboard |
-| Header | 🔴 Tinggi | Header dashboard dengan user info |
-| CRUD Berita | 🔴 Tinggi | Create, Read, Update, Delete berita |
-| CRUD Pengumuman | 🔴 Tinggi | Create, Read, Update, Delete pengumuman |
-| CRUD Prestasi | 🔴 Tinggi | Create, Read, Update, Delete prestasi |
-| CRUD BKK | 🔴 Tinggi | Create, Read, Update, Delete lowongan BKK |
-| Data PPDB | 🔴 Tinggi | Melihat dan mengelola data pendaftar |
+Frontend **tidak pernah** menyentuh API key. Kalau key ditaruh di React, ia ikut terbundel ke browser dan bisa dipakai orang lain.
 
-### Supabase Integration
+Basis pengetahuannya adalah seluruh isi `dummyData.js` (~19.000 token) yang dikirim sebagai instruksi. Karena muat dalam satu prompt, proyek ini **tidak memerlukan vector database atau RAG**.
 
-| Fitur | Prioritas | Keterangan |
-|-------|-----------|------------|
-| Database Schema | 🟡 Sedang | Rancangan tabel dan relasi |
-| Authentication | 🟡 Sedang | Login admin, guru, siswa |
-| Storage | 🟡 Sedang | Upload gambar dan dokumen |
-| Row Level Security | 🟡 Sedang | Keamanan data per role |
+### Setelah mengubah isi situs
+
+```bash
+cd frontend
+```
+
+```bash
+npm run stela:konten
+```
+
+Lalu deploy ulang Edge Function-nya. Tanpa langkah ini, STELA masih menjawab memakai data lama.
+
+📖 Panduan pemasangan lengkap: [`supabase/functions/stela/README.md`](./supabase/functions/stela/README.md)
+
+---
+
+## ✅ Status Fitur
+
+| Fitur | Status | Keterangan |
+|-------|--------|------------|
+| Landing Page | ✅ Selesai | Seluruh section |
+| Halaman Tentang | ✅ Selesai | Termasuk video profil dan galeri fasilitas |
+| Halaman Jurusan | ✅ Selesai | Daftar + 4 halaman detail |
+| Halaman Prestasi | ✅ Selesai | Unggulan, galeri, perjalanan + 6 halaman detail |
+| Halaman BKK | ✅ Selesai | Lowongan, PKL, jalur karier, alumni |
+| Halaman Berita | ✅ Selesai | Sorotan, kategori, agenda + 12 halaman detail |
+| Halaman Pengumuman | ✅ Selesai | PPDB, statistik, daftar + 6 halaman detail |
+| Navigasi | ✅ Selesai | Seluruh tombol dan kartu mengarah ke tujuan nyata |
+| Animasi & interaksi | ✅ Selesai | Scroll reveal, transisi halaman, zoom foto |
+| Galeri & video | ✅ Selesai | Galeri layar penuh, pemutar video |
+| Login admin | ✅ Selesai | Supabase Auth |
+| Dashboard admin | ✅ Selesai | Ringkasan + sidebar |
+| CRUD Berita | ✅ Selesai | Terhubung Supabase |
+| CRUD Pengumuman | ✅ Selesai | Terhubung Supabase |
+| CRUD Prestasi | ✅ Selesai | Terhubung Supabase |
+| STELA AI | ✅ Selesai | Perlu API key untuk aktif |
+| CRUD BKK | ⬜ Belum | Masih placeholder |
+| PPDB Online | ⬜ Belum | Route mendarat di Segera Hadir |
+| Halaman Ekskul | ⬜ Belum | Belum ada desain maupun datanya |
+| Responsive | ✅ Selesai | Seluruh halaman |
+
+### Catatan teknis yang perlu diketahui
+
+- **Data situs masih dari `dummyData.js`.** CRUD admin sudah menulis ke Supabase, tetapi halaman publik belum membacanya. Memindahkannya adalah pekerjaan berikutnya.
+- **Sebagian foto masih memakai aset pengganti.** Ditandai komentar `ponytail:` di `dummyData.js`.
+- **Video highlight prestasi** sementara memakai video profil sekolah karena reel khususnya belum ada.
 
 ---
 
 ## 🔄 Panduan Git
 
-### Setiap Kali Memulai Coding
+### Setiap kali memulai coding
 
 ```bash
 git pull
 ```
 
-> **Penting:** Selalu `git pull` sebelum mulai coding untuk mendapatkan update terbaru dari tim.
-
-### Setelah Selesai Coding
+### Setelah selesai coding
 
 ```bash
-# Cek file yang berubah
 git status
+```
 
-# Tambahkan semua perubahan
+```bash
 git add .
+```
 
-# Commit dengan pesan yang jelas
+```bash
 git commit -m "feat: menambahkan halaman dashboard admin"
+```
 
-# Push ke repository
+```bash
 git push
 ```
 
-### Format Pesan Commit
-
-Gunakan format berikut agar pesan commit rapi dan konsisten:
+### Format pesan commit
 
 | Prefix | Keterangan |
 |--------|------------|
@@ -320,195 +398,61 @@ Gunakan format berikut agar pesan commit rapi dan konsisten:
 | `docs:` | Perubahan dokumentasi |
 | `chore:` | Tugas rutin (setup, config) |
 
-**Contoh:**
-
-```bash
-git commit -m "feat: membuat komponen sidebar dashboard"
-git commit -m "fix: memperbaiki navbar tidak sticky di mobile"
-git commit -m "style: menyesuaikan warna button PPDB"
-```
-
----
-
-## 👨‍💻 Tugas Reiner
-
-Halo Reiner! 👋
-
-Selamat bergabung di tim! Berikut adalah tugas yang perlu kamu kerjakan:
-
-### 📌 Yang Perlu Kamu Tahu
-
-1. **Landing Page sudah selesai** 🎉 — Kamu tidak perlu mengubahnya, kecuali jika menemukan bug atau ada diskusi terlebih dahulu dengan tim.
-
-2. **Fokus utama kamu adalah Dashboard Admin**.
-
-### 🎯 Prioritas Utama: Dashboard Admin
-
-Dashboard Admin adalah halaman yang digunakan oleh admin sekolah untuk mengelola konten website. Dashboard ini **belum perlu dihubungkan ke database** — fokus dulu pada UI/UX menggunakan React.
-
-#### Yang Harus Dibuat:
-
-#### 1. Login Page
-- Form login dengan email dan password
-- Desain modern dengan ilustrasi
-- Validasi form sederhana
-- **File:** `src/pages/Login.jsx`
-
-#### 2. Dashboard Layout
-- Sidebar navigasi
-- Header dengan user info
-- Konten utama
-- **File:** `src/layouts/DashboardLayout.jsx`
-
-#### 3. Sidebar Navigation
-- Menu: Dashboard, Berita, Pengumuman, Prestasi, BKK, PPDB
-- Icon untuk setiap menu
-- Active menu highlight
-- Collapsible di mobile
-
-#### 4. Dashboard Page
-- Cards: Total Berita, Total Pengumuman, Total Prestasi, Pendaftar PPDB
-- Grafik atau statistik sederhana
-- Welcome message
-
-#### 5. CRUD Berita
-- Tabel daftar berita
-- Tombol Tambah, Edit, Hapus
-- Modal/Form untuk tambah/edit berita
-- Kolom: Judul, Konten, Gambar, Tanggal, Status
-
-#### 6. CRUD Pengumuman
-- Sama seperti CRUD Berita
-- Kolom: Judul, Konten, Tanggal, Status
-
-#### 7. CRUD Prestasi
-- Tabel daftar prestasi
-- Tombol Tambah, Edit, Hapus
-- Kolom: Judul, Kategori, Deskripsi, Gambar, Tanggal
-
-#### 8. CRUD BKK
-- Tabel lowongan kerja
-- Tombol Tambah, Edit, Hapus
-- Kolom: Perusahaan, Posisi, Deskripsi, Deadline, Status
-
-#### 9. Data PPDB
-- Tabel daftar pendaftar
-- Filter status (diterima, ditunda, ditolak)
-- Detail pendaftar
-
-### 📁 Struktur Dashboard yang Disarankan
-
-```
-src/
-├── components/
-│   ├── dashboard/
-│   │   ├── Sidebar.jsx
-│   │   ├── Header.jsx
-│   │   ├── StatCard.jsx
-│   │   ├── DataTable.jsx
-│   │   ├── Modal.jsx
-│   │   └── FormInput.jsx
-│   │
-│   └── ... (komponen landing page yang sudah ada)
-│
-├── pages/
-│   ├── dashboard/
-│   │   ├── DashboardPage.jsx
-│   │   ├── BeritaPage.jsx
-│   │   ├── PengumumanPage.jsx
-│   │   ├── PrestasiPage.jsx
-│   │   ├── BKKPage.jsx
-│   │   └── PPDBPage.jsx
-│   │
-│   ├── LandingPage.jsx
-│   └── Login.jsx
-│
-├── layouts/
-│   ├── MainLayout.jsx
-│   └── DashboardLayout.jsx
-│
-├── data/
-│   └── dummyData.js      # Data dummy untuk development
-```
-
-### 💡 Tips untuk Reiner
-
-- Gunakan komponen yang **reusable** (contoh: `DataTable`, `Modal`, `FormInput`)
-- Gunakan **Tailwind CSS** untuk styling, jangan inline CSS
-- Gunakan **penamaan file PascalCase** (contoh: `Sidebar.jsx`, `DataTable.jsx`)
-- Gunakan **React Functional Component** dengan arrow function
-- Simpan **data dummy** di file `data/dummyData.js` untuk sementara
-- **Commit secara berkala** dengan pesan commit yang jelas
-- Jika ada yang tidak jelas, **tanya ke tim** — jangan diam saja!
-
 ---
 
 ## 📝 Aturan Proyek
 
-Agar project tetap rapi dan konsisten, ikuti aturan berikut:
+### 1. Coding style
 
-### 1. Landing Page
-- ❌ **Jangan mengubah** Landing Page tanpa diskusi dengan tim terlebih dahulu
-- ❌ **Jangan menghapus** komponen yang sudah dibuat
-- ❌ **Jangan mengubah** struktur Landing Page tanpa persetujuan
-- ✅ Jika menemukan **bug**, laporkan dan diskusikan sebelum memperbaiki
-
-### 2. Struktur Folder
-- ❌ **Jangan mengubah** struktur folder sembarangan
-- ✅ Tambahkan folder baru jika diperlukan, tapi diskusikan dulu
-- ✅ Ikuti struktur folder yang sudah ditentukan
-
-### 3. Coding Style
-- ✅ Gunakan **React Functional Component**
-- ✅ Gunakan **penamaan file PascalCase** (contoh: `Sidebar.jsx`)
+- ✅ **React Functional Component** dengan arrow function
+- ✅ Penamaan berkas **PascalCase** (contoh: `Sidebar.jsx`)
 - ✅ **Pisahkan setiap section** menjadi komponen tersendiri
-- ✅ Gunakan **Tailwind CSS** untuk semua styling
-- ❌ **Jangan gunakan inline CSS**
-- ❌ **Jangan gunakan Bootstrap, jQuery, Material UI**
+- ✅ **Tailwind CSS** untuk seluruh styling
+- ❌ Jangan gunakan **inline CSS**
+- ❌ Jangan gunakan **Bootstrap, jQuery, Material UI**
 
-### 4. Data
-- ✅ Gunakan **data dummy** di folder `data/` untuk development
-- ❌ **Jangan hardcode data** yang nantinya akan menggunakan Supabase
-- ✅ Simpan data dummy di file terpisah agar mudah diganti nanti
+### 2. Struktur folder
 
-### 5. Git
-- ✅ **Commit secara berkala** — jangan menumpuk banyak perubahan
-- ✅ Gunakan **pesan commit yang jelas** (lihat format di atas)
-- ✅ **Push setiap hari** agar tim bisa melihat progress
-- ✅ **Pull sebelum mulai coding** untuk mendapatkan update terbaru
+- ✅ Ikuti struktur yang sudah ada
+- ❌ Jangan mengubah struktur folder sembarangan
+- ✅ Diskusikan dulu kalau perlu menambah folder baru
 
-### 6. Komunikasi
-- ✅ Jika ada yang tidak jelas, **tanya ke tim**
-- ✅ Jika ingin mengubah sesuatu yang sudah jadi, **diskusikan dulu**
-- ✅ Laporkan **progress** secara rutin
+### 3. Data
 
----
+- ✅ Simpan data di `src/data/dummyData.js`, terpisah dari komponen
+- ❌ Jangan menulis teks konten langsung di dalam komponen
+- ✅ Setiap item yang punya halaman detail wajib memiliki `slug` unik
 
-## 🎯 Target Akhir
+### 4. Navigasi
 
-Fitur yang harus selesai:
+- ✅ Gunakan **React Router** (`<Link>`), bukan `<a href="#">`
+- ❌ Jangan ada tombol yang hanya dekorasi tanpa fungsi
+- ✅ Tujuan yang belum dibangun diarahkan ke halaman **Segera Hadir**
 
-| Fitur | Status Target |
-|-------|---------------|
-| ✅ Landing Page Modern | ✅ Selesai |
-| ✅ Navbar + Footer | ✅ Selesai |
-| 🔄 Dashboard Admin | 🟡 Dalam Pengerjaan |
-| ⏳ PPDB Online | ⬜ Belum |
-| ⏳ STELA AI | ⬜ Belum (Frontend sudah) |
-| ⏳ NextTel AI | ⬜ Belum |
-| ⏳ Responsive | ✅ Selesai (Landing Page) |
-| ⏳ Mudah Dikembangkan | ✅ Arsitektur sudah modular |
+### 5. Keamanan
+
+- ❌ **Jangan pernah** menaruh secret key di variabel `VITE_*` — semuanya terbaca di browser
+- ❌ **Jangan commit** berkas `.env`
+- ✅ Kunci rahasia disimpan sebagai secret Supabase, dipakai dari Edge Function
+
+### 6. Git
+
+- ✅ Commit berkala dengan pesan yang jelas
+- ✅ Pull sebelum mulai coding
+
+### 7. Komunikasi
+
+- ✅ Kalau ada yang tidak jelas, tanya ke tim
+- ✅ Diskusikan dulu sebelum mengubah bagian yang sudah jadi
 
 ---
 
 ## 📞 Kontak
 
-Jika ada pertanyaan atau butuh bantuan, hubungi:
-
 | Nama | Role | Kontak |
 |------|------|--------|
 | [Nama Ketua Tim] | Project Lead / Frontend | [Email/Discord] |
-| Reiner | Frontend Developer | [Email/Discord] |
+| Rainer | Frontend Developer | [Email/Discord] |
 
 ---
 
