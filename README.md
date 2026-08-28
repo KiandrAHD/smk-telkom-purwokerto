@@ -3,7 +3,7 @@
 <div align="center">
   <img src="./frontend/public/favicon.svg" alt="SMK Telkom Purwokerto" width="120" />
   <br /><br />
-  <p><strong>Website resmi SMK Telkom Purwokerto</strong> — Dibangun dengan UI/UX modern, performa tinggi, dan asisten berbasis AI.</p>
+  <p><strong>Website REMAKE SMK Telkom Purwokerto</strong> — Dibangun dengan UI/UX modern, performa tinggi, dan asisten berbasis AI.</p>
   <p>Proyek ini dibuat untuk mengikuti <strong>Lomba Website Sekolah</strong>.</p>
 </div>
 
