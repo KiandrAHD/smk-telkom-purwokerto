@@ -11,6 +11,7 @@ import JurusanDetailPage from './pages/JurusanDetailPage';
 import PrestasiDetailPage from './pages/PrestasiDetailPage';
 import BeritaDetailPage from './pages/BeritaDetailPage';
 import PengumumanDetailPage from './pages/PengumumanDetailPage';
+import StelaPage from './pages/StelaPage';
 import SegeraHadirPage from './pages/SegeraHadirPage';
 import Login from './page/Login/Login';
 import ProtectedRoute from './router/ProtectedRoute';
@@ -40,6 +41,8 @@ const App = () => {
         <Route path="/prestasi/:slug" element={<PrestasiDetailPage />} />
         <Route path="/berita/:slug" element={<BeritaDetailPage />} />
         <Route path="/pengumuman/:slug" element={<PengumumanDetailPage />} />
+
+        <Route path="/stela" element={<StelaPage />} />
 
         <Route path="/login" element={<Login />} />
 

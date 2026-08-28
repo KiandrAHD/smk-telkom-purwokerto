@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import HeroStatsBar from '../HeroStatsBar';
 import { jurusanHero, jurusanStats } from '../../data/dummyData';
 
 const JurusanHeroSection = () => (
@@ -43,19 +44,7 @@ const JurusanHeroSection = () => (
         </div>
 
         {/* Kartu statistik menimpa bagian bawah hero */}
-        <div className="relative z-10 mx-1 -mt-6 rounded-2xl border border-dark-100 bg-white shadow-card lg:mx-16 lg:mt-5 xl:-mt-7">
-          <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
-            {jurusanStats.map((stat) => (
-              <div key={stat.label} className="flex items-center gap-3 px-6 py-5">
-                <span className="h-10 w-10 flex-shrink-0 rounded-lg bg-primary" />
-                <div>
-                  <p className="font-heading text-xl font-extrabold text-dark-900">{stat.value}</p>
-                  <p className="text-[11px] text-dark-500">{stat.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <HeroStatsBar items={jurusanStats} />
       </div>
     </div>
   </section>

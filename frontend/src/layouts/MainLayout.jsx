@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import StelaWidget from '../components/stela/StelaWidget';
 
 export default function MainLayout({ children }) {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ export default function MainLayout({ children }) {
         {children}
       </main>
       <Footer />
+      <StelaWidget />
     </div>
   );
 }
