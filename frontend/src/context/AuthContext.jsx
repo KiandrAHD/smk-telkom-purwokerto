@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { supabase } from '../services/supabase';
+import { PESAN_SUPABASE_BELUM_SIAP, supabase, supabaseSiap } from '../services/supabase';
 
 const AuthContext = createContext(null);
 
@@ -8,7 +8,7 @@ const ADMIN_ACCESS_ERROR = 'Anda tidak memiliki akses sebagai admin.';
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(supabaseSiap);
   const [isAdmin, setIsAdmin] = useState(false);
 
   const checkAdmin = useCallback(async (userId) => {
@@ -45,6 +45,10 @@ export function AuthProvider({ children }) {
   );
 
   useEffect(() => {
+    // Tanpa konfigurasi Supabase tidak ada session yang bisa dibaca. Berhenti di
+    // sini supaya halaman publik tetap tampil dan hanya area admin yang terkunci.
+    if (!supabaseSiap) return undefined;
+
     let mounted = true;
 
     const initialize = async () => {
@@ -77,6 +81,8 @@ export function AuthProvider({ children }) {
 
   const signIn = useCallback(
     async (email, password) => {
+      if (!supabaseSiap) throw new Error(PESAN_SUPABASE_BELUM_SIAP);
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) throw error;
@@ -105,6 +111,8 @@ export function AuthProvider({ children }) {
   );
 
   const signOut = useCallback(async () => {
+    if (!supabaseSiap) return;
+
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
     setSession(null);

@@ -67,7 +67,7 @@ const PrestasiGaleriSection = () => {
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full aspect-[16/10] object-cover"
+                    className="w-full aspect-[16/10] object-cover object-top"
                     loading="lazy"
                   />
                   <span className="absolute bottom-1.5 left-1.5 rounded bg-primary px-1.5 py-0.5 text-[8px] font-bold text-white">

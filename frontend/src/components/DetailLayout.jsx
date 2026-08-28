@@ -43,7 +43,7 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           <img
             src={item.image}
             alt={item.title}
-            className="mt-7 w-full rounded-2xl object-cover aspect-[16/9]"
+            className="mt-7 w-full rounded-2xl object-cover object-top aspect-[16/9]"
           />
         )}
 

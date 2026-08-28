@@ -14,7 +14,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card">
       <div className="relative">
-        <img src={image} alt={name} className="w-full aspect-[2/1] object-cover" />
+        <img src={image} alt={name} className="w-full aspect-[2/1] object-cover object-top" />
         <span className="absolute -bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-md">
           <Icon className="h-4 w-4 text-white" />
         </span>
