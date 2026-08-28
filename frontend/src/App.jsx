@@ -17,11 +17,12 @@ import Login from './page/Login/Login';
 import ProtectedRoute from './router/ProtectedRoute';
 import DashboardPage from './pages/admin/DashboardPage';
 import AdminHomePage from './pages/admin/AdminHomePage';
-import AdminPlaceholderPage from './pages/admin/AdminPlaceholderPage';
 import AdminBeritaPage from './pages/admin/berita/BeritaPage';
 import AdminPengumumanPage from './pages/admin/pengumuman/PengumumanPage';
 import AdminPrestasiPage from './pages/admin/prestasi/PrestasiPage';
 import AdminBkkPage from './pages/admin/bkk/BkkPage';
+import PPDBPage from './pages/PPDBPage';
+import AdminPPDBPage from './pages/admin/ppdb/PPDBPage';
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/bkk" element={<BkkPage />} />
         <Route path="/berita" element={<BeritaPage />} />
         <Route path="/pengumuman" element={<PengumumanPage />} />
+        <Route path="/ppdb" element={<PPDBPage />} />
 
         {/* Halaman detail: isinya dicari dari slug, satu komponen per kategori. */}
         <Route path="/jurusan/:slug" element={<JurusanDetailPage />} />
@@ -53,7 +55,7 @@ const App = () => {
             <Route path="pengumuman" element={<AdminPengumumanPage />} />
             <Route path="prestasi" element={<AdminPrestasiPage />} />
             <Route path="bkk" element={<AdminBkkPage />} />
-            <Route path="ppdb" element={<AdminPlaceholderPage title="Kelola PPDB" />} />
+            <Route path="ppdb" element={<AdminPPDBPage />} />
           </Route>
         </Route>
 
