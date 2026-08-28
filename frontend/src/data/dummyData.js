@@ -199,6 +199,17 @@ export const stelaData = {
   description:
     'STELA (Stematel Learning Asistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto',
   ctaText: 'Tanya STELA Sekarang',
+  // Sapaan pembuka dan pertanyaan contoh untuk halaman /stela. Ditaruh di sini,
+  // bukan di komponen, supaya bisa diubah tanpa menyentuh kode.
+  sapaan:
+    'Halo! Aku STELA, asisten SMK Telkom Purwokerto. Tanya apa saja soal jurusan, PPDB, prestasi, atau fasilitas sekolah ya.',
+  saran: [
+    'Apa saja jurusan di SMK Telkom Purwokerto?',
+    'Kapan PPDB gelombang 2 ditutup?',
+    'Prestasi apa yang pernah diraih sekolah ini?',
+    'Jurusan apa yang cocok kalau saya suka jaringan?',
+  ],
+  placeholder: 'Tulis pertanyaanmu di sini...',
   chats: [
     {
       from: 'user',
