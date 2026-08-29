@@ -12,7 +12,7 @@ const AchievementCard = ({ title, category, image, slug, highlight = false }) =>
         <img
           src={image}
           alt={title}
-          className="w-full aspect-[16/9] object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full aspect-[16/9] object-cover object-top transition-transform duration-500 group-hover:scale-110"
         />
       </div>
       <div className="px-4 py-2.5">

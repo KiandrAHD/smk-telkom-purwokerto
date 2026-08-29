@@ -97,7 +97,7 @@ const BeritaAgendaSection = () => {
                   src={g.image}
                   alt={g.alt}
                   loading="lazy"
-                  className="aspect-[4/3] w-full rounded-lg object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="aspect-[4/3] w-full rounded-lg object-cover object-top transition-transform duration-500 group-hover:scale-110"
                 />
               </Link>
             ))}

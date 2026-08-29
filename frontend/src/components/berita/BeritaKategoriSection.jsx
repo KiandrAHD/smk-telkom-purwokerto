@@ -97,7 +97,7 @@ const BeritaKategoriSection = () => {
                   <img
                     src={n.image}
                     alt={n.title}
-                    className="w-full aspect-[16/10] object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                   <span className="absolute bottom-1.5 left-1.5 rounded bg-primary px-1.5 py-0.5 text-[8px] font-bold text-white">

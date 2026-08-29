@@ -2045,7 +2045,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Fasilitas baru berbasis AI dan Machine Learning resmi digunakan untuk pembelajaran...',
-      image: jurusanRpl,
+      image: labKomputer,
     },
     {
       kategori: 'Sekolah',
@@ -2056,7 +2056,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Kerja sama strategis untuk peningkatan kompetensi siswa dalam bidang teknologi...',
-      image: jurusanTkj,
+      image: guruGroup,
     },
     {
       kategori: 'Kegiatan',
@@ -2100,7 +2100,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Pendaftaran siswa baru gelombang kedua dibuka dengan kuota terbatas untuk...',
-      image: jurusanTjat,
+      image: pengumumanHeroImg,
     },
     {
       kategori: 'BKK',
@@ -2154,8 +2154,8 @@ export const galeriKegiatan = {
   // (batas panggilan MCP paket Starter). Ganti kalau sudah tersedia.
   items: [
     { alt: 'Tim siswa berprestasi', image: prestasi1 },
-    { alt: 'Siswa di ruang kelas', image: jurusanRpl },
-    { alt: 'Praktik jaringan siswa', image: jurusanTkj },
+    { alt: 'Siswa di studio multimedia', image: studioMultimedia },
+    { alt: 'Praktik jaringan siswa', image: showcaseTkj },
     { alt: 'Siswa mengerjakan proyek', image: prestasi2 },
   ],
 };

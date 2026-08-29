@@ -50,7 +50,7 @@ const JurusanShowcaseSection = () => {
                   <img
                     src={item.image}
                     alt={item.title.replace('\n', ' ')}
-                    className="w-full aspect-[16/10] object-cover"
+                    className="w-full aspect-[16/10] object-cover object-top"
                   />
                   <span
                     className={`absolute bottom-2 left-2 rounded px-2 py-1 text-[9px] font-bold text-white ${item.tagClass}`}
