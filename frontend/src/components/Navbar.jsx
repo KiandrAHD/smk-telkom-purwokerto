@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
-import { navLinks } from '../data/dummyData';
+import { ctaMasukPpdb, navLinks } from '../data/dummyData';
 
 const Navbar = () => {
   const location = useLocation();
@@ -46,10 +46,10 @@ const Navbar = () => {
 
           {/* Desktop CTA */}
           <Link
-            to="/ppdb"
+            to={ctaMasukPpdb.href}
             className="hidden lg:inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
           >
-            Masuk PPDB
+            {ctaMasukPpdb.label}
             <ArrowRight className="w-4 h-4" />
           </Link>
 
@@ -79,11 +79,11 @@ const Navbar = () => {
                 </Link>
               ))}
               <Link
-                to="/ppdb"
+                to={ctaMasukPpdb.href}
                 onClick={() => setIsMobileOpen(false)}
                 className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white"
               >
-                Masuk PPDB
+                {ctaMasukPpdb.label}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

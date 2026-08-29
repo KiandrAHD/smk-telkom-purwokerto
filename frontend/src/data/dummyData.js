@@ -60,6 +60,13 @@ export const navLinks = [
 ];
 
 // ── Hero Beranda ──
+// Tombol "Masuk PPDB" muncul di navbar (desktop dan laci mobile) serta di hero
+// beranda. Alamatnya disimpan sekali di sini supaya tidak ada lagi URL yang
+// ditulis ulang di tiga tempat dan berisiko beda sendiri saat diubah.
+// Tujuannya halaman masuk portal, bukan laman info /ppdb — di sana sudah ada
+// tautan "Daftar Akun Baru" untuk pendaftar yang belum punya akun.
+export const ctaMasukPpdb = { label: 'Masuk PPDB', href: '/ppdb/masuk' };
+
 export const landingHero = {
   breadcrumb: [
     { label: 'Beranda', href: '/' },
@@ -70,7 +77,7 @@ export const landingHero = {
   titleAccent: 'Bersama Teknologi',
   description:
     'SMK Telkom Purwokerto mencetak generasi digital yang siap bersaing di dunia industri melalui pembelajaran berbasis teknologi, kreativitas, dan karakter',
-  primaryCta: { label: 'Masuk PPDB', href: '/ppdb' },
+  primaryCta: ctaMasukPpdb,
   secondaryCta: { label: 'Lihat Jurusan', href: '/jurusan' },
   // Panel merah + foto + watermark "TELKOM" sudah menyatu jadi satu aset dari Figma.
   image: heroPanel,
