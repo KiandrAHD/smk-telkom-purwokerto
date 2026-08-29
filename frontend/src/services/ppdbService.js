@@ -5,6 +5,7 @@ const STORAGE_BUCKET = 'ppdb-documents';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const COMBINED_DOCUMENT_TYPES = ['application/pdf'];
+export const DUPLICATE_SUBMISSION_MESSAGE = 'Anda sudah memiliki pendaftaran PPDB. Silakan melihat status pendaftaran Anda.';
 
 const throwIfError = ({ data, error }) => {
   if (error) throw error;
@@ -16,12 +17,26 @@ const sanitizeFilename = (filename) => {
   return cleaned || 'dokumen';
 };
 
+const buatErrorDuplicateSubmission = () => {
+  const error = new Error(DUPLICATE_SUBMISSION_MESSAGE);
+  error.code = 'PPDB_DUPLICATE_SUBMISSION';
+  return error;
+};
+
 export async function submitPpdb(data) {
   const client = ensureSupabase();
   const { data: userData, error: userError } = await client.auth.getUser();
   if (userError) throw userError;
   const user = userData?.user;
   if (!user) throw new Error('Sesi PPDB tidak ditemukan. Silakan login kembali.');
+
+  const { data: existingSubmissions, error: existingError } = await client
+    .from('ppdb')
+    .select('id')
+    .eq('auth_user_id', user.id)
+    .limit(1);
+  if (existingError) throw existingError;
+  if (existingSubmissions?.length) throw buatErrorDuplicateSubmission();
 
   const { dokumen, biodata, ...legacyFields } = data;
   const fields = biodata
@@ -71,6 +86,9 @@ export async function submitPpdb(data) {
       } catch {
         // Policy publik hanya mengizinkan upload; cleanup dilakukan best effort.
       }
+    }
+    if (insertError.code === '23505' && insertError.message?.includes('ppdb_one_submission_per_auth_user_idx')) {
+      throw buatErrorDuplicateSubmission();
     }
     throw insertError;
   }

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, FileText } from 'lucide-react';
 import PpdbPortalLayout from '../../components/ppdb/PpdbPortalLayout';
 import { usePpdb } from '../../context/PpdbContext';
-import { ppdbCombinedDocumentRules, submitPpdb } from '../../services/ppdbService';
+import { DUPLICATE_SUBMISSION_MESSAGE, ppdbCombinedDocumentRules, submitPpdb } from '../../services/ppdbService';
 
 const BarisDokumen = ({ berkas, onPilih }) => {
   const inputRef = useRef(null);
@@ -33,6 +33,7 @@ const UploadDocumentsPage = () => {
   const navigate = useNavigate();
   const { dokumen, isiDokumen, kirimPendaftaran, biodata } = usePpdb();
   const [galat, setGalat] = useState('');
+  const [duplikat, setDuplikat] = useState(false);
   const [mengirim, setMengirim] = useState(false);
 
   const pilihBerkas = (file) => {
@@ -46,6 +47,7 @@ const UploadDocumentsPage = () => {
       return;
     }
     setGalat('');
+    setDuplikat(false);
     isiDokumen('utama', file);
   };
 
@@ -56,13 +58,19 @@ const UploadDocumentsPage = () => {
       return;
     }
     setGalat('');
+    setDuplikat(false);
     setMengirim(true);
     try {
       const hasil = await submitPpdb({ biodata, dokumen: berkas });
       kirimPendaftaran(hasil.id);
       navigate('/ppdb/selesai');
-    } catch {
-      setGalat('Pendaftaran gagal dikirim. Silakan coba lagi.');
+    } catch (error) {
+      if (error?.code === 'PPDB_DUPLICATE_SUBMISSION' || error?.message === DUPLICATE_SUBMISSION_MESSAGE) {
+        setDuplikat(true);
+        setGalat('Anda sudah memiliki pendaftaran PPDB.');
+      } else {
+        setGalat('Pendaftaran gagal dikirim. Silakan coba lagi.');
+      }
     } finally {
       setMengirim(false);
     }
@@ -74,7 +82,7 @@ const UploadDocumentsPage = () => {
       <p className="mt-1.5 text-xs text-dark-500">Gabungkan dokumen persyaratan menjadi satu file PDF sebelum diunggah. Ukuran maksimal 10MB.</p>
       <div className="mt-6 rounded-2xl border border-dark-100 bg-white p-5 shadow-card sm:p-6">
         <BarisDokumen berkas={dokumen.utama} onPilih={pilihBerkas} />
-        {galat && <p role="alert" className="mt-5 rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{galat}</p>}
+         {galat && <div className="mt-5 rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800"><p role="alert">{galat}</p>{duplikat && <Link to="/ppdb/status" className="mt-2 inline-block font-bold underline hover:text-primary-900">Lihat Status Pendaftaran</Link>}</div>}
         <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-dark-100 pt-6">
           <Link to="/ppdb/formulir" className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary">&larr; Kembali ke Data Akademik</Link>
           <button type="button" onClick={kirim} disabled={mengirim} className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
