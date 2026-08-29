@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Briefcase, ChevronRight, Monitor, UserPlus } from 'lucide-react';
+import { ArrowRight, Bot, Briefcase, ChevronRight, Monitor, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 
@@ -7,6 +7,7 @@ const icons = {
   monitor: Monitor,
   briefcase: Briefcase,
   bot: Bot,
+  sparkles: Sparkles,
 };
 
 const HeroSection = () => (

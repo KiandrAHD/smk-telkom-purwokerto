@@ -20,6 +20,8 @@ Jalankan dari root repository:
 
 ```bash
 supabase secrets set ANTHROPIC_API_KEY=sk-ant-xxxxx
+supabase secrets set STELA_MODEL=claude-sonnet-4-20250514
+supabase secrets set STELA_ALLOWED_ORIGINS=https://domain-website-anda.example,http://localhost:5173
 ```
 
 Key ini tersimpan di sisi Supabase dan tidak pernah masuk ke git.
@@ -43,9 +45,20 @@ Pakai **anon/publishable key**, bukan service key. Anon key memang dirancang unt
 
 Selesai. Buka `/stela` atau klik gelembung chat di pojok kanan bawah.
 
-## Memperbarui isi pengetahuan STELA
+## Pengetahuan STELA
 
-STELA menjawab dari `konten-sekolah.ts`, yang dihasilkan otomatis dari `frontend/src/data/dummyData.js`. Setiap kali data situs berubah:
+STELA memakai dua sumber pengetahuan:
+
+1. `konten-sekolah.ts` sebagai pengetahuan statis/fallback, yang dihasilkan otomatis dari `frontend/src/data/dummyData.js`.
+2. Context dinamis dari tabel publik Supabase pada setiap cache window 60 detik:
+   - Berita berstatus `published`.
+   - Pengumuman berstatus `published`.
+   - Seluruh Prestasi.
+   - BKK berstatus `aktif`.
+
+Context dinamis dibaca menggunakan key anon dan tetap mengikuti RLS. STELA tidak membaca PPDB, `admins`, draft, atau bucket private.
+
+Jika isi statis di `dummyData.js` berubah, perbarui snapshot dengan:
 
 ```bash
 cd frontend
@@ -59,12 +72,14 @@ Lalu deploy ulang fungsinya. Jangan mengedit `konten-sekolah.ts` dengan tangan �
 | Secret | Bawaan | Kegunaan |
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | — | wajib |
-| `STELA_MODEL` | `claude-sonnet-5` | ganti ke `claude-haiku-4-5-20251001` kalau ingin lebih murah dan cepat |
-| `STELA_ALLOWED_ORIGIN` | `*` | isi dengan domain situs supaya endpoint tidak dipakai dari situs lain |
+| `STELA_MODEL` | — | wajib diisi dengan model ID Anthropic yang tersedia pada akun Anda |
+| `STELA_ALLOWED_ORIGINS` | — | daftar origin frontend yang dipisahkan koma; wajib diisi untuk request browser |
+| `SUPABASE_URL` | disediakan Supabase | URL project untuk membaca context publik |
+| `SUPABASE_ANON_KEY` | disediakan Supabase | key anon untuk membaca context yang tunduk pada RLS |
 
 ## Soal biaya
 
-Konten sekolah berukuran ~19.000 token dan dikirim sebagai instruksi pada setiap pertanyaan. Karena itu blok tersebut ditandai `cache_control: ephemeral` — Anthropic menyimpannya sehingga pengiriman berikutnya jauh lebih murah daripada tarif penuh. Tanpa penandaan itu, biaya per pertanyaan berlipat.
+Knowledge statis dan context publik dikirim sebagai system prompt. Blok tersebut ditandai `cache_control: ephemeral` agar Anthropic dapat menggunakan prompt caching ketika context tetap sama. Context dinamis juga di-cache di isolate selama 60 detik untuk mengurangi request Supabase.
 
 Batas yang sudah terpasang di kode:
 
@@ -79,4 +94,6 @@ Batas yang sudah terpasang di kode:
 
 **Jawaban belum dialirkan (streaming).** Pengguna menunggu sampai jawaban lengkap, ditemani indikator mengetik. Kalau terasa lambat, ubah fungsi ini agar meneruskan `stream: true` dari Anthropic dan baca potongannya di `StelaChat.jsx`.
 
-**STELA hanya tahu isi situs ini.** Ia diinstruksikan menolak mengarang dan mengarahkan ke Tata Usaha untuk hal yang tidak ada di data. Instruksi tersebut juga menutup upaya pengunjung menyuruh STELA keluar dari perannya lewat isi pesan.
+**STELA hanya tahu isi situs ini.** Ia diinstruksikan menolak mengarang dan mengarahkan ke Tata Usaha untuk hal yang tidak ada di data. Instruksi tersebut juga menutup upaya pengunjung menyuruh STELA keluar dari perannya lewat isi pesan maupun isi konten admin.
+
+API key Anthropic tidak pernah dimasukkan ke `frontend/.env`, source React, localStorage, atau response Edge Function. Error internal juga tidak diteruskan ke browser.

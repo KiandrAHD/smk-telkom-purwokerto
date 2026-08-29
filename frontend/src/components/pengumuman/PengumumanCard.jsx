@@ -16,7 +16,7 @@ const Tag = ({ children }) => (
 );
 
 const PengumumanCard = ({ item }) => {
-  const Ikon = ikon[item.icon];
+  const Ikon = ikon[item.icon] || Info;
 
   return (
   <article className="flex gap-4 rounded-xl bg-white p-4 shadow-card">
@@ -30,7 +30,7 @@ const PengumumanCard = ({ item }) => {
     <div className="flex min-w-0 flex-1 flex-col">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-wrap gap-1.5">
-          {item.tags.map((tag) => (
+          {(item.tags || [item.kategori || 'Pengumuman']).map((tag) => (
             <Tag key={tag}>{tag}</Tag>
           ))}
         </div>

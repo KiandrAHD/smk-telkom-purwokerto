@@ -3,18 +3,20 @@ import { ArrowRight, Megaphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { beritaHero, breakingNews } from '../../data/dummyData';
 
-const BeritaHeroSection = () => {
+const BeritaHeroSection = ({ items = [] }) => {
   const [i, setI] = useState(0);
+  const breakingItems = items;
 
   // Ticker berganti otomatis; dijeda saat kursor menyentuh baris berita.
   const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (paused) return undefined;
-    const t = setInterval(() => setI((n) => (n + 1) % breakingNews.items.length), 5000);
+    if (breakingItems.length === 0) return undefined;
+    const t = setInterval(() => setI((n) => (n + 1) % breakingItems.length), 5000);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, breakingItems.length]);
 
-  const item = breakingNews.items[i];
+  const item = breakingItems[i % breakingItems.length];
 
   return (
     <section className="bg-white pt-4 pb-6">
@@ -52,7 +54,7 @@ const BeritaHeroSection = () => {
         </div>
 
         {/* Baris breaking news */}
-        <div
+        {item && <div
           className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-stretch sm:gap-3"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
@@ -77,7 +79,7 @@ const BeritaHeroSection = () => {
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
-        </div>
+        </div>}
       </div>
     </section>
   );

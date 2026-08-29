@@ -8,24 +8,30 @@ import PengumumanPopulerCard from './PengumumanPopulerCard';
 import PengumumanBantuanCard from './PengumumanBantuanCard';
 import { daftarPengumuman } from '../../data/dummyData';
 
-const PengumumanDaftarSection = () => {
+const PengumumanDaftarSection = ({ items = [] }) => {
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return daftarPengumuman.items.filter((item) => {
+    return items.filter((item) => {
       const byChip = chip === 'Semua' || item.kategori === chip;
       const byText =
         !q || item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q);
       return byChip && byText;
     });
-  }, [chip, query]);
+  }, [chip, query, items]);
 
   return (
     <section className="bg-white pb-8 lg:pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <PengumumanFilterBar chip={chip} onChip={setChip} query={query} onQuery={setQuery} />
+        <PengumumanFilterBar
+          chip={chip}
+          onChip={setChip}
+          query={query}
+          onQuery={setQuery}
+          chips={['Semua']}
+        />
 
         <div className="mt-5">
           <PengumumanTimelineBar />

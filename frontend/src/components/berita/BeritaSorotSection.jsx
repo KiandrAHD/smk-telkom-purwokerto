@@ -3,13 +3,16 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { beritaSorot } from '../../data/dummyData';
 
-const BeritaSorotSection = () => {
+const BeritaSorotSection = ({ items = [] }) => {
   const [active, setActive] = useState(0);
-  const featured = beritaSorot.items[active];
-  const trending = beritaSorot.items
+  const sourceItems = items;
+  const featured = sourceItems[active % sourceItems.length];
+  const trending = sourceItems
     .map((item, i) => ({ item, i }))
     .filter(({ i }) => i !== active)
     .slice(0, 3);
+
+  if (!featured) return null;
 
   return (
     <section id="berita-sorot" className="bg-white py-8 lg:py-12">

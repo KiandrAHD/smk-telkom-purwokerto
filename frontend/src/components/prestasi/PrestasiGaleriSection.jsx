@@ -3,18 +3,21 @@ import { ArrowRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { galeriPrestasi } from '../../data/dummyData';
 
-const PrestasiGaleriSection = () => {
+const PrestasiGaleriSection = ({ items = [] }) => {
   const [filter, setFilter] = useState('Semua');
   const [query, setQuery] = useState('');
 
+  const sourceItems = items;
+  const filters = ['Semua', ...new Set(sourceItems.flatMap((item) => [item.level, item.kategori].filter(Boolean)))];
+
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return galeriPrestasi.items.filter((item) => {
-      const byTag = filter === 'Semua' || item.tags.includes(filter);
+    return sourceItems.filter((item) => {
+      const byTag = filter === 'Semua' || item.tags?.includes(filter) || item.level === filter || item.kategori === filter;
       const byText = !q || item.title.toLowerCase().includes(q) || item.level.toLowerCase().includes(q);
       return byTag && byText;
     });
-  }, [filter, query]);
+  }, [filter, query, sourceItems]);
 
   return (
     <section id="galeri-prestasi" className="bg-white py-8 lg:py-12">
@@ -25,7 +28,7 @@ const PrestasiGaleriSection = () => {
 
         {/* Filter + pencarian */}
         <div className="mt-5 flex flex-wrap items-center gap-2">
-          {galeriPrestasi.filters.map((f) => (
+          {filters.map((f) => (
             <button
               key={f}
               type="button"

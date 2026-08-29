@@ -3,12 +3,15 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { prestasiUnggulan } from '../../data/dummyData';
 
-const PrestasiUnggulanSection = () => {
+const PrestasiUnggulanSection = ({ items = [] }) => {
   const [active, setActive] = useState(0);
-  const featured = prestasiUnggulan.items[active];
-  const others = prestasiUnggulan.items
+  const sourceItems = items;
+  const featured = sourceItems[active % sourceItems.length];
+  const others = sourceItems
     .map((item, i) => ({ item, i }))
     .filter(({ i }) => i !== active);
+
+  if (!featured) return null;
 
   return (
     <section className="bg-white py-8 lg:py-12">

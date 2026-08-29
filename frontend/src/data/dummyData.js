@@ -106,6 +106,13 @@ export const quickLinks = [
     linkLabel: 'Tanya STELA',
     href: '/stela',
   },
+  {
+    icon: 'sparkles',
+    title: 'NextTel AI',
+    desc: 'Temukan jurusan yang sesuai dengan minat dan bakatmu',
+    linkLabel: 'Cari Jurusan yang Cocok',
+    href: '/nexttel',
+  },
 ];
 
 // ── Section Tentang (Beranda) ──
