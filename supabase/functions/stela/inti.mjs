@@ -19,11 +19,26 @@ export const BATAS = {
   MAKS_TOKEN_JAWABAN: 2000,
 };
 
-export const MODEL_BAWAAN = 'claude-opus-5';
+// STELA bisa berjalan di atas Anthropic atau Google Gemini. Yang dipakai
+// ditentukan oleh kunci mana yang terisi -- tidak ada sakelar terpisah yang
+// bisa lupa disetel.
+export const MODEL_BAWAAN = {
+  anthropic: 'claude-opus-5',
+  // Flash 2.0 dipilih sebagai bawaan karena kuota gratisnya paling longgar dan
+  // ia tidak memakai token "berpikir". Kalau diganti ke model seri 2.5, ingat
+  // bahwa model itu berpikir secara bawaan dan token berpikir ikut ditagih.
+  gemini: 'gemini-2.0-flash',
+};
 
 // Chatbot FAQ sekolah tidak butuh penalaran dalam. Effort rendah menekan biaya
 // dan latensi tanpa menurunkan mutu jawaban untuk pertanyaan sesederhana ini.
 export const EFFORT_BAWAAN = 'low';
+
+export const pilihPenyedia = ({ anthropicKey, geminiKey }) => {
+  if (anthropicKey) return 'anthropic';
+  if (geminiKey) return 'gemini';
+  return null;
+};
 
 export const buatInstruksi = (
   contextPublik,
@@ -74,11 +89,18 @@ export const periksaPesan = (mentah) => {
   return { pesan };
 };
 
-// Memanggil Anthropic lewat HTTP mentah, bukan SDK, karena berkas yang sama
-// harus jalan di Deno (Supabase Edge) maupun Node tanpa dependensi tambahan.
-// Melempar Error dengan properti `status` supaya pemanggil bisa membedakan
-// gagal-karena-Anthropic dari gagal-karena-jaringan.
-export const tanyaClaude = async ({ apiKey, model, pesan, contextPublik, signal }) => {
+// Kedua penyedia dipanggil lewat HTTP mentah, bukan SDK, karena berkas yang
+// sama harus jalan di Deno (Supabase Edge) maupun Node tanpa dependensi
+// tambahan. Keduanya melempar Error dengan properti `status` supaya pemanggil
+// bisa membedakan gagal-karena-penyedia dari gagal-karena-jaringan.
+
+const galatPenyedia = (pesan, status) => {
+  const galat = new Error(pesan);
+  galat.status = status;
+  return galat;
+};
+
+const tanyaAnthropic = async ({ apiKey, model, pesan, contextPublik, signal }) => {
   const tanggapan = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     signal,
@@ -88,12 +110,12 @@ export const tanyaClaude = async ({ apiKey, model, pesan, contextPublik, signal 
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      model: model || MODEL_BAWAAN,
+      model,
       max_tokens: BATAS.MAKS_TOKEN_JAWABAN,
       output_config: { effort: EFFORT_BAWAAN },
-      // Instruksi + seluruh data sekolah (~80 KB) selalu sama persis di setiap
-      // permintaan, jadi ditandai agar di-cache. Tanpa ini, tiap pertanyaan
-      // membayar penuh untuk konteks yang itu-itu juga.
+      // Instruksi + seluruh data sekolah (~31 rb token) selalu sama persis di
+      // setiap permintaan, jadi ditandai agar di-cache. Tanpa ini, tiap
+      // pertanyaan membayar penuh untuk konteks yang itu-itu juga.
       system: [
         {
           type: 'text',
@@ -106,21 +128,91 @@ export const tanyaClaude = async ({ apiKey, model, pesan, contextPublik, signal 
   });
 
   if (!tanggapan.ok) {
-    const galat = new Error(`Anthropic menolak dengan status ${tanggapan.status}`);
-    galat.status = tanggapan.status;
-    throw galat;
+    throw galatPenyedia(`Anthropic menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
 
   const hasil = await tanggapan.json();
 
   // Penolakan keamanan datang sebagai HTTP 200, jadi harus diperiksa terpisah.
-  if (hasil.stop_reason === 'refusal') {
-    return 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto.';
+  if (hasil.stop_reason === 'refusal') return PESAN_DITOLAK;
+
+  return {
+    teks: (hasil.content ?? [])
+      .filter((bagian) => bagian.type === 'text')
+      .map((bagian) => bagian.text ?? '')
+      .join('\n')
+      .trim(),
+    tokenMasuk: hasil.usage?.input_tokens ?? 0,
+    tokenKeluar: hasil.usage?.output_tokens ?? 0,
+  };
+};
+
+const tanyaGemini = async ({ apiKey, model, pesan, contextPublik, signal }) => {
+  const tanggapan = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+    {
+      method: 'POST',
+      signal,
+      headers: {
+        'x-goog-api-key': apiKey,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: buatInstruksi(contextPublik) }] },
+        // Gemini menamai peran asisten 'model', bukan 'assistant'.
+        contents: pesan.map((p) => ({
+          role: p.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: p.content }],
+        })),
+        generationConfig: {
+          maxOutputTokens: BATAS.MAKS_TOKEN_JAWABAN,
+          // Rendah dan bukan nol: jawaban FAQ harus konsisten, tapi nol membuat
+          // kalimatnya kaku dan mudah terjebak mengulang.
+          temperature: 0.3,
+        },
+      }),
+    },
+  );
+
+  if (!tanggapan.ok) {
+    throw galatPenyedia(`Gemini menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
 
-  return (hasil.content ?? [])
-    .filter((bagian) => bagian.type === 'text')
-    .map((bagian) => bagian.text ?? '')
-    .join('\n')
-    .trim();
+  const hasil = await tanggapan.json();
+
+  // Gemini memblokir lewat dua jalur berbeda, dan keduanya HTTP 200.
+  if (hasil.promptFeedback?.blockReason) return PESAN_DITOLAK;
+  const kandidat = hasil.candidates?.[0];
+  if (!kandidat || kandidat.finishReason === 'SAFETY') return PESAN_DITOLAK;
+
+  return {
+    teks: (kandidat.content?.parts ?? [])
+      .map((bagian) => bagian.text ?? '')
+      .join('\n')
+      .trim(),
+    tokenMasuk: hasil.usageMetadata?.promptTokenCount ?? 0,
+    tokenKeluar: hasil.usageMetadata?.candidatesTokenCount ?? 0,
+  };
+};
+
+const PESAN_DITOLAK = {
+  teks: 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto.',
+  tokenMasuk: 0,
+  tokenKeluar: 0,
+};
+
+const PENYEDIA = { anthropic: tanyaAnthropic, gemini: tanyaGemini };
+
+// Satu pintu masuk. Mengembalikan { teks, tokenMasuk, tokenKeluar } supaya
+// pemakaian bisa dicatat tanpa pemanggil perlu tahu penyedia mana yang jalan.
+export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, signal }) => {
+  const panggil = PENYEDIA[penyedia];
+  if (!panggil) throw galatPenyedia(`Penyedia tidak dikenal: ${penyedia}`, 500);
+  return panggil({
+    apiKey,
+    model: model || MODEL_BAWAAN[penyedia],
+    pesan,
+    contextPublik,
+    signal,
+  });
 };

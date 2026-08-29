@@ -1,6 +1,10 @@
 # STELA — chatbot situs SMK Telkom Purwokerto
 
-Edge Function yang menjembatani widget chat di browser dengan Claude API.
+Edge Function yang menjembatani widget chat di browser dengan penyedia AI.
+
+Mendukung **Anthropic (Claude)** dan **Google Gemini**. Yang dipakai ditentukan
+oleh kunci mana yang terisi — tidak ada sakelar terpisah yang bisa lupa disetel.
+Kalau keduanya ada, Anthropic yang menang.
 
 ## Kenapa harus lewat Edge Function
 
@@ -20,11 +24,22 @@ Pemilihannya otomatis di `frontend/src/services/stela.js`: begitu `VITE_SUPABASE
 
 ### Mode lokal (paling cepat)
 
-Isi satu baris di `frontend/.env`:
+Isi **salah satu** baris di `frontend/.env`:
+
+```
+GEMINI_API_KEY=AIzaSy...
+```
+
+atau
 
 ```
 ANTHROPIC_API_KEY=sk-ant-xxxxx
 ```
+
+Kunci Gemini dari [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
+berbentuk `AIzaSy` diikuti 33 karakter. Kalau kunci Anda berawalan `AQ.` atau
+`ya29.`, itu token OAuth/efemeral yang berumur pendek, **bukan** API key — ia
+akan ditolak atau mati dalam hitungan menit.
 
 Lalu `npm run dev`. Dev server akan mencetak `STELA lokal siap di /api/stela`. Buka `/stela` atau klik gelembung chat.
 
@@ -97,11 +112,51 @@ Lalu deploy ulang fungsinya. Jangan mengedit `konten-sekolah.mjs` dengan tangan 
 
 | Secret | Bawaan | Kegunaan |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | — | wajib |
-| `STELA_MODEL` | `claude-opus-5` | opsional; isi kalau ingin model lain, misal `claude-haiku-4-5` untuk menekan biaya |
+| `ANTHROPIC_API_KEY` | — | wajib, kecuali memakai Gemini |
+| `GEMINI_API_KEY` | — | alternatif Anthropic; salah satu wajib ada |
+| `STELA_AKTIF` | `true` | isi `false` untuk mematikan STELA seketika |
+| `STELA_MAKS_PER_HARI` | `500` | plafon panggilan berbayar per hari |
+| `STELA_MAKS_PER_IP` | `20` | plafon per alamat IP tiap 5 menit |
+| `STELA_MODEL` | `claude-opus-5` / `gemini-2.0-flash` | opsional; ikut penyedia yang aktif |
 | `STELA_ALLOWED_ORIGINS` | — | daftar origin frontend yang dipisahkan koma; wajib diisi untuk request browser |
 | `SUPABASE_URL` | disediakan Supabase | URL project untuk membaca context publik |
 | `SUPABASE_ANON_KEY` | disediakan Supabase | key anon untuk membaca context yang tunduk pada RLS |
+
+## Pagar biaya
+
+Enam lapisan, diurutkan dari yang paling murah ke paling mahal. Permintaan
+harus lolos semuanya sebelum satu token pun dibeli.
+
+| # | Lapisan | Bawaan | Setelan |
+| --- | --- | --- | --- |
+| 1 | Sakelar mati | aktif | `STELA_AKTIF=false` |
+| 2 | Plafon harian | 500 (Edge) / 100 (lokal) | `STELA_MAKS_PER_HARI` |
+| 3 | Plafon per IP / 5 menit | 20 | `STELA_MAKS_PER_IP` |
+| 4 | Cache jawaban | 200 entri, 1 jam | di `penjaga-biaya.mjs` |
+| 5 | Batas ukuran masukan | 20 pesan, 8.000 karakter | di `inti.mjs` |
+| 6 | Plafon token keluaran | 2.000 | `BATAS.MAKS_TOKEN_JAWABAN` |
+
+**Lapisan 4 yang paling banyak menghemat.** Di situs sekolah, mayoritas
+pengunjung menanyakan hal yang itu-itu juga. Satu jawaban tersimpan melayani
+puluhan orang tanpa biaya tambahan, dan jawaban dari cache tidak memakan jatah
+harian. Hanya pertanyaan pembuka satu pesan yang di-cache — percakapan lanjutan
+jawabannya bergantung konteks sebelumnya, jadi menyimpannya berisiko menyodorkan
+jawaban milik orang lain.
+
+### Yang TIDAK dijamin lapisan ini
+
+Semua hitungan di atas ada **di memori proses**. Di Supabase Edge tiap isolate
+punya salinan sendiri, dan hitungannya kembali nol saat isolate diistirahatkan —
+jadi plafon efektifnya bisa berlipat sebanyak isolate yang aktif.
+
+**Plafon yang benar-benar mengikat hanya batas belanja di konsol penyedia.**
+Pasang di sana lebih dulu, sebelum mengandalkan apa pun di kode ini:
+
+- Gemini: [Google Cloud Console → Billing → Budgets & alerts](https://console.cloud.google.com/billing). Kuota gratis AI Studio sudah punya batas sendiri; selama belum ditautkan ke akun billing, ia berhenti melayani, bukan menagih.
+- Anthropic: [console.anthropic.com](https://console.anthropic.com) → **Settings → Limits**.
+
+Kalau situs mulai ramai, pindahkan hitungan harian ke tabel Postgres dengan
+indeks `(ip, waktu)` supaya berlaku lintas isolate.
 
 ## Soal biaya
 
@@ -113,6 +168,8 @@ Batas yang sudah terpasang di kode:
 - maksimal 1.000 karakter per pertanyaan, 8.000 karakter per percakapan
 - maksimal 2.000 token jawaban (Opus 5 berpikir secara bawaan dan token berpikir ikut terhitung; plafon 800 memotong jawaban di tengah). Keringkasan dijaga aturan prompt, bukan plafon token
 - maksimal 20 permintaan per 5 menit per alamat IP
+- maksimal 500 panggilan berbayar per hari
+- jawaban berulang dilayani dari cache, tanpa memanggil API
 
 ## Menguji tanpa memanggil API
 
@@ -127,7 +184,8 @@ Memeriksa validasi pesan — batas panjang, urutan peran, penolakan peran `syste
 
 | Berkas | Isi |
 | --- | --- |
-| `inti.mjs` | prompt sistem, validasi pesan, pemanggilan Anthropic — dipakai bersama kedua mode |
+| `inti.mjs` | prompt sistem, validasi pesan, pemanggilan Anthropic/Gemini — dipakai bersama kedua mode |
+| `penjaga-biaya.mjs` | sakelar mati, plafon harian, pembatas per IP, cache jawaban |
 | `index.ts` | pembungkus Deno: CORS, pembatas laju, context Supabase |
 | `konten-sekolah.mjs` | hasil generate dari `dummyData.js`, jangan diedit tangan |
 | `frontend/vite-plugin-stela.js` | endpoint `/api/stela` untuk mode lokal |

@@ -22,7 +22,7 @@ export const stelaSiap = PAKAI_EDGE_FUNCTION || import.meta.env.DEV;
 
 export const PESAN_STELA_GAGAL = 'STELA sedang mengalami kendala. Silakan coba lagi.';
 export const PESAN_STELA_BELUM_SIAP =
-  'STELA belum dikonfigurasi. Isi ANTHROPIC_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
+  'STELA belum dikonfigurasi. Isi GEMINI_API_KEY atau ANTHROPIC_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
 
 export const tanyaStela = async (pesan, { signal } = {}) => {
   if (!stelaSiap) throw new Error(PESAN_STELA_BELUM_SIAP);
