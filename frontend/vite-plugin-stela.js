@@ -2,6 +2,7 @@ import { loadEnv } from 'vite';
 import {
   BATAS,
   MODEL_BAWAAN,
+  kunciBermasalah,
   periksaPesan,
   pilihPenyedia,
   tanyaAI,
@@ -32,10 +33,23 @@ export const stelaDevPlugin = () => ({
     const env = loadEnv(server.config.mode, server.config.envDir ?? process.cwd(), '');
     const baca = (nama) => env[nama] ?? process.env[nama];
 
-    const anthropicKey = baca('ANTHROPIC_API_KEY');
-    const geminiKey = baca('GEMINI_API_KEY');
-    const penyedia = pilihPenyedia({ anthropicKey, geminiKey });
-    const apiKey = penyedia === 'anthropic' ? anthropicKey : geminiKey;
+    const kunci = {
+      anthropic: baca('ANTHROPIC_API_KEY'),
+      gemini: baca('GEMINI_API_KEY'),
+      groq: baca('GROQ_API_KEY'),
+    };
+    const argKunci = {
+      anthropicKey: kunci.anthropic,
+      geminiKey: kunci.gemini,
+      groqKey: kunci.groq,
+    };
+    const penyedia = pilihPenyedia(argKunci);
+    for (const rusak of kunciBermasalah(argKunci)) {
+      server.config.logger.warn(
+        `  [33m➜[0m  Kunci ${rusak.toUpperCase()} diabaikan: bentuknya tidak sesuai. Kosongkan atau ganti baris itu di frontend/.env.`,
+      );
+    }
+    const apiKey = penyedia ? kunci[penyedia] : undefined;
     const model = baca('STELA_MODEL') || (penyedia ? MODEL_BAWAAN[penyedia] : '');
 
     const penjaga = buatPenjaga({
@@ -46,7 +60,7 @@ export const stelaDevPlugin = () => ({
     server.config.logger.info(
       penyedia
         ? `  \x1b[32m➜\x1b[0m  STELA lokal siap di /api/stela (${penyedia}, ${model}, maks ${penjaga.statistik().maksPerHari}/hari)`
-        : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi ANTHROPIC_API_KEY atau GEMINI_API_KEY di frontend/.env',
+        : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env',
     );
 
     server.middlewares.use('/api/stela', async (req, res) => {
@@ -61,7 +75,7 @@ export const stelaDevPlugin = () => ({
         return kirim(
           {
             error:
-              'Kunci AI belum diisi. Isi ANTHROPIC_API_KEY atau GEMINI_API_KEY di frontend/.env, lalu jalankan ulang dev server.',
+              'Kunci AI belum diisi. Isi GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env, lalu jalankan ulang dev server.',
           },
           503,
         );
@@ -121,6 +135,9 @@ export const stelaDevPlugin = () => ({
         return kirim({ reply: teks }, 200);
       } catch (error) {
         server.config.logger.error(`  [stela] ${error?.message ?? 'kesalahan tidak dikenal'}`);
+        // Plafon token per menit bukan kerusakan, dan pengunjung bisa
+        // menindaklanjutinya sendiri -- jadi pesannya diteruskan apa adanya.
+        if (error?.status === 429) return kirim({ error: error.message }, 429);
         return kirim({ error: 'STELA sedang mengalami kendala.' }, error?.status ? 502 : 500);
       }
     });

@@ -2,9 +2,23 @@
 
 Edge Function yang menjembatani widget chat di browser dengan penyedia AI.
 
-Mendukung **Anthropic (Claude)** dan **Google Gemini**. Yang dipakai ditentukan
-oleh kunci mana yang terisi — tidak ada sakelar terpisah yang bisa lupa disetel.
-Kalau keduanya ada, Anthropic yang menang.
+Mendukung **Anthropic (Claude)**, **Google Gemini**, dan **Groq**. Yang dipakai
+ditentukan oleh kunci mana yang terisi — tidak ada sakelar terpisah yang bisa
+lupa disetel. Urutan prioritas: Anthropic, Gemini, Groq.
+
+### Memilih penyedia
+
+| | Gratis | Prompt penuh (28 rb token) | Praktisnya |
+| --- | --- | --- | --- |
+| **Gemini** | ya, permanen | muat | pilihan terbaik untuk situs publik |
+| **Groq** | ya, tapi 8.000 token/menit | **ditolak HTTP 413** | ~1-2 pertanyaan per menit |
+| **Anthropic** | tidak | muat, dan di-cache | termurah per jawaban bila berbayar |
+
+Angka Groq itu hasil pengukuran langsung, bukan perkiraan: prompt penuh STELA
+37.308 token diminta terhadap plafon 8.000 dan ditolak seketika. STELA
+menanganinya dengan memangkas pengetahuan ke ~3.000 token per pertanyaan
+(lihat `konteks.mjs`), tapi plafon per menitnya tetap membatasi berapa orang
+bisa bertanya bersamaan. **Untuk situs sekolah yang ramai, pakai Gemini.**
 
 ## Kenapa harus lewat Edge Function
 
@@ -88,6 +102,13 @@ Selesai. Buka `/stela` atau klik gelembung chat di pojok kanan bawah.
 
 ## Pengetahuan STELA
 
+Data dashboard admin **sengaja dikecualikan** dari pengetahuan chatbot.
+`adminPendaftar` berisi nama, NISN, tanggal lahir, alamat, dan telepon
+pendaftar. Isinya sekarang dummy, tapi begitu diganti data asli, STELA akan
+patuh membacakannya ke penanya mana pun. Lebih aman datanya tidak pernah masuk
+context daripada mengandalkan prompt untuk menolak. Penyaringnya ada di
+`buat-konten-stela.mjs` (`const DILARANG = /^admin/i`).
+
 STELA memakai dua sumber pengetahuan:
 
 1. `konten-sekolah.mjs` sebagai pengetahuan statis/fallback, yang dihasilkan otomatis dari `frontend/src/data/dummyData.js`.
@@ -114,6 +135,7 @@ Lalu deploy ulang fungsinya. Jangan mengedit `konten-sekolah.mjs` dengan tangan 
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | — | wajib, kecuali memakai Gemini |
 | `GEMINI_API_KEY` | — | alternatif Anthropic; salah satu wajib ada |
+| `GROQ_API_KEY` | — | alternatif lain; berbentuk `gsk_` + 52 karakter |
 | `STELA_AKTIF` | `true` | isi `false` untuk mematikan STELA seketika |
 | `STELA_MAKS_PER_HARI` | `500` | plafon panggilan berbayar per hari |
 | `STELA_MAKS_PER_IP` | `20` | plafon per alamat IP tiap 5 menit |
@@ -184,7 +206,8 @@ Memeriksa validasi pesan — batas panjang, urutan peran, penolakan peran `syste
 
 | Berkas | Isi |
 | --- | --- |
-| `inti.mjs` | prompt sistem, validasi pesan, pemanggilan Anthropic/Gemini — dipakai bersama kedua mode |
+| `inti.mjs` | prompt sistem, validasi pesan, pemanggilan Anthropic/Gemini/Groq — dipakai bersama kedua mode |
+| `konteks.mjs` | memilih potongan pengetahuan yang relevan, agar muat di plafon penyedia |
 | `penjaga-biaya.mjs` | sakelar mati, plafon harian, pembatas per IP, cache jawaban |
 | `index.ts` | pembungkus Deno: CORS, pembatas laju, context Supabase |
 | `konten-sekolah.mjs` | hasil generate dari `dummyData.js`, jangan diedit tangan |

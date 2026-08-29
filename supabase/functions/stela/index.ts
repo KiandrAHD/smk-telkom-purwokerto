@@ -6,13 +6,30 @@
 // juga oleh server pengembangan lokal (frontend/vite-plugin-stela.js).
 // Pagar biayanya ada di ./penjaga-biaya.mjs.
 
-import { BATAS, MODEL_BAWAAN, periksaPesan, pilihPenyedia, tanyaAI } from './inti.mjs';
+import { BATAS, MODEL_BAWAAN, kunciBermasalah, periksaPesan, pilihPenyedia, tanyaAI } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
 
-const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
-const GEMINI_KEY = Deno.env.get('GEMINI_API_KEY');
-const PENYEDIA = pilihPenyedia({ anthropicKey: ANTHROPIC_KEY, geminiKey: GEMINI_KEY });
-const API_KEY = PENYEDIA === 'anthropic' ? ANTHROPIC_KEY : GEMINI_KEY;
+const KUNCI: Record<string, string | undefined> = {
+  anthropic: Deno.env.get('ANTHROPIC_API_KEY'),
+  gemini: Deno.env.get('GEMINI_API_KEY'),
+  groq: Deno.env.get('GROQ_API_KEY'),
+};
+const PENYEDIA = pilihPenyedia({
+  anthropicKey: KUNCI.anthropic,
+  geminiKey: KUNCI.gemini,
+  groqKey: KUNCI.groq,
+});
+const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
+
+// Kunci yang terisi tapi bentuknya salah akan diabaikan, bukan dipakai lalu
+// gagal. Dicatat sekali saat boot supaya penyebabnya terlihat di log.
+for (const rusak of kunciBermasalah({
+  anthropicKey: KUNCI.anthropic,
+  geminiKey: KUNCI.gemini,
+  groqKey: KUNCI.groq,
+})) {
+  console.warn(`Kunci ${rusak.toUpperCase()} diabaikan: bentuknya tidak sesuai.`);
+}
 const MODEL = Deno.env.get('STELA_MODEL') || (PENYEDIA ? MODEL_BAWAAN[PENYEDIA] : '');
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
@@ -161,6 +178,11 @@ Deno.serve(async (req) => {
     return balas({ reply: teks }, 200, origin);
   } catch (error) {
     console.error('Kesalahan STELA', error instanceof Error ? error.message : 'unknown');
+    // Plafon token per menit bukan kerusakan, dan pengunjung bisa
+    // menindaklanjutinya sendiri -- jadi pesannya diteruskan apa adanya.
+    if ((error as { status?: number })?.status === 429) {
+      return balas({ error: (error as Error).message }, 429, origin);
+    }
     const status = (error as { status?: number })?.status ? 502 : 500;
     return balas({ error: 'STELA sedang tidak tersedia.' }, status, origin);
   }

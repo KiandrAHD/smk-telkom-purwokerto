@@ -6,7 +6,7 @@
 // tahap kompilasi. Kalau prompt atau aturan validasi ditaruh di dua berkas
 // terpisah, cepat atau lambat keduanya akan berbeda tanpa ada yang sadar.
 
-import { KONTEN_SEKOLAH } from './konten-sekolah.mjs';
+import { pilihKonten } from './konteks.mjs';
 
 export const BATAS = {
   MAKS_PESAN: 20,
@@ -19,7 +19,7 @@ export const BATAS = {
   MAKS_TOKEN_JAWABAN: 2000,
 };
 
-// STELA bisa berjalan di atas Anthropic atau Google Gemini. Yang dipakai
+// STELA bisa berjalan di atas Anthropic, Google Gemini, atau Groq. Yang dipakai
 // ditentukan oleh kunci mana yang terisi -- tidak ada sakelar terpisah yang
 // bisa lupa disetel.
 export const MODEL_BAWAAN = {
@@ -28,20 +28,74 @@ export const MODEL_BAWAAN = {
   // ia tidak memakai token "berpikir". Kalau diganti ke model seri 2.5, ingat
   // bahwa model itu berpikir secara bawaan dan token berpikir ikut ditagih.
   gemini: 'gemini-2.0-flash',
+  // Konteks 131 rb dan termasuk cepat di Groq. Plafon yang mengikat di sini
+  // bukan konteks melainkan token per menit -- lihat ANGGARAN_KONTEKS.
+  groq: 'openai/gpt-oss-20b',
+};
+
+// Berapa token pengetahuan sekolah yang boleh ikut per permintaan.
+// 0 = kirim penuh.
+export const ANGGARAN_KONTEKS = {
+  // Prefix yang konstan ditagih dengan harga cache, jadi mengirim penuh justru
+  // LEBIH murah daripada memangkas -- potongan yang berubah tiap pertanyaan
+  // tidak pernah kena cache.
+  anthropic: 0,
+  // Tier gratis Gemini toleran terhadap prompt besar.
+  gemini: 0,
+  // Tier gratis Groq: 8.000 token PER MENIT, keras. Pengetahuan penuh (28 rb)
+  // ditolak HTTP 413 sebelum model sempat membacanya.
+  //
+  // Angka ini menentukan berapa pertanyaan per menit yang muat, bukan sekadar
+  // muat/tidak. Diukur langsung: 5.000 memberi ~5.600 token per permintaan,
+  // artinya hanya SATU pertanyaan per menit. 3.000 memberi ~3.500, jadi dua
+  // pertanyaan per menit masih lolos. Untuk situs yang ramai, Gemini jauh
+  // lebih longgar.
+  groq: 3000,
+};
+
+// Groq berbicara format OpenAI. Konstanta ini juga membuka OpenRouter,
+// Mistral, dan DeepSeek: cukup tambahkan barisnya di sini.
+export const ALAMAT_OPENAI = {
+  groq: 'https://api.groq.com/openai/v1/chat/completions',
 };
 
 // Chatbot FAQ sekolah tidak butuh penalaran dalam. Effort rendah menekan biaya
 // dan latensi tanpa menurunkan mutu jawaban untuk pertanyaan sesederhana ini.
 export const EFFORT_BAWAAN = 'low';
 
-export const pilihPenyedia = ({ anthropicKey, geminiKey }) => {
-  if (anthropicKey) return 'anthropic';
-  if (geminiKey) return 'gemini';
-  return null;
+// Awalan kunci tiap penyedia. Dipakai untuk MENOLAK kunci yang jelas keliru,
+// bukan untuk memvalidasi keasliannya.
+//
+// Kenapa perlu: kunci yang salah bentuk tapi terisi akan MENYEMBUNYIKAN kunci
+// lain yang benar, karena pemilihan berdasarkan prioritas. Pernah terjadi:
+// GEMINI_API_KEY diisi token OAuth berawalan "AQ." yang selalu ditolak Google,
+// dan itu membuat GROQ_API_KEY yang sah tidak pernah terpakai. Gagalnya pun
+// membingungkan -- yang terlihat cuma "STELA sedang mengalami kendala".
+export const POLA_KUNCI = {
+  anthropic: /^sk-ant-/,
+  gemini: /^AIza/,
+  groq: /^gsk_/,
 };
 
+const URUTAN = ['anthropic', 'gemini', 'groq'];
+
+export const pilihPenyedia = ({ anthropicKey, geminiKey, groqKey } = {}) => {
+  const kunci = { anthropic: anthropicKey, gemini: geminiKey, groq: groqKey };
+  return URUTAN.find((nama) => kunci[nama] && POLA_KUNCI[nama].test(kunci[nama])) ?? null;
+};
+
+// Kunci yang terisi tapi bentuknya salah. Dilaporkan terpisah supaya server
+// bisa memberi tahu, bukan diam-diam melewatinya.
+export const kunciBermasalah = ({ anthropicKey, geminiKey, groqKey } = {}) => {
+  const kunci = { anthropic: anthropicKey, gemini: geminiKey, groq: groqKey };
+  return URUTAN.filter((nama) => kunci[nama] && !POLA_KUNCI[nama].test(kunci[nama]));
+};
+
+// kontenSekolah dibiarkan bisa diganti supaya penyedia berplafon ketat dapat
+// mengirim potongan yang relevan saja. Bawaannya tetap pengetahuan penuh.
 export const buatInstruksi = (
   contextPublik,
+  kontenSekolah = pilihKonten('', 0),
 ) => `Kamu adalah STELA (Stematel Learning Asistant), asisten virtual resmi situs SMK Telkom Purwokerto.
 
 Tugasmu menjawab pertanyaan umum tentang SMK Telkom Purwokerto: profil, jurusan, fasilitas, kegiatan, prestasi, BKK, PPDB, berita, pengumuman, dan kontak.
@@ -57,7 +111,7 @@ ATURAN WAJIB:
 8. Jangan pernah menuliskan tag XML internal atau sistem di dalam jawabanmu.
 
 <data-sekolah>
-${KONTEN_SEKOLAH}
+${kontenSekolah}
 </data-sekolah>
 
 <data-dinamis-publik>
@@ -100,7 +154,7 @@ const galatPenyedia = (pesan, status) => {
   return galat;
 };
 
-const tanyaAnthropic = async ({ apiKey, model, pesan, contextPublik, signal }) => {
+const tanyaAnthropic = async ({ apiKey, model, pesan, instruksi, signal }) => {
   const tanggapan = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     signal,
@@ -119,7 +173,7 @@ const tanyaAnthropic = async ({ apiKey, model, pesan, contextPublik, signal }) =
       system: [
         {
           type: 'text',
-          text: buatInstruksi(contextPublik),
+          text: instruksi,
           cache_control: { type: 'ephemeral' },
         },
       ],
@@ -147,7 +201,7 @@ const tanyaAnthropic = async ({ apiKey, model, pesan, contextPublik, signal }) =
   };
 };
 
-const tanyaGemini = async ({ apiKey, model, pesan, contextPublik, signal }) => {
+const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
   const tanggapan = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
     {
@@ -158,7 +212,7 @@ const tanyaGemini = async ({ apiKey, model, pesan, contextPublik, signal }) => {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: buatInstruksi(contextPublik) }] },
+        systemInstruction: { parts: [{ text: instruksi }] },
         // Gemini menamai peran asisten 'model', bukan 'assistant'.
         contents: pesan.map((p) => ({
           role: p.role === 'assistant' ? 'model' : 'user',
@@ -195,24 +249,82 @@ const tanyaGemini = async ({ apiKey, model, pesan, contextPublik, signal }) => {
   };
 };
 
+
+// Groq berbicara format OpenAI, jadi adaptor ini sekaligus melayani OpenRouter,
+// Mistral, dan DeepSeek -- cukup tambahkan alamatnya di ALAMAT_OPENAI.
+const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi, signal }) => {
+  const alamat = ALAMAT_OPENAI[penyedia];
+  const tanggapan = await fetch(alamat, {
+    method: 'POST',
+    signal,
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: 'system', content: instruksi }, ...pesan],
+      max_tokens: BATAS.MAKS_TOKEN_JAWABAN,
+      temperature: 0.3,
+    }),
+  });
+
+  if (!tanggapan.ok) {
+    const badan = await tanggapan.text();
+    // Plafon token per menit adalah kegagalan paling mungkin di tier gratis,
+    // dan pesan generik membuatnya sulit dikenali. Sebutkan apa adanya.
+    if (tanggapan.status === 413 || badan.includes('rate_limit_exceeded')) {
+      throw galatPenyedia(
+        'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.',
+        429,
+      );
+    }
+    throw galatPenyedia(`${penyedia} menolak dengan status ${tanggapan.status}`, tanggapan.status);
+  }
+
+  const hasil = await tanggapan.json();
+  const pilihan = hasil.choices?.[0];
+  if (pilihan?.finish_reason === 'content_filter') return PESAN_DITOLAK;
+
+  return {
+    teks: (pilihan?.message?.content ?? '').trim(),
+    tokenMasuk: hasil.usage?.prompt_tokens ?? 0,
+    tokenKeluar: hasil.usage?.completion_tokens ?? 0,
+  };
+};
+
 const PESAN_DITOLAK = {
   teks: 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto.',
   tokenMasuk: 0,
   tokenKeluar: 0,
 };
 
-const PENYEDIA = { anthropic: tanyaAnthropic, gemini: tanyaGemini };
+const PENYEDIA = {
+  anthropic: tanyaAnthropic,
+  gemini: tanyaGemini,
+  groq: tanyaOpenAICompatible,
+};
 
 // Satu pintu masuk. Mengembalikan { teks, tokenMasuk, tokenKeluar } supaya
 // pemakaian bisa dicatat tanpa pemanggil perlu tahu penyedia mana yang jalan.
 export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, signal }) => {
   const panggil = PENYEDIA[penyedia];
   if (!panggil) throw galatPenyedia(`Penyedia tidak dikenal: ${penyedia}`, 500);
+
+  // Pemilihan konten memakai pertanyaan TERAKHIR, bukan seluruh riwayat: itu
+  // yang sedang ditanyakan sekarang, dan riwayat panjang akan mengaburkan skor.
+  const pertanyaan = pesan[pesan.length - 1]?.content ?? '';
+  const instruksi = buatInstruksi(
+    contextPublik,
+    pilihKonten(pertanyaan, ANGGARAN_KONTEKS[penyedia] ?? 0),
+  );
+
   return panggil({
+    penyedia,
     apiKey,
     model: model || MODEL_BAWAAN[penyedia],
     pesan,
-    contextPublik,
+    instruksi,
     signal,
   });
 };

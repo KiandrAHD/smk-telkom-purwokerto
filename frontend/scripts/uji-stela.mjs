@@ -7,7 +7,8 @@
 // seolah-olah pernah diucapkan STELA.
 
 import assert from 'node:assert/strict';
-import { BATAS, buatInstruksi, periksaPesan, pilihPenyedia } from '../../supabase/functions/stela/inti.mjs';
+import { ANGGARAN_KONTEKS, BATAS, buatInstruksi, kunciBermasalah, periksaPesan, pilihPenyedia } from '../../supabase/functions/stela/inti.mjs';
+import { pilihKonten, statistikKonten } from '../../supabase/functions/stela/konteks.mjs';
 import { buatPenjaga } from '../../supabase/functions/stela/penjaga-biaya.mjs';
 
 const u = (content) => ({ role: 'user', content });
@@ -69,9 +70,57 @@ assert.ok(
 );
 
 // --- Pemilihan penyedia ---
-assert.equal(pilihPenyedia({ anthropicKey: 'a', geminiKey: 'g' }), 'anthropic', 'Anthropic didahulukan bila keduanya ada');
-assert.equal(pilihPenyedia({ geminiKey: 'g' }), 'gemini');
+// Dummy dengan bentuk yang benar; pemilihnya kini menolak kunci salah bentuk.
+const SK = 'sk-ant-contoh';
+const AI = 'AIzaSyContoh';
+const GSK = 'gsk_contoh';
+assert.equal(pilihPenyedia({ anthropicKey: SK, geminiKey: AI }), 'anthropic', 'Anthropic didahulukan bila keduanya ada');
+assert.equal(pilihPenyedia({ geminiKey: AI }), 'gemini');
+assert.equal(pilihPenyedia({ groqKey: GSK }), 'groq');
+assert.equal(pilihPenyedia({ geminiKey: AI, groqKey: GSK }), 'gemini', 'Gemini didahulukan atas Groq');
 assert.equal(pilihPenyedia({}), null, 'tanpa kunci apa pun harus null, bukan penyedia asal');
+
+// Kunci yang salah bentuk TIDAK boleh menyembunyikan kunci lain yang sah.
+// Ini pernah terjadi: token OAuth "AQ." di GEMINI_API_KEY membuat GROQ_API_KEY
+// yang benar tidak pernah terpakai, dan gagalnya tampak seperti kerusakan.
+const campur = { geminiKey: 'AQ.tokenOAuthBukanApiKey', groqKey: 'gsk_kunciYangBenar' };
+assert.equal(pilihPenyedia(campur), 'groq', 'kunci rusak harus dilewati, bukan dipakai');
+assert.deepEqual(kunciBermasalah(campur), ['gemini'], 'kunci rusak harus dilaporkan');
+assert.equal(pilihPenyedia({ geminiKey: 'AQ.x' }), null, 'satu-satunya kunci rusak = tidak ada penyedia');
+assert.equal(pilihPenyedia({ anthropicKey: 'bukan-kunci' }), null);
+assert.deepEqual(kunciBermasalah({ groqKey: 'gsk_benar' }), [], 'kunci sah tidak boleh dilaporkan');
+
+// --- Pemilihan konteks ---
+// Groq tier gratis hanya 8.000 token per menit; pengetahuan penuh (~28 rb)
+// ditolak HTTP 413. Kalau anggaran ini jebol, STELA mati total di Groq.
+const penuh = statistikKonten();
+assert.ok(penuh.totalToken > 20_000, 'pengetahuan penuh memang besar');
+assert.ok(pilihKonten('apa pun', 0).length > 100_000, 'anggaran 0 harus mengirim pengetahuan penuh');
+
+for (const pertanyaan of [
+  'Jurusan apa saja yang ada?',
+  'Siapa kepala sekolahnya?',
+  'Kapan PPDB dibuka?',
+  'zzz kata yang tidak cocok apa pun',
+]) {
+  const token = Math.ceil(pilihKonten(pertanyaan, ANGGARAN_KONTEKS.groq).length / 4);
+  assert.ok(
+    token <= ANGGARAN_KONTEKS.groq,
+    `konteks "${pertanyaan}" = ${token} token, melebihi anggaran ${ANGGARAN_KONTEKS.groq}`,
+  );
+}
+
+// Bagian inti wajib selalu ikut, sekecil apa pun anggarannya -- tanpa ini
+// STELA bisa kehilangan jati diri hanya karena pertanyaannya tak memuat
+// kata "sekolah".
+const sempit = pilihKonten('zzz', 1);
+assert.ok(sempit.includes('## aboutDescription'), 'identitas sekolah wajib ikut');
+assert.ok(sempit.includes('## jurusanData'), 'daftar jurusan wajib ikut');
+
+// Data dashboard admin tidak boleh ada di pengetahuan chatbot publik.
+const semua = pilihKonten('pendaftar admin berita', 0);
+assert.ok(!semua.includes('## adminPendaftar'), 'data pendaftar tidak boleh masuk context chatbot');
+assert.ok(!/^## admin/m.test(semua), 'tidak boleh ada bagian admin apa pun');
 
 // --- Pagar biaya ---
 // Sakelar mati harus menutup pintu sebelum apa pun sempat dihitung.
