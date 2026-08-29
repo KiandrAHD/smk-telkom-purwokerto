@@ -65,7 +65,12 @@ const HeroSection = () => (
         {/* Overlap ke panel merah hanya di xl, di bawah itu kolom teks terlalu sempit
             (deskripsi jadi 4 baris) sehingga tombol CTA ketutup kartu. */}
         <div className="relative z-10 mx-1 -mt-6 lg:mx-16 lg:mt-5 xl:-mt-7 rounded-2xl border border-dark-100 bg-white shadow-card">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y divide-dark-100 lg:divide-y-0 lg:divide-x">
+          {/* Lima kolom, bukan empat: jumlah quickLinks memang lima. Dengan empat
+              kolom, kartu kelima turun sendirian ke baris kedua dan menyisakan
+              tiga sel kosong di sebelahnya. Kalau daftarnya nanti bertambah,
+              sesuaikan angka ini -- grid ini sengaja tidak auto-fit supaya
+              lebar tiap kartu tetap sama persis. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y divide-dark-100 lg:divide-y-0 lg:divide-x">
             {quickLinks.map((item) => {
               const Icon = icons[item.icon];
               return (
@@ -85,7 +90,9 @@ const HeroSection = () => (
                       className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-primary hover:underline"
                     >
                       {item.linkLabel}
-                      <ArrowRight className="h-3 w-3" />
+                      {/* flex-shrink-0 supaya panahnya tidak gepeng saat kolom
+                          menyempit di layar kecil. */}
+                      <ArrowRight className="h-3 w-3 flex-shrink-0" />
                     </Link>
                   </div>
                 </div>
