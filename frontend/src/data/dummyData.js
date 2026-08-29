@@ -425,11 +425,14 @@ export const footerData = {
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
   ],
+  // Galeri sengaja tidak dicantumkan di sini: ia tidak ada di desain maupun di
+  // navbar, jadi memunculkannya hanya di footer membuat strukturnya tidak
+  // konsisten. Halamannya sendiri tetap ada dan tetap terjangkau lewat tautan
+  // "Lihat Semua" di bagian Galeri Kegiatan pada halaman Berita.
   informasi: [
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
     { label: 'PPDB', href: '/ppdb' },
-    { label: 'Galeri', href: '/galeri' },
   ],
   kontak: {
     address: 'Jl.D I Panjaitan No.128 Purwokerto',
