@@ -439,13 +439,18 @@ export const footerData = {
     phone: '(0281) 632138',
     email: 'info@smktelkom-pwt.sch.id',
   },
-  // CATATAN: tautan sosial media di bawah masih tebakan dari pola nama sekolah
-  // karena akun resminya tidak tercantum di desain. Ganti kalau handle-nya beda.
+  // Akun resmi sekolah, handle-nya seragam: stematelpwt.
+  //
+  // Parameter pelacak bawaan tombol "salin tautan" (?igsi=, ?_r=&_t=, ?si=)
+  // sengaja dibuang. Parameter itu terikat pada sesi orang yang menyalinnya,
+  // tidak diperlukan untuk membuka profil, dan menyematkannya di situs publik
+  // berarti setiap pengunjung ikut membawa jejak sesi tersebut.
+  //
+  // Facebook dihapus atas permintaan sekolah.
   socials: [
-    { name: 'Instagram', icon: 'instagram', href: 'https://www.instagram.com/smktelkompurwokerto' },
-    { name: 'YouTube', icon: 'youtube', href: 'https://www.youtube.com/@smktelkompurwokerto' },
-    { name: 'Facebook', icon: 'facebook', href: 'https://www.facebook.com/smktelkompurwokerto' },
-    { name: 'TikTok', icon: 'tiktok', href: 'https://www.tiktok.com/@smktelkompurwokerto' },
+    { name: 'Instagram', icon: 'instagram', href: 'https://www.instagram.com/stematelpwt' },
+    { name: 'YouTube', icon: 'youtube', href: 'https://www.youtube.com/@stematelpwt' },
+    { name: 'TikTok', icon: 'tiktok', href: 'https://www.tiktok.com/@stematelpwt' },
   ],
   map: mapImg,
 };

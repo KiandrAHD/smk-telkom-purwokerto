@@ -1,5 +1,5 @@
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
+import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
@@ -7,7 +7,6 @@ import { footerData } from '../data/dummyData';
 const socialIcons = {
   instagram: FaInstagram,
   youtube: FaYoutube,
-  facebook: FaFacebookF,
   tiktok: FaTiktok,
 };
 

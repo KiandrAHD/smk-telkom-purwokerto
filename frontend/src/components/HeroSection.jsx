@@ -65,12 +65,16 @@ const HeroSection = () => (
         {/* Overlap ke panel merah hanya di xl, di bawah itu kolom teks terlalu sempit
             (deskripsi jadi 4 baris) sehingga tombol CTA ketutup kartu. */}
         <div className="relative z-10 mx-1 -mt-6 lg:mx-16 lg:mt-5 xl:-mt-7 rounded-2xl border border-dark-100 bg-white shadow-card">
-          {/* Lima kolom, bukan empat: jumlah quickLinks memang lima. Dengan empat
-              kolom, kartu kelima turun sendirian ke baris kedua dan menyisakan
-              tiga sel kosong di sebelahnya. Kalau daftarnya nanti bertambah,
-              sesuaikan angka ini -- grid ini sengaja tidak auto-fit supaya
-              lebar tiap kartu tetap sama persis. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y divide-dark-100 lg:divide-y-0 lg:divide-x">
+          {/* quickLinks berjumlah lima, jadi jumlah kolomnya mengikuti lebar:
+              - xl (>=1280px): lima kolom, semua muat satu baris dengan lega
+                (sel ~211px, label tidak membungkus).
+              - lg (1024-1279px): tiga kolom. Lima kolom di sini memberi sel
+                hanya ~173px dan SEMUA label membungkus dua baris; empat kolom
+                menyisakan satu kartu yatim dengan tiga sel kosong. Tiga kolom
+                menghasilkan baris 3+2 yang paling rapi di antara ketiganya.
+              Grid ini sengaja tidak auto-fit supaya lebar tiap kartu sama
+              persis. Kalau daftarnya bertambah, sesuaikan angka-angka ini. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 divide-y divide-dark-100 lg:divide-y-0 lg:divide-x">
             {quickLinks.map((item) => {
               const Icon = icons[item.icon];
               return (
