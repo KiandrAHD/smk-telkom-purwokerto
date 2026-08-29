@@ -210,11 +210,20 @@ export const periksaPesan = (mentah) => {
 // tambahan. Keduanya melempar Error dengan properti `status` supaya pemanggil
 // bisa membedakan gagal-karena-penyedia dari gagal-karena-jaringan.
 
-const galatPenyedia = (pesan, status) => {
+// untukPengguna menandai galat yang pesannya memang ditulis untuk dibaca
+// pengunjung. Tanpa penanda ini, pesan internal seperti "Gemini menolak dengan
+// status 429" ikut tampil di gelembung chat -- membingungkan bagi pengunjung
+// dan membocorkan penyedia mana yang dipakai.
+const galatPenyedia = (pesan, status, untukPengguna = false) => {
   const galat = new Error(pesan);
   galat.status = status;
+  galat.untukPengguna = untukPengguna;
   return galat;
 };
+
+export const PESAN_KUOTA_HARIAN =
+  'STELA sudah mencapai batas percakapan hari ini. Silakan coba lagi besok, atau hubungi Tata Usaha untuk pertanyaan yang mendesak.';
+export const PESAN_SEDANG_RAMAI = 'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.';
 
 const tanyaAnthropic = async ({ apiKey, model, pesan, instruksi, signal }) => {
   const tanggapan = await fetch('https://api.anthropic.com/v1/messages', {
@@ -299,6 +308,16 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
   );
 
   if (!tanggapan.ok) {
+    // Google memakai 429 untuk dua hal yang sangat berbeda: kuota HARIAN habis
+    // (tier gratis hanya 20 permintaan/hari/model) dan batas per menit. Yang
+    // pertama tidak akan pulih dengan menunggu sebentar, jadi pengunjung tidak
+    // boleh disuruh "coba lagi sebentar lagi". Bedanya hanya terlihat di
+    // quotaId pada badan galat.
+    const badan = await tanggapan.text();
+    if (tanggapan.status === 429) {
+      const harian = badan.includes('PerDay');
+      throw galatPenyedia(harian ? PESAN_KUOTA_HARIAN : PESAN_SEDANG_RAMAI, 429, true);
+    }
     throw galatPenyedia(`Gemini menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
 
@@ -344,10 +363,7 @@ const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi
     // Plafon token per menit adalah kegagalan paling mungkin di tier gratis,
     // dan pesan generik membuatnya sulit dikenali. Sebutkan apa adanya.
     if (tanggapan.status === 413 || badan.includes('rate_limit_exceeded')) {
-      throw galatPenyedia(
-        'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.',
-        429,
-      );
+      throw galatPenyedia(PESAN_SEDANG_RAMAI, 429, true);
     }
     throw galatPenyedia(`${penyedia} menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }

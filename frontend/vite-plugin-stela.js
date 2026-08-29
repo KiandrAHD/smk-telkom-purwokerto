@@ -135,9 +135,10 @@ export const stelaDevPlugin = () => ({
         return kirim({ reply: teks }, 200);
       } catch (error) {
         server.config.logger.error(`  [stela] ${error?.message ?? 'kesalahan tidak dikenal'}`);
-        // Plafon token per menit bukan kerusakan, dan pengunjung bisa
-        // menindaklanjutinya sendiri -- jadi pesannya diteruskan apa adanya.
-        if (error?.status === 429) return kirim({ error: error.message }, 429);
+        // Hanya pesan yang memang ditulis untuk pengunjung yang diteruskan.
+        // Sebelumnya semua galat 429 diteruskan mentah, sehingga pengunjung
+        // sempat melihat "Gemini menolak dengan status 429" di gelembung chat.
+        if (error?.untukPengguna) return kirim({ error: error.message }, error.status ?? 429);
         return kirim({ error: 'STELA sedang mengalami kendala.' }, error?.status ? 502 : 500);
       }
     });

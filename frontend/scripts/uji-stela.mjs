@@ -7,7 +7,7 @@
 // seolah-olah pernah diucapkan STELA.
 
 import assert from 'node:assert/strict';
-import { ANGGARAN_KONTEKS, BATAS, bersihkanMasukan, buatInstruksi, kunciBermasalah, periksaPesan, pilihPenyedia } from '../../supabase/functions/stela/inti.mjs';
+import { ANGGARAN_KONTEKS, BATAS, PESAN_KUOTA_HARIAN, PESAN_SEDANG_RAMAI, bersihkanMasukan, buatInstruksi, kunciBermasalah, periksaPesan, pilihPenyedia } from '../../supabase/functions/stela/inti.mjs';
 import { pilihKonten, statistikKonten } from '../../supabase/functions/stela/konteks.mjs';
 import { buatPenjaga } from '../../supabase/functions/stela/penjaga-biaya.mjs';
 
@@ -255,5 +255,25 @@ assert.equal(periksaPesan([u(raksasa)]).pesan, undefined, 'muatan raksasa harus 
 
 // Aturan tolak-seluruhnya, yang menutup pola "menolak lalu tetap menjawab".
 assert.ok(buatInstruksi('x').includes('Tolak SELURUH pesan'), 'aturan tolak-seluruhnya wajib ada');
+
+// --- Pesan galat tidak boleh membocorkan internal ---
+// Pernah terjadi: pengunjung melihat "Gemini menolak dengan status 429" di
+// gelembung chat. Pesan yang ditujukan ke pengunjung tidak boleh menyebut nama
+// penyedia, kode status, atau nama variabel apa pun.
+for (const pesan of [PESAN_KUOTA_HARIAN, PESAN_SEDANG_RAMAI]) {
+  for (const bocor of ['gemini', 'groq', 'anthropic', 'claude', 'api', 'status', '429', '503', 'token', 'quota', 'kuota_']) {
+    assert.ok(
+      !pesan.toLowerCase().includes(bocor),
+      `pesan untuk pengunjung membocorkan "${bocor}": ${pesan}`,
+    );
+  }
+  assert.ok(pesan.includes('STELA'), 'pesan harus berbicara sebagai STELA');
+}
+
+// Kuota harian tidak pulih dengan menunggu semenit, jadi pesannya tidak boleh
+// menyuruh pengunjung mencoba lagi sebentar lagi.
+assert.ok(PESAN_KUOTA_HARIAN.includes('besok'), 'batas harian harus mengarahkan ke hari berikutnya');
+assert.ok(!PESAN_KUOTA_HARIAN.includes('menit'), 'batas harian tidak boleh menjanjikan pemulihan dalam menit');
+assert.ok(PESAN_SEDANG_RAMAI.includes('menit'), 'batas per menit harus menyebut rentang menitnya');
 
 console.log('Semua pemeriksaan STELA lolos.');

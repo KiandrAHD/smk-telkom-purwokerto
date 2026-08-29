@@ -178,10 +178,12 @@ Deno.serve(async (req) => {
     return balas({ reply: teks }, 200, origin);
   } catch (error) {
     console.error('Kesalahan STELA', error instanceof Error ? error.message : 'unknown');
-    // Plafon token per menit bukan kerusakan, dan pengunjung bisa
-    // menindaklanjutinya sendiri -- jadi pesannya diteruskan apa adanya.
-    if ((error as { status?: number })?.status === 429) {
-      return balas({ error: (error as Error).message }, 429, origin);
+    // Hanya pesan yang memang ditulis untuk pengunjung yang diteruskan.
+    // Sebelumnya semua galat 429 diteruskan mentah, sehingga pengunjung sempat
+    // melihat "Gemini menolak dengan status 429" di gelembung chat.
+    const ditandai = error as { untukPengguna?: boolean; status?: number };
+    if (ditandai?.untukPengguna) {
+      return balas({ error: (error as Error).message }, ditandai.status ?? 429, origin);
     }
     const status = (error as { status?: number })?.status ? 502 : 500;
     return balas({ error: 'STELA sedang tidak tersedia.' }, status, origin);
