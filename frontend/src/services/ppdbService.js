@@ -108,6 +108,15 @@ export async function signInPpdb(email, password) {
   return throwIfError(await client.auth.signInWithPassword({ email, password }));
 }
 
+export async function resendPpdbVerification(email) {
+  const client = ensureSupabase();
+  return throwIfError(await client.auth.resend({
+    type: 'signup',
+    email,
+    options: { emailRedirectTo: `${window.location.origin}/ppdb/verifikasi` },
+  }));
+}
+
 export async function signOutPpdb() {
   const client = ensureSupabase();
   return throwIfError(await client.auth.signOut());

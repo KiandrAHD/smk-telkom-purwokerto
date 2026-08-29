@@ -350,3 +350,11 @@ Deno dan Supabase CLI diperlukan untuk validasi/deploy Edge Function. Jika tool 
 - Jangan mencampur STELA dan NextTel.
 - Jangan mengubah CRUD, PPDB, migration, atau halaman publik lain tanpa kebutuhan langsung.
 - Setelah perubahan, jalankan lint, build, static security scan, dan uji Edge Function sebelum deployment.
+
+## 12. PPDB Auth, Verifikasi, dan Status
+
+Portal PPDB menggunakan Supabase Auth. Signup mengirim email konfirmasi dengan redirect ke `/ppdb/verifikasi`, sedangkan login memakai email dan password melalui `signInWithPassword`. Keberhasilan signup tidak sama dengan email telah diterima; pengiriman email tetap bergantung pada konfigurasi Email Confirmation, URL Configuration, dan SMTP di Supabase Dashboard.
+
+Halaman verifikasi membaca session dan `email_confirmed_at`, serta memakai `auth.resend` untuk mengirim ulang email dengan cooldown 60 detik. Setelah terverifikasi, pengguna dapat melanjutkan ke formulir. Tidak ada token atau password yang disimpan manual.
+
+Halaman `/ppdb/status` mengambil submission terbaru melalui `auth_user_id` milik user aktif. RLS membatasi pembacaan user pada submission sendiri; admin tetap dapat membaca seluruh data. Dokumen tetap private dan hanya diakses melalui signed URL. Record lama dengan `auth_user_id = NULL` dianggap legacy dan tidak diklaim oleh akun mana pun.

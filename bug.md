@@ -60,3 +60,7 @@ Tidak ada perubahan database, migration, RLS, atau konfigurasi security. Bug ini
 ## Catatan QA
 
 Lint dan build frontend berhasil. Pengujian CRUD, Auth, RLS, Storage, dan konsistensi public-admin tidak dapat dinyatakan PASS sebelum tabel tersedia pada project Supabase aktif.
+
+## Status mitigasi identity PPDB
+
+Bug akun/email yang tertukar telah **MITIGATED, LIVE TEST PENDING**. UI production tidak lagi memakai akun contoh, portal membaca email dari session Supabase Auth, submission memakai `auth_user_id`, dan status user difilter berdasarkan owner tersebut. Verifikasi User A/User B, refresh, multi-tab, email delivery, dan RLS tetap harus diuji setelah migration `002_ppdb_identity.sql` diterapkan pada project Supabase aktif.

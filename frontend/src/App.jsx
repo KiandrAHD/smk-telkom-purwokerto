@@ -30,6 +30,7 @@ import VerifyEmailPage from './pages/ppdb/VerifyEmailPage';
 import RegistrationFormPage from './pages/ppdb/RegistrationFormPage';
 import UploadDocumentsPage from './pages/ppdb/UploadDocumentsPage';
 import SubmitSuccessPage from './pages/ppdb/SubmitSuccessPage';
+import PpdbStatusPage from './pages/ppdb/PpdbStatusPage';
 import { AdminDataProvider } from './context/AdminDataContext';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import DashboardHomePage from './pages/dashboard/DashboardHomePage';
@@ -121,6 +122,7 @@ const App = () => {
           <Route path="/ppdb/formulir" element={<RegistrationFormPage />} />
           <Route path="/ppdb/berkas" element={<UploadDocumentsPage />} />
           <Route path="/ppdb/selesai" element={<SubmitSuccessPage />} />
+          <Route path="/ppdb/status" element={<PpdbStatusPage />} />
           <Route path="/ppdb/dokumen-peserta" element={<DokumenPesertaPage />} />
         </Route>
 

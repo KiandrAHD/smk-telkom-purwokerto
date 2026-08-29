@@ -103,3 +103,5 @@ Submission baru hanya dapat dibuat oleh user authenticated, dengan `auth_user_id
 Flow PPDB menggunakan satu PDF gabungan. Object path disimpan pada `dokumen_url` dengan pola `submissions/<auth_user_id>/<ppdb_id>/<nama-file>`. Bucket tetap private dan dokumen hanya dibuka memakai signed URL. Jangan gunakan `getPublicUrl()` untuk dokumen PPDB.
 
 Signup mengirim email konfirmasi melalui Supabase Auth dengan redirect ke `/ppdb/verifikasi`. Signup berhasil tidak selalu berarti email sudah diterima; periksa pengaturan email confirmation, URL Configuration, SMTP provider, spam, dan bounce di Supabase Dashboard.
+
+Pada halaman verifikasi, email dapat dikirim ulang melalui Supabase Auth dengan cooldown 60 detik. Setelah login, portal memeriksa `auth_user_id` dan mengarahkan user tanpa submission ke formulir, atau ke `/ppdb/status` untuk menampilkan submission terbaru miliknya. Status `menunggu`, `diproses`, `diterima`, dan `ditolak` dibaca langsung dari `public.ppdb`.

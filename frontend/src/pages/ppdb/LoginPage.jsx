@@ -5,7 +5,7 @@ import FormInput from '../../components/dashboard/FormInput';
 import PanelMerah from '../../components/ppdb/PanelMerah';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { ppdbPanelMasuk } from '../../data/dummyData';
-import { signInPpdb } from '../../services/ppdbService';
+import { getMyPpdb, signInPpdb } from '../../services/ppdbService';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -22,7 +22,8 @@ const LoginPage = () => {
     setMengirim(true);
     try {
       await signInPpdb(form.akun.trim(), form.sandi);
-      navigate('/ppdb/formulir');
+      const submissions = await getMyPpdb();
+      navigate(submissions.length ? '/ppdb/status' : '/ppdb/formulir');
     } catch {
       setGalat('Email atau kata sandi tidak valid.');
     } finally {

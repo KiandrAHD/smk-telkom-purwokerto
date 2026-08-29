@@ -41,7 +41,7 @@ export const PpdbProvider = ({ children }) => {
     setNilai({});
     setDokumen({});
     setNomorRegistrasi(null);
-    setDraftTersimpan(false);
+      setDraftTersimpan(false);
   }, []);
 
   useEffect(() => {
@@ -94,6 +94,11 @@ export const PpdbProvider = ({ children }) => {
     return nomor;
   }, []);
 
+  const mulaiAkunBaru = useCallback(() => {
+    resetWizard();
+    setCurrentUser(null);
+  }, [resetWizard]);
+
   const logout = useCallback(async () => {
     await signOutPpdb();
     resetWizard();
@@ -114,8 +119,9 @@ export const PpdbProvider = ({ children }) => {
       setDraftTersimpan,
       kirimPendaftaran,
       logout,
+      mulaiAkunBaru,
     }),
-    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, isiBiodata, isiNilai, isiDokumen, kirimPendaftaran, logout]
+    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, isiBiodata, isiNilai, isiDokumen, kirimPendaftaran, logout, mulaiAkunBaru]
   );
 
   return <PpdbContext.Provider value={nilaiContext}>{children}</PpdbContext.Provider>;
