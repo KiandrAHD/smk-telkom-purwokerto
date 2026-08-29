@@ -68,10 +68,6 @@ export const navLinks = [
 export const ctaMasukPpdb = { label: 'Masuk PPDB', href: '/ppdb/masuk' };
 
 export const landingHero = {
-  breadcrumb: [
-    { label: 'Beranda', href: '/' },
-    { label: 'Profil Sekolah', href: '/tentang' },
-  ],
   hashtag: '#DigitalSmartSchool',
   title: 'Bangun Masa Depanmu',
   titleAccent: 'Bersama Teknologi',
