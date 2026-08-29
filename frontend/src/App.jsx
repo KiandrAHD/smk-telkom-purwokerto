@@ -13,6 +13,14 @@ import PrestasiDetailPage from './pages/PrestasiDetailPage';
 import BeritaDetailPage from './pages/BeritaDetailPage';
 import PengumumanDetailPage from './pages/PengumumanDetailPage';
 import StelaPage from './pages/StelaPage';
+import DetailPelengkapPage from './pages/DetailPelengkapPage';
+import GaleriPage from './pages/GaleriPage';
+import PanduanPage from './pages/PanduanPage';
+import JurusanFaqPage from './pages/JurusanFaqPage';
+import JurusanPerbandinganPage from './pages/JurusanPerbandinganPage';
+import KetentuanPpdbPage from './pages/KetentuanPpdbPage';
+import LupaSandiPage from './pages/ppdb/LupaSandiPage';
+import DokumenPesertaPage from './pages/ppdb/DokumenPesertaPage';
 import SegeraHadirPage from './pages/SegeraHadirPage';
 import Login from './page/Login/Login';
 import { PpdbProvider } from './context/PpdbContext';
@@ -83,6 +91,22 @@ const App = () => {
             tertinggal di riwayat dan menjebak tombol Back. */}
         <Route path="/ppdb" element={<Navigate to="/ppdb/masuk" replace />} />
 
+        {/* Halaman pelengkap. Slug-nya mengikuti hasil slugify() pada kartu
+            asal, karena tautannya dirakit dari judul kartu. */}
+        <Route path="/galeri" element={<GaleriPage />} />
+        <Route path="/galeri/:slug" element={<DetailPelengkapPage jenis="galeri" />} />
+        <Route path="/berita/agenda/:slug" element={<DetailPelengkapPage jenis="agenda" />} />
+        <Route path="/bkk/panduan" element={<PanduanPage />} />
+        <Route path="/bkk/panduan/:slug" element={<DetailPelengkapPage jenis="panduan" />} />
+        <Route path="/bkk/pkl/:slug" element={<DetailPelengkapPage jenis="pkl" />} />
+        <Route path="/bkk/roadmap/:slug" element={<DetailPelengkapPage jenis="roadmap" />} />
+        <Route path="/jurusan/faq" element={<JurusanFaqPage />} />
+        <Route path="/jurusan/perbandingan" element={<JurusanPerbandinganPage />} />
+        <Route path="/jurusan/project/:slug" element={<DetailPelengkapPage jenis="project" />} />
+        <Route path="/tentang/guru/:slug" element={<DetailPelengkapPage jenis="guru" />} />
+        <Route path="/ketentuan-ppdb" element={<KetentuanPpdbPage />} />
+        <Route path="/lupa-sandi" element={<LupaSandiPage />} />
+
         {/* Alur portal PPDB. PpdbProvider membungkus keenam langkah supaya isian
             formulir tetap ada saat berpindah langkah. */}
         <Route
@@ -98,6 +122,7 @@ const App = () => {
           <Route path="/ppdb/formulir" element={<RegistrationFormPage />} />
           <Route path="/ppdb/berkas" element={<UploadDocumentsPage />} />
           <Route path="/ppdb/selesai" element={<SubmitSuccessPage />} />
+          <Route path="/ppdb/dokumen-peserta" element={<DokumenPesertaPage />} />
         </Route>
 
         {/* Halaman detail: isinya dicari dari slug, satu komponen per kategori. */}

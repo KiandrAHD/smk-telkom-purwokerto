@@ -2632,3 +2632,730 @@ export const ppdbAkunContoh = {
   nama: 'Aditya Nur Arif',
   nisn: '0081234567',
 };
+
+/* =========================================================
+   HALAMAN PELENGKAP
+   Isi untuk empat belas tujuan yang sebelumnya mendarat di "Segera Hadir".
+   Slug di sini WAJIB sama dengan hasil slugify() pada kartu asalnya, karena
+   tautannya dirakit dari judul kartu — bukan dari field slug.
+   ========================================================= */
+
+/* ── Agenda kegiatan: /berita/agenda/:slug ── */
+export const agendaDetail = [
+  {
+    slug: 'semianar-cyber-security-bersama-telkom',
+    kategori: 'Event',
+    title: 'Semianar Cyber Security bersama Telkom',
+    subtitle: 'Aula SMK Telkom Purwokerto, 24 Mei',
+    date: '24 Mei 2025',
+    image: labKomputer,
+    lead: 'Seminar keamanan siber menghadirkan praktisi dari Telkom untuk membahas ancaman yang paling sering menimpa pengguna sehari-hari dan cara menghadapinya.',
+    body: [
+      'Materi dibuka dengan peragaan bagaimana sebuah kata sandi lemah bisa ditebak dalam hitungan detik, lalu dilanjutkan dengan cara menyusun kata sandi yang kuat namun tetap mudah diingat.',
+      'Sesi kedua membahas rekayasa sosial: bagaimana penipu memancing korban lewat pesan singkat, surel palsu, dan tautan yang menyamar. Siswa diajak membedah contoh nyata yang pernah beredar.',
+      'Peserta yang hadir penuh sampai akhir memperoleh sertifikat kehadiran yang dapat dilampirkan pada portofolio.',
+    ],
+    facts: [
+      { label: 'Tempat', value: 'Aula SMK Telkom Purwokerto' },
+      { label: 'Waktu', value: '24 Mei 2025, 08.00 - 12.00' },
+      { label: 'Pemateri', value: 'Praktisi keamanan siber Telkom' },
+      { label: 'Biaya', value: 'Gratis untuk siswa' },
+    ],
+  },
+  {
+    slug: 'pelatihan-ui-ux-design-untuk-siswa',
+    kategori: 'Workshop',
+    title: 'Pelatihan UI/UX Design Untuk Siswa',
+    subtitle: 'Lab Multimedia, 28 Mei',
+    date: '28 Mei 2025',
+    image: studioMultimedia,
+    lead: 'Pelatihan sehari penuh untuk mengenal proses merancang antarmuka, mulai dari memahami kebutuhan pengguna sampai menyusun purwarupa yang bisa dicoba.',
+    body: [
+      'Peserta memulai dengan wawancara singkat sesama peserta untuk melatih kepekaan menangkap kebutuhan yang sebenarnya, bukan sekadar keinginan yang diucapkan.',
+      'Setelah itu setiap kelompok menyusun alur layar di atas kertas sebelum memindahkannya ke perkakas desain. Tahap ini sengaja dilakukan manual agar ide cepat diuji dan cepat pula dibuang bila tidak cocok.',
+      'Hari ditutup dengan sesi saling menguji purwarupa antar kelompok, lalu memperbaikinya berdasarkan catatan yang terkumpul.',
+    ],
+    facts: [
+      { label: 'Tempat', value: 'Lab Multimedia' },
+      { label: 'Waktu', value: '28 Mei 2025, 08.00 - 15.00' },
+      { label: 'Kuota', value: '30 siswa' },
+      { label: 'Perlu dibawa', value: 'Laptop pribadi' },
+    ],
+  },
+  {
+    slug: 'campus-hiring-day-telkom-grup',
+    kategori: 'Career',
+    title: 'Campus Hiring Day Telkom Grup',
+    subtitle: 'Aula SMK Telkom Purwokerto, 2 Juni',
+    date: '2 Juni 2025',
+    image: guruGroup,
+    lead: 'Hari rekrutmen bersama perusahaan di lingkungan Telkom Grup, terbuka untuk siswa kelas XII dan alumni yang sedang mencari penempatan kerja.',
+    body: [
+      'Setiap perusahaan membuka meja sendiri untuk sesi tanya jawab, penerimaan berkas, dan wawancara awal di tempat bagi pelamar yang berkasnya lengkap.',
+      'Panitia menyarankan peserta membawa berkas cetak rangkap tiga dan mengenakan pakaian rapi, karena sebagian perusahaan langsung menjadwalkan wawancara lanjutan pada hari yang sama.',
+      'Bursa Kerja Khusus sekolah membuka pendampingan penyusunan berkas satu pekan sebelum acara bagi yang membutuhkan.',
+    ],
+    facts: [
+      { label: 'Tempat', value: 'Aula SMK Telkom Purwokerto' },
+      { label: 'Waktu', value: '2 Juni 2025, 08.00 - 16.00' },
+      { label: 'Peserta', value: 'Siswa kelas XII dan alumni' },
+      { label: 'Berkas', value: 'CV, ijazah, transkrip nilai' },
+    ],
+  },
+];
+
+/* ── Galeri kegiatan: /galeri dan /galeri/:slug ── */
+export const galeriIndex = {
+  eyebrow: 'Dokumentasi Sekolah',
+  title: 'Galeri Kegiatan',
+  deskripsi:
+    'Kumpulan momen dari kegiatan belajar, lomba, dan acara sekolah sepanjang tahun ajaran berjalan.',
+};
+
+export const galeriDetail = [
+  {
+    slug: 'tim-siswa-berprestasi',
+    kategori: 'Prestasi',
+    title: 'Tim Siswa Berprestasi',
+    subtitle: 'Dokumentasi penerimaan penghargaan',
+    date: '24 Agustus 2024',
+    image: prestasi1,
+    lead: 'Momen tim siswa menerima penghargaan setelah menyelesaikan rangkaian lomba tingkat nasional.',
+    body: [
+      'Foto diambil tepat setelah pengumuman pemenang dibacakan. Tim yang tampak di gambar menjalani persiapan selama empat bulan dengan pendampingan guru produktif.',
+      'Dokumentasi seperti ini disimpan sebagai arsip sekolah dan dipakai kembali untuk bahan pembinaan angkatan berikutnya.',
+    ],
+    facts: [
+      { label: 'Kegiatan', value: 'Penyerahan penghargaan lomba' },
+      { label: 'Lokasi', value: 'Aula SMK Telkom Purwokerto' },
+    ],
+  },
+  {
+    slug: 'siswa-di-studio-multimedia',
+    kategori: 'Fasilitas',
+    title: 'Siswa di Studio Multimedia',
+    subtitle: 'Produksi konten dan aset visual',
+    date: '14 Mei 2025',
+    image: studioMultimedia,
+    lead: 'Studio multimedia dipakai untuk produksi konten, penyuntingan video, dan pembuatan aset visual oleh siswa jurusan Pengembangan Game dan Desain Komunikasi Visual.',
+    body: [
+      'Ruangan ini dilengkapi perangkat penyuntingan, pen tablet, dan area perekaman sederhana yang bisa dipakai bergantian antar kelas.',
+      'Sebagian besar karya yang tampil di Project Showcase dikerjakan di ruangan ini.',
+    ],
+    facts: [
+      { label: 'Ruang', value: 'Studio Multimedia' },
+      { label: 'Dipakai oleh', value: 'Jurusan PG dan DKV' },
+    ],
+  },
+  {
+    slug: 'praktik-jaringan-siswa',
+    kategori: 'Praktik',
+    title: 'Praktik Jaringan Siswa',
+    subtitle: 'Konfigurasi perangkat di laboratorium',
+    date: '8 Mei 2025',
+    image: showcaseTkj,
+    lead: 'Siswa jurusan jaringan berlatih memasang dan mengonfigurasi perangkat menggunakan alat yang sama dengan yang dipakai di industri.',
+    body: [
+      'Praktik dilakukan langsung pada router dan switch fisik, bukan hanya simulator, supaya siswa terbiasa dengan penanganan perangkat sungguhan.',
+      'Setiap kelompok diberi skenario gangguan berbeda dan diminta menemukan penyebabnya lewat pembacaan log.',
+    ],
+    facts: [
+      { label: 'Ruang', value: 'Laboratorium Jaringan' },
+      { label: 'Perangkat', value: 'Router dan switch industri' },
+    ],
+  },
+  {
+    slug: 'siswa-mengerjakan-proyek',
+    kategori: 'Kegiatan',
+    title: 'Siswa Mengerjakan Proyek',
+    subtitle: 'Kerja kelompok menjelang penilaian',
+    date: '2 Mei 2025',
+    image: prestasi2,
+    lead: 'Suasana kerja kelompok menjelang penilaian proyek akhir semester, saat setiap tim merapikan hasil kerja sebelum dipresentasikan.',
+    body: [
+      'Proyek dikerjakan dalam tim kecil dengan pembagian peran menyerupai alur kerja di industri: ada yang menangani rancangan, ada yang menulis kode, ada yang menguji.',
+      'Penilaian tidak hanya melihat hasil akhir, tetapi juga catatan perkembangan pekerjaan selama proses berlangsung.',
+    ],
+    facts: [
+      { label: 'Kegiatan', value: 'Penilaian proyek akhir semester' },
+      { label: 'Bentuk', value: 'Kerja tim' },
+    ],
+  },
+];
+
+/* ── Panduan karier BKK: /bkk/panduan dan /bkk/panduan/:slug ── */
+export const panduanIndex = {
+  eyebrow: 'Bursa Kerja Khusus',
+  title: 'Panduan Karier',
+  deskripsi:
+    'Bahan siap pakai untuk menyiapkan berkas lamaran, menghadapi wawancara, dan merencanakan langkah karier setelah lulus.',
+};
+
+export const panduanDetail = [
+  {
+    slug: 'download-template-cv-profesional',
+    kategori: 'Berkas Lamaran',
+    title: 'Download Template CV Profesional',
+    subtitle: 'Format satu halaman yang mudah dibaca perekrut',
+    date: 'Diperbarui 12 Mei 2025',
+    image: labKomputer,
+    lead: 'Templat riwayat hidup satu halaman yang disusun mengikuti kebiasaan perekrut di industri teknologi: ringkas, mudah dipindai, dan menonjolkan bukti kerja.',
+    body: [
+      'Perekrut umumnya hanya memindai riwayat hidup selama beberapa detik pada tahap penyaringan awal. Karena itu bagian paling atas diisi keahlian dan pengalaman yang paling relevan dengan posisi yang dilamar, bukan riwayat pendidikan sejak sekolah dasar.',
+      'Setiap pengalaman ditulis dengan pola tindakan dan hasil. Tulis apa yang dikerjakan, alat yang dipakai, dan hasilnya jika ada angkanya. Kalimat "membuat aplikasi kasir yang dipakai koperasi sekolah" jauh lebih berbobot daripada "menguasai pemrograman".',
+      'Simpan berkas dalam format PDF dan beri nama sesuai pola Nama_Posisi_CV agar tidak tertukar di kotak masuk perekrut.',
+    ],
+    facts: [
+      { label: 'Format', value: 'PDF, satu halaman' },
+      { label: 'Cocok untuk', value: 'Lamaran kerja dan magang' },
+      { label: 'Disusun oleh', value: 'Tim BKK sekolah' },
+    ],
+  },
+  {
+    slug: 'panduan-interview-kerja',
+    kategori: 'Wawancara',
+    title: 'Panduan Interview Kerja',
+    subtitle: 'Persiapan sebelum, saat, dan sesudah wawancara',
+    date: 'Diperbarui 10 Mei 2025',
+    image: guruGroup,
+    lead: 'Panduan menghadapi wawancara kerja pertama, disusun dari pertanyaan yang paling sering muncul pada perekrutan tingkat pemula di bidang teknologi.',
+    body: [
+      'Sebelum hari wawancara, pelajari apa yang dikerjakan perusahaan dan siapkan satu pertanyaan yang menunjukkan Anda benar-benar mencari tahu. Pertanyaan yang baik memberi kesan lebih kuat daripada jawaban yang dihafal.',
+      'Saat wawancara, jawab pertanyaan pengalaman dengan urutan situasi, tindakan, dan hasil. Bila belum punya pengalaman kerja, proyek sekolah tetap sah dijadikan contoh selama diceritakan dengan jujur.',
+      'Setelah selesai, kirim pesan terima kasih singkat dalam satu hari kerja. Langkah kecil ini jarang dilakukan pelamar lain dan membuat Anda lebih diingat.',
+    ],
+    facts: [
+      { label: 'Isi', value: 'Daftar pertanyaan dan cara menjawab' },
+      { label: 'Sesi latihan', value: 'Tersedia lewat BKK sekolah' },
+      { label: 'Cocok untuk', value: 'Siswa kelas XII dan alumni' },
+    ],
+  },
+  {
+    slug: 'latihan-soal-dan-tips',
+    kategori: 'Tes Seleksi',
+    title: 'Latihan Soal dan Tips',
+    subtitle: 'Kumpulan soal tes masuk kerja',
+    date: 'Diperbarui 6 Mei 2025',
+    image: perpustakaan,
+    lead: 'Kumpulan soal latihan untuk tahap tes tertulis, mencakup kemampuan dasar, logika, dan pengetahuan teknis sesuai bidang keahlian.',
+    body: [
+      'Bagian kemampuan dasar menguji hitungan cepat dan pemahaman bacaan. Kuncinya bukan menghafal rumus, melainkan membiasakan diri mengerjakan dengan batas waktu.',
+      'Bagian logika berisi pola gambar dan penalaran. Latihan rutin membuat pola-pola yang muncul terasa akrab sehingga waktu pengerjaan jauh lebih hemat.',
+      'Bagian teknis disesuaikan dengan jurusan. Kerjakan soal sesuai bidang Anda dulu, baru melebar ke bidang lain jika masih ada waktu.',
+    ],
+    facts: [
+      { label: 'Jumlah soal', value: 'Lebih dari 200 butir' },
+      { label: 'Pembahasan', value: 'Disertakan di setiap paket' },
+      { label: 'Bentuk', value: 'PDF dan latihan daring' },
+    ],
+  },
+  {
+    slug: 'panduan-pengembangan-karier',
+    kategori: 'Rencana Karier',
+    title: 'Panduan Pengembangan Karier',
+    subtitle: 'Menyusun langkah setelah lulus',
+    date: 'Diperbarui 2 Mei 2025',
+    image: gedungSekolah,
+    lead: 'Panduan menyusun rencana karier jangka menengah, baik bagi yang langsung bekerja, melanjutkan kuliah, maupun merintis usaha sendiri.',
+    body: [
+      'Langkah pertama adalah mengenali bidang yang benar-benar diminati. Cara paling jujur menilainya adalah melihat pekerjaan apa yang tetap dikerjakan meski sedang tidak ada tugas.',
+      'Setelah bidangnya jelas, susun target satu tahun yang bisa diukur, misalnya menyelesaikan satu sertifikasi atau membangun tiga proyek yang layak masuk portofolio.',
+      'Sertifikasi industri membantu, tetapi bukti kerja tetap yang paling menentukan. Simpan setiap hasil kerja dengan rapi sejak masih sekolah.',
+    ],
+    facts: [
+      { label: 'Isi', value: 'Kerangka rencana satu dan tiga tahun' },
+      { label: 'Pendampingan', value: 'Konsultasi dengan BKK' },
+      { label: 'Cocok untuk', value: 'Semua tingkat' },
+    ],
+  },
+];
+
+/* ── Info PKL: /bkk/pkl/:slug ── */
+export const pklDetailLengkap = [
+  {
+    slug: 'pkl-it-support-pt-telkom-indonesia',
+    kategori: 'PKL',
+    title: 'PKL IT Support',
+    subtitle: 'PT Telkom Indonesia - Purwokerto, Jawa Tengah',
+    date: 'Kuota 8 siswa',
+    image: labKomputer,
+    lead: 'Penempatan praktik kerja lapangan pada tim dukungan teknis, menangani kebutuhan perangkat dan jaringan pengguna di lingkungan kantor.',
+    body: [
+      'Peserta membantu penanganan keluhan perangkat, pemasangan aplikasi, dan pemeriksaan sambungan jaringan. Semua pekerjaan didampingi teknisi tetap.',
+      'Bagian yang paling melatih adalah pencatatan tiket: setiap keluhan harus dicatat, ditelusuri, dan ditutup dengan keterangan penyelesaian. Kebiasaan ini yang kelak membedakan teknisi rapi dan teknisi asal selesai.',
+      'Di akhir masa PKL, peserta menyusun laporan berisi jenis gangguan yang paling sering muncul beserta usulan pencegahannya.',
+    ],
+    facts: [
+      { label: 'Perusahaan', value: 'PT Telkom Indonesia' },
+      { label: 'Lokasi', value: 'Purwokerto, Jawa Tengah' },
+      { label: 'Kuota', value: '8 siswa' },
+      { label: 'Jurusan disarankan', value: 'TKJ dan TJAT' },
+    ],
+  },
+  {
+    slug: 'pkl-game-dev-pt-telkom-indonesia',
+    kategori: 'PKL',
+    title: 'PKL Game Dev',
+    subtitle: 'PT Telkom Indonesia - Yogyakarta',
+    date: 'Kuota 6 siswa',
+    image: studioMultimedia,
+    lead: 'Penempatan pada tim pengembangan permainan, terlibat dalam pembuatan aset, penyusunan level, dan pengujian permainan.',
+    body: [
+      'Peserta bergabung pada satu siklus produksi pendek: menerima rancangan, mengerjakan bagiannya, lalu ikut sesi tinjauan bersama tim.',
+      'Pengujian permainan menjadi bagian penting. Peserta diminta mencatat titik yang membuat pemain bingung atau berhenti bermain, lalu mengusulkan perbaikannya.',
+      'Hasil kerja selama PKL boleh dimasukkan ke portofolio pribadi sepanjang tidak memuat aset milik perusahaan.',
+    ],
+    facts: [
+      { label: 'Perusahaan', value: 'PT Telkom Indonesia' },
+      { label: 'Lokasi', value: 'Yogyakarta' },
+      { label: 'Kuota', value: '6 siswa' },
+      { label: 'Jurusan disarankan', value: 'PG dan DKV' },
+    ],
+  },
+  {
+    slug: 'pkl-software-engineer-pt-telkom-indonesia',
+    kategori: 'PKL',
+    title: 'PKL Software Engineer',
+    subtitle: 'PT Telkom Indonesia - Jakarta',
+    date: 'Kuota 6 siswa',
+    image: showcaseRpl,
+    lead: 'Penempatan pada tim pengembang perangkat lunak, mengerjakan bagian kecil dari produk yang benar-benar dipakai pengguna.',
+    body: [
+      'Peserta mulai dengan mempelajari alur kerja tim: bagaimana pekerjaan dibagi, bagaimana kode ditinjau sebelum digabung, dan bagaimana rilis disiapkan.',
+      'Tugas biasanya berupa perbaikan kecil atau penambahan fitur ringan. Ukuran tugasnya sengaja dijaga agar peserta sempat melewati seluruh siklus, dari menulis sampai dirilis.',
+      'Pendampingan dilakukan oleh seorang pengembang tetap yang menjadi tempat bertanya selama masa penempatan.',
+    ],
+    facts: [
+      { label: 'Perusahaan', value: 'PT Telkom Indonesia' },
+      { label: 'Lokasi', value: 'Jakarta' },
+      { label: 'Kuota', value: '6 siswa' },
+      { label: 'Jurusan disarankan', value: 'PPLG dan RPL' },
+    ],
+  },
+];
+
+/* ── Roadmap karier: /bkk/roadmap/:slug ── */
+export const roadmapDetail = [
+  {
+    slug: 'rpl',
+    kategori: 'Jalur Karier',
+    title: 'Roadmap Karier Rekayasa Perangkat Lunak',
+    subtitle: 'Dari belajar dasar sampai memimpin tim',
+    date: 'Jalur 6 tahap',
+    image: showcaseRpl,
+    lead: 'Rangkaian tahap yang umum dilalui lulusan Rekayasa Perangkat Lunak, dari menguasai dasar sampai menempati peran senior di industri.',
+    body: [
+      'Tiga tahap pertama diselesaikan selama masa sekolah: menguasai dasar, membangun portofolio, lalu menjalani praktik kerja lapangan. Bekal terpenting dari tahap ini bukan banyaknya bahasa pemrograman yang dikuasai, melainkan kebiasaan menulis kode yang bisa dibaca orang lain.',
+      'Tahap Junior biasanya berjalan satu sampai dua tahun pertama setelah lulus. Fokusnya menyelesaikan tugas dengan tuntas dan belajar dari tinjauan kode rekan yang lebih berpengalaman.',
+      'Tahap Profesional dan Expert ditandai dengan berpindahnya tanggung jawab, dari menyelesaikan tugas menjadi menentukan cara tim bekerja dan merancang sistem yang dipakai banyak orang.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Rekayasa Perangkat Lunak' },
+      { label: 'Jumlah tahap', value: '6 tahap' },
+      { label: 'Contoh peran', value: 'Software Engineer, Web Developer' },
+    ],
+  },
+  {
+    slug: 'pg',
+    kategori: 'Jalur Karier',
+    title: 'Roadmap Karier Pengembangan Game',
+    subtitle: 'Dari game pertama sampai memimpin produksi',
+    date: 'Jalur 6 tahap',
+    image: showcasePg,
+    lead: 'Rangkaian tahap bagi lulusan Pengembangan Game, mulai dari merilis permainan pertama sampai memimpin produksi sebuah judul.',
+    body: [
+      'Tahap awal difokuskan pada penguasaan dasar desain permainan dan pemrograman. Merilis satu permainan kecil yang benar-benar selesai lebih berharga daripada menyimpan sepuluh proyek setengah jadi.',
+      'Praktik kerja lapangan di studio memberi gambaran bagaimana permainan dikerjakan sebagai produk, lengkap dengan tenggat, pembagian peran, dan pengujian ke pemain sungguhan.',
+      'Tahap lanjut membuka pilihan bercabang: mendalami sisi teknis, sisi seni, atau sisi rancangan permainan. Ketiganya bisa mengantar ke peran Game Director atau merintis studio sendiri.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Pengembangan Game' },
+      { label: 'Jumlah tahap', value: '6 tahap' },
+      { label: 'Contoh peran', value: 'Game Developer, Level Designer' },
+    ],
+  },
+  {
+    slug: 'tkj',
+    kategori: 'Jalur Karier',
+    title: 'Roadmap Karier Teknik Komputer dan Jaringan',
+    subtitle: 'Dari lab sendiri sampai arsitek jaringan',
+    date: 'Jalur 6 tahap',
+    image: showcaseTkj,
+    lead: 'Rangkaian tahap bagi lulusan Teknik Komputer dan Jaringan, dari membangun laboratorium sendiri sampai merancang infrastruktur berskala besar.',
+    body: [
+      'Tahap awal menuntut penguasaan dasar jaringan dan server. Membangun laboratorium kecil di rumah, meski hanya dengan perangkat bekas, mempercepat pemahaman jauh melebihi membaca teori.',
+      'Sertifikasi mulai berperan pada tahap Junior. Banyak perusahaan memakainya sebagai penyaring awal, sehingga mengambilnya sejak masa sekolah memberi keuntungan.',
+      'Tahap Profesional berhubungan dengan pengelolaan infrastruktur yang tidak boleh berhenti. Di titik ini kemampuan menelusuri gangguan secara sistematis lebih menentukan daripada hafalan perintah.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Teknik Komputer dan Jaringan' },
+      { label: 'Jumlah tahap', value: '6 tahap' },
+      { label: 'Contoh peran', value: 'Network Engineer, System Administrator' },
+    ],
+  },
+  {
+    slug: 'tjat',
+    kategori: 'Jalur Karier',
+    title: 'Roadmap Karier Teknik Jaringan Akses Telekomunikasi',
+    subtitle: 'Dari fiber optic sampai perancangan jaringan akses',
+    date: 'Jalur 6 tahap',
+    image: showcaseTjat,
+    lead: 'Rangkaian tahap bagi lulusan Teknik Jaringan Akses Telekomunikasi, dari penguasaan fiber optic sampai merancang jaringan yang menghubungkan pelanggan.',
+    body: [
+      'Tahap awal berfokus pada dasar telekomunikasi dan keterampilan tangan: penyambungan fiber dan pengukuran redaman jalur. Ketelitian di tahap ini sangat menentukan kualitas layanan yang diterima pelanggan.',
+      'Praktik kerja lapangan biasanya dijalani di operator telekomunikasi, ikut tim lapangan menangani pemasangan dan perbaikan jalur.',
+      'Tahap lanjut bergeser dari pekerjaan lapangan ke perancangan: memperkirakan kebutuhan material, memetakan jalur, dan menyusun rencana pengembangan jaringan.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Teknik Jaringan Akses Telekomunikasi' },
+      { label: 'Jumlah tahap', value: '6 tahap' },
+      { label: 'Contoh peran', value: 'Fiber Optic Technician, Access Network Engineer' },
+    ],
+  },
+];
+
+/* ── Project showcase: /jurusan/project/:slug ── */
+export const projectDetail = [
+  {
+    slug: 'sistem-informasi-perpustakaan',
+    kategori: 'RPL',
+    title: 'Sistem Informasi Perpustakaan',
+    subtitle: 'Karya siswa Rekayasa Perangkat Lunak',
+    date: 'Proyek kelas XI',
+    image: showcaseRpl,
+    lead: 'Aplikasi web untuk mencatat peminjaman dan pengembalian buku perpustakaan sekolah, menggantikan pencatatan manual di buku besar.',
+    body: [
+      'Masalah yang diselesaikan sederhana tetapi nyata: petugas kesulitan mengetahui buku mana yang sedang dipinjam dan siapa yang terlambat mengembalikan.',
+      'Sistem ini mencatat setiap transaksi, menghitung tenggat otomatis, dan menampilkan daftar keterlambatan pada halaman utama petugas. Pencarian buku memakai penelusuran judul dan pengarang sekaligus.',
+      'Aplikasinya kini dipakai di perpustakaan sekolah dan dirawat bergantian oleh siswa kelas XI sebagai bagian dari pembelajaran.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Rekayasa Perangkat Lunak' },
+      { label: 'Bentuk', value: 'Aplikasi web' },
+      { label: 'Status', value: 'Dipakai di perpustakaan sekolah' },
+    ],
+  },
+  {
+    slug: 'game-2d-adventure',
+    kategori: 'PG',
+    title: 'Game 2D Adventure',
+    subtitle: 'Karya siswa Pengembangan Game',
+    date: 'Proyek kelas XI',
+    image: showcasePg,
+    lead: 'Permainan petualangan dua dimensi dengan cerita, level bertingkat, dan aset visual yang seluruhnya digambar sendiri oleh tim siswa.',
+    body: [
+      'Permainan dibangun dalam satu semester dengan pembagian peran menyerupai studio kecil: ada yang menangani pemrograman mekanik, ada yang menggambar aset, ada yang menyusun level.',
+      'Tantangan terbesar bukan pada pemrogramannya, melainkan menjaga tingkat kesulitan tetap wajar. Beberapa level harus dirombak setelah pengujian menunjukkan pemain berhenti di tempat yang sama.',
+      'Versi akhirnya diuji ke siswa kelas lain sebelum dipamerkan pada Project Showcase sekolah.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Pengembangan Game' },
+      { label: 'Bentuk', value: 'Permainan 2D' },
+      { label: 'Aset', value: 'Digambar sendiri oleh tim' },
+    ],
+  },
+  {
+    slug: 'server-monitoring-system',
+    kategori: 'TKJ',
+    title: 'Server Monitoring System',
+    subtitle: 'Karya siswa Teknik Komputer dan Jaringan',
+    date: 'Proyek kelas XII',
+    image: showcaseTkj,
+    lead: 'Sistem pemantau kondisi server sekolah yang menampilkan penggunaan sumber daya dan mengirim peringatan saat ada yang melewati batas aman.',
+    body: [
+      'Sistem membaca beban prosesor, pemakaian memori, dan sisa ruang penyimpanan dari beberapa server sekaligus, lalu menampilkannya pada satu halaman ringkas.',
+      'Peringatan dikirim lewat pesan singkat ketika sebuah nilai melewati ambang yang ditetapkan, sehingga gangguan dapat ditangani sebelum layanan benar-benar terhenti.',
+      'Proyek ini muncul dari kebutuhan nyata: sebelumnya kondisi server hanya diketahui ketika ada yang mengeluh layanan tidak bisa diakses.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Teknik Komputer dan Jaringan' },
+      { label: 'Bentuk', value: 'Aplikasi pemantauan' },
+      { label: 'Status', value: 'Dipasang di jaringan sekolah' },
+    ],
+  },
+  {
+    slug: 'jaringan-fiber-optic-simulation',
+    kategori: 'TJAT',
+    title: 'Jaringan Fiber Optic Simulation',
+    subtitle: 'Karya siswa Teknik Jaringan Akses Telekomunikasi',
+    date: 'Proyek kelas XII',
+    image: showcaseTjat,
+    lead: 'Simulasi jaringan akses fiber optic dari sisi penyedia layanan sampai ke rumah pelanggan, lengkap dengan perhitungan redaman jalurnya.',
+    body: [
+      'Simulasi menampilkan jalur lengkap beserta perangkat di setiap titik, sehingga siswa dapat melihat bagaimana satu sambungan yang buruk memengaruhi kualitas sampai ke ujung.',
+      'Perhitungan redaman dilakukan mengikuti rumus yang dipakai di lapangan, lalu dibandingkan dengan hasil pengukuran nyata di laboratorium.',
+      'Model ini kini dipakai sebagai alat bantu mengajar untuk adik kelas sebelum mereka menyentuh perangkat sungguhan.',
+    ],
+    facts: [
+      { label: 'Jurusan', value: 'Teknik Jaringan Akses Telekomunikasi' },
+      { label: 'Bentuk', value: 'Simulasi jaringan' },
+      { label: 'Status', value: 'Dipakai sebagai alat bantu ajar' },
+    ],
+  },
+];
+
+/* ── Profil guru: /tentang/guru/:slug ── */
+export const guruDetail = [
+  {
+    slug: 'bayu-setiawan-s-kom',
+    kategori: 'Guru Produktif RPL',
+    title: 'Bayu Setiawan, S.Kom.',
+    subtitle: 'Pemrograman web dan basis data',
+    date: 'Guru Produktif',
+    image: guru1,
+    lead: 'Mengampu mata pelajaran pemrograman web dan basis data untuk jurusan Rekayasa Perangkat Lunak.',
+    body: [
+      'Pendekatan mengajarnya bertumpu pada praktik: teori disampaikan seperlunya, lalu siswa langsung mengerjakan kasus nyata di depan komputer.',
+      'Selain mengajar, beliau mendampingi tim lomba bidang teknologi web dan membimbing siswa menyiapkan portofolio sebelum praktik kerja lapangan.',
+    ],
+    facts: [
+      { label: 'Jabatan', value: 'Guru Produktif RPL' },
+      { label: 'Bidang ajar', value: 'Pemrograman web dan basis data' },
+    ],
+  },
+  {
+    slug: 'anindya-larasati-s-pd',
+    kategori: 'Guru Produktif PG',
+    title: 'Anindya Larasati, S.Pd.',
+    subtitle: 'Desain game dan aset visual',
+    date: 'Guru Produktif',
+    image: guru2,
+    lead: 'Mengampu desain permainan dan pembuatan aset visual untuk jurusan Pengembangan Game.',
+    body: [
+      'Kelasnya menekankan bahwa permainan yang baik lahir dari aturan main yang jelas, bukan dari tampilan yang paling megah.',
+      'Beliau juga mendampingi produksi permainan yang ditampilkan pada Project Showcase sekolah setiap akhir tahun ajaran.',
+    ],
+    facts: [
+      { label: 'Jabatan', value: 'Guru Produktif PG' },
+      { label: 'Bidang ajar', value: 'Desain game dan aset visual' },
+    ],
+  },
+  {
+    slug: 'nurul-hidayah-s-t',
+    kategori: 'Guru Produktif TKJ',
+    title: 'Nurul Hidayah, S.T.',
+    subtitle: 'Administrasi jaringan dan server',
+    date: 'Guru Produktif',
+    image: guru3,
+    lead: 'Mengampu administrasi jaringan dan server untuk jurusan Teknik Komputer dan Jaringan.',
+    body: [
+      'Praktik di kelasnya dilakukan pada perangkat sungguhan, bukan hanya simulator, agar siswa terbiasa menangani perangkat yang dipakai industri.',
+      'Beliau membimbing siswa menyiapkan sertifikasi jaringan yang dapat diambil sejak masa sekolah.',
+    ],
+    facts: [
+      { label: 'Jabatan', value: 'Guru Produktif TKJ' },
+      { label: 'Bidang ajar', value: 'Administrasi jaringan dan server' },
+    ],
+  },
+  {
+    slug: 'fajar-nugroho-s-t',
+    kategori: 'Guru Produktif TJAT',
+    title: 'Fajar Nugroho, S.T.',
+    subtitle: 'Fiber optic dan jaringan akses',
+    date: 'Guru Produktif',
+    image: guru4,
+    lead: 'Mengampu praktik fiber optic dan jaringan akses untuk jurusan Teknik Jaringan Akses Telekomunikasi.',
+    body: [
+      'Fokus pengajarannya pada ketelitian kerja lapangan: penyambungan fiber, pengukuran redaman, dan penelusuran gangguan jalur.',
+      'Beliau mendampingi siswa saat praktik kerja lapangan di penyedia layanan telekomunikasi.',
+    ],
+    facts: [
+      { label: 'Jabatan', value: 'Guru Produktif TJAT' },
+      { label: 'Bidang ajar', value: 'Fiber optic dan jaringan akses' },
+    ],
+  },
+];
+
+/* ── Halaman FAQ lengkap: /jurusan/faq ── */
+// Tiga butir pertama sengaja diambil ulang dari jurusanFaq supaya isi ringkasan
+// di halaman Jurusan dan halaman lengkap ini tidak pernah berbeda.
+export const faqLengkap = {
+  eyebrow: 'Pertanyaan yang Sering Diajukan',
+  title: 'FAQ Tentang Jurusan',
+  deskripsi:
+    'Kumpulan pertanyaan yang paling sering ditanyakan calon siswa dan orang tua seputar program keahlian di SMK Telkom Purwokerto.',
+  kelompok: [
+    {
+      nama: 'Umum',
+      items: [
+        {
+          q: 'Apakah semua jurusan belajar coding?',
+          a: 'Semua jurusan mendapat dasar pemrograman, tetapi porsinya berbeda. RPL dan PG paling banyak coding, sedangkan TKJ dan TJAT lebih banyak konfigurasi jaringan dan perangkat.',
+        },
+        {
+          q: 'Apakah bisa pindah jurusan setelah diterima?',
+          a: 'Perpindahan jurusan hanya dimungkinkan pada awal semester pertama, dengan mempertimbangkan sisa daya tampung jurusan tujuan dan hasil konsultasi dengan wali kelas.',
+        },
+        {
+          q: 'Apakah harus punya laptop sendiri?',
+          a: 'Tidak wajib. Seluruh praktik dapat dikerjakan memakai komputer laboratorium sekolah. Namun laptop pribadi memudahkan pengerjaan tugas di luar jam sekolah.',
+        },
+      ],
+    },
+    {
+      nama: 'Pembelajaran',
+      items: [
+        {
+          q: 'Berapa banyak porsi praktik dibanding teori?',
+          a: 'Mata pelajaran produktif berjalan dengan porsi praktik lebih besar daripada teori. Teori disampaikan seperlunya, lalu langsung dilanjutkan pengerjaan di laboratorium.',
+        },
+        {
+          q: 'Apakah ada sertifikasi selama sekolah?',
+          a: 'Ada. Siswa dapat mengambil sertifikasi industri sesuai bidang keahlian, dan sekolah menyediakan pendampingan persiapannya.',
+        },
+        {
+          q: 'Bagaimana penilaian proyek dilakukan?',
+          a: 'Penilaian tidak hanya melihat hasil akhir, tetapi juga catatan perkembangan pekerjaan selama proses, termasuk kerja sama di dalam tim.',
+        },
+      ],
+    },
+    {
+      nama: 'Magang dan Karier',
+      items: [
+        {
+          q: 'Apakah ada kesempatan magang?',
+          a: 'Ada. Seluruh siswa menjalani Praktik Kerja Lapangan di mitra industri kami, dan penempatannya disesuaikan dengan jurusan masing-masing.',
+        },
+        {
+          q: 'Apakah bisa lanjut ke jenjang lebih tinggi?',
+          a: 'Bisa. Lulusan kami banyak yang melanjutkan ke perguruan tinggi, termasuk Telkom University, di samping yang langsung bekerja atau berwirausaha.',
+        },
+        {
+          q: 'Apakah sekolah membantu penyaluran kerja?',
+          a: 'Bursa Kerja Khusus sekolah menghubungkan lulusan dengan perusahaan mitra, menyelenggarakan campus hiring, dan menyediakan pendampingan penyusunan berkas lamaran.',
+        },
+      ],
+    },
+  ],
+};
+
+/* ── Halaman perbandingan jurusan: /jurusan/perbandingan ── */
+// Baris tabelnya diambil dari jurusanCompare agar tidak ada dua sumber angka
+// yang bisa berbeda. Yang ditambahkan di sini hanya keterangan pelengkap.
+export const perbandinganLengkap = {
+  eyebrow: 'Bantuan Memilih',
+  title: 'Perbandingan Jurusan',
+  deskripsi:
+    'Bandingkan keempat program keahlian berdasarkan fokus belajar, tingkat kesulitan, dan arah kariernya sebelum menentukan pilihan.',
+  cocokUntuk: [
+    {
+      kode: 'RPL',
+      judul: 'Rekayasa Perangkat Lunak',
+      teks: 'Cocok bila kamu senang memecahkan masalah lewat logika dan betah menghabiskan waktu membangun sesuatu dari nol.',
+      slug: 'rpl',
+    },
+    {
+      kode: 'PG',
+      judul: 'Pengembangan Game',
+      teks: 'Cocok bila kamu tertarik pada sisi kreatif sekaligus teknis, dan senang menguji apakah sesuatu terasa menyenangkan dimainkan.',
+      slug: 'pg',
+    },
+    {
+      kode: 'TKJ',
+      judul: 'Teknik Komputer dan Jaringan',
+      teks: 'Cocok bila kamu suka membongkar perangkat, menelusuri penyebab gangguan, dan memastikan sistem tetap berjalan.',
+      slug: 'tkj',
+    },
+    {
+      kode: 'TJAT',
+      judul: 'Teknik Jaringan Akses Telekomunikasi',
+      teks: 'Cocok bila kamu betah bekerja teliti dengan alat ukur dan tertarik pada infrastruktur yang menghubungkan banyak orang.',
+      slug: 'tjat',
+    },
+  ],
+  catatan:
+    'Tingkat kesulitan bukan ukuran mana yang lebih baik. Jurusan yang paling tepat adalah yang paling dekat dengan hal yang membuatmu betah belajar.',
+};
+
+/* ── Ketentuan PPDB: /ketentuan-ppdb ── */
+export const ketentuanPpdb = {
+  eyebrow: 'Dokumen Resmi',
+  title: 'Ketentuan PPDB SMK Telkom Purwokerto',
+  deskripsi: 'Ketentuan yang berlaku bagi seluruh calon peserta didik pada Penerimaan Peserta Didik Baru tahun ajaran 2027/2028.',
+  diperbarui: 'Diperbarui 20 Mei 2026',
+  bagian: [
+    {
+      judul: 'Persyaratan Umum',
+      butir: [
+        'Lulus atau akan lulus SMP/MTs atau sederajat pada tahun berjalan.',
+        'Berusia paling tinggi 21 tahun pada saat mendaftar.',
+        'Memiliki Nomor Induk Siswa Nasional (NISN) yang terdaftar.',
+        'Bersedia mengikuti seluruh tahapan seleksi yang ditetapkan panitia.',
+      ],
+    },
+    {
+      judul: 'Berkas Pendaftaran',
+      butir: [
+        'Pas foto terbaru ukuran 3x4 atau 4x6 dengan latar merah atau biru.',
+        'Pindaian rapor semester 1 sampai 5 yang digabung dalam satu berkas PDF.',
+        'Akta kelahiran atau surat kenal lahir.',
+        'Kartu Keluarga terbaru.',
+      ],
+    },
+    {
+      judul: 'Ketentuan Data',
+      butir: [
+        'Seluruh data yang diisikan harus benar dan dapat dipertanggungjawabkan.',
+        'Data yang terbukti tidak benar dapat menggugurkan pendaftaran, termasuk setelah dinyatakan diterima.',
+        'Perubahan data setelah pendaftaran dikirim hanya dapat dilakukan lewat panitia PPDB.',
+        'Satu calon peserta didik hanya diperbolehkan memiliki satu akun pendaftaran.',
+      ],
+    },
+    {
+      judul: 'Perlindungan Data Pribadi',
+      butir: [
+        'Data yang dikumpulkan hanya digunakan untuk keperluan seleksi dan administrasi penerimaan.',
+        'Berkas pendaftaran tidak dibagikan ke pihak lain di luar kepentingan penyelenggaraan PPDB.',
+        'Pendaftar berhak meminta penghapusan data apabila membatalkan pendaftaran.',
+      ],
+    },
+    {
+      judul: 'Pengumuman Hasil',
+      butir: [
+        'Hasil seleksi diumumkan melalui portal PPDB dan pemberitahuan WhatsApp.',
+        'Keputusan panitia bersifat final dan tidak dapat diganggu gugat.',
+        'Peserta yang dinyatakan diterima wajib melakukan daftar ulang sesuai jadwal.',
+      ],
+    },
+  ],
+  kontakTeks: 'Ada bagian yang belum jelas?',
+  kontakCta: 'Hubungi Panitia PPDB',
+};
+
+/* ── Lupa sandi: /lupa-sandi ── */
+export const lupaSandi = {
+  badge: 'Pemulihan Akun',
+  judul: 'Lupa Kata Sandi?',
+  deskripsi:
+    'Masukkan alamat email yang kamu pakai saat mendaftar. Kami akan mengirimkan tautan untuk membuat kata sandi baru.',
+  ctaLabel: 'Kirim Tautan Pemulihan',
+  pesanTerkirim:
+    'Kalau alamat itu terdaftar, tautan pemulihan sudah dikirim. Periksa juga folder Spam bila belum masuk dalam beberapa menit.',
+  catatanJudul: 'Masih belum bisa masuk?',
+  catatan: [
+    'Pastikan alamat email yang dimasukkan sama dengan yang dipakai saat pendaftaran.',
+    'Tautan pemulihan hanya berlaku 60 menit sejak dikirim.',
+    'Bila email pendaftaran sudah tidak aktif, hubungi panitia PPDB untuk penggantian.',
+  ],
+};
+
+/* ── Dokumen peserta: /ppdb/dokumen-peserta ── */
+export const dokumenPeserta = {
+  eyebrow: 'Berkas Peserta',
+  title: 'Dokumen Peserta PPDB',
+  deskripsi:
+    'Kartu peserta dan jadwal seleksi untuk dibawa saat mengikuti tahapan tes. Simpan atau cetak sebelum hari pelaksanaan.',
+  kartuJudul: 'Kartu Peserta PPDB',
+  kartuCatatan: 'Tunjukkan kartu ini saat registrasi ulang dan pelaksanaan tes.',
+  berkas: [
+    { icon: 'cetak', judul: 'Kartu Peserta PPDB', deskripsi: 'Bukti pendaftaran resmi, format PDF' },
+    { icon: 'jadwal', judul: 'Jadwal Seleksi', deskripsi: 'Tanggal tes tertulis dan wawancara' },
+    { icon: 'panduan', judul: 'Panduan Tes Seleksi', deskripsi: 'Materi yang diujikan dan tata tertib' },
+  ],
+  tahapan: [
+    { tanggal: '02 Juli 2026', nama: 'Verifikasi Berkas', ket: 'Panitia memeriksa kelengkapan dokumen' },
+    { tanggal: '08 Juli 2026', nama: 'Tes Tertulis', ket: 'Kemampuan dasar dan logika' },
+    { tanggal: '12 Juli 2026', nama: 'Wawancara', ket: 'Minat dan kesiapan belajar' },
+    { tanggal: '18 Juli 2026', nama: 'Pengumuman Hasil', ket: 'Diumumkan lewat portal dan WhatsApp' },
+  ],
+};
