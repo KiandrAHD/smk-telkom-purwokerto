@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/LandingPage';
 import TentangPage from './pages/TentangPage';
@@ -15,6 +15,13 @@ import PengumumanDetailPage from './pages/PengumumanDetailPage';
 import StelaPage from './pages/StelaPage';
 import SegeraHadirPage from './pages/SegeraHadirPage';
 import Login from './page/Login/Login';
+import { PpdbProvider } from './context/PpdbContext';
+import PpdbRegisterPage from './pages/ppdb/RegisterPage';
+import PpdbLoginPage from './pages/ppdb/LoginPage';
+import VerifyEmailPage from './pages/ppdb/VerifyEmailPage';
+import RegistrationFormPage from './pages/ppdb/RegistrationFormPage';
+import UploadDocumentsPage from './pages/ppdb/UploadDocumentsPage';
+import SubmitSuccessPage from './pages/ppdb/SubmitSuccessPage';
 import { AdminDataProvider } from './context/AdminDataContext';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import DashboardHomePage from './pages/dashboard/DashboardHomePage';
@@ -70,6 +77,23 @@ const App = () => {
         <Route path="/berita" element={<BeritaPage />} />
         <Route path="/pengumuman" element={<PengumumanPage />} />
         <Route path="/ppdb" element={<PPDBPage />} />
+
+        {/* Alur portal PPDB. PpdbProvider membungkus keenam langkah supaya isian
+            formulir tetap ada saat berpindah langkah. */}
+        <Route
+          element={
+            <PpdbProvider>
+              <Outlet />
+            </PpdbProvider>
+          }
+        >
+          <Route path="/ppdb/daftar" element={<PpdbRegisterPage />} />
+          <Route path="/ppdb/masuk" element={<PpdbLoginPage />} />
+          <Route path="/ppdb/verifikasi" element={<VerifyEmailPage />} />
+          <Route path="/ppdb/formulir" element={<RegistrationFormPage />} />
+          <Route path="/ppdb/berkas" element={<UploadDocumentsPage />} />
+          <Route path="/ppdb/selesai" element={<SubmitSuccessPage />} />
+        </Route>
 
         {/* Halaman detail: isinya dicari dari slug, satu komponen per kategori. */}
         <Route path="/jurusan/:slug" element={<JurusanDetailPage />} />

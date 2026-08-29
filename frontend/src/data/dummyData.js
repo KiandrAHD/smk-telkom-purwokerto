@@ -2461,3 +2461,158 @@ export const adminPengaturanUmum = {
   statusPpdb: 'Dibuka',
   beritaPerHalaman: '5',
 };
+
+/* =========================================================
+   PORTAL PPDB
+   Alur pendaftaran calon siswa: daftar akun, verifikasi email, isi formulir,
+   unggah berkas, sampai bukti submit.
+   ========================================================= */
+
+export const ppdbMeta = {
+  namaSekolah: 'SMK Telkom Purwokerto',
+  sistem: 'PPDB System 2027/2028',
+  portal: 'Portal PPDB 2027',
+  tahun: '2027',
+  hakCipta: '© 2027 SMK Telkom Purwokerto. All Rights Reserved.',
+  waHelpdesk: 'https://wa.me/6281234567890',
+};
+
+export const ppdbPanelDaftar = {
+  badge: 'Langkah 1 dari 2',
+  judul: 'Mulai Masa Depan\nDigitalmu di Sini.',
+  deskripsi:
+    'Buat akun resmi untuk mengakses portal pendaftaran, memilih jurusan favorit, dan mengunggah berkas seleksi.',
+  fitur: [
+    { icon: 'centang', teks: 'Prosedur pendaftaran 100% online' },
+    { icon: 'kirim', teks: 'Notifikasi kelulusan via WhatsApp & Portal' },
+  ],
+  bantuanLabel: 'Butuh bantuan?',
+  bantuanTeks: 'CS PPDB Telkom',
+};
+
+export const ppdbPanelMasuk = {
+  badge: 'Portal Calon Siswa',
+  judul: 'Selamat Datang\nKembali!',
+  deskripsi:
+    'Masuk untuk memantau status pendaftaran, melengkapi berkas biodata, dan mengunduh kartu peserta seleksi.',
+  fitur: [{ icon: 'pantau', teks: 'Pantau Hasil Seleksi Real-Time' }],
+  bantuanLabel: 'Lupa akun?',
+  bantuanTeks: 'Bantuan Login',
+};
+
+// Nama jurusan mengikuti penamaan kurikulum terbaru, sama dengan panel admin.
+export const ppdbJurusanPilihan = [
+  'PPLG (Pengembangan Perangkat Lunak dan Gim)',
+  'TJKT (Teknik Jaringan Komputer dan Telekomunikasi)',
+  'DKV (Desain Komunikasi Visual)',
+  'AKL (Akuntansi dan Keuangan Lembaga)',
+];
+
+export const ppdbVerifikasi = {
+  badge: 'Langkah 2 dari 2: Verifikasi Akun',
+  judul: 'Cek Email Anda',
+  deskripsi: 'Kami telah mengirimkan tautan konfirmasi pendaftaran ke alamat email',
+  emailContoh: 'siswa@gmail.com',
+  ctaLabel: 'Buka Gmail Langsung',
+  ctaUrl: 'https://mail.google.com',
+  catatanJudul: 'Belum menerima email?',
+  catatan: [
+    'Periksa folder Spam / Junk pada email Anda.',
+    'Pastikan penulisan alamat email saat registrasi sudah benar.',
+  ],
+  ubahLabel: 'Salah email?',
+  ubahTeks: 'Ubah Email',
+  kirimUlangLabel: 'Kirim Ulang',
+  jedaKirimUlang: 59,
+};
+
+export const ppdbAgama = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'];
+
+export const ppdbTahunLulus = ['2027', '2026', '2025', '2024'];
+
+// `catatan` hanya dipakai baris terakhir, mengikuti desain yang menampilkan
+// keterangan kecil di bawah nama mata pelajarannya.
+export const ppdbMataPelajaran = [
+  { nama: 'Bahasa Indonesia' },
+  { nama: 'Matematika' },
+  { nama: 'Ilmu Pengetahuan Alam' },
+  { nama: 'Bahasa Inggris' },
+  { nama: 'Informatika / TIK', catatan: 'Dasar Keahlian Produktif' },
+];
+
+export const ppdbSemester = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5'];
+
+export const ppdbDokumen = [
+  {
+    id: 'pas-foto',
+    nama: 'Pas Foto Terbaru (3x4 atau 4x6 Background Merah/Biru)',
+    format: 'Format: JPG, JPEG, PNG. Maks. 2MB',
+    tipe: 'image/jpeg,image/png',
+    maksMb: 2,
+  },
+  {
+    id: 'rapor',
+    nama: 'Scan Dokumen Rapor Semester 1 - 5 (Digabung 1 PDF)',
+    format: 'Format: PDF. Maks: 5MB',
+    tipe: 'application/pdf',
+    maksMb: 5,
+  },
+  {
+    id: 'akta',
+    nama: 'Akta Kelahiran / Surat Kenal Lahir',
+    format: 'Format: PDF, JPG, PNG. Maks. 2MB',
+    tipe: 'application/pdf,image/jpeg,image/png',
+    maksMb: 2,
+  },
+  {
+    id: 'kk',
+    nama: 'Kartu Keluarga (KK) Terbaru',
+    format: 'Format: PDF, JPG, PNG. Maks. 2MB',
+    tipe: 'application/pdf,image/jpeg,image/png',
+    maksMb: 2,
+  },
+];
+
+export const ppdbSukses = {
+  judul: 'Pendaftaran Berhasil Disubmit!',
+  pesan:
+    'Terima kasih telah melengkapi seluruh rangkaian data dan berkas. Data Anda saat ini berada di dalam antrean verifikasi oleh panitia PPDB SMK Telkom Purwokerto.',
+  kartu: [
+    // nilai null diisi nomor registrasi hasil submit, bukan ditulis di sini
+    { label: 'Nomor Registrasi', nilai: null, catatan: 'Aktif & Terdaftar', titikCatatan: 'hijau' },
+    {
+      label: 'Status Berkas',
+      nilai: 'Menunggu Verifikasi',
+      nadaNilai: 'oranye',
+      titikNilai: 'oranye',
+      catatan: 'Estimasi waktu: 1x24 jam kerja',
+    },
+    {
+      label: 'Jalur Seleksi',
+      nilai: 'Jalur Prestasi / Reguler',
+      catatan: 'SMK Telkom Purwokerto',
+      nadaCatatan: 'merah',
+    },
+  ],
+  langkahJudul: 'Langkah Selanjutnya & Dokumen',
+  langkah: [
+    {
+      icon: 'cetak',
+      judul: 'Cetak Kartu Peserta PPDB',
+      deskripsi: 'Unduh bukti pendaftaran format PDF',
+    },
+    {
+      icon: 'jadwal',
+      judul: 'Jadwal & Tahapan Seleksi',
+      deskripsi: 'Cek tanggal tes dan pengumuman',
+    },
+  ],
+  bantuanTeks: 'Butuh bantuan atau ada kesalahan input data?',
+  bantuanCta: 'Hubungi Panitia PPDB via WhatsApp',
+};
+
+// Dipakai header portal setelah calon siswa masuk.
+export const ppdbAkunContoh = {
+  nama: 'Aditya Nur Arif',
+  nisn: '0081234567',
+};
