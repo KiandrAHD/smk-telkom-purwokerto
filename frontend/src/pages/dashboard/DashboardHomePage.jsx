@@ -65,7 +65,7 @@ const DashboardHomePage = () => {
       header: 'Judul Berita',
       render: (b) => (
         <Link
-          to={`/dashboard/berita/${b.id}/edit`}
+          to="/dashboard/berita"
           className="font-medium text-dark-800 transition-colors hover:text-primary"
         >
           {b.judul}

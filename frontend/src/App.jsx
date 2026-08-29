@@ -33,14 +33,13 @@ import SubmitSuccessPage from './pages/ppdb/SubmitSuccessPage';
 import { AdminDataProvider } from './context/AdminDataContext';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import DashboardHomePage from './pages/dashboard/DashboardHomePage';
-import DashboardBeritaPage from './pages/dashboard/BeritaPage';
-import BeritaFormPage from './pages/dashboard/BeritaFormPage';
-import DashboardPPDBPage from './pages/dashboard/PPDBPage';
-import PPDBDetailPage from './pages/dashboard/PPDBDetailPage';
 import DashboardJurusanPage from './pages/dashboard/JurusanPage';
-import DashboardPrestasiPage from './pages/dashboard/PrestasiPage';
-import BKKPage from './pages/dashboard/BKKPage';
 import PengaturanPage from './pages/dashboard/PengaturanPage';
+import AdminBeritaPage from './pages/admin/berita/BeritaPage';
+import AdminPengumumanPage from './pages/admin/pengumuman/PengumumanPage';
+import AdminPrestasiPage from './pages/admin/prestasi/PrestasiPage';
+import AdminBkkPage from './pages/admin/bkk/BkkPage';
+import AdminPpdbPage from './pages/admin/ppdb/PPDBPage';
 import ProtectedRoute from './router/ProtectedRoute';
 import NextTelPage from './pages/NextTelPage';
 
@@ -148,14 +147,15 @@ const App = () => {
             }
           >
             <Route index element={<DashboardHomePage />} />
-            <Route path="berita" element={<DashboardBeritaPage />} />
-            <Route path="berita/tambah" element={<BeritaFormPage />} />
-            <Route path="berita/:id/edit" element={<BeritaFormPage />} />
-            <Route path="ppdb" element={<DashboardPPDBPage />} />
-            <Route path="ppdb/:id" element={<PPDBDetailPage />} />
+            <Route path="berita" element={<AdminBeritaPage />} />
+            <Route path="berita/tambah" element={<Navigate to="/dashboard/berita" replace />} />
+            <Route path="berita/:id/edit" element={<Navigate to="/dashboard/berita" replace />} />
+            <Route path="pengumuman" element={<AdminPengumumanPage />} />
+            <Route path="ppdb" element={<AdminPpdbPage />} />
+            <Route path="ppdb/:id" element={<Navigate to="/dashboard/ppdb" replace />} />
             <Route path="jurusan" element={<DashboardJurusanPage />} />
-            <Route path="prestasi" element={<DashboardPrestasiPage />} />
-            <Route path="bkk" element={<BKKPage />} />
+            <Route path="prestasi" element={<AdminPrestasiPage />} />
+            <Route path="bkk" element={<AdminBkkPage />} />
             <Route path="pengaturan" element={<PengaturanPage />} />
           </Route>
         </Route>

@@ -4,6 +4,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   Layers,
+  Megaphone,
   Newspaper,
   Settings,
   Trophy,
@@ -20,6 +21,7 @@ const ikon = {
   prestasi: Trophy,
   bkk: BriefcaseBusiness,
   berita: Newspaper,
+  pengumuman: Megaphone,
   pengaturan: Settings,
 };
 

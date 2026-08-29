@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AlertCircle, CheckCircle2, Plus, RefreshCw, Search, X } from 'lucide-react';
 import BeritaForm from './BeritaForm';
 import BeritaModal from './BeritaModal';
@@ -18,11 +19,12 @@ const formatDateTime = (date) => {
 };
 
 const BeritaPage = () => {
+  const [searchParams] = useSearchParams();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState(null);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(() => searchParams.get('cari') || '');
   const [statusFilter, setStatusFilter] = useState('all');
   const [modal, setModal] = useState(null);
   const [submitting, setSubmitting] = useState(false);

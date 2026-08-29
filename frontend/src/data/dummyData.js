@@ -2214,6 +2214,7 @@ export const adminMenu = [
   { label: 'Prestasi', to: '/dashboard/prestasi', icon: 'prestasi' },
   { label: 'BKK', to: '/dashboard/bkk', icon: 'bkk' },
   { label: 'Berita', to: '/dashboard/berita', icon: 'berita' },
+  { label: 'Pengumuman', to: '/dashboard/pengumuman', icon: 'pengumuman' },
   { label: 'Pengaturan', to: '/dashboard/pengaturan', icon: 'pengaturan' },
 ];
 
