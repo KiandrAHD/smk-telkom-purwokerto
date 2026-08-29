@@ -4,23 +4,58 @@ import { AlertCircle, Send } from 'lucide-react';
 import { PESAN_STELA_GAGAL, tanyaStela } from '../../services/stela';
 import { stelaData } from '../../data/dummyData';
 
-// STELA sering menyebut alamat halaman detail. Pola pemisah dipakai untuk
-// memecah teks, pola pencocok dipakai untuk menguji tiap potongan — sengaja dua
-// regex terpisah karena regex global menyimpan lastIndex, sehingga .test() yang
-// dipanggil berulang pada regex yang sama akan meleset selang-seling.
-const PEMISAH = /(\/(?:jurusan|prestasi|berita|pengumuman)\/[a-z0-9-]+)/g;
-const COCOK = /^\/(?:jurusan|prestasi|berita|pengumuman)\/[a-z0-9-]+$/;
+// STELA menyebut alamat halaman, dan menulis **tebal** serta `kode` karena
+// model bahasa memang terbiasa memakai Markdown. Tanpa penanganan di sini,
+// bintang dan backtick-nya muncul mentah di gelembung chat.
+//
+// Sengaja bukan pustaka Markdown: yang perlu ditangani cuma tiga bentuk, dan
+// menambah dependensi untuk itu jauh lebih mahal daripada satu regex.
+//
+// Pola pemisah dan pola pencocok dipisah karena regex global menyimpan
+// lastIndex, sehingga .test() yang dipanggil berulang pada regex yang sama
+// akan meleset selang-seling.
+const BAGIAN_PATH = '/(?:jurusan|prestasi|berita|pengumuman|bkk|tentang|galeri|ppdb)(?:/[a-z0-9-]+)*';
+// Urutan alternasi penting: **tebal** harus diuji sebelum *miring*, kalau
+// tidak pola satu-bintang akan memakan bintang pertama dari pasangan ganda.
+const PEMISAH = new RegExp(
+  `(\\*\\*[^*\\n]+\\*\\*|\\*[^*\\n]+\\*|\`[^\`\\n]+\`|${BAGIAN_PATH})`,
+  'g',
+);
+const COCOK_PATH = new RegExp(`^${BAGIAN_PATH}$`);
+
+const TautanPath = ({ path }) => (
+  <Link to={path} className="font-semibold text-primary underline">
+    {path}
+  </Link>
+);
 
 const IsiPesan = ({ teks }) =>
-  teks.split(PEMISAH).map((bagian, i) =>
-    COCOK.test(bagian) ? (
-      <Link key={i} to={bagian} className="font-semibold text-primary underline">
-        {bagian}
-      </Link>
-    ) : (
-      bagian
-    )
-  );
+  teks.split(PEMISAH).map((bagian, i) => {
+    if (!bagian) return null;
+
+    if (bagian.startsWith('**') && bagian.endsWith('**')) {
+      return <strong key={i}>{bagian.slice(2, -2)}</strong>;
+    }
+
+    if (bagian.startsWith('*') && bagian.endsWith('*')) {
+      return <em key={i}>{bagian.slice(1, -1)}</em>;
+    }
+
+    // Model sering membungkus path dengan backtick (`/jurusan`). Isinya
+    // diperiksa dulu supaya tetap menjadi tautan, bukan sekadar teks kode.
+    if (bagian.startsWith('`') && bagian.endsWith('`')) {
+      const isi = bagian.slice(1, -1);
+      return COCOK_PATH.test(isi) ? (
+        <TautanPath key={i} path={isi} />
+      ) : (
+        <code key={i} className="rounded bg-dark-100 px-1 py-0.5 text-[0.9em]">
+          {isi}
+        </code>
+      );
+    }
+
+    return COCOK_PATH.test(bagian) ? <TautanPath key={i} path={bagian} /> : bagian;
+  });
 
 const StelaChat = ({ className = '', tampilkanSaran = true }) => {
   const [riwayat, setRiwayat] = useState([{ role: 'assistant', content: stelaData.sapaan }]);

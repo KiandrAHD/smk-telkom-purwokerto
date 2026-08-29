@@ -24,10 +24,12 @@ export const BATAS = {
 // bisa lupa disetel.
 export const MODEL_BAWAAN = {
   anthropic: 'claude-opus-5',
-  // Flash 2.0 dipilih sebagai bawaan karena kuota gratisnya paling longgar dan
-  // ia tidak memakai token "berpikir". Kalau diganti ke model seri 2.5, ingat
-  // bahwa model itu berpikir secara bawaan dan token berpikir ikut ditagih.
-  gemini: 'gemini-2.0-flash',
+  // Diverifikasi lewat panggilan sungguhan, bukan dari daftar model. Daftar
+  // /v1beta/models MEMUAT model yang tidak bisa dipakai akun baru: gemini-2.5-flash
+  // ada di daftar tapi menjawab 404 "no longer available to new users", dan
+  // gemini-2.0-flash sudah hilang sama sekali. Kalau mengganti versi, uji
+  // dengan generateContent sungguhan -- daftar model tidak cukup.
+  gemini: 'gemini-3.6-flash',
   // Konteks 131 rb dan termasuk cepat di Groq. Plafon yang mengikat di sini
   // bukan konteks melainkan token per menit -- lihat ANGGARAN_KONTEKS.
   groq: 'openai/gpt-oss-20b',
@@ -223,6 +225,14 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
           // Rendah dan bukan nol: jawaban FAQ harus konsisten, tapi nol membuat
           // kalimatnya kaku dan mudah terjebak mengulang.
           temperature: 0.3,
+          // Seri 2.5 ke atas berpikir secara bawaan, dan token berpikir ikut
+          // terhitung ke maxOutputTokens -- jawaban bisa habis terpotong
+          // sebelum satu kalimat pun tertulis. Pertanyaan FAQ sekolah tidak
+          // butuh penalaran berlapis.
+          //
+          // Namanya berbeda antar generasi: seri 2.5 memakai thinkingBudget,
+          // seri 3.x menolaknya dengan 400 dan memakai thinkingLevel.
+          thinkingConfig: { thinkingLevel: 'low' },
         },
       }),
     },

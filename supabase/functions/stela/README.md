@@ -6,6 +6,17 @@ Mendukung **Anthropic (Claude)**, **Google Gemini**, dan **Groq**. Yang dipakai
 ditentukan oleh kunci mana yang terisi — tidak ada sakelar terpisah yang bisa
 lupa disetel. Urutan prioritas: Anthropic, Gemini, Groq.
 
+### Catatan model Gemini
+
+Daftar `/v1beta/models` **memuat model yang tidak bisa dipakai akun baru.**
+`gemini-2.5-flash` muncul di daftar tapi menjawab 404 dengan pesan
+*"no longer available to new users"*; `gemini-2.0-flash` sudah hilang sama
+sekali. Jadi kalau mengganti versi, uji dengan `generateContent` sungguhan —
+membaca daftar model saja tidak cukup.
+
+Parameter thinking juga berbeda antar generasi: seri 2.5 memakai
+`thinkingBudget`, seri 3.x menolaknya dengan 400 dan memakai `thinkingLevel`.
+
 ### Memilih penyedia
 
 | | Gratis | Prompt penuh (28 rb token) | Praktisnya |
@@ -139,7 +150,7 @@ Lalu deploy ulang fungsinya. Jangan mengedit `konten-sekolah.mjs` dengan tangan 
 | `STELA_AKTIF` | `true` | isi `false` untuk mematikan STELA seketika |
 | `STELA_MAKS_PER_HARI` | `500` | plafon panggilan berbayar per hari |
 | `STELA_MAKS_PER_IP` | `20` | plafon per alamat IP tiap 5 menit |
-| `STELA_MODEL` | `claude-opus-5` / `gemini-2.0-flash` | opsional; ikut penyedia yang aktif |
+| `STELA_MODEL` | `claude-opus-5` / `gemini-3.6-flash` | opsional; ikut penyedia yang aktif |
 | `STELA_ALLOWED_ORIGINS` | — | daftar origin frontend yang dipisahkan koma; wajib diisi untuk request browser |
 | `SUPABASE_URL` | disediakan Supabase | URL project untuk membaca context publik |
 | `SUPABASE_ANON_KEY` | disediakan Supabase | key anon untuk membaca context yang tunduk pada RLS |
