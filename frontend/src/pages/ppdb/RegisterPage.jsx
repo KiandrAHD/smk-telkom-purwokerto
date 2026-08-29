@@ -32,7 +32,7 @@ const RegisterPage = () => {
 
   return (
     <PpdbAuthLayout aksiLabel="Kembali ke Beranda">
-      <div className="grid rounded-3xl bg-white p-4 shadow-card sm:p-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+      <div className="grid rounded-3xl border border-dark-100 bg-white p-4 shadow-card sm:p-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
         <PanelMerah {...ppdbPanelDaftar} className="rounded-2xl" />
 
         <div className="p-8 sm:p-10">

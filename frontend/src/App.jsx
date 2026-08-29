@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation, Outlet } from 'react-router-dom';
+import { Routes, Route, useLocation, Outlet, Navigate } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/LandingPage';
 import TentangPage from './pages/TentangPage';
@@ -34,7 +34,6 @@ import DashboardPrestasiPage from './pages/dashboard/PrestasiPage';
 import BKKPage from './pages/dashboard/BKKPage';
 import PengaturanPage from './pages/dashboard/PengaturanPage';
 import ProtectedRoute from './router/ProtectedRoute';
-import PPDBPage from './pages/PPDBPage';
 import NextTelPage from './pages/NextTelPage';
 
 const PAGE_META = {
@@ -76,7 +75,13 @@ const App = () => {
         <Route path="/bkk" element={<BkkPage />} />
         <Route path="/berita" element={<BeritaPage />} />
         <Route path="/pengumuman" element={<PengumumanPage />} />
-        <Route path="/ppdb" element={<PPDBPage />} />
+        {/* Delapan tautan di seluruh situs (footer, CTA, hero Tentang/Jurusan/
+            Pengumuman) masih menunjuk ke /ppdb. Daripada menyunting satu per satu
+            dan berisiko ada yang terlewat, rutenya sendiri yang dialihkan ke
+            portal baru — jadi tautan lama maupun yang dibuat nanti sama-sama
+            mendarat di desain terbaru. `replace` dipakai supaya alamat lama tidak
+            tertinggal di riwayat dan menjebak tombol Back. */}
+        <Route path="/ppdb" element={<Navigate to="/ppdb/masuk" replace />} />
 
         {/* Alur portal PPDB. PpdbProvider membungkus keenam langkah supaya isian
             formulir tetap ada saat berpindah langkah. */}

@@ -2580,6 +2580,15 @@ export const ppdbDokumen = [
   },
 ];
 
+// Tiga langkah setelah calon siswa masuk portal. Desain memberi penomoran
+// sendiri untuk tahap akun ("Langkah 1 dari 2"), jadi indikator ini khusus
+// tahap portal dan tidak menabrak badge di halaman Daftar/Verifikasi.
+export const ppdbLangkahPortal = [
+  { id: 'formulir', label: 'Biodata & Nilai', to: '/ppdb/formulir' },
+  { id: 'berkas', label: 'Unggah Berkas', to: '/ppdb/berkas' },
+  { id: 'selesai', label: 'Selesai', to: '/ppdb/selesai' },
+];
+
 export const ppdbSukses = {
   judul: 'Pendaftaran Berhasil Disubmit!',
   pesan:

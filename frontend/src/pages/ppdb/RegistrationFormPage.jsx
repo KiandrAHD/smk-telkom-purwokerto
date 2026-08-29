@@ -209,7 +209,7 @@ const RegistrationFormPage = () => {
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-dark-100 pt-6">
           <Link
-            to="/ppdb"
+            to="/ppdb/masuk"
             className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary"
           >
             &larr; Batal &amp; Kembali

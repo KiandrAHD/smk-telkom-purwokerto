@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '../Logo';
+import PpdbProgress from './PpdbProgress';
 import { ppdbAkunContoh, ppdbMeta } from '../../data/dummyData';
 
 const inisial = (nama) =>
@@ -11,36 +12,50 @@ const inisial = (nama) =>
     .join('')
     .toUpperCase();
 
-// Kerangka halaman setelah calon siswa masuk: header portal + isi.
-const PpdbPortalLayout = ({ children }) => (
-  <div className="flex min-h-screen flex-col bg-dark-50">
-    <header className="sticky top-0 z-30 border-b border-dark-100 bg-white">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary-50 p-1.5">
-            <Logo className="h-full w-full" />
-          </span>
-          <span className="font-heading text-sm font-extrabold text-dark-900">{ppdbMeta.portal}</span>
-        </Link>
+// Kerangka halaman setelah calon siswa masuk: header portal, indikator langkah,
+// lalu isi halamannya.
+const PpdbPortalLayout = ({ children }) => {
+  const { pathname } = useLocation();
 
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <p className="font-heading text-xs font-bold leading-tight text-dark-900">
-              {ppdbAkunContoh.nama}
-            </p>
-            <p className="text-[10px] text-dark-500">NISN: {ppdbAkunContoh.nisn}</p>
+  return (
+    <div className="flex min-h-screen flex-col bg-dark-50">
+      <header className="sticky top-0 z-30 border-b border-dark-100 bg-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
+          <Link to="/" className="flex items-center gap-3">
+            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary-50 p-1.5 transition-transform hover:scale-105">
+              <Logo className="h-full w-full" />
+            </span>
+            <span className="font-heading text-sm font-extrabold text-dark-900">{ppdbMeta.portal}</span>
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="font-heading text-xs font-bold leading-tight text-dark-900">
+                {ppdbAkunContoh.nama}
+              </p>
+              <p className="text-[10px] text-dark-500">NISN: {ppdbAkunContoh.nisn}</p>
+            </div>
+            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary font-heading text-xs font-bold text-white">
+              {inisial(ppdbAkunContoh.nama)}
+            </span>
           </div>
-          <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary font-heading text-xs font-bold text-white">
-            {inisial(ppdbAkunContoh.nama)}
-          </span>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">{children}</main>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+        <PpdbProgress />
 
-    <footer className="py-6 text-center text-[11px] text-dark-400">{ppdbMeta.hakCipta}</footer>
-  </div>
-);
+        {/* key={pathname} memaksa isi dipasang ulang tiap pindah langkah supaya
+            animasi masuknya benar-benar jalan — pola yang sama dipakai
+            MainLayout dan DashboardLayout. */}
+        <div key={pathname} className="animate-masuk-halaman">
+          {children}
+        </div>
+      </main>
+
+      <footer className="py-6 text-center text-[11px] text-dark-400">{ppdbMeta.hakCipta}</footer>
+    </div>
+  );
+};
 
 export default PpdbPortalLayout;

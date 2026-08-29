@@ -1,4 +1,5 @@
 import { BellRing, CheckCircle2, Radar } from 'lucide-react';
+import fotoSiswa from '../../assets/jurusan/showcase-rpl.jpg';
 import ribbon from '../../assets/landing/ribbon.png';
 import watermark from '../../assets/landing/watermark-logo.png';
 
@@ -14,7 +15,7 @@ const ikon = {
 // tiga lapis identitas yang sudah dipakai situs utama — gradien merah Telkom,
 // pita bermotif logo (ribbon.png) yang juga jadi pemisah section di beranda, dan
 // watermark logo besar. Semuanya aria-hidden karena murni dekorasi.
-const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuanTeks, className = '' }) => (
+const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuanTeks, foto = true, className = '' }) => (
   <div
     className={`relative flex flex-col overflow-hidden bg-gradient-to-br from-primary-600 via-primary to-primary-800 p-8 text-white sm:p-10 ${className}`}
   >
@@ -71,8 +72,21 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
         })}
       </ul>
 
+      {/* Revisi tim: sisa ruang di bawah daftar fitur sebelumnya kosong. Foto
+          siswa ditaruh di sini dengan flex-1 supaya ia yang menyerap ruang lebih,
+          bukan malah memaksa panel jadi lebih tinggi di layar pendek. */}
+      {foto && (
+        <div className="mt-7 hidden min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/25 sm:block">
+          <img
+            src={fotoSiswa}
+            alt="Siswa SMK Telkom Purwokerto sedang belajar"
+            className="h-full min-h-32 w-full object-cover transition-transform duration-700 hover:scale-105"
+          />
+        </div>
+      )}
+
       {bantuanTeks && (
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-10 text-[11px]">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-8 text-[11px]">
           <span className="text-white/70">{bantuanLabel}</span>
           <a
             href="https://wa.me/6281234567890"

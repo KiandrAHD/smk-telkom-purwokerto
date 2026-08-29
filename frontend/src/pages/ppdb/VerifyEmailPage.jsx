@@ -22,7 +22,7 @@ const VerifyEmailPage = () => {
 
   return (
     <PpdbAuthLayout aksiLabel="Butuh Bantuan?" aksiTo="/ppdb/masuk" tinggiPita="h-52">
-      <div className="mx-auto max-w-md rounded-3xl bg-white p-8 text-center shadow-card sm:p-10">
+      <div className="mx-auto max-w-md rounded-3xl border border-dark-100 bg-white p-8 text-center shadow-card sm:p-10">
         <span className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50">
           <Mail className="h-7 w-7 text-primary" />
           <CheckCircle2

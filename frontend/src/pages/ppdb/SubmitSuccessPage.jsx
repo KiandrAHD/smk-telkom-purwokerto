@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, CheckCircle2, Printer } from 'lucide-react';
 import PpdbPortalLayout from '../../components/ppdb/PpdbPortalLayout';
+import Reveal from '../../components/Reveal';
+import maskot from '../../assets/pengumuman/stela-bot.png';
 import { usePpdb } from '../../context/PpdbContext';
 import { ppdbMeta, ppdbSukses } from '../../data/dummyData';
 
@@ -37,11 +39,9 @@ const SubmitSuccessPage = () => {
       {/* Tiga kartu ringkasan. Titik warna dan warna teks berbeda per kartu,
           jadi keduanya ditentukan lewat data, bukan dipaksa seragam di sini. */}
       <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
-        {ppdbSukses.kartu.map((kartu) => (
-          <div
-            key={kartu.label}
-            className="rounded-2xl border border-dark-100 bg-white px-5 py-5 shadow-card transition-shadow hover:shadow-lg"
-          >
+        {ppdbSukses.kartu.map((kartu, i) => (
+          <Reveal key={kartu.label} className={['', 'delay-100', 'delay-200'][i] ?? ''}>
+            <div className="h-full rounded-2xl border border-dark-100 bg-white px-5 py-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg">
             <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-dark-400">
               {kartu.label}
             </p>
@@ -68,7 +68,8 @@ const SubmitSuccessPage = () => {
               )}
               {kartu.catatan}
             </p>
-          </div>
+            </div>
+          </Reveal>
         ))}
       </div>
 
@@ -101,7 +102,12 @@ const SubmitSuccessPage = () => {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-dark-100 pt-5">
-          <p className="text-[11px] text-dark-500">{ppdbSukses.bantuanTeks}</p>
+          <p className="flex items-center gap-3 text-[11px] text-dark-500">
+            {/* Maskot STELA dipakai ulang dari halaman Pengumuman supaya baris
+                bantuan tidak terasa kosong dan tetap satu identitas. */}
+            <img src={maskot} alt="" aria-hidden="true" className="h-9 w-9 flex-shrink-0 object-contain" />
+            {ppdbSukses.bantuanTeks}
+          </p>
           <a
             href={ppdbMeta.waHelpdesk}
             target="_blank"

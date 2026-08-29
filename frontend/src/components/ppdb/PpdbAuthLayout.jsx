@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '../Logo';
 import ribbon from '../../assets/landing/ribbon.png';
 import { ppdbMeta } from '../../data/dummyData';
@@ -6,7 +6,10 @@ import { ppdbMeta } from '../../data/dummyData';
 // Kerangka halaman sebelum calon siswa masuk (Daftar, Masuk, Verifikasi).
 // Pita merah di atas dibuat lebih tinggi dari isinya supaya kartu putih di
 // tengah terlihat mengambang di atasnya, seperti pada desain.
-const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children }) => (
+const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children }) => {
+  const { pathname } = useLocation();
+
+  return (
   <div className="flex min-h-screen flex-col bg-dark-50">
     <div className={`relative ${tinggiPita} bg-gradient-to-r from-primary-700 via-primary to-primary-600`}>
       {/* Revisi tim: pita bermotif logo dari beranda dipakai sebagai tekstur
@@ -42,12 +45,18 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
     </div>
 
     {/* Margin negatif menarik kartu naik menimpa pita merah */}
-    <main className="relative mx-auto -mt-24 w-full max-w-6xl flex-1 px-4 pb-10 sm:px-6">
+    {/* key={pathname} memicu animasi masuk tiap berpindah antar Daftar, Masuk,
+        dan Verifikasi. */}
+    <main
+      key={pathname}
+      className="animate-masuk-halaman relative mx-auto -mt-24 w-full max-w-6xl flex-1 px-4 pb-10 sm:px-6"
+    >
       {children}
     </main>
 
     <footer className="py-6 text-center text-[11px] text-dark-400">{ppdbMeta.hakCipta}</footer>
-  </div>
-);
+    </div>
+  );
+};
 
 export default PpdbAuthLayout;

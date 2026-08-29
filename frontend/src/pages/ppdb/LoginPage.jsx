@@ -15,7 +15,7 @@ const LoginPage = () => {
 
   return (
     <PpdbAuthLayout aksiLabel="Kembali ke Beranda">
-      <div className="mx-auto grid max-w-4xl rounded-3xl bg-white p-4 shadow-card sm:p-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
+      <div className="mx-auto grid max-w-4xl rounded-3xl border border-dark-100 bg-white p-4 shadow-card sm:p-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
         <PanelMerah {...ppdbPanelMasuk} className="rounded-2xl" />
 
         <div className="p-8 sm:p-10">
