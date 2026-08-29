@@ -45,13 +45,21 @@ const Navbar = () => {
           </div>
 
           {/* Desktop CTA */}
-          <Link
-            to={ctaMasukPpdb.href}
-            className="hidden lg:inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
-          >
-            {ctaMasukPpdb.label}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="hidden items-center gap-3 lg:flex">
+            <Link
+              to="/login"
+              className="inline-flex items-center rounded-full border border-primary px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              Login Admin
+            </Link>
+            <Link
+              to={ctaMasukPpdb.href}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              {ctaMasukPpdb.label}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
 
           {/* Mobile toggle */}
           <button
@@ -79,9 +87,16 @@ const Navbar = () => {
                 </Link>
               ))}
               <Link
+                to="/login"
+                onClick={() => setIsMobileOpen(false)}
+                className="mt-3 inline-flex items-center justify-center rounded-full border border-primary px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              >
+                Login Admin
+              </Link>
+              <Link
                 to={ctaMasukPpdb.href}
                 onClick={() => setIsMobileOpen(false)}
-                className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 {ctaMasukPpdb.label}
                 <ArrowRight className="w-4 h-4" />
