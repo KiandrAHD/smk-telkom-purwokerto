@@ -1,6 +1,6 @@
 
 import heroPanel from '../assets/landing/hero-panel.jpg';
-import aboutVideo from '../assets/landing/about-video.png';
+import aboutVideo from '../assets/landing/about-video.jpg';
 import jurusanRpl from '../assets/landing/jurusan-rpl.jpg';
 import jurusanPg from '../assets/landing/jurusan-pg.jpg';
 import jurusanTkj from '../assets/landing/jurusan-tkj.jpg';
