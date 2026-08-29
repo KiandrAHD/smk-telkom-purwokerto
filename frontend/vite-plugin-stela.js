@@ -1,7 +1,7 @@
 import { loadEnv } from 'vite';
 import {
   BATAS,
-  MODEL_BAWAAN,
+  MODEL_CADANGAN,
   kunciBermasalah,
   periksaPesan,
   pilihPenyedia,
@@ -50,7 +50,12 @@ export const stelaDevPlugin = () => ({
       );
     }
     const apiKey = penyedia ? kunci[penyedia] : undefined;
-    const model = baca('STELA_MODEL') || (penyedia ? MODEL_BAWAAN[penyedia] : '');
+    // Dibiarkan undefined kalau tidak disetel, supaya tanyaAI memakai daftar
+    // cadangannya dan bisa berpindah model saat kuota satu model habis.
+    // Mengisinya dengan MODEL_BAWAAN akan mematikan failover, karena model
+    // yang dipilih manual sengaja dihormati apa adanya.
+    const model = baca('STELA_MODEL') || undefined;
+    const labelModel = model ?? `${MODEL_CADANGAN[penyedia]?.length ?? 1} model bergantian`;
 
     const penjaga = buatPenjaga({
       aktif: baca('STELA_AKTIF') !== 'false',
@@ -59,7 +64,7 @@ export const stelaDevPlugin = () => ({
 
     server.config.logger.info(
       penyedia
-        ? `  \x1b[32m➜\x1b[0m  STELA lokal siap di /api/stela (${penyedia}, ${model}, maks ${penjaga.statistik().maksPerHari}/hari)`
+        ? `  \x1b[32m➜\x1b[0m  STELA lokal siap di /api/stela (${penyedia}, ${labelModel}, maks ${penjaga.statistik().maksPerHari}/hari)`
         : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env',
     );
 
@@ -115,7 +120,7 @@ export const stelaDevPlugin = () => ({
 
       try {
         penjaga.catatPanggilan();
-        const { teks, tokenMasuk, tokenKeluar } = await tanyaAI({
+        const { teks, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
           penyedia,
           apiKey,
           model,
@@ -130,7 +135,7 @@ export const stelaDevPlugin = () => ({
         penjaga.simpanCache(pesan, teks);
         const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
         server.config.logger.info(
-          `  [stela] ${terpakaiHariIni}/${maksPerHari} hari ini | token masuk ${tokenMasuk}, keluar ${tokenKeluar}`,
+          `  [stela] ${terpakaiHariIni}/${maksPerHari} hari ini | model ${modelDipakai} | token masuk ${tokenMasuk}, keluar ${tokenKeluar}`,
         );
         return kirim({ reply: teks }, 200);
       } catch (error) {

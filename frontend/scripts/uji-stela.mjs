@@ -7,7 +7,7 @@
 // seolah-olah pernah diucapkan STELA.
 
 import assert from 'node:assert/strict';
-import { ANGGARAN_KONTEKS, BATAS, PESAN_KUOTA_HARIAN, PESAN_SEDANG_RAMAI, bersihkanMasukan, buatInstruksi, kunciBermasalah, periksaPesan, pilihPenyedia } from '../../supabase/functions/stela/inti.mjs';
+import { ANGGARAN_KONTEKS, BATAS, MODEL_BAWAAN, MODEL_CADANGAN, PESAN_KUOTA_HARIAN, PESAN_SEDANG_RAMAI, bersihkanMasukan, buatInstruksi, kunciBermasalah, periksaPesan, pilihPenyedia } from '../../supabase/functions/stela/inti.mjs';
 import { pilihKonten, statistikKonten } from '../../supabase/functions/stela/konteks.mjs';
 import { buatPenjaga } from '../../supabase/functions/stela/penjaga-biaya.mjs';
 
@@ -275,5 +275,26 @@ for (const pesan of [PESAN_KUOTA_HARIAN, PESAN_SEDANG_RAMAI]) {
 assert.ok(PESAN_KUOTA_HARIAN.includes('besok'), 'batas harian harus mengarahkan ke hari berikutnya');
 assert.ok(!PESAN_KUOTA_HARIAN.includes('menit'), 'batas harian tidak boleh menjanjikan pemulihan dalam menit');
 assert.ok(PESAN_SEDANG_RAMAI.includes('menit'), 'batas per menit harus menyebut rentang menitnya');
+
+// --- Daftar model cadangan ---
+// Kuota gratis Gemini adalah 20 permintaan per hari PER MODEL. Daftar cadangan
+// inilah yang mengubah 20 menjadi ratusan tanpa biaya, dan menjaga STELA tetap
+// hidup ketika Google menarik sebuah model (gemini-2.5-flash sudah begitu).
+for (const penyedia of Object.keys(MODEL_BAWAAN)) {
+  const daftar = MODEL_CADANGAN[penyedia];
+  assert.ok(Array.isArray(daftar) && daftar.length > 0, `${penyedia} wajib punya daftar model`);
+  assert.equal(daftar[0], MODEL_BAWAAN[penyedia], `${penyedia}: model bawaan harus jadi pilihan pertama`);
+  assert.equal(new Set(daftar).size, daftar.length, `${penyedia}: daftar model tidak boleh berisi duplikat`);
+}
+
+// Model yang sudah ditarik Google tidak boleh dihidupkan kembali diam-diam.
+for (const mati of ['gemini-2.0-flash', 'gemini-2.5-flash']) {
+  assert.ok(
+    !MODEL_CADANGAN.gemini.includes(mati),
+    `${mati} sudah ditarik Google dan menjawab 404, jangan dimasukkan ke daftar`,
+  );
+}
+
+assert.ok(MODEL_CADANGAN.gemini.length >= 3, 'cadangan Gemini terlalu sedikit untuk menolong kuota harian');
 
 console.log('Semua pemeriksaan STELA lolos.');

@@ -43,6 +43,44 @@ export const MODEL_BAWAAN = {
   groq: 'openai/gpt-oss-20b',
 };
 
+// Daftar cadangan, dicoba berurutan ketika model di atasnya menolak.
+//
+// Kenapa ini ada: kuota gratis Gemini adalah 20 permintaan per hari PER MODEL,
+// bukan per akun. Satu model habis bukan berarti kuncinya habis. Memindah ke
+// model berikutnya memberi 20 lagi, tanpa biaya dan tanpa akun tambahan.
+//
+// Ini juga menambal masalah kedua: model bisa ditarik Google sewaktu-waktu
+// (gemini-2.5-flash kini menjawab 404 "no longer available to new users").
+// Dengan daftar cadangan, satu model yang mati tidak mematikan STELA.
+export const MODEL_CADANGAN = {
+  anthropic: ['claude-opus-5'],
+  gemini: [
+    'gemini-3.6-flash',
+    'gemini-flash-lite-latest',
+    'gemini-3.1-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-flash-latest',
+  ],
+  groq: ['openai/gpt-oss-20b', 'openai/gpt-oss-120b', 'qwen/qwen3.6-27b'],
+};
+
+// Status kuota per model, hidup selama proses berjalan. Tanpa ini setiap
+// permintaan akan mencoba ulang model yang sudah jelas habis, membuang satu
+// perjalanan jaringan sebelum sampai ke model yang benar-benar bisa menjawab.
+const modelHabis = new Map();
+const HABIS_MS = 30 * 60 * 1000;
+
+const sedangHabis = (model) => {
+  const sampai = modelHabis.get(model);
+  if (!sampai) return false;
+  if (Date.now() > sampai) {
+    modelHabis.delete(model);
+    return false;
+  }
+  return true;
+};
+
 // Berapa token pengetahuan sekolah yang boleh ikut per permintaan.
 // 0 = kirim penuh.
 export const ANGGARAN_KONTEKS = {
@@ -405,12 +443,33 @@ export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, s
     pilihKonten(pertanyaan, ANGGARAN_KONTEKS[penyedia] ?? 0),
   );
 
-  return panggil({
-    penyedia,
-    apiKey,
-    model: model || MODEL_BAWAAN[penyedia],
-    pesan,
-    instruksi,
-    signal,
-  });
+  // STELA_MODEL yang disetel manual dihormati apa adanya -- kalau seseorang
+  // memilih model tertentu, jangan diam-diam dipindah ke model lain.
+  const daftar = model
+    ? [model]
+    : (MODEL_CADANGAN[penyedia] ?? [MODEL_BAWAAN[penyedia]]);
+
+  const belumHabis = daftar.filter((m) => !sedangHabis(m));
+  // Kalau semuanya tercatat habis, tetap coba yang pertama: catatan ini hanya
+  // perkiraan, dan kuota bisa saja sudah pulih lebih cepat.
+  const urutan = belumHabis.length ? belumHabis : daftar.slice(0, 1);
+
+  let galatTerakhir;
+  for (const kandidat of urutan) {
+    try {
+      const hasil = await panggil({ penyedia, apiKey, model: kandidat, pesan, instruksi, signal });
+      return { ...hasil, modelDipakai: kandidat };
+    } catch (error) {
+      galatTerakhir = error;
+      // 429 = kuota/laju habis, 404 = model ditarik. Keduanya berarti "coba
+      // model lain", bukan "gagal". Galat lain (400, 401, jaringan) tidak akan
+      // membaik dengan berganti model, jadi langsung dilempar.
+      if (error?.status !== 429 && error?.status !== 404) throw error;
+      if (error?.status === 429) modelHabis.set(kandidat, Date.now() + HABIS_MS);
+    }
+  }
+  throw galatTerakhir;
 };
+
+// Untuk log dan pengujian.
+export const statusModel = () => Object.fromEntries(modelHabis);

@@ -6,7 +6,7 @@
 // juga oleh server pengembangan lokal (frontend/vite-plugin-stela.js).
 // Pagar biayanya ada di ./penjaga-biaya.mjs.
 
-import { BATAS, MODEL_BAWAAN, kunciBermasalah, periksaPesan, pilihPenyedia, tanyaAI } from './inti.mjs';
+import { BATAS, kunciBermasalah, periksaPesan, pilihPenyedia, tanyaAI } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
 
 const KUNCI: Record<string, string | undefined> = {
@@ -30,7 +30,9 @@ for (const rusak of kunciBermasalah({
 })) {
   console.warn(`Kunci ${rusak.toUpperCase()} diabaikan: bentuknya tidak sesuai.`);
 }
-const MODEL = Deno.env.get('STELA_MODEL') || (PENYEDIA ? MODEL_BAWAAN[PENYEDIA] : '');
+// Dibiarkan undefined kalau tidak disetel, supaya tanyaAI memakai daftar
+// cadangannya dan berpindah model saat kuota satu model habis.
+const MODEL = Deno.env.get('STELA_MODEL') || undefined;
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');

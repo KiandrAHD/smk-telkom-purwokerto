@@ -6,6 +6,26 @@ Mendukung **Anthropic (Claude)**, **Google Gemini**, dan **Groq**. Yang dipakai
 ditentukan oleh kunci mana yang terisi — tidak ada sakelar terpisah yang bisa
 lupa disetel. Urutan prioritas: Anthropic, Gemini, Groq.
 
+### Kuota gratis dan failover model
+
+Kuota gratis Gemini adalah **20 permintaan per hari PER MODEL**, bukan per akun,
+dan bukan per token. Karena itu memangkas panjang prompt **tidak** menambah
+jatah sama sekali — jurus yang biasanya pertama dicoba justru tidak relevan di
+sini.
+
+Yang menolong: `MODEL_CADANGAN` di `inti.mjs`. Ketika sebuah model menjawab 429,
+`tanyaAI` otomatis mencoba model berikutnya dan mengingat mana yang habis
+selama 30 menit agar tidak dicoba berulang. Enam model Gemini di daftar berarti
+sekitar **120 permintaan gratis per hari**, tanpa biaya dan tanpa akun tambahan.
+
+Failover juga menambal masalah kedua: Google menarik model sewaktu-waktu.
+`gemini-2.5-flash` kini menjawab 404 *"no longer available to new users"*.
+Dengan daftar cadangan, satu model mati tidak mematikan STELA.
+
+**Menyetel `STELA_MODEL` mematikan failover** — sengaja. Kalau seseorang
+memilih model tertentu, pilihannya dihormati apa adanya, tidak diam-diam
+dipindah.
+
 ### Catatan model Gemini
 
 Daftar `/v1beta/models` **memuat model yang tidak bisa dipakai akun baru.**
