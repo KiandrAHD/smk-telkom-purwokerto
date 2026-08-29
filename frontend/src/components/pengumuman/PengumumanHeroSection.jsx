@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { pengumumanHero } from '../../data/dummyData';
 
@@ -8,18 +8,11 @@ const PengumumanHeroSection = () => (
       <div className="rounded-[2rem] border border-dark-100 bg-white p-3 sm:p-4">
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[38%_1fr] lg:gap-4">
           <div className="px-3 pt-6 lg:pl-4 lg:pt-6">
-            <nav className="flex items-center gap-1.5 text-[11px] font-medium text-primary">
-              {pengumumanHero.breadcrumb.map((item, i) => (
-                <span key={item.label} className="flex items-center gap-1.5">
-                  {i > 0 && <ChevronRight className="h-3 w-3" />}
-                  <Link to={item.href} className="hover:underline">
-                    {item.label}
-                  </Link>
-                </span>
-              ))}
-            </nav>
+            {/* Breadcrumb dihapus: satu-satunya tautannya menuju Beranda,
+                yang sudah tersedia di navbar. Halaman detail tetap memakai
+                breadcrumb sendiri lewat DetailLayout karena letaknya lebih dalam. */}
 
-            <h1 className="mt-5 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
+            <h1 className="whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {pengumumanHero.heading}
               {'\n'}
               <span className="text-primary">{pengumumanHero.headingAccent}</span>

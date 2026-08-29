@@ -246,10 +246,6 @@ export const ctaBanner = {
 
 // ── Hero Section ──
 export const heroData = {
-  breadcrumb: [
-    { label: 'Beranda', href: '/' },
-    { label: 'Profil Sekolah', href: '/tentang' },
-  ],
   heading: 'Discover\nthe Place',
   headingAccent: 'Where Future\nInnovators Grow.',
   description:
