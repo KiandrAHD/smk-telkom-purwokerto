@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertCircle, Send } from 'lucide-react';
-import { tanyaStela } from '../../services/stela';
+import { PESAN_STELA_GAGAL, tanyaStela } from '../../services/stela';
 import { stelaData } from '../../data/dummyData';
 
 // STELA sering menyebut alamat halaman detail. Pola pemisah dipakai untuk
@@ -32,9 +32,17 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
   const controllerRef = useRef(null);
   const aktifRef = useRef(true);
 
-  useEffect(() => () => {
-    aktifRef.current = false;
-    controllerRef.current?.abort();
+  // Penanda "komponen masih terpasang", dipakai agar setState tidak dipanggil
+  // setelah unmount. Nilainya WAJIB dikembalikan ke true di badan efek: di
+  // StrictMode React menjalankan mount -> cleanup -> mount, dan tanpa baris
+  // pertama ini penanda tersangkut di false selamanya, sehingga setiap jawaban
+  // dan setiap galat ditelan tanpa jejak.
+  useEffect(() => {
+    aktifRef.current = true;
+    return () => {
+      aktifRef.current = false;
+      controllerRef.current?.abort();
+    };
   }, []);
 
   useEffect(() => {
@@ -70,7 +78,10 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
       setPertanyaanGagal('');
     } catch (error) {
       if (!aktifRef.current || error?.name === 'AbortError') return;
-      setGalat('STELA sedang mengalami kendala. Silakan coba lagi.');
+      // Pesan dari layanan ditulis sendiri oleh tim dan sudah aman ditampilkan.
+      // Menampilkannya apa adanya jauh menolong saat penyebabnya sepele — misal
+      // ANTHROPIC_API_KEY yang belum diisi — dan tetap generik di produksi.
+      setGalat(error?.message || PESAN_STELA_GAGAL);
       setPertanyaanGagal(pertanyaan);
     } finally {
       if (aktifRef.current) setMemuat(false);

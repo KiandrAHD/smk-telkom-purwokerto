@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "stela:konten": "node scripts/buat-konten-stela.mjs",
     "foto:pertajam": "node scripts/pertajam-foto.mjs",
-    "foto:pulihkan": "node scripts/pulihkan-foto.mjs"
+    "foto:pulihkan": "node scripts/pulihkan-foto.mjs",
+    "stela:uji": "node scripts/uji-stela.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.111.0",
