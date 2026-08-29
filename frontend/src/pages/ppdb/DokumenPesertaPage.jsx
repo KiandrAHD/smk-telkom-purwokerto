@@ -4,13 +4,13 @@ import Logo from '../../components/Logo';
 import PpdbPortalLayout from '../../components/ppdb/PpdbPortalLayout';
 import Reveal from '../../components/Reveal';
 import { usePpdb } from '../../context/PpdbContext';
-import { dokumenPeserta, ppdbAkunContoh, ppdbMeta } from '../../data/dummyData';
+import { dokumenPeserta, ppdbMeta } from '../../data/dummyData';
 
 const ikon = { cetak: Printer, jadwal: CalendarDays, panduan: BookOpen };
 
 const DokumenPesertaPage = () => {
-  const { nomorRegistrasi, biodata } = usePpdb();
-  const nomor = nomorRegistrasi ?? 'PPDB2027-88492';
+  const { nomorRegistrasi, biodata, currentUser } = usePpdb();
+  const nomor = nomorRegistrasi ?? '-';
 
   return (
     <PpdbPortalLayout>
@@ -38,8 +38,9 @@ const DokumenPesertaPage = () => {
             <dl className="space-y-4 px-5 py-5">
               {[
                 ['Nomor Registrasi', nomor],
-                ['Nama Lengkap', biodata.namaLengkap || ppdbAkunContoh.nama],
-                ['NISN', biodata.nisn || ppdbAkunContoh.nisn],
+                ['Nama Lengkap', biodata.namaLengkap || '-'],
+                ['NISN', biodata.nisn || '-'],
+                ['Email', currentUser?.email || biodata.email || '-'],
                 ['Peminatan', biodata.jurusan || 'Belum dipilih'],
               ].map(([label, nilai]) => (
                 <div key={label}>

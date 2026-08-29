@@ -6,7 +6,7 @@ import { usePpdb } from '../../context/PpdbContext';
 import { ppdbVerifikasi } from '../../data/dummyData';
 
 const VerifyEmailPage = () => {
-  const { biodata } = usePpdb();
+  const { biodata, currentUser } = usePpdb();
   const [sisa, setSisa] = useState(ppdbVerifikasi.jedaKirimUlang);
 
   // Hitung mundur tombol kirim ulang. Daftar dependensi sengaja kosong: kalau
@@ -18,7 +18,7 @@ const VerifyEmailPage = () => {
     return () => clearInterval(id);
   }, []);
 
-  const email = biodata.email || ppdbVerifikasi.emailContoh;
+  const email = biodata.email || currentUser?.email || 'alamat email Anda';
 
   return (
     <PpdbAuthLayout aksiLabel="Butuh Bantuan?" aksiTo="/ppdb/masuk" tinggiPita="h-52">
@@ -90,13 +90,11 @@ const VerifyEmailPage = () => {
           </button>
         </div>
 
-        {/* Tautan lanjut disediakan karena tanpa backend email, verifikasi tidak
-            pernah benar-benar terjadi. */}
         <Link
-          to="/ppdb/formulir"
+          to="/ppdb/masuk"
           className="mt-5 inline-block text-[11px] font-semibold text-dark-400 underline-offset-4 hover:text-primary hover:underline"
         >
-          Lanjut ke formulir pendaftaran
+          Lanjut ke Login PPDB
         </Link>
       </div>
     </PpdbAuthLayout>

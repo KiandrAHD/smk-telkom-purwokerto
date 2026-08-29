@@ -1,7 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import Logo from '../Logo';
 import PpdbProgress from './PpdbProgress';
-import { ppdbAkunContoh, ppdbMeta } from '../../data/dummyData';
+import { ppdbMeta } from '../../data/dummyData';
+import { usePpdb } from '../../context/PpdbContext';
 
 const inisial = (nama) =>
   nama
@@ -16,6 +17,13 @@ const inisial = (nama) =>
 // lalu isi halamannya.
 const PpdbPortalLayout = ({ children }) => {
   const { pathname } = useLocation();
+  const { currentUser, authLoading, logout } = usePpdb();
+
+  if (authLoading) {
+    return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">Memeriksa sesi PPDB...</div>;
+  }
+
+  if (!currentUser) return <Navigate to="/ppdb/masuk" replace />;
 
   return (
     <div className="flex min-h-screen flex-col bg-dark-50">
@@ -30,13 +38,13 @@ const PpdbPortalLayout = ({ children }) => {
 
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <p className="font-heading text-xs font-bold leading-tight text-dark-900">
-                {ppdbAkunContoh.nama}
+              <p className="max-w-48 truncate font-heading text-xs font-bold leading-tight text-dark-900 sm:max-w-none">
+                {currentUser.email}
               </p>
-              <p className="text-[10px] text-dark-500">NISN: {ppdbAkunContoh.nisn}</p>
+              <button type="button" onClick={() => void logout()} className="text-[10px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Keluar</button>
             </div>
             <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary font-heading text-xs font-bold text-white">
-              {inisial(ppdbAkunContoh.nama)}
+              {inisial(currentUser.email || 'PPDB')}
             </span>
           </div>
         </div>

@@ -5,13 +5,30 @@ import FormInput from '../../components/dashboard/FormInput';
 import PanelMerah from '../../components/ppdb/PanelMerah';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { ppdbPanelMasuk } from '../../data/dummyData';
+import { signInPpdb } from '../../services/ppdbService';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ akun: '', sandi: '' });
   const [ingat, setIngat] = useState(false);
+  const [galat, setGalat] = useState('');
+  const [mengirim, setMengirim] = useState(false);
 
   const ubah = (kunci) => (e) => setForm((f) => ({ ...f, [kunci]: e.target.value }));
+
+  const kirim = async (e) => {
+    e.preventDefault();
+    setGalat('');
+    setMengirim(true);
+    try {
+      await signInPpdb(form.akun.trim(), form.sandi);
+      navigate('/ppdb/formulir');
+    } catch {
+      setGalat('Email atau kata sandi tidak valid.');
+    } finally {
+      setMengirim(false);
+    }
+  };
 
   return (
     <PpdbAuthLayout aksiLabel="Kembali ke Beranda">
@@ -25,18 +42,15 @@ const LoginPage = () => {
           </p>
 
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate('/ppdb/formulir');
-            }}
+            onSubmit={kirim}
             className="mt-7 space-y-5"
           >
             <FormInput
-              label="NISN / Alamat Email"
+              label="Alamat Email"
               wajib
               value={form.akun}
               onChange={ubah('akun')}
-              placeholder="Masukkan NISN atau Email"
+              placeholder="Masukkan alamat email"
               required
             />
 
@@ -70,11 +84,14 @@ const LoginPage = () => {
               Ingat saya di perangkat ini
             </label>
 
+            {galat && <p role="alert" className="rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{galat}</p>}
+
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5"
+              disabled={mengirim}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Masuk Sekarang
+              {mengirim ? 'Memeriksa...' : 'Masuk Sekarang'}
               <ArrowRight className="h-4 w-4" />
             </button>
 

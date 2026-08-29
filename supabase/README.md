@@ -1,10 +1,10 @@
 # Supabase — SMK Telkom Purwokerto
 
-Dokumen ini menjelaskan database foundation untuk platform Digital Smart School. Fase ini hanya menyiapkan database, Row Level Security (RLS), dan Storage; belum mengubah frontend atau memindahkan `dummyData.js`.
+Dokumen ini menjelaskan database, Row Level Security (RLS), dan Storage untuk platform Digital Smart School.
 
 ## Menjalankan migration
 
-File migration utama adalah `supabase/migrations/001_initial_schema.sql`.
+Migration dijalankan berurutan: `001_initial_schema.sql`, kemudian `002_ppdb_identity.sql`.
 
 ### Supabase CLI
 
@@ -20,7 +20,7 @@ Jika project lokal sudah terhubung, `supabase db push` akan menjalankan migratio
 
 ### SQL Editor
 
-Alternatifnya, buka Supabase Dashboard → **SQL Editor**, buat query baru, salin seluruh isi `001_initial_schema.sql`, lalu jalankan sekali. Migration membuat tabel, index, trigger, policy RLS, dan bucket Storage.
+Alternatifnya, buka Supabase Dashboard → **SQL Editor**, lalu jalankan isi `001_initial_schema.sql` terlebih dahulu dan `002_ppdb_identity.sql` setelahnya. Migration kedua menambahkan ownership PPDB dan policy terkait.
 
 ## Struktur database
 
@@ -42,8 +42,8 @@ Kolom dan tipe data pada keenam tabel mengikuti rancangan fase 1. Constraint sta
 RLS aktif untuk seluruh tabel.
 
 - Pengunjung anonim dapat membaca berita published, pengumuman published, seluruh prestasi, dan BKK aktif.
-- Pengunjung anonim dapat membuat row PPDB baru. Insert publik dipaksa berstatus `menunggu` dan tidak boleh mengisi `catatan_admin`.
-- Pengunjung tidak dapat membaca, mengubah, atau menghapus data PPDB.
+- User PPDB yang sudah authenticated dapat membuat row PPDB miliknya sendiri. Insert dipaksa berstatus `menunggu` dan tidak boleh mengisi `catatan_admin`.
+- User PPDB hanya dapat membaca submission miliknya sendiri; user tidak dapat mengubah atau menghapus submission.
 - Admin terautentikasi dapat SELECT/INSERT/UPDATE/DELETE berita, pengumuman, prestasi, dan BKK.
 - Admin dapat SELECT dan UPDATE PPDB, tetapi tidak diberi DELETE.
 - Fungsi `public.is_admin()` memeriksa keberadaan `auth.uid()` pada tabel `admins` menggunakan `SECURITY DEFINER` agar policy tidak mengalami rekursi RLS.
@@ -63,7 +63,7 @@ Migration membuat dua bucket:
 ### `ppdb-documents`
 
 - Bucket private; jangan memakai `getPublicUrl()` untuk dokumen PPDB.
-- Pengunjung hanya dapat upload ke path yang diawali `submissions/`.
+- User authenticated hanya dapat upload ke path `submissions/<auth_user_id>/<ppdb_id>/<nama-file>` miliknya.
 - Pengunjung tidak dapat membaca, mengubah, atau menghapus file.
 - Admin dapat membaca dan mengelola file.
 - Simpan object path, misalnya `submissions/<id>/<nama-file>`, pada `ppdb.dokumen_url`. Saat admin perlu melihat file, buat signed URL dengan masa berlaku terbatas menggunakan Storage API.
@@ -90,6 +90,16 @@ WHERE user_id = 'UUID_USER_DARI_AUTH';
 
 Jangan menyimpan password di `public.admins`. Untuk menambah admin berikutnya, ulangi proses pembuatan user Auth dan insert relasi tersebut. `user_id` unik sehingga satu akun Auth hanya dapat memiliki satu row admin.
 
-## Catatan integrasi frontend berikutnya
+## Catatan integrasi frontend
 
-Fase ini tidak mengganti sumber data publik dari `dummyData.js`. Pada fase integrasi, query publik harus memfilter status sesuai policy, form PPDB harus mengirim field yang sesuai schema, dan operasi admin harus menggunakan session Supabase Auth dari user yang terdaftar di `admins`.
+Frontend memakai Supabase Auth untuk portal PPDB dan session admin. Query publik harus tetap memfilter status sesuai policy, sedangkan operasi admin harus menggunakan session Supabase Auth dari user yang terdaftar di `admins`.
+
+## Ownership PPDB (migration 002)
+
+`002_ppdb_identity.sql` menambahkan `ppdb.auth_user_id` yang berelasi ke `auth.users(id)` dengan `ON DELETE RESTRICT`. Record lama boleh memiliki `auth_user_id = NULL` dan dianggap sebagai legacy; record tersebut tidak dipetakan otomatis ke akun mana pun.
+
+Submission baru hanya dapat dibuat oleh user authenticated, dengan `auth_user_id = auth.uid()`. User hanya dapat membaca submission miliknya sendiri, sedangkan admin tetap dapat membaca dan memperbarui seluruh submission melalui policy admin yang sudah ada.
+
+Flow PPDB menggunakan satu PDF gabungan. Object path disimpan pada `dokumen_url` dengan pola `submissions/<auth_user_id>/<ppdb_id>/<nama-file>`. Bucket tetap private dan dokumen hanya dibuka memakai signed URL. Jangan gunakan `getPublicUrl()` untuk dokumen PPDB.
+
+Signup mengirim email konfirmasi melalui Supabase Auth dengan redirect ke `/ppdb/verifikasi`. Signup berhasil tidak selalu berarti email sudah diterima; periksa pengaturan email confirmation, URL Configuration, SMTP provider, spam, dan bounce di Supabase Dashboard.

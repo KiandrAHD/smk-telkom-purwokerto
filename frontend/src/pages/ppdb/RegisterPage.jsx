@@ -5,7 +5,15 @@ import FormInput from '../../components/dashboard/FormInput';
 import PanelMerah from '../../components/ppdb/PanelMerah';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { usePpdb } from '../../context/PpdbContext';
-import { ppdbJurusanPilihan, ppdbPanelDaftar } from '../../data/dummyData';
+import { ppdbPanelDaftar } from '../../data/dummyData';
+import { signUpPpdb } from '../../services/ppdbService';
+
+const ppdbJurusanPilihan = [
+  'Rekayasa Perangkat Lunak (RPL)',
+  'Pengembangan Game (PG)',
+  'Teknik Komputer dan Jaringan (TKJ)',
+  'Teknik Jaringan Akses Telekomunikasi (TJAT)',
+];
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -13,10 +21,11 @@ const RegisterPage = () => {
   const [sandi, setSandi] = useState({ kata: '', konfirmasi: '' });
   const [setuju, setSetuju] = useState(false);
   const [galat, setGalat] = useState('');
+  const [mengirim, setMengirim] = useState(false);
 
   const ubah = (kunci) => (e) => isiBiodata({ [kunci]: e.target.value });
 
-  const kirim = (e) => {
+  const kirim = async (e) => {
     e.preventDefault();
     if (sandi.kata.length < 8) {
       setGalat('Kata sandi minimal 8 karakter.');
@@ -27,7 +36,17 @@ const RegisterPage = () => {
       return;
     }
     setGalat('');
-    navigate('/ppdb/verifikasi');
+    setMengirim(true);
+    try {
+      await signUpPpdb(biodata.email.trim(), sandi.kata);
+      navigate('/ppdb/verifikasi');
+    } catch (error) {
+      setGalat(error?.message?.includes('already registered')
+        ? 'Email tersebut sudah terdaftar. Silakan masuk ke portal PPDB.'
+        : 'Pendaftaran akun gagal. Silakan periksa koneksi lalu coba lagi.');
+    } finally {
+      setMengirim(false);
+    }
   };
 
   return (
@@ -138,9 +157,10 @@ const RegisterPage = () => {
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5"
+              disabled={mengirim}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Buat Akun &amp; Lanjutkan Pendaftaran
+              {mengirim ? 'Membuat Akun...' : 'Buat Akun & Lanjutkan Pendaftaran'}
               <ArrowRight className="h-4 w-4" />
             </button>
 

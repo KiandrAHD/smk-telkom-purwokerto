@@ -1,4 +1,6 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ensureSupabase, supabaseSiap } from '../services/supabase';
+import { signOutPpdb } from '../services/ppdbService';
 
 // Alur PPDB melewati beberapa halaman: daftar akun, isi formulir, unggah berkas,
 // lalu bukti submit. Kalau tiap halaman menyimpan state-nya sendiri, data hilang
@@ -6,9 +8,6 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 // mungkin nyambung dengan isian sebelumnya. Karena itu state alur disimpan di
 // satu tempat.
 //
-// ponytail: masih di memori, jadi hilang saat halaman dimuat ulang. Untuk draft
-// yang bertahan, simpan `biodata` dan `nilai` ke localStorage, atau kirim ke
-// tabel `ppdb` yang sudah ada di migration Supabase.
 const PpdbContext = createContext(null);
 
 const BIODATA_KOSONG = {
@@ -27,16 +26,54 @@ const BIODATA_KOSONG = {
   tahunLulus: '',
 };
 
-// Nomor registrasi dibuat sekali saat submit supaya tidak berganti tiap render.
-const buatNomorRegistrasi = () =>
-  `PPDB2027-${String(Math.floor(10000 + Math.random() * 89999)).slice(0, 5)}`;
-
 export const PpdbProvider = ({ children }) => {
   const [biodata, setBiodata] = useState(BIODATA_KOSONG);
   const [nilai, setNilai] = useState({});
   const [dokumen, setDokumen] = useState({});
   const [nomorRegistrasi, setNomorRegistrasi] = useState(null);
   const [draftTersimpan, setDraftTersimpan] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(supabaseSiap);
+  const userIdRef = useRef(null);
+
+  const resetWizard = useCallback(() => {
+    setBiodata(BIODATA_KOSONG);
+    setNilai({});
+    setDokumen({});
+    setNomorRegistrasi(null);
+    setDraftTersimpan(false);
+  }, []);
+
+  useEffect(() => {
+    if (!supabaseSiap) {
+      return undefined;
+    }
+
+    let mounted = true;
+    const client = ensureSupabase();
+    const applyUser = (user) => {
+      if (!mounted) return;
+      if (userIdRef.current && user?.id !== userIdRef.current) resetWizard();
+      if (!user) resetWizard();
+      userIdRef.current = user?.id ?? null;
+      setCurrentUser(user ?? null);
+      setAuthLoading(false);
+    };
+
+    client.auth.getSession().then(({ data, error }) => {
+      if (error) console.error('Gagal membaca sesi PPDB:', error);
+      applyUser(data?.session?.user ?? null);
+    });
+
+    const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
+      applyUser(session?.user ?? null);
+    });
+
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
+  }, [resetWizard]);
 
   const isiBiodata = useCallback((sebagian) => {
     setDraftTersimpan(false);
@@ -52,11 +89,15 @@ export const PpdbProvider = ({ children }) => {
     setDokumen((lama) => ({ ...lama, [id]: berkas }));
   }, []);
 
-  const kirimPendaftaran = useCallback(() => {
-    const nomor = buatNomorRegistrasi();
+  const kirimPendaftaran = useCallback((nomor) => {
     setNomorRegistrasi(nomor);
     return nomor;
   }, []);
+
+  const logout = useCallback(async () => {
+    await signOutPpdb();
+    resetWizard();
+  }, [resetWizard]);
 
   const nilaiContext = useMemo(
     () => ({
@@ -64,14 +105,17 @@ export const PpdbProvider = ({ children }) => {
       nilai,
       dokumen,
       nomorRegistrasi,
+      currentUser,
+      authLoading,
       draftTersimpan,
       isiBiodata,
       isiNilai,
       isiDokumen,
       setDraftTersimpan,
       kirimPendaftaran,
+      logout,
     }),
-    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, isiBiodata, isiNilai, isiDokumen, kirimPendaftaran]
+    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, isiBiodata, isiNilai, isiDokumen, kirimPendaftaran, logout]
   );
 
   return <PpdbContext.Provider value={nilaiContext}>{children}</PpdbContext.Provider>;
