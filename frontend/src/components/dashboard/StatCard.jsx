@@ -7,6 +7,11 @@ import {
   UserPlus,
   Users,
   UserCheck,
+  FileText,
+  Megaphone,
+  Trophy,
+  CircleCheck,
+  CircleX,
 } from 'lucide-react';
 
 const IKON = {
@@ -18,6 +23,12 @@ const IKON = {
   mitra: Building2,
   terserap: UserCheck,
   alumni: Users,
+  berita: FileText,
+  pengumuman: Megaphone,
+  prestasi: Trophy,
+  diproses: Clock,
+  diterima: CircleCheck,
+  ditolak: CircleX,
 };
 
 const NADA = {

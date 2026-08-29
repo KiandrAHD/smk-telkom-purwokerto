@@ -66,7 +66,10 @@ const Footer = () => (
         </div>
 
         <LinkColumn title="Menu" links={footerData.menu} />
-        <LinkColumn title="Informasi" links={footerData.informasi} />
+        <LinkColumn
+          title="Informasi"
+          links={[...footerData.informasi, { label: 'Login Admin', href: '/login' }]}
+        />
 
         {/* Kontak */}
         <div>

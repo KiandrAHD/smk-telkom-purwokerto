@@ -451,7 +451,7 @@ git push
 
 | Nama | Role | Kontak |
 |------|------|--------|
-| Kiandra | Backend Developer | - |
+| Kiandra | Backend Developer | kiandragagahsatriautama@gmail.com|
 | Rainer | Frontend Developer | rainersimanjuntak59@gmail.com |
 
 ---
