@@ -2177,3 +2177,287 @@ export const newsletterBerita = {
   note: 'Kami tidak akan membagikan email kamu ke pihak lain.',
   successText: 'Terima kasih! Email kamu sudah terdaftar.',
 };
+
+/* =========================================================
+   ADMIN PANEL
+   Data khusus panel admin, dipisah dari data situs publik karena isinya memang
+   berbeda: tabel admin memuat status, thumbnail, dan berkas pendaftar yang
+   tidak pernah tampil di halaman publik.
+   ========================================================= */
+
+export const adminProfil = {
+  nama: 'Admin SMK Telkom',
+  peran: 'Administrator',
+  notifikasi: 5,
+  placeholderCari: 'Cari sesuatu...',
+};
+
+export const adminSekolah = {
+  nama: 'SMK Telkom Purwokerto',
+  alamat: ['Jl. D.I. Panjaitan No.128', 'Purwokerto, Jawa Tengah'],
+  website: 'www.smktelkom-pwt.sch.id',
+};
+
+// Nama ikon dipetakan ke komponennya di DashboardSidebar, jadi berkas data ini
+// tetap bebas dari impor komponen.
+export const adminMenu = [
+  { label: 'Dashboard', to: '/dashboard', icon: 'dashboard', end: true },
+  { label: 'Manajemen PPDB', to: '/dashboard/ppdb', icon: 'ppdb' },
+  { label: 'Jurusan', to: '/dashboard/jurusan', icon: 'jurusan' },
+  { label: 'Prestasi', to: '/dashboard/prestasi', icon: 'prestasi' },
+  { label: 'BKK', to: '/dashboard/bkk', icon: 'bkk' },
+  { label: 'Berita', to: '/dashboard/berita', icon: 'berita' },
+  { label: 'Pengaturan', to: '/dashboard/pengaturan', icon: 'pengaturan' },
+];
+
+/* ── Manajemen Berita ── */
+
+export const adminKategoriBerita = ['Prestasi', 'Kegiatan', 'PPDB', 'BKK'];
+export const adminStatusBerita = ['Published', 'Draft'];
+
+// Tanggal disimpan dalam format ISO supaya bisa langsung dipakai <input type="date">;
+// tampilannya diformat ke "24 Mei 2025" oleh helper tanggal.
+export const adminBerita = [
+  { id: 1, judul: 'SMK Telkom Purwokerto Raih Juara 1 Lomba IoT Tingkat Nasional', kategori: 'Prestasi', tanggal: '2025-05-24', status: 'Published', konten: 'Tim IoT SMK Telkom Purwokerto meraih juara 1 pada ajang tingkat nasional setelah bersaing dengan puluhan sekolah dari seluruh Indonesia.' },
+  { id: 2, judul: 'Kunjungan Industri ke PT Telkom Indonesia Tbk Jakarta', kategori: 'Kegiatan', tanggal: '2025-05-21', status: 'Published', konten: 'Siswa kelas XI mengikuti kunjungan industri ke kantor pusat PT Telkom Indonesia untuk melihat langsung operasional jaringan berskala nasional.' },
+  { id: 3, judul: 'Informasi Penerimaan Peserta Didik Baru Tahun Ajaran 2025/2026', kategori: 'PPDB', tanggal: '2025-05-20', status: 'Published', konten: 'Pendaftaran peserta didik baru dibuka untuk seluruh program keahlian. Seluruh proses dilakukan daring melalui laman PPDB sekolah.' },
+  { id: 4, judul: 'Workshop Cyber Security Bersama Industri Partner', kategori: 'BKK', tanggal: '2025-05-18', status: 'Draft', konten: 'Workshop keamanan siber diselenggarakan bersama mitra industri untuk membekali siswa dengan praktik pengamanan jaringan terkini.' },
+  { id: 5, judul: 'Upacara Peringatan Hari Pendidikan Nasional 2025', kategori: 'Kegiatan', tanggal: '2025-05-17', status: 'Published', konten: 'Seluruh warga sekolah mengikuti upacara peringatan Hari Pendidikan Nasional di lapangan utama sekolah.' },
+  { id: 6, judul: 'Tim Robotik Melaju ke Babak Final Kompetisi Provinsi', kategori: 'Prestasi', tanggal: '2025-05-15', status: 'Published', konten: 'Tim robotik sekolah memastikan tempat di babak final setelah menyisihkan sepuluh tim lain pada babak penyisihan.' },
+  { id: 7, judul: 'Pembukaan Lab AI Center untuk Pembelajaran Siswa', kategori: 'Kegiatan', tanggal: '2025-05-14', status: 'Published', konten: 'Laboratorium AI Center resmi dibuka dan langsung dipakai untuk pembelajaran kecerdasan buatan pada hari yang sama.' },
+  { id: 8, judul: 'Campus Hiring Bersama Enam Perusahaan Mitra', kategori: 'BKK', tanggal: '2025-05-12', status: 'Published', konten: 'Bursa Kerja Khusus menghadirkan enam perusahaan mitra untuk merekrut alumni pada acara campus hiring tahunan.' },
+  { id: 9, judul: 'Sosialisasi Jalur Prestasi PPDB Gelombang Pertama', kategori: 'PPDB', tanggal: '2025-05-10', status: 'Draft', konten: 'Panitia PPDB menyampaikan mekanisme jalur prestasi kepada calon peserta didik dan orang tua melalui sesi daring.' },
+  { id: 10, judul: 'Juara 2 Lomba Web Design Tingkat Provinsi', kategori: 'Prestasi', tanggal: '2025-05-09', status: 'Published', konten: 'Perwakilan sekolah meraih juara 2 pada lomba web design tingkat provinsi yang diikuti puluhan peserta.' },
+  { id: 11, judul: 'Pelatihan Sertifikasi Jaringan untuk Siswa Kelas XII', kategori: 'Kegiatan', tanggal: '2025-05-08', status: 'Published', konten: 'Siswa kelas XII mengikuti pelatihan intensif sebagai persiapan mengambil sertifikasi jaringan berstandar industri.' },
+  { id: 12, judul: 'Kerja Sama Baru dengan Perusahaan Teknologi Nasional', kategori: 'BKK', tanggal: '2025-05-06', status: 'Published', konten: 'Sekolah menandatangani kerja sama penempatan kerja dan magang dengan sebuah perusahaan teknologi nasional.' },
+  { id: 13, judul: 'Jadwal Uji Kompetensi Keahlian Tahun 2025', kategori: 'PPDB', tanggal: '2025-05-05', status: 'Draft', konten: 'Jadwal uji kompetensi keahlian untuk seluruh program keahlian telah diterbitkan dan dapat diunduh di portal siswa.' },
+  { id: 14, judul: 'Siswa Berbagi Cerita Magang di Perusahaan Rintisan', kategori: 'Kegiatan', tanggal: '2025-05-03', status: 'Published', konten: 'Beberapa siswa membagikan pengalaman magang mereka di perusahaan rintisan kepada adik kelas dalam sesi berbagi.' },
+  { id: 15, judul: 'Medali Perak Kompetisi Keterampilan Tingkat Asia', kategori: 'Prestasi', tanggal: '2025-05-02', status: 'Published', konten: 'Dua siswa membawa pulang medali perak dari kompetisi keterampilan tingkat Asia pada kategori teknologi web.' },
+  { id: 16, judul: 'Renovasi Perpustakaan Sekolah Rampung', kategori: 'Kegiatan', tanggal: '2025-04-30', status: 'Draft', konten: 'Renovasi perpustakaan selesai dengan penambahan ruang diskusi dan area baca yang lebih luas untuk siswa.' },
+  { id: 17, judul: 'Lowongan Magang Terbaru dari Mitra Industri', kategori: 'BKK', tanggal: '2025-04-28', status: 'Published', konten: 'Sejumlah lowongan magang terbaru dibuka untuk siswa kelas XI dan XII pada berbagai bidang teknologi.' },
+  { id: 18, judul: 'Panduan Pengisian Formulir Pendaftaran Daring', kategori: 'PPDB', tanggal: '2025-04-26', status: 'Published', konten: 'Panduan langkah demi langkah pengisian formulir pendaftaran daring diterbitkan untuk memudahkan calon pendaftar.' },
+  { id: 19, judul: 'Juara Harapan 1 Lomba Robotik Tingkat Provinsi', kategori: 'Prestasi', tanggal: '2025-04-25', status: 'Published', konten: 'Tim robotik sekolah meraih juara harapan 1 pada lomba robotik tingkat provinsi tahun ini.' },
+  { id: 20, judul: 'Pekan Olahraga Antar Kelas Resmi Dibuka', kategori: 'Kegiatan', tanggal: '2025-04-24', status: 'Draft', konten: 'Pekan olahraga antar kelas dibuka dengan pertandingan futsal dan berlangsung selama satu pekan penuh.' },
+];
+
+/* ── Manajemen PPDB ── */
+
+export const adminPpdbStats = [
+  { label: 'Total Pendaftar', value: '1.248', nada: 'merah', icon: 'ppdb' },
+  { label: 'Pendaftar Baru', value: '312', nada: 'biru', icon: 'baru' },
+  { label: 'Sudah Diverifikasi', value: '856', nada: 'hijau', icon: 'verifikasi' },
+  { label: 'Belum Diverifikasi', value: '392', nada: 'oranye', icon: 'tunggu' },
+];
+
+// Kode program di panel admin memakai penamaan kurikulum terbaru (PPLG, TJKT,
+// DKV, AKL) sesuai desain, berbeda dari singkatan di situs publik.
+export const adminProgramKeahlian = ['PPLG', 'TJKT', 'DKV', 'AKL'];
+
+export const adminPendaftar = [
+  {
+    id: 1,
+    nama: 'Rizky Pratama',
+    asalSekolah: 'SMP Negeri 1 Purwokerto',
+    program: 'PPLG',
+    tanggal: '2025-05-25',
+    status: 'Diverifikasi',
+    tempatLahir: 'Purwokerto',
+    tanggalLahir: '14 Maret 2010',
+    jenisKelamin: 'Laki-laki',
+    nisn: '0123456784',
+    alamat: 'Jl. Merdeka No. 10, Purwokerto',
+    telepon: '0812-3456-7890',
+    email: 'rizky.pratama@email.com',
+    pilihan1: 'PPLG',
+    pilihan2: 'TJKT',
+  },
+  {
+    id: 2,
+    nama: 'Salsabila Azzahra',
+    asalSekolah: 'SMP Muhammadiyah 2',
+    program: 'TJKT',
+    tanggal: '2025-05-25',
+    status: 'Belum Diverifikasi',
+    tempatLahir: 'Banyumas',
+    tanggalLahir: '2 Juni 2010',
+    jenisKelamin: 'Perempuan',
+    nisn: '0123456785',
+    alamat: 'Jl. Gatot Subroto No. 22, Banyumas',
+    telepon: '0813-2244-8899',
+    email: 'salsabila.azzahra@email.com',
+    pilihan1: 'TJKT',
+    pilihan2: 'PPLG',
+  },
+  {
+    id: 3,
+    nama: 'Fajar Maulana',
+    asalSekolah: 'SMP Negeri 3 Purwokerto',
+    program: 'DKV',
+    tanggal: '2025-05-24',
+    status: 'Diverifikasi',
+    tempatLahir: 'Purbalingga',
+    tanggalLahir: '19 Januari 2010',
+    jenisKelamin: 'Laki-laki',
+    nisn: '0123456786',
+    alamat: 'Jl. Ahmad Yani No. 5, Purbalingga',
+    telepon: '0857-1122-3344',
+    email: 'fajar.maulana@email.com',
+    pilihan1: 'DKV',
+    pilihan2: 'PPLG',
+  },
+  {
+    id: 4,
+    nama: 'Nadya Putri',
+    asalSekolah: 'SMP Islam Al Ayyubi',
+    program: 'AKL',
+    tanggal: '2025-05-24',
+    status: 'Belum Diverifikasi',
+    tempatLahir: 'Cilacap',
+    tanggalLahir: '30 September 2009',
+    jenisKelamin: 'Perempuan',
+    nisn: '0123456787',
+    alamat: 'Jl. Diponegoro No. 41, Cilacap',
+    telepon: '0895-6677-1200',
+    email: 'nadya.putri@email.com',
+    pilihan1: 'AKL',
+    pilihan2: 'DKV',
+  },
+  {
+    id: 5,
+    nama: 'Daffa Alfarizi',
+    asalSekolah: 'SMP Negeri 2 Purwokerto',
+    program: 'PPLG',
+    tanggal: '2025-05-23',
+    status: 'Diverifikasi',
+    tempatLahir: 'Purwokerto',
+    tanggalLahir: '7 Juli 2010',
+    jenisKelamin: 'Laki-laki',
+    nisn: '0123456788',
+    alamat: 'Jl. S. Parman No. 88, Purwokerto',
+    telepon: '0821-9090-1122',
+    email: 'daffa.alfarizi@email.com',
+    pilihan1: 'PPLG',
+    pilihan2: 'TJKT',
+  },
+  {
+    id: 6,
+    nama: 'Aisyah Nur Fadillah',
+    asalSekolah: 'SMP Negeri 5 Purwokerto',
+    program: 'DKV',
+    tanggal: '2025-05-23',
+    status: 'Belum Diverifikasi',
+    tempatLahir: 'Purwokerto',
+    tanggalLahir: '11 Februari 2010',
+    jenisKelamin: 'Perempuan',
+    nisn: '0123456789',
+    alamat: 'Jl. Sudirman No. 17, Purwokerto',
+    telepon: '0838-4455-6677',
+    email: 'aisyah.nur@email.com',
+    pilihan1: 'DKV',
+    pilihan2: 'AKL',
+  },
+  {
+    id: 7,
+    nama: 'Bagas Nugroho',
+    asalSekolah: 'SMP Negeri 4 Purwokerto',
+    program: 'TJKT',
+    tanggal: '2025-05-22',
+    status: 'Diverifikasi',
+    tempatLahir: 'Banjarnegara',
+    tanggalLahir: '25 Agustus 2010',
+    jenisKelamin: 'Laki-laki',
+    nisn: '0123456790',
+    alamat: 'Jl. Pemuda No. 3, Banjarnegara',
+    telepon: '0812-7788-9911',
+    email: 'bagas.nugroho@email.com',
+    pilihan1: 'TJKT',
+    pilihan2: 'PPLG',
+  },
+  {
+    id: 8,
+    nama: 'Salma Khairunnisa',
+    asalSekolah: 'SMP Muhammadiyah 1',
+    program: 'AKL',
+    tanggal: '2025-05-22',
+    status: 'Belum Diverifikasi',
+    tempatLahir: 'Kebumen',
+    tanggalLahir: '3 Desember 2009',
+    jenisKelamin: 'Perempuan',
+    nisn: '0123456791',
+    alamat: 'Jl. Veteran No. 60, Kebumen',
+    telepon: '0896-3322-1144',
+    email: 'salma.khairunnisa@email.com',
+    pilihan1: 'AKL',
+    pilihan2: 'DKV',
+  },
+];
+
+// Berkas yang sama diminta dari setiap pendaftar, jadi disimpan sekali saja.
+export const adminBerkasPendaftar = [
+  { nama: 'Akta Kelahiran.pdf' },
+  { nama: 'Kartu Keluarga.pdf' },
+  { nama: 'Rapor Semester 1-5.pdf' },
+  { nama: 'Pas Foto 3x4.jpg' },
+];
+
+/* ── Manajemen Jurusan ── */
+
+export const adminJurusan = [
+  { id: 1, nama: 'PPLG (Pengembangan Perangkat Lunak dan Gim)', kode: 'PPLG', deskripsi: 'Mempelajari pengembangan software dan gim.', jumlahSiswa: 342 },
+  { id: 2, nama: 'TJKT (Teknik Jaringan Komputer dan Telekomunikasi)', kode: 'TJKT', deskripsi: 'Mempelajari jaringan komputer dan telekomunikasi.', jumlahSiswa: 318 },
+  { id: 3, nama: 'DKV (Desain Komunikasi Visual)', kode: 'DKV', deskripsi: 'Mempelajari desain grafis dan multimedia.', jumlahSiswa: 210 },
+  { id: 4, nama: 'AKL (Akuntansi dan Keuangan Lembaga)', kode: 'AKL', deskripsi: 'Mempelajari akuntansi dan keuangan.', jumlahSiswa: 186 },
+];
+
+/* ── Manajemen Prestasi ── */
+
+export const adminTingkatPrestasi = ['Nasional', 'Provinsi', 'Kota'];
+
+export const adminPrestasi = [
+  { id: 1, nama: 'Juara 1 Lomba IoT Tingkat Nasional', tingkat: 'Nasional', diraihOleh: 'Tim Siswa SMK Telkom Purwokerto', tanggal: '2025-05-24' },
+  { id: 2, nama: 'Juara 2 Lomba Web Design', tingkat: 'Provinsi', diraihOleh: 'Daffa Alfarizi', tanggal: '2025-05-10' },
+  { id: 3, nama: 'Juara 3 Futsal Antar Pelajar', tingkat: 'Kota', diraihOleh: 'Tim Futsal SMK Telkom', tanggal: '2025-05-05' },
+  { id: 4, nama: 'Juara Harapan 1 Lomba Robotik', tingkat: 'Provinsi', diraihOleh: 'Tim Robotik SMK Telkom', tanggal: '2025-04-28' },
+];
+
+/* ── Manajemen BKK ── */
+
+export const adminBkkStats = [
+  { label: 'Total Lowongan', value: '28', nada: 'hijau', icon: 'lowongan' },
+  { label: 'Perusahaan Mitra', value: '42', nada: 'biru', icon: 'mitra' },
+  { label: 'Siswa Terserap', value: '156', nada: 'oranye', icon: 'terserap' },
+  { label: 'Total Alumni', value: '1.256', nada: 'ungu', icon: 'alumni' },
+];
+
+export const adminLowongan = [
+  { id: 1, posisi: 'Junior Programmer', perusahaan: 'PT Telkom Indonesia', tanggalPosting: '2025-05-24', batasLamaran: '2025-06-10' },
+  { id: 2, posisi: 'Network Engineer', perusahaan: 'PT Huawei Indonesia', tanggalPosting: '2025-05-23', batasLamaran: '2025-06-08' },
+  { id: 3, posisi: 'Graphic Designer', perusahaan: 'PT Ruang Raya Indonesia', tanggalPosting: '2025-05-22', batasLamaran: '2025-06-06' },
+  { id: 4, posisi: 'Admin Keuangan', perusahaan: 'PT Sinar Saro', tanggalPosting: '2025-05-21', batasLamaran: '2025-06-03' },
+  { id: 5, posisi: 'IT Support', perusahaan: 'PT Astra International', tanggalPosting: '2025-05-19', batasLamaran: '2025-06-01' },
+];
+
+/* ── Pengaturan ── */
+
+export const adminTabPengaturan = ['Profil Sekolah', 'Akun Admin', 'Pengaturan Umum'];
+
+export const adminProfilSekolah = {
+  namaSekolah: 'SMK Telkom Purwokerto',
+  npsn: '20303020',
+  alamat: 'Jl. D.I. Panjaitan No.128, Purwokerto, Jawa Tengah',
+  telepon: '(0281) 635180',
+  email: 'info@smktelkom-pwt.sch.id',
+  website: 'www.smktelkom-pwt.sch.id',
+};
+
+export const adminAkun = {
+  namaLengkap: 'Admin SMK Telkom',
+  email: 'admin@smktelkom-pwt.sch.id',
+  peran: 'Administrator',
+};
+
+export const adminPengaturanUmum = {
+  tahunAjaran: '2025/2026',
+  statusPpdb: 'Dibuka',
+  beritaPerHalaman: '5',
+};

@@ -15,15 +15,19 @@ import PengumumanDetailPage from './pages/PengumumanDetailPage';
 import StelaPage from './pages/StelaPage';
 import SegeraHadirPage from './pages/SegeraHadirPage';
 import Login from './page/Login/Login';
+import { AdminDataProvider } from './context/AdminDataContext';
+import DashboardLayout from './components/dashboard/DashboardLayout';
+import DashboardHomePage from './pages/dashboard/DashboardHomePage';
+import DashboardBeritaPage from './pages/dashboard/BeritaPage';
+import BeritaFormPage from './pages/dashboard/BeritaFormPage';
+import DashboardPPDBPage from './pages/dashboard/PPDBPage';
+import PPDBDetailPage from './pages/dashboard/PPDBDetailPage';
+import DashboardJurusanPage from './pages/dashboard/JurusanPage';
+import DashboardPrestasiPage from './pages/dashboard/PrestasiPage';
+import BKKPage from './pages/dashboard/BKKPage';
+import PengaturanPage from './pages/dashboard/PengaturanPage';
 import ProtectedRoute from './router/ProtectedRoute';
-import DashboardPage from './pages/admin/DashboardPage';
-import AdminHomePage from './pages/admin/AdminHomePage';
-import AdminBeritaPage from './pages/admin/berita/BeritaPage';
-import AdminPengumumanPage from './pages/admin/pengumuman/PengumumanPage';
-import AdminPrestasiPage from './pages/admin/prestasi/PrestasiPage';
-import AdminBkkPage from './pages/admin/bkk/BkkPage';
 import PPDBPage from './pages/PPDBPage';
-import AdminPPDBPage from './pages/admin/ppdb/PPDBPage';
 import NextTelPage from './pages/NextTelPage';
 
 const PAGE_META = {
@@ -79,13 +83,26 @@ const App = () => {
         <Route path="/login" element={<Login />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardPage />}>
-            <Route index element={<AdminHomePage />} />
-            <Route path="berita" element={<AdminBeritaPage />} />
-            <Route path="pengumuman" element={<AdminPengumumanPage />} />
-            <Route path="prestasi" element={<AdminPrestasiPage />} />
-            <Route path="bkk" element={<AdminBkkPage />} />
-            <Route path="ppdb" element={<AdminPPDBPage />} />
+          {/* Panel admin. AdminDataProvider dipasang di sini, bukan di main.jsx,
+              supaya halaman publik tidak ikut menanggung state-nya. */}
+          <Route
+            path="/dashboard"
+            element={
+              <AdminDataProvider>
+                <DashboardLayout />
+              </AdminDataProvider>
+            }
+          >
+            <Route index element={<DashboardHomePage />} />
+            <Route path="berita" element={<DashboardBeritaPage />} />
+            <Route path="berita/tambah" element={<BeritaFormPage />} />
+            <Route path="berita/:id/edit" element={<BeritaFormPage />} />
+            <Route path="ppdb" element={<DashboardPPDBPage />} />
+            <Route path="ppdb/:id" element={<PPDBDetailPage />} />
+            <Route path="jurusan" element={<DashboardJurusanPage />} />
+            <Route path="prestasi" element={<DashboardPrestasiPage />} />
+            <Route path="bkk" element={<BKKPage />} />
+            <Route path="pengaturan" element={<PengaturanPage />} />
           </Route>
         </Route>
 
