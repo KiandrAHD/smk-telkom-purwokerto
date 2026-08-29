@@ -27,7 +27,7 @@ const KOLEKSI = {
   pkl: { data: pklDetailLengkap, backTo: '/bkk', backLabel: 'BKK' },
   roadmap: { data: roadmapDetail, backTo: '/bkk', backLabel: 'BKK' },
   project: { data: projectDetail, backTo: '/jurusan', backLabel: 'Jurusan' },
-  guru: { data: guruDetail, backTo: '/tentang', backLabel: 'Tentang' },
+  guru: { data: guruDetail, backTo: '/profil-sekolah', backLabel: 'Profil Sekolah' },
 };
 
 const DetailPelengkapPage = ({ jenis }) => {

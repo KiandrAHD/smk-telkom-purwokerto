@@ -51,7 +51,13 @@ import logoDicoding from '../assets/landing/logo-dicoding.png';
 
 // ── Navigasi ──
 export const navLinks = [
-  { label: 'Tentang', href: '/tentang' },
+  {
+    label: 'Tentang',
+    children: [
+      { label: 'Beranda', href: '/' },
+      { label: 'Profil Sekolah', href: '/profil-sekolah' },
+    ],
+  },
   { label: 'Jurusan', href: '/jurusan' },
   { label: 'Prestasi', href: '/prestasi' },
   { label: 'BKK', href: '/bkk' },
@@ -418,7 +424,7 @@ export const footerData = {
   tagline:
     'Mencetak generasi digital yang kompeten, berkarakter, dan siap bersaing di era teknologi',
   menu: [
-    { label: 'Tentang', href: '/tentang' },
+    { label: 'Profil Sekolah', href: '/profil-sekolah' },
     { label: 'Jurusan', href: '/jurusan' },
     { label: 'Prestasi', href: '/prestasi' },
     { label: 'BKK', href: '/bkk' },
@@ -3095,7 +3101,7 @@ export const projectDetail = [
   },
 ];
 
-/* ── Profil guru: /tentang/guru/:slug ── */
+/* ── Profil guru: /profil-sekolah/guru/:slug ── */
 export const guruDetail = [
   {
     slug: 'bayu-setiawan-s-kom',

@@ -72,7 +72,7 @@ const TentangKepalaSekolahSection = () => {
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
-                to={`/tentang/guru/${slugify(guru.nama)}`}
+                to={`/profil-sekolah/guru/${slugify(guru.nama)}`}
                 className="block overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
               >
                 <article>

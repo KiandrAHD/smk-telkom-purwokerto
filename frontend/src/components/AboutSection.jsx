@@ -41,7 +41,7 @@ const AboutSection = () => (
           </div>
 
           <Link
-            to="/tentang"
+            to="/profil-sekolah"
             className="mt-5 inline-flex items-center rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
           >
             {landingAbout.ctaText}

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation, Outlet, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/LandingPage';
-import TentangPage from './pages/TentangPage';
+import ProfileSekolahPage from './pages/TentangPage';
 import JurusanPage from './pages/JurusanPage';
 import PrestasiPage from './pages/PrestasiPage';
 import BkkPage from './pages/BkkPage';
@@ -46,7 +46,7 @@ import NextTelPage from './pages/NextTelPage';
 
 const PAGE_META = {
   '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
-  '/tentang': ['Tentang SMK Telkom Purwokerto', 'Kenali profil, visi misi, dan fasilitas SMK Telkom Purwokerto.'],
+  '/profil-sekolah': ['Profil Sekolah | SMK Telkom Purwokerto', 'Kenali profil, visi misi, dan fasilitas SMK Telkom Purwokerto.'],
   '/jurusan': ['Jurusan SMK Telkom Purwokerto', 'Pilih program keahlian teknologi sesuai minat dan bakatmu.'],
   '/prestasi': ['Prestasi SMK Telkom Purwokerto', 'Lihat prestasi dan pencapaian siswa SMK Telkom Purwokerto.'],
   '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
@@ -70,6 +70,11 @@ const PageMetadata = () => {
   return null;
 };
 
+const LegacyProfileGuruRedirect = () => {
+  const { slug } = useParams();
+  return <Navigate to={`/profil-sekolah/guru/${slug}`} replace />;
+};
+
 const App = () => {
   return (
     <>
@@ -77,7 +82,8 @@ const App = () => {
       <PageMetadata />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/tentang" element={<TentangPage />} />
+        <Route path="/profil-sekolah" element={<ProfileSekolahPage />} />
+        <Route path="/tentang" element={<Navigate to="/profil-sekolah" replace />} />
         <Route path="/jurusan" element={<JurusanPage />} />
         <Route path="/prestasi" element={<PrestasiPage />} />
         <Route path="/bkk" element={<BkkPage />} />
@@ -103,7 +109,8 @@ const App = () => {
         <Route path="/jurusan/faq" element={<JurusanFaqPage />} />
         <Route path="/jurusan/perbandingan" element={<JurusanPerbandinganPage />} />
         <Route path="/jurusan/project/:slug" element={<DetailPelengkapPage jenis="project" />} />
-        <Route path="/tentang/guru/:slug" element={<DetailPelengkapPage jenis="guru" />} />
+        <Route path="/profil-sekolah/guru/:slug" element={<DetailPelengkapPage jenis="guru" />} />
+        <Route path="/tentang/guru/:slug" element={<LegacyProfileGuruRedirect />} />
         <Route path="/ketentuan-ppdb" element={<KetentuanPpdbPage />} />
         <Route path="/lupa-sandi" element={<LupaSandiPage />} />
 

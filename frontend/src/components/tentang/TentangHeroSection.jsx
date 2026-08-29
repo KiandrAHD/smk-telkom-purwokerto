@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { heroData } from '../../data/dummyData';
 
@@ -9,11 +9,23 @@ const TentangHeroSection = () => (
         <div className="grid grid-cols-1 lg:grid-cols-[38%_1fr] items-start gap-6 lg:gap-4">
           {/* Kolom teks */}
           <div className="px-3 pt-6 lg:pl-4 lg:pt-6">
-            {/* Breadcrumb dihapus: satu-satunya tautannya menuju Beranda,
-                yang sudah tersedia di navbar. Halaman detail tetap memakai
-                breadcrumb sendiri lewat DetailLayout karena letaknya lebih dalam. */}
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold">
+              <Link to="/" className="text-primary transition-colors hover:text-primary-800">
+                Beranda
+              </Link>
+              <ChevronRight className="h-3 w-3 text-dark-400" aria-hidden="true" />
+              <Link
+                to="/profil-sekolah"
+                aria-current="page"
+                className="text-dark-500 transition-colors hover:text-primary hover:underline"
+              >
+                Profil Sekolah
+              </Link>
+            </div>
 
-            <h1 className="whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
+            <p className="mt-3 text-[10px] font-semibold text-primary">{heroData.hashtag}</p>
+
+            <h1 className="mt-4 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {heroData.heading}
               {'\n'}
               <span className="text-primary">{heroData.headingAccent}</span>

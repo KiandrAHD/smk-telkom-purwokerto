@@ -11,7 +11,7 @@ import TentangKepalaSekolahSection from '../components/tentang/TentangKepalaSeko
 import StelaAISection from '../components/StelaAISection';
 import CTASection from '../components/CTASection';
 
-const TentangPage = () => (
+const ProfileSekolahPage = () => (
   <MainLayout>
     <TentangHeroSection />
     <Reveal>
@@ -42,4 +42,4 @@ const TentangPage = () => (
   </MainLayout>
 );
 
-export default TentangPage;
+export default ProfileSekolahPage;
