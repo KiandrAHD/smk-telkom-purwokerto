@@ -56,13 +56,10 @@ const DashboardHeader = ({ onBukaMenu }) => {
 
         <button
           type="button"
-          aria-label={`Notifikasi, ${adminProfil.notifikasi} belum dibaca`}
+          aria-label="Notifikasi"
           className="relative flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-dark-600 transition-colors hover:bg-dark-100"
         >
           <Bell className="h-5 w-5" />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-white">
-            {adminProfil.notifikasi}
-          </span>
         </button>
 
         <div className="flex flex-shrink-0 items-center gap-3">
