@@ -1966,7 +1966,7 @@ export const beritaHero = {
 };
 
 export const breakingNews = {
-  label: 'Breking News',
+  label: 'Breaking News',
   linkText: 'Lihat Prestasi',
   items: [
     {
