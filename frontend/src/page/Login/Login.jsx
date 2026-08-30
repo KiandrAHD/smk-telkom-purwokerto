@@ -96,6 +96,19 @@ const Login = () => {
             </div>
           </div>
 
+          <div>
+            <label htmlFor="Akun Admin" className="mb-2 block text-xs font-semibold text-dark-700">Akun Admin</label>
+            <div className="relative">
+              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-400" />
+              <div
+                id="Email_PW_Admin"
+                className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-3 text-sm text-dark-900 outline-none"
+              >
+                admin1234@admin.id (1234)
+              </div>
+            </div>
+          </div>
+
           {error && <p role="alert" className="rounded-lg bg-primary-50 px-3 py-2.5 text-xs font-medium text-primary-800">{error}</p>}
 
           <button
