@@ -1,5 +1,5 @@
 import { BellRing, CheckCircle2, Radar } from 'lucide-react';
-import fotoSiswa from '../../assets/jurusan/showcase-rpl.jpg';
+import fotoSiswa from '../../assets/ppdb/login-spmb-2027-2028.png';
 import ribbon from '../../assets/landing/ribbon.png';
 import watermark from '../../assets/landing/watermark-logo.png';
 
