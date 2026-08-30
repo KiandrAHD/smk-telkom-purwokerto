@@ -18,10 +18,10 @@ import logoHuaweiColor from '../assets/bkk/logo-huawei.png';
 import logoAgate from '../assets/bkk/logo-agate.png';
 import logoDicodingColor from '../assets/bkk/logo-dicoding.png';
 import stelaMascot from '../assets/bkk/stela-mascot.png';
-import showcaseRpl from '../assets/jurusan/showcase-rpl.jpg';
-import showcasePg from '../assets/jurusan/showcase-pg.jpg';
-import showcaseTkj from '../assets/jurusan/showcase-tkj.jpg';
-import showcaseTjat from '../assets/jurusan/showcase-tjat.jpg';
+import showcaseRpl from '../assets/jurusan/stock-hd/rpl-software-development.jpg';
+import showcasePg from '../assets/jurusan/stock-hd/game-development.jpg';
+import showcaseTkj from '../assets/jurusan/stock-hd/server-monitoring.jpg';
+import showcaseTjat from '../assets/jurusan/stock-hd/fiber-optic-network.jpg';
 
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
