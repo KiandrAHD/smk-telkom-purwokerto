@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo';
 import { useAuth } from '../../context/AuthContext';
 
@@ -35,7 +35,14 @@ const Login = () => {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-dark-50 px-4 py-8">
+    <main className="relative flex min-h-screen items-center justify-center bg-dark-50 px-4 py-8">
+      <Link
+        to="/"
+        className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white sm:right-8 sm:top-8"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Kembali ke Beranda
+      </Link>
       <div className="w-full max-w-md rounded-2xl border border-dark-100 bg-white p-6 shadow-card sm:p-8">
         <div className="flex flex-col items-center text-center">
           <Logo className="h-16 w-16" />
