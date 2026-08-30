@@ -2208,7 +2208,7 @@ export const adminProfil = {
 export const adminSekolah = {
   nama: 'SMK Telkom Purwokerto',
   alamat: ['Jl. D.I. Panjaitan No.128', 'Purwokerto, Jawa Tengah'],
-  website: 'www.smktelkom-pwt.sch.id',
+  website: 'https://smk-telkom-purwokerto.vercel.app/',
 };
 
 // Nama ikon dipetakan ke komponennya di DashboardSidebar, jadi berkas data ini

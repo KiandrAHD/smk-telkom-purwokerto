@@ -82,7 +82,7 @@ const DashboardSidebar = ({ onPilihMenu }) => (
           </p>
         ))}
         <a
-          href={`https://${adminSekolah.website}`}
+          href={adminSekolah.website}
           target="_blank"
           rel="noreferrer"
           className="mt-2.5 block text-[11px] font-medium text-primary hover:underline"
