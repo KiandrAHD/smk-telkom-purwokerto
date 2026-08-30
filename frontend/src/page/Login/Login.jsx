@@ -8,8 +8,8 @@ const Login = () => {
   const { signIn, loading, user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin1234@admin.id');
+  const [password, setPassword] = useState('1234');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-dark-50 px-4 py-8">
+    <main className="relative flex min-h-screen items-center justify-center bg-dark-50 px-3 py-6 sm:px-4 sm:py-8">
       <Link
         to="/"
         className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white sm:right-8 sm:top-8"
@@ -43,15 +43,17 @@ const Login = () => {
         <ArrowLeft className="h-4 w-4" />
         Kembali ke Beranda
       </Link>
-      <div className="w-full max-w-md rounded-2xl border border-dark-100 bg-white p-6 shadow-card sm:p-8">
+      <div className="w-full max-w-md rounded-2xl border border-dark-100 bg-white p-5 shadow-card sm:p-8">
         <div className="flex flex-col items-center text-center">
-          <Logo className="h-16 w-16" />
+          <Link to="/" aria-label="Kembali ke homepage" className="rounded-xl p-1 transition-transform hover:scale-105">
+            <Logo className="h-16 w-16 sm:h-20 sm:w-20" />
+          </Link>
           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary">Area Terbatas</p>
           <h1 className="mt-2 font-heading text-2xl font-extrabold text-dark-900">Login Admin</h1>
           <p className="mt-2 text-sm text-dark-500">Masuk untuk mengelola konten sekolah.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <form onSubmit={handleSubmit} className="mt-7 space-y-5 sm:mt-8">
           <div>
             <label htmlFor="email" className="mb-2 block text-xs font-semibold text-dark-700">Email</label>
             <div className="relative">
@@ -63,7 +65,7 @@ const Login = () => {
                 onChange={(event) => setEmail(event.target.value)}
                 autoComplete="email"
                 required
-                className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-3 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
+                className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-3 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 placeholder="admin@sekolah.sch.id"
               />
             </div>
@@ -80,13 +82,13 @@ const Login = () => {
                 onChange={(event) => setPassword(event.target.value)}
                 autoComplete="current-password"
                 required
-                className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-11 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
+                className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-11 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 placeholder="Masukkan password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((visible) => !visible)}
-                className="absolute right-2 top-1/2 rounded p-1.5 text-dark-400 hover:text-primary"
+                className="absolute right-2 top-1/2 flex min-h-9 min-w-9 -translate-y-1/2 items-center justify-center rounded-lg text-dark-400 hover:bg-primary-50 hover:text-primary"
                 aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -99,7 +101,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={submitting || loading}
-            className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-primary px-4 py-3.5 text-sm font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? 'Memproses login...' : 'Login'}
           </button>

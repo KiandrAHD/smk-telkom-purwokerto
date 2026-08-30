@@ -1,6 +1,15 @@
 import { ensureSupabase } from './supabase';
 
 const pengumumanColumns = 'id, judul, slug, ringkasan, konten, gambar_url, status, tanggal, created_at, updated_at';
+const STATUS_PENGUMUMAN = ['draft', 'published'];
+
+const normalizePayload = (data) => {
+  const payload = { ...data, status: String(data.status || '').toLowerCase() };
+  if (!STATUS_PENGUMUMAN.includes(payload.status)) {
+    throw new Error('Status pengumuman tidak valid. Pilih Draft atau Published.');
+  }
+  return payload;
+};
 
 const throwIfError = ({ data, error }) => {
   if (error) throw error;
@@ -48,15 +57,18 @@ export async function getPengumumanBySlug(slug) {
 export async function createPengumuman(data) {
   const supabase = ensureSupabase();
   return throwIfError(
-    await supabase.from('pengumuman').insert(data).select(pengumumanColumns).single(),
+    await supabase.from('pengumuman').insert(normalizePayload(data)).select(pengumumanColumns).single(),
   );
 }
 
 export async function updatePengumuman(id, data) {
   const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('pengumuman').update(data).eq('id', id).select(pengumumanColumns).single(),
-  );
+  const result = await supabase.from('pengumuman').update(normalizePayload(data)).eq('id', id).select(pengumumanColumns).single();
+  const updated = throwIfError(result);
+  if (!updated || updated.id !== id || !STATUS_PENGUMUMAN.includes(updated.status)) {
+    throw new Error('Pengumuman tidak ditemukan atau status gagal diperbarui.');
+  }
+  return updated;
 }
 
 export async function deletePengumuman(id) {

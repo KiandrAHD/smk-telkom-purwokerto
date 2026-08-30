@@ -48,6 +48,10 @@ export const AdminDataProvider = ({ children }) => {
     setJurusan((lama) => [...lama, { ...data, id: berikutnya(lama) }]);
   }, []);
 
+  const ubahJurusan = useCallback((id, data) => {
+    setJurusan((lama) => lama.map((j) => (j.id === id ? { ...j, ...data, id } : j)));
+  }, []);
+
   const hapusJurusan = useCallback((id) => {
     setJurusan((lama) => lama.filter((j) => j.id !== id));
   }, []);
@@ -80,6 +84,7 @@ export const AdminDataProvider = ({ children }) => {
       hapusBerita,
       ubahStatusPendaftar,
       tambahJurusan,
+      ubahJurusan,
       hapusJurusan,
       tambahPrestasi,
       hapusPrestasi,
@@ -98,6 +103,7 @@ export const AdminDataProvider = ({ children }) => {
       hapusBerita,
       ubahStatusPendaftar,
       tambahJurusan,
+      ubahJurusan,
       hapusJurusan,
       tambahPrestasi,
       hapusPrestasi,

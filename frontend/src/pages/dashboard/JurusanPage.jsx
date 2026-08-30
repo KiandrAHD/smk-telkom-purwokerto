@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { CheckCircle2, Pencil, Plus, Trash2, X } from 'lucide-react';
 import DataTable from '../../components/dashboard/DataTable';
 import FormInput from '../../components/dashboard/FormInput';
 import Modal from '../../components/dashboard/Modal';
@@ -9,18 +9,40 @@ import { useAdminData } from '../../context/AdminDataContext';
 const KOSONG = { nama: '', kode: '', deskripsi: '', jumlahSiswa: '' };
 
 const JurusanPage = () => {
-  const { jurusan, tambahJurusan, hapusJurusan } = useAdminData();
+  const { jurusan, tambahJurusan, ubahJurusan, hapusJurusan } = useAdminData();
   const [formTerbuka, setFormTerbuka] = useState(false);
   const [form, setForm] = useState(KOSONG);
   const [akanDihapus, setAkanDihapus] = useState(null);
+  const [sedangDiedit, setSedangDiedit] = useState(null);
+  const [feedback, setFeedback] = useState('');
 
   const ubah = (kunci) => (e) => setForm((f) => ({ ...f, [kunci]: e.target.value }));
 
   const simpan = (e) => {
     e.preventDefault();
-    tambahJurusan({ ...form, jumlahSiswa: Number(form.jumlahSiswa) || 0 });
+    const data = { ...form, jumlahSiswa: Number(form.jumlahSiswa) || 0 };
+    if (sedangDiedit) {
+      ubahJurusan(sedangDiedit.id, data);
+      setFeedback('Jurusan berhasil diperbarui.');
+    } else {
+      tambahJurusan(data);
+      setFeedback('Jurusan berhasil ditambahkan.');
+    }
     setForm(KOSONG);
+    setSedangDiedit(null);
     setFormTerbuka(false);
+  };
+
+  const bukaTambah = () => {
+    setForm(KOSONG);
+    setSedangDiedit(null);
+    setFormTerbuka(true);
+  };
+
+  const bukaEdit = (item) => {
+    setForm({ ...item, jumlahSiswa: String(item.jumlahSiswa ?? '') });
+    setSedangDiedit(item);
+    setFormTerbuka(true);
   };
 
   const columns = [
@@ -35,17 +57,17 @@ const JurusanPage = () => {
     { key: 'jumlahSiswa', header: 'Jumlah Siswa', kelas: 'w-32' },
     {
       key: 'aksi',
-      header: '',
-      kelas: 'w-16',
+      header: 'Aksi',
+      kelas: 'w-28',
       render: (j) => (
-        <button
-          type="button"
-          onClick={() => setAkanDihapus(j)}
-          aria-label={`Hapus ${j.nama}`}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-dark-500 transition-colors hover:bg-primary-50 hover:text-primary"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
+        <div className="flex gap-1">
+          <button type="button" onClick={() => bukaEdit(j)} aria-label={`Edit ${j.nama}`} title="Edit" className="flex h-9 w-9 items-center justify-center rounded-lg text-dark-500 transition-colors hover:bg-dark-100 hover:text-dark-800">
+            <Pencil className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={() => setAkanDihapus(j)} aria-label={`Hapus ${j.nama}`} title="Hapus" className="flex h-9 w-9 items-center justify-center rounded-lg text-dark-500 transition-colors hover:bg-primary-50 hover:text-primary">
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -58,7 +80,7 @@ const JurusanPage = () => {
         aksi={
           <button
             type="button"
-            onClick={() => setFormTerbuka(true)}
+            onClick={bukaTambah}
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5"
           >
             <Plus className="h-4 w-4" />
@@ -67,13 +89,21 @@ const JurusanPage = () => {
         }
       />
 
+      {feedback && (
+        <div className="mt-5 flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700" role="status">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span className="flex-1">{feedback}</span>
+          <button type="button" onClick={() => setFeedback('')} aria-label="Tutup notifikasi"><X className="h-4 w-4" /></button>
+        </div>
+      )}
+
       <DataTable columns={columns} rows={jurusan} kosong="Belum ada jurusan." />
 
       <Modal
         terbuka={formTerbuka}
         onTutup={() => setFormTerbuka(false)}
-        judul="Tambah Jurusan"
-        deskripsi="Lengkapi data jurusan baru."
+        judul={sedangDiedit ? 'Edit Jurusan' : 'Tambah Jurusan'}
+        deskripsi={sedangDiedit ? 'Perbarui data jurusan.' : 'Lengkapi data jurusan baru.'}
       >
         <form onSubmit={simpan} className="space-y-4">
           <FormInput
@@ -112,7 +142,7 @@ const JurusanPage = () => {
           <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
-              onClick={() => setFormTerbuka(false)}
+              onClick={() => { setFormTerbuka(false); setSedangDiedit(null); }}
               className="rounded-xl border border-dark-200 px-5 py-2.5 text-xs font-bold text-dark-700 transition-colors hover:border-dark-400"
             >
               Batal
@@ -121,7 +151,7 @@ const JurusanPage = () => {
               type="submit"
               className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5"
             >
-              Simpan Jurusan
+              {sedangDiedit ? 'Simpan Perubahan' : 'Simpan Jurusan'}
             </button>
           </div>
         </form>

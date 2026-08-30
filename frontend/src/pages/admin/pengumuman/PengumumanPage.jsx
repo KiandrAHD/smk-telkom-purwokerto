@@ -9,7 +9,13 @@ const getErrorMessage = (error, fallback) => {
   if (error?.code === '23505' || /slug/i.test(error?.message || '')) {
     return 'Slug tersebut sudah digunakan. Gunakan slug yang berbeda.';
   }
-  return error?.message || fallback;
+  if (error?.code === '23514' || /status.*valid|check constraint/i.test(error?.message || '')) {
+    return 'Gagal menyimpan pengumuman. Pilih status Draft atau Published.';
+  }
+  if (error?.code === '42501' || /permission|row-level security|not found|ditemukan/i.test(error?.message || '')) {
+    return 'Gagal menyimpan pengumuman. Anda tidak memiliki izin atau pengumuman sudah tidak tersedia.';
+  }
+  return fallback;
 };
 
 const formatDateTime = (date) => {
@@ -190,4 +196,3 @@ const PengumumanPage = () => {
 };
 
 export default PengumumanPage;
-
