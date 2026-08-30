@@ -2461,7 +2461,7 @@ export const adminProfilSekolah = {
   alamat: 'Jl. D.I. Panjaitan No.128, Purwokerto, Jawa Tengah',
   telepon: '(0281) 635180',
   email: 'info@smktelkom-pwt.sch.id',
-  website: 'www.smktelkom-pwt.sch.id',
+  website: 'https://smk-telkom-purwokerto.vercel.app/',
 };
 
 export const adminAkun = {
