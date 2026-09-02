@@ -13,6 +13,16 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
 
+  // Sama seperti di Berita: tabel `pengumuman` tidak punya kolom kategori,
+  // jadi barisan chip-nya dulu berisi sepuluh kategori yang tak satu pun bisa
+  // cocok. Sempat ditambal dengan chips={['Semua']} -- satu tombol yang tidak
+  // menyaring apa-apa. Sekarang diturunkan dari data, dan hilang selama belum
+  // ada yang bisa dibedakan.
+  const kategoriChips = useMemo(() => {
+    const unik = [...new Set(items.map((item) => item.kategori).filter(Boolean))].sort();
+    return unik.length > 1 ? ['Semua', ...unik] : [];
+  }, [items]);
+
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((item) => {
@@ -31,7 +41,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
           onChip={setChip}
           query={query}
           onQuery={setQuery}
-          chips={['Semua']}
+          chips={kategoriChips}
         />
 
         <div className="mt-5">

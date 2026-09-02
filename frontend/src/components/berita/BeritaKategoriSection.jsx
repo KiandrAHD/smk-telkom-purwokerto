@@ -10,6 +10,19 @@ const BeritaKategoriSection = ({ items = [] }) => {
   const [shownCount, setShownCount] = useState(kategoriBerita.perPage);
   const sourceItems = items;
 
+  // Chip dulu diambil dari daftar tetap sepuluh kategori (Prestasi, Sekolah,
+  // PPDB, ...), padahal tabel `berita` tidak punya kolom kategori sama sekali:
+  // setiap berita berkategori "Berita". Jadi sembilan dari sepuluh chip itu
+  // dijamin memulangkan halaman kosong.
+  //
+  // Sekarang chip diturunkan dari data yang benar-benar ada -- pola yang sama
+  // dengan PrestasiGaleriSection -- dan barisnya disembunyikan selama belum ada
+  // yang bisa dibedakan. Begitu kolom kategori ditambahkan, chip muncul sendiri.
+  const kategoriChips = useMemo(() => {
+    const unik = [...new Set(sourceItems.map((n) => n.kategori).filter(Boolean))].sort();
+    return unik.length > 1 ? ['Semua', ...unik] : [];
+  }, [sourceItems]);
+
   const matched = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = sourceItems.filter((n) => {
@@ -42,7 +55,7 @@ const BeritaKategoriSection = ({ items = [] }) => {
 
         {/* Chip kategori + pencarian + urutan */}
         <div className="mt-5 flex flex-wrap items-center gap-2">
-          {kategoriBerita.chips.map((c) => (
+          {kategoriChips.map((c) => (
             <button
               key={c}
               type="button"

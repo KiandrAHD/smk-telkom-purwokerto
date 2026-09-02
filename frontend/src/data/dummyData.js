@@ -1012,7 +1012,9 @@ export const pengumumanStats = [
 ];
 
 export const pengumumanFilter = {
-  chips: ['Semua', 'PPDB', 'Akademik', 'Lomba', 'Workshop', 'Libur', 'BKK', 'Sekolah', 'Guru', 'OSIS'],
+  // Daftar chip tetap dihapus: tabel `pengumuman` tidak punya kolom
+  // kategori, jadi tak satu pun dari sepuluh chip itu pernah cocok.
+  // Chip sekarang diturunkan dari data di PengumumanDaftarSection.
   searchPlaceholder: 'Cari Pengumuman',
 };
 
@@ -2076,18 +2078,9 @@ export const kategoriBerita = {
     { value: 'terbaru', label: 'Terbaru' },
     { value: 'terlama', label: 'Terlama' },
   ],
-  chips: [
-    'Semua',
-    'Prestasi',
-    'Sekolah',
-    'PPDB',
-    'BKK',
-    'Jurusan',
-    'Teknologi',
-    'Lomba',
-    'Workshop',
-    'Seminar',
-  ],
+  // Daftar chip tetap dihapus: tabel `berita` tidak punya kolom kategori,
+  // jadi sembilan dari sepuluh chip itu selalu memulangkan halaman kosong.
+  // Chip sekarang diturunkan dari data di BeritaKategoriSection.
   items: [
     {
       kategori: 'Prestasi',

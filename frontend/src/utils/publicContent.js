@@ -31,7 +31,10 @@ export const toBeritaItem = (row) => ({
   text: row.ringkasan || row.konten,
   image: normalizeImage(row.gambar_url, heroPanel),
   author: row.penulis || 'SMK Telkom Purwokerto',
-  kategori: 'Berita',
+  // Tabel `berita` belum punya kolom kategori; sampai ada, semua
+  // berita berkategori sama. Pola fallback ini mengikuti toPrestasiItem,
+  // yang tabelnya sudah punya kolomnya.
+  kategori: row.kategori || 'Berita',
   date: formatPublicDate(row.created_at),
   iso: row.created_at || '',
   body: splitContent(row.konten),
@@ -43,8 +46,8 @@ export const toPengumumanItem = (row) => ({
   title: row.judul,
   desc: row.ringkasan || row.konten,
   image: normalizeImage(row.gambar_url, heroPanel),
-  kategori: 'Pengumuman',
-  tags: ['Pengumuman'],
+  kategori: row.kategori || 'Pengumuman',
+  tags: [row.kategori || 'Pengumuman'],
   date: formatPublicDate(row.tanggal || row.created_at),
   iso: row.tanggal || row.created_at || '',
   body: splitContent(row.konten),

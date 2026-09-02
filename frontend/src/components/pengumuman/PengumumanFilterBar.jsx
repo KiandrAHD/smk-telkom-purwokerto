@@ -1,7 +1,9 @@
 import { Search } from 'lucide-react';
 import { pengumumanFilter } from '../../data/dummyData';
 
-const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = pengumumanFilter.chips }) => (
+// `chips` sengaja kosong secara bawaan: barisnya hanya pantas muncul kalau
+// memang ada kategori yang bisa dibedakan (lihat PengumumanDaftarSection).
+const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => (
   <div className="flex flex-wrap items-center gap-2">
     {chips.map((c) => (
       <button

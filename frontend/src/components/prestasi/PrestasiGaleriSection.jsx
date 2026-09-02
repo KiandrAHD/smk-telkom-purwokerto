@@ -9,7 +9,12 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const [query, setQuery] = useState('');
 
   const sourceItems = items;
-  const filters = ['Semua', ...new Set(sourceItems.flatMap((item) => [item.level, item.kategori].filter(Boolean)))];
+  // Filter di sini sudah benar sejak awal -- diturunkan dari data, bukan daftar
+  // tetap. Yang ditambahkan: barisnya disembunyikan kalau tidak ada yang bisa
+  // dibedakan, supaya tidak menyisakan tombol "Semua" tunggal yang tak
+  // menyaring apa-apa. Sama seperti di Berita, Pengumuman, dan BKK.
+  const nilaiUnik = [...new Set(sourceItems.flatMap((item) => [item.level, item.kategori].filter(Boolean)))].sort();
+  const filters = nilaiUnik.length > 1 ? ['Semua', ...nilaiUnik] : [];
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
