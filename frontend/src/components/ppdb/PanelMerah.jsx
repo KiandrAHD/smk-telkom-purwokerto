@@ -1,4 +1,5 @@
 import { BellRing, CheckCircle2, Radar } from 'lucide-react';
+import { ppdbMeta } from '../../data/dummyData';
 import fotoSiswa from '../../assets/ppdb/login-spmb-2027-2028.png';
 import ribbon from '../../assets/landing/ribbon.png';
 import watermark from '../../assets/landing/watermark-logo.png';
@@ -89,7 +90,10 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-8 text-[11px]">
           <span className="text-white/70">{bantuanLabel}</span>
           <a
-            href="https://wa.me/6281234567890"
+            // Nomor diambil dari ppdbMeta, bukan ditulis di sini. Sebelumnya
+            // panel ini memuat nomor placeholder sendiri, sehingga tombol
+            // bantuan di alur PPDB mengarah ke nomor yang tidak ada.
+            href={ppdbMeta.waHelpdesk}
             target="_blank"
             rel="noreferrer"
             className="font-heading font-bold text-white underline-offset-4 hover:underline"

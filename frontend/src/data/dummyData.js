@@ -2517,7 +2517,10 @@ export const ppdbMeta = {
   portal: 'Portal PPDB 2027',
   tahun: '2027',
   hakCipta: '© 2027 SMK Telkom Purwokerto. All Rights Reserved.',
-  waHelpdesk: 'https://wa.me/6281234567890',
+  // 0812-2970-1800. Format wa.me memakai kode negara tanpa 0 dan tanpa
+  // tanda baca: 0812... menjadi 62812...
+  waHelpdesk: 'https://wa.me/6281229701800',
+  waHelpdeskTampil: '0812-2970-1800',
 };
 
 export const ppdbPanelDaftar = {
