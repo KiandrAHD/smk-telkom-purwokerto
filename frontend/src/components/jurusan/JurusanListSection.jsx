@@ -12,7 +12,7 @@ const JurusanListSection = () => {
     <section id="daftar-jurusan" className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          Explore Jurusan Kami
+          Jelajahi Jurusan Kami
         </h2>
 
         <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

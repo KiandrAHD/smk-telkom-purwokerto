@@ -523,7 +523,7 @@ export const jurusanQuiz = {
   options: [
     { text: 'Aku suka memecahkan masalah', scores: { RPL: 2, TKJ: 1 } },
     { text: 'Aku tertarik dengan teknologi dan komputer', scores: { TKJ: 2, TJAT: 1 } },
-    { text: 'Aku ingin bekerja dibidang IT', scores: { RPL: 1, PG: 1, TKJ: 1, TJAT: 1 } },
+    { text: 'Aku ingin bekerja di bidang IT', scores: { RPL: 1, PG: 1, TKJ: 1, TJAT: 1 } },
   ],
   results: {
     RPL: { name: 'Rekayasa Perangkat Lunak (RPL)', cta: 'Lihat Detail RPL' },
@@ -613,7 +613,7 @@ export const prestasiStats = [
 ];
 
 export const prestasiUnggulan = {
-  title: 'Preatasi Unggulan',
+  title: 'Prestasi Unggulan',
   ctaText: 'Baca Cerita Lengkap',
   items: [
     {
@@ -644,7 +644,7 @@ export const prestasiUnggulan = {
 };
 
 export const galeriPrestasi = {
-  title: 'Galeri Pretasi',
+  title: 'Galeri Prestasi',
   ctaText: 'Lihat Semua Prestasi',
   filters: ['Semua', 'Nasional', 'Interasional', 'LKS', 'Robotik', 'Programming', 'UI/UX', 'AI', 'Game'],
   items: [
@@ -751,7 +751,7 @@ export const hallOfFame = {
 };
 
 export const videoHighlight = {
-  sectionTitle: 'Didukung  & Diakui Oleh',
+  sectionTitle: 'Didukung & Diakui Oleh',
   title: 'Video Highlight',
   videoTitle: 'Highlight Prestasi SMK Telkom Purwokerto\nTahun 2024',
   videoDesc: 'Perjalanan, kerja keras, dan moment terbaik siswa SMK Telkom Purwokerto',
@@ -982,7 +982,6 @@ export const pengumumanHero = {
   image: pengumumanHeroImg,
 };
 
-// CATATAN: salah ketik "dafar" ditiru apa adanya dari desain.
 export const ppdbBanner = {
   title: 'PPDB 2027',
   titleAccent: 'Resmi Dibuka!',
@@ -992,7 +991,7 @@ export const ppdbBanner = {
     { label: 'Deadline 30 Juni 2026' },
   ],
   description:
-    'Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 telah resmi dibuka, Segera dafar dan bergabung bersama kami',
+    'Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 telah resmi dibuka, Segera daftar dan bergabung bersama kami',
   ctaText: '20 Mei 2026',
   href: '/ppdb',
 };
@@ -1092,16 +1091,15 @@ export const daftarPengumuman = {
   ],
 };
 
-// CATATAN: "Kunjugan" dan "KelaS XII" ditiru apa adanya dari desain.
 export const pengumumanPopuler = {
   title: 'Pengumuman Populer',
   linkText: 'Lihat Semua',
   items: [
-    { slug: 'ppdb-gelombang-1-dibuka', title: 'PPDB Gelombang 1 Dibuka', date: '15 2026 Mei', views: '2.4k Dilihat', badge: 'bg-[#f5ced2] text-[#9b0011]' },
-    { slug: 'jadwal-ujian-tengah-semester', title: 'Jadwal Ujian Tengah Semester', date: '15 2026 Mei', views: '2.4k Dilihat', badge: 'bg-[#d9f5ce] text-[#268500]' },
-    { slug: 'workshop-ai-untuk-siswa', title: 'Workshop AI untuk Siswa', date: '15 2026 Mei', views: '2.4k Dilihat', badge: 'bg-[#cecff5] text-[#0b11cd]' },
-    { slug: 'kunjungan-industri-ke-telkom', title: 'Kunjugan Industri ke Telkom', date: '15 2026 Mei', views: '2.4k Dilihat', badge: 'bg-[#ceebf5] text-[#0b9ccd]' },
-    { slug: 'pengumuman-kelulusan-kelas-xii', title: 'Pengumuman Kelulusan KelaS XII', date: '15 2026 Mei', views: '2.4k Dilihat', badge: 'bg-[#f5f2ce] text-[#8f8c69]' },
+    { slug: 'ppdb-gelombang-1-dibuka', title: 'PPDB Gelombang 1 Dibuka', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#f5ced2] text-[#9b0011]' },
+    { slug: 'jadwal-ujian-tengah-semester', title: 'Jadwal Ujian Tengah Semester', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#d9f5ce] text-[#268500]' },
+    { slug: 'workshop-ai-untuk-siswa', title: 'Workshop AI untuk Siswa', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#cecff5] text-[#0b11cd]' },
+    { slug: 'kunjungan-industri-ke-telkom', title: 'Kunjungan Industri ke Telkom', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#ceebf5] text-[#0b9ccd]' },
+    { slug: 'pengumuman-kelulusan-kelas-xii', title: 'Pengumuman Kelulusan Kelas XII', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#f5f2ce] text-[#8f8c69]' },
   ],
 };
 
