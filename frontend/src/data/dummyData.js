@@ -2485,7 +2485,10 @@ export const adminProfilSekolah = {
   npsn: '20303020',
   alamat:
     'Jl. DI Panjaitan No.128, Karangreja, Purwokerto Kidul, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53141',
-  telepon: '(0281) 635180',
+  // Diseragamkan dengan footerData.kontak.phone. Sebelumnya di sini tertulis
+  // (0281) 635180 sementara footer memakai 632138, jadi situs menampilkan dua
+  // nomor berbeda untuk sekolah yang sama.
+  telepon: '(0281) 632138',
   email: 'info@smktelkom-pwt.sch.id',
   website: 'https://smk-telkom-purwokerto.vercel.app/',
 };
