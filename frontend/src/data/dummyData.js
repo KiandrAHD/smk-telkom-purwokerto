@@ -262,11 +262,16 @@ export const heroData = {
     { label: 'Beranda', href: '/' },
     { label: 'Profil Sekolah', href: '/tentang' },
   ],
-  heading: 'Discover\nthe Place',
-  headingAccent: 'Where Future\nInnovators Grow.',
+  // Judul aslinya berbahasa Inggris ("Discover the Place Where Future
+  // Innovators Grow"), satu-satunya judul Inggris yang tersisa di situs
+  // berbahasa Indonesia -- dan pembacanya siswa SMP beserta orang tua.
+  heading: 'Tempat Tumbuhnya',
+  headingAccent: 'Para Inovator\nMasa Depan.',
   description:
     'SMK Telkom Purwokerto, sekolah vokasi berbasis teknologi yang mencetak generasi digital berkarakter, kompeten, dan siap bersaing di dunia industri global.',
-  ctaText: 'Explore School',
+  // Tombolnya menuju /ppdb, bukan menjelajah halaman sekolah, jadi labelnya
+  // ("Explore School") menjanjikan hal yang berbeda dari tujuannya.
+  ctaText: 'Daftar Sekarang',
   // Panel merah + foto gedung + pill hashtag + 3 poin keunggulan menyatu jadi satu aset Figma.
   image: profilHero,
   hashtag: '#DigitalSmartSchool',
@@ -491,7 +496,8 @@ export const jurusanHero = {
   titleAccent: 'Pilihanmu',
   description:
     'Pilih jurusan yang sesuai dengan minat dan bakatmu. Bangun masa depanmu bersama teknologi.',
-  ctaText: 'Explore Jurusan',
+  // Sama seperti hero Profil Sekolah: tombolnya menuju /ppdb.
+  ctaText: 'Daftar Sekarang',
   image: heroJurusan,
 };
 
@@ -2004,7 +2010,7 @@ export const pengumumanDetail = [
    ========================================================= */
 
 export const beritaHero = {
-  badge: 'Stay Connected with Stematel',
+  badge: 'Kabar Terkini Stematel',
   title: 'Berita &\nKegiatan',
   titleAccent: 'Terbaru',
   description:

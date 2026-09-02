@@ -13,7 +13,7 @@ const icons = {
 const HeroSection = () => (
   <section className="bg-white pt-4 pb-6">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="relative rounded-[2rem] border border-dark-100 bg-white p-3 sm:p-4">
+      <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
         <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] xl:grid-cols-[34%_1fr] gap-6 lg:gap-4 items-start">
           {/* Kolom teks */}
           {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
@@ -30,7 +30,11 @@ const HeroSection = () => (
               ))}
             </nav>
 
-            <p className="mt-4 text-[10px] font-semibold text-primary">{landingHero.hashtag}</p>
+            {/* Chip yang sama dipakai enam hero lain; sebelumnya di sini cuma
+                teks merah polos, jadi hero Beranda terlihat lain sendiri. */}
+            <span className="mt-4 inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
+              {landingHero.hashtag}
+            </span>
 
             <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {landingHero.title}

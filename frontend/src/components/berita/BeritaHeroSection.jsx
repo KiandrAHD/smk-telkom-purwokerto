@@ -24,7 +24,9 @@ const BeritaHeroSection = ({ items = [] }) => {
         <div className="rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
           <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[38%_1fr] lg:gap-4">
             <div className="px-3 pt-6 lg:pb-6 lg:pl-4 lg:pt-4">
-              <span className="text-[10px] font-bold text-primary">{beritaHero.badge}</span>
+              <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
+                {beritaHero.badge}
+              </span>
 
               <h1 className="mt-3 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
                 {beritaHero.title}
