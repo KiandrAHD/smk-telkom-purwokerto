@@ -8,7 +8,6 @@ import jurusanTjat from '../assets/landing/jurusan-tjat.jpg';
 import prestasi1 from '../assets/landing/prestasi-1.jpg';
 import prestasi2 from '../assets/landing/prestasi-2.jpg';
 import prestasi3 from '../assets/landing/prestasi-3.jpg';
-import prestasi4 from '../assets/landing/prestasi-4.jpg';
 import mapImg from '../assets/landing/map.jpg';
 
 import heroJurusan from '../assets/jurusan/hero-jurusan.jpg';
@@ -31,11 +30,11 @@ import guru1 from '../assets/tentang/guru-1.png';
 import guru2 from '../assets/tentang/guru-2.png';
 import guru3 from '../assets/tentang/guru-3.png';
 import guru4 from '../assets/tentang/guru-4.png';
-import gedungSekolah from '../assets/tentang/school-building.png';
-import labKomputer from '../assets/tentang/lab-komputer.png';
-import perpustakaan from '../assets/tentang/perpustakaan.png';
-import studioMultimedia from '../assets/tentang/studio-multimedia.png';
-import guruGroup from '../assets/tentang/guru-group.png';
+import gedungSekolah from '../assets/tentang/school-building.jpg';
+import labKomputer from '../assets/tentang/lab-komputer.jpg';
+import perpustakaan from '../assets/tentang/perpustakaan.jpg';
+import studioMultimedia from '../assets/tentang/studio-multimedia.jpg';
+import guruGroup from '../assets/tentang/guru-group.jpg';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -1423,7 +1422,11 @@ export const prestasiDetail = [
     title: 'Juara 1 IoT Challenge Telkom 2024',
     subtitle: 'IoT Challenge Telkom 2024',
     date: '1 Oktober 2024',
-    image: prestasi4,
+    // TITIPAN: foto asli IoT Challenge belum ada, jadi sementara memakai foto
+    // Gemastik. Dulu ini berkas terpisah (prestasi-4.jpg) yang isinya identik
+    // byte-per-byte dengan prestasi-3.jpg, sehingga duplikasinya tak terlihat.
+    // Ganti dengan foto IoT Challenge yang sebenarnya begitu tersedia.
+    image: prestasi3,
     lead: 'Purwarupa smart agriculture berbasis IoT rancangan siswa dinobatkan sebagai juara pertama pada IoT Challenge Telkom 2024.',
     body: [
       'Alat yang dibuat memantau kelembapan tanah dan suhu, lalu menyalakan penyiraman secara otomatis ketika ambang batas terlampaui. Datanya dikirim ke aplikasi agar petani bisa memeriksanya dari jauh.',

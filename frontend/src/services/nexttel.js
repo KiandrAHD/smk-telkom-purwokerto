@@ -2,12 +2,21 @@ import { supabaseSiap } from './supabase';
 
 export const PESAN_NEXTTEL_GAGAL = 'NextTel sedang mengalami kendala. Silakan coba lagi.';
 
-const alamatNextTel = import.meta.env.VITE_SUPABASE_URL
+// Dua backend, sama seperti STELA: Edge Function saat Supabase terkonfigurasi,
+// endpoint lokal /api/nexttel saat `npm run dev`. Sebelumnya NextTel hanya
+// punya jalur Edge Function, sehingga tidak bisa dicoba sama sekali tanpa
+// deploy Supabase lebih dulu.
+const PAKAI_EDGE_FUNCTION = supabaseSiap;
+const alamatNextTel = PAKAI_EDGE_FUNCTION
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nexttel`
-  : '';
+  : '/api/nexttel';
+
+// import.meta.env.DEV dilipat saat build, jadi cabang lokal hilang dari bundel
+// produksi -- bukan sekadar tidak terpanggil.
+export const nextTelSiap = PAKAI_EDGE_FUNCTION || import.meta.env.DEV;
 
 export async function jelaskanRekomendasiNextTel(payload, { signal } = {}) {
-  if (!supabaseSiap || !alamatNextTel) throw new Error(PESAN_NEXTTEL_GAGAL);
+  if (!nextTelSiap) throw new Error(PESAN_NEXTTEL_GAGAL);
 
   try {
     const response = await fetch(alamatNextTel, {
@@ -15,7 +24,9 @@ export async function jelaskanRekomendasiNextTel(payload, { signal } = {}) {
       signal,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        ...(PAKAI_EDGE_FUNCTION
+          ? { Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` }
+          : {}),
       },
       body: JSON.stringify(payload),
     });

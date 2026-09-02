@@ -1,5 +1,24 @@
-const API_KEY = Deno.env.get('NEXTTEL_ANTHROPIC_API_KEY');
-const MODEL = Deno.env.get('NEXTTEL_MODEL');
+// NextTel memakai lapisan penyedia yang sama dengan STELA, jadi ia ikut
+// mendapat Gemini, Groq, failover antar model, dan penanganan galat yang
+// sama. Sebelumnya ia hanya bisa Anthropic, dan kunci NEXTTEL_* tidak pernah
+// terdokumentasi di .env.example -- akibatnya fitur ini praktis mati.
+import { pilihPenyedia, tanyaAI } from '../stela/inti.mjs';
+
+// Kunci khusus NextTel dipakai kalau ada (berguna untuk memisahkan tagihan),
+// selain itu jatuh ke kunci bersama supaya cukup mengisi satu kunci saja.
+const KUNCI: Record<string, string | undefined> = {
+  anthropic: Deno.env.get('NEXTTEL_ANTHROPIC_API_KEY') ?? Deno.env.get('ANTHROPIC_API_KEY'),
+  gemini: Deno.env.get('NEXTTEL_GEMINI_API_KEY') ?? Deno.env.get('GEMINI_API_KEY'),
+  groq: Deno.env.get('NEXTTEL_GROQ_API_KEY') ?? Deno.env.get('GROQ_API_KEY'),
+};
+const PENYEDIA = pilihPenyedia({
+  anthropicKey: KUNCI.anthropic,
+  geminiKey: KUNCI.gemini,
+  groqKey: KUNCI.groq,
+});
+const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
+// Dibiarkan undefined supaya failover daftar model ikut aktif.
+const MODEL = Deno.env.get('NEXTTEL_MODEL') || undefined;
 const ALLOWED_ORIGINS = (Deno.env.get('NEXTTEL_ALLOWED_ORIGINS') ?? '').split(',').map((origin) => origin.trim()).filter(Boolean);
 const MAJORS = ['RPL', 'PG', 'TKJ', 'TJAT'];
 const MAX_ANSWERS = 8;
@@ -32,7 +51,7 @@ Deno.serve(async (request) => {
   const origin = request.headers.get('origin');
   if (!allowed(origin)) return reply({ error: 'Origin tidak diizinkan.' }, 403, origin);
   if (request.method === 'OPTIONS') return new Response('ok', { headers: cors(origin) });
-  if (request.method !== 'POST' || !API_KEY || !MODEL || rateLimited(request.headers.get('x-forwarded-for') ?? 'unknown')) return fail(origin);
+  if (request.method !== 'POST' || !PENYEDIA || rateLimited(request.headers.get('x-forwarded-for') ?? 'unknown')) return fail(origin);
   try {
     const raw = await request.text();
     if (raw.length > MAX_BODY) return fail(origin);
@@ -41,11 +60,14 @@ Deno.serve(async (request) => {
     const questionIds = body.answers.map((answer: Record<string, unknown>) => answer?.questionId);
     if (body.answers.some((answer: Record<string, unknown>) => typeof answer?.questionId !== 'string' || typeof answer?.optionId !== 'string' || answer.questionId.length > 50 || answer.optionId.length > 2 || !QUESTION_IDS.includes(answer.questionId) || !OPTION_IDS.includes(answer.optionId)) || new Set(questionIds).size !== MAX_ANSWERS) return fail(origin);
     const userData = JSON.stringify({ answers: body.answers, scores: body.scores, topRecommendation: body.topRecommendation }).slice(0, MAX_TEXT * 10);
-    const response = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01' }, body: JSON.stringify({ model: MODEL, max_tokens: 500, system: systemPrompt, messages: [{ role: 'user', content: `Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n${userData}` }] }) });
-    if (!response.ok) return fail(origin);
-    const data = await response.json();
-    const text = data?.content?.find((item: { type?: string }) => item.type === 'text')?.text;
-    if (typeof text !== 'string') return fail(origin);
+    const { teks: text } = await tanyaAI({
+      penyedia: PENYEDIA,
+      apiKey: API_KEY,
+      model: MODEL,
+      instruksiKustom: systemPrompt,
+      pesan: [{ role: 'user', content: `Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n${userData}` }],
+    });
+    if (typeof text !== 'string' || !text) return fail(origin);
     const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] ?? '');
     if (typeof parsed.explanation !== 'string' || !Array.isArray(parsed.strengths) || !Array.isArray(parsed.learningSuggestions)) return fail(origin);
     return reply({ explanation: parsed.explanation.slice(0, 1200), strengths: parsed.strengths.filter((item: unknown) => typeof item === 'string').slice(0, 4).map((item: string) => item.slice(0, 240)), learningSuggestions: parsed.learningSuggestions.filter((item: unknown) => typeof item === 'string').slice(0, 4).map((item: string) => item.slice(0, 240)) }, 200, origin);

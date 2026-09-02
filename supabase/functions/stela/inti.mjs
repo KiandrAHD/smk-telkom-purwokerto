@@ -431,17 +431,20 @@ const PENYEDIA = {
 
 // Satu pintu masuk. Mengembalikan { teks, tokenMasuk, tokenKeluar } supaya
 // pemakaian bisa dicatat tanpa pemanggil perlu tahu penyedia mana yang jalan.
-export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, signal }) => {
+// instruksiKustom memungkinkan fitur AI lain memakai lapisan penyedia yang
+// sama tanpa ikut membawa prompt STELA. NextTel memanfaatkannya: ia punya
+// prompt sendiri, tapi mewarisi pemilihan penyedia, failover model, dan
+// penanganan galat dari sini.
+export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, instruksiKustom, signal }) => {
   const panggil = PENYEDIA[penyedia];
   if (!panggil) throw galatPenyedia(`Penyedia tidak dikenal: ${penyedia}`, 500);
 
   // Pemilihan konten memakai pertanyaan TERAKHIR, bukan seluruh riwayat: itu
   // yang sedang ditanyakan sekarang, dan riwayat panjang akan mengaburkan skor.
   const pertanyaan = pesan[pesan.length - 1]?.content ?? '';
-  const instruksi = buatInstruksi(
-    contextPublik,
-    pilihKonten(pertanyaan, ANGGARAN_KONTEKS[penyedia] ?? 0),
-  );
+  const instruksi =
+    instruksiKustom ??
+    buatInstruksi(contextPublik, pilihKonten(pertanyaan, ANGGARAN_KONTEKS[penyedia] ?? 0));
 
   // STELA_MODEL yang disetel manual dihormati apa adanya -- kalau seseorang
   // memilih model tertentu, jangan diam-diam dipindah ke model lain.

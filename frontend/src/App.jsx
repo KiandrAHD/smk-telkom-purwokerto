@@ -168,12 +168,11 @@ const App = () => {
             }
           >
             <Route index element={<DashboardHomePage />} />
+            {/* Tambah/edit berita dan detail PPDB kini memakai modal di dalam
+                halamannya masing-masing, jadi tidak ada rute terpisah lagi. */}
             <Route path="berita" element={<AdminBeritaPage />} />
-            <Route path="berita/tambah" element={<Navigate to="/dashboard/berita" replace />} />
-            <Route path="berita/:id/edit" element={<Navigate to="/dashboard/berita" replace />} />
             <Route path="pengumuman" element={<AdminPengumumanPage />} />
             <Route path="ppdb" element={<AdminPpdbPage />} />
-            <Route path="ppdb/:id" element={<Navigate to="/dashboard/ppdb" replace />} />
             <Route path="jurusan" element={<DashboardJurusanPage />} />
             <Route path="prestasi" element={<AdminPrestasiPage />} />
             <Route path="bkk" element={<AdminBkkPage />} />
