@@ -13,7 +13,9 @@
     "foto:pulihkan": "node scripts/pulihkan-foto.mjs",
     "stela:uji": "node scripts/uji-stela.mjs",
     "aset:bersihkan": "node scripts/bersihkan-latar.mjs",
-    "aset:ringankan": "node scripts/ringankan-aset.mjs"
+    "aset:ringankan": "node scripts/ringankan-aset.mjs",
+    "aset:hero": "node scripts/buat-hero.mjs",
+    "bkk:uji": "node scripts/uji-bkk-filter.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.111.0",

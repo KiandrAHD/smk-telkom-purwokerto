@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { bkkSearch, lowonganPopuler } from '../../data/dummyData';
+import { opsiFilter, saringLowongan } from '../../utils/bkkFilter';
 
 const Select = ({ label, value, onChange, options }) => (
   <label className="min-w-0 flex-1">
@@ -22,39 +23,36 @@ const Select = ({ label, value, onChange, options }) => (
   </label>
 );
 
+// Tabel `bkk` hanya punya dua kolom yang bisa dipakai menyaring: lokasi dan
+// tipe_pekerjaan. Tidak ada kolom kategori.
+//
+// Sebelumnya panel ini menampilkan TIGA kendali untuk satu hal yang sama:
+// dropdown "Kategori" dan "Tipe Pekerjaan" sama-sama diisi daftar tipe
+// pekerjaan, ditambah barisan chip yang juga berisi tipe pekerjaan. Jadi
+// "Kategori" menawarkan "Full Time" -- persis yang terlihat di layar -- dan
+// memilih chip lalu dropdown sekaligus justru mengosongkan hasil karena
+// keduanya di-AND-kan.
+//
+// Sekarang: satu kendali per faset. Chip dan dropdown tipe berbagi satu state,
+// jadi keduanya adalah dua cara menyentuh filter yang sama, bukan dua filter.
 const BkkLowonganSection = ({ items = [] }) => {
   const [keyword, setKeyword] = useState('');
   const [lokasi, setLokasi] = useState('');
-  const [kategori, setKategori] = useState('');
   const [tipe, setTipe] = useState('');
-  const [chip, setChip] = useState('Semua');
 
   const sourceItems = items;
-  const tipeOptions = [...new Set(sourceItems.map((job) => job.tipe_pekerjaan).filter(Boolean))];
-  const chips = ['Semua', ...tipeOptions];
 
-  const shown = useMemo(() => {
-    const q = keyword.trim().toLowerCase();
-    return sourceItems.filter((job) => {
-      const byText =
-        !q ||
-        job.role.toLowerCase().includes(q) ||
-        job.company.toLowerCase().includes(q) ||
-        job.tags?.some((t) => t.toLowerCase().includes(q));
-      const byLokasi = !lokasi || job.location.includes(lokasi);
-      const byKategori = !kategori || job.tags.includes(kategori);
-      const byTipe = !tipe || job.badges.includes(tipe);
-      const byChip = chip === 'Semua' || job.tags.includes(chip);
-      return byText && byLokasi && byKategori && byTipe && byChip;
-    });
-  }, [keyword, lokasi, kategori, tipe, chip, sourceItems]);
+  const { lokasiOptions, tipeOptions } = useMemo(() => opsiFilter(sourceItems), [sourceItems]);
+
+  const shown = useMemo(
+    () => saringLowongan(sourceItems, { keyword, lokasi, tipe }),
+    [keyword, lokasi, tipe, sourceItems],
+  );
 
   const reset = () => {
     setKeyword('');
     setLokasi('');
-    setKategori('');
     setTipe('');
-    setChip('Semua');
   };
 
   return (
@@ -78,9 +76,21 @@ const BkkLowonganSection = ({ items = [] }) => {
                 className="w-full rounded-lg border border-dark-200 px-3 py-2.5 text-[11px] text-dark-700 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
               />
             </label>
-            <Select label={bkkSearch.placeholders.lokasi} value={lokasi} onChange={setLokasi} options={bkkSearch.lokasiOptions} />
-            <Select label={bkkSearch.placeholders.kategori} value={kategori} onChange={setKategori} options={tipeOptions} />
-            <Select label={bkkSearch.placeholders.tipe} value={tipe} onChange={setTipe} options={tipeOptions} />
+            <Select
+              label={bkkSearch.placeholders.lokasi}
+              value={lokasi}
+              onChange={setLokasi}
+              options={lokasiOptions}
+            />
+            <Select
+              label={bkkSearch.placeholders.tipe}
+              value={tipe}
+              onChange={setTipe}
+              options={tipeOptions}
+            />
+            {/* Penyaringan berjalan langsung setiap ketikan, jadi tidak ada yang
+                perlu "dicari". Tombolnya mengosongkan filter -- dan dulu memang
+                sudah begitu, hanya labelnya tertulis "Cari Lowongan". */}
             <button
               type="button"
               onClick={reset}
@@ -90,23 +100,28 @@ const BkkLowonganSection = ({ items = [] }) => {
             </button>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            {chips.map((c) => (
-              <button
-                key={c}
-                type="button"
-                onClick={() => setChip(c)}
-                aria-pressed={chip === c}
-                className={`rounded-full border px-3.5 py-1.5 text-[10px] font-semibold transition-colors ${
-                  chip === c
-                    ? 'border-primary bg-primary text-white'
-                    : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
+          {tipeOptions.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {['Semua', ...tipeOptions].map((c) => {
+                const nilai = c === 'Semua' ? '' : c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setTipe(nilai)}
+                    aria-pressed={tipe === nilai}
+                    className={`rounded-full border px-3.5 py-1.5 text-[10px] font-semibold transition-colors ${
+                      tipe === nilai
+                        ? 'border-primary bg-primary text-white'
+                        : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'
+                    }`}
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Lowongan populer */}

@@ -790,28 +790,20 @@ export const bkkSearch = {
   title: 'Temukan',
   titleAccent: 'Peluang',
   titleTail: 'Terbaik',
-  ctaText: 'Cari Lowongan',
+  // Tombolnya mengosongkan filter, bukan menjalankan pencarian: penyaringan
+  // sudah berjalan langsung setiap ketikan.
+  ctaText: 'Atur Ulang',
   placeholders: {
-    keyword: 'Cari Posisi,Perusahaan, Atau Skill',
+    keyword: 'Cari Posisi, Perusahaan, atau Skill',
     lokasi: 'Lokasi',
-    kategori: 'Kategori',
     tipe: 'Tipe Pekerjaan',
   },
-  lokasiOptions: ['Purwokerto', 'Jakarta', 'Yogyakarta', 'Remote'],
-  kategoriOptions: ['Programming', 'Networking', 'Game', 'AI'],
-  tipeOptions: ['Full Time', 'Intership', 'Remote'],
-  chips: [
-    'Semua',
-    'Nasional',
-    'Interasional',
-    'LKS',
-    'Robotik',
-    'Programming',
-    'UI/UX',
-    'AI',
-    'Game',
-    'Networking',
-  ],
+  // Daftar pilihan lokasi dan tipe TIDAK ditulis di sini: keduanya diturunkan
+  // dari lowongan yang benar-benar ada di database (lihat BkkLowonganSection),
+  // supaya dropdown tidak pernah menawarkan pilihan yang nihil hasil.
+  //
+  // Pilihan "Kategori" dihapus seluruhnya -- tabel `bkk` tidak punya kolom
+  // kategori, jadi filter itu tidak pernah bisa menyaring apa pun.
 };
 
 export const lowonganPopuler = {
