@@ -103,7 +103,7 @@ const Footer = () => (
         <div className="col-span-2 lg:col-span-1">
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              footerData.kontak.address
+              footerData.kontak.mapsQuery ?? footerData.kontak.address
             )}`}
             target="_blank"
             rel="noopener noreferrer"

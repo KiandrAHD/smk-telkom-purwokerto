@@ -448,9 +448,19 @@ export const footerData = {
     { label: 'PPDB', href: '/ppdb' },
   ],
   kontak: {
-    address: 'Jl.D I Panjaitan No.128 Purwokerto',
+    // Alamat lengkap resmi. Nilai ini juga dipakai Footer.jsx untuk menyusun
+    // tautan Google Maps, jadi memperbaruinya di sini sekaligus memindahkan
+    // titik petanya.
+    address:
+      'Jl. DI Panjaitan No.128, Karangreja, Purwokerto Kidul, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53141',
     phone: '(0281) 632138',
     email: 'info@smktelkom-pwt.sch.id',
+    // Kueri peta sengaja memakai NAMA sekolah, bukan alamatnya. Diuji langsung:
+    // mencari dengan string alamat hanya menjatuhkan pin di ruas jalan (dan
+    // Google membakukan kodeposnya jadi 53147), sedangkan mencari dengan nama
+    // membuka listing resmi sekolah -- lengkap dengan foto, jam buka, dan
+    // kontaknya, serta kodepos 53141 yang sama dengan alamat di atas.
+    mapsQuery: 'SMK Telkom Purwokerto',
   },
   // Akun resmi sekolah, handle-nya seragam: stematelpwt.
   //
@@ -2218,7 +2228,11 @@ export const adminProfil = {
 
 export const adminSekolah = {
   nama: 'SMK Telkom Purwokerto',
-  alamat: ['Jl. D.I. Panjaitan No.128', 'Purwokerto, Jawa Tengah'],
+  alamat: [
+    'Jl. DI Panjaitan No.128, Karangreja',
+    'Purwokerto Kidul, Kec. Purwokerto Sel.',
+    'Kabupaten Banyumas, Jawa Tengah 53141',
+  ],
   website: 'https://smk-telkom-purwokerto.vercel.app/',
 };
 
@@ -2469,7 +2483,8 @@ export const adminTabPengaturan = ['Profil Sekolah', 'Akun Admin', 'Pengaturan U
 export const adminProfilSekolah = {
   namaSekolah: 'SMK Telkom Purwokerto',
   npsn: '20303020',
-  alamat: 'Jl. D.I. Panjaitan No.128, Purwokerto, Jawa Tengah',
+  alamat:
+    'Jl. DI Panjaitan No.128, Karangreja, Purwokerto Kidul, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53141',
   telepon: '(0281) 635180',
   email: 'info@smktelkom-pwt.sch.id',
   website: 'https://smk-telkom-purwokerto.vercel.app/',
