@@ -3,7 +3,6 @@ import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
 import PengumumanHeroSection from '../components/pengumuman/PengumumanHeroSection';
 import PengumumanPpdbSection from '../components/pengumuman/PengumumanPpdbSection';
-import PengumumanStatsSection from '../components/pengumuman/PengumumanStatsSection';
 import PengumumanDaftarSection from '../components/pengumuman/PengumumanDaftarSection';
 import CTASection from '../components/CTASection';
 import PublicDataState from '../components/PublicDataState';
@@ -28,7 +27,6 @@ const PengumumanPage = () => {
     <MainLayout>
       <PengumumanHeroSection />
       <Reveal><PengumumanPpdbSection /></Reveal>
-      <Reveal><PengumumanStatsSection /></Reveal>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label="pengumuman" />
       </div>

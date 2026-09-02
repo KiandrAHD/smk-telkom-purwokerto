@@ -13,7 +13,7 @@ import Logo from '../Logo';
 import { adminMenu, adminSekolah } from '../../data/dummyData';
 
 // Nama ikon disimpan sebagai teks di dummyData lalu dipetakan di sini, mengikuti
-// pola yang sudah dipakai HeroStatsBar dan PengumumanStatsSection.
+// pola yang sudah dipakai HeroStatsBar.
 const ikon = {
   dashboard: LayoutDashboard,
   ppdb: GraduationCap,

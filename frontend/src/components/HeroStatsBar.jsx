@@ -1,6 +1,9 @@
 import {
+  AlarmClock,
   Briefcase,
   Building2,
+  CalendarCheck,
+  CalendarDays,
   Flag,
   FolderKanban,
   Globe,
@@ -9,11 +12,11 @@ import {
   Trophy,
   UserCheck,
   Users,
+  Volume2,
 } from 'lucide-react';
 
-// Peta nama ikon -> komponennya, mengikuti pola yang sudah dipakai
-// PengumumanStatsSection: data cukup menyimpan nama ikon sebagai teks biasa,
-// jadi dummyData.js tetap bebas dari impor komponen.
+// Peta nama ikon -> komponennya: data cukup menyimpan nama ikon sebagai teks
+// biasa, jadi dummyData.js tetap bebas dari impor komponen.
 const ikon = {
   jurusan: GraduationCap,
   mitra: Building2,
@@ -26,11 +29,16 @@ const ikon = {
   lowongan: Briefcase,
   alumni: UserCheck,
   komunitas: Users,
+  megaphone: Volume2,
+  kalender: CalendarDays,
+  alarm: AlarmClock,
+  agenda: CalendarCheck,
 };
 
 // Bilah statistik yang menimpa bagian bawah hero. Markup-nya dulu disalin sama
 // persis di hero Jurusan, Prestasi, dan BKK; disatukan di sini supaya perubahan
-// berikutnya cukup dikerjakan di satu tempat.
+// berikutnya cukup dikerjakan di satu tempat. Hero Pengumuman ikut memakainya
+// sejak statistiknya dipindah masuk ke panel hero.
 const HeroStatsBar = ({ items }) => (
   <div className="relative z-10 mx-1 -mt-6 rounded-2xl border border-dark-100 bg-white shadow-card lg:mx-16 lg:mt-5 xl:-mt-7">
     <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">

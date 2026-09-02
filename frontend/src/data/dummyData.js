@@ -967,6 +967,7 @@ export const kisahAlumni = {
 // Where Future Innovators Grow"), yang tidak menjelaskan isi halaman sama
 // sekali. Teksnya sekarang milik halaman ini sendiri.
 export const pengumumanHero = {
+  badge: 'Papan Pengumuman',
   heading: 'Semua Kabar Resmi',
   headingAccent: 'Ada di Satu Tempat.',
   description:
@@ -1003,11 +1004,14 @@ export const infoPenting = {
 
 // Hanya kartu pertama yang punya ikon megafon di dalam lingkarannya; tiga sisanya
 // lingkaran polos, sama seperti di Figma.
+// Tampil sebagai HeroStatsBar di dalam panel hero, sama seperti Jurusan,
+// Prestasi, dan BKK. Kolom `desc` ikut dibuang bersama PengumumanStatsSection:
+// bilah hero hanya menampilkan angka dan labelnya.
 export const pengumumanStats = [
-  { value: '45', label: 'Pengumuman', desc: 'Total Seluruh Pengumuman', icon: 'megaphone' },
-  { value: '12', label: 'Event', desc: 'Event & Kegiatan Sekolah', icon: 'kalender' },
-  { value: '5', label: 'Deadline', desc: 'Batas Waktu Kegiatan', icon: 'alarm' },
-  { value: '8', label: 'Agenda Minggu Ini', desc: 'Agenda & Kegiatan', icon: 'agenda' },
+  { value: '45', label: 'Total Pengumuman', icon: 'megaphone' },
+  { value: '12', label: 'Event & Kegiatan', icon: 'kalender' },
+  { value: '5', label: 'Deadline Terdekat', icon: 'alarm' },
+  { value: '8', label: 'Agenda Minggu Ini', icon: 'agenda' },
 ];
 
 export const pengumumanFilter = {
