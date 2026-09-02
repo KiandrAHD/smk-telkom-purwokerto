@@ -86,7 +86,7 @@ const DokumenPesertaPage = () => {
                       <button
                         type="button"
                         onClick={() => window.print()}
-                        className="flex flex-shrink-0 items-center gap-1.5 rounded-lg border border-primary px-4 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+                        className="flex flex-shrink-0 items-center gap-1.5 rounded-full border border-primary px-4 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
                       >
                         <Download className="h-3.5 w-3.5" />
                         Unduh

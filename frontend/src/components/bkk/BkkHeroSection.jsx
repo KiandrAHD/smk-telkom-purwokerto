@@ -35,7 +35,7 @@ const BkkHeroSection = () => (
 
           <img
             src={bkkHero.image}
-            alt="Siswa SMK Telkom Purwokerto"
+            alt="Siswa SMK Telkom Purwokerto praktik di laboratorium komputer"
             className="w-full rounded-[1.75rem] object-contain"
           />
         </div>

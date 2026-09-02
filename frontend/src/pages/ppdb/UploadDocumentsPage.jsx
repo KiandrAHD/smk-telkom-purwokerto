@@ -21,7 +21,7 @@ const BarisDokumen = ({ berkas, onPilih }) => {
         </div>
       </div>
       <div className="flex min-w-0 flex-shrink-0 items-center gap-3">
-        <button type="button" onClick={() => inputRef.current?.click()} className="rounded-lg border border-primary bg-primary-50 px-4 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Pilih File</button>
+        <button type="button" onClick={() => inputRef.current?.click()} className="rounded-full border border-primary bg-primary-50 px-4 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Pilih File</button>
         <span className={`max-w-48 truncate text-[11px] ${berkas ? 'font-medium text-green-600' : 'text-dark-400'}`}>{berkas ? berkas.name : 'Belum ada file'}</span>
         <input ref={inputRef} type="file" accept="application/pdf,.pdf" aria-label="Dokumen persyaratan PDF gabungan" onChange={(e) => onPilih(e.target.files?.[0])} className="hidden" />
       </div>
@@ -85,7 +85,7 @@ const UploadDocumentsPage = () => {
          {galat && <div className="mt-5 rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800"><p role="alert">{galat}</p>{duplikat && <Link to="/ppdb/status" className="mt-2 inline-block font-bold underline hover:text-primary-900">Lihat Status Pendaftaran</Link>}</div>}
         <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-dark-100 pt-6">
           <Link to="/ppdb/formulir" className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary">&larr; Kembali ke Data Akademik</Link>
-          <button type="button" onClick={kirim} disabled={mengirim} className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" onClick={kirim} disabled={mengirim} className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
             {mengirim ? 'Mengirim...' : 'Finalisasi & Kirim Pendaftaran'}
             <ArrowRight className="h-4 w-4" />
           </button>

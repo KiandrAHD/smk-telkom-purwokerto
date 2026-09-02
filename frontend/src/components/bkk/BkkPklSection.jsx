@@ -26,7 +26,7 @@ const BkkPklSection = () => (
               <p className="mt-0.5 text-[9px] text-primary">{pkl.kota}</p>
               <Link
                 to={`/bkk/pkl/${slugify(`${pkl.role} ${pkl.company}`)}`}
-                className="mt-3.5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dark-200 px-2.5 py-1.5 text-[8px] font-bold text-dark-500 transition-colors hover:border-primary hover:text-primary"
+                className="mt-3.5 inline-flex items-center justify-center gap-1.5 rounded-full border border-dark-200 px-2.5 py-1.5 text-[8px] font-bold text-dark-500 transition-colors hover:border-primary hover:text-primary"
               >
                 {pklData.ctaText}
                 <ArrowRight className="h-2 w-2" />
@@ -49,7 +49,7 @@ const BkkPklSection = () => (
         />
         <Link
           to="/stela"
-          className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
+          className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
         >
           {pklData.stela.ctaText}
           <ArrowRight className="h-3.5 w-3.5" />

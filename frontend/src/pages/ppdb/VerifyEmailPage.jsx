@@ -98,7 +98,7 @@ const VerifyEmailPage = () => {
           <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
           <h1 className="mt-6 font-heading text-2xl font-extrabold text-dark-900">Email berhasil diverifikasi</h1>
           <p className="mt-3 text-xs leading-relaxed text-dark-500">Akunmu sudah aktif. Lanjutkan untuk melengkapi pendaftaran PPDB.</p>
-          <button type="button" onClick={lanjut} className="mt-6 w-full rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Lanjutkan Pendaftaran</button>
+          <button type="button" onClick={lanjut} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Lanjutkan Pendaftaran</button>
         </div>
       </PpdbAuthLayout>
     );
@@ -114,7 +114,7 @@ const VerifyEmailPage = () => {
         <h1 className="mt-2 font-heading text-2xl font-extrabold text-dark-900">Cek Email Anda</h1>
         <p className="mt-3 text-xs leading-relaxed text-dark-500">Kami telah mengirimkan tautan konfirmasi pendaftaran ke alamat email</p>
         <p className="mx-auto mt-3 w-fit max-w-full truncate rounded-lg bg-dark-50 px-4 py-2 font-heading text-xs font-bold text-dark-900">{email}</p>
-        <a href={ppdbVerifikasi.ctaUrl} target="_blank" rel="noreferrer" className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5"><Mail className="h-4 w-4" />{ppdbVerifikasi.ctaLabel}</a>
+        <a href={ppdbVerifikasi.ctaUrl} target="_blank" rel="noreferrer" className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5"><Mail className="h-4 w-4" />{ppdbVerifikasi.ctaLabel}</a>
         <div className="mt-6 rounded-xl bg-dark-50 px-5 py-4 text-left"><p className="font-heading text-[11px] font-bold text-dark-900">{ppdbVerifikasi.catatanJudul}</p><ul className="mt-2 space-y-1.5">{ppdbVerifikasi.catatan.map((catatan) => <li key={catatan} className="flex gap-2 text-[11px] leading-relaxed text-dark-500"><span aria-hidden="true">&bull;</span>{catatan}</li>)}</ul></div>
         {feedback && <p role="status" className="mt-5 rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{feedback}</p>}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-2 border-t border-dark-100 pt-5 text-[11px]"><span className="text-dark-500">Salah email? <button type="button" onClick={ubahEmail} className="font-bold text-dark-900 underline hover:text-primary">Ubah Email</button></span><button type="button" disabled={sisa > 0 || resending} onClick={kirimUlang} className="font-heading font-bold text-primary hover:underline disabled:cursor-not-allowed disabled:text-dark-400 disabled:no-underline">{resending ? 'Mengirim...' : sisa > 0 ? `Kirim Ulang (${sisa}s)` : 'Kirim Ulang'}</button></div>

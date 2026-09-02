@@ -38,7 +38,7 @@ const Login = () => {
     <main className="relative flex min-h-screen items-center justify-center bg-dark-50 px-3 py-6 sm:px-4 sm:py-8">
       <Link
         to="/"
-        className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white sm:right-8 sm:top-8"
+        className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white sm:right-8 sm:top-8"
       >
         <ArrowLeft className="h-4 w-4" />
         Kembali ke Beranda
@@ -114,7 +114,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={submitting || loading}
-            className="w-full rounded-lg bg-primary px-4 py-3.5 text-sm font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-full bg-primary px-4 py-3.5 text-sm font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? 'Memproses login...' : 'Login'}
           </button>

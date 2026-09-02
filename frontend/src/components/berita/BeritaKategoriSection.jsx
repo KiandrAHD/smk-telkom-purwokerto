@@ -146,7 +146,7 @@ const BeritaKategoriSection = ({ items = [] }) => {
             type="button"
             onClick={() => setShownCount((c) => c + kategoriBerita.perPage)}
             disabled={!hasMore}
-            className="inline-flex items-center gap-2 rounded-lg border border-primary/40 bg-white px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-primary"
           >
             {kategoriBerita.ctaText}
           </button>

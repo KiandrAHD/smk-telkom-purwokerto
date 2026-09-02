@@ -42,7 +42,7 @@ const PengumumanPpdbSection = ({ tampilkanLihatSemua = true }) => (
 
             <Link
               to={ppdbBanner.href}
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-xs font-extrabold text-primary transition-colors hover:bg-primary-50"
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-extrabold text-primary transition-colors hover:bg-primary-50"
             >
               {ppdbBanner.ctaText}
               <ArrowRight className="h-3.5 w-3.5" />
@@ -62,7 +62,7 @@ const PengumumanPpdbSection = ({ tampilkanLihatSemua = true }) => (
           {tampilkanLihatSemua && (
             <Link
               to="/pengumuman/informasi-penting"
-              className="mt-3 inline-flex items-center gap-2 rounded-lg border border-primary px-3 py-1.5 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
+              className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary px-3 py-1.5 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
             >
               {infoPenting.linkText}
               <ArrowRight className="h-3 w-3" />

@@ -47,7 +47,7 @@ const BeritaHeroSection = ({ items = [] }) => {
 
             <img
               src={beritaHero.image}
-              alt="Siswa SMK Telkom Purwokerto"
+              alt="Gedung SMK Telkom Purwokerto dengan siswa berjalan di halaman depan"
               className="w-full rounded-[1.75rem] object-contain"
             />
           </div>

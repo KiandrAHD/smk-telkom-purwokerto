@@ -34,7 +34,7 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
             </p>
             <Link
               to={`/prestasi/${featured.slug}`}
-              className="mt-5 inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/40 px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
               {prestasiUnggulan.ctaText}
               <ArrowRight className="h-3 w-3" />

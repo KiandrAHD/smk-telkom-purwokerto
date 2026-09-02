@@ -26,7 +26,7 @@ const BkkJalurKarierSection = () => {
                   role="tab"
                   aria-selected={tab === t}
                   onClick={() => setTab(t)}
-                  className={`rounded-md px-3.5 py-1.5 text-[10px] font-bold transition-colors ${
+                  className={`rounded-full px-3.5 py-1.5 text-[10px] font-bold transition-colors ${
                     tab === t
                       ? 'bg-primary text-white'
                       : 'border border-dark-200 text-dark-600 hover:border-primary hover:text-primary'
@@ -68,7 +68,7 @@ const BkkJalurKarierSection = () => {
           <div className="mt-8 flex justify-center">
             <Link
               to={`/bkk/roadmap/${tab.toLowerCase()}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
               {jalurKarier.ctaText}
               <ArrowRight className="h-3 w-3" />

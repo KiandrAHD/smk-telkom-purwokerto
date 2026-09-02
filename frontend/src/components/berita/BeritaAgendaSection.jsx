@@ -143,7 +143,7 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
             </label>
             <button
               type="submit"
-              className="mt-3 w-full rounded-lg bg-primary py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
+              className="mt-3 w-full rounded-full bg-primary py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
             >
               {newsletterBerita.ctaText}
             </button>

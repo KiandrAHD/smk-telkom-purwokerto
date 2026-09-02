@@ -9,7 +9,7 @@ const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = pengumumanF
         type="button"
         onClick={() => onChip(c)}
         aria-pressed={chip === c}
-        className={`min-w-[62px] rounded-lg px-3 py-2 text-[11px] font-bold transition-colors ${
+        className={`min-w-[62px] rounded-full px-3 py-2 text-[11px] font-bold transition-colors ${
           chip === c
             ? 'bg-primary text-white'
             : 'border border-dark-300 text-dark-900/[0.68] hover:border-primary hover:text-primary'

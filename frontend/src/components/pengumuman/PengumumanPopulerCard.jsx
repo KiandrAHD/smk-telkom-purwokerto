@@ -14,7 +14,7 @@ const PengumumanPopulerCard = ({ tampilkanLihatSemua = true }) => (
       {tampilkanLihatSemua && (
         <Link
           to="/pengumuman/populer"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-[#bf0d1b] px-2.5 py-1 font-heading text-[10px] font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
+          className="inline-flex items-center gap-1.5 rounded-full border border-primary px-2.5 py-1 font-heading text-[10px] font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
         >
           {pengumumanPopuler.linkText}
           <ArrowRight className="h-2.5 w-2.5" />
@@ -37,7 +37,7 @@ const PengumumanPopulerCard = ({ tampilkanLihatSemua = true }) => (
               </span>
               <span className="mt-1 flex flex-wrap items-center gap-2 font-heading text-[9px] font-extrabold text-dark-900/[0.68]">
                 {item.date}
-                <span className="h-1 w-1 rounded-full bg-[#525252]" />
+                <span className="h-1 w-1 rounded-full bg-current" />
                 {item.views}
               </span>
             </span>

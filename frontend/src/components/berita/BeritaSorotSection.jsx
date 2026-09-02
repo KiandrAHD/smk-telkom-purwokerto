@@ -36,7 +36,7 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
 
           <Link
             to={`/berita/${featured.slug}`}
-            className="mt-6 inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
           >
             {beritaSorot.ctaText}
           </Link>
@@ -71,7 +71,7 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
             <div className="mt-5 flex justify-end">
               <Link
                 to="/berita/trending"
-                className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
               >
                 {beritaSorot.trendingCta}
                 <ArrowRight className="h-3 w-3" />

@@ -55,7 +55,7 @@ const BkkAlumniSection = () => (
         <Link
           to="/bkk/panduan"
           aria-label="Lihat semua sumber daya karier"
-          className="mt-auto flex items-center justify-end rounded-lg border border-primary/40 px-4 py-2 text-primary transition-colors hover:bg-primary hover:text-white"
+          className="mt-auto flex items-center justify-end rounded-full border border-primary/40 px-4 py-2 text-primary transition-colors hover:bg-primary hover:text-white"
         >
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>

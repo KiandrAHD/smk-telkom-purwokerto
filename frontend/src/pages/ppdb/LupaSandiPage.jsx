@@ -48,7 +48,7 @@ const LupaSandiPage = () => {
             />
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5"
             >
               {lupaSandi.ctaLabel}
               <ArrowRight className="h-4 w-4" />

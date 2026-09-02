@@ -11,6 +11,9 @@ import prestasi3 from '../assets/landing/prestasi-3.jpg';
 import mapImg from '../assets/landing/map.jpg';
 
 import heroJurusan from '../assets/jurusan/hero-jurusan.jpg';
+import heroPrestasi from '../assets/prestasi/hero-prestasi.jpg';
+import heroBkk from '../assets/bkk/hero-bkk.jpg';
+import heroBerita from '../assets/berita/hero-berita.jpg';
 
 import logoTelkomColor from '../assets/bkk/logo-telkom.png';
 import logoHuaweiColor from '../assets/bkk/logo-huawei.png';
@@ -593,7 +596,7 @@ export const prestasiHero = {
   description:
     'Siswa SMK Telkom Purwokerto terus berinovasi, berkompetisi, dan mengharumkan nama sekolah di tingkat nasional hingga internasional.',
   ctaText: 'Lihat Prestasi',
-  image: heroJurusan,
+  image: heroPrestasi,
 };
 
 export const prestasiStats = [
@@ -755,9 +758,20 @@ export const videoHighlight = {
    HALAMAN BKK
    ========================================================= */
 
-// Di Figma hero BKK memakai teks yang sama persis dengan halaman Prestasi;
-// hanya angka statistiknya yang berbeda.
-export const bkkHero = { ...prestasiHero };
+// Sebelumnya `{ ...prestasiHero }`, mengikuti Figma. Akibatnya halaman BKK
+// membuka diri sebagai halaman Prestasi -- judul, badge, dan tombolnya semua
+// bicara soal kejuaraan, padahal isinya lowongan kerja dan PKL. Halaman yang
+// memakai identitas halaman lain membuat pengunjung kehilangan orientasi, jadi
+// BKK diberi teksnya sendiri.
+export const bkkHero = {
+  badge: 'Bursa Kerja Khusus',
+  title: 'Dari Ruang Kelas',
+  titleAccent: 'Menuju Dunia\nKerja Nyata',
+  description:
+    'BKK SMK Telkom Purwokerto menjembatani siswa dan alumni dengan lowongan kerja, tempat PKL, serta mitra industri yang siap membuka pintu karier.',
+  ctaText: 'Lihat Lowongan',
+  image: heroBkk,
+};
 
 export const bkkStats = [
   { value: '250+', label: 'Lowongan Aktif', icon: 'lowongan' },
@@ -948,9 +962,18 @@ export const kisahAlumni = {
    HALAMAN PENGUMUMAN
    ========================================================= */
 
-// Hero-nya memakai teks yang sama persis dengan halaman Profil Sekolah di Figma —
-// hanya ilustrasinya yang berganti jadi megafon.
-export const pengumumanHero = { ...heroData, image: pengumumanHeroImg };
+// Sebelumnya `{ ...heroData }`, mengikuti Figma -- sehingga halaman Pengumuman
+// menyapa pengunjung dengan judul milik Profil Sekolah ("Discover the Place
+// Where Future Innovators Grow"), yang tidak menjelaskan isi halaman sama
+// sekali. Teksnya sekarang milik halaman ini sendiri.
+export const pengumumanHero = {
+  heading: 'Semua Kabar Resmi',
+  headingAccent: 'Ada di Satu Tempat.',
+  description:
+    'Jadwal PPDB, agenda sekolah, sampai pengumuman harian dikumpulkan di sini supaya tidak ada informasi penting yang terlewat.',
+  ctaText: 'Lihat Info PPDB',
+  image: pengumumanHeroImg,
+};
 
 // CATATAN: salah ketik "dafar" ditiru apa adanya dari desain.
 export const ppdbBanner = {
@@ -1017,8 +1040,8 @@ export const daftarPengumuman = {
       tags: ['PPDB', 'Baru'],
       penting: true,
       icon: 'megaphone',
-      iconColor: 'text-[#cd0b20]',
-      thumb: 'bg-[#cd0b20]/20',
+      iconColor: 'text-primary',
+      thumb: 'bg-primary/20',
     },
     {
       id: 'peng-02',
@@ -1983,7 +2006,7 @@ export const beritaHero = {
   description:
     'Ikuti semua informasi terkini tentang prestasi, kegiatan, event, dan inovasi di SMK Telkom Purwokerto',
   ctaText: 'Jelajahi Berita',
-  image: heroJurusan,
+  image: heroBerita,
 };
 
 export const breakingNews = {

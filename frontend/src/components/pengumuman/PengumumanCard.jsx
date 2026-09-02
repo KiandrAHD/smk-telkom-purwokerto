@@ -10,7 +10,7 @@ const ikon = {
 };
 
 const Tag = ({ children }) => (
-  <span className="rounded bg-primary/20 px-2 py-0.5 font-heading text-[10px] font-extrabold text-[#9b0011]">
+  <span className="rounded bg-primary/20 px-2 py-0.5 font-heading text-[10px] font-extrabold text-primary-800">
     {children}
   </span>
 );
@@ -56,7 +56,7 @@ const PengumumanCard = ({ item }) => {
 
         <Link
           to={`/pengumuman/${item.slug}`}
-          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-lg border border-[#bf0d1b] px-3 py-1.5 font-heading text-[10px] font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
+          className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 font-heading text-[10px] font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
         >
           {daftarPengumuman.detailText}
           <ArrowRight className="h-3 w-3" />

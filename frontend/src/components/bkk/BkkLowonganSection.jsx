@@ -84,7 +84,7 @@ const BkkLowonganSection = ({ items = [] }) => {
             <button
               type="button"
               onClick={reset}
-              className="flex-shrink-0 rounded-lg bg-primary px-6 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
+              className="flex-shrink-0 rounded-full bg-primary px-6 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
             >
               {bkkSearch.ctaText}
             </button>
@@ -151,7 +151,7 @@ const BkkLowonganSection = ({ items = [] }) => {
                   target={job.link_pendaftaran ? '_blank' : undefined}
                   rel={job.link_pendaftaran ? 'noreferrer' : undefined}
                   onClick={(event) => { if (!job.link_pendaftaran) event.preventDefault(); }}
-                  className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dark-200 px-3 py-2 text-[9px] font-bold text-dark-600 transition-colors hover:border-primary hover:text-primary"
+                  className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-full border border-dark-200 px-3 py-2 text-[9px] font-bold text-dark-600 transition-colors hover:border-primary hover:text-primary"
                 >
                   {lowonganPopuler.ctaText}
                   <ArrowRight className="h-2.5 w-2.5" />

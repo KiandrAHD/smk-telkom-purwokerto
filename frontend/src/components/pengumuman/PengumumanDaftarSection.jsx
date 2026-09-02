@@ -57,7 +57,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
               <div className="mt-7 flex justify-center">
                 <Link
                   to="/pengumuman/semua"
-                  className="inline-flex items-center gap-3 rounded-lg border border-[#bf0d1b] px-7 py-3 font-heading text-xs font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
+                  className="inline-flex items-center gap-3 rounded-full border border-primary px-7 py-3 font-heading text-xs font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
                 >
                   {daftarPengumuman.ctaText}
                   <ArrowRight className="h-4 w-4" />

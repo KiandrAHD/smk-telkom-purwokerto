@@ -225,13 +225,13 @@ const RegistrationFormPage = () => {
             <button
               type="button"
               onClick={() => setDraftTersimpan(true)}
-              className="rounded-xl border border-dark-200 px-5 py-3 text-xs font-bold text-dark-700 transition-colors hover:border-primary hover:text-primary"
+              className="rounded-full border border-dark-200 px-5 py-3 text-xs font-bold text-dark-700 transition-colors hover:border-primary hover:text-primary"
             >
               Simpan Draft
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5"
+              className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5"
             >
               Lanjut ke Berkas
               <ArrowRight className="h-4 w-4" />

@@ -223,7 +223,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
           type="submit"
           disabled={memuat || !masukan.trim()}
           aria-label="Kirim pertanyaan"
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Send className="h-4 w-4" />
         </button>
