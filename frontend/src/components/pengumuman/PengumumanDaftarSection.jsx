@@ -8,7 +8,8 @@ import PengumumanPopulerCard from './PengumumanPopulerCard';
 import PengumumanBantuanCard from './PengumumanBantuanCard';
 import { daftarPengumuman } from '../../data/dummyData';
 
-const PengumumanDaftarSection = ({ items = [] }) => {
+// Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
+const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
 
@@ -52,15 +53,17 @@ const PengumumanDaftarSection = ({ items = [] }) => {
               </p>
             )}
 
-            <div className="mt-7 flex justify-center">
-              <Link
-                to="/pengumuman/semua"
-                className="inline-flex items-center gap-3 rounded-lg border border-[#bf0d1b] px-7 py-3 font-heading text-xs font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
-              >
-                {daftarPengumuman.ctaText}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+            {tampilkanLihatSemua && (
+              <div className="mt-7 flex justify-center">
+                <Link
+                  to="/pengumuman/semua"
+                  className="inline-flex items-center gap-3 rounded-lg border border-[#bf0d1b] px-7 py-3 font-heading text-xs font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
+                >
+                  {daftarPengumuman.ctaText}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            )}
           </div>
 
           <div className="space-y-5">

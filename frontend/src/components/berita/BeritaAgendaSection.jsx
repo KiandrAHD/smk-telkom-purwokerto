@@ -8,7 +8,9 @@ import {
 } from "../../data/dummyData";
 import { slugify } from "../../utils/slug";
 
-const BeritaAgendaSection = () => {
+// Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard. Di sini ada DUA
+// tautan yang menunjuk ke /berita/agenda, jadi keduanya ikut dimatikan.
+const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
@@ -27,12 +29,14 @@ const BeritaAgendaSection = () => {
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
               {agendaEvent.title}
             </h2>
-            <Link
-              to="/berita/agenda"
-              className="text-[10px] font-bold text-primary hover:underline"
-            >
-              {agendaEvent.linkText}
-            </Link>
+            {tampilkanLihatSemua && (
+              <Link
+                to="/berita/agenda"
+                className="text-[10px] font-bold text-primary hover:underline"
+              >
+                {agendaEvent.linkText}
+              </Link>
+            )}
           </div>
 
           <ul className="mt-4 space-y-3">
@@ -64,12 +68,14 @@ const BeritaAgendaSection = () => {
             ))}
           </ul>
 
-          <Link
-            to="/berita/agenda"
-            className="mt-4 inline-block text-[10px] font-bold text-primary hover:underline"
-          >
-            {agendaEvent.ctaText}
-          </Link>
+          {tampilkanLihatSemua && (
+            <Link
+              to="/berita/agenda"
+              className="mt-4 inline-block text-[10px] font-bold text-primary hover:underline"
+            >
+              {agendaEvent.ctaText}
+            </Link>
+          )}
         </div>
 
         {/* Galeri kegiatan */}

@@ -148,7 +148,16 @@ const KoleksiPage = ({ jenis }) => {
         </div>
       )}
 
-      <Reveal>{ambil ? <Section items={items} /> : <Section />}</Reveal>
+      {/* tampilkanLihatSemua dimatikan: di halaman ini, tombol "Lihat Semua"
+          milik section menunjuk ke halaman yang sedang dibuka -- diklik, tidak
+          ke mana-mana. Tombol kembali sudah tersedia di kepala halaman. */}
+      <Reveal>
+        {ambil ? (
+          <Section items={items} tampilkanLihatSemua={false} />
+        ) : (
+          <Section tampilkanLihatSemua={false} />
+        )}
+      </Reveal>
       <Reveal>
         <CTASection />
       </Reveal>

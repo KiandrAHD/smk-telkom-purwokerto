@@ -3,7 +3,8 @@ import { ArrowRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { galeriPrestasi } from '../../data/dummyData';
 
-const PrestasiGaleriSection = ({ items = [] }) => {
+// Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
+const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const [filter, setFilter] = useState('Semua');
   const [query, setQuery] = useState('');
 
@@ -95,15 +96,17 @@ const PrestasiGaleriSection = ({ items = [] }) => {
           </p>
         )}
 
-        <div className="mt-7 flex justify-center">
-          <Link
-            to="/prestasi/galeri"
-            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-5 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
-          >
-            {galeriPrestasi.ctaText}
-            <ArrowRight className="h-3 w-3" />
-          </Link>
-        </div>
+        {tampilkanLihatSemua && (
+          <div className="mt-7 flex justify-center">
+            <Link
+              to="/prestasi/galeri"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-5 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+            >
+              {galeriPrestasi.ctaText}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

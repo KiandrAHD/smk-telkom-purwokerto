@@ -2,19 +2,24 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { pengumumanPopuler } from '../../data/dummyData';
 
-const PengumumanPopulerCard = () => (
+// tampilkanLihatSemua dimatikan saat komponen ini menjadi isi halaman
+// /pengumuman/populer itu sendiri. Di sana tombolnya akan menunjuk ke halaman
+// yang sedang dibuka -- tombol yang diklik tapi tidak ke mana-mana.
+const PengumumanPopulerCard = ({ tampilkanLihatSemua = true }) => (
   <div className="rounded-xl bg-white p-4 shadow-card">
     <div className="flex items-center justify-between gap-3">
       <h2 className="font-heading text-sm font-extrabold text-dark-900">
         {pengumumanPopuler.title}
       </h2>
-      <Link
-        to="/pengumuman/populer"
-        className="inline-flex items-center gap-1.5 rounded-lg border border-[#bf0d1b] px-2.5 py-1 font-heading text-[10px] font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
-      >
-        {pengumumanPopuler.linkText}
-        <ArrowRight className="h-2.5 w-2.5" />
-      </Link>
+      {tampilkanLihatSemua && (
+        <Link
+          to="/pengumuman/populer"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-[#bf0d1b] px-2.5 py-1 font-heading text-[10px] font-extrabold text-[#c72b37] transition-colors hover:bg-primary hover:text-white"
+        >
+          {pengumumanPopuler.linkText}
+          <ArrowRight className="h-2.5 w-2.5" />
+        </Link>
+      )}
     </div>
 
     <ul className="mt-4 space-y-4">

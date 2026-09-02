@@ -3,7 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { beritaSorot } from '../../data/dummyData';
 
-const BeritaSorotSection = ({ items = [] }) => {
+// Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
+const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const [active, setActive] = useState(0);
   const sourceItems = items;
   const featured = sourceItems[active % sourceItems.length];
@@ -66,15 +67,17 @@ const BeritaSorotSection = ({ items = [] }) => {
             ))}
           </div>
 
-          <div className="mt-5 flex justify-end">
-            <Link
-              to="/berita/trending"
-              className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
-            >
-              {beritaSorot.trendingCta}
-              <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
+          {tampilkanLihatSemua && (
+            <div className="mt-5 flex justify-end">
+              <Link
+                to="/berita/trending"
+                className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+              >
+                {beritaSorot.trendingCta}
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

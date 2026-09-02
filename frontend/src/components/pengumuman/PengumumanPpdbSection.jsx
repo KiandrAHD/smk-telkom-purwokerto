@@ -2,7 +2,8 @@ import { ArrowRight, BellRing, CalendarDays, ClipboardList, Volume2 } from 'luci
 import { Link } from 'react-router-dom';
 import { infoPenting, ppdbBanner } from '../../data/dummyData';
 
-const PengumumanPpdbSection = () => (
+// Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
+const PengumumanPpdbSection = ({ tampilkanLihatSemua = true }) => (
   <section className="bg-white py-4 lg:py-6">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Kolom kiri 63% mengikuti lebar panel merah di Figma (1069 dari 1694). */}
@@ -58,13 +59,15 @@ const PengumumanPpdbSection = () => (
             </h2>
           </div>
 
-          <Link
-            to="/pengumuman/informasi-penting"
-            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-primary px-3 py-1.5 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
-          >
-            {infoPenting.linkText}
-            <ArrowRight className="h-3 w-3" />
-          </Link>
+          {tampilkanLihatSemua && (
+            <Link
+              to="/pengumuman/informasi-penting"
+              className="mt-3 inline-flex items-center gap-2 rounded-lg border border-primary px-3 py-1.5 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
+            >
+              {infoPenting.linkText}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          )}
 
           <ul className="mt-5 space-y-2.5">
             {infoPenting.items.map((item) => (
