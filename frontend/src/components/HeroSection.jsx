@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Briefcase, Monitor, UserPlus, Sparkles } from 'lucide-react';
+import { ArrowRight, Bot, Briefcase, ChevronRight, Monitor, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 
@@ -19,11 +19,18 @@ const HeroSection = () => (
           {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
               lihat catatan yang sama di PrestasiHeroSection. */}
           <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-2">
-            {/* Breadcrumb dihapus: Beranda adalah halaman pertama, jadi tidak ada
-                jejak navigasi yang perlu ditampilkan di sini. Halaman lain
-                (Profil Sekolah, Pengumuman) tetap memakai breadcrumb-nya sendiri
-                lewat heroData. */}
-            <p className="text-[10px] font-semibold text-primary">{landingHero.hashtag}</p>
+            <nav className="flex items-center gap-1.5 text-[11px] font-medium text-primary">
+              {landingHero.breadcrumb.map((item, i) => (
+                <span key={item.label} className="flex items-center gap-1.5">
+                  {i > 0 && <ChevronRight className="h-3 w-3" />}
+                  <Link to={item.href} className="hover:underline">
+                    {item.label}
+                  </Link>
+                </span>
+              ))}
+            </nav>
+
+            <p className="mt-4 text-[10px] font-semibold text-primary">{landingHero.hashtag}</p>
 
             <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {landingHero.title}

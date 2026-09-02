@@ -14,6 +14,7 @@ import BeritaDetailPage from './pages/BeritaDetailPage';
 import PengumumanDetailPage from './pages/PengumumanDetailPage';
 import StelaPage from './pages/StelaPage';
 import DetailPelengkapPage from './pages/DetailPelengkapPage';
+import KoleksiPage from './pages/KoleksiPage';
 import GaleriPage from './pages/GaleriPage';
 import PanduanPage from './pages/PanduanPage';
 import JurusanFaqPage from './pages/JurusanFaqPage';
@@ -135,6 +136,17 @@ const App = () => {
 
         {/* Halaman detail: isinya dicari dari slug, satu komponen per kategori. */}
         <Route path="/jurusan/:slug" element={<JurusanDetailPage />} />
+        {/* Halaman "Lihat Semua". WAJIB berada sebelum rute :slug di bawah:
+            tanpa ini /pengumuman/populer cocok dengan /pengumuman/:slug dan
+            "populer" dicari sebagai slug artikel -- halaman jadi kosong. */}
+        <Route path="/pengumuman/populer" element={<KoleksiPage jenis="pengumuman-populer" />} />
+        <Route path="/pengumuman/semua" element={<KoleksiPage jenis="pengumuman-semua" />} />
+        <Route path="/pengumuman/timeline" element={<KoleksiPage jenis="pengumuman-timeline" />} />
+        <Route path="/pengumuman/informasi-penting" element={<KoleksiPage jenis="pengumuman-informasi-penting" />} />
+        <Route path="/berita/trending" element={<KoleksiPage jenis="berita-trending" />} />
+        <Route path="/berita/agenda" element={<KoleksiPage jenis="berita-agenda" />} />
+        <Route path="/prestasi/galeri" element={<KoleksiPage jenis="prestasi-galeri" />} />
+
         <Route path="/prestasi/:slug" element={<PrestasiDetailPage />} />
         <Route path="/berita/:slug" element={<BeritaDetailPage />} />
         <Route path="/pengumuman/:slug" element={<PengumumanDetailPage />} />
