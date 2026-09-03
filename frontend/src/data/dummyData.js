@@ -1085,15 +1085,21 @@ export const daftarPengumuman = {
   ],
 };
 
+// Angka 1-5 di daftar ini adalah peringkat, dan angkanya sendiri sudah
+// menyatakan peringkat itu. Warnanya dulu berbeda-beda per baris (merah,
+// hijau, biru, biru muda, kuning) tanpa mengkodekan apa pun -- empat di
+// antaranya warna yang tidak muncul di halaman mana pun selain ini, dan
+// tiga gagal kontras WCAG AA. Kolom `badge` dihapus; perlakuannya kini
+// seragam dan diatur di PengumumanPopulerCard.
 export const pengumumanPopuler = {
   title: 'Pengumuman Populer',
   linkText: 'Lihat Semua',
   items: [
-    { slug: 'ppdb-gelombang-1-dibuka', title: 'PPDB Gelombang 1 Dibuka', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#f5ced2] text-[#9b0011]' },
-    { slug: 'jadwal-ujian-tengah-semester', title: 'Jadwal Ujian Tengah Semester', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#d9f5ce] text-[#268500]' },
-    { slug: 'workshop-ai-untuk-siswa', title: 'Workshop AI untuk Siswa', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#cecff5] text-[#0b11cd]' },
-    { slug: 'kunjungan-industri-ke-telkom', title: 'Kunjungan Industri ke Telkom', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#ceebf5] text-[#0b9ccd]' },
-    { slug: 'pengumuman-kelulusan-kelas-xii', title: 'Pengumuman Kelulusan Kelas XII', date: '15 Mei 2026', views: '2.4k Dilihat', badge: 'bg-[#f5f2ce] text-[#8f8c69]' },
+    { slug: 'ppdb-gelombang-1-dibuka', title: 'PPDB Gelombang 1 Dibuka', date: '15 Mei 2026', views: '2.4k Dilihat' },
+    { slug: 'jadwal-ujian-tengah-semester', title: 'Jadwal Ujian Tengah Semester', date: '15 Mei 2026', views: '2.4k Dilihat' },
+    { slug: 'workshop-ai-untuk-siswa', title: 'Workshop AI untuk Siswa', date: '15 Mei 2026', views: '2.4k Dilihat' },
+    { slug: 'kunjungan-industri-ke-telkom', title: 'Kunjungan Industri ke Telkom', date: '15 Mei 2026', views: '2.4k Dilihat' },
+    { slug: 'pengumuman-kelulusan-kelas-xii', title: 'Pengumuman Kelulusan Kelas XII', date: '15 Mei 2026', views: '2.4k Dilihat' },
   ],
 };
 

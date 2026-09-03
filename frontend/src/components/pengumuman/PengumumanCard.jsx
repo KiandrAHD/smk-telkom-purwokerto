@@ -36,7 +36,7 @@ const PengumumanCard = ({ item }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-extrabold text-dark-900/[0.68]">
+          <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-extrabold text-dark-600">
             <CalendarDays className="h-3 w-3 flex-shrink-0" />
             {item.date}
           </span>
@@ -49,7 +49,7 @@ const PengumumanCard = ({ item }) => {
           <h3 className="font-heading text-sm font-extrabold leading-snug text-dark-900">
             {item.title}
           </h3>
-          <p className="mt-1.5 max-w-[24rem] font-heading text-[10px] font-extrabold leading-relaxed text-dark-900/[0.68]">
+          <p className="mt-1.5 max-w-[24rem] font-heading text-[10px] font-extrabold leading-relaxed text-dark-600">
             {item.desc}
           </p>
         </div>

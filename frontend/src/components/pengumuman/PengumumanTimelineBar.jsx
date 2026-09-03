@@ -4,7 +4,7 @@ import { pengumumanTimeline } from '../../data/dummyData';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
 const PengumumanTimelineBar = ({ tampilkanLihatSemua = true }) => (
-  <div className="grid grid-cols-2 gap-y-5 rounded-lg border border-dark-300 px-5 py-6 sm:grid-cols-4 lg:grid-cols-[repeat(4,auto)_1fr] lg:gap-x-[4.5rem] lg:px-8">
+  <div className="grid grid-cols-2 gap-y-5 rounded-lg border border-dark-200 px-5 py-6 sm:grid-cols-4 lg:grid-cols-[repeat(4,auto)_1fr] lg:gap-x-[4.5rem] lg:px-8">
     {pengumumanTimeline.items.map((item) => (
       <div key={item.label}>
         <p className="font-heading text-sm font-bold text-dark-900">{item.label}</p>

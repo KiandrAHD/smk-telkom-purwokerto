@@ -7,7 +7,7 @@ const PengumumanBantuanCard = () => (
     <h2 className="font-heading text-base font-extrabold text-primary-800">
       {butuhBantuan.title}
     </h2>
-    <p className="mt-1.5 max-w-[13rem] font-heading text-[10px] font-extrabold leading-snug text-dark-900/[0.68]">
+    <p className="mt-1.5 max-w-[13rem] font-heading text-[10px] font-extrabold leading-snug text-dark-600">
       {butuhBantuan.description}
     </p>
 

@@ -27,7 +27,7 @@ const PengumumanPopulerCard = ({ tampilkanLihatSemua = true }) => (
         <li key={item.title}>
           <Link to={`/pengumuman/${item.slug}`} className="flex items-start gap-3">
             <span
-              className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full font-heading text-base font-bold ${item.badge}`}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-primary-50 font-heading text-base font-bold text-primary"
             >
               {i + 1}
             </span>
@@ -35,7 +35,7 @@ const PengumumanPopulerCard = ({ tampilkanLihatSemua = true }) => (
               <span className="block font-heading text-[11px] font-extrabold leading-snug text-dark-900">
                 {item.title}
               </span>
-              <span className="mt-1 flex flex-wrap items-center gap-2 font-heading text-[9px] font-extrabold text-dark-900/[0.68]">
+              <span className="mt-1 flex flex-wrap items-center gap-2 font-heading text-[9px] font-extrabold text-dark-600">
                 {item.date}
                 <span className="h-1 w-1 rounded-full bg-current" />
                 {item.views}
