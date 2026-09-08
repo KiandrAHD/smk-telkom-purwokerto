@@ -1,15 +1,5 @@
-// Menyusun foto hero untuk halaman yang tadinya menumpang hero-jurusan.jpg.
-//
-// Empat halaman (/jurusan, /prestasi, /bkk, /berita) memakai satu berkas yang
-// sama, jadi keempatnya terlihat identik saat dibuka. Yang dibutuhkan bukan
-// foto acak, melainkan foto yang masih terasa satu keluarga dengan dua hero
-// yang sudah ada: latar putih, sapuan merah menyapu dari kanan bawah, subjek
-// mengambang di atasnya.
-//
-// Sapuan merahnya digambar sendiri lewat SVG (bukan dipotong dari aset lama,
-// karena di sana ia tertutup subjek), lalu fotonya ditaruh sebagai kartu
-// bersudut tumpul di atasnya. Ukuran kanvas mengikuti hero yang sudah ada:
-// 1600x751, rasio 2.13.
+// Menyusun foto hero Prestasi, BKK, dan Berita di atas latar putih.
+// Ukuran kanvas mengikuti hero yang sudah ada: 1600x751, rasio 2.13.
 //
 // Jalankan: node scripts/buat-hero.mjs
 
@@ -21,47 +11,8 @@ const AKAR = path.resolve(import.meta.dirname, '..', 'src', 'assets');
 const L = 1600;
 const T = 751;
 
-// Kartu foto: sisakan margin supaya sapuan merah terlihat mengintip di
-// kanan dan bawah, bukan tertutup rata.
+// Kartu foto: sisakan margin supaya foto tetap terlihat mengambang.
 const KARTU = { x: 96, y: 56, w: 950, h: 600, r: 44 };
-
-const MERAH = '#c8102e';
-
-// Dua pita melengkung yang saling menimpa, meniru sapuan pada pengumuman-hero:
-// satu pita gelap sebagai dasar, satu pita terang di atasnya.
-const sapuan = Buffer.from(`
-<svg width="${L}" height="${T}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="tua" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0%" stop-color="${MERAH}" stop-opacity="0.85"/>
-      <stop offset="55%" stop-color="${MERAH}"/>
-      <stop offset="100%" stop-color="#e8283f"/>
-    </linearGradient>
-    <linearGradient id="muda" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0%" stop-color="#f36b73" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#ff9d84" stop-opacity="0.9"/>
-    </linearGradient>
-    <filter id="halus" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur stdDeviation="1.2"/>
-    </filter>
-  </defs>
-
-  <!-- pita dasar: pita merah penuh di sepanjang bawah, menebal ke kanan -->
-  <path filter="url(#halus)" fill="url(#tua)"
-    d="M -40 ${T - 72}
-       C 420 ${T - 78}, 880 ${T - 120}, 1200 ${T - 300}
-       C 1400 ${T - 410}, 1520 ${T - 520}, ${L + 40} ${T - 625}
-       L ${L + 40} ${T + 40} L -40 ${T + 40} Z" />
-
-  <!-- pita terang: menumpang di atas pita dasar, hanya di paruh kanan -->
-  <path filter="url(#halus)" fill="url(#muda)"
-    d="M 300 ${T - 80}
-       C 700 ${T - 122}, 1000 ${T - 232}, 1240 ${T - 400}
-       C 1420 ${T - 520}, 1520 ${T - 620}, ${L + 40} ${T - 718}
-       L ${L + 40} ${T - 622}
-       C 1520 ${T - 522}, 1400 ${T - 412}, 1200 ${T - 302}
-       C 880 ${T - 122}, 420 ${T - 80}, 300 ${T - 80} Z" />
-</svg>`);
 
 // Bayangan lembut di bawah kartu supaya ia terbaca mengambang, bukan ditempel.
 const bayangan = Buffer.from(`
@@ -70,7 +21,7 @@ const bayangan = Buffer.from(`
     <feGaussianBlur stdDeviation="26"/>
   </filter></defs>
   <rect x="${KARTU.x + 10}" y="${KARTU.y + 22}" width="${KARTU.w}" height="${KARTU.h}"
-        rx="${KARTU.r}" fill="#8a1420" opacity="0.26" filter="url(#b)"/>
+        rx="${KARTU.r}" fill="#64748b" opacity="0.2" filter="url(#b)"/>
 </svg>`);
 
 const masker = Buffer.from(`
@@ -78,8 +29,7 @@ const masker = Buffer.from(`
   <rect width="${KARTU.w}" height="${KARTU.h}" rx="${KARTU.r}" fill="#fff"/>
 </svg>`);
 
-// crop = area sumber yang dipakai. Dipilih manual, bukan center-crop, karena
-// dua foto punya watermark yang harus ikut terpotong.
+// Crop area sumber dipilih manual agar framing tiap foto tetap konsisten.
 const HERO = [
   {
     keluar: 'prestasi/hero-prestasi.jpg',
@@ -103,7 +53,7 @@ const HERO = [
 const dasar = await sharp({
   create: { width: L, height: T, channels: 3, background: '#ffffff' },
 })
-  .composite([{ input: sapuan }, { input: bayangan }])
+  .composite([{ input: bayangan }])
   .png()
   .toBuffer();
 
