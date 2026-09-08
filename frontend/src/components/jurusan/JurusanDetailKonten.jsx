@@ -120,11 +120,11 @@ const JurusanDetailKonten = ({ item }) => {
                   className="aspect-[2/1] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
-              <span className="px-4 py-3.5">
+              <span className="flex flex-1 flex-col px-4 py-3.5">
                 <span className="block font-heading text-[11px] font-bold leading-snug text-dark-900">
                   {j.title}
                 </span>
-                <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-primary">
+                <span className="mt-auto inline-flex items-center gap-1 pt-1.5 text-[10px] font-bold text-primary">
                   Lihat detail
                   <ArrowRight className="h-3 w-3" />
                 </span>

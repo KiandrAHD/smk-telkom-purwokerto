@@ -26,7 +26,7 @@ const JurusanListSection = () => {
                 onFocus={() => setActive(i)}
                 className={`group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all ${
                   isActive
-                    ? '-translate-y-1 border-primary shadow-lg'
+                    ? 'border-primary shadow-lg'
                     : 'border-dark-100 hover:border-primary/40'
                 }`}
               >
@@ -49,7 +49,7 @@ const JurusanListSection = () => {
                   </h3>
                   <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{item.desc}</p>
 
-                  <div className="mt-3 flex flex-wrap gap-1.5">
+                  <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
                     {jurusanTags.map((tag) => (
                       <span
                         key={tag}

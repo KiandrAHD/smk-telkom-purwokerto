@@ -26,10 +26,10 @@ const BkkJalurKarierSection = () => {
                   role="tab"
                   aria-selected={tab === t}
                   onClick={() => setTab(t)}
-                  className={`rounded-full px-3.5 py-1.5 text-[10px] font-bold transition-colors ${
+                  className={`rounded-full border px-3.5 py-1.5 text-[10px] font-bold transition-colors ${
                     tab === t
-                      ? 'bg-primary text-white'
-                      : 'border border-dark-200 text-dark-600 hover:border-primary hover:text-primary'
+                      ? 'border-primary bg-primary text-white'
+                      : 'border-dark-200 text-dark-600 hover:border-primary hover:text-primary'
                   }`}
                 >
                   {t}
