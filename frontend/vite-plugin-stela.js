@@ -46,11 +46,13 @@ export const stelaDevPlugin = () => ({
     const baca = (nama) => env[nama] ?? process.env[nama];
 
     const kunci = {
+      ninerouter: baca('NINEROUTER_KEY'),
       anthropic: baca('ANTHROPIC_API_KEY'),
       gemini: baca('GEMINI_API_KEY'),
       groq: baca('GROQ_API_KEY'),
     };
     const argKunci = {
+      ninerouterKey: kunci.ninerouter,
       anthropicKey: kunci.anthropic,
       geminiKey: kunci.gemini,
       groqKey: kunci.groq,
@@ -66,7 +68,9 @@ export const stelaDevPlugin = () => ({
     // cadangannya dan bisa berpindah model saat kuota satu model habis.
     // Mengisinya dengan MODEL_BAWAAN akan mematikan failover, karena model
     // yang dipilih manual sengaja dihormati apa adanya.
-    const model = baca('STELA_MODEL') || undefined;
+    const model = (penyedia === 'ninerouter' ? baca('NINEROUTER_MODEL') : undefined)
+      || baca('STELA_MODEL')
+      || undefined;
     const labelModel = model ?? `${MODEL_CADANGAN[penyedia]?.length ?? 1} model bergantian`;
 
     const penjaga = buatPenjaga({
@@ -77,7 +81,7 @@ export const stelaDevPlugin = () => ({
     server.config.logger.info(
       penyedia
         ? `  \x1b[32m➜\x1b[0m  STELA lokal siap di /api/stela (${penyedia}, ${labelModel}, maks ${penjaga.statistik().maksPerHari}/hari)`
-        : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env',
+        : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi NINEROUTER_KEY, GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env',
     );
 
     server.middlewares.use('/api/stela', async (req, res) => {
@@ -92,7 +96,7 @@ export const stelaDevPlugin = () => ({
         return kirim(
           {
             error:
-              'Kunci AI belum diisi. Isi GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env, lalu jalankan ulang dev server.',
+              'Kunci AI belum diisi. Isi NINEROUTER_KEY, GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env, lalu jalankan ulang dev server.',
           },
           503,
         );

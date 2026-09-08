@@ -115,6 +115,9 @@ Set secret melalui Supabase CLI atau dashboard:
 
 ```bash
 supabase secrets set ANTHROPIC_API_KEY=...
+supabase secrets set NINEROUTER_KEY=...
+supabase secrets set NINEROUTER_URL=https://9router.com
+supabase secrets set NINEROUTER_MODEL=cc/claude-haiku-4-20250514
 supabase secrets set STELA_MODEL=...
 supabase secrets set STELA_ALLOWED_ORIGINS=https://domain-website-anda.example,http://localhost:5173
 ```
@@ -273,8 +276,11 @@ yang sudah divalidasi dan dipangkas ukurannya.
 
 Konfigurasi Supabase Edge Function:
 
-- `NEXTTEL_ANTHROPIC_API_KEY`: secret API Anthropic khusus NextTel.
-- `NEXTTEL_MODEL`: model ID yang tersedia pada akun Anthropic.
+- `NINEROUTER_KEY`: secret API 9Router bersama STELA dan NextTel.
+- `NINEROUTER_URL`: base URL 9Router, bawaan `https://9router.com`.
+- `NINEROUTER_MODEL`: model atau combo 9Router; bawaan Haiku cepat.
+- `NEXTTEL_NINEROUTER_KEY`: secret 9Router khusus NextTel, jika ingin memisahkan akun.
+- `NEXTTEL_NINEROUTER_MODEL`: model 9Router khusus NextTel.
 - `NEXTTEL_ALLOWED_ORIGINS`: daftar origin frontend dipisahkan koma.
 
 Frontend hanya memakai `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` untuk memanggil

@@ -7,18 +7,24 @@ import { pilihPenyedia, tanyaAI } from '../stela/inti.mjs';
 // Kunci khusus NextTel dipakai kalau ada (berguna untuk memisahkan tagihan),
 // selain itu jatuh ke kunci bersama supaya cukup mengisi satu kunci saja.
 const KUNCI: Record<string, string | undefined> = {
+  ninerouter: Deno.env.get('NEXTTEL_NINEROUTER_KEY') ?? Deno.env.get('NINEROUTER_KEY'),
   anthropic: Deno.env.get('NEXTTEL_ANTHROPIC_API_KEY') ?? Deno.env.get('ANTHROPIC_API_KEY'),
   gemini: Deno.env.get('NEXTTEL_GEMINI_API_KEY') ?? Deno.env.get('GEMINI_API_KEY'),
   groq: Deno.env.get('NEXTTEL_GROQ_API_KEY') ?? Deno.env.get('GROQ_API_KEY'),
 };
 const PENYEDIA = pilihPenyedia({
+  ninerouterKey: KUNCI.ninerouter,
   anthropicKey: KUNCI.anthropic,
   geminiKey: KUNCI.gemini,
   groqKey: KUNCI.groq,
 });
 const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
 // Dibiarkan undefined supaya failover daftar model ikut aktif.
-const MODEL = Deno.env.get('NEXTTEL_MODEL') || undefined;
+const MODEL = (PENYEDIA === 'ninerouter'
+  ? Deno.env.get('NEXTTEL_NINEROUTER_MODEL') ?? Deno.env.get('NINEROUTER_MODEL')
+  : undefined)
+  || Deno.env.get('NEXTTEL_MODEL')
+  || undefined;
 const ALLOWED_ORIGINS = (Deno.env.get('NEXTTEL_ALLOWED_ORIGINS') ?? '').split(',').map((origin) => origin.trim()).filter(Boolean);
 const MAJORS = ['RPL', 'PG', 'TKJ', 'TJAT'];
 const MAX_ANSWERS = 8;

@@ -27,10 +27,11 @@ export const BATAS = {
   MAKS_TOKEN_JAWABAN: 2000,
 };
 
-// STELA bisa berjalan di atas Anthropic, Google Gemini, atau Groq. Yang dipakai
+// STELA bisa berjalan di atas 9Router, Anthropic, Google Gemini, atau Groq. Yang dipakai
 // ditentukan oleh kunci mana yang terisi -- tidak ada sakelar terpisah yang
 // bisa lupa disetel.
 export const MODEL_BAWAAN = {
+  ninerouter: 'cc/claude-haiku-4-20250514',
   anthropic: 'claude-opus-5',
   // Diverifikasi lewat panggilan sungguhan, bukan dari daftar model. Daftar
   // /v1beta/models MEMUAT model yang tidak bisa dipakai akun baru: gemini-2.5-flash
@@ -53,6 +54,10 @@ export const MODEL_BAWAAN = {
 // (gemini-2.5-flash kini menjawab 404 "no longer available to new users").
 // Dengan daftar cadangan, satu model yang mati tidak mematikan STELA.
 export const MODEL_CADANGAN = {
+  ninerouter: [
+    'cc/claude-haiku-4-20250514',
+    'cc/claude-sonnet-4-20250514',
+  ],
   anthropic: ['claude-opus-5'],
   gemini: [
     'gemini-3.6-flash',
@@ -84,6 +89,7 @@ const sedangHabis = (model) => {
 // Berapa token pengetahuan sekolah yang boleh ikut per permintaan.
 // 0 = kirim penuh.
 export const ANGGARAN_KONTEKS = {
+  ninerouter: 0,
   // Prefix yang konstan ditagih dengan harga cache, jadi mengirim penuh justru
   // LEBIH murah daripada memangkas -- potongan yang berubah tiap pertanyaan
   // tidak pernah kena cache.
@@ -101,10 +107,22 @@ export const ANGGARAN_KONTEKS = {
   groq: 3000,
 };
 
-// Groq berbicara format OpenAI. Konstanta ini juga membuka OpenRouter,
-// Mistral, dan DeepSeek: cukup tambahkan barisnya di sini.
+// Groq dan 9Router berbicara format OpenAI.
 export const ALAMAT_OPENAI = {
   groq: 'https://api.groq.com/openai/v1/chat/completions',
+};
+
+const bacaEnv = (nama) => {
+  if (typeof Deno !== 'undefined' && typeof Deno.env?.get === 'function') return Deno.env.get(nama);
+  if (typeof process !== 'undefined') return process.env?.[nama];
+  return undefined;
+};
+
+export const buatAlamatPenyedia = (penyedia, baseUrl = bacaEnv('NINEROUTER_URL')) => {
+  if (penyedia === 'ninerouter') {
+    return `${(baseUrl || 'https://9router.com').replace(/\/+$/, '')}/v1/chat/completions`;
+  }
+  return ALAMAT_OPENAI[penyedia];
 };
 
 // Chatbot FAQ sekolah tidak butuh penalaran dalam. Effort rendah menekan biaya
@@ -120,22 +138,23 @@ export const EFFORT_BAWAAN = 'low';
 // dan itu membuat GROQ_API_KEY yang sah tidak pernah terpakai. Gagalnya pun
 // membingungkan -- yang terlihat cuma "STELA sedang mengalami kendala".
 export const POLA_KUNCI = {
+  ninerouter: /^sk-/,
   anthropic: /^sk-ant-/,
   gemini: /^AIza/,
   groq: /^gsk_/,
 };
 
-const URUTAN = ['anthropic', 'gemini', 'groq'];
+const URUTAN = ['ninerouter', 'anthropic', 'gemini', 'groq'];
 
-export const pilihPenyedia = ({ anthropicKey, geminiKey, groqKey } = {}) => {
-  const kunci = { anthropic: anthropicKey, gemini: geminiKey, groq: groqKey };
+export const pilihPenyedia = ({ ninerouterKey, anthropicKey, geminiKey, groqKey } = {}) => {
+  const kunci = { ninerouter: ninerouterKey, anthropic: anthropicKey, gemini: geminiKey, groq: groqKey };
   return URUTAN.find((nama) => kunci[nama] && POLA_KUNCI[nama].test(kunci[nama])) ?? null;
 };
 
 // Kunci yang terisi tapi bentuknya salah. Dilaporkan terpisah supaya server
 // bisa memberi tahu, bukan diam-diam melewatinya.
-export const kunciBermasalah = ({ anthropicKey, geminiKey, groqKey } = {}) => {
-  const kunci = { anthropic: anthropicKey, gemini: geminiKey, groq: groqKey };
+export const kunciBermasalah = ({ ninerouterKey, anthropicKey, geminiKey, groqKey } = {}) => {
+  const kunci = { ninerouter: ninerouterKey, anthropic: anthropicKey, gemini: geminiKey, groq: groqKey };
   return URUTAN.filter((nama) => kunci[nama] && !POLA_KUNCI[nama].test(kunci[nama]));
 };
 
@@ -377,10 +396,9 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
 };
 
 
-// Groq berbicara format OpenAI, jadi adaptor ini sekaligus melayani OpenRouter,
-// Mistral, dan DeepSeek -- cukup tambahkan alamatnya di ALAMAT_OPENAI.
+// Groq dan 9Router memakai format OpenAI yang sama.
 const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi, signal }) => {
-  const alamat = ALAMAT_OPENAI[penyedia];
+  const alamat = buatAlamatPenyedia(penyedia);
   const tanggapan = await fetch(alamat, {
     method: 'POST',
     signal,
@@ -393,6 +411,7 @@ const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi
       messages: [{ role: 'system', content: instruksi }, ...pesan],
       max_tokens: BATAS.MAKS_TOKEN_JAWABAN,
       temperature: 0.3,
+      stream: false,
     }),
   });
 
@@ -424,6 +443,7 @@ const PESAN_DITOLAK = {
 };
 
 const PENYEDIA = {
+  ninerouter: tanyaOpenAICompatible,
   anthropic: tanyaAnthropic,
   gemini: tanyaGemini,
   groq: tanyaOpenAICompatible,

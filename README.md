@@ -214,7 +214,7 @@ Setelah snapshot berubah, deploy ulang function STELA.
 
 NextTel menggunakan kuesioner delapan pertanyaan. Scoring dilakukan di frontend untuk `RPL`, `PG`, `TKJ`, dan `TJAT`. Hasil dikirim ke `${VITE_SUPABASE_URL}/functions/v1/nexttel` untuk mendapatkan penjelasan.
 
-Edge Function NextTel menggunakan Anthropic server-side, memvalidasi pertanyaan, pilihan, score, dan rekomendasi, menerapkan origin restriction serta rate limit, dan mengembalikan `explanation`, `strengths`, serta `learningSuggestions`. API key disimpan pada `NEXTTEL_ANTHROPIC_API_KEY`.
+Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, memvalidasi pertanyaan, pilihan, score, dan rekomendasi, menerapkan origin restriction serta rate limit, dan mengembalikan `explanation`, `strengths`, serta `learningSuggestions`. API key tidak pernah dikirim ke browser.
 
 ## Environment Variables
 
@@ -228,6 +228,9 @@ Edge Function NextTel menggunakan Anthropic server-side, memvalidasi pertanyaan,
 | `ANTHROPIC_API_KEY` | STELA local | Opsional | Ya |
 | `GEMINI_API_KEY` | STELA local | Opsional | Ya |
 | `GROQ_API_KEY` | STELA local | Opsional | Ya |
+| `NINEROUTER_KEY` | STELA local | Opsional | Ya |
+| `NINEROUTER_URL` | Base URL 9Router | Opsional | Tidak |
+| `NINEROUTER_MODEL` | Model 9Router | Opsional | Tidak |
 | `STELA_MODEL` | Model STELA local | Opsional | Tidak |
 | `STELA_AKTIF` | Sakelar STELA | Opsional | Tidak |
 | `STELA_MAKS_PER_HARI` | Batas harian STELA | Opsional | Tidak |
@@ -240,6 +243,9 @@ Edge Function NextTel menggunakan Anthropic server-side, memvalidasi pertanyaan,
 | `ANTHROPIC_API_KEY` | STELA Anthropic | Ya |
 | `GEMINI_API_KEY` | STELA Gemini | Ya |
 | `GROQ_API_KEY` | STELA Groq | Ya |
+| `NINEROUTER_KEY` | STELA 9Router | Ya |
+| `NINEROUTER_URL` | Base URL 9Router | Tidak |
+| `NINEROUTER_MODEL` | Model 9Router | Tidak |
 | `STELA_MODEL` | Model STELA | Tidak |
 | `STELA_AKTIF` | Emergency switch STELA | Tidak |
 | `STELA_MAKS_PER_HARI` | Batas harian STELA | Tidak |
@@ -248,6 +254,8 @@ Edge Function NextTel menggunakan Anthropic server-side, memvalidasi pertanyaan,
 | `SUPABASE_URL` | Context publik STELA | Tidak |
 | `SUPABASE_ANON_KEY` | REST context STELA | Tidak |
 | `NEXTTEL_ANTHROPIC_API_KEY` | Provider NextTel | Ya |
+| `NEXTTEL_NINEROUTER_KEY` | Provider 9Router khusus NextTel | Ya |
+| `NEXTTEL_NINEROUTER_MODEL` | Model 9Router khusus NextTel | Tidak |
 | `NEXTTEL_MODEL` | Model NextTel | Tidak |
 | `NEXTTEL_ALLOWED_ORIGINS` | Origin NextTel | Tidak |
 
@@ -587,7 +595,7 @@ Redeploy the STELA function after the snapshot changes.
 
 NextTel uses an eight-question questionnaire. Scoring runs in the frontend for `RPL`, `PG`, `TKJ`, and `TJAT`. The result is sent to `${VITE_SUPABASE_URL}/functions/v1/nexttel` for an explanation.
 
-The NextTel Edge Function uses Anthropic server-side, validates questions, options, scores, and recommendations, applies origin and rate restrictions, and returns `explanation`, `strengths`, and `learningSuggestions`. Its API key is stored in `NEXTTEL_ANTHROPIC_API_KEY`.
+The NextTel Edge Function uses server-side AI providers, including 9Router, validates questions, options, scores, and recommendations, applies origin and rate restrictions, and returns `explanation`, `strengths`, and `learningSuggestions`. API keys never reach the browser.
 
 ## Environment Variables
 
@@ -601,6 +609,9 @@ The NextTel Edge Function uses Anthropic server-side, validates questions, optio
 | `ANTHROPIC_API_KEY` | Local STELA | Optional | Yes |
 | `GEMINI_API_KEY` | Local STELA | Optional | Yes |
 | `GROQ_API_KEY` | Local STELA | Optional | Yes |
+| `NINEROUTER_KEY` | Local STELA | Optional | Yes |
+| `NINEROUTER_URL` | 9Router base URL | Optional | No |
+| `NINEROUTER_MODEL` | 9Router model | Optional | No |
 | `STELA_MODEL` | Local STELA model | Optional | No |
 | `STELA_AKTIF` | STELA switch | Optional | No |
 | `STELA_MAKS_PER_HARI` | STELA daily limit | Optional | No |
@@ -613,6 +624,9 @@ The NextTel Edge Function uses Anthropic server-side, validates questions, optio
 | `ANTHROPIC_API_KEY` | STELA Anthropic | Yes |
 | `GEMINI_API_KEY` | STELA Gemini | Yes |
 | `GROQ_API_KEY` | STELA Groq | Yes |
+| `NINEROUTER_KEY` | STELA 9Router | Yes |
+| `NINEROUTER_URL` | 9Router base URL | No |
+| `NINEROUTER_MODEL` | 9Router model | No |
 | `STELA_MODEL` | STELA model | No |
 | `STELA_AKTIF` | STELA emergency switch | No |
 | `STELA_MAKS_PER_HARI` | STELA daily limit | No |
@@ -621,6 +635,8 @@ The NextTel Edge Function uses Anthropic server-side, validates questions, optio
 | `SUPABASE_URL` | STELA public context | No |
 | `SUPABASE_ANON_KEY` | STELA REST context | No |
 | `NEXTTEL_ANTHROPIC_API_KEY` | NextTel provider | Yes |
+| `NEXTTEL_NINEROUTER_KEY` | NextTel 9Router provider | Yes |
+| `NEXTTEL_NINEROUTER_MODEL` | NextTel 9Router model | No |
 | `NEXTTEL_MODEL` | NextTel model | No |
 | `NEXTTEL_ALLOWED_ORIGINS` | NextTel origins | No |
 

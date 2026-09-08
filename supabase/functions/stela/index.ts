@@ -10,11 +10,13 @@ import { BATAS, kunciBermasalah, periksaPesan, pilihPenyedia, tanyaAI } from './
 import { buatPenjaga } from './penjaga-biaya.mjs';
 
 const KUNCI: Record<string, string | undefined> = {
+  ninerouter: Deno.env.get('NINEROUTER_KEY'),
   anthropic: Deno.env.get('ANTHROPIC_API_KEY'),
   gemini: Deno.env.get('GEMINI_API_KEY'),
   groq: Deno.env.get('GROQ_API_KEY'),
 };
 const PENYEDIA = pilihPenyedia({
+  ninerouterKey: KUNCI.ninerouter,
   anthropicKey: KUNCI.anthropic,
   geminiKey: KUNCI.gemini,
   groqKey: KUNCI.groq,
@@ -32,7 +34,9 @@ for (const rusak of kunciBermasalah({
 }
 // Dibiarkan undefined kalau tidak disetel, supaya tanyaAI memakai daftar
 // cadangannya dan berpindah model saat kuota satu model habis.
-const MODEL = Deno.env.get('STELA_MODEL') || undefined;
+const MODEL = (PENYEDIA === 'ninerouter' ? Deno.env.get('NINEROUTER_MODEL') : undefined)
+  || Deno.env.get('STELA_MODEL')
+  || undefined;
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
