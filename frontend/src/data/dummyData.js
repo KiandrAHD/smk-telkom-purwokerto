@@ -1,10 +1,10 @@
 
 import heroPanel from '../assets/landing/hero-panel.jpg';
 import aboutVideo from '../assets/landing/about-video.jpg';
-import jurusanRpl from '../assets/landing/jurusan-rpl.jpg';
-import jurusanPg from '../assets/landing/jurusan-pg.jpg';
-import jurusanTkj from '../assets/landing/jurusan-tkj.jpg';
-import jurusanTjat from '../assets/landing/jurusan-tjat.jpg';
+import jurusanRpl from '../assets/jurusan/showcase-rpl.jpg';
+import jurusanPg from '../assets/jurusan/showcase-pg.jpg';
+import jurusanTkj from '../assets/jurusan/showcase-tkj.jpg';
+import jurusanTjat from '../assets/jurusan/showcase-tjat.jpg';
 import prestasi1 from '../assets/landing/prestasi-1.jpg';
 import prestasi2 from '../assets/landing/prestasi-2.jpg';
 import prestasi3 from '../assets/landing/prestasi-3.jpg';
