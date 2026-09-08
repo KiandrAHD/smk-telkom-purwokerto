@@ -26,6 +26,7 @@ const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
 // Kunci yang terisi tapi bentuknya salah akan diabaikan, bukan dipakai lalu
 // gagal. Dicatat sekali saat boot supaya penyebabnya terlihat di log.
 for (const rusak of kunciBermasalah({
+  ninerouterKey: KUNCI.ninerouter,
   anthropicKey: KUNCI.anthropic,
   geminiKey: KUNCI.gemini,
   groqKey: KUNCI.groq,

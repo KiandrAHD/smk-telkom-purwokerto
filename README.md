@@ -229,7 +229,7 @@ Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, mem
 | `GEMINI_API_KEY` | STELA local | Opsional | Ya |
 | `GROQ_API_KEY` | STELA local | Opsional | Ya |
 | `NINEROUTER_KEY` | STELA local | Opsional | Ya |
-| `NINEROUTER_URL` | Base URL 9Router | Opsional | Tidak |
+| `NINEROUTER_URL` | URL API router lokal/VPS; wajib untuk 9Router | Jika memakai 9Router | Tidak |
 | `NINEROUTER_MODEL` | Model 9Router | Opsional | Tidak |
 | `STELA_MODEL` | Model STELA local | Opsional | Tidak |
 | `STELA_AKTIF` | Sakelar STELA | Opsional | Tidak |
@@ -244,7 +244,7 @@ Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, mem
 | `GEMINI_API_KEY` | STELA Gemini | Ya |
 | `GROQ_API_KEY` | STELA Groq | Ya |
 | `NINEROUTER_KEY` | STELA 9Router | Ya |
-| `NINEROUTER_URL` | Base URL 9Router | Tidak |
+| `NINEROUTER_URL` | URL HTTPS router yang bisa dijangkau Supabase (bukan localhost) | Tidak |
 | `NINEROUTER_MODEL` | Model 9Router | Tidak |
 | `STELA_MODEL` | Model STELA | Tidak |
 | `STELA_AKTIF` | Emergency switch STELA | Tidak |
@@ -610,7 +610,7 @@ The NextTel Edge Function uses server-side AI providers, including 9Router, vali
 | `GEMINI_API_KEY` | Local STELA | Optional | Yes |
 | `GROQ_API_KEY` | Local STELA | Optional | Yes |
 | `NINEROUTER_KEY` | Local STELA | Optional | Yes |
-| `NINEROUTER_URL` | 9Router base URL | Optional | No |
+| `NINEROUTER_URL` | Local/VPS router API URL; required for 9Router | When using 9Router | No |
 | `NINEROUTER_MODEL` | 9Router model | Optional | No |
 | `STELA_MODEL` | Local STELA model | Optional | No |
 | `STELA_AKTIF` | STELA switch | Optional | No |
@@ -625,7 +625,7 @@ The NextTel Edge Function uses server-side AI providers, including 9Router, vali
 | `GEMINI_API_KEY` | STELA Gemini | Yes |
 | `GROQ_API_KEY` | STELA Groq | Yes |
 | `NINEROUTER_KEY` | STELA 9Router | Yes |
-| `NINEROUTER_URL` | 9Router base URL | No |
+| `NINEROUTER_URL` | HTTPS router URL reachable from Supabase (not localhost) | No |
 | `NINEROUTER_MODEL` | 9Router model | No |
 | `STELA_MODEL` | STELA model | No |
 | `STELA_AKTIF` | STELA emergency switch | No |

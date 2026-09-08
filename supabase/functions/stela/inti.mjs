@@ -31,7 +31,7 @@ export const BATAS = {
 // ditentukan oleh kunci mana yang terisi -- tidak ada sakelar terpisah yang
 // bisa lupa disetel.
 export const MODEL_BAWAAN = {
-  ninerouter: 'cc/claude-haiku-4-20250514',
+  ninerouter: 'kr/claude-haiku-4.5',
   anthropic: 'claude-opus-5',
   // Diverifikasi lewat panggilan sungguhan, bukan dari daftar model. Daftar
   // /v1beta/models MEMUAT model yang tidak bisa dipakai akun baru: gemini-2.5-flash
@@ -55,8 +55,8 @@ export const MODEL_BAWAAN = {
 // Dengan daftar cadangan, satu model yang mati tidak mematikan STELA.
 export const MODEL_CADANGAN = {
   ninerouter: [
-    'cc/claude-haiku-4-20250514',
-    'cc/claude-sonnet-4-20250514',
+    'kr/claude-haiku-4.5',
+    'kr/claude-sonnet-4.5',
   ],
   anthropic: ['claude-opus-5'],
   gemini: [
@@ -120,7 +120,8 @@ const bacaEnv = (nama) => {
 
 export const buatAlamatPenyedia = (penyedia, baseUrl = bacaEnv('NINEROUTER_URL')) => {
   if (penyedia === 'ninerouter') {
-    return `${(baseUrl || 'https://9router.com').replace(/\/+$/, '')}/v1/chat/completions`;
+    if (!baseUrl?.trim()) throw new Error('NINEROUTER_URL belum diisi. Gunakan URL API dari dashboard 9Router.');
+    return `${baseUrl.trim().replace(/\/+$/, '').replace(/\/v1$/, '')}/v1/chat/completions`;
   }
   return ALAMAT_OPENAI[penyedia];
 };
@@ -397,8 +398,8 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
 
 
 // Groq dan 9Router memakai format OpenAI yang sama.
-const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi, signal }) => {
-  const alamat = buatAlamatPenyedia(penyedia);
+const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi, signal, baseUrl }) => {
+  const alamat = buatAlamatPenyedia(penyedia, baseUrl);
   const tanggapan = await fetch(alamat, {
     method: 'POST',
     signal,
@@ -455,7 +456,7 @@ const PENYEDIA = {
 // sama tanpa ikut membawa prompt STELA. NextTel memanfaatkannya: ia punya
 // prompt sendiri, tapi mewarisi pemilihan penyedia, failover model, dan
 // penanganan galat dari sini.
-export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, instruksiKustom, signal }) => {
+export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, instruksiKustom, signal, baseUrl }) => {
   const panggil = PENYEDIA[penyedia];
   if (!panggil) throw galatPenyedia(`Penyedia tidak dikenal: ${penyedia}`, 500);
 
@@ -480,7 +481,7 @@ export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, i
   let galatTerakhir;
   for (const kandidat of urutan) {
     try {
-      const hasil = await panggil({ penyedia, apiKey, model: kandidat, pesan, instruksi, signal });
+      const hasil = await panggil({ penyedia, apiKey, model: kandidat, pesan, instruksi, signal, baseUrl });
       return { ...hasil, modelDipakai: kandidat };
     } catch (error) {
       galatTerakhir = error;

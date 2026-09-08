@@ -116,8 +116,8 @@ Set secret melalui Supabase CLI atau dashboard:
 ```bash
 supabase secrets set ANTHROPIC_API_KEY=...
 supabase secrets set NINEROUTER_KEY=...
-supabase secrets set NINEROUTER_URL=https://9router.com
-supabase secrets set NINEROUTER_MODEL=cc/claude-haiku-4-20250514
+supabase secrets set NINEROUTER_URL=https://router-anda.example
+supabase secrets set NINEROUTER_MODEL=kr/claude-haiku-4.5
 supabase secrets set STELA_MODEL=...
 supabase secrets set STELA_ALLOWED_ORIGINS=https://domain-website-anda.example,http://localhost:5173
 ```
@@ -277,10 +277,18 @@ yang sudah divalidasi dan dipangkas ukurannya.
 Konfigurasi Supabase Edge Function:
 
 - `NINEROUTER_KEY`: secret API 9Router bersama STELA dan NextTel.
-- `NINEROUTER_URL`: base URL 9Router, bawaan `https://9router.com`.
-- `NINEROUTER_MODEL`: model atau combo 9Router; bawaan Haiku cepat.
+- `NINEROUTER_URL`: wajib saat memakai 9Router. Lokal: `http://127.0.0.1:20128`; Supabase: URL HTTPS router/VPS/tunnel yang bisa dijangkau server. `router-anda.example` di atas adalah placeholder. Homepage `https://9router.com` bukan endpoint API yang berfungsi saat diuji.
+- `NINEROUTER_MODEL`: model atau combo sesuai dashboard; bawaan `kr/claude-haiku-4.5` memerlukan provider Kiro yang terhubung.
 - `NEXTTEL_NINEROUTER_KEY`: secret 9Router khusus NextTel, jika ingin memisahkan akun.
 - `NEXTTEL_NINEROUTER_MODEL`: model 9Router khusus NextTel.
+
+### Benchmark lokal 9Router
+
+Jalankan `9router.cmd -H 127.0.0.1 -n --skip-update`, lalu `npm.cmd run dev` dari folder `frontend`. Di terminal lain, jalankan `npm.cmd run ai:benchmark` dari folder yang sama. Skrip memanggil `http://127.0.0.1:5173` dan memakai kuota AI sungguhan; restart dev server sebelum pengukuran untuk mengosongkan cache.
+
+Hasil sampel lokal dengan `kr/claude-haiku-4.5`: STELA jurusan 8.692 ms, fasilitas 2.575 ms, penolakan luar topik 2.871 ms; NextTel JSON 3.322 ms. Cache STELA 35 ms dan penolakan input kosong 5 ms. Keenam pemeriksaan lolos. Angka cache bukan kecepatan model. Sampel ini belum menguji beban serentak, uptime jangka panjang, atau deployment produksi.
+
+Router lokal harus tetap berjalan selama dipakai. Deploy Vercel saja tidak menjalankan 9Router atau Edge Function; untuk produksi, siapkan URL HTTPS router yang aktif lalu atur secret dan deploy fungsi Supabase.
 - `NEXTTEL_ALLOWED_ORIGINS`: daftar origin frontend dipisahkan koma.
 
 Frontend hanya memakai `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` untuk memanggil

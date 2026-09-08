@@ -137,6 +137,7 @@ export const stelaDevPlugin = () => ({
       try {
         penjaga.catatPanggilan();
         const { teks, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
+          baseUrl: baca('NINEROUTER_URL'),
           penyedia,
           apiKey,
           model,
@@ -194,6 +195,7 @@ export const stelaDevPlugin = () => ({
         const badan = JSON.parse(mentah);
         penjaga.catatPanggilan();
         const { teks } = await tanyaAI({
+          baseUrl: baca('NINEROUTER_URL'),
           penyedia,
           apiKey,
           model,

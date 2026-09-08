@@ -13,6 +13,7 @@
     "foto:pulihkan": "node scripts/pulihkan-foto.mjs",
     "stela:uji": "node scripts/uji-stela.mjs",
     "ninerouter:uji": "node scripts/uji-ninerouter.mjs",
+    "ai:benchmark": "node scripts/benchmark-ai.mjs",
     "aset:bersihkan": "node scripts/bersihkan-latar.mjs",
     "aset:ringankan": "node scripts/ringankan-aset.mjs",
     "aset:hero": "node scripts/buat-hero.mjs",
