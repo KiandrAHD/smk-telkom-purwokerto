@@ -7,13 +7,18 @@ import { slugify } from '../../utils/slug';
 const JurusanShowcaseSection = () => {
   const items = projectShowcase.items;
   const [start, setStart] = useState(0);
+  const [direction, setDirection] = useState('next');
 
   // Geser satu kartu; indeks berputar supaya panah tidak pernah jadi jalan buntu.
-  const move = (step) => setStart((s) => (s + step + items.length) % items.length);
+  const move = (step) => {
+    if (!step) return;
+    setDirection(step > 0 ? 'next' : 'previous');
+    setStart((s) => (s + step + items.length) % items.length);
+  };
   const ordered = items.map((_, i) => items[(start + i) % items.length]);
 
   return (
-    <section className="bg-white py-8 lg:py-12">
+    <section className="overflow-hidden bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
           {projectShowcase.title}{' '}
@@ -39,7 +44,11 @@ const JurusanShowcaseSection = () => {
             <ChevronRight className="h-4 w-4" />
           </button>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div
+            key={start}
+            data-direction={direction}
+            className="showcase-grid grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          >
             {ordered.map((item) => (
               <Link
                 key={item.tag}
@@ -71,7 +80,7 @@ const JurusanShowcaseSection = () => {
             <button
               key={item.tag}
               type="button"
-              onClick={() => setStart(i)}
+              onClick={() => move(i - start)}
               aria-label={`Mulai dari project ${item.tag}`}
               aria-current={i === start}
               className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${

@@ -104,6 +104,26 @@ body {
   }
 }
 
+.showcase-grid {
+  --showcase-offset: 32px;
+  animation: showcase-masuk 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.showcase-grid[data-direction='previous'] {
+  --showcase-offset: -32px;
+}
+
+@keyframes showcase-masuk {
+  from {
+    opacity: 0;
+    transform: translateX(var(--showcase-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Dipakai komponen <Reveal>. Kelas `.visible` dipasang oleh IntersectionObserver
    saat elemennya masuk layar, jadi tiap section naik pelan sekali saja — bukan
    berkedip tiap kali discroll bolak-balik. Jeda antar kartu diatur lewat utility
