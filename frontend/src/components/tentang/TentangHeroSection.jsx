@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { heroData } from '../../data/dummyData';
 
@@ -9,20 +9,6 @@ const TentangHeroSection = () => (
         <div className="grid grid-cols-1 lg:grid-cols-[38%_1fr] items-start gap-6 lg:gap-4">
           {/* Kolom teks */}
           <div className="px-3 pt-6 lg:pl-4 lg:pt-6">
-            <div className="flex items-center gap-1.5 text-[10px] font-semibold">
-              <Link to="/" className="text-primary transition-colors hover:text-primary-800">
-                Beranda
-              </Link>
-              <ChevronRight className="h-3 w-3 text-dark-400" aria-hidden="true" />
-              <Link
-                to="/profil-sekolah"
-                aria-current="page"
-                className="text-dark-500 transition-colors hover:text-primary hover:underline"
-              >
-                Profil Sekolah
-              </Link>
-            </div>
-
             <span className="mt-3 inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
               {heroData.hashtag}
             </span>

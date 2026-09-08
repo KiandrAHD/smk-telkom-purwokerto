@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Briefcase, ChevronRight, Monitor, UserPlus, Sparkles } from 'lucide-react';
+import { ArrowRight, Bot, Briefcase, Monitor, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 
@@ -19,17 +19,6 @@ const HeroSection = () => (
           {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
               lihat catatan yang sama di PrestasiHeroSection. */}
           <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-2">
-            <nav className="flex items-center gap-1.5 text-[11px] font-medium text-primary">
-              {landingHero.breadcrumb.map((item, i) => (
-                <span key={item.label} className="flex items-center gap-1.5">
-                  {i > 0 && <ChevronRight className="h-3 w-3" />}
-                  <Link to={item.href} className="hover:underline">
-                    {item.label}
-                  </Link>
-                </span>
-              ))}
-            </nav>
-
             {/* Chip yang sama dipakai enam hero lain; sebelumnya di sini cuma
                 teks merah polos, jadi hero Beranda terlihat lain sendiri. */}
             <span className="mt-4 inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">

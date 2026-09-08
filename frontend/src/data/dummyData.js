@@ -76,10 +76,6 @@ export const navLinks = [
 export const ctaMasukPpdb = { label: 'Masuk PPDB', href: '/ppdb/masuk' };
 
 export const landingHero = {
-  breadcrumb: [
-    { label: 'Beranda', href: '/' },
-    { label: 'Profil Sekolah', href: '/tentang' },
-  ],
   hashtag: '#DigitalSmartSchool',
   title: 'Bangun Masa Depanmu',
   titleAccent: 'Bersama Teknologi',
@@ -258,10 +254,6 @@ export const ctaBanner = {
 
 // ── Hero Section ──
 export const heroData = {
-  breadcrumb: [
-    { label: 'Beranda', href: '/' },
-    { label: 'Profil Sekolah', href: '/tentang' },
-  ],
   // Judul aslinya berbahasa Inggris ("Discover the Place Where Future
   // Innovators Grow"), satu-satunya judul Inggris yang tersisa di situs
   // berbahasa Indonesia -- dan pembacanya siswa SMP beserta orang tua.
