@@ -141,7 +141,7 @@ const PrestasiCarousel = () => {
             aria-label={`Ke slide prestasi ${i + 1}`}
             aria-current={i === active}
             className={`relative h-2 w-2 rounded-full transition-colors before:absolute before:-inset-2 before:content-[''] ${
-              i === active ? 'bg-primary' : 'bg-dark-200 hover:bg-dark-300'
+              i === active ? 'w-6 bg-primary' : 'bg-dark-200 hover:bg-primary/50'
             }`}
           />
         ))}
@@ -151,5 +151,4 @@ const PrestasiCarousel = () => {
 };
 
 export default PrestasiCarousel;
-
 

@@ -96,7 +96,7 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
             {galeriKegiatan.items.map((g) => (
               <Link
                 key={g.alt}
-                to={`/galeri/${slugify(g.alt)}`}
+                to={`/galeri/${slugify(g.alt)}?from=berita`}
                 className="group block overflow-hidden rounded-lg"
               >
                 <img

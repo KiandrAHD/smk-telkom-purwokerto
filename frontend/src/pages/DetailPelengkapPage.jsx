@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
 import SegeraHadirPage from './SegeraHadirPage';
 import {
@@ -32,12 +32,14 @@ const KOLEKSI = {
 
 const DetailPelengkapPage = ({ jenis }) => {
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
   const koleksi = KOLEKSI[jenis];
   const item = koleksi?.data.find((entri) => entri.slug === slug);
 
   if (!item) return <SegeraHadirPage />;
 
-  return <DetailLayout item={item} backTo={koleksi.backTo} backLabel={koleksi.backLabel} />;
+  const kembaliKeBerita = jenis === 'galeri' && searchParams.get('from') === 'berita';
+  return <DetailLayout item={item} backTo={kembaliKeBerita ? '/berita' : koleksi.backTo} backLabel={kembaliKeBerita ? 'Berita' : koleksi.backLabel} />;
 };
 
 export default DetailPelengkapPage;

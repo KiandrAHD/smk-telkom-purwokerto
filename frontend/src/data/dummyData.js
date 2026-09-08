@@ -38,6 +38,7 @@ import labKomputer from '../assets/tentang/lab-komputer.jpg';
 import perpustakaan from '../assets/tentang/perpustakaan.jpg';
 import studioMultimedia from '../assets/tentang/studio-multimedia.jpg';
 import guruGroup from '../assets/tentang/guru-group.jpg';
+import ekskulComputerClub from '../assets/tentang/ekskul-computer-club.jpg';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -61,6 +62,7 @@ export const navLinks = [
     ],
   },
   { label: 'Jurusan', href: '/jurusan' },
+  { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
   { label: 'Prestasi', href: '/prestasi' },
   { label: 'BKK', href: '/bkk' },
   { label: 'Berita', href: '/berita' },
@@ -167,7 +169,7 @@ export const jurusanData = {
     {
       icon: 'gamepad',
       name: 'Pengembangan Game (PG)',
-      desc: 'Belajar design game, pemrograman, dan produksi game hingga menjadi game developer profesional.',
+      desc: 'Belajar desain game, pemrograman, dan produksi game hingga menjadi game developer profesional.',
       image: jurusanPg,
       slug: 'pg',
     },
@@ -211,11 +213,23 @@ export const prestasiData = {
   ],
 };
 
+export const ekstrakurikulerData = {
+  eyebrow: 'Kegiatan Siswa',
+  title: 'Ekstrakurikuler',
+  deskripsi: 'Ruang bagi siswa untuk mengembangkan minat, keterampilan, karakter, dan pengalaman berkompetisi di luar pembelajaran kelas.',
+  items: [
+    { title: 'Stematel Computer Club', category: 'Teknologi', description: 'Mendalami komputer melalui divisi desain grafis, web design, networking, dan animasi.', image: ekskulComputerClub },
+    { title: 'Stematel Fighter', category: 'Olahraga', description: 'Kegiatan bela diri yang melatih disiplin, kebugaran, dan kesiapan berkompetisi.', image: guruGroup },
+    { title: 'Seni Tari', category: 'Seni', description: 'Wadah untuk berlatih tari tradisional dan modern secara rutin bersama pembina.', image: studioMultimedia },
+    { title: 'Rohani Islam', category: 'Karakter', description: 'Kegiatan pembinaan kerohanian dan kebersamaan siswa di lingkungan sekolah.', image: gedungSekolah },
+  ],
+};
+
 // ── STELA AI ──
 export const stelaData = {
   title: 'Tanyakan apa saja\nke STELA',
   description:
-    'STELA (Stematel Learning Asistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto',
+    'STELA (Stematel Learning Assistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto',
   ctaText: 'Tanya STELA Sekarang',
   // Sapaan pembuka dan pertanyaan contoh untuk halaman /stela. Ditaruh di sini,
   // bukan di komponen, supaya bisa diubah tanpa menyentuh kode.
@@ -297,7 +311,7 @@ export const aboutStats = [
 // ── About Description Section ──
 export const aboutDescription = {
   title: 'Tentang\nSMK Telkom Purwokerto',
-  text: 'SMK Telkom Purwokerto merupakan sekolah vokasi di bawah naungan Yayasan Pendidikan Telkom yang berfokus pada bidang teknologi informasi, jaringan, dan telekomunikasi. Kami berkomitmen untuk menghadirkan pendidikan berkualitas yang relevan dengan dunia industri dan perkembangan teknologi.',
+  text: 'SMK Telkom Purwokerto adalah sekolah vokasi di bawah naungan Yayasan Pendidikan Telkom. Pembelajaran berfokus pada teknologi informasi, jaringan, dan telekomunikasi dengan pendekatan yang relevan dengan kebutuhan industri.',
   ctaText: 'Pelajari Selengkapnya',
 };
 
@@ -638,7 +652,7 @@ export const prestasiUnggulan = {
 export const galeriPrestasi = {
   title: 'Galeri Prestasi',
   ctaText: 'Lihat Semua Prestasi',
-  filters: ['Semua', 'Nasional', 'Interasional', 'LKS', 'Robotik', 'Programming', 'UI/UX', 'AI', 'Game'],
+  filters: ['Semua', 'Nasional', 'Internasional', 'LKS', 'Robotik', 'Programming', 'UI/UX', 'AI', 'Game'],
   items: [
     {
       level: 'Nasional',
@@ -650,12 +664,12 @@ export const galeriPrestasi = {
       image: prestasi1,
     },
     {
-      level: 'Interasional',
+      level: 'Internasional',
       slug: 'huawei-ict-competition-2024',
       title: 'Silver Medal Huawei ICT Competition 2024',
       date: '12 Juni 2024',
       year: 2024,
-      tags: ['Interasional', 'Programming'],
+      tags: ['Internasional', 'Programming'],
       image: showcaseTkj,
     },
     {
@@ -677,12 +691,12 @@ export const galeriPrestasi = {
       image: showcaseTjat,
     },
     {
-      level: 'Interasional',
+      level: 'Internasional',
       slug: 'world-skills-asia-2024',
       title: 'Bronze Medal – Word Skills Asia 2024',
       date: '25 November 2024',
       year: 2024,
-      tags: ['Interasional', 'Robotik', 'UI/UX'],
+      tags: ['Internasional', 'Robotik', 'UI/UX'],
       image: prestasi2,
     },
   ],
@@ -746,7 +760,7 @@ export const videoHighlight = {
   sectionTitle: 'Didukung & Diakui Oleh',
   title: 'Video Highlight',
   videoTitle: 'Highlight Prestasi SMK Telkom Purwokerto\nTahun 2024',
-  videoDesc: 'Perjalanan, kerja keras, dan moment terbaik siswa SMK Telkom Purwokerto',
+  videoDesc: 'Perjalanan, kerja keras, dan momen terbaik siswa SMK Telkom Purwokerto',
   // ponytail: memakai video profil resmi sekolah karena reel khusus prestasi
   // belum ada. Ganti `videoId` di sini begitu videonya tersedia.
   video: { ...videoProfilSekolah, poster: prestasi1 },
@@ -818,7 +832,7 @@ export const lowonganPopuler = {
       location: 'Jakarta, Indonesia',
       badges: ['Full Time', 'Hybird'],
       salary: 'Rp 9 - 16 Juta',
-      tags: ['Interasional', 'Networking'],
+      tags: ['Internasional', 'Networking'],
     },
     {
       logo: logoAgate,
@@ -2181,7 +2195,7 @@ export const agendaEvent = {
     {
       day: '24',
       month: 'Mei',
-      title: 'Semianar Cyber Security bersama Telkom',
+      title: 'Seminar Cyber Security bersama Telkom',
       venue: 'Aula SMK Telkom Purwokerto',
       tag: 'Event',
     },
@@ -2698,7 +2712,7 @@ export const agendaDetail = [
   {
     slug: 'semianar-cyber-security-bersama-telkom',
     kategori: 'Event',
-    title: 'Semianar Cyber Security bersama Telkom',
+    title: 'Seminar Cyber Security bersama Telkom',
     subtitle: 'Aula SMK Telkom Purwokerto, 24 Mei',
     date: '24 Mei 2025',
     image: labKomputer,

@@ -44,6 +44,7 @@ import AdminBkkPage from './pages/admin/bkk/BkkPage';
 import AdminPpdbPage from './pages/admin/ppdb/PPDBPage';
 import ProtectedRoute from './router/ProtectedRoute';
 import NextTelPage from './pages/NextTelPage';
+import EkstrakurikulerPage from './pages/EkstrakurikulerPage';
 
 const PAGE_META = {
   '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
@@ -56,6 +57,7 @@ const PAGE_META = {
   '/ppdb': ['PPDB Online SMK Telkom Purwokerto', 'Daftar PPDB online SMK Telkom Purwokerto.'],
   '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
   '/nexttel': ['NextTel AI | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
+  '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
   '/login': ['Login Admin | SMK Telkom Purwokerto', 'Halaman login administrator website sekolah.'],
   '/dashboard': ['Dashboard Admin | SMK Telkom Purwokerto', 'Kelola konten dan data website sekolah.'],
 };
@@ -153,6 +155,7 @@ const App = () => {
 
         <Route path="/stela" element={<StelaPage />} />
         <Route path="/nexttel" element={<NextTelPage />} />
+        <Route path="/ekstrakurikuler" element={<EkstrakurikulerPage />} />
 
         <Route path="/login" element={<Login />} />
 
