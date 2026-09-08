@@ -33,7 +33,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
         <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{desc}</p>
         <Link
           to={`/jurusan/${slug}`}
-          className="mt-3 inline-flex items-center justify-between gap-2 text-[10px] font-bold text-primary hover:underline"
+          className="mt-auto inline-flex items-center justify-between gap-2 pt-3 text-[10px] font-bold text-primary hover:underline"
         >
           Selengkapnya
           <ArrowRight className="h-3.5 w-3.5" />
