@@ -62,10 +62,10 @@ export const navLinks = [
     children: [
       { label: 'Beranda', href: '/' },
       { label: 'Profil Sekolah', href: '/profil-sekolah' },
+      { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
     ],
   },
   { label: 'Jurusan', href: '/jurusan' },
-  { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
   { label: 'Prestasi', href: '/prestasi' },
   { label: 'BKK', href: '/bkk' },
   { label: 'Berita', href: '/berita' },
