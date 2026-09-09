@@ -425,6 +425,7 @@ export const footerData = {
     'Mencetak generasi digital yang kompeten, berkarakter, dan siap bersaing di era teknologi',
   menu: [
     { label: 'Profil Sekolah', href: '/profil-sekolah' },
+    { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
     { label: 'Jurusan', href: '/jurusan' },
     { label: 'Prestasi', href: '/prestasi' },
     { label: 'BKK', href: '/bkk' },
@@ -439,6 +440,8 @@ export const footerData = {
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
     { label: 'PPDB', href: '/ppdb' },
+    { label: 'STELA AI', href: '/stela' },
+    { label: 'NextTel AI', href: '/nexttel' },
   ],
   kontak: {
     // Alamat lengkap resmi. Nilai ini juga dipakai Footer.jsx untuk menyusun
