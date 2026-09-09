@@ -37,7 +37,7 @@ const TentangKepalaSekolahSection = () => {
             <img
               src={kepalaSekolah.image}
               alt={kepalaSekolah.name}
-              className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-cover object-top"
+              className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-contain p-1"
             />
             <div className="min-w-0">
               <Quote className="h-4 w-4 text-primary" fill="currentColor" />
@@ -79,11 +79,11 @@ const TentangKepalaSekolahSection = () => {
                 className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none"
               >
                 <article className="h-full min-w-0">
-                  <div className="flex aspect-[4/5] items-end justify-center overflow-hidden rounded-xl bg-dark-50">
+                  <div className="relative aspect-[4/5] rounded-xl bg-dark-50">
                     <img
                       src={guru.image}
                       alt={guru.nama}
-                      className="h-full w-full object-contain object-bottom"
+                      className="absolute inset-0 h-full w-full object-contain p-2"
                       loading={i < 4 ? 'eager' : 'lazy'}
                     />
                   </div>
