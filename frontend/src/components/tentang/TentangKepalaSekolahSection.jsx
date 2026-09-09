@@ -31,7 +31,7 @@ const TentangKepalaSekolahSection = () => {
 
       <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8">
         {/* Kepala Sekolah */}
-        <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
+        <div className="self-start rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
           <h2 className="font-heading text-base font-extrabold text-primary">Kepala Sekolah</h2>
           <div className="mt-4 flex flex-col gap-4 min-[400px]:flex-row">
             <img
