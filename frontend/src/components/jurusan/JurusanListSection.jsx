@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ArrowRight, Code2, Gamepad2, Network, RadioTower } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jurusanData, jurusanTags } from '../../data/dummyData';
@@ -6,8 +5,6 @@ import { jurusanData, jurusanTags } from '../../data/dummyData';
 const icons = { code: Code2, gamepad: Gamepad2, network: Network, tower: RadioTower };
 
 const JurusanListSection = () => {
-  const [active, setActive] = useState(0);
-
   return (
     <section id="daftar-jurusan" className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,19 +13,12 @@ const JurusanListSection = () => {
         </h2>
 
         <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {jurusanData.items.map((item, i) => {
+          {jurusanData.items.map((item) => {
             const Icon = icons[item.icon];
-            const isActive = i === active;
             return (
               <article
                 key={item.name}
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => setActive(i)}
-                className={`group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-all ${
-                  isActive
-                    ? 'border-primary shadow-lg'
-                    : 'border-dark-100 hover:border-primary/40'
-                }`}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-all hover:border-primary hover:shadow-lg"
               >
                 <div className="relative">
                   <div className="overflow-hidden">
