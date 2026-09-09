@@ -79,11 +79,11 @@ const TentangKepalaSekolahSection = () => {
                 className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none"
               >
                 <article className="h-full min-w-0">
-                  <div className="relative aspect-[4/5] rounded-xl bg-dark-50">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-dark-50">
                     <img
                       src={guru.image}
                       alt={guru.nama}
-                      className="absolute inset-0 h-full w-full object-contain p-2"
+                      className="absolute inset-0 h-full w-full object-cover object-top"
                       loading={i < 4 ? 'eager' : 'lazy'}
                     />
                   </div>
