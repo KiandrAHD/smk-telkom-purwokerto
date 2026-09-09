@@ -1,27 +1,22 @@
 import assert from 'node:assert/strict';
-import { access, readFile } from 'node:fs/promises';
+import { createServer } from 'vite';
 
-const dataPath = new URL('../src/data/dummyData.js', import.meta.url);
-const assetDir = new URL('../src/assets/tentang/fasilitas/', import.meta.url);
-const source = await readFile(dataPath, 'utf8');
-const galeri = source.match(/galeri: \[([\s\S]*?)\n {2}\],\n};/)?.[1] ?? '';
-const assets = [
-  ['kelasInovasi', 'kelas-inovasi.jpg'],
-  ['studioGreenScreen', 'studio-green-screen.jpg'],
-  ['robotikTiga', 'robotik-3.png'],
-  ['robotikDua', 'robotik-2.png'],
-  ['robotikSatu', 'robotik-1.png'],
-  ['laboratoriumTjkt', 'laboratorium-tjkt.jpeg'],
-  ['ruangKelasDua', 'ruang-kelas-2.jpeg'],
-  ['ruangKelasSatu', 'ruang-kelas-1.jpg'],
-  ['fasilitasSmkTelkom', 'fasilitas-smk-telkom.png'],
+const expected = [
+  'kelas-inovasi.jpg',
+  'ruang-kelas-1.jpg',
+  'ruang-kelas-2.jpeg',
+  'laboratorium-tjkt.jpeg',
+  'robotik-1.png',
+  'robotik-2.png',
+  'robotik-3.png',
 ];
+const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
 
-for (const [name, file] of assets) {
-  await access(new URL(file, assetDir));
-  assert.match(source, new RegExp(`import ${name} from '../assets/tentang/fasilitas/${file.replace('.', '\\.')}'`));
-  assert.match(galeri, new RegExp(`image: ${name}`));
+try {
+  const { profilVideo } = await server.ssrLoadModule('/src/data/dummyData.js');
+  const actual = profilVideo.galeri.map(({ image }) => image.split('/').at(-1));
+  assert.deepEqual(actual, expected);
+  console.log(`Galeri fasilitas menampilkan ${actual.length} foto.`);
+} finally {
+  await server.close();
 }
-
-assert.equal((galeri.match(/\{ image:/g) ?? []).length, assets.length);
-console.log(`Galeri fasilitas memakai ${assets.length} foto dari folder Drive.`);

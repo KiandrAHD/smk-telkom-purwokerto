@@ -43,14 +43,12 @@ import studioMultimedia from '../assets/tentang/studio-multimedia.jpg';
 import guruGroup from '../assets/tentang/guru-group.jpg';
 import ekskulComputerClub from '../assets/tentang/ekskul-computer-club.jpg';
 import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
-import studioGreenScreen from '../assets/tentang/fasilitas/studio-green-screen.jpg';
 import robotikTiga from '../assets/tentang/fasilitas/robotik-3.png';
 import robotikDua from '../assets/tentang/fasilitas/robotik-2.png';
 import robotikSatu from '../assets/tentang/fasilitas/robotik-1.png';
 import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
 import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
-import fasilitasSmkTelkom from '../assets/tentang/fasilitas/fasilitas-smk-telkom.png';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -375,8 +373,6 @@ export const profilVideo = {
     { image: robotikSatu, alt: 'Robot hexapod untuk praktik pemrograman dan robotik' },
     { image: robotikDua, alt: 'Robot barista sebagai sarana praktik siswa' },
     { image: robotikTiga, alt: 'Demonstrasi robot barista di laboratorium robotik' },
-    { image: studioGreenScreen, alt: 'Studio green screen untuk produksi foto dan video siswa' },
-    { image: fasilitasSmkTelkom, alt: 'Kolase fasilitas dan kegiatan siswa SMK Telkom Purwokerto' },
   ],
 };
 
