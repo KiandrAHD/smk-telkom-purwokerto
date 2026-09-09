@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DepartmentCard from './DepartmentCard';
-import watermark from '../assets/landing/watermark-logo.png';
+import watermark from '../assets/landing/logo.png';
 import { jurusanData } from '../data/dummyData';
 
 const DepartmentsSection = () => (
@@ -11,19 +11,13 @@ const DepartmentsSection = () => (
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute -left-10 top-24 hidden w-28 select-none opacity-40 lg:block"
+      className="pointer-events-none absolute left-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
     />
     <img
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute -right-8 top-6 hidden w-24 select-none opacity-40 lg:block"
-    />
-    <img
-      src={watermark}
-      alt=""
-      aria-hidden="true"
-      className="pointer-events-none absolute -right-12 bottom-4 hidden w-32 select-none opacity-40 lg:block"
+      className="pointer-events-none absolute right-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
     />
 
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

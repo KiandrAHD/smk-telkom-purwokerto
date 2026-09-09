@@ -1,5 +1,5 @@
 import PrestasiCarousel from './PrestasiCarousel';
-import watermark from '../assets/landing/watermark-logo.png';
+import watermark from '../assets/landing/logo.png';
 import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
 
@@ -10,13 +10,13 @@ const AchievementsSection = () => (
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute -left-10 top-10 hidden w-28 select-none opacity-40 lg:block"
+      className="pointer-events-none absolute left-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
     />
     <img
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute -right-10 bottom-16 hidden w-32 select-none opacity-40 lg:block"
+      className="pointer-events-none absolute right-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
     />
 
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
