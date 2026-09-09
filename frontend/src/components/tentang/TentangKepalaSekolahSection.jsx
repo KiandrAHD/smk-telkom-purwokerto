@@ -15,7 +15,7 @@ const TentangKepalaSekolahSection = () => {
   const shown = guruData.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   return (
-    <section className="relative overflow-hidden bg-white py-8 lg:py-12">
+    <section id="guru" className="relative overflow-hidden bg-white py-8 lg:py-12">
       <img
         src={watermark}
         alt=""
@@ -29,11 +29,11 @@ const TentangKepalaSekolahSection = () => {
         className="pointer-events-none absolute -right-10 bottom-10 hidden w-32 select-none opacity-40 lg:block"
       />
 
-      <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[38%_1fr] lg:px-8">
+      <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8">
         {/* Kepala Sekolah */}
         <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
           <h2 className="font-heading text-base font-extrabold text-primary">Kepala Sekolah</h2>
-          <div className="mt-4 flex gap-4">
+          <div className="mt-4 flex flex-col gap-4 min-[400px]:flex-row">
             <img
               src={kepalaSekolah.image}
               alt={kepalaSekolah.name}
@@ -63,34 +63,36 @@ const TentangKepalaSekolahSection = () => {
         </div>
 
         {/* Guru & Tenaga Pendidik */}
-        <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
+        <div className="min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
           <h2 className="font-heading text-base font-extrabold text-primary">
             Guru &amp; Tenaga Pendidik
           </h2>
 
-          <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
                 to={`/profil-sekolah/guru/${slugify(guru.nama)}`}
-                className="block overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
+                className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none"
               >
-                <article>
-                  <div className="flex h-28 items-end justify-center overflow-hidden rounded-xl bg-primary">
+                <article className="h-full min-w-0">
+                  <div className="flex aspect-[4/5] items-end justify-center overflow-hidden rounded-xl bg-dark-50">
                     <img
                       src={guru.image}
-                      alt={`${guru.nama}, ${guru.jabatan}`}
-                      className="h-full w-auto object-contain object-bottom"
+                      alt={guru.nama}
+                      className="h-full w-full object-contain object-bottom"
                       loading={i < 4 ? 'eager' : 'lazy'}
                     />
                   </div>
-                  <h3 className="mt-2 font-heading text-[11px] font-bold leading-snug text-primary">
-                    {guru.nama}
-                  </h3>
-                  <p className="mt-0.5 font-heading text-[9px] font-bold leading-snug text-dark-900">
-                    {guru.jabatan}
-                  </p>
-                  <p className="mt-0.5 text-[9px] leading-snug text-dark-500">{guru.bidang}</p>
+                  <div className="px-1 pb-2 pt-2 [overflow-wrap:anywhere]">
+                    <h3 className="font-heading text-xs font-bold leading-relaxed text-primary">
+                      {guru.nama}
+                    </h3>
+                    {guru.jabatan && <p className="mt-1 font-heading text-[11px] font-bold leading-relaxed text-dark-900">
+                      {guru.jabatan}
+                    </p>}
+                    {guru.bidang && <p className="mt-1 text-[11px] leading-relaxed text-dark-500">{guru.bidang}</p>}
+                  </div>
                 </article>
               </Link>
             ))}

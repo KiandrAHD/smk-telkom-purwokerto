@@ -28,10 +28,10 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           <span className="rounded bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
             {item.kategori}
           </span>
-          <span className="flex items-center gap-1.5 text-[11px] text-dark-500">
+          {item.date && <span className="flex items-center gap-1.5 text-[11px] text-dark-500">
             <CalendarDays className="h-3.5 w-3.5" />
             {item.date}
-          </span>
+          </span>}
           {item.author && <span className="text-[11px] text-dark-500">{item.author}</span>}
         </div>
 

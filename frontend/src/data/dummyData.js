@@ -28,11 +28,14 @@ import showcaseTjat from '../assets/jurusan/stock-hd/fiber-optic-network.jpg';
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
 import profilHero from '../assets/tentang/profil-hero.jpg';
-import profilKepsek from '../assets/tentang/profil-kepsek.png';
-import guru1 from '../assets/tentang/guru-1.png';
-import guru2 from '../assets/tentang/guru-2.png';
-import guru3 from '../assets/tentang/guru-3.png';
-import guru4 from '../assets/tentang/guru-4.png';
+import profilKepsek from '../assets/tentang/guru/pak-aris.png';
+import buFirda from '../assets/tentang/guru/bu-firda.png';
+import pakAic from '../assets/tentang/guru/pak-aic.png';
+import pakBayu from '../assets/tentang/guru/pak-bayu.png';
+import pakHerdi from '../assets/tentang/guru/pak-herdi.png';
+import pakNandar from '../assets/tentang/guru/pak-nandar.png';
+import pakRagil from '../assets/tentang/guru/pak-ragil.png';
+import { slugify } from '../utils/slug';
 import gedungSekolah from '../assets/tentang/school-building.jpg';
 import labKomputer from '../assets/tentang/lab-komputer.jpg';
 import perpustakaan from '../assets/tentang/perpustakaan.jpg';
@@ -395,7 +398,7 @@ export const timelineData = [
 
 // ── Kepala Sekolah ──
 export const kepalaSekolah = {
-  name: 'Aria Puji Santoso, S.Kom., M.M.',
+  name: 'Pak Aris',
   title: 'Kepala SMK Telkom Purwokerto',
   image: profilKepsek,
   quote:
@@ -406,39 +409,15 @@ export const kepalaSekolah = {
 };
 
 // ── Guru & Tenaga Pendidik ──
-// Di Figma keempat kartu ini memakai teks placeholder hasil salin dari section Prestasi
-// ("Juara 1 / LKS Nasional 2024"), sehingga di halaman Tentang seolah para guru memenangkan
-// lomba yang sama dengan siswa. Diganti dengan data guru yang semestinya.
-//
-// ponytail: nama di bawah ini masih data dummy — ganti dengan data kepegawaian asli.
-// Jumlah entri sengaja disamakan dengan jumlah foto yang tersedia (4) supaya tidak ada
-// wajah yang sama muncul dengan dua nama berbeda. Tambah entri + foto baru, dan carousel
-// di TentangKepalaSekolahSection otomatis aktif lagi (empat kartu per halaman).
+// Nama mengikuti label file Drive yang disetujui. Lengkapi jabatan dan bidang
+// hanya setelah data kepegawaian dikonfirmasi.
 export const guruData = [
-  {
-    nama: 'Bayu Setiawan, S.Kom.',
-    jabatan: 'Guru Produktif RPL',
-    bidang: 'Pemrograman web dan basis data',
-    image: guru1,
-  },
-  {
-    nama: 'Anindya Larasati, S.Pd.',
-    jabatan: 'Guru Produktif PG',
-    bidang: 'Desain game dan aset visual',
-    image: guru2,
-  },
-  {
-    nama: 'Nurul Hidayah, S.T.',
-    jabatan: 'Guru Produktif TKJ',
-    bidang: 'Administrasi jaringan dan server',
-    image: guru3,
-  },
-  {
-    nama: 'Fajar Nugroho, S.T.',
-    jabatan: 'Guru Produktif TJAT',
-    bidang: 'Fiber optic dan jaringan akses',
-    image: guru4,
-  },
+  { nama: 'Bu Firda', jabatan: '', bidang: '', image: buFirda },
+  { nama: 'Pak Aic', jabatan: '', bidang: '', image: pakAic },
+  { nama: 'Pak Bayu', jabatan: '', bidang: '', image: pakBayu },
+  { nama: 'Pak Herdi', jabatan: '', bidang: '', image: pakHerdi },
+  { nama: 'Pak Nandar', jabatan: '', bidang: '', image: pakNandar },
+  { nama: 'Pak Ragil', jabatan: '', bidang: '', image: pakRagil },
 ];
 
 export const footerData = {
@@ -3162,76 +3141,15 @@ export const projectDetail = [
 ];
 
 /* ── Profil guru: /profil-sekolah/guru/:slug ── */
-export const guruDetail = [
-  {
-    slug: 'bayu-setiawan-s-kom',
-    kategori: 'Guru Produktif RPL',
-    title: 'Bayu Setiawan, S.Kom.',
-    subtitle: 'Pemrograman web dan basis data',
-    date: 'Guru Produktif',
-    image: guru1,
-    lead: 'Mengampu mata pelajaran pemrograman web dan basis data untuk jurusan Rekayasa Perangkat Lunak.',
-    body: [
-      'Pendekatan mengajarnya bertumpu pada praktik: teori disampaikan seperlunya, lalu siswa langsung mengerjakan kasus nyata di depan komputer.',
-      'Selain mengajar, beliau mendampingi tim lomba bidang teknologi web dan membimbing siswa menyiapkan portofolio sebelum praktik kerja lapangan.',
-    ],
-    facts: [
-      { label: 'Jabatan', value: 'Guru Produktif RPL' },
-      { label: 'Bidang ajar', value: 'Pemrograman web dan basis data' },
-    ],
-  },
-  {
-    slug: 'anindya-larasati-s-pd',
-    kategori: 'Guru Produktif PG',
-    title: 'Anindya Larasati, S.Pd.',
-    subtitle: 'Desain game dan aset visual',
-    date: 'Guru Produktif',
-    image: guru2,
-    lead: 'Mengampu desain permainan dan pembuatan aset visual untuk jurusan Pengembangan Game.',
-    body: [
-      'Kelasnya menekankan bahwa permainan yang baik lahir dari aturan main yang jelas, bukan dari tampilan yang paling megah.',
-      'Beliau juga mendampingi produksi permainan yang ditampilkan pada Project Showcase sekolah setiap akhir tahun ajaran.',
-    ],
-    facts: [
-      { label: 'Jabatan', value: 'Guru Produktif PG' },
-      { label: 'Bidang ajar', value: 'Desain game dan aset visual' },
-    ],
-  },
-  {
-    slug: 'nurul-hidayah-s-t',
-    kategori: 'Guru Produktif TKJ',
-    title: 'Nurul Hidayah, S.T.',
-    subtitle: 'Administrasi jaringan dan server',
-    date: 'Guru Produktif',
-    image: guru3,
-    lead: 'Mengampu administrasi jaringan dan server untuk jurusan Teknik Komputer dan Jaringan.',
-    body: [
-      'Praktik di kelasnya dilakukan pada perangkat sungguhan, bukan hanya simulator, agar siswa terbiasa menangani perangkat yang dipakai industri.',
-      'Beliau membimbing siswa menyiapkan sertifikasi jaringan yang dapat diambil sejak masa sekolah.',
-    ],
-    facts: [
-      { label: 'Jabatan', value: 'Guru Produktif TKJ' },
-      { label: 'Bidang ajar', value: 'Administrasi jaringan dan server' },
-    ],
-  },
-  {
-    slug: 'fajar-nugroho-s-t',
-    kategori: 'Guru Produktif TJAT',
-    title: 'Fajar Nugroho, S.T.',
-    subtitle: 'Fiber optic dan jaringan akses',
-    date: 'Guru Produktif',
-    image: guru4,
-    lead: 'Mengampu praktik fiber optic dan jaringan akses untuk jurusan Teknik Jaringan Akses Telekomunikasi.',
-    body: [
-      'Fokus pengajarannya pada ketelitian kerja lapangan: penyambungan fiber, pengukuran redaman, dan penelusuran gangguan jalur.',
-      'Beliau mendampingi siswa saat praktik kerja lapangan di penyedia layanan telekomunikasi.',
-    ],
-    facts: [
-      { label: 'Jabatan', value: 'Guru Produktif TJAT' },
-      { label: 'Bidang ajar', value: 'Fiber optic dan jaringan akses' },
-    ],
-  },
-];
+export const guruDetail = guruData.map((guru) => ({
+  slug: slugify(guru.nama),
+  kategori: 'Guru & Tenaga Pendidik',
+  title: guru.nama,
+  subtitle: guru.jabatan,
+  image: guru.image,
+  lead: guru.bidang,
+  body: [],
+}));
 
 /* ── Halaman FAQ lengkap: /jurusan/faq ── */
 // Tiga butir pertama sengaja diambil ulang dari jurusanFaq supaya isi ringkasan
