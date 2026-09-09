@@ -2,7 +2,7 @@ import { BellRing, CheckCircle2, Radar } from 'lucide-react';
 import { ppdbMeta } from '../../data/dummyData';
 import fotoSiswa from '../../assets/ppdb/login-spmb-2027-2028.png';
 import ribbon from '../../assets/landing/ribbon.png';
-import watermark from '../../assets/landing/logo.png';
+import watermark from '../../assets/landing/telkom-accent.png';
 
 const ikon = {
   centang: CheckCircle2,
@@ -37,7 +37,7 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute right-6 bottom-1/4 w-40 select-none object-contain opacity-10 grayscale"
+      className="pointer-events-none absolute right-6 bottom-1/4 w-40 select-none object-contain opacity-15"
     />
     {/* Cahaya lembut di sudut atas supaya gradiennya tidak terasa datar */}
     <span

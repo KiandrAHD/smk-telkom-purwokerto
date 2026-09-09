@@ -1,5 +1,5 @@
 import PrestasiCarousel from './PrestasiCarousel';
-import watermark from '../assets/landing/logo.png';
+import watermark from '../assets/landing/telkom-accent.png';
 import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
 
@@ -10,13 +10,13 @@ const AchievementsSection = () => (
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute left-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
+      className="pointer-events-none absolute right-2 top-0 hidden w-40 -rotate-90 select-none object-contain 2xl:block"
     />
     <img
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute right-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
+      className="pointer-events-none absolute bottom-4 right-2 hidden w-40 select-none object-contain 2xl:block"
     />
 
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

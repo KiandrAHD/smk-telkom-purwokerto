@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DepartmentCard from './DepartmentCard';
-import watermark from '../assets/landing/logo.png';
+import watermark from '../assets/landing/telkom-accent.png';
 import { jurusanData } from '../data/dummyData';
 
 const DepartmentsSection = () => (
@@ -11,13 +11,25 @@ const DepartmentsSection = () => (
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute left-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
+      className="pointer-events-none absolute left-2 top-4 hidden w-40 rotate-180 select-none object-contain 2xl:block"
     />
     <img
       src={watermark}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute right-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
+      className="pointer-events-none absolute right-2 top-12 hidden w-40 select-none object-contain 2xl:block"
+    />
+    <img
+      src={watermark}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute bottom-12 left-2 hidden w-40 -rotate-90 select-none object-contain 2xl:block"
+    />
+    <img
+      src={watermark}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute bottom-4 right-2 hidden w-40 rotate-90 select-none object-contain 2xl:block"
     />
 
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

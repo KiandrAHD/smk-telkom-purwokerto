@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
-import watermark from '../../assets/landing/logo.png';
+import watermark from '../../assets/landing/telkom-accent.png';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
 
 const PER_PAGE = 4;
@@ -20,13 +20,13 @@ const TentangKepalaSekolahSection = () => {
         src={watermark}
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute left-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
+        className="pointer-events-none absolute left-0 top-8 hidden w-32 rotate-180 select-none object-contain 2xl:block"
       />
       <img
         src={watermark}
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute right-6 top-1/2 hidden w-20 -translate-y-1/2 select-none object-contain opacity-10 grayscale 2xl:block"
+        className="pointer-events-none absolute bottom-8 right-0 hidden w-32 select-none object-contain 2xl:block"
       />
 
       <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8">
