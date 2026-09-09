@@ -409,15 +409,15 @@ export const kepalaSekolah = {
 };
 
 // ── Guru & Tenaga Pendidik ──
-// Nama mengikuti label file Drive yang disetujui. Lengkapi jabatan dan bidang
-// hanya setelah data kepegawaian dikonfirmasi.
+// Nama dan foto mengikuti Drive. Atas permintaan pengguna, empat contoh
+// deskripsi lama dipakai kembali; penempatannya belum mewakili data kepegawaian.
 export const guruData = [
-  { nama: 'Bu Firda', jabatan: '', bidang: '', image: buFirda },
-  { nama: 'Pak Aic', jabatan: '', bidang: '', image: pakAic },
-  { nama: 'Pak Bayu', jabatan: '', bidang: '', image: pakBayu },
-  { nama: 'Pak Herdi', jabatan: '', bidang: '', image: pakHerdi },
-  { nama: 'Pak Nandar', jabatan: '', bidang: '', image: pakNandar },
-  { nama: 'Pak Ragil', jabatan: '', bidang: '', image: pakRagil },
+  { nama: 'Bu Firda', jabatan: 'Guru Produktif PG', bidang: 'Desain game dan aset visual', image: buFirda },
+  { nama: 'Pak Aic', jabatan: 'Guru Produktif TKJ', bidang: 'Administrasi jaringan dan server', image: pakAic },
+  { nama: 'Pak Bayu', jabatan: 'Guru Produktif RPL', bidang: 'Pemrograman web dan basis data', image: pakBayu },
+  { nama: 'Pak Herdi', jabatan: 'Guru Produktif TJAT', bidang: 'Fiber optic dan jaringan akses', image: pakHerdi },
+  { nama: 'Pak Nandar', jabatan: 'Guru Produktif RPL', bidang: 'Pemrograman web dan basis data', image: pakNandar },
+  { nama: 'Pak Ragil', jabatan: 'Guru Produktif TKJ', bidang: 'Administrasi jaringan dan server', image: pakRagil },
 ];
 
 export const footerData = {
@@ -3146,7 +3146,7 @@ export const projectDetail = [
 /* ── Profil guru: /profil-sekolah/guru/:slug ── */
 export const guruDetail = guruData.map((guru) => ({
   slug: slugify(guru.nama),
-  kategori: 'Guru & Tenaga Pendidik',
+  kategori: 'Profil Guru — Deskripsi Sementara',
   title: guru.nama,
   subtitle: guru.jabatan,
   image: guru.image,

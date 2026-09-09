@@ -67,6 +67,9 @@ const TentangKepalaSekolahSection = () => {
           <h2 className="font-heading text-base font-extrabold text-primary">
             Guru &amp; Tenaga Pendidik
           </h2>
+          <p className="mt-2 text-[11px] leading-relaxed text-dark-500">
+            Deskripsi sementara; jabatan dan bidang mengajar belum diverifikasi.
+          </p>
 
           <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             {shown.map((guru, i) => (
