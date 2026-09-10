@@ -117,7 +117,7 @@ const JurusanDetailKonten = ({ item }) => {
                   src={j.image}
                   alt={j.title}
                   loading="lazy"
-                  className="aspect-[2/1] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                  className="aspect-[2/1] w-full object-cover object-[center_60%] transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
               <span className="flex flex-1 flex-col px-4 py-3.5">
