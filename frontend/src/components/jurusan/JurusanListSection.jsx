@@ -25,7 +25,7 @@ const JurusanListSection = () => {
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full aspect-[2/1] object-cover object-[center_60%] transition-transform duration-500 group-hover:scale-110"
+                      className="w-full aspect-[2/1] object-cover object-top transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
                   <span className="absolute -bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-md">
