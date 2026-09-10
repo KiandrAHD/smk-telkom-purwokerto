@@ -1,29 +1,29 @@
 
-import heroPanel from '../assets/landing/hero-panel.jpg';
-import aboutVideo from '../assets/landing/about-video.jpg';
-import jurusanRpl from '../assets/jurusan/showcase-rpl.jpg';
-import jurusanPg from '../assets/jurusan/showcase-pg.jpg';
-import jurusanTkj from '../assets/jurusan/showcase-tkj.jpg';
-import jurusanTjat from '../assets/jurusan/showcase-tjat.jpg';
-import prestasi1 from '../assets/landing/prestasi-1.jpg';
-import prestasi2 from '../assets/landing/prestasi-2.jpg';
-import prestasi3 from '../assets/landing/prestasi-3.jpg';
+import heroPanel from '../assets/drive/header-jurusan.png';
+import aboutVideo from '../assets/tentang/profil-hero.jpg';
+import jurusanRpl from '../assets/drive/jurusan-rpl.png';
+import jurusanPg from '../assets/drive/jurusan-pg.png';
+import jurusanTkj from '../assets/drive/jurusan-tkj.png';
+import jurusanTjat from '../assets/drive/jurusan-tjat.png';
+import prestasi1 from '../assets/drive/showcase-projek-a.png';
+import prestasi2 from '../assets/drive/showcase-mobil.png';
+import prestasi3 from '../assets/drive/showcase-musik.png';
 import mapImg from '../assets/landing/map.jpg';
 
-import heroJurusan from '../assets/jurusan/hero-jurusan.jpg';
-import heroPrestasi from '../assets/prestasi/hero-prestasi.jpg';
-import heroBkk from '../assets/bkk/hero-bkk.jpg';
-import heroBerita from '../assets/berita/hero-berita.jpg';
+import heroJurusan from '../assets/drive/header-jurusan.png';
+import heroPrestasi from '../assets/drive/showcase-projek-a.png';
+import heroBkk from '../assets/drive/header-bkk.png';
+import heroBerita from '../assets/drive/showcase-rumah.png';
 
 import logoTelkomColor from '../assets/bkk/logo-telkom.png';
 import logoHuaweiColor from '../assets/bkk/logo-huawei.png';
 import logoAgate from '../assets/bkk/logo-agate.png';
 import logoDicodingColor from '../assets/bkk/logo-dicoding.png';
 import stelaMascot from '../assets/bkk/stela-mascot.png';
-import showcaseRpl from '../assets/jurusan/stock-hd/rpl-software-development.jpg';
-import showcasePg from '../assets/jurusan/stock-hd/game-development.jpg';
-import showcaseTkj from '../assets/jurusan/stock-hd/server-monitoring.jpg';
-import showcaseTjat from '../assets/jurusan/stock-hd/fiber-optic-network.jpg';
+import showcaseRpl from '../assets/drive/jurusan-rpl.png';
+import showcasePg from '../assets/drive/jurusan-pg.png';
+import showcaseTkj from '../assets/drive/jurusan-tkj.png';
+import showcaseTjat from '../assets/drive/jurusan-tjat.png';
 
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
@@ -36,11 +36,11 @@ import pakHerdi from '../assets/tentang/guru/pak-herdi.png';
 import pakNandar from '../assets/tentang/guru/pak-nandar.png';
 import pakRagil from '../assets/tentang/guru/pak-ragil.png';
 import { slugify } from '../utils/slug';
-import gedungSekolah from '../assets/tentang/school-building.jpg';
-import labKomputer from '../assets/tentang/lab-komputer.jpg';
-import perpustakaan from '../assets/tentang/perpustakaan.jpg';
-import studioMultimedia from '../assets/tentang/studio-multimedia.jpg';
-import guruGroup from '../assets/tentang/guru-group.jpg';
+import gedungSekolah from '../assets/drive/header-jurusan.png';
+import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
+import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
+import studioMultimedia from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
+import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ekskulComputerClub from '../assets/tentang/ekskul-computer-club.jpg';
 import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import robotikTiga from '../assets/tentang/fasilitas/robotik-3.png';
@@ -1459,10 +1459,7 @@ export const prestasiDetail = [
     title: 'Juara 1 IoT Challenge Telkom 2024',
     subtitle: 'IoT Challenge Telkom 2024',
     date: '1 Oktober 2024',
-    // TITIPAN: foto asli IoT Challenge belum ada, jadi sementara memakai foto
-    // Gemastik. Dulu ini berkas terpisah (prestasi-4.jpg) yang isinya identik
-    // byte-per-byte dengan prestasi-3.jpg, sehingga duplikasinya tak terlihat.
-    // Ganti dengan foto IoT Challenge yang sebenarnya begitu tersedia.
+    // Foto asli IoT Challenge belum ada; gunakan showcase Drive yang tersedia.
     image: prestasi3,
     lead: 'Purwarupa smart agriculture berbasis IoT rancangan siswa dinobatkan sebagai juara pertama pada IoT Challenge Telkom 2024.',
     body: [
