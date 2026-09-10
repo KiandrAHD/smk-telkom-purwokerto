@@ -18,7 +18,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
           <img
             src={image}
             alt={name}
-            className="w-full aspect-[2/1] object-cover object-top transition-transform duration-500 group-hover:scale-110"
+            className="w-full aspect-[2/1] object-cover object-bottom transition-transform duration-500 group-hover:scale-110"
           />
         </div>
         <span className="absolute -bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-md">
