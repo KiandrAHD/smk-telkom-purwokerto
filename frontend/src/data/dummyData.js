@@ -24,6 +24,10 @@ import showcaseRpl from '../assets/drive/jurusan-rpl.png';
 import showcasePg from '../assets/drive/jurusan-pg.png';
 import showcaseTkj from '../assets/drive/jurusan-tkj.png';
 import showcaseTjat from '../assets/drive/jurusan-tjat.png';
+import projectLibrary from '../assets/drive/showcase-library.jpg';
+import projectGame from '../assets/drive/showcase-mobil.png';
+import projectNetwork from '../assets/drive/showcase-kabel.png';
+import projectFiber from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
 
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
@@ -560,10 +564,10 @@ export const projectShowcase = {
   titleAccent: 'Showcase',
   titleTail: 'Siswa',
   items: [
-    { tag: 'RPL', tagClass: 'bg-primary', title: 'Sistem Informasi\nPerpustakaan', image: showcaseRpl },
-    { tag: 'PG', tagClass: 'bg-purple-600', title: 'Game 2D\nAdventure', image: showcasePg },
-    { tag: 'TKJ', tagClass: 'bg-blue-600', title: 'Server Monitoring\nSystem', image: showcaseTkj },
-    { tag: 'TJAT', tagClass: 'bg-orange-500', title: 'Jaringan Fiber Optic\nSimulation', image: showcaseTjat },
+    { tag: 'RPL', tagClass: 'bg-primary', title: 'Sistem Informasi\nPerpustakaan', image: projectLibrary },
+    { tag: 'PG', tagClass: 'bg-purple-600', title: 'Game 2D\nAdventure', image: projectGame },
+    { tag: 'TKJ', tagClass: 'bg-blue-600', title: 'Server Monitoring\nSystem', image: projectNetwork },
+    { tag: 'TJAT', tagClass: 'bg-orange-500', title: 'Jaringan Fiber Optic\nSimulation', image: projectFiber },
   ],
 };
 
