@@ -8,6 +8,10 @@ import jurusanTjat from '../assets/drive/jurusan-tjat.png';
 import prestasi1 from '../assets/drive/showcase-projek-a.png';
 import prestasi2 from '../assets/drive/showcase-mobil.png';
 import prestasi3 from '../assets/drive/showcase-musik.png';
+import prestasiWeb from '../assets/jurusan/stock-hd/rpl-software-development.jpg';
+import prestasiNetwork from '../assets/jurusan/stock-hd/server-monitoring.jpg';
+import prestasiGame from '../assets/jurusan/stock-hd/game-development.jpg';
+import prestasiIot from '../assets/jurusan/stock-hd/fiber-optic-network.jpg';
 import mapImg from '../assets/landing/map.jpg';
 
 import heroJurusan from '../assets/drive/header-jurusan.png';
@@ -220,10 +224,10 @@ export const prestasiData = {
   title: 'Prestasi Membanggakan',
   subtitle: 'Bukti nyata dari semangat dan kerja\nkeras siswa kami',
   items: [
-    { title: 'Juara 1\nLKS Nasional 2024', category: 'Web Technologies', image: prestasi1, slug: 'lks-nasional-2024-web-technologies' },
-    { title: 'Gold Medal\nIDSEEC 2024', category: 'Network Security', image: prestasi2, slug: 'idseec-2024-network-security' },
-    { title: 'Juara 2\nGemastik 2024', category: 'Game Development', image: prestasi3, slug: 'gemastik-2024-game-development' },
-    { title: 'Juara 1\nIoT Challenge 2024', category: 'Smart Agriculture', image: showcaseTjat, slug: 'iot-challenge-telkom-2024' },
+    { title: 'Juara 1\nLKS Nasional 2024', category: 'Web Technologies', image: prestasiWeb, slug: 'lks-nasional-2024-web-technologies' },
+    { title: 'Gold Medal\nIDSEEC 2024', category: 'Network Security', image: prestasiNetwork, slug: 'idseec-2024-network-security' },
+    { title: 'Juara 2\nGemastik 2024', category: 'Game Development', image: prestasiGame, slug: 'gemastik-2024-game-development' },
+    { title: 'Juara 1\nIoT Challenge 2024', category: 'Smart Agriculture', image: prestasiIot, slug: 'iot-challenge-telkom-2024' },
   ],
 };
 
