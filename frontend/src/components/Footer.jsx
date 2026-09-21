@@ -3,13 +3,24 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import telkomAccent from '../assets/landing/telkom-accent.png';
+import footerAccent from '../assets/landing/footer-accent.png';
 
 const socialIcons = {
   instagram: FaInstagram,
   youtube: FaYoutube,
   tiktok: FaTiktok,
 };
+
+const footerAccents = [
+  'left-[-104px] top-[-21px]',
+  'left-[-94px] top-[164px]',
+  'left-[129px] top-[200px] -rotate-90',
+  'left-[310px] top-[202px]',
+  'right-[375px] top-[200px] -rotate-90',
+  'right-[174px] top-[204px] -rotate-90',
+  'right-[-7px] top-[206px]',
+  'right-[-117px] top-[18px]',
+];
 
 const LinkColumn = ({ title, links }) => (
   <div>
@@ -35,26 +46,14 @@ const Footer = () => (
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 select-none overflow-hidden"
     >
-      <img
-        src={telkomAccent}
-        alt=""
-        className="absolute -left-20 top-3 h-36 w-36 -rotate-90 opacity-50 sm:-left-16 sm:h-44 sm:w-44 lg:-left-24 lg:top-7 lg:h-56 lg:w-56"
-      />
-      <img
-        src={telkomAccent}
-        alt=""
-        className="absolute -right-20 top-3 h-36 w-36 opacity-50 sm:-right-16 sm:h-44 sm:w-44 lg:-right-24 lg:top-7 lg:h-56 lg:w-56"
-      />
-      <img
-        src={telkomAccent}
-        alt=""
-        className="absolute -bottom-28 left-24 hidden h-48 w-48 rotate-180 opacity-50 sm:block lg:-bottom-32 lg:left-56 lg:h-64 lg:w-64"
-      />
-      <img
-        src={telkomAccent}
-        alt=""
-        className="absolute -bottom-28 right-24 hidden h-48 w-48 -rotate-90 opacity-50 sm:block lg:-bottom-32 lg:right-56 lg:h-64 lg:w-64"
-      />
+      {footerAccents.map((className) => (
+        <img
+          key={className}
+          src={footerAccent}
+          alt=""
+          className={`absolute hidden h-[233px] w-[233px] max-w-none opacity-30 lg:block ${className}`}
+        />
+      ))}
     </div>
 
     <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
