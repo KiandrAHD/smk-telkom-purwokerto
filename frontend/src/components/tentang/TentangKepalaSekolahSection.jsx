@@ -24,8 +24,8 @@ const TentangKepalaSekolahSection = () => {
   const shown = guruData.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   return (
-    <section id="guru" className="relative overflow-hidden bg-white py-8 lg:py-12 2xl:py-14">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-hidden 2xl:block">
+    <section id="guru" className="relative overflow-x-clip bg-white py-8 lg:py-12 2xl:py-14">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-x-clip 2xl:block">
         {accentPositions.map((position) => (
           <img
             key={position}
