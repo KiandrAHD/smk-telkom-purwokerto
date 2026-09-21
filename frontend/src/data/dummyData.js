@@ -44,7 +44,6 @@ import gedungSekolah from '../assets/drive/header-jurusan.png';
 import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
-import ekskulComputerClub from '../assets/tentang/ekskul-computer-club.jpg';
 import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import robotikTiga from '../assets/tentang/fasilitas/robotik-3.png';
 import robotikDua from '../assets/tentang/fasilitas/robotik-2.png';
@@ -52,6 +51,11 @@ import robotikSatu from '../assets/tentang/fasilitas/robotik-1.png';
 import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
 import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
+import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.png';
+import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
+import kegiatanEkskul2 from '../assets/ekstrakurikuler/kegiatan-2.png';
+import kegiatanEkskul3 from '../assets/ekstrakurikuler/kegiatan-3.png';
+import kegiatanEkskul4 from '../assets/ekstrakurikuler/kegiatan-4.png';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -227,14 +231,34 @@ export const prestasiData = {
 };
 
 export const ekstrakurikulerData = {
-  eyebrow: 'Kegiatan Siswa',
-  title: 'Ekstrakurikuler',
-  deskripsi: 'Ruang bagi siswa untuk mengembangkan minat, keterampilan, karakter, dan pengalaman berkompetisi di luar pembelajaran kelas.',
+  eyebrow: '#DigitalSmartSchool',
+  title: 'EKSTRAKURIKULER',
+  subtitle: 'Eksplorasi Minat & Bakat',
+  heroImage: heroEkstrakurikuler,
+  categories: ['Semua', 'Organisasi', 'Prestasi', 'Sentra', 'Community'],
+  stats: [
+    { value: 7, label: 'Total Organisasi' },
+    { value: 22, label: 'Total Ekstrakurikuler Prestasi' },
+    { value: 5, label: 'Total Community' },
+    { value: 4, label: 'Total Ekstrakurikuler Sentra' },
+  ],
   items: [
-    { title: 'Stematel Computer Club', category: 'Teknologi', description: 'Mendalami komputer melalui divisi desain grafis, web design, networking, dan animasi.', image: ekskulComputerClub },
-    { title: 'Stematel Fighter', category: 'Olahraga', description: 'Kegiatan bela diri yang melatih disiplin, kebugaran, dan kesiapan berkompetisi.', image: guruGroup },
-    { title: 'Penampilan Musik Tradisional', category: 'Seni', description: 'Penampilan musik tradisional siswa pada Stematel Innovation Summit.', image: penampilanMusik },
-    { title: 'Rohani Islam', category: 'Karakter', description: 'Kegiatan pembinaan kerohanian dan kebersamaan siswa di lingkungan sekolah.', image: gedungSekolah },
+    { title: 'OSIS', category: 'Organisasi', description: 'OSISTEL merupakan lembaga eksekutif siswa di lingkungan SMK Telkom Purwokerto.', image: kegiatanEkskul1 },
+    { title: 'Pramuka', category: 'Organisasi', description: 'Kegiatan Pramuka melatih kedisiplinan, kepemimpinan, dan kemandirian siswa.', image: kegiatanEkskul2 },
+    { title: 'PMR', category: 'Organisasi', description: 'PMR bergerak di bidang kemanusiaan, kesehatan, dan kepalangmerahan.', image: kegiatanEkskul3 },
+    { title: 'MPK', category: 'Organisasi', description: 'MPK merupakan organisasi siswa yang berfungsi sebagai lembaga legislatif di sekolah.', image: kegiatanEkskul4 },
+    { title: 'Futsal', category: 'Prestasi', description: 'Wadah pengembangan bakat olahraga dan kerja sama tim melalui permainan futsal.', image: kegiatanEkskul1 },
+    { title: 'Basket', category: 'Prestasi', description: 'Kegiatan untuk mengembangkan keterampilan, kebugaran, dan prestasi bola basket.', image: kegiatanEkskul2 },
+    { title: 'Robotik', category: 'Prestasi', description: 'Robotik mengasah kemampuan siswa dalam otomasi, elektronika, dan teknologi digital.', image: kegiatanEkskul3 },
+    { title: 'E-Sport', category: 'Prestasi', description: 'Wadah siswa mengembangkan bakat di dunia gim kompetitif dan industri kreatif digital.', image: kegiatanEkskul4 },
+    { title: 'Wirausaha', category: 'Sentra', description: 'Kegiatan untuk belajar kewirausahaan dan mengembangkan ide bisnis kreatif.', image: kegiatanEkskul1 },
+    { title: 'PIK-R', category: 'Sentra', description: 'Wadah remaja untuk berbagi dan memperoleh edukasi mengenai kehidupan remaja.', image: kegiatanEkskul2 },
+    { title: 'ROHIS', category: 'Sentra', description: 'Ruang pembinaan akhlak, kegiatan keagamaan, dan pengembangan karakter siswa.', image: kegiatanEkskul3 },
+    { title: 'ROHKRIS', category: 'Sentra', description: 'Wadah pembinaan kerohanian bagi siswa beragama Kristen dan Katolik.', image: kegiatanEkskul4 },
+    { title: 'Brand Ambassador', category: 'Community', description: 'Wadah siswa dalam komunikasi, representasi sekolah, dan pengembangan citra positif.', image: kegiatanEkskul1 },
+    { title: 'Team Konten', category: 'Community', description: 'Mengembangkan kemampuan produksi media dan penyampaian informasi melalui konten digital.', image: kegiatanEkskul2 },
+    { title: 'Stematel ART', category: 'Community', description: 'Mewadahi minat siswa dalam seni visual, pertunjukan, dan kegiatan kreatif.', image: kegiatanEkskul3 },
+    { title: 'StematelReader', category: 'Community', description: 'Komunitas literasi untuk membaca, menulis, berdiskusi, dan berkarya bersama.', image: kegiatanEkskul4 },
   ],
 };
 
