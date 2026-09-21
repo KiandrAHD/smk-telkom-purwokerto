@@ -37,7 +37,7 @@ const PrestasiHeroSection = () => (
 
           <img
             src={prestasiHero.image}
-            alt="Tim robotik SMK Telkom Purwokerto bersama medali dan robot rancangan mereka"
+            alt={prestasiHero.imageAlt}
             className="w-full rounded-[1.75rem] object-contain"
           />
         </div>

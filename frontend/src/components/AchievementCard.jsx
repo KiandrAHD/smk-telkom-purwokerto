@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const AchievementCard = ({ title, category, image, slug, highlight = false }) => (
+const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = false }) => (
   <Link
     to={`/prestasi/${slug}`}
     className={`group block overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
@@ -11,7 +11,7 @@ const AchievementCard = ({ title, category, image, slug, highlight = false }) =>
       <div className="overflow-hidden">
         <img
           src={image}
-          alt={title}
+          alt={imageAlt || title}
           className="w-full aspect-[16/9] object-cover object-top transition-transform duration-500 group-hover:scale-110"
         />
       </div>
@@ -26,4 +26,3 @@ const AchievementCard = ({ title, category, image, slug, highlight = false }) =>
 );
 
 export default AchievementCard;
-

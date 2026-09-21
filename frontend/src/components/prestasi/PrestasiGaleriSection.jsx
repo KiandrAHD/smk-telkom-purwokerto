@@ -75,7 +75,7 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
                 <div className="relative overflow-hidden">
                   <img
                     src={item.image}
-                    alt={item.title}
+                    alt={item.imageAlt || item.title}
                     className="w-full aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
@@ -91,6 +91,9 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
                     <p className="text-[9px] text-dark-400">{item.date}</p>
                     <ArrowRight className="h-3 w-3 flex-shrink-0 text-primary" />
                   </div>
+                  {item.imageNote && (
+                    <p className="mt-1 text-[8px] leading-snug text-dark-400">{item.imageNote}</p>
+                  )}
                 </div>
               </Link>
             ))}

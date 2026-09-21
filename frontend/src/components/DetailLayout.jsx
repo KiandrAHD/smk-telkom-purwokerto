@@ -46,10 +46,14 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           <div className="mt-7 overflow-hidden rounded-2xl">
             <img
               src={item.image}
-              alt={item.title}
+              alt={item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi'}
               className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
             />
           </div>
+        )}
+
+        {item.imageNote && (
+          <p className="mt-2 text-[10px] text-dark-400">{item.imageNote}</p>
         )}
 
         <p className="mt-7 text-sm sm:text-base font-medium leading-relaxed text-dark-700">

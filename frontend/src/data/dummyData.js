@@ -5,9 +5,9 @@ import jurusanRpl from '../assets/drive/jurusan-rpl.png';
 import jurusanPg from '../assets/drive/jurusan-pg.png';
 import jurusanTkj from '../assets/drive/jurusan-tkj.png';
 import jurusanTjat from '../assets/drive/jurusan-tjat.png';
-import prestasi1 from '../assets/drive/showcase-projek-a.png';
-import prestasi2 from '../assets/drive/showcase-mobil.png';
-import prestasi3 from '../assets/drive/showcase-musik.png';
+import showcaseIot from '../assets/drive/showcase-projek-a.png';
+import showcaseSmartHome from '../assets/drive/showcase-mobil.png';
+import penampilanMusik from '../assets/drive/showcase-musik.png';
 import prestasiWeb from '../assets/jurusan/stock-hd/rpl-software-development.jpg';
 import prestasiNetwork from '../assets/jurusan/stock-hd/server-monitoring.jpg';
 import prestasiGame from '../assets/jurusan/stock-hd/game-development.jpg';
@@ -43,7 +43,6 @@ import { slugify } from '../utils/slug';
 import gedungSekolah from '../assets/drive/header-jurusan.png';
 import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
-import studioMultimedia from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
 import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ekskulComputerClub from '../assets/tentang/ekskul-computer-club.jpg';
 import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
@@ -220,10 +219,10 @@ export const prestasiData = {
   title: 'Prestasi Membanggakan',
   subtitle: 'Bukti nyata dari semangat dan kerja\nkeras siswa kami',
   items: [
-    { title: 'Juara 1\nLKS Nasional 2024', category: 'Web Technologies', image: prestasiWeb, slug: 'lks-nasional-2024-web-technologies' },
-    { title: 'Gold Medal\nIDSEEC 2024', category: 'Network Security', image: prestasiNetwork, slug: 'idseec-2024-network-security' },
-    { title: 'Juara 2\nGemastik 2024', category: 'Game Development', image: prestasiGame, slug: 'gemastik-2024-game-development' },
-    { title: 'Juara 1\nIoT Challenge 2024', category: 'Smart Agriculture', image: prestasiIot, slug: 'iot-challenge-telkom-2024' },
+    { title: 'Juara 2\nLKS 2024', category: 'Web Technology · foto ilustrasi', image: prestasiWeb, imageAlt: 'Foto ilustrasi pengembangan web', slug: 'lks-nasional-2024-web-technologies' },
+    { title: 'Gold Medal\nIDSEEC 2024', category: 'Belum terverifikasi · foto ilustrasi', image: prestasiNetwork, imageAlt: 'Foto ilustrasi pemantauan server', slug: 'idseec-2024-network-security' },
+    { title: 'Juara 2\nGemastik 2024', category: 'Belum terverifikasi · foto ilustrasi', image: prestasiGame, imageAlt: 'Foto ilustrasi pengembangan game', slug: 'gemastik-2024-game-development' },
+    { title: 'Juara 1\nIoT Challenge 2024', category: 'Belum terverifikasi · foto ilustrasi', image: prestasiIot, imageAlt: 'Foto ilustrasi jaringan fiber optik', slug: 'iot-challenge-telkom-2024' },
   ],
 };
 
@@ -234,7 +233,7 @@ export const ekstrakurikulerData = {
   items: [
     { title: 'Stematel Computer Club', category: 'Teknologi', description: 'Mendalami komputer melalui divisi desain grafis, web design, networking, dan animasi.', image: ekskulComputerClub },
     { title: 'Stematel Fighter', category: 'Olahraga', description: 'Kegiatan bela diri yang melatih disiplin, kebugaran, dan kesiapan berkompetisi.', image: guruGroup },
-    { title: 'Seni Tari', category: 'Seni', description: 'Wadah untuk berlatih tari tradisional dan modern secara rutin bersama pembina.', image: studioMultimedia },
+    { title: 'Penampilan Musik Tradisional', category: 'Seni', description: 'Penampilan musik tradisional siswa pada Stematel Innovation Summit.', image: penampilanMusik },
     { title: 'Rohani Islam', category: 'Karakter', description: 'Kegiatan pembinaan kerohanian dan kebersamaan siswa di lingkungan sekolah.', image: gedungSekolah },
   ],
 };
@@ -603,6 +602,7 @@ export const prestasiHero = {
     'Siswa SMK Telkom Purwokerto terus berinovasi, berkompetisi, dan mengharumkan nama sekolah di tingkat nasional hingga internasional.',
   ctaText: 'Lihat Prestasi',
   image: heroPrestasi,
+  imageAlt: 'Siswa mempresentasikan purwarupa IoT pada pameran proyek',
 };
 
 export const prestasiStats = [
@@ -619,26 +619,26 @@ export const prestasiUnggulan = {
     {
       level: 'Tingkat Nasional',
       slug: 'lks-nasional-2024-web-technologies',
-      title: 'Juara 1 LKS Nasional Bidang Web Technologies',
-      desc: 'Tim SMK Telkom Purwokerto berhasil meraih Juara 1 dalam ajang Lomba Kompetensi Siswa (LKS) Nasional 2024 di bidang Web Technologies.',
+      title: 'Juara 2 LKS 2024 Bidang Web Technology',
+      desc: 'Muhammad Daffa Izzati dari kelas XII RPL 3 meraih Juara 2 bidang Web Technology pada LKS 2024.',
     },
     {
-      level: 'Internasional',
+      level: 'Belum terverifikasi',
       slug: 'huawei-ict-competition-2024',
-      title: 'Silver Medal – Huawei ITC Competition 2024',
-      desc: 'Delegasi sekolah meraih Silver Medal pada Huawei ICT Competition 2024 setelah bersaing dengan peserta dari berbagai negara.',
+      title: 'Silver Medal – Huawei ICT Competition 2024',
+      desc: 'Detail prestasi dan dokumentasi acara belum terverifikasi.',
     },
     {
-      level: 'Nasional',
+      level: 'Belum terverifikasi',
       slug: 'gemastik-2024-game-development',
       title: 'Juara 2 Gemastik Game Development 2024',
-      desc: 'Karya game orisinal siswa membawa pulang Juara 2 kategori Game Development pada ajang Gemastik 2024.',
+      desc: 'Detail prestasi dan dokumentasi acara belum terverifikasi.',
     },
     {
-      level: 'Nasional',
+      level: 'Belum terverifikasi',
       slug: 'iot-challenge-telkom-2024',
       title: 'Juara 1 IoT Challenge Telkom 2024',
-      desc: 'Purwarupa smart agriculture berbasis IoT rancangan siswa dinobatkan sebagai juara pertama IoT Challenge Telkom 2024.',
+      desc: 'Detail prestasi dan dokumentasi acara belum terverifikasi.',
     },
   ],
 };
@@ -651,47 +651,57 @@ export const galeriPrestasi = {
     {
       level: 'Nasional',
       slug: 'lks-nasional-2024-web-technologies',
-      title: 'Juara 1 LKS Nasional 2024 Web Technologies',
-      date: '20 Agustus 2024',
+      title: 'Juara 2 LKS 2024 Bidang Web Technology',
+      date: '2024',
       year: 2024,
       tags: ['Nasional', 'LKS', 'Programming'],
-      image: prestasi1,
+      image: showcaseIot,
+      imageAlt: 'Siswa mempresentasikan purwarupa IoT pada pameran proyek',
+      imageNote: 'Foto ilustrasi; bukan dokumentasi lomba.',
     },
     {
-      level: 'Internasional',
+      level: 'Belum terverifikasi',
       slug: 'huawei-ict-competition-2024',
       title: 'Silver Medal Huawei ICT Competition 2024',
       date: '12 Juni 2024',
       year: 2024,
       tags: ['Internasional', 'Programming'],
       image: showcaseTkj,
+      imageAlt: 'Dua siswa membawa perangkat komputer',
+      imageNote: 'Foto ilustrasi; detail prestasi belum terverifikasi.',
     },
     {
-      level: 'Nasional',
+      level: 'Belum terverifikasi',
       slug: 'gemastik-2024-game-development',
       title: 'Juara 2 Gemastik 2024 Game Development',
       date: '30 September 2024',
       year: 2024,
       tags: ['Nasional', 'Game'],
       image: showcasePg,
+      imageAlt: 'Siswa menggunakan perangkat VR dan komputer',
+      imageNote: 'Foto ilustrasi; detail prestasi belum terverifikasi.',
     },
     {
-      level: 'Nasional',
+      level: 'Belum terverifikasi',
       slug: 'iot-challenge-telkom-2024',
       title: 'Juara 1 IoT Challenge Telkom 2024',
       date: '1 Oktober 2024',
       year: 2024,
       tags: ['Nasional', 'AI'],
       image: showcaseTjat,
+      imageAlt: 'Siswa melakukan praktik pada menara telekomunikasi',
+      imageNote: 'Foto ilustrasi; detail prestasi belum terverifikasi.',
     },
     {
-      level: 'Internasional',
+      level: 'Belum terverifikasi',
       slug: 'world-skills-asia-2024',
-      title: 'Bronze Medal – Word Skills Asia 2024',
+      title: 'Bronze Medal – WorldSkills Asia 2024',
       date: '25 November 2024',
       year: 2024,
       tags: ['Internasional', 'Robotik', 'UI/UX'],
-      image: prestasi2,
+      image: showcaseSmartHome,
+      imageAlt: 'Purwarupa Smart Home dengan sistem garasi otomatis',
+      imageNote: 'Foto ilustrasi; detail prestasi belum terverifikasi.',
     },
   ],
 };
@@ -757,7 +767,7 @@ export const videoHighlight = {
   videoDesc: 'Perjalanan, kerja keras, dan momen terbaik siswa SMK Telkom Purwokerto',
   // ponytail: memakai video profil resmi sekolah karena reel khusus prestasi
   // belum ada. Ganti `videoId` di sini begitu videonya tersedia.
-  video: { ...videoProfilSekolah, poster: prestasi1 },
+  video: { ...videoProfilSekolah, poster: showcaseIot },
 };
 
 /* =========================================================
@@ -777,6 +787,7 @@ export const bkkHero = {
     'BKK SMK Telkom Purwokerto menjembatani siswa dan alumni dengan lowongan kerja, tempat PKL, serta mitra industri yang siap membuka pintu karier.',
   ctaText: 'Lihat Lowongan',
   image: heroBkk,
+  imageAlt: 'Siswa SMK Telkom Purwokerto membawa laptop',
 };
 
 export const bkkStats = [
@@ -812,7 +823,7 @@ export const lowonganPopuler = {
   items: [
     {
       logo: logoTelkomColor,
-      role: 'Software Enginer',
+      role: 'Software Engineer',
       company: 'PT Telkom Indonesia',
       location: 'Purwokerto, Jawa Tengah',
       badges: ['Full Time', 'Onsite'],
@@ -821,10 +832,10 @@ export const lowonganPopuler = {
     },
     {
       logo: logoHuaweiColor,
-      role: 'Network Enginer',
+      role: 'Network Engineer',
       company: 'Huawei Indonesia',
       location: 'Jakarta, Indonesia',
-      badges: ['Full Time', 'Hybird'],
+      badges: ['Full Time', 'Hybrid'],
       salary: 'Rp 9 - 16 Juta',
       tags: ['Internasional', 'Networking'],
     },
@@ -833,7 +844,7 @@ export const lowonganPopuler = {
       role: 'Game Developer',
       company: 'Agate Studio',
       location: 'Yogyakarta, Indonesia',
-      badges: ['Intership', 'Onsite'],
+      badges: ['Internship', 'Onsite'],
       salary: 'Rp2 - 4 Juta',
       tags: ['Nasional', 'Game'],
     },
@@ -842,7 +853,7 @@ export const lowonganPopuler = {
       role: 'AI Research Intern',
       company: 'Dicoding Indonesia',
       location: 'Remote',
-      badges: ['Internaship', 'Remote'],
+      badges: ['Internship', 'Remote'],
       salary: 'Rp 2 - 3 Juta',
       tags: ['Nasional', 'AI'],
     },
@@ -856,25 +867,25 @@ export const pklData = {
       logo: logoTelkomColor,
       role: 'PKL IT Support',
       company: 'PT Telkom Indonesia',
-      location: 'Purwokerto, Jawa Tengah',
+      location: 'Lokasi belum diverifikasi',
       kuota: 'Kuota 8 Siswa',
-      kota: 'Purwokerto',
+      kota: 'Detail penempatan belum terverifikasi',
     },
     {
       logo: logoAgate,
       role: 'PKL Game Dev',
-      company: 'PT Telkom Indonesia',
-      location: 'Purwokerto, Jawa Tengah',
+      company: 'Agate Studio',
+      location: 'Lokasi belum diverifikasi',
       kuota: 'Kuota 6 Siswa',
-      kota: 'Yogyakarta',
+      kota: 'Detail penempatan belum terverifikasi',
     },
     {
       logo: logoHuaweiColor,
       role: 'PKL Software Engineer',
-      company: 'PT Telkom Indonesia',
-      location: 'Purwokerto, Jawa Tengah',
+      company: 'Huawei Indonesia',
+      location: 'Lokasi belum diverifikasi',
       kuota: 'Kuota 6 Siswa',
-      kota: 'Jakarta',
+      kota: 'Detail penempatan belum terverifikasi',
     },
   ],
   stela: {
@@ -891,7 +902,7 @@ export const jalurKarier = {
   steps: {
     RPL: [
       { title: 'Belajar', desc: 'Kuasai skill dan teori dasar' },
-      { title: 'Proyek', desc: 'Bangun Portofolio tebraikmu' },
+      { title: 'Proyek', desc: 'Bangun portofolio terbaikmu' },
       { title: 'PKL/Magang', desc: 'Dapatkan pengalaman nyata di industri' },
       { title: 'Junior', desc: 'Mulai Karier Sebagai Developer Junior' },
       { title: 'Profesional', desc: 'Tingkatkan Skill Dan Jadi Ahli' },
@@ -932,7 +943,7 @@ export const kisahAlumni = {
       meta: 'Alumni RPL 2020',
       role: 'Software Engineer di Tokopedia',
       quote:
-        'Ilmu yang saya dapatkan di SMK Telkom Purokwerto sangat bermanfaat dalam karier saya saat ini',
+        'Ilmu yang saya dapatkan di SMK Telkom Purwokerto sangat bermanfaat dalam karier saya saat ini',
     },
     {
       name: 'Dewi Anggraini',
@@ -1212,7 +1223,7 @@ export const jurusanDetail = [
     ],
     galeri: [
       { image: showcasePg, alt: 'Permainan buatan siswa Pengembangan Game' },
-      { image: studioMultimedia, alt: 'Studio multimedia tempat aset game diproduksi' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
       { image: heroPanel, alt: 'Sesi playtest permainan bersama pemain' },
     ],
   },
@@ -1260,7 +1271,7 @@ export const jurusanDetail = [
       { role: 'IT Support', desc: 'Menangani kebutuhan perangkat dan jaringan pengguna di kantor.' },
     ],
     galeri: [
-      { image: showcaseTkj, alt: 'Praktik konfigurasi router dan switch' },
+      { image: showcaseTkj, alt: 'Foto ilustrasi: dua siswa membawa perangkat komputer' },
       { image: heroPanel, alt: 'Siswa TKJ praktik konfigurasi jaringan di kelas' },
       { image: labKomputer, alt: 'Praktik administrasi server oleh siswa TKJ' },
     ],
@@ -1319,37 +1330,25 @@ export const jurusanDetail = [
 export const prestasiDetail = [
   {
     slug: 'lks-nasional-2024-web-technologies',
-    kategori: 'Tingkat Nasional',
-    title: 'Juara 1 LKS Nasional 2024 Bidang Web Technologies',
-    subtitle: 'Lomba Kompetensi Siswa Nasional 2024',
-    date: '20 Agustus 2024',
-    image: prestasi1,
-    lead: 'Tim RPL SMK Telkom Purwokerto meraih Juara 1 pada Lomba Kompetensi Siswa Nasional 2024 bidang Web Technologies setelah bersaing dengan perwakilan dari seluruh provinsi.',
+    kategori: 'LKS 2024',
+    title: 'Juara 2 LKS 2024 Bidang Web Technology',
+    subtitle: 'Muhammad Daffa Izzati · XII RPL 3',
+    date: '2024',
+    image: showcaseRpl,
+    imageAlt: 'Foto ilustrasi: siswa menggunakan komputer untuk kegiatan pengembangan perangkat lunak',
+    imageNote: 'Foto ilustrasi; bukan dokumentasi lomba.',
+    lead: 'Muhammad Daffa Izzati dari kelas XII RPL 3 meraih Juara 2 bidang Web Technology pada LKS 2024.',
     body: [
-      'Peserta diminta membangun aplikasi web utuh dalam waktu terbatas: merancang basis data, menulis sisi server, dan menyelesaikan antarmuka yang responsif dalam satu rangkaian penilaian.',
-      'Persiapan berjalan selama empat bulan dengan pendampingan guru produktif dan alumni yang kini bekerja sebagai software engineer. Latihan difokuskan pada kecepatan menulis kode yang tetap rapi dan mudah diperiksa.',
-      'Kemenangan ini membuka jalur beasiswa bagi anggota tim dan menjadi acuan penyusunan kurikulum RPL pada tahun ajaran berikutnya.',
+      'Informasi peserta dan hasil mengikuti publikasi resmi sekolah. Detail pelaksanaan yang belum tercantum pada sumber tidak ditambahkan.',
     ],
     facts: [
-      { label: 'Bidang lomba', value: 'Web Technologies' },
-      { label: 'Tingkat', value: 'Nasional' },
-      { label: 'Penyelenggara', value: 'Kementerian Pendidikan' },
-      { label: 'Hasil', value: 'Juara 1' },
-    ],
-    sorotan: [
-      { angka: '1', label: 'Peringkat akhir' },
-      { angka: '34', label: 'Provinsi bersaing' },
-      { angka: '4 bulan', label: 'Masa persiapan' },
-    ],
-    perjalanan: [
-      { tahap: 'Seleksi sekolah', isi: 'Dua puluh siswa RPL mengikuti simulasi lomba tertutup, disaring menjadi tiga kandidat.' },
-      { tahap: 'Seleksi provinsi', isi: 'Tim menyelesaikan studi kasus aplikasi web dalam delapan jam dan lolos sebagai wakil Jawa Tengah.' },
-      { tahap: 'Final nasional', isi: 'Tiga hari penilaian di Jakarta, ditutup dengan pengumuman Juara 1 bidang Web Technologies.' },
+      { label: 'Peserta', value: 'Muhammad Daffa Izzati' },
+      { label: 'Kelas', value: 'XII RPL 3' },
+      { label: 'Bidang lomba', value: 'Web Technology' },
+      { label: 'Hasil', value: 'Juara 2' },
     ],
     galeri: [
-      { image: prestasi3, alt: 'Tim menerima piala Juara 1 LKS Nasional 2024' },
-      { image: showcaseRpl, alt: 'Aplikasi web yang dilombakan di babak final' },
-      { image: labKomputer, alt: 'Latihan rutin di laboratorium RPL sebelum lomba' },
+      { image: showcaseRpl, alt: 'Foto ilustrasi: siswa menggunakan komputer untuk pengembangan perangkat lunak' },
     ],
   },
   {
@@ -1358,7 +1357,7 @@ export const prestasiDetail = [
     title: 'Gold Medal IDSEEC 2024 Bidang Network Security',
     subtitle: 'Indonesia Science and Engineering Expo Competition 2024',
     date: '5 Oktober 2024',
-    image: prestasi2,
+    image: showcaseSmartHome,
     lead: 'Siswa TKJ membawa pulang Gold Medal dari IDSEEC 2024 lewat purwarupa sistem deteksi gangguan jaringan yang bekerja tanpa perangkat keras tambahan.',
     body: [
       'Karya yang dilombakan berupa perangkat lunak pemantau lalu lintas jaringan yang menandai pola mencurigakan dan mengirim peringatan dini ke administrator.',
@@ -1382,7 +1381,7 @@ export const prestasiDetail = [
       { tahap: 'Penjurian IDSEEC', isi: 'Juri menguji ketepatan deteksi dan kesiapan penerapannya, lalu memberikan Gold Medal.' },
     ],
     galeri: [
-      { image: prestasi1, alt: 'Presentasi purwarupa di hadapan juri IDSEEC 2024' },
+      { image: showcaseIot, alt: 'Foto ilustrasi: siswa mempresentasikan purwarupa IoT pada pameran proyek' },
       { image: jurusanTkj, alt: 'Praktik pemantauan jaringan di laboratorium TKJ' },
       { image: labKomputer, alt: 'Pengujian sistem deteksi pada jaringan sekolah' },
     ],
@@ -1393,7 +1392,7 @@ export const prestasiDetail = [
     title: 'Silver Medal Huawei ICT Competition 2024',
     subtitle: 'Huawei ICT Competition 2024',
     date: '12 Juni 2024',
-    image: prestasi2,
+    image: showcaseSmartHome,
     lead: 'Delegasi sekolah meraih Silver Medal pada Huawei ICT Competition 2024 setelah melewati babak penyisihan bersama peserta dari berbagai negara.',
     body: [
       'Kompetisi menguji penguasaan jaringan, komputasi awan, dan keamanan melalui rangkaian soal praktik yang harus diselesaikan langsung pada perangkat.',
@@ -1417,8 +1416,8 @@ export const prestasiDetail = [
       { tahap: 'Babak praktik', isi: 'Konfigurasi langsung pada perangkat sungguhan, dinilai berdasarkan ketepatan dan kecepatan.' },
     ],
     galeri: [
-      { image: prestasi1, alt: 'Delegasi sekolah di Huawei ICT Competition 2024' },
-      { image: showcaseTkj, alt: 'Konfigurasi perangkat jaringan saat babak praktik' },
+      { image: showcaseIot, alt: 'Foto ilustrasi: siswa mempresentasikan purwarupa IoT pada pameran proyek' },
+      { image: showcaseTkj, alt: 'Foto ilustrasi: dua siswa membawa perangkat komputer' },
       { image: jurusanTkj, alt: 'Persiapan tim di laboratorium jaringan sekolah' },
     ],
   },
@@ -1428,7 +1427,8 @@ export const prestasiDetail = [
     title: 'Juara 2 Gemastik 2024 Kategori Game Development',
     subtitle: 'Gemastik 2024',
     date: '30 September 2024',
-    image: prestasi3,
+    image: showcasePg,
+    imageAlt: 'Foto ilustrasi: siswa menggunakan perangkat VR dan komputer',
     lead: 'Karya game orisinal siswa Pengembangan Game membawa pulang Juara 2 kategori Game Development pada ajang Gemastik 2024.',
     body: [
       'Game yang dilombakan mengangkat cerita lokal dengan mekanik teka-teki sederhana, dirancang agar tetap bisa dimainkan pada perangkat berspesifikasi rendah.',
@@ -1452,9 +1452,9 @@ export const prestasiDetail = [
       { tahap: 'Playtest dan final', isi: 'Puluhan pemain menguji permainan, hasil masukannya dipakai memperbaiki level sebelum penjurian Gemastik.' },
     ],
     galeri: [
-      { image: prestasi1, alt: 'Tim Pengembangan Game di panggung Gemastik 2024' },
+      { image: showcaseIot, alt: 'Foto ilustrasi: siswa mempresentasikan purwarupa IoT pada pameran proyek' },
       { image: showcasePg, alt: 'Tangkapan layar game yang dilombakan' },
-      { image: studioMultimedia, alt: 'Produksi aset visual di studio multimedia' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
     ],
   },
   {
@@ -1464,7 +1464,8 @@ export const prestasiDetail = [
     subtitle: 'IoT Challenge Telkom 2024',
     date: '1 Oktober 2024',
     // Foto asli IoT Challenge belum ada; gunakan showcase Drive yang tersedia.
-    image: prestasi3,
+    image: showcaseIot,
+    imageAlt: 'Foto ilustrasi: siswa mempresentasikan purwarupa IoT pada pameran proyek',
     lead: 'Purwarupa smart agriculture berbasis IoT rancangan siswa dinobatkan sebagai juara pertama pada IoT Challenge Telkom 2024.',
     body: [
       'Alat yang dibuat memantau kelembapan tanah dan suhu, lalu menyalakan penyiraman secara otomatis ketika ambang batas terlampaui. Datanya dikirim ke aplikasi agar petani bisa memeriksanya dari jauh.',
@@ -1488,7 +1489,7 @@ export const prestasiDetail = [
       { tahap: 'Uji dan lomba', isi: 'Alat diuji langsung di lahan selama dua pekan sebelum dipresentasikan pada IoT Challenge Telkom 2024.' },
     ],
     galeri: [
-      { image: prestasi2, alt: 'Purwarupa perangkat IoT pertanian buatan siswa' },
+      { image: showcaseSmartHome, alt: 'Foto ilustrasi: purwarupa Smart Home dengan sistem garasi otomatis' },
       { image: showcaseTjat, alt: 'Pemasangan sensor di lahan uji coba' },
       { image: labKomputer, alt: 'Perakitan dan pengujian perangkat di laboratorium' },
     ],
@@ -1499,7 +1500,7 @@ export const prestasiDetail = [
     title: 'Bronze Medal World Skills Asia 2024',
     subtitle: 'World Skills Asia 2024',
     date: '25 November 2024',
-    image: prestasi1,
+    image: showcaseIot,
     lead: 'Siswa SMK Telkom Purwokerto meraih Bronze Medal pada World Skills Asia 2024, ajang keterampilan vokasi tingkat Asia.',
     body: [
       'Peserta dinilai pada rangkaian tugas praktik yang dikerjakan di bawah pengawasan juri internasional, dengan standar penilaian yang sama di seluruh negara peserta.',
@@ -1523,7 +1524,7 @@ export const prestasiDetail = [
       { tahap: 'Kompetisi Asia', isi: 'Bersaing dengan peserta dari belasan negara dan membawa pulang medali perunggu.' },
     ],
     galeri: [
-      { image: prestasi2, alt: 'Peraih medali World Skills Asia 2024' },
+      { image: showcaseSmartHome, alt: 'Foto ilustrasi: purwarupa Smart Home dengan sistem garasi otomatis' },
       { image: showcaseRpl, alt: 'Hasil kerja peserta pada kategori Web Technologies' },
       { image: heroPanel, alt: 'Sesi pemusatan latihan sebelum berangkat' },
     ],
@@ -1538,7 +1539,7 @@ export const beritaDetail = [
     subtitle: 'Tim RPL kembali membawa pulang gelar tertinggi',
     date: '20 Mei 2025',
     author: 'Admin',
-    image: prestasi1,
+    image: showcaseIot,
     lead: 'Tim RPL SMK Telkom Purwokerto berhasil meraih Juara 1 dalam ajang Lomba Kompetensi Siswa Nasional 2025 yang diselenggarakan di Jakarta.',
     body: [
       'Babak final berlangsung tiga hari dengan tugas membangun aplikasi web lengkap, mulai dari rancangan basis data sampai antarmuka yang harus rapi di layar kecil maupun besar.',
@@ -1550,7 +1551,7 @@ export const beritaDetail = [
       oleh: 'Pembina tim LKS Web Technologies',
     },
     galeri: [
-      { image: prestasi3, alt: 'Penyerahan piala Juara 1 LKS Nasional 2025' },
+      { image: penampilanMusik, alt: 'Foto ilustrasi: penampilan musik tradisional pada Stematel Innovation Summit' },
       { image: showcaseRpl, alt: 'Aplikasi web yang dikerjakan selama babak final' },
       { image: labKomputer, alt: 'Latihan tim di laboratorium RPL' },
     ],
@@ -1574,7 +1575,7 @@ export const beritaDetail = [
       oleh: 'Praktisi AI Telkom Indonesia',
     },
     galeri: [
-      { image: studioMultimedia, alt: 'Sesi praktik membangun model pembelajaran mesin' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
       { image: labKomputer, alt: 'Siswa mengikuti workshop di laboratorium komputer' },
       { image: guruGroup, alt: 'Pendampingan guru selama sesi berlangsung' },
     ],
@@ -1599,7 +1600,7 @@ export const beritaDetail = [
     },
     galeri: [
       { image: labKomputer, alt: 'Rombongan siswa di laboratorium jaringan Huawei' },
-      { image: showcaseTkj, alt: 'Peninjauan perangkat jaringan berskala besar' },
+      { image: showcaseTkj, alt: 'Foto ilustrasi: dua siswa membawa perangkat komputer' },
       { image: gedungSekolah, alt: 'Pelepasan rombongan kunjungan industri di sekolah' },
     ],
   },
@@ -1610,7 +1611,7 @@ export const beritaDetail = [
     subtitle: 'Kategori Web Technologies dan Network Systems',
     date: '10 Mei 2025',
     author: 'Admin',
-    image: prestasi2,
+    image: showcaseSmartHome,
     lead: 'Dua siswa membawa pulang medali perak pada kategori Web Technologies dan Network Systems di ajang World Skills Asia 2025.',
     body: [
       'Keduanya bersaing dengan peserta dari belasan negara dalam rangkaian tugas praktik yang dinilai juri internasional dengan standar seragam.',
@@ -1622,9 +1623,9 @@ export const beritaDetail = [
       oleh: 'Peraih medali perak Web Technologies',
     },
     galeri: [
-      { image: prestasi1, alt: 'Dua siswa peraih medali perak World Skills Asia 2025' },
+      { image: showcaseIot, alt: 'Foto ilustrasi: siswa mempresentasikan purwarupa IoT pada pameran proyek' },
       { image: showcaseRpl, alt: 'Hasil kerja pada kategori Web Technologies' },
-      { image: showcaseTkj, alt: 'Praktik kategori Network Systems' },
+      { image: showcaseTkj, alt: 'Foto ilustrasi: dua siswa membawa perangkat komputer' },
     ],
   },
   {
@@ -1634,7 +1635,7 @@ export const beritaDetail = [
     subtitle: 'Kontes Robot Indonesia 2025',
     date: '11 Mei 2025',
     author: 'Admin',
-    image: prestasi2,
+    image: showcaseSmartHome,
     lead: 'Prestasi membanggakan kembali diraih siswa SMK Telkom Purwokerto lewat gelar juara pertama pada Kontes Robot Indonesia 2025.',
     body: [
       'Robot yang dilombakan dirancang dan dirakit sendiri oleh tim, termasuk sistem kendali dan algoritma navigasinya.',
@@ -1646,9 +1647,9 @@ export const beritaDetail = [
       oleh: 'Ketua tim robotika',
     },
     galeri: [
-      { image: prestasi3, alt: 'Tim robotika bersama piala KRI Nasional 2025' },
+      { image: penampilanMusik, alt: 'Foto ilustrasi: penampilan musik tradisional pada Stematel Innovation Summit' },
       { image: labKomputer, alt: 'Perakitan dan kalibrasi robot sebelum lomba' },
-      { image: studioMultimedia, alt: 'Pengujian lintasan di ruang latihan' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
     ],
   },
   {
@@ -1671,7 +1672,7 @@ export const beritaDetail = [
     },
     galeri: [
       { image: labKomputer, alt: 'Ruang AI Center dengan perangkat berspesifikasi tinggi' },
-      { image: studioMultimedia, alt: 'Area kerja kelompok di dalam AI Center' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
       { image: gedungSekolah, alt: 'Gedung tempat AI Center berada' },
     ],
   },
@@ -1742,7 +1743,7 @@ export const beritaDetail = [
       oleh: 'Praktisi UI/UX pemateri workshop',
     },
     galeri: [
-      { image: studioMultimedia, alt: 'Sesi workshop UI/UX di studio multimedia' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
       { image: jurusanPg, alt: 'Hasil rancangan antarmuka karya siswa' },
       { image: labKomputer, alt: 'Praktik membuat purwarupa antarmuka' },
     ],
@@ -1768,7 +1769,7 @@ export const beritaDetail = [
     galeri: [
       { image: showcasePg, alt: 'Peserta seleksi internal mempresentasikan karyanya' },
       { image: labKomputer, alt: 'Pengerjaan studi kasus dengan batas waktu' },
-      { image: prestasi3, alt: 'Piala Gemastik tahun sebelumnya sebagai target tim' },
+      { image: penampilanMusik, alt: 'Foto ilustrasi: penampilan musik tradisional pada Stematel Innovation Summit' },
     ],
   },
   {
@@ -2012,6 +2013,7 @@ export const beritaHero = {
     'Ikuti semua informasi terkini tentang prestasi, kegiatan, event, dan inovasi di SMK Telkom Purwokerto',
   ctaText: 'Jelajahi Berita',
   image: heroBerita,
+  imageAlt: 'Maket proyek Smart Home karya siswa kelas XII TJKT 4',
 };
 
 export const breakingNews = {
@@ -2094,7 +2096,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Prestasi membanggakan kembali diraih oleh siswa SMK Telkom Purwokerto di ajang...',
-      image: prestasi2,
+      image: showcaseSmartHome,
     },
     {
       kategori: 'Teknologi',
@@ -2127,7 +2129,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Kegiatan outing class siswa kelas XI ke Borobudur dan Malioboro berjalan seru...',
-      image: prestasi1,
+      image: showcaseIot,
     },
     {
       kategori: 'Workshop',
@@ -2149,7 +2151,7 @@ export const kategoriBerita = {
       author: 'Admin',
       excerpt:
         'Puluhan tim bersaing di seleksi internal untuk mewakili sekolah di Gemastik...',
-      image: prestasi3,
+      image: penampilanMusik,
     },
     {
       kategori: 'PPDB',
@@ -2213,10 +2215,10 @@ export const galeriKegiatan = {
   // ponytail: keempat foto ini pengganti — aset asli belum bisa diunduh dari Figma
   // (batas panggilan MCP paket Starter). Ganti kalau sudah tersedia.
   items: [
-    { alt: 'Tim siswa berprestasi', image: prestasi1 },
-    { alt: 'Siswa di studio multimedia', image: studioMultimedia },
-    { alt: 'Praktik jaringan siswa', image: showcaseTkj },
-    { alt: 'Siswa mengerjakan proyek', image: prestasi2 },
+    { alt: 'Siswa mempresentasikan purwarupa IoT pada pameran proyek', image: showcaseIot },
+    { alt: 'Peralatan praktik fiber optik di laboratorium sekolah', image: laboratoriumTjkt },
+    { alt: 'Dua siswa membawa perangkat komputer', image: showcaseTkj },
+    { alt: 'Purwarupa Smart Home dengan sistem garasi otomatis', image: showcaseSmartHome },
   ],
 };
 
@@ -2225,7 +2227,7 @@ export const newsletterBerita = {
   heading: 'Dapatkan Berita Terbaru',
   description:
     'Berlangganan newsletter kami untuk mendapatkan update berita dan informasi terbaru.',
-  placeholder: 'Masukan email kamu',
+  placeholder: 'Masukkan email kamu',
   ctaText: 'Berlangganan',
   note: 'Kami tidak akan membagikan email kamu ke pihak lain.',
   successText: 'Terima kasih! Email kamu sudah terdaftar.',
@@ -2726,7 +2728,7 @@ export const agendaDetail = [
     title: 'Pelatihan UI/UX Design Untuk Siswa',
     subtitle: 'Lab Multimedia, 28 Mei',
     date: '28 Mei 2025',
-    image: studioMultimedia,
+    image: laboratoriumTjkt,
     lead: 'Pelatihan sehari penuh untuk mengenal proses merancang antarmuka, mulai dari memahami kebutuhan pengguna sampai menyusun purwarupa yang bisa dicoba.',
     body: [
       'Peserta memulai dengan wawancara singkat sesama peserta untuk melatih kepekaan menangkap kebutuhan yang sebenarnya, bukan sekadar keinginan yang diucapkan.',
@@ -2777,7 +2779,7 @@ export const galeriDetail = [
     title: 'Tim Siswa Berprestasi',
     subtitle: 'Dokumentasi penerimaan penghargaan',
     date: '24 Agustus 2024',
-    image: prestasi1,
+    image: showcaseIot,
     lead: 'Momen tim siswa menerima penghargaan setelah menyelesaikan rangkaian lomba tingkat nasional.',
     body: [
       'Foto diambil tepat setelah pengumuman pemenang dibacakan. Tim yang tampak di gambar menjalani persiapan selama empat bulan dengan pendampingan guru produktif.',
@@ -2794,7 +2796,7 @@ export const galeriDetail = [
     title: 'Siswa di Studio Multimedia',
     subtitle: 'Produksi konten dan aset visual',
     date: '14 Mei 2025',
-    image: studioMultimedia,
+    image: laboratoriumTjkt,
     lead: 'Studio multimedia dipakai untuk produksi konten, penyuntingan video, dan pembuatan aset visual oleh siswa jurusan Pengembangan Game dan Desain Komunikasi Visual.',
     body: [
       'Ruangan ini dilengkapi perangkat penyuntingan, pen tablet, dan area perekaman sederhana yang bisa dipakai bergantian antar kelas.',
@@ -2828,7 +2830,7 @@ export const galeriDetail = [
     title: 'Siswa Mengerjakan Proyek',
     subtitle: 'Kerja kelompok menjelang penilaian',
     date: '2 Mei 2025',
-    image: prestasi2,
+    image: showcaseSmartHome,
     lead: 'Suasana kerja kelompok menjelang penilaian proyek akhir semester, saat setiap tim merapikan hasil kerja sebelum dipresentasikan.',
     body: [
       'Proyek dikerjakan dalam tim kecil dengan pembagian peran menyerupai alur kerja di industri: ada yang menangani rancangan, ada yang menulis kode, ada yang menguji.',
@@ -2934,7 +2936,7 @@ export const pklDetailLengkap = [
     slug: 'pkl-it-support-pt-telkom-indonesia',
     kategori: 'PKL',
     title: 'PKL IT Support',
-    subtitle: 'PT Telkom Indonesia - Purwokerto, Jawa Tengah',
+    subtitle: 'PT Telkom Indonesia · lokasi belum diverifikasi',
     date: 'Kuota 8 siswa',
     image: labKomputer,
     lead: 'Penempatan praktik kerja lapangan pada tim dukungan teknis, menangani kebutuhan perangkat dan jaringan pengguna di lingkungan kantor.',
@@ -2945,18 +2947,20 @@ export const pklDetailLengkap = [
     ],
     facts: [
       { label: 'Perusahaan', value: 'PT Telkom Indonesia' },
-      { label: 'Lokasi', value: 'Purwokerto, Jawa Tengah' },
+      { label: 'Lokasi', value: 'Belum diverifikasi' },
       { label: 'Kuota', value: '8 siswa' },
       { label: 'Jurusan disarankan', value: 'TKJ dan TJAT' },
     ],
   },
   {
-    slug: 'pkl-game-dev-pt-telkom-indonesia',
+    slug: 'pkl-game-dev-agate-studio',
     kategori: 'PKL',
     title: 'PKL Game Dev',
-    subtitle: 'PT Telkom Indonesia - Yogyakarta',
+    subtitle: 'Agate Studio · lokasi belum diverifikasi',
     date: 'Kuota 6 siswa',
-    image: studioMultimedia,
+    image: showcasePg,
+    imageAlt: 'Foto ilustrasi: siswa menggunakan perangkat VR dan komputer',
+    imageNote: 'Logo mendukung nama perusahaan; detail lokasi dan penempatan belum terverifikasi.',
     lead: 'Penempatan pada tim pengembangan permainan, terlibat dalam pembuatan aset, penyusunan level, dan pengujian permainan.',
     body: [
       'Peserta bergabung pada satu siklus produksi pendek: menerima rancangan, mengerjakan bagiannya, lalu ikut sesi tinjauan bersama tim.',
@@ -2964,17 +2968,17 @@ export const pklDetailLengkap = [
       'Hasil kerja selama PKL boleh dimasukkan ke portofolio pribadi sepanjang tidak memuat aset milik perusahaan.',
     ],
     facts: [
-      { label: 'Perusahaan', value: 'PT Telkom Indonesia' },
-      { label: 'Lokasi', value: 'Yogyakarta' },
+      { label: 'Perusahaan', value: 'Agate Studio' },
+      { label: 'Lokasi', value: 'Belum diverifikasi' },
       { label: 'Kuota', value: '6 siswa' },
-      { label: 'Jurusan disarankan', value: 'PG dan DKV' },
+      { label: 'Jurusan disarankan', value: 'Pengembangan Gim' },
     ],
   },
   {
-    slug: 'pkl-software-engineer-pt-telkom-indonesia',
+    slug: 'pkl-software-engineer-huawei-indonesia',
     kategori: 'PKL',
     title: 'PKL Software Engineer',
-    subtitle: 'PT Telkom Indonesia - Jakarta',
+    subtitle: 'Huawei Indonesia · lokasi belum diverifikasi',
     date: 'Kuota 6 siswa',
     image: showcaseRpl,
     lead: 'Penempatan pada tim pengembang perangkat lunak, mengerjakan bagian kecil dari produk yang benar-benar dipakai pengguna.',
@@ -2984,8 +2988,8 @@ export const pklDetailLengkap = [
       'Pendampingan dilakukan oleh seorang pengembang tetap yang menjadi tempat bertanya selama masa penempatan.',
     ],
     facts: [
-      { label: 'Perusahaan', value: 'PT Telkom Indonesia' },
-      { label: 'Lokasi', value: 'Jakarta' },
+      { label: 'Perusahaan', value: 'Huawei Indonesia' },
+      { label: 'Lokasi', value: 'Belum diverifikasi' },
       { label: 'Kuota', value: '6 siswa' },
       { label: 'Jurusan disarankan', value: 'PPLG dan RPL' },
     ],
