@@ -24,15 +24,23 @@ const PartnersSection = () => (
       className="pointer-events-none absolute inset-y-0 right-0 h-full select-none"
     />
 
-    <div className="absolute inset-0 flex items-center">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-4 px-4 sm:justify-between sm:gap-x-4 sm:px-6 lg:px-8">
-        {mitraIndustri.map((mitra) => (
-          <img
-            key={mitra.name}
-            src={mitra.logo}
-            alt={mitra.name}
-            className={`${mitra.size} w-auto object-contain`}
-          />
+    <div className="absolute inset-0 flex items-center overflow-hidden">
+      <div className="partners-marquee flex w-max">
+        {[false, true].map((duplicate) => (
+          <div
+            key={duplicate ? 'duplicate' : 'original'}
+            aria-hidden={duplicate || undefined}
+            className="flex w-screen min-w-[72rem] shrink-0 items-center justify-around px-20"
+          >
+            {mitraIndustri.map((mitra) => (
+              <img
+                key={mitra.name}
+                src={mitra.logo}
+                alt={duplicate ? '' : mitra.name}
+                className={`${mitra.size} w-auto shrink-0 object-contain`}
+              />
+            ))}
+          </div>
         ))}
       </div>
     </div>

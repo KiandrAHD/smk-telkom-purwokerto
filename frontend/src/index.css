@@ -104,6 +104,19 @@ body {
   }
 }
 
+@keyframes partners-bergerak {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.partners-marquee {
+  animation: partners-bergerak 24s linear infinite;
+}
+
 .showcase-grid {
   --showcase-offset: 32px;
   animation: showcase-masuk 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -161,6 +174,11 @@ body {
     opacity: 1;
     transform: none;
     transition-property: none;
+  }
+
+  .partners-marquee {
+    animation: none;
+    transform: none;
   }
 
   *,
