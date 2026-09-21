@@ -3,6 +3,7 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
+import telkomAccent from '../assets/landing/telkom-accent.png';
 
 const socialIcons = {
   instagram: FaInstagram,
@@ -29,8 +30,34 @@ const LinkColumn = ({ title, links }) => (
 );
 
 const Footer = () => (
-  <footer className="bg-white py-7 lg:py-9">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <footer className="relative overflow-hidden bg-white py-7 lg:py-9">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 select-none overflow-hidden"
+    >
+      <img
+        src={telkomAccent}
+        alt=""
+        className="absolute -left-20 top-3 h-36 w-36 -rotate-90 opacity-50 sm:-left-16 sm:h-44 sm:w-44 lg:-left-24 lg:top-7 lg:h-56 lg:w-56"
+      />
+      <img
+        src={telkomAccent}
+        alt=""
+        className="absolute -right-20 top-3 h-36 w-36 opacity-50 sm:-right-16 sm:h-44 sm:w-44 lg:-right-24 lg:top-7 lg:h-56 lg:w-56"
+      />
+      <img
+        src={telkomAccent}
+        alt=""
+        className="absolute -bottom-28 left-24 hidden h-48 w-48 rotate-180 opacity-50 sm:block lg:-bottom-32 lg:left-56 lg:h-64 lg:w-64"
+      />
+      <img
+        src={telkomAccent}
+        alt=""
+        className="absolute -bottom-28 right-24 hidden h-48 w-48 -rotate-90 opacity-50 sm:block lg:-bottom-32 lg:right-56 lg:h-64 lg:w-64"
+      />
+    </div>
+
+    <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
         {/* Brand */}
         <div className="col-span-2 lg:col-span-1">
