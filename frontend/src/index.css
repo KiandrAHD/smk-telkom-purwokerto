@@ -106,7 +106,7 @@ body {
 
 @keyframes partners-bergerak {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
   to {
     transform: translateX(0);
@@ -114,7 +114,7 @@ body {
 }
 
 .partners-marquee {
-  animation: partners-bergerak 24s linear infinite;
+  animation: partners-bergerak 18s linear infinite;
 }
 
 .showcase-grid {

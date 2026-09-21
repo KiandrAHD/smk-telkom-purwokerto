@@ -15,28 +15,28 @@ const PartnersSection = () => (
       src={decoLeft}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute inset-y-0 left-0 h-full select-none"
+      className="pointer-events-none absolute inset-y-0 left-0 z-10 h-full select-none"
     />
     <img
       src={decoRight}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute inset-y-0 right-0 h-full select-none"
+      className="pointer-events-none absolute inset-y-0 right-0 z-10 h-full select-none"
     />
 
-    <div className="absolute inset-0 flex items-center overflow-hidden">
+    <div className="absolute inset-y-0 left-20 right-20 flex items-center overflow-hidden sm:left-24 sm:right-24 lg:left-28 lg:right-28">
       <div className="partners-marquee flex w-max">
-        {[false, true].map((duplicate) => (
+        {[0, 1, 2, 3].map((copyIndex) => (
           <div
-            key={duplicate ? 'duplicate' : 'original'}
-            aria-hidden={duplicate || undefined}
-            className="flex w-screen min-w-[72rem] shrink-0 items-center justify-around px-20"
+            key={copyIndex}
+            aria-hidden={copyIndex > 0 || undefined}
+            className="flex shrink-0 items-center gap-14 px-7"
           >
             {mitraIndustri.map((mitra) => (
               <img
                 key={mitra.name}
                 src={mitra.logo}
-                alt={duplicate ? '' : mitra.name}
+                alt={copyIndex === 0 ? mitra.name : ''}
                 className={`${mitra.size} w-auto shrink-0 object-contain`}
               />
             ))}
