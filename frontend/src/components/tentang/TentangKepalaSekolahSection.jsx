@@ -77,7 +77,7 @@ const TentangKepalaSekolahSection = () => {
             Guru &amp; Tenaga Pendidik
           </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500 2xl:sr-only">
-            Deskripsi sementara; jabatan dan bidang mengajar belum diverifikasi.
+            Jabatan organisasi mengikuti SK Pengawakan 2026/2027; mata pelajaran tidak tercantum dalam SK.
           </p>
 
           <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 2xl:ml-[45px] 2xl:mt-[38px] 2xl:grid-cols-[repeat(4,206px)] 2xl:gap-5">

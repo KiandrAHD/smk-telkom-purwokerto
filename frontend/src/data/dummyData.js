@@ -409,7 +409,7 @@ export const timelineData = [
 
 // ── Kepala Sekolah ──
 export const kepalaSekolah = {
-  name: 'Pak Aris',
+  name: 'Aris Puji Santoso, S.Kom., M.M.',
   title: 'Kepala SMK Telkom Purwokerto',
   image: profilKepsek,
   quote:
@@ -420,15 +420,15 @@ export const kepalaSekolah = {
 };
 
 // ── Guru & Tenaga Pendidik ──
-// Nama dan foto mengikuti Drive. Atas permintaan pengguna, empat contoh
-// deskripsi lama dipakai kembali; penempatannya belum mewakili data kepegawaian.
+// Nama dan jabatan mengikuti SK Pengawakan TP 2026/2027.
+// SK tidak memuat pembagian mata pelajaran, jadi mapel tidak ditebak.
 export const guruData = [
-  { nama: 'Bu Firda', jabatan: 'Guru Produktif PG', bidang: 'Desain game dan aset visual', image: buFirda },
-  { nama: 'Pak Aic', jabatan: 'Guru Produktif TKJ', bidang: 'Administrasi jaringan dan server', image: pakAic },
-  { nama: 'Pak Bayu', jabatan: 'Guru Produktif RPL', bidang: 'Pemrograman web dan basis data', image: pakBayu },
-  { nama: 'Pak Herdi', jabatan: 'Guru Produktif TJAT', bidang: 'Fiber optic dan jaringan akses', image: pakHerdi },
-  { nama: 'Pak Nandar', jabatan: 'Guru Produktif RPL', bidang: 'Pemrograman web dan basis data', image: pakNandar },
-  { nama: 'Pak Ragil', jabatan: 'Guru Produktif TKJ', bidang: 'Administrasi jaringan dan server', image: pakRagil },
+  { nama: 'Firda Ayu Nirmala, S.Kom.', jabatan: 'Staf Sinergi, Unit Produksi & Alumni', bidang: 'Mata pelajaran belum tercantum dalam SK', image: buFirda },
+  { nama: 'Agus Indra Cahaya, S.Kom.', jabatan: 'Staf Teknologi Informasi', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakAic },
+  { nama: 'Bayu Aji Sukma, S.Si.', jabatan: 'Koord. Perencanaan KBM dan Perpustakaan', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakBayu },
+  { nama: 'Herdiyanto, S.Sos.I., M.Pd.', jabatan: 'Pembina Kerohanian', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakHerdi },
+  { nama: 'Arif Munandar, S.Si.', jabatan: 'Karakter', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakNandar },
+  { nama: 'Ragil Rudi Priyanto, S.Si.', jabatan: 'Kaur Pelaksanaan dan Evaluasi KBM', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakRagil },
 ];
 
 export const footerData = {
@@ -3159,7 +3159,7 @@ export const projectDetail = [
 /* ── Profil guru: /profil-sekolah/guru/:slug ── */
 export const guruDetail = guruData.map((guru) => ({
   slug: slugify(guru.nama),
-  kategori: 'Profil Guru — Deskripsi Sementara',
+  kategori: 'Profil Guru & Tenaga Pendidik',
   title: guru.nama,
   subtitle: guru.jabatan,
   image: guru.image,
