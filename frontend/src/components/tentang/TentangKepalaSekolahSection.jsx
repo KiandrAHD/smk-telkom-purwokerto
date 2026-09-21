@@ -24,7 +24,7 @@ const TentangKepalaSekolahSection = () => {
   const shown = guruData.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
 
   return (
-    <section id="guru" className="relative overflow-hidden bg-white py-8 lg:py-12">
+    <section id="guru" className="relative overflow-hidden bg-white py-8 lg:py-12 2xl:py-14">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-hidden 2xl:block">
         {accentPositions.map((position) => (
           <img
@@ -36,23 +36,25 @@ const TentangKepalaSekolahSection = () => {
         ))}
       </div>
 
-      <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8 2xl:max-w-[1621px] 2xl:grid-cols-[610px_964px] 2xl:gap-[47px] 2xl:px-0">
         {/* Kepala Sekolah */}
-        <div className="self-start rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
-          <h2 className="font-heading text-base font-extrabold text-primary">Kepala Sekolah</h2>
-          <div className="mt-4 flex flex-col gap-4 min-[400px]:flex-row">
+        <div className="self-start rounded-2xl border border-dark-100 bg-white p-5 shadow-card 2xl:min-h-[438px] 2xl:rounded-[20px] 2xl:border-0 2xl:bg-[#fffdfd] 2xl:p-0">
+          <h2 className="font-heading text-base font-extrabold text-primary 2xl:ml-[42px] 2xl:mt-[14px] 2xl:text-[32px] 2xl:leading-[40px]">
+            Kepala Sekolah
+          </h2>
+          <div className="mt-4 flex flex-col gap-4 min-[400px]:flex-row 2xl:mt-[18px] 2xl:gap-[13px] 2xl:px-[34px]">
             <img
               src={kepalaSekolah.image}
               alt={kepalaSekolah.name}
-              className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-contain p-1"
+              className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-contain p-1 2xl:h-[321px] 2xl:w-[257px] 2xl:p-0"
             />
             <div className="min-w-0">
-              <Quote className="h-4 w-4 text-primary" fill="currentColor" />
-              <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600">
+              <Quote className="h-4 w-4 text-primary 2xl:h-6 2xl:w-6" fill="currentColor" />
+              <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600 2xl:text-[18px] 2xl:leading-[1.45]">
                 {expanded ? kepalaSekolah.quoteFull : kepalaSekolah.quote}
               </p>
-              <p className="mt-2 text-[10px] font-bold text-primary">{kepalaSekolah.name}</p>
-              <p className="text-[9px] text-dark-500">{kepalaSekolah.title}</p>
+              <p className="mt-2 text-[10px] font-bold text-primary 2xl:text-xs">{kepalaSekolah.name}</p>
+              <p className="text-[9px] text-dark-500 2xl:text-[11px]">{kepalaSekolah.title}</p>
 
               <button
                 type="button"
@@ -70,23 +72,23 @@ const TentangKepalaSekolahSection = () => {
         </div>
 
         {/* Guru & Tenaga Pendidik */}
-        <div className="min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
-          <h2 className="font-heading text-base font-extrabold text-primary">
+        <div className="relative min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card 2xl:h-[438px] 2xl:rounded-[20px] 2xl:border-0 2xl:bg-[#fffdfd] 2xl:p-0">
+          <h2 className="font-heading text-base font-extrabold text-primary 2xl:ml-[51px] 2xl:mt-[14px] 2xl:text-[32px] 2xl:leading-[40px]">
             Guru &amp; Tenaga Pendidik
           </h2>
-          <p className="mt-2 text-[11px] leading-relaxed text-dark-500">
+          <p className="mt-2 text-[11px] leading-relaxed text-dark-500 2xl:sr-only">
             Deskripsi sementara; jabatan dan bidang mengajar belum diverifikasi.
           </p>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 2xl:ml-[45px] 2xl:mt-[38px] 2xl:grid-cols-[repeat(4,206px)] 2xl:gap-5">
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
                 to={`/profil-sekolah/guru/${slugify(guru.nama)}`}
-                className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none"
+                className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none 2xl:w-[206px]"
               >
                 <article className="h-full min-w-0">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-dark-50">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-dark-50 2xl:h-[172px] 2xl:w-[206px] 2xl:aspect-auto">
                     <img
                       src={guru.image}
                       alt={guru.nama}
@@ -110,7 +112,7 @@ const TentangKepalaSekolahSection = () => {
 
           {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
           {pages > 1 && (
-          <div className="mt-5 flex items-center justify-center gap-2">
+          <div className="mt-5 flex items-center justify-center gap-2 2xl:absolute 2xl:bottom-5 2xl:left-1/2 2xl:mt-0 2xl:-translate-x-1/2">
             {Array.from({ length: pages }).map((_, i) => (
               <button
                 key={i}
