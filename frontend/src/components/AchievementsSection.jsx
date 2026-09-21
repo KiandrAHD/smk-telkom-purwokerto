@@ -1,25 +1,28 @@
 import PrestasiCarousel from './PrestasiCarousel';
-import watermark from '../assets/landing/telkom-accent.png';
+import watermark from '../assets/landing/footer-accent.png';
 import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
 
-const AchievementsSection = () => (
-  <section id="prestasi" className="relative overflow-hidden bg-white py-8 lg:py-12">
-    {/* Watermark logo dekoratif */}
-    <img
-      src={watermark}
-      alt=""
-      aria-hidden="true"
-      className="pointer-events-none absolute right-2 top-0 hidden w-40 -rotate-90 select-none object-contain 2xl:block"
-    />
-    <img
-      src={watermark}
-      alt=""
-      aria-hidden="true"
-      className="pointer-events-none absolute bottom-4 right-2 hidden w-40 select-none object-contain 2xl:block"
-    />
+const accentPositions = [
+  'right-[min(121px,6.55vw)] top-[min(16px,0.87vw)]',
+  'right-[max(-86px,-4.66vw)] top-[min(229px,12.4vw)]',
+  'right-[min(89px,4.82vw)] top-[min(486px,26.31vw)] -rotate-90',
+];
 
-    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+const AchievementsSection = () => (
+  <section id="prestasi" className="relative overflow-hidden bg-white py-8 lg:py-12 2xl:min-h-[635px]">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-hidden 2xl:block">
+      {accentPositions.map((position) => (
+        <img
+          key={position}
+          src={watermark}
+          alt=""
+          className={`absolute size-[min(233px,12.61vw)] max-w-none select-none opacity-30 ${position}`}
+        />
+      ))}
+    </div>
+
+    <div className="relative mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
       {/* Judul diapit dua cabang laurel (sisi kanan = cabang yang sama, dicerminkan) */}
       <div className="flex items-center justify-center gap-3 sm:gap-6">
         <img

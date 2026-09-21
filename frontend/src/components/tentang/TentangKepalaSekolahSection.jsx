@@ -2,10 +2,19 @@ import { useState } from 'react';
 import { ArrowRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
-import watermark from '../../assets/landing/telkom-accent.png';
+import watermark from '../../assets/landing/footer-accent.png';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
 
 const PER_PAGE = 4;
+
+const accentPositions = [
+  'right-[min(99px,5.36vw)] top-0',
+  'right-[max(-86px,-4.66vw)] top-[min(163px,8.83vw)]',
+  'right-[min(89px,4.82vw)] top-[min(420px,22.74vw)] -rotate-90',
+  'left-[min(188px,10.18vw)] top-[min(494px,26.75vw)]',
+  'left-[min(372px,20.14vw)] top-[min(658px,35.63vw)] rotate-90',
+  'left-[max(-55px,-2.98vw)] top-[min(683px,36.98vw)] -rotate-90',
+];
 
 const TentangKepalaSekolahSection = () => {
   const [expanded, setExpanded] = useState(false);
@@ -16,18 +25,16 @@ const TentangKepalaSekolahSection = () => {
 
   return (
     <section id="guru" className="relative overflow-hidden bg-white py-8 lg:py-12">
-      <img
-        src={watermark}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-8 hidden w-32 rotate-180 select-none object-contain 2xl:block"
-      />
-      <img
-        src={watermark}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-8 right-0 hidden w-32 select-none object-contain 2xl:block"
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-hidden 2xl:block">
+        {accentPositions.map((position) => (
+          <img
+            key={position}
+            src={watermark}
+            alt=""
+            className={`absolute size-[min(235px,12.72vw)] max-w-none select-none opacity-30 ${position}`}
+          />
+        ))}
+      </div>
 
       <div className="relative max-w-7xl mx-auto grid grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8">
         {/* Kepala Sekolah */}

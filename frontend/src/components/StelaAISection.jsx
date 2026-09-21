@@ -10,7 +10,7 @@ import { stelaData } from '../data/dummyData';
 // terbaca di mobile, section ini harus dibongkar jadi teks HTML.
 const StelaAISection = () => (
   <section id="stela" className="bg-white py-6 lg:py-8">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
       <div className="relative">
         <img
           src={stelaCard}
