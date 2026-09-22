@@ -10,16 +10,18 @@ const kegiatan = [
   'OSIS', 'Pramuka', 'PMR', 'MPK',
   'Futsal', 'Basket', 'Robotik', 'E-Sport',
   'Wirausaha', 'PIK-R', 'ROHIS', 'ROHKRIS',
-  'Brand Ambassador', 'Team Konten', 'Stematel ART', 'StematelReader',
+  'Brand Ambassador', 'Team Konten', 'Stematel ART', 'Stematel Reader',
 ];
 
 for (const nama of kegiatan) {
   assert.ok(data.includes(`title: '${nama}'`), `${nama} belum tersedia`);
 }
 
-assert.match(page, /useMemo/);
+assert.match(page, /CATEGORY_ORDER/);
 assert.match(page, /aria-label="Cari kegiatan"/);
-assert.match(page, /setKategori/);
-assert.match(page, /filteredItems/);
+assert.match(page, /scrollIntoView/);
+assert.match(page, /data-category-section/);
+assert.match(page, /RibbonDivider/);
+assert.match(page, /footerAccent/);
 
-console.log('Filter, pencarian, dan 16 kegiatan ekstrakurikuler tersedia.');
+console.log('Empat segmen Figma, navigasi kategori, pencarian, dan 16 kegiatan tersedia.');
