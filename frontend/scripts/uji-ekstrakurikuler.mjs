@@ -24,4 +24,10 @@ assert.match(page, /data-category-section/);
 assert.match(page, /RibbonDivider/);
 assert.match(page, /footerAccent/);
 
-console.log('Empat segmen Figma, navigasi kategori, pencarian, dan 16 kegiatan tersedia.');
+assert.match(page, /max-w-7xl/, 'Container belum mengikuti skala halaman publik lain');
+assert.match(page, /lg:px-8/, 'Padding desktop belum mengikuti halaman publik lain');
+for (const ukuranBerlebih of ['max-w-[1763px]', 'max-w-[1565px]', 'lg:text-[50px]', 'lg:h-[416px]']) {
+  assert.ok(!page.includes(ukuranBerlebih), `${ukuranBerlebih} masih membuat halaman tampak terlalu besar`);
+}
+
+console.log('Empat segmen, skala halaman publik, navigasi kategori, pencarian, dan 16 kegiatan tersedia.');

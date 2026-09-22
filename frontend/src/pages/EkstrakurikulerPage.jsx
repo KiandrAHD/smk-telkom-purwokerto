@@ -8,13 +8,6 @@ import { ekstrakurikulerData } from '../data/dummyData';
 
 const CATEGORY_ORDER = ['Organisasi', 'Prestasi', 'Sentra', 'Community'];
 const STAT_ICONS = [BriefcaseBusiness, Trophy, UsersRound, Bookmark];
-const TAB_WIDTHS = {
-  Semua: 'lg:w-[187px]',
-  Organisasi: 'lg:w-[187px]',
-  Prestasi: 'lg:w-[179px]',
-  Sentra: 'lg:w-[160px]',
-  Community: 'lg:w-[206px]',
-};
 
 const AccentPattern = () => (
   <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -37,7 +30,7 @@ const AccentPattern = () => (
 );
 
 const CategoryTabs = ({ activeCategory, onSelect }) => (
-  <div className="mx-auto flex max-w-full gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:justify-center lg:gap-[23px] [&::-webkit-scrollbar]:hidden">
+  <div className="mx-auto flex max-w-full gap-3 overflow-x-auto pb-2 [scrollbar-width:none] sm:justify-center [&::-webkit-scrollbar]:hidden">
     {ekstrakurikulerData.categories.map((name) => {
       const active = activeCategory === name;
       return (
@@ -46,7 +39,7 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
           type="button"
           onClick={() => onSelect(name)}
           aria-pressed={active}
-          className={`h-12 flex-none rounded-full border px-6 font-heading text-sm font-bold transition-all duration-200 lg:h-16 lg:text-xl ${TAB_WIDTHS[name]} ${
+          className={`h-10 min-w-[7.5rem] flex-none rounded-full border px-5 font-heading text-xs font-bold transition-all duration-200 ${
             active
               ? 'border-primary bg-primary text-white shadow-[0_8px_20px_rgba(200,16,46,0.18)]'
               : 'border-primary/45 bg-white text-primary hover:border-primary hover:bg-primary-50'
@@ -60,8 +53,8 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
 );
 
 const ActivityCard = ({ item }) => (
-  <article className="group flex h-full min-h-[390px] flex-col overflow-hidden rounded-[14px] bg-white shadow-[0_12px_30px_rgba(15,23,42,0.13)] transition-transform duration-300 hover:-translate-y-1 lg:h-[416px] lg:min-h-0">
-    <div className="h-[180px] flex-none overflow-hidden lg:h-[201px]">
+  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg">
+    <div className="aspect-[2/1] flex-none overflow-hidden">
       <img
         src={item.image}
         alt={`Kegiatan ${item.title}`}
@@ -69,21 +62,21 @@ const ActivityCard = ({ item }) => (
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
       />
     </div>
-    <div className="flex min-h-0 flex-1 flex-col px-6 pb-6 pt-4 lg:px-7 lg:pb-7">
-      <h3 className="font-heading text-xl font-bold leading-tight text-primary lg:text-[22px]">{item.title}</h3>
-      <p className="mt-3 line-clamp-5 text-[11px] leading-[1.35] text-dark-600 lg:text-xs">{item.description}</p>
+    <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 pt-4">
+      <h3 className="font-heading text-[13px] font-bold leading-snug text-primary">{item.title}</h3>
+      <p className="mt-1.5 line-clamp-5 text-[10px] leading-relaxed text-dark-500">{item.description}</p>
       <Link
         to="/berita"
-        className="mt-auto inline-flex items-center gap-6 pt-4 text-xs font-bold text-primary transition-colors hover:text-primary-800"
+        className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[10px] font-bold text-primary transition-colors hover:text-primary-800"
       >
-        Selengkapnya <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
+        Selengkapnya <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
       </Link>
     </div>
   </article>
 );
 
 const CardGrid = ({ items }) => (
-  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-9">
+  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
     {items.map((item) => <ActivityCard key={item.title} item={item} />)}
   </div>
 );
@@ -92,24 +85,24 @@ const CategorySection = ({ category, first, items, onSelect }) => (
   <section
     id={`kategori-${category.toLocaleLowerCase('id-ID')}`}
     data-category-section={category}
-    className="relative scroll-mt-24 overflow-hidden bg-white lg:min-h-[930px]"
+    className="relative scroll-mt-24 overflow-hidden bg-white py-8 lg:py-12"
   >
     {!first && <AccentPattern />}
-    <div className="relative z-10 mx-auto max-w-[1565px] px-4 pt-7 sm:px-6 lg:px-0">
+    <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <CategoryTabs activeCategory={first ? 'Semua' : category} onSelect={onSelect} />
-      <h2 className="mt-7 font-heading text-3xl font-bold text-black lg:mt-[29px] lg:text-[34px]">{category}</h2>
-      <div className="mt-7 lg:mt-[22px]">
+      <h2 className="mt-6 font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{category}</h2>
+      <div className="mt-7">
         <CardGrid items={items} />
       </div>
-      <div aria-hidden="true" className="mt-14 flex justify-center gap-3 lg:mt-[74px]">
+      <div aria-hidden="true" className="mt-8 flex justify-center gap-2">
         {[0, 1, 2, 3].map((dot) => (
-          <span key={dot} className={`h-3.5 w-3.5 rounded-full ${dot === 0 ? 'bg-primary' : 'bg-dark-200'}`} />
+          <span key={dot} className={`h-2.5 w-2.5 rounded-full ${dot === 0 ? 'bg-primary' : 'bg-dark-200'}`} />
         ))}
       </div>
-      <div className="mt-10 flex justify-center">
+      <div className="mt-6 flex justify-center">
         <Link
           to="/berita"
-          className="inline-flex h-14 items-center justify-center gap-5 rounded-lg bg-primary px-8 font-heading text-sm font-bold tracking-[0.12em] text-white transition-all duration-200 hover:bg-primary-800 hover:shadow-lg lg:h-16 lg:w-[187px] lg:px-0 lg:text-base"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white transition-all duration-200 hover:bg-primary-800 hover:shadow-lg"
         >
           Lihat Semua <ArrowRight className="h-4 w-4" />
         </Link>
@@ -136,43 +129,44 @@ const EkstrakurikulerPage = () => {
 
   return (
     <MainLayout>
-      <section className="bg-white pb-0 pt-8 lg:pt-[78px]">
-        <div className="mx-auto w-[calc(100%-32px)] max-w-[1763px] overflow-hidden rounded-[20px] border-2 border-[#efa2ad] bg-white lg:h-[522px] lg:w-[calc(100%-84px)]">
-          <div className="grid h-full lg:grid-cols-[37.7%_62.3%]">
-            <div className="flex flex-col justify-center px-6 py-9 sm:px-10 lg:justify-start lg:px-10 lg:pb-8 lg:pt-16">
+      <section className="bg-white pb-6 pt-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
+            <div className="grid overflow-hidden rounded-[1.75rem] lg:min-h-[390px] lg:grid-cols-[38%_1fr]">
+            <div className="flex flex-col justify-center px-4 py-7 sm:px-6 lg:px-7 lg:py-8">
               <span className="w-fit rounded-full border border-primary/35 px-2 py-0.5 text-[8px] font-bold tracking-wide text-primary">
                 {ekstrakurikulerData.eyebrow}
               </span>
-              <h1 className="mt-7 font-heading text-[1.8rem] font-extrabold leading-none tracking-[0.08em] text-black sm:text-4xl lg:-ml-1 lg:mt-8 lg:text-[50px] lg:tracking-[0.105em]">
+              <h1 className="mt-4 font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
                 {ekstrakurikulerData.title}
               </h1>
-              <p className="mt-2 text-base font-medium text-dark-500 lg:text-xl">{ekstrakurikulerData.subtitle}</p>
+              <p className="mt-2 text-sm font-medium text-dark-500">{ekstrakurikulerData.subtitle}</p>
 
-              <label className="mt-6 flex h-12 w-full max-w-[562px] items-center rounded-full border border-dark-200 bg-white pl-5 shadow-[0_2px_6px_rgba(15,23,42,0.12)] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+              <label className="mt-5 flex h-11 w-full max-w-md items-center rounded-full border border-dark-200 bg-white pl-4 shadow-card focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
                 <input
                   type="search"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   aria-label="Cari kegiatan"
                   placeholder="Cari Kegiatan...."
-                  className="min-w-0 flex-1 bg-transparent text-sm text-dark-700 outline-none placeholder:text-dark-400 lg:text-lg"
+                  className="min-w-0 flex-1 bg-transparent text-xs text-dark-700 outline-none placeholder:text-dark-400 sm:text-sm"
                 />
-                <span className="mr-1.5 grid h-[41px] w-[41px] flex-none place-items-center rounded-full bg-primary text-white">
-                  <Search className="h-5 w-5" />
+                <span className="mr-1 grid h-9 w-9 flex-none place-items-center rounded-full bg-primary text-white">
+                  <Search className="h-4 w-4" />
                 </span>
               </label>
 
-              <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-6 lg:mt-[46px] lg:max-w-[540px] lg:grid-cols-[215px_1fr] lg:gap-x-4 lg:gap-y-9">
+              <div className="mt-7 grid max-w-md grid-cols-2 gap-x-4 gap-y-5">
                 {ekstrakurikulerData.stats.map((stat, index) => {
                   const Icon = STAT_ICONS[index];
                   return (
                     <div key={stat.label} className="flex min-w-0 items-center gap-2">
-                      <span className="grid h-10 w-10 flex-none place-items-center rounded-full bg-primary text-white lg:h-[50px] lg:w-[50px]">
-                        <Icon className="h-5 w-5 lg:h-6 lg:w-6" />
+                      <span className="grid h-10 w-10 flex-none place-items-center rounded-full bg-primary text-white">
+                        <Icon className="h-5 w-5" />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-[10px] font-medium leading-tight text-dark-700 lg:text-sm">{stat.label}</p>
-                        <p className="mt-0.5 font-heading text-lg font-bold leading-none text-black lg:text-2xl">{stat.value}</p>
+                        <p className="text-[10px] font-medium leading-tight text-dark-600">{stat.label}</p>
+                        <p className="mt-0.5 font-heading text-lg font-bold leading-none text-dark-900">{stat.value}</p>
                       </div>
                     </div>
                   );
@@ -180,7 +174,7 @@ const EkstrakurikulerPage = () => {
               </div>
             </div>
 
-            <div className="relative min-h-[330px] overflow-hidden lg:min-h-0">
+            <div className="relative min-h-[260px] overflow-hidden lg:min-h-0">
               <img
                 src={ekstrakurikulerData.heroImage}
                 alt="Siswa SMK Telkom Purwokerto mengeksplorasi teknologi"
@@ -189,13 +183,14 @@ const EkstrakurikulerPage = () => {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       {keyword ? (
-        <section className="relative bg-white py-10 lg:min-h-[850px]">
-          <div className="mx-auto max-w-[1565px] px-4 sm:px-6 lg:px-0">
+        <section className="relative bg-white py-8 lg:py-12">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <CategoryTabs activeCategory="Semua" onSelect={scrollToCategory} />
-            <h2 className="mt-8 font-heading text-3xl font-bold text-black">Hasil Pencarian</h2>
+            <h2 className="mt-6 font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">Hasil Pencarian</h2>
             {searchResults.length > 0 ? (
               <div className="mt-7"><CardGrid items={searchResults} /></div>
             ) : (
