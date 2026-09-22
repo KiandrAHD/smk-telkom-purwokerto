@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound } from 'lucide-react';
+import { ArrowRight, Bookmark, BriefcaseBusiness, ChevronLeft, ChevronRight, Search, Trophy, UsersRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import RibbonDivider from '../components/RibbonDivider';
@@ -75,41 +75,108 @@ const ActivityCard = ({ item }) => (
   </article>
 );
 
-const CardGrid = ({ items }) => (
+const CardGrid = ({ items, carousel = false }) => (
   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-    {items.map((item) => <ActivityCard key={item.title} item={item} />)}
+    {items.map((item, index) => (
+      <div
+        key={item.title}
+        className={carousel && index > 0 ? (index === 1 ? 'hidden h-full sm:block' : 'hidden h-full lg:block') : 'h-full'}
+      >
+        <ActivityCard item={item} />
+      </div>
+    ))}
   </div>
 );
 
-const CategorySection = ({ category, first, items, onSelect }) => (
-  <section
-    id={`kategori-${category.toLocaleLowerCase('id-ID')}`}
-    data-category-section={category}
-    className="relative scroll-mt-24 overflow-hidden bg-white py-8 lg:py-12"
-  >
-    {!first && <AccentPattern />}
-    <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <CategoryTabs activeCategory={first ? 'Semua' : category} onSelect={onSelect} />
-      <h2 className="mt-6 font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{category}</h2>
-      <div className="mt-7">
-        <CardGrid items={items} />
-      </div>
-      <div aria-hidden="true" className="mt-8 flex justify-center gap-2">
-        {[0, 1, 2, 3].map((dot) => (
-          <span key={dot} className={`h-2.5 w-2.5 rounded-full ${dot === 0 ? 'bg-primary' : 'bg-dark-200'}`} />
-        ))}
-      </div>
-      <div className="mt-6 flex justify-center">
-        <Link
-          to="/berita"
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white transition-all duration-200 hover:bg-primary-800 hover:shadow-lg"
+const CategorySection = ({ category, first, items, onSelect }) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [direction, setDirection] = useState('next');
+  const orderedItems = items.map((_, offset) => items[(activeSlide + offset) % items.length]);
+
+  const shiftSlide = (step) => {
+    setDirection(step < 0 ? 'previous' : 'next');
+    setActiveSlide((current) => (current + step + items.length) % items.length);
+  };
+
+  const selectSlide = (nextSlide) => {
+    setDirection(nextSlide < activeSlide ? 'previous' : 'next');
+    setActiveSlide(nextSlide);
+  };
+
+  const handleCarouselKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      shiftSlide(-1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      shiftSlide(1);
+    }
+  };
+
+  return (
+    <section
+      id={`kategori-${category.toLocaleLowerCase('id-ID')}`}
+      data-category-section={category}
+      className="relative scroll-mt-24 overflow-hidden bg-white py-8 lg:py-12"
+    >
+      {!first && <AccentPattern />}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <CategoryTabs activeCategory={first ? 'Semua' : category} onSelect={onSelect} />
+        <h2 className="mt-6 font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{category}</h2>
+        <div
+          className="mt-7 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          role="region"
+          aria-label={`Carousel ${category}`}
+          tabIndex={0}
+          onKeyDown={handleCarouselKeyDown}
         >
-          Lihat Semua <ArrowRight className="h-4 w-4" />
-        </Link>
+          <div key={`${category}-${activeSlide}`} className="showcase-grid" data-direction={direction}>
+            <CardGrid items={orderedItems} carousel />
+          </div>
+        </div>
+        <div className="mt-8 flex items-center justify-center gap-3" aria-label={`Navigasi carousel ${category}`}>
+          <button
+            type="button"
+            onClick={() => shiftSlide(-1)}
+            aria-label={`Slide ${category} sebelumnya`}
+            className="grid h-8 w-8 place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <div className="flex gap-2">
+            {items.map((item, dot) => (
+              <button
+                key={item.title}
+                type="button"
+                onClick={() => selectSlide(dot)}
+                aria-label={`Tampilkan slide ${dot + 1} ${category}`}
+                aria-current={dot === activeSlide ? 'true' : undefined}
+                className={`h-2.5 w-2.5 rounded-full transition-all ${dot === activeSlide ? 'scale-110 bg-primary' : 'bg-dark-200 hover:bg-primary/50'}`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => shiftSlide(1)}
+            aria-label={`Slide ${category} berikutnya`}
+            className="grid h-8 w-8 place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="mt-6 flex justify-center">
+          <Link
+            to="/berita"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white transition-all duration-200 hover:bg-primary-800 hover:shadow-lg"
+          >
+            Lihat Semua <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const EkstrakurikulerPage = () => {
   const [search, setSearch] = useState('');
