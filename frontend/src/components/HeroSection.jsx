@@ -1,17 +1,15 @@
-import { ArrowRight, Bot, Briefcase, Monitor, UserPlus, Sparkles } from 'lucide-react';
+import { ArrowRight, Bot, LockKeyhole, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 
 const icons = {
   userPlus: UserPlus,
-  monitor: Monitor,
-  briefcase: Briefcase,
   bot: Bot,
   sparkles: Sparkles,
 };
 
 const HeroSection = () => (
-  <section className="bg-white pt-4 pb-6">
+  <section className="bg-white pb-6 pt-4 lg:pb-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
         <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] xl:grid-cols-[34%_1fr] gap-6 lg:gap-4 items-start">
@@ -61,24 +59,13 @@ const HeroSection = () => (
           />
         </div>
 
-        {/* Kartu akses cepat */}
-        {/* Overlap ke panel merah hanya di xl, di bawah itu kolom teks terlalu sempit
-            (deskripsi jadi 4 baris) sehingga tombol CTA ketutup kartu. */}
-        <div className="relative z-10 mx-1 -mt-6 lg:mx-16 lg:mt-5 xl:-mt-7 rounded-2xl border border-dark-100 bg-white shadow-card">
-          {/* quickLinks berjumlah lima, jadi jumlah kolomnya mengikuti lebar:
-              - xl (>=1280px): lima kolom, semua muat satu baris dengan lega
-                (sel ~211px, label tidak membungkus).
-              - lg (1024-1279px): tiga kolom. Lima kolom di sini memberi sel
-                hanya ~173px dan SEMUA label membungkus dua baris; empat kolom
-                menyisakan satu kartu yatim dengan tiga sel kosong. Tiga kolom
-                menghasilkan baris 3+2 yang paling rapi di antara ketiganya.
-              Grid ini sengaja tidak auto-fit supaya lebar tiap kartu sama
-              persis. Kalau daftarnya bertambah, sesuaikan angka-angka ini. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 divide-y divide-dark-100 lg:divide-y-0 lg:divide-x">
+        {/* Panel tiga akses utama menimpa batas bawah hero seperti di Figma. */}
+        <div className="relative z-10 mx-1 -mt-6 overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card lg:absolute lg:bottom-0 lg:left-1/2 lg:mx-0 lg:mt-0 lg:w-[calc(100%-4rem)] lg:max-w-[52rem] lg:-translate-x-1/2 lg:translate-y-1/2">
+          <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
             {quickLinks.map((item) => {
               const Icon = icons[item.icon];
               return (
-                <div key={item.title} className="flex gap-3 px-5 py-5">
+                <div key={item.title} className="flex gap-3 px-5 py-4">
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
                     <Icon className="h-5 w-5 text-white" />
                   </span>
@@ -102,6 +89,15 @@ const HeroSection = () => (
                 </div>
               );
             })}
+          </div>
+          <div className="flex justify-end border-t border-primary-800 bg-primary px-5 py-2.5">
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-white transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+            >
+              <LockKeyhole className="h-3.5 w-3.5" aria-hidden="true" />
+              Login Admin
+            </Link>
           </div>
         </div>
       </div>

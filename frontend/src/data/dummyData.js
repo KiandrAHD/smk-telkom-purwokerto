@@ -116,20 +116,6 @@ export const quickLinks = [
     href: '/ppdb',
   },
   {
-    icon: 'monitor',
-    title: 'Jurusan',
-    desc: 'Pilihan jurusan sesuai minat dan bakatmu',
-    linkLabel: 'Lihat Jurusan',
-    href: '/jurusan',
-  },
-  {
-    icon: 'briefcase',
-    title: 'BKK',
-    desc: 'Info lowongan kerja, PKL dan career center',
-    linkLabel: 'Kunjungi BKK',
-    href: '/bkk',
-  },
-  {
     icon: 'bot',
     title: 'STELA AI',
     desc: 'Tanya aja tentang SMK Telkom Purwokerto',
