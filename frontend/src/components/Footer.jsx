@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { LockKeyhole, Mail, MapPin, Phone } from 'lucide-react';
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
@@ -41,7 +41,7 @@ const LinkColumn = ({ title, links }) => (
 );
 
 const Footer = () => (
-  <footer className="relative overflow-hidden bg-white py-7 lg:py-9">
+  <footer className="relative overflow-hidden bg-white pt-7 lg:pt-9">
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 select-none overflow-hidden"
@@ -56,7 +56,7 @@ const Footer = () => (
       ))}
     </div>
 
-    <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
       <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
         {/* Brand */}
         <div className="col-span-2 lg:col-span-1">
@@ -91,10 +91,7 @@ const Footer = () => (
         </div>
 
         <LinkColumn title="Menu" links={footerData.menu} />
-        <LinkColumn
-          title="Informasi"
-          links={[...footerData.informasi, { label: 'Login Admin', href: '/login' }]}
-        />
+        <LinkColumn title="Informasi" links={footerData.informasi} />
 
         {/* Kontak */}
         <div>
@@ -143,6 +140,23 @@ const Footer = () => (
               className="w-full rounded-xl border border-dark-100 object-cover"
             />
           </a>
+        </div>
+      </div>
+    </div>
+
+    <div className="relative z-10 bg-primary text-white">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-[10px] sm:flex-row sm:px-6 lg:px-8">
+        <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
+        <div className="flex items-center gap-3">
+          <span className="underline underline-offset-2">Kebijakan Privasi</span>
+          <span aria-hidden="true" className="h-3 border-l border-white/60" />
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-1.5 underline-offset-2 transition-opacity hover:opacity-80 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <LockKeyhole className="h-3 w-3" aria-hidden="true" />
+            Akses Staf & Admin
+          </Link>
         </div>
       </div>
     </div>

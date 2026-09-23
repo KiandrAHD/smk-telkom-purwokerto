@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const [hero, data, app] = await Promise.all([
+const [hero, footer, layout, data, app] = await Promise.all([
   readFile(new URL('../src/components/HeroSection.jsx', import.meta.url), 'utf8'),
+  readFile(new URL('../src/components/Footer.jsx', import.meta.url), 'utf8'),
+  readFile(new URL('../src/layouts/MainLayout.jsx', import.meta.url), 'utf8'),
   readFile(new URL('../src/data/dummyData.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/App.jsx', import.meta.url), 'utf8'),
 ]);
@@ -27,6 +29,9 @@ for (const obsolete of ['Jurusan', 'BKK']) {
 assert.match(hero, /lg:grid-cols-3/);
 assert.match(hero, /lg:absolute/);
 assert.match(hero, /lg:translate-y-1\/2/);
-assert.match(hero, /to="\/login"[\s\S]*Login Admin/);
+assert.doesNotMatch(hero, /to="\/login"[\s\S]*Login Admin/);
+assert.match(footer, /to="\/login"[\s\S]*Akses Staf & Admin/);
+assert.match(footer, /Kebijakan Privasi/);
+assert.match(layout, /<Footer \/>/);
 
-console.log('Panel hero memuat tiga akses utama, overlap responsif, dan Login Admin di bawahnya.');
+console.log('Panel hero hanya memuat tiga akses utama; akses admin berada di bar footer bersama.');

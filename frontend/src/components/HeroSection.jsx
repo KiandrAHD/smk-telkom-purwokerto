@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, LockKeyhole, UserPlus, Sparkles } from 'lucide-react';
+import { ArrowRight, Bot, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 
@@ -89,15 +89,6 @@ const HeroSection = () => (
                 </div>
               );
             })}
-          </div>
-          <div className="flex justify-end border-t border-primary-800 bg-primary px-5 py-2.5">
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-white transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-            >
-              <LockKeyhole className="h-3.5 w-3.5" aria-hidden="true" />
-              Login Admin
-            </Link>
           </div>
         </div>
       </div>
