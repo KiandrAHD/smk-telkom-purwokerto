@@ -22,12 +22,16 @@ assert.match(page, /const \[activeCategory, setActiveCategory\] = useState\('Eks
 assert.match(page, /activeCategory === 'Ekstrakurikuler' \|\| item\.category === activeCategory/);
 assert.match(page, /CategoryTabs activeCategory=\{activeCategory\} onSelect=\{onSelect\}/);
 assert.match(page, /onSelect=\{setActiveCategory\}/);
-assert.match(page, /id="penjelasan-kategori"/);
-assert.match(page, /aria-live="polite"/);
-assert.match(page, /aria-controls="penjelasan-kategori"/);
-assert.match(page, /categoryDetails\[activeCategory\]/);
-for (const kategori of ['Ekstrakurikuler', 'Organisasi', 'Prestasi', 'Sentra', 'Community']) {
-  assert.ok(data.includes(`${kategori}: {`), `Penjelasan ${kategori} belum tersedia`);
+assert.ok(!page.includes('Penjelasan kategori'), 'Penjelasan kategori masih tampil di halaman');
+assert.ok(!data.includes('categoryDetails:'), 'Data penjelasan kategori masih tersisa');
+assert.match(page, /const ActivityDetailDialog/);
+assert.match(page, /<dialog/);
+assert.match(page, /showModal\(\)/);
+assert.match(page, /const \[selectedItem, setSelectedItem\] = useState\(null\)/);
+assert.match(page, /onOpen\(item\)/);
+for (const nama of kegiatan) {
+  const item = data.match(new RegExp(`title: '${nama.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}'[\\s\\S]*?focus: \\[([\\s\\S]*?)\\]`));
+  assert.ok(item?.[1], `Detail yang dipelajari untuk ${nama} belum tersedia`);
 }
 assert.ok(!page.includes('scrollIntoView'), 'Filter masih menggulir ke section lain');
 assert.ok(!page.includes('RibbonDivider'), 'Kategori masih dirender sebagai section bertumpuk');
