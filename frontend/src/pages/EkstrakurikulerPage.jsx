@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Bookmark, BriefcaseBusiness, ChevronLeft, ChevronRight, Search, Trophy, UsersRound } from 'lucide-react';
+import { ArrowRight, Bookmark, BriefcaseBusiness, ChevronLeft, ChevronRight, Info, Search, Trophy, UsersRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import footerAccent from '../assets/landing/footer-accent.png';
@@ -37,6 +37,7 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
           type="button"
           onClick={() => onSelect(name)}
           aria-pressed={active}
+          aria-controls="penjelasan-kategori"
           className={`h-10 min-w-[7.5rem] flex-none rounded-full border px-5 font-heading text-xs font-bold transition-all duration-200 ${
             active
               ? 'border-primary bg-primary text-white shadow-[0_8px_20px_rgba(200,16,46,0.18)]'
@@ -91,6 +92,7 @@ const CardGrid = ({ items, carousel = false }) => (
 const CategorySection = ({ activeCategory, title, items, onSelect }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [direction, setDirection] = useState('next');
+  const categoryDetail = ekstrakurikulerData.categoryDetails[activeCategory];
   const orderedItems = items.map((_, offset) => items[(activeSlide + offset) % items.length]);
 
   const shiftSlide = (step) => {
@@ -122,6 +124,36 @@ const CategorySection = ({ activeCategory, title, items, onSelect }) => {
       <AccentPattern />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
+        <div
+          id="penjelasan-kategori"
+          aria-live="polite"
+          aria-labelledby="judul-penjelasan-kategori"
+          className="mt-5 overflow-hidden rounded-2xl border border-primary/20 bg-primary-50/60"
+        >
+          <div key={activeCategory} className="animate-masuk-halaman p-5 sm:p-6">
+            <div className="flex items-start gap-3">
+              <span className="grid h-9 w-9 flex-none place-items-center rounded-full bg-primary text-white">
+                <Info className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-primary">Penjelasan kategori</p>
+                <h2 id="judul-penjelasan-kategori" className="mt-1 font-heading text-lg font-extrabold text-dark-900 sm:text-xl">
+                  {categoryDetail.title}
+                </h2>
+                <p className="mt-2 max-w-4xl text-xs leading-relaxed text-dark-600 sm:text-sm">
+                  {categoryDetail.description}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2" aria-label={`Hal yang dikembangkan dalam ${categoryDetail.title}`}>
+                  {categoryDetail.skills.map((skill) => (
+                    <span key={skill} className="rounded-full border border-primary/20 bg-white px-3 py-1 text-[10px] font-semibold text-primary sm:text-xs">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="mt-6 flex items-end justify-between gap-4">
           <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{title}</h2>
           <p className="text-xs text-dark-500">{items.length} kegiatan</p>
@@ -182,17 +214,17 @@ const CategorySection = ({ activeCategory, title, items, onSelect }) => {
 
 const EkstrakurikulerPage = () => {
   const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Semua');
+  const [activeCategory, setActiveCategory] = useState('Ekstrakurikuler');
   const keyword = search.trim().toLocaleLowerCase('id-ID');
 
   const filteredItems = useMemo(() => ekstrakurikulerData.items.filter((item) => (
-    (activeCategory === 'Semua' || item.category === activeCategory)
+    (activeCategory === 'Ekstrakurikuler' || item.category === activeCategory)
     && `${item.title} ${item.category} ${item.description}`.toLocaleLowerCase('id-ID').includes(keyword)
   )), [activeCategory, keyword]);
 
   const sectionTitle = keyword
     ? 'Hasil Pencarian'
-    : activeCategory === 'Semua' ? 'Semua Ekstrakurikuler' : activeCategory;
+    : activeCategory === 'Ekstrakurikuler' ? 'Semua Ekstrakurikuler' : activeCategory;
 
   return (
     <MainLayout>

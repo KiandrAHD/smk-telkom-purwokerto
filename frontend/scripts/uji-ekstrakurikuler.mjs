@@ -18,10 +18,17 @@ for (const nama of kegiatan) {
 }
 
 assert.match(page, /aria-label="Cari kegiatan"/);
-assert.match(page, /const \[activeCategory, setActiveCategory\] = useState\('Semua'\)/);
-assert.match(page, /activeCategory === 'Semua' \|\| item\.category === activeCategory/);
+assert.match(page, /const \[activeCategory, setActiveCategory\] = useState\('Ekstrakurikuler'\)/);
+assert.match(page, /activeCategory === 'Ekstrakurikuler' \|\| item\.category === activeCategory/);
 assert.match(page, /CategoryTabs activeCategory=\{activeCategory\} onSelect=\{onSelect\}/);
 assert.match(page, /onSelect=\{setActiveCategory\}/);
+assert.match(page, /id="penjelasan-kategori"/);
+assert.match(page, /aria-live="polite"/);
+assert.match(page, /aria-controls="penjelasan-kategori"/);
+assert.match(page, /categoryDetails\[activeCategory\]/);
+for (const kategori of ['Ekstrakurikuler', 'Organisasi', 'Prestasi', 'Sentra', 'Community']) {
+  assert.ok(data.includes(`${kategori}: {`), `Penjelasan ${kategori} belum tersedia`);
+}
 assert.ok(!page.includes('scrollIntoView'), 'Filter masih menggulir ke section lain');
 assert.ok(!page.includes('RibbonDivider'), 'Kategori masih dirender sebagai section bertumpuk');
 assert.match(page, /footerAccent/);

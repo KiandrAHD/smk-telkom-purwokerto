@@ -221,7 +221,34 @@ export const ekstrakurikulerData = {
   title: 'EKSTRAKURIKULER',
   subtitle: 'Eksplorasi Minat & Bakat',
   heroImage: heroEkstrakurikuler,
-  categories: ['Semua', 'Organisasi', 'Prestasi', 'Sentra', 'Community'],
+  categories: ['Ekstrakurikuler', 'Organisasi', 'Prestasi', 'Sentra', 'Community'],
+  categoryDetails: {
+    Ekstrakurikuler: {
+      title: 'Ekstrakurikuler',
+      description: 'Kegiatan di luar pembelajaran utama yang membantu siswa mengeksplorasi minat, mengembangkan bakat, membangun karakter, dan memperluas pengalaman belajar bersama teman sebaya.',
+      skills: ['Minat dan bakat', 'Karakter', 'Kerja sama', 'Pengalaman praktis'],
+    },
+    Organisasi: {
+      title: 'Organisasi',
+      description: 'Wadah bagi siswa untuk belajar memimpin, menyusun program, mengelola kegiatan, menyampaikan aspirasi, dan bekerja dalam tim dengan tanggung jawab yang jelas.',
+      skills: ['Kepemimpinan', 'Komunikasi', 'Manajemen kegiatan', 'Tanggung jawab'],
+    },
+    Prestasi: {
+      title: 'Prestasi',
+      description: 'Kegiatan pembinaan bakat olahraga dan teknologi yang mempersiapkan siswa untuk berlatih secara terarah, menetapkan target, serta mengikuti kompetisi dengan sportif.',
+      skills: ['Keterampilan teknis', 'Disiplin latihan', 'Sportivitas', 'Mental kompetitif'],
+    },
+    Sentra: {
+      title: 'Sentra',
+      description: 'Wadah pengembangan yang berfokus pada kewirausahaan, pendampingan remaja, dan pembinaan kerohanian untuk membantu siswa tumbuh mandiri, peduli, dan berkarakter.',
+      skills: ['Kemandirian', 'Kepedulian sosial', 'Karakter', 'Kewirausahaan'],
+    },
+    Community: {
+      title: 'Community',
+      description: 'Komunitas berbasis minat yang mempertemukan siswa untuk berkarya dalam bidang kreatif, media, literasi, dan representasi sekolah melalui proyek kolaboratif.',
+      skills: ['Kolaborasi', 'Kreativitas', 'Portofolio', 'Publikasi'],
+    },
+  },
   stats: [
     { value: 7, label: 'Total Organisasi' },
     { value: 22, label: 'Total Ekstrakurikuler Prestasi' },
