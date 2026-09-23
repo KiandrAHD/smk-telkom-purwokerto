@@ -2,11 +2,9 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, ChevronLeft, ChevronRight, Search, Trophy, UsersRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import RibbonDivider from '../components/RibbonDivider';
 import footerAccent from '../assets/landing/footer-accent.png';
 import { ekstrakurikulerData } from '../data/dummyData';
 
-const CATEGORY_ORDER = ['Organisasi', 'Prestasi', 'Sentra', 'Community'];
 const STAT_ICONS = [BriefcaseBusiness, Trophy, UsersRound, Bookmark];
 
 const AccentPattern = () => (
@@ -80,7 +78,9 @@ const CardGrid = ({ items, carousel = false }) => (
     {items.map((item, index) => (
       <div
         key={item.title}
-        className={carousel && index > 0 ? (index === 1 ? 'hidden h-full sm:block' : 'hidden h-full lg:block') : 'h-full'}
+        className={carousel && index > 0
+          ? (index === 1 ? 'hidden h-full sm:block' : index <= 3 ? 'hidden h-full lg:block' : 'hidden')
+          : 'h-full'}
       >
         <ActivityCard item={item} />
       </div>
@@ -88,7 +88,7 @@ const CardGrid = ({ items, carousel = false }) => (
   </div>
 );
 
-const CategorySection = ({ category, first, items, onSelect }) => {
+const CategorySection = ({ activeCategory, title, items, onSelect }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [direction, setDirection] = useState('next');
   const orderedItems = items.map((_, offset) => items[(activeSlide + offset) % items.length]);
@@ -116,63 +116,65 @@ const CategorySection = ({ category, first, items, onSelect }) => {
 
   return (
     <section
-      id={`kategori-${category.toLocaleLowerCase('id-ID')}`}
-      data-category-section={category}
-      className="relative scroll-mt-24 overflow-hidden bg-white py-8 lg:py-12"
+      id="daftar-ekstrakurikuler"
+      className="relative overflow-hidden bg-white py-8 lg:py-12"
     >
-      {!first && <AccentPattern />}
+      <AccentPattern />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <CategoryTabs activeCategory={first ? 'Semua' : category} onSelect={onSelect} />
-        <h2 className="mt-6 font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{category}</h2>
-        <div
-          className="mt-7 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-          role="region"
-          aria-label={`Carousel ${category}`}
-          tabIndex={0}
-          onKeyDown={handleCarouselKeyDown}
-        >
-          <div key={`${category}-${activeSlide}`} className="showcase-grid" data-direction={direction}>
-            <CardGrid items={orderedItems} carousel />
+        <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
+        <div className="mt-6 flex items-end justify-between gap-4">
+          <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{title}</h2>
+          <p className="text-xs text-dark-500">{items.length} kegiatan</p>
+        </div>
+        {items.length > 0 ? (
+          <div
+            className="mt-7 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            role="region"
+            aria-label={`Carousel ${title}`}
+            tabIndex={0}
+            onKeyDown={handleCarouselKeyDown}
+          >
+            <div key={`${title}-${activeSlide}`} className="showcase-grid" data-direction={direction}>
+              <CardGrid items={orderedItems} carousel />
+            </div>
           </div>
-        </div>
-        <div className="mt-8 flex items-center justify-center gap-3" aria-label={`Navigasi carousel ${category}`}>
-          <button
-            type="button"
-            onClick={() => shiftSlide(-1)}
-            aria-label={`Slide ${category} sebelumnya`}
-            className="grid h-8 w-8 place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <div className="flex gap-2">
-            {items.map((item, dot) => (
-              <button
-                key={item.title}
-                type="button"
-                onClick={() => selectSlide(dot)}
-                aria-label={`Tampilkan slide ${dot + 1} ${category}`}
-                aria-current={dot === activeSlide ? 'true' : undefined}
-                className={`h-2.5 w-2.5 rounded-full transition-all ${dot === activeSlide ? 'scale-110 bg-primary' : 'bg-dark-200 hover:bg-primary/50'}`}
-              />
-            ))}
+        ) : (
+          <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">
+            Kegiatan yang dicari belum ditemukan.
+          </p>
+        )}
+        {items.length > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-3" aria-label={`Navigasi carousel ${title}`}>
+            <button
+              type="button"
+              onClick={() => shiftSlide(-1)}
+              aria-label={`Slide ${title} sebelumnya`}
+              className="grid h-8 w-8 flex-none place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <div className="flex gap-1.5">
+              {items.map((item, dot) => (
+                <button
+                  key={item.title}
+                  type="button"
+                  onClick={() => selectSlide(dot)}
+                  aria-label={`Tampilkan slide ${dot + 1} ${title}`}
+                  aria-current={dot === activeSlide ? 'true' : undefined}
+                  className={`h-2.5 w-2.5 rounded-full transition-all ${dot === activeSlide ? 'scale-110 bg-primary' : 'bg-dark-200 hover:bg-primary/50'}`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => shiftSlide(1)}
+              aria-label={`Slide ${title} berikutnya`}
+              className="grid h-8 w-8 flex-none place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => shiftSlide(1)}
-            aria-label={`Slide ${category} berikutnya`}
-            className="grid h-8 w-8 place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-        <div className="mt-6 flex justify-center">
-          <Link
-            to="/berita"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white transition-all duration-200 hover:bg-primary-800 hover:shadow-lg"
-          >
-            Lihat Semua <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+        )}
       </div>
     </section>
   );
@@ -180,19 +182,17 @@ const CategorySection = ({ category, first, items, onSelect }) => {
 
 const EkstrakurikulerPage = () => {
   const [search, setSearch] = useState('');
+  const [activeCategory, setActiveCategory] = useState('Semua');
   const keyword = search.trim().toLocaleLowerCase('id-ID');
 
-  const searchResults = useMemo(() => ekstrakurikulerData.items.filter((item) => (
-    `${item.title} ${item.category} ${item.description}`.toLocaleLowerCase('id-ID').includes(keyword)
-  )), [keyword]);
+  const filteredItems = useMemo(() => ekstrakurikulerData.items.filter((item) => (
+    (activeCategory === 'Semua' || item.category === activeCategory)
+    && `${item.title} ${item.category} ${item.description}`.toLocaleLowerCase('id-ID').includes(keyword)
+  )), [activeCategory, keyword]);
 
-  const scrollToCategory = (category) => {
-    const target = category === 'Semua' ? CATEGORY_ORDER[0] : category;
-    document.getElementById(`kategori-${target.toLocaleLowerCase('id-ID')}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
-  };
+  const sectionTitle = keyword
+    ? 'Hasil Pencarian'
+    : activeCategory === 'Semua' ? 'Semua Ekstrakurikuler' : activeCategory;
 
   return (
     <MainLayout>
@@ -253,33 +253,13 @@ const EkstrakurikulerPage = () => {
         </div>
       </section>
 
-      {keyword ? (
-        <section className="relative bg-white py-8 lg:py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <CategoryTabs activeCategory="Semua" onSelect={scrollToCategory} />
-            <h2 className="mt-6 font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">Hasil Pencarian</h2>
-            {searchResults.length > 0 ? (
-              <div className="mt-7"><CardGrid items={searchResults} /></div>
-            ) : (
-              <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">
-                Kegiatan yang dicari belum ditemukan.
-              </p>
-            )}
-          </div>
-        </section>
-      ) : (
-        CATEGORY_ORDER.map((category, index) => (
-          <div key={category}>
-            <CategorySection
-              category={category}
-              first={index === 0}
-              items={ekstrakurikulerData.items.filter((item) => item.category === category)}
-              onSelect={scrollToCategory}
-            />
-            {index < CATEGORY_ORDER.length - 1 && <RibbonDivider />}
-          </div>
-        ))
-      )}
+      <CategorySection
+        key={`${activeCategory}-${keyword}`}
+        activeCategory={activeCategory}
+        title={sectionTitle}
+        items={filteredItems}
+        onSelect={setActiveCategory}
+      />
     </MainLayout>
   );
 };

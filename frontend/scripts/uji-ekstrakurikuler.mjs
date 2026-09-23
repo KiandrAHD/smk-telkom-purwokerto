@@ -17,11 +17,13 @@ for (const nama of kegiatan) {
   assert.ok(data.includes(`title: '${nama}'`), `${nama} belum tersedia`);
 }
 
-assert.match(page, /CATEGORY_ORDER/);
 assert.match(page, /aria-label="Cari kegiatan"/);
-assert.match(page, /scrollIntoView/);
-assert.match(page, /data-category-section/);
-assert.match(page, /RibbonDivider/);
+assert.match(page, /const \[activeCategory, setActiveCategory\] = useState\('Semua'\)/);
+assert.match(page, /activeCategory === 'Semua' \|\| item\.category === activeCategory/);
+assert.match(page, /CategoryTabs activeCategory=\{activeCategory\} onSelect=\{onSelect\}/);
+assert.match(page, /onSelect=\{setActiveCategory\}/);
+assert.ok(!page.includes('scrollIntoView'), 'Filter masih menggulir ke section lain');
+assert.ok(!page.includes('RibbonDivider'), 'Kategori masih dirender sebagai section bertumpuk');
 assert.match(page, /footerAccent/);
 assert.match(page, /ChevronLeft/);
 assert.match(page, /ChevronRight/);
@@ -37,4 +39,4 @@ for (const ukuranBerlebih of ['max-w-[1763px]', 'max-w-[1565px]', 'lg:text-[50px
   assert.ok(!page.includes(ukuranBerlebih), `${ukuranBerlebih} masih membuat halaman tampak terlalu besar`);
 }
 
-console.log('Empat segmen, skala halaman publik, navigasi kategori, pencarian, dan 16 kegiatan tersedia.');
+console.log('Filter kategori tunggal, carousel, pencarian, skala halaman publik, dan 16 kegiatan tersedia.');
