@@ -71,9 +71,19 @@ import logoDicoding from '../assets/landing/logo-dicoding.png';
 
 // ── Navigasi ──
 export const navLinks = [
-  { label: 'PPDB', href: '/ppdb' },
-  { label: 'STELA AI', href: '/stela' },
-  { label: 'NextTel AI', href: '/nexttel' },
+  {
+    label: 'Tentang',
+    children: [
+      { label: 'Beranda', href: '/' },
+      { label: 'Profil Sekolah', href: '/profil-sekolah' },
+      { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
+    ],
+  },
+  { label: 'Jurusan', href: '/jurusan' },
+  { label: 'Prestasi', href: '/prestasi' },
+  { label: 'BKK', href: '/bkk' },
+  { label: 'Berita', href: '/berita' },
+  { label: 'Pengumuman', href: '/pengumuman' },
 ];
 
 // ── Hero Beranda ──
