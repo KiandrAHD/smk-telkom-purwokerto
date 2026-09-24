@@ -1,50 +1,50 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/LandingPage';
-import ProfileSekolahPage from './pages/TentangPage';
-import JurusanPage from './pages/JurusanPage';
-import PrestasiPage from './pages/PrestasiPage';
-import BkkPage from './pages/BkkPage';
-import BeritaPage from './pages/BeritaPage';
-import PengumumanPage from './pages/PengumumanPage';
-import JurusanDetailPage from './pages/JurusanDetailPage';
-import PrestasiDetailPage from './pages/PrestasiDetailPage';
-import BeritaDetailPage from './pages/BeritaDetailPage';
-import PengumumanDetailPage from './pages/PengumumanDetailPage';
-import StelaPage from './pages/StelaPage';
-import DetailPelengkapPage from './pages/DetailPelengkapPage';
-import KoleksiPage from './pages/KoleksiPage';
-import GaleriPage from './pages/GaleriPage';
-import PanduanPage from './pages/PanduanPage';
-import JurusanFaqPage from './pages/JurusanFaqPage';
-import JurusanPerbandinganPage from './pages/JurusanPerbandinganPage';
-import KetentuanPpdbPage from './pages/KetentuanPpdbPage';
-import LupaSandiPage from './pages/ppdb/LupaSandiPage';
-import DokumenPesertaPage from './pages/ppdb/DokumenPesertaPage';
-import SegeraHadirPage from './pages/SegeraHadirPage';
-import Login from './page/Login/Login';
-import { PpdbProvider } from './context/PpdbContext';
-import PpdbRegisterPage from './pages/ppdb/RegisterPage';
-import PpdbLoginPage from './pages/ppdb/LoginPage';
-import VerifyEmailPage from './pages/ppdb/VerifyEmailPage';
-import RegistrationFormPage from './pages/ppdb/RegistrationFormPage';
-import UploadDocumentsPage from './pages/ppdb/UploadDocumentsPage';
-import SubmitSuccessPage from './pages/ppdb/SubmitSuccessPage';
-import PpdbStatusPage from './pages/ppdb/PpdbStatusPage';
-import { AdminDataProvider } from './context/AdminDataContext';
-import DashboardLayout from './components/dashboard/DashboardLayout';
-import DashboardHomePage from './pages/dashboard/DashboardHomePage';
-import DashboardJurusanPage from './pages/dashboard/JurusanPage';
-import PengaturanPage from './pages/dashboard/PengaturanPage';
-import AdminBeritaPage from './pages/admin/berita/BeritaPage';
-import AdminPengumumanPage from './pages/admin/pengumuman/PengumumanPage';
-import AdminPrestasiPage from './pages/admin/prestasi/PrestasiPage';
-import AdminBkkPage from './pages/admin/bkk/BkkPage';
-import AdminPpdbPage from './pages/admin/ppdb/PPDBPage';
-import ProtectedRoute from './router/ProtectedRoute';
-import NextTelPage from './pages/NextTelPage';
-import EkstrakurikulerPage from './pages/EkstrakurikulerPage';
+const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
+const JurusanPage = lazy(() => import('./pages/JurusanPage'));
+const PrestasiPage = lazy(() => import('./pages/PrestasiPage'));
+const BkkPage = lazy(() => import('./pages/BkkPage'));
+const BeritaPage = lazy(() => import('./pages/BeritaPage'));
+const PengumumanPage = lazy(() => import('./pages/PengumumanPage'));
+const JurusanDetailPage = lazy(() => import('./pages/JurusanDetailPage'));
+const PrestasiDetailPage = lazy(() => import('./pages/PrestasiDetailPage'));
+const BeritaDetailPage = lazy(() => import('./pages/BeritaDetailPage'));
+const PengumumanDetailPage = lazy(() => import('./pages/PengumumanDetailPage'));
+const StelaPage = lazy(() => import('./pages/StelaPage'));
+const DetailPelengkapPage = lazy(() => import('./pages/DetailPelengkapPage'));
+const KoleksiPage = lazy(() => import('./pages/KoleksiPage'));
+const GaleriPage = lazy(() => import('./pages/GaleriPage'));
+const PanduanPage = lazy(() => import('./pages/PanduanPage'));
+const JurusanFaqPage = lazy(() => import('./pages/JurusanFaqPage'));
+const JurusanPerbandinganPage = lazy(() => import('./pages/JurusanPerbandinganPage'));
+const KetentuanPpdbPage = lazy(() => import('./pages/KetentuanPpdbPage'));
+const LupaSandiPage = lazy(() => import('./pages/ppdb/LupaSandiPage'));
+const DokumenPesertaPage = lazy(() => import('./pages/ppdb/DokumenPesertaPage'));
+const SegeraHadirPage = lazy(() => import('./pages/SegeraHadirPage'));
+const Login = lazy(() => import('./page/Login/Login'));
+const PpdbProvider = lazy(() => import('./context/PpdbContext').then(({ PpdbProvider: Provider }) => ({ default: Provider })));
+const PpdbRegisterPage = lazy(() => import('./pages/ppdb/RegisterPage'));
+const PpdbLoginPage = lazy(() => import('./pages/ppdb/LoginPage'));
+const VerifyEmailPage = lazy(() => import('./pages/ppdb/VerifyEmailPage'));
+const RegistrationFormPage = lazy(() => import('./pages/ppdb/RegistrationFormPage'));
+const UploadDocumentsPage = lazy(() => import('./pages/ppdb/UploadDocumentsPage'));
+const SubmitSuccessPage = lazy(() => import('./pages/ppdb/SubmitSuccessPage'));
+const PpdbStatusPage = lazy(() => import('./pages/ppdb/PpdbStatusPage'));
+const AdminDataProvider = lazy(() => import('./context/AdminDataContext').then(({ AdminDataProvider: Provider }) => ({ default: Provider })));
+const DashboardLayout = lazy(() => import('./components/dashboard/DashboardLayout'));
+const DashboardHomePage = lazy(() => import('./pages/dashboard/DashboardHomePage'));
+const DashboardJurusanPage = lazy(() => import('./pages/dashboard/JurusanPage'));
+const PengaturanPage = lazy(() => import('./pages/dashboard/PengaturanPage'));
+const AdminBeritaPage = lazy(() => import('./pages/admin/berita/BeritaPage'));
+const AdminPengumumanPage = lazy(() => import('./pages/admin/pengumuman/PengumumanPage'));
+const AdminPrestasiPage = lazy(() => import('./pages/admin/prestasi/PrestasiPage'));
+const AdminBkkPage = lazy(() => import('./pages/admin/bkk/BkkPage'));
+const AdminPpdbPage = lazy(() => import('./pages/admin/ppdb/PPDBPage'));
+const ProtectedRoute = lazy(() => import('./router/ProtectedRoute'));
+const NextTelPage = lazy(() => import('./pages/NextTelPage'));
+const EkstrakurikulerPage = lazy(() => import('./pages/EkstrakurikulerPage'));
 
 const PAGE_META = {
   '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
@@ -83,6 +83,7 @@ const App = () => {
     <>
       <ScrollToTop />
       <PageMetadata />
+      <Suspense fallback={<div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">Memuat halaman...</div>}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/profil-sekolah" element={<ProfileSekolahPage />} />
@@ -186,6 +187,7 @@ const App = () => {
         {/* Tujuan yang belum memiliki route khusus mendarat di halaman ini. */}
         <Route path="*" element={<SegeraHadirPage />} />
       </Routes>
+      </Suspense>
     </>
   );
 };
