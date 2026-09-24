@@ -62,6 +62,7 @@ import organisasiPaskibra from '../assets/ekstrakurikuler/organisasi/paskibra.jp
 import organisasiPikRSatria from '../assets/ekstrakurikuler/organisasi/pik-r-satria.jpg';
 import fotoAI from '../assets/ekstrakurikuler/kegiatan/ai.jpg';
 import fotoBasket from '../assets/ekstrakurikuler/kegiatan/basket.jpg';
+import fotoBrandAmbassador from '../assets/ekstrakurikuler/kegiatan/brand-ambassador.jpg';
 import fotoBuluTangkis from '../assets/ekstrakurikuler/kegiatan/bulu-tangkis.png';
 import fotoDesainGrafis from '../assets/ekstrakurikuler/kegiatan/desain-grafis.jpg';
 import fotoEsport from '../assets/ekstrakurikuler/kegiatan/esport.jpg';
@@ -71,7 +72,9 @@ import fotoInc from '../assets/ekstrakurikuler/kegiatan/inc.jpg';
 import fotoPmr from '../assets/ekstrakurikuler/kegiatan/pmr.jpg';
 import fotoPramuka from '../assets/ekstrakurikuler/kegiatan/pramuka.jpg';
 import fotoRobotik from '../assets/ekstrakurikuler/kegiatan/robotik.jpg';
+import fotoRohkris from '../assets/ekstrakurikuler/kegiatan/rohkris.jpeg';
 import fotoRohis from '../assets/ekstrakurikuler/kegiatan/rohis.jpg';
+import fotoStematelArt from '../assets/ekstrakurikuler/kegiatan/stematel-art.jpeg';
 import fotoStematelReader from '../assets/ekstrakurikuler/kegiatan/stematel-reader.jpg';
 import fotoTeamKonten from '../assets/ekstrakurikuler/kegiatan/team-konten.jpg';
 import fotoWirausaha from '../assets/ekstrakurikuler/kegiatan/wirausaha.jpg';
@@ -271,10 +274,10 @@ export const ekstrakurikulerData = {
     { title: 'Wirausaha', category: 'Sentra', description: 'Ekstrakurikuler Wirausaha di SMK Telkom Purwokerto secara resmi diwadahi melalui Sentra Kewirausahaan serta program inkubasi bisnis sekolah.', focus: ['Ide bisnis', 'Perencanaan usaha', 'Pemasaran', 'Pengelolaan keuangan dasar'], image: fotoWirausaha },
     { title: 'PIK-R', category: 'Sentra', description: 'PIK-R Satria adalah wadah resmi bagi siswa untuk saling berbagi, berkonsultasi, dan mendapatkan edukasi mengenai kehidupan remaja.', focus: ['Konseling sebaya', 'Komunikasi sehat', 'Perencanaan masa depan', 'Edukasi remaja'], image: organisasiPikRSatria },
     { title: 'ROHIS', category: 'Sentra', description: 'ROHIS SMK Telkom Purwokerto adalah organisasi keagamaan sekolah yang berfungsi sebagai pusat syiar Islam, pembinaan akhlak, serta pengembangan karakter religius siswa.', focus: ['Pembinaan akhlak', 'Kegiatan keagamaan', 'Kepemimpinan', 'Kepedulian sosial'], image: fotoRohis },
-    { title: 'ROHKRIS', category: 'Sentra', description: 'ROHKRIS SMK Telkom Purwokerto adalah wadah pembinaan kerohanian resmi bagi siswa yang beragama Kristen dan Katolik.', focus: ['Pembinaan iman', 'Pelayanan', 'Kebersamaan', 'Karakter'], image: kegiatanEkskul4 },
-    { title: 'Brand Ambassador', category: 'Community', description: 'Brand Ambassador SMK Telkom Purwokerto adalah program resmi sekolah untuk memilih siswa-siswi terbaik sebagai wajah dan representasi sekolah.', focus: ['Public speaking', 'Personal branding', 'Etika representasi', 'Komunikasi publik'], image: kegiatanEkskul1 },
+    { title: 'ROHKRIS', category: 'Sentra', description: 'ROHKRIS SMK Telkom Purwokerto adalah wadah pembinaan kerohanian resmi bagi siswa yang beragama Kristen dan Katolik.', focus: ['Pembinaan iman', 'Pelayanan', 'Kebersamaan', 'Karakter'], image: fotoRohkris },
+    { title: 'Brand Ambassador', category: 'Community', description: 'Brand Ambassador SMK Telkom Purwokerto adalah program resmi sekolah untuk memilih siswa-siswi terbaik sebagai wajah dan representasi sekolah.', focus: ['Public speaking', 'Personal branding', 'Etika representasi', 'Komunikasi publik'], image: fotoBrandAmbassador },
     { title: 'Team Konten', category: 'Community', description: 'Tim Konten adalah tim kreatif resmi sekolah yang mengelola, memproduksi, dan menyusun strategi komunikasi digital pada akun media sosial sekolah.', focus: ['Perencanaan konten', 'Produksi media', 'Penulisan kreatif', 'Strategi media sosial'], image: fotoTeamKonten },
-    { title: 'Stematel ART', category: 'Community', description: 'Stematel ART adalah salah satu pilar pengembangan bakat siswa yang ingin mendalami industri kreatif, seni digital, dan desain visual modern.', focus: ['Seni digital', 'Desain visual', 'Kreativitas', 'Pengembangan portofolio'], image: kegiatanEkskul3 },
+    { title: 'Stematel ART', category: 'Community', description: 'Stematel ART adalah salah satu pilar pengembangan bakat siswa yang ingin mendalami industri kreatif, seni digital, dan desain visual modern.', focus: ['Seni digital', 'Desain visual', 'Kreativitas', 'Pengembangan portofolio'], image: fotoStematelArt },
     { title: 'Stematel Reader', category: 'Community', description: 'Komunitas literasi resmi SMK Telkom Purwokerto yang bergerak dalam membangun budaya membaca, menulis, dan berkarya secara modern dan digital.', focus: ['Membaca kritis', 'Menulis', 'Diskusi literasi', 'Publikasi karya'], image: fotoStematelReader },
   ],
 };
