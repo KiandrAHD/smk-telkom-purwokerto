@@ -11,15 +11,18 @@ const socialIcons = {
   tiktok: FaTiktok,
 };
 
-const footerAccents = [
+const footerSideAccents = [
   'left-[-104px] top-[-21px]',
   'left-[-94px] top-[164px]',
-  'left-[129px] top-[200px] -rotate-90',
-  'left-[310px] top-[202px]',
-  'right-[375px] top-[200px] -rotate-90',
-  'right-[174px] top-[204px] -rotate-90',
-  'right-[-7px] top-[206px]',
   'right-[-117px] top-[18px]',
+];
+
+const footerBottomAccents = [
+  '-left-[50px] -top-[55px]',
+  'left-[22%] -top-[120px] -rotate-90 hidden sm:block',
+  'left-[43%] -top-[55px] hidden lg:block',
+  'right-[22%] -top-[120px] -rotate-90 hidden sm:block',
+  '-right-[50px] -top-[55px]',
 ];
 
 const LinkColumn = ({ title, links }) => (
@@ -46,7 +49,7 @@ const Footer = () => (
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 select-none overflow-hidden"
     >
-      {footerAccents.map((className) => (
+      {footerSideAccents.map((className) => (
         <img
           key={className}
           src={footerAccent}
@@ -142,6 +145,17 @@ const Footer = () => (
           </a>
         </div>
       </div>
+    </div>
+
+    <div aria-hidden="true" className="pointer-events-none relative h-20 overflow-hidden sm:h-24 lg:h-28">
+      {footerBottomAccents.map((className) => (
+        <img
+          key={className}
+          src={footerAccent}
+          alt=""
+          className={`absolute size-[min(233px,42vw)] max-w-none select-none opacity-30 ${className}`}
+        />
+      ))}
     </div>
 
     <div className="relative z-10 bg-primary text-white">
