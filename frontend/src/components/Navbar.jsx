@@ -74,7 +74,7 @@ const Navbar = () => {
 
                   {isTentangOpen && (
                     <div
-                      className="absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2 shadow-card"
+                      className="absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
                       role="menu"
                       aria-label="Submenu Tentang"
                     >
@@ -102,12 +102,6 @@ const Navbar = () => {
 
           {/* Desktop CTA */}
           <div className="hidden items-center gap-3 lg:flex">
-            <Link
-              to="/login"
-              className="inline-flex items-center rounded-full border border-primary px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            >
-              Login Admin
-            </Link>
             <Link
               to={ctaMasukPpdb.href}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
@@ -180,13 +174,6 @@ const Navbar = () => {
                   </div>
                 );
               })}
-              <Link
-                to="/login"
-                onClick={() => setIsMobileOpen(false)}
-                className="mt-3 inline-flex items-center justify-center rounded-full border border-primary px-6 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                Login Admin
-              </Link>
               <Link
                 to={ctaMasukPpdb.href}
                 onClick={() => setIsMobileOpen(false)}

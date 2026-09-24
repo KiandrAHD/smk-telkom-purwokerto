@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Bookmark, BriefcaseBusiness, ChevronLeft, ChevronRight, Search, Trophy, UsersRound, X } from 'lucide-react';
+import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import footerAccent from '../assets/landing/footer-accent.png';
 import { ekstrakurikulerData } from '../data/dummyData';
@@ -27,7 +27,7 @@ const AccentPattern = () => (
 );
 
 const CategoryTabs = ({ activeCategory, onSelect }) => (
-  <div className="mx-auto flex max-w-full gap-3 overflow-x-auto pb-2 [scrollbar-width:none] sm:justify-center [&::-webkit-scrollbar]:hidden">
+  <div className="mx-auto grid max-w-xl grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
     {ekstrakurikulerData.categories.map((name) => {
       const active = activeCategory === name;
       return (
@@ -36,9 +36,9 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
           type="button"
           onClick={() => onSelect(name)}
           aria-pressed={active}
-          className={`h-10 min-w-[7.5rem] flex-none rounded-full border px-5 font-heading text-xs font-bold transition-all duration-200 ${
+          className={`h-10 rounded-full border px-4 font-heading text-xs font-bold transition-colors duration-200 sm:min-w-[7.5rem] sm:px-5 ${
             active
-              ? 'border-primary bg-primary text-white shadow-[0_8px_20px_rgba(200,16,46,0.18)]'
+              ? 'border-primary bg-primary text-white'
               : 'border-primary/45 bg-white text-primary hover:border-primary hover:bg-primary-50'
           }`}
         >
@@ -50,13 +50,13 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
 );
 
 const ActivityCard = ({ item, onOpen }) => (
-  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg">
+  <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white transition-colors duration-200 hover:border-primary">
     <div className="aspect-[2/1] flex-none overflow-hidden">
       <img
         src={item.image}
         alt={`Kegiatan ${item.title}`}
         loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        className="h-full w-full object-cover"
       />
     </div>
     <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 pt-4">
@@ -73,15 +73,10 @@ const ActivityCard = ({ item, onOpen }) => (
   </article>
 );
 
-const CardGrid = ({ items, onOpen, carousel = false }) => (
-  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-    {items.map((item, index) => (
-      <div
-        key={item.title}
-        className={carousel && index > 0
-          ? (index === 1 ? 'hidden h-full sm:block' : index <= 3 ? 'hidden h-full lg:block' : 'hidden')
-          : 'h-full'}
-      >
+const CardGrid = ({ items, onOpen }) => (
+  <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    {items.map((item) => (
+      <div key={item.title} className="h-full">
         <ActivityCard item={item} onOpen={onOpen} />
       </div>
     ))}
@@ -106,7 +101,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
         onClose();
       }}
       aria-labelledby="judul-detail-kegiatan"
-      className="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border-0 bg-white p-0 shadow-2xl backdrop:bg-dark-900/70 backdrop:backdrop-blur-sm"
+      className="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
       <div className="relative max-h-[90vh] overflow-y-auto">
         <img src={item.image} alt={`Kegiatan ${item.title}`} className="aspect-[16/7] w-full object-cover" />
@@ -114,7 +109,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
           type="button"
           onClick={() => dialogRef.current?.close()}
           aria-label="Tutup penjelasan kegiatan"
-          className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-white text-dark-800 shadow-card transition-colors hover:bg-primary hover:text-white"
+          className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-dark-200 bg-white text-dark-800 transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <X className="h-4 w-4" />
         </button>
@@ -142,30 +137,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
 };
 
 const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [direction, setDirection] = useState('next');
-  const orderedItems = items.map((_, offset) => items[(activeSlide + offset) % items.length]);
-
-  const shiftSlide = (step) => {
-    setDirection(step < 0 ? 'previous' : 'next');
-    setActiveSlide((current) => (current + step + items.length) % items.length);
-  };
-
-  const selectSlide = (nextSlide) => {
-    setDirection(nextSlide < activeSlide ? 'previous' : 'next');
-    setActiveSlide(nextSlide);
-  };
-
-  const handleCarouselKeyDown = (event) => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      shiftSlide(-1);
-    }
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      shiftSlide(1);
-    }
-  };
+  const visibleItems = items.slice(0, 4);
 
   return (
     <section
@@ -177,56 +149,16 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
         <div className="mt-6 flex items-end justify-between gap-4">
           <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{title}</h2>
-          <p className="text-xs text-dark-500">{items.length} kegiatan</p>
+          <p className="text-xs text-dark-500">{visibleItems.length} kegiatan</p>
         </div>
         {items.length > 0 ? (
-          <div
-            className="mt-7 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-            role="region"
-            aria-label={`Carousel ${title}`}
-            tabIndex={0}
-            onKeyDown={handleCarouselKeyDown}
-          >
-            <div key={`${title}-${activeSlide}`} className="showcase-grid" data-direction={direction}>
-              <CardGrid items={orderedItems} onOpen={onOpen} carousel />
-            </div>
+          <div className="mt-7">
+            <CardGrid items={visibleItems} onOpen={onOpen} />
           </div>
         ) : (
           <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">
             Kegiatan yang dicari belum ditemukan.
           </p>
-        )}
-        {items.length > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-3" aria-label={`Navigasi carousel ${title}`}>
-            <button
-              type="button"
-              onClick={() => shiftSlide(-1)}
-              aria-label={`Slide ${title} sebelumnya`}
-              className="grid h-8 w-8 flex-none place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <div className="flex gap-1.5">
-              {items.map((item, dot) => (
-                <button
-                  key={item.title}
-                  type="button"
-                  onClick={() => selectSlide(dot)}
-                  aria-label={`Tampilkan slide ${dot + 1} ${title}`}
-                  aria-current={dot === activeSlide ? 'true' : undefined}
-                  className={`h-2.5 w-2.5 rounded-full transition-all ${dot === activeSlide ? 'scale-110 bg-primary' : 'bg-dark-200 hover:bg-primary/50'}`}
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => shiftSlide(1)}
-              aria-label={`Slide ${title} berikutnya`}
-              className="grid h-8 w-8 flex-none place-items-center rounded-full border border-primary/40 text-primary transition-colors hover:bg-primary hover:text-white"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
         )}
       </div>
     </section>
@@ -263,7 +195,7 @@ const EkstrakurikulerPage = () => {
               </h1>
               <p className="mt-2 text-sm font-medium text-dark-500">{ekstrakurikulerData.subtitle}</p>
 
-              <label className="mt-5 flex h-11 w-full max-w-md items-center rounded-full border border-dark-200 bg-white pl-4 shadow-card focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+              <label className="mt-5 flex h-11 w-full max-w-md items-center rounded-full border border-dark-200 bg-white pl-4 focus-within:border-primary">
                 <input
                   type="search"
                   value={search}
