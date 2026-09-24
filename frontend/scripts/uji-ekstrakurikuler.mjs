@@ -7,11 +7,19 @@ const [page, data] = await Promise.all([
 ]);
 
 const kegiatan = [
-  'OSIS', 'Pramuka', 'PMR', 'MPK',
-  'Futsal', 'Basket', 'Robotik', 'E-Sport',
-  'Wirausaha', 'PIK-R', 'ROHIS', 'ROHKRIS',
+  'Desain Grafis', 'Web Technologies', 'AI / Artificial Intelligence', 'IT Software',
+  'Robotik', 'Cyber Security (EISS)', 'Information Network Cabling (INC)',
+  '3D Game Art (Animasi)', 'English Club', 'Paduan Suara', 'Seni Musik', 'Seni Tari',
+  'PMR', 'Paskibra', 'Photografi dan Vidiografi', 'Basket', 'Bulu Tangkis', 'Futsal',
+  'Voli', 'Bela Diri', 'E-Sport', 'Musik Tradisional/Karawitan', 'Hand Ball/Bola Tangan',
+  'OSIS', 'Pramuka', 'MPK', 'Wirausaha', 'PIK-R', 'ROHIS', 'ROHKRIS',
   'Brand Ambassador', 'Team Konten', 'Stematel ART', 'Stematel Reader',
 ];
+
+const activityData = data.split('export const ekstrakurikulerData = {')[1].split('// ── STELA AI ──')[0];
+const activityTitles = [...activityData.matchAll(/\{ title: '([^']+)'/g)].map(([, title]) => title);
+assert.equal(activityTitles.length, kegiatan.length, 'Daftar ekskul memiliki entri ganda atau jumlahnya salah');
+assert.equal(new Set(activityTitles).size, activityTitles.length, 'Nama ekskul harus unik');
 
 for (const nama of kegiatan) {
   assert.ok(data.includes(`title: '${nama}'`), `${nama} belum tersedia`);
@@ -22,6 +30,10 @@ assert.match(page, /const \[activeCategory, setActiveCategory\] = useState\('Eks
 assert.match(page, /activeCategory === 'Ekstrakurikuler' \|\| item\.category === activeCategory/);
 assert.match(page, /CategoryTabs activeCategory=\{activeCategory\} onSelect=\{onSelect\}/);
 assert.match(page, /onSelect=\{setActiveCategory\}/);
+assert.match(page, /name === 'Ekstrakurikuler' \? 'Semua' : name/);
+assert.match(page, /Semua kegiatan/);
+assert.ok(!page.includes('slice(0, 4)'), 'Daftar kegiatan masih dibatasi empat item');
+assert.match(page, /lg:grid-cols-4/);
 assert.ok(!page.includes('Penjelasan kategori'), 'Penjelasan kategori masih tampil di halaman');
 assert.ok(!data.includes('categoryDetails:'), 'Data penjelasan kategori masih tersisa');
 assert.match(page, /const ActivityDetailDialog/);
@@ -36,13 +48,6 @@ for (const nama of kegiatan) {
 assert.ok(!page.includes('scrollIntoView'), 'Filter masih menggulir ke section lain');
 assert.ok(!page.includes('RibbonDivider'), 'Kategori masih dirender sebagai section bertumpuk');
 assert.match(page, /footerAccent/);
-assert.match(page, /ChevronLeft/);
-assert.match(page, /ChevronRight/);
-assert.match(page, /event\.key === 'ArrowLeft'/);
-assert.match(page, /event\.key === 'ArrowRight'/);
-assert.match(page, /aria-current/);
-assert.match(page, /carousel && index/);
-assert.match(page, /hidden h-full lg:block/);
 
 assert.match(page, /max-w-7xl/, 'Container belum mengikuti skala halaman publik lain');
 assert.match(page, /lg:px-8/, 'Padding desktop belum mengikuti halaman publik lain');
@@ -50,4 +55,4 @@ for (const ukuranBerlebih of ['max-w-[1763px]', 'max-w-[1565px]', 'lg:text-[50px
   assert.ok(!page.includes(ukuranBerlebih), `${ukuranBerlebih} masih membuat halaman tampak terlalu besar`);
 }
 
-console.log('Filter kategori tunggal, carousel, pencarian, skala halaman publik, dan 16 kegiatan tersedia.');
+console.log(`Filter kategori, pencarian, grid empat kolom, dan ${activityTitles.length} kegiatan tersedia.`);
