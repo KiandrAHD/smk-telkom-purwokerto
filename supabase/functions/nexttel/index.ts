@@ -70,6 +70,7 @@ Deno.serve(async (request) => {
       penyedia: PENYEDIA,
       apiKey: API_KEY,
       model: MODEL,
+      baseUrl: Deno.env.get('NEXTTEL_NINEROUTER_URL') ?? Deno.env.get('NINEROUTER_URL'),
       instruksiKustom: systemPrompt,
       pesan: [{ role: 'user', content: `Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n${userData}` }],
     });
