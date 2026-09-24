@@ -27,7 +27,7 @@ const AccentPattern = () => (
 );
 
 const CategoryTabs = ({ activeCategory, onSelect }) => (
-  <div className="mx-auto grid max-w-xl grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
+  <div className="mx-auto grid max-w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
     {ekstrakurikulerData.categories.map((name) => {
       const active = activeCategory === name;
       return (

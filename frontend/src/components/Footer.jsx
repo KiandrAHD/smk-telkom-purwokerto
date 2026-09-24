@@ -51,7 +51,7 @@ const Footer = () => (
           key={className}
           src={footerAccent}
           alt=""
-          className={`absolute hidden h-[233px] w-[233px] max-w-none opacity-30 lg:block ${className}`}
+          className={`absolute hidden h-[233px] w-[233px] max-w-none opacity-30 2xl:block ${className}`}
         />
       ))}
     </div>
