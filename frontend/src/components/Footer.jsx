@@ -3,24 +3,12 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import footerAccent from '../assets/landing/footer-accent.png';
 
 const socialIcons = {
   instagram: FaInstagram,
   youtube: FaYoutube,
   tiktok: FaTiktok,
 };
-
-const footerAccents = [
-  'left-[-104px] top-[-21px]',
-  'left-[-94px] top-[164px]',
-  'left-[129px] top-[200px] -rotate-90',
-  'left-[310px] top-[202px]',
-  'right-[375px] top-[200px] -rotate-90',
-  'right-[174px] top-[204px] -rotate-90',
-  'right-[-7px] top-[206px]',
-  'right-[-117px] top-[18px]',
-];
 
 const LinkColumn = ({ title, links }) => (
   <div>
@@ -42,20 +30,6 @@ const LinkColumn = ({ title, links }) => (
 
 const Footer = () => (
   <footer className="relative overflow-hidden bg-white pt-7 lg:pt-9">
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 select-none overflow-hidden"
-    >
-      {footerAccents.map((className) => (
-        <img
-          key={className}
-          src={footerAccent}
-          alt=""
-          className={`absolute hidden h-[233px] w-[233px] max-w-none opacity-30 2xl:block ${className}`}
-        />
-      ))}
-    </div>
-
     <div className="relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
       <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
         {/* Brand */}
