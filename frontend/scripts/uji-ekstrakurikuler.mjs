@@ -9,9 +9,8 @@ const [page, data] = await Promise.all([
 const kegiatan = [
   'Desain Grafis', 'Web Technologies', 'AI / Artificial Intelligence', 'IT Software',
   'Robotik', 'Cyber Security (EISS)', 'Information Network Cabling (INC)',
-  '3D Game Art (Animasi)', 'English Club', 'Paduan Suara', 'Seni Musik', 'Seni Tari',
-  'PMR', 'Paskibra', 'Photografi dan Vidiografi', 'Basket', 'Bulu Tangkis', 'Futsal',
-  'Voli', 'Bela Diri', 'E-Sport', 'Musik Tradisional/Karawitan', 'Hand Ball/Bola Tangan',
+  '3D Game Art (Animasi)', 'PMR', 'Paskibra', 'Basket', 'Bulu Tangkis', 'Futsal',
+  'Voli', 'Bela Diri', 'E-Sport', 'Hand Ball/Bola Tangan',
   'OSIS', 'Pramuka', 'MPK', 'Wirausaha', 'PIK-R', 'ROHIS', 'ROHKRIS',
   'Brand Ambassador', 'Team Konten', 'Stematel ART', 'Stematel Reader',
 ];
@@ -20,6 +19,8 @@ const activityData = data.split('export const ekstrakurikulerData = {')[1].split
 const activityTitles = [...activityData.matchAll(/\{ title: '([^']+)'/g)].map(([, title]) => title);
 assert.equal(activityTitles.length, kegiatan.length, 'Daftar ekskul memiliki entri ganda atau jumlahnya salah');
 assert.equal(new Set(activityTitles).size, activityTitles.length, 'Nama ekskul harus unik');
+const communityTitles = [...activityData.matchAll(/\{ title: '([^']+)', category: 'Community'/g)].map(([, title]) => title);
+assert.deepEqual(communityTitles, ['Brand Ambassador', 'Team Konten', 'Stematel ART', 'Stematel Reader']);
 
 for (const nama of kegiatan) {
   assert.ok(data.includes(`title: '${nama}'`), `${nama} belum tersedia`);

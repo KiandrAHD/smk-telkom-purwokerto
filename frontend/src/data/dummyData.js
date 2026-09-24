@@ -225,7 +225,7 @@ export const ekstrakurikulerData = {
   stats: [
     { value: 7, label: 'Total Organisasi' },
     { value: 22, label: 'Total Ekstrakurikuler Prestasi' },
-    { value: 5, label: 'Total Community' },
+    { value: 4, label: 'Total Community' },
     { value: 4, label: 'Total Ekstrakurikuler Sentra' },
   ],
   items: [
@@ -257,12 +257,6 @@ export const ekstrakurikulerData = {
     { title: 'Team Konten', category: 'Community', description: 'Tim Konten adalah tim kreatif resmi sekolah yang mengelola, memproduksi, dan menyusun strategi komunikasi digital pada akun media sosial sekolah.', focus: ['Perencanaan konten', 'Produksi media', 'Penulisan kreatif', 'Strategi media sosial'], image: kegiatanEkskul2 },
     { title: 'Stematel ART', category: 'Community', description: 'Stematel ART adalah salah satu pilar pengembangan bakat siswa yang ingin mendalami industri kreatif, seni digital, dan desain visual modern.', focus: ['Seni digital', 'Desain visual', 'Kreativitas', 'Pengembangan portofolio'], image: kegiatanEkskul3 },
     { title: 'Stematel Reader', category: 'Community', description: 'Komunitas literasi resmi SMK Telkom Purwokerto yang bergerak dalam membangun budaya membaca, menulis, dan berkarya secara modern dan digital.', focus: ['Membaca kritis', 'Menulis', 'Diskusi literasi', 'Publikasi karya'], image: kegiatanEkskul4 },
-    { title: 'English Club', category: 'Community', description: 'English Club menjadi ruang bagi siswa untuk berlatih menggunakan bahasa Inggris dalam suasana yang interaktif. Kegiatan dapat mencakup percakapan, kosakata, dan presentasi.', focus: ['Percakapan', 'Kosakata', 'Pelafalan', 'Presentasi'], image: kegiatanEkskul1 },
-    { title: 'Paduan Suara', category: 'Community', description: 'Siswa berlatih bernyanyi dalam kelompok dengan memperhatikan teknik vokal, harmoni, dan kekompakan. Kegiatan ini mengembangkan kepekaan musikal serta rasa percaya diri.', focus: ['Teknik vokal', 'Harmoni', 'Ritme', 'Kekompakan'], image: kegiatanEkskul2 },
-    { title: 'Seni Musik', category: 'Community', description: 'Ekskul ini menjadi wadah untuk mengeksplorasi musik melalui latihan vokal atau alat musik. Siswa mengembangkan kreativitas, musikalitas, dan kemampuan tampil bersama.', focus: ['Ritme', 'Teknik bermusik', 'Ekspresi', 'Kolaborasi'], image: kegiatanEkskul3 },
-    { title: 'Seni Tari', category: 'Community', description: 'Siswa mempelajari gerak, teknik, dan ekspresi dalam seni tari. Kegiatan mendorong kreativitas, kebugaran, serta apresiasi terhadap karya dan budaya.', focus: ['Teknik gerak', 'Ekspresi', 'Koreografi', 'Apresiasi budaya'], image: kegiatanEkskul4 },
-    { title: 'Photografi dan Vidiografi', category: 'Community', description: 'Kegiatan ini mengajak siswa membuat foto dan video serta memahami proses kreatif di baliknya. Siswa berlatih menyusun komposisi, merekam gambar, dan mengolah hasil karya.', focus: ['Komposisi foto', 'Teknik pengambilan video', 'Penyuntingan', 'Penceritaan visual'], image: kegiatanEkskul1 },
-    { title: 'Musik Tradisional/Karawitan', category: 'Community', description: 'Siswa mengenal dan berlatih musik tradisional, termasuk permainan karawitan secara berkelompok. Kegiatan ini menumbuhkan kreativitas sekaligus apresiasi terhadap warisan budaya.', focus: ['Irama tradisional', 'Teknik memainkan alat musik', 'Ansambel', 'Apresiasi budaya'], image: kegiatanEkskul2 },
   ],
 };
 
