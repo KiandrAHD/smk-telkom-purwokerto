@@ -68,7 +68,7 @@ const skor = (bagian, kunci) => {
 };
 
 // maksToken 0 atau tidak diisi berarti kirim penuh.
-export const pilihKonten = (pertanyaan, maksToken = 0) => {
+export const pilihKonten = (pertanyaan, maksToken = 0, kategori) => {
   if (!maksToken) return KONTEN_SEKOLAH;
 
   const dipakai = new Set(INTI);
@@ -81,19 +81,58 @@ export const pilihKonten = (pertanyaan, maksToken = 0) => {
     terpakai += bagian.token;
   }
 
-  const kunci = kataKunci(pertanyaan);
+  let kunci = kataKunci(pertanyaan);
+
+  if (kategori) {
+    const prioritas = [];
+    switch (kategori) {
+      case 'sekolah':
+        prioritas.push('aboutDescription', 'visiMisi', 'kepalaSekolah', 'footerData');
+        break;
+      case 'jurusan':
+        prioritas.push('jurusanData', 'jurusanDetail', 'kepalaSekolah');
+        break;
+      case 'ppdb':
+        prioritas.push('ppdbMeta', 'kepalaSekolah', 'jurusanData');
+        break;
+      case 'bkk':
+        prioritas.push('bkkData', 'footerData');
+        break;
+      case 'prestasi':
+        prioritas.push('prestasiData', 'kepalaSekolah');
+        break;
+      case 'berita':
+        prioritas.push('beritaData', 'kepalaSekolah');
+        break;
+      case 'pengumuman':
+        prioritas.push('pengumumanData', 'kepalaSekolah');
+        break;
+      default:
+        break;
+    }
+    for (const nama of prioritas) {
+      if (!dipakai.has(nama)) continue;
+      const bagian = BAGIAN.find((b) => b.nama === nama);
+      if (bagian && !hasil.includes(bagian)) {
+        hasil.push(bagian);
+        terpakai += bagian.token;
+      }
+    }
+  }
+
   const kandidat = BAGIAN.filter((b) => !dipakai.has(b.nama))
     .map((b) => ({ b, s: skor(b, kunci) }))
     .filter((x) => x.s > 0)
     .sort((x, y) => y.s - x.s);
 
   for (const { b } of kandidat) {
-    if (terpakai + b.token > maksToken) continue; // lewati yang kebesaran, coba berikutnya
-    hasil.push(b);
-    terpakai += b.token;
+    if (terpakai + b.token > maksToken) continue;
+    if (!hasil.includes(b)) {
+      hasil.push(b);
+      terpakai += b.token;
+    }
   }
 
-  // Urutkan kembali sesuai urutan aslinya supaya susunannya tetap terbaca wajar.
   const urutan = new Map(BAGIAN.map((b, i) => [b.nama, i]));
   hasil.sort((a, b) => urutan.get(a.nama) - urutan.get(b.nama));
 

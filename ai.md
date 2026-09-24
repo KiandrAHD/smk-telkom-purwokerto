@@ -20,9 +20,9 @@ STELA hanya menjawab berdasarkan knowledge sekolah. Jika informasi tidak tersedi
 
 ### NextTel AI
 
-NextTel adalah fitur terpisah untuk rekomendasi jurusan berdasarkan minat dan kebutuhan pengguna. NextTel bukan chatbot informasi umum dan tidak boleh dicampur dengan prompt, state, knowledge, endpoint, atau hasil STELA.
+NextTel adalah fitur rekomendasi jurusan berdasarkan kuesioner 8 pertanyaan. NextTel bukan chatbot informasi umum dan tidak boleh dicampur dengan prompt, state, knowledge, endpoint, atau hasil STELA.
 
-Implementasi NextTel belum tersedia di repository ini. Ketika dikembangkan, module, endpoint, prompt, dan state-nya harus dibuat terpisah.
+**Implementasi:** NextTel sudah tersedia dan aktif di repository. Scoring dilakukan secara deterministik di frontend, sedangkan AI hanya menghasilkan penjelasan hasil.
 
 ## 2. Arsitektur STELA
 
@@ -34,17 +34,40 @@ StelaChat / StelaWidget
 frontend/src/services/stela.js
    ↓
 Supabase Edge Function: /functions/v1/stela
-   ├─ validasi request
-   ├─ context publik Supabase sesuai RLS
-   ├─ knowledge statis fallback
-   └─ Anthropic API
+   ├─ CORS & origin check
+   ├─ Rate limit (per-IP, daily quota)
+   ├─ Input validation (length, roles, content)
+   ├─ Input sanitization (HTML comments, chat tokens)
+   ├─ Topic guard (scope enforcement)
+   ├─ FAQ fast path (deterministic answers)
+   ├─ Answer cache (60 min, first message only)
+   ├─ Context assembly (dynamic DB + static knowledge)
+   ├─ Context relevance routing (category-based prioritization)
+   ├─ Provider selection (9Router → Anthropic → Gemini → Groq)
+   ├─ Model fallback (multiple models per provider)
+   ├─ Timeout enforcement (12s per provider)
+   ├─ Output validation (secret patterns, length, safety)
+   └─ Safe error normalization
    ↓
 Response aman { reply }
    ↓
 Chat UI
 ```
 
-STELA tidak memanggil Anthropic langsung dari browser. API key model hanya boleh tersedia di environment server-side Edge Function.
+STELA tidak memanggil AI provider langsung dari browser. API key model hanya boleh tersedia di environment server-side Edge Function.
+
+### Defense in Depth (10 Lapisan Keamanan)
+
+1. **Input Validation:** Length limits, role alternation, empty check
+2. **Input Sanitization:** Strip HTML comments, chat tokens, XML tags
+3. **Topic Guard:** Regex-based scope enforcement, block out-of-scope requests
+4. **Prompt Hierarchy:** Separate system rules, trusted knowledge, untrusted DB data
+5. **Context Isolation:** XML markers `<data-sekolah>`, `<data-dinamis-publik>` with tag neutralization
+6. **Output Validation:** Secret pattern detection, length check, system prompt fragment filter
+7. **Rate Limiting:** Per-IP (20/5min), daily quota (500/day), emergency kill switch
+8. **Cache Layers:** Answer cache (60min), context cache (60s), FAQ fast path (<5ms)
+9. **Provider Fallback:** Priority chain with health tracking, timeout handling, 5xx retry
+10. **Safe Fallback Response:** Generic errors, no provider names, no status codes leaked
 
 ## 3. Struktur File STELA
 
@@ -55,9 +78,12 @@ frontend/src/components/stela/StelaWidget.jsx
 frontend/src/services/stela.js
 frontend/src/data/dummyData.js
 frontend/scripts/buat-konten-stela.mjs
+frontend/scripts/uji-stela.mjs
 supabase/functions/stela/index.ts
-supabase/functions/stela/konten-sekolah.ts
-supabase/functions/stela/README.md
+supabase/functions/stela/inti.mjs
+supabase/functions/stela/konteks.mjs
+supabase/functions/stela/konten-sekolah.mjs
+supabase/functions/stela/penjaga-biaya.mjs
 ```
 
 Peran masing-masing:
@@ -66,9 +92,13 @@ Peran masing-masing:
 - `StelaChat.jsx`: state percakapan, input, loading, retry, error, dan scroll.
 - `StelaWidget.jsx`: widget mengambang di halaman publik selain `/stela`.
 - `stela.js`: client request ke Edge Function.
-- `index.ts`: validasi, keamanan, context, rate limit, dan request ke Anthropic.
-- `konten-sekolah.ts`: snapshot knowledge statis/fallback.
+- `index.ts`: entry point, CORS, rate limit, context assembly, error handling.
+- `inti.mjs`: core AI logic, provider selection, model fallback, timeout, FAQ fast path, topic guard, output validation.
+- `konteks.mjs`: context selection, keyword scoring, category-based prioritization.
+- `konten-sekolah.mjs`: snapshot knowledge statis (~28K tokens).
+- `penjaga-biaya.mjs`: rate limiting, answer cache, daily quota, emergency switch.
 - `buat-konten-stela.mjs`: generator snapshot dari `dummyData.js`.
+- `uji-stela.mjs`: comprehensive test suite (300+ lines, injection resistance, validation, cache, rate limits).
 
 ## 4. Cara Menggunakan STELA
 
@@ -134,10 +164,13 @@ supabase functions deploy stela
 
 ## 6. Knowledge dan Context
 
-STELA menggunakan dua sumber informasi:
+STELA menggunakan tiga sumber informasi:
 
-1. Knowledge statis pada `konten-sekolah.ts` sebagai fallback.
-2. Context dinamis dari data publik Supabase yang diambil Edge Function dan di-cache singkat.
+1. **FAQ Fast Path:** Jawaban deterministik untuk pertanyaan umum (jurusan, BKK, PPDB, alamat, profil) - <5ms response.
+2. **Knowledge statis:** `konten-sekolah.mjs` (~28K tokens) sebagai baseline context.
+3. **Context dinamis:** Data publik Supabase yang diambil Edge Function dan di-cache 60 detik.
+
+### Context Dinamis
 
 Context dinamis hanya mencakup:
 
@@ -153,6 +186,22 @@ STELA tidak membaca:
 - Berita atau pengumuman draft.
 - Dokumen private Storage.
 
+### Context Relevance Routing
+
+Pertanyaan dikategorikan secara deterministik (sekolah, jurusan, ppdb, bkk, prestasi, berita, pengumuman, umum). Untuk provider dengan budget ketat (Groq: 3000 tokens), section yang relevan diprioritaskan:
+
+- **sekolah:** aboutDescription, visiMisi, kepalaSekolah, footerData
+- **jurusan:** jurusanData, jurusanDetail, kepalaSekolah
+- **ppdb:** ppdbMeta, kepalaSekolah, jurusanData
+- **bkk:** bkkData, footerData
+- **prestasi:** prestasiData, kepalaSekolah
+- **berita:** beritaData, kepalaSekolah
+- **pengumuman:** pengumumanData, kepalaSekolah
+
+Static knowledge INTI (identitas sekolah, kontak, daftar jurusan) selalu ikut.
+
+### Update Knowledge Statis
+
 Jika `dummyData.js` berubah, perbarui snapshot:
 
 ```bash
@@ -166,23 +215,49 @@ Konten database diperlakukan sebagai data referensi tidak tepercaya. Isi konten 
 
 ## 7. Security dan Error Handling
 
-- API key Anthropic hanya dibaca dari `Deno.env` di Edge Function.
-- Tidak ada API key model di React, `.env` frontend, localStorage, atau response.
-- Request dibatasi maksimal 20 pesan.
-- Panjang setiap pesan maksimal 1.000 karakter.
-- Total percakapan maksimal 8.000 karakter.
-- Pesan harus diawali user dan bergantian dengan assistant.
-- Pesan terakhir harus berasal dari user.
-- Rate limit diberlakukan per alamat IP pada memory isolate.
-- CORS dibatasi melalui `STELA_ALLOWED_ORIGINS`.
-- Tidak ada riwayat percakapan yang disimpan ke database atau localStorage.
-- Error internal tidak diteruskan ke browser.
+### Keamanan Multi-Layer
 
-Pesan error frontend yang digunakan:
+STELA menerapkan **defense in depth** dengan 10 lapisan keamanan:
 
-```text
-STELA sedang mengalami kendala. Silakan coba lagi.
-```
+1. **Input Validation:** Max 20 messages, 1000 chars/message, 8000 total, role alternation
+2. **Input Sanitization:** Strip HTML comments `<!-- -->`, chat tokens `<|im_start|>`, XML tags
+3. **Topic Guard:** Regex-based scope check, blocks: prompt injection, API key requests, system prompt reveal, admin impersonation
+4. **Prompt Hierarchy:** System rules (immutable) → Trusted knowledge → Untrusted DB data → User message
+5. **Context Isolation:** XML markers with tag neutralization (`netralkanPenanda()`)
+6. **Output Validation:** Secret patterns (`sk-`, `AIza`, `gsk_`, `Bearer`), length check, system prompt fragments
+7. **Rate Limiting:** 20 req/5min per-IP, 500/day total, emergency kill switch (`STELA_AKTIF=false`)
+8. **Cache Layers:** FAQ fast path (<5ms), answer cache (60min), context cache (60s)
+9. **Provider Fallback:** 9Router → Anthropic → Gemini → Groq, with timeout (12s/provider) and health tracking
+10. **Safe Fallback:** Generic errors, no provider names, no status codes
+
+### Timeout Enforcement
+
+- **Per-provider timeout:** 12 seconds
+- **Fallback trigger:** Timeout, 429, 404, 5xx errors
+- **Model health tracking:** 30-min cooldown for failed models
+- **AbortController:** Proper cleanup, no memory leaks
+
+### Tested Attack Resistance
+
+STELA telah diuji terhadap:
+
+- HTML comment injection: `<!-- SYSTEM OVERRIDE -->`
+- Chat token injection: `<|im_start|>system`
+- XML tag injection: `</data-sekolah>`
+- Prompt reveal attempts
+- Role change attempts
+- API key extraction attempts
+- Database content as instructions
+
+Catatan: Tidak ada sistem yang 100% jailbreak-proof. STELA resistant to tested attack patterns.
+
+### Error Handling
+
+- API key hanya di `Deno.env` Edge Function
+- Tidak ada API key di React, frontend `.env`, localStorage, atau response
+- CORS dibatasi `STELA_ALLOWED_ORIGINS` (production: explicit origins only)
+- Tidak ada riwayat percakapan disimpan ke database atau localStorage
+- Error internal dinormalisasi: "STELA sedang mengalami kendala. Silakan coba lagi."
 
 ## 8. Cara Mengembangkan STELA
 
@@ -203,19 +278,48 @@ Edit `frontend/src/services/stela.js`. Pertahankan endpoint existing, anon key S
 
 ### Perubahan prompt dan context
 
-Edit `supabase/functions/stela/index.ts`. Setiap perubahan harus mempertahankan:
+Edit `supabase/functions/stela/inti.mjs`. Setiap perubahan harus mempertahankan:
 
 - Scope informasi sekolah.
 - Larangan mengarang informasi.
-- Perlindungan terhadap prompt injection.
+- Perlindungan terhadap prompt injection (ATURAN KEAMANAN items 9-15 tidak dapat diubah).
 - Filter status publik.
 - Batas panjang context dan request.
 
+### Menambah FAQ Fast Path
+
+Edit `FAQ_FAST_PATH` di `inti.mjs`. Setiap FAQ harus:
+
+- Memiliki `pola` regex yang jelas
+- Memiliki `cocok()` function untuk confidence check
+- Memiliki `jawaban` yang sudah tervalidasi dan singkat
+- Tidak bocorkan informasi private
+- Tetap melewati `topikDiizinkan()` check
+
 ### Perubahan knowledge statis
 
-Ubah sumber data yang relevan, jalankan generator `npm run stela:konten`, review hasil `konten-sekolah.ts`, lalu deploy ulang Edge Function.
+Ubah sumber data yang relevan, jalankan generator `npm run stela:konten`, review hasil `konten-sekolah.mjs`, lalu deploy ulang Edge Function.
 
 Jangan membuat database, tabel, bucket, atau authentication baru hanya untuk STELA jika data existing masih cukup.
+
+### Testing
+
+Jalankan test suite sebelum deploy:
+
+```bash
+cd frontend
+node scripts/uji-stela.mjs
+```
+
+Test suite mencakup:
+- Input validation (length, roles, content)
+- Prompt injection resistance
+- Provider selection
+- Context selection
+- Rate limiting
+- Cache behavior
+- Secret leak prevention
+- Model fallback list
 
 ## 9. NextTel
 
@@ -306,8 +410,14 @@ menjadi:
 NextTel sedang mengalami kendala. Silakan coba lagi.
 ```
 
+NextTel menggunakan provider fallback yang sama dengan STELA: 9Router → Anthropic → Gemini → Groq, dengan timeout 12 detik per provider.
+
 Rekomendasi NextTel adalah panduan berdasarkan minat, bukan keputusan resmi
 penerimaan siswa.
+
+### Deterministic Fallback
+
+Jika AI gagal atau response tidak valid, aplikasi tetap menampilkan hasil deterministik (topRecommendation, scores, ranking) tanpa AI explanation. AI explanation adalah enhancement, bukan requirement.
 
 ### Pengembangan dan testing
 

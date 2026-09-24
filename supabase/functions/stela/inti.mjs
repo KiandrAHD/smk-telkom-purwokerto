@@ -25,6 +25,9 @@ export const BATAS = {
   // sebelum sempat ditulis. 2000 memberi ruang; keringkasan dijaga lewat
   // aturan prompt, bukan lewat plafon token.
   MAKS_TOKEN_JAWABAN: 2000,
+  // Timeout per provider: cegah request menggantung tanpa batas. Bila timeout,
+  // fallback ke provider/model berikutnya.
+  TIMEOUT_PROVIDER_MS: 12000,
 };
 
 // STELA bisa berjalan di atas 9Router, Anthropic, Google Gemini, atau Groq. Yang dipakai
@@ -129,6 +132,69 @@ export const buatAlamatPenyedia = (penyedia, baseUrl = bacaEnv('NINEROUTER_URL')
 // Chatbot FAQ sekolah tidak butuh penalaran dalam. Effort rendah menekan biaya
 // dan latensi tanpa menurunkan mutu jawaban untuk pertanyaan sesederhana ini.
 export const EFFORT_BAWAAN = 'low';
+
+export const PESAN_DI_LUAR_SCOPE = 'Maaf, saya STELA dan fokus membantu informasi tentang SMK Telkom Purwokerto.';
+export const PESAN_AMAN = 'Maaf, saya belum bisa memberikan jawaban untuk pertanyaan tersebut.';
+
+const FAQ_FAST_PATH = [
+  {
+    pola: /jurusan|program keahlian/i,
+    cocok: (teks) => /(?:apa|ada|tersedia|saja|jurusan|program)/i.test(teks),
+    jawaban: 'SMK Telkom Purwokerto memiliki empat jurusan: Rekayasa Perangkat Lunak (RPL), Pengembangan Game (PG), Teknik Komputer dan Jaringan (TKJ), serta Teknik Jaringan Akses Telekomunikasi (TJAT).',
+  },
+  {
+    pola: /\bbkk\b/i,
+    cocok: (teks) => /apa itu|lowongan|kerja|bkk/i.test(teks),
+    jawaban: 'BKK adalah Bursa Kerja Khusus yang membantu menyediakan informasi peluang kerja dan hubungan sekolah dengan dunia industri. Informasi lowongan terbaru dapat dilihat di halaman /bkk.',
+  },
+  {
+    pola: /ppdb|pendaftaran|daftar masuk/i,
+    cocok: (teks) => /bagaimana|cara|daftar|ppdb|pendaftaran/i.test(teks),
+    jawaban: 'Informasi dan alur pendaftaran peserta didik baru tersedia di halaman /ppdb. Untuk jadwal, biaya, kuota, dan persyaratan terbaru, silakan konfirmasi ke Tata Usaha sekolah.',
+  },
+  {
+    pola: /alamat|lokasi|kontak|hubungi/i,
+    cocok: (teks) => /alamat|lokasi|kontak|telepon|hubungi/i.test(teks),
+    jawaban: 'Informasi alamat dan kontak resmi SMK Telkom Purwokerto tersedia di halaman /profil-sekolah. Gunakan informasi pada halaman tersebut untuk menghubungi sekolah.',
+  },
+  {
+    pola: /profil|tentang sekolah|fasilitas/i,
+    cocok: (teks) => /profil|tentang|fasilitas|sekolah/i.test(teks),
+    jawaban: 'SMK Telkom Purwokerto adalah sekolah vokasi di bawah naungan Yayasan Pendidikan Telkom yang berfokus pada teknologi informasi, jaringan, dan telekomunikasi. Profil dan fasilitas sekolah dapat dipelajari di halaman /profil-sekolah.',
+  },
+];
+
+export const jawabanFaqCepat = (teks) => {
+  const pertanyaan = String(teks ?? '').trim();
+  if (!pertanyaan || !topikDiizinkan([{ content: pertanyaan }])) return null;
+  const faq = FAQ_FAST_PATH.find((item) => item.pola.test(pertanyaan) && item.cocok(pertanyaan));
+  return faq?.jawaban ?? null;
+};
+
+const POLA_DI_LUAR_SCOPE = /(?:ignore\s+(?:previous|all)|system\s*prompt|developer\s*mode|reveal|show\s+(?:hidden|system)|api[_ -]?key|service[_ -]?role|bearer|password|secret|environment\s+variable|data\s+private|ppdb\s+(?:orang|peserta|private)|hacking|malware|ransomware|exploit|politik|agama|kesehatan\s+(?:saya|pribadi)|hukum\s+(?:saya|pribadi)|keuangan\s+(?:saya|pribadi)|coding\s+umum)/i;
+const KATA_SEKOLAH = /(?:smk|telkom|purwokerto|sekolah|jurusan|fasilitas|kegiatan|prestasi|berita|pengumuman|bkk|lowongan|pkl|ppdb|kontak|alamat|daftar|belajar)/i;
+
+export const topikDiizinkan = (pesan) => {
+  const teks = pesan[pesan.length - 1]?.content ?? '';
+  if (POLA_DI_LUAR_SCOPE.test(teks)) return false;
+  return KATA_SEKOLAH.test(teks) || pesan.length > 1;
+};
+
+export const kategoriPertanyaan = (teks) => {
+  const nilai = String(teks ?? '').toLowerCase();
+  if (/\b(?:bkk|lowongan|perusahaan|karier|pekerjaan)\b/.test(nilai)) return 'bkk';
+  if (/\b(?:ppdb|pendaftaran|pendaftar|seleksi)\b/.test(nilai)) return 'ppdb';
+  if (/\b(?:prestasi|juara|penghargaan|lomba)\b/.test(nilai)) return 'prestasi';
+  if (/\b(?:pengumuman|pemberitahuan)\b/.test(nilai)) return 'pengumuman';
+  if (/\b(?:berita|kabar|artikel)\b/.test(nilai)) return 'berita';
+  if (/\b(?:jurusan|rpl|\bpg\b|tkj|tjat|program keahlian)\b/.test(nilai)) return 'jurusan';
+  if (/\b(?:profil|tentang|sejarah|visi|misi|fasilitas|alamat|kontak)\b/.test(nilai)) return 'sekolah';
+  return 'umum';
+};
+
+const POLA_SECRET = /(?:sk-[a-z0-9_-]{8,}|AIza[a-z0-9_-]{20,}|gsk_[a-z0-9_-]{12,}|(?:api[_ -]?key|service[_ -]?role|authorization|bearer|password|secret|token|SUPABASE_|ANTHROPIC_|GEMINI_|NINEROUTER_)[ \\t]*[:=][ \\t]*[^\\s,;]{4,})/i;
+export const keluaranAman = (teks) => typeof teks === 'string' && teks.trim().length > 0 && teks.length <= BATAS.MAKS_PANJANG_ASISTEN && !POLA_SECRET.test(teks) && !/(?:system prompt|stack trace|process\.env|Deno\.env|<data-)/i.test(teks);
+
 
 // Awalan kunci tiap penyedia. Dipakai untuk MENOLAK kunci yang jelas keliru,
 // bukan untuk memvalidasi keasliannya.
@@ -282,6 +348,7 @@ const galatPenyedia = (pesan, status, untukPengguna = false) => {
 export const PESAN_KUOTA_HARIAN =
   'STELA sudah mencapai batas percakapan hari ini. Silakan coba lagi besok, atau hubungi Tata Usaha untuk pertanyaan yang mendesak.';
 export const PESAN_SEDANG_RAMAI = 'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.';
+export const PESAN_TIMEOUT = 'STELA sedang mengalami kendala koneksi. Silakan coba lagi.';
 
 const tanyaAnthropic = async ({ apiKey, model, pesan, instruksi, signal }) => {
   const tanggapan = await fetch('https://api.anthropic.com/v1/messages', {
@@ -442,6 +509,11 @@ const PESAN_DITOLAK = {
   tokenMasuk: 0,
   tokenKeluar: 0,
 };
+const PESAN_JAUH_DARI_KONTEKS = {
+  teks: PESAN_DI_LUAR_SCOPE,
+  tokenMasuk: 0,
+  tokenKeluar: 0,
+};
 
 const PENYEDIA = {
   ninerouter: tanyaOpenAICompatible,
@@ -457,15 +529,19 @@ const PENYEDIA = {
 // prompt sendiri, tapi mewarisi pemilihan penyedia, failover model, dan
 // penanganan galat dari sini.
 export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, instruksiKustom, signal, baseUrl }) => {
+  // Fast path FAQ sekolah
+  const fast = jawabanFaqCepat(pesan[pesan.length - 1]?.content ?? '');
+  if (fast) return { teks: fast, tokenMasuk: 0, tokenKeluar: 0, modelDipakai: 'faq' };
+
   const panggil = PENYEDIA[penyedia];
   if (!panggil) throw galatPenyedia(`Penyedia tidak dikenal: ${penyedia}`, 500);
 
-  // Pemilihan konten memakai pertanyaan TERAKHIR, bukan seluruh riwayat: itu
-  // yang sedang ditanyakan sekarang, dan riwayat panjang akan mengaburkan skor.
+  // Routing relevansi konteks
   const pertanyaan = pesan[pesan.length - 1]?.content ?? '';
+  const kategori = kategoriPertanyaan(pertanyaan);
   const instruksi =
     instruksiKustom ??
-    buatInstruksi(contextPublik, pilihKonten(pertanyaan, ANGGARAN_KONTEKS[penyedia] ?? 0));
+    buatInstruksi(contextPublik, pilihKonten(pertanyaan, ANGGARAN_KONTEKS[penyedia] ?? 0, kategori));
 
   // STELA_MODEL yang disetel manual dihormati apa adanya -- kalau seseorang
   // memilih model tertentu, jangan diam-diam dipindah ke model lain.
@@ -480,16 +556,31 @@ export const tanyaAI = async ({ penyedia, apiKey, model, pesan, contextPublik, i
 
   let galatTerakhir;
   for (const kandidat of urutan) {
+    const pengendali = new AbortController();
+    const timeout = setTimeout(() => pengendali.abort(), BATAS.TIMEOUT_PROVIDER_MS);
+    const batalkan = () => pengendali.abort();
+    if (signal) {
+      if (signal.aborted) pengendali.abort();
+      else signal.addEventListener('abort', batalkan, { once: true });
+    }
     try {
-      const hasil = await panggil({ penyedia, apiKey, model: kandidat, pesan, instruksi, signal, baseUrl });
+      const hasil = await panggil({ penyedia, apiKey, model: kandidat, pesan, instruksi, signal: pengendali.signal, baseUrl });
       return { ...hasil, modelDipakai: kandidat };
     } catch (error) {
       galatTerakhir = error;
-      // 429 = kuota/laju habis, 404 = model ditarik. Keduanya berarti "coba
-      // model lain", bukan "gagal". Galat lain (400, 401, jaringan) tidak akan
-      // membaik dengan berganti model, jadi langsung dilempar.
-      if (error?.status !== 429 && error?.status !== 404) throw error;
-      if (error?.status === 429) modelHabis.set(kandidat, Date.now() + HABIS_MS);
+      const dibatalkan = pengendali.signal.aborted;
+      if (signal?.aborted) throw error;
+      if (dibatalkan) {
+        galatTerakhir = galatPenyedia(PESAN_TIMEOUT, 504);
+      }
+      const status = galatTerakhir?.status;
+      // 429 = kuota/laju habis, 404 = model ditarik, timeout, dan 5xx
+      // merupakan kegagalan upstream yang aman dialihkan ke kandidat berikutnya.
+      if (!dibatalkan && status !== 429 && status !== 404 && !(status >= 500 && status <= 599)) throw error;
+      if (status === 429 || status === 404 || dibatalkan) modelHabis.set(kandidat, Date.now() + HABIS_MS);
+    } finally {
+      clearTimeout(timeout);
+      if (signal) signal.removeEventListener('abort', batalkan);
     }
   }
   throw galatTerakhir;
