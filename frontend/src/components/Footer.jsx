@@ -11,18 +11,15 @@ const socialIcons = {
   tiktok: FaTiktok,
 };
 
-const footerSideAccents = [
-  'left-[-104px] top-[-21px]',
-  'left-[-94px] top-[164px]',
-  'right-[-117px] top-[18px]',
-];
-
-const footerBottomAccents = [
-  '-left-[50px] -top-[55px]',
-  'left-[22%] -top-[120px] -rotate-90 hidden sm:block',
-  'left-[43%] -top-[55px] hidden lg:block',
-  'right-[22%] -top-[120px] -rotate-90 hidden sm:block',
-  '-right-[50px] -top-[55px]',
+const footerAccents = [
+  '-left-[90px] -top-[55px]',
+  'left-[10%] -top-[120px] -rotate-90 hidden sm:block',
+  'left-[24%] -top-[55px] hidden md:block',
+  'left-[38%] -top-[120px] -rotate-90 hidden lg:block',
+  'left-[52%] -top-[55px] hidden lg:block',
+  'right-[24%] -top-[120px] -rotate-90 hidden md:block',
+  'right-[10%] -top-[55px] hidden sm:block',
+  '-right-[90px] -top-[120px] -rotate-90',
 ];
 
 const LinkColumn = ({ title, links }) => (
@@ -44,21 +41,19 @@ const LinkColumn = ({ title, links }) => (
 );
 
 const Footer = () => (
-  <footer className="relative overflow-hidden bg-white pt-7 lg:pt-9">
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 select-none overflow-hidden"
-    >
-      {footerSideAccents.map((className) => (
+  <>
+    <div aria-hidden="true" className="pointer-events-none relative h-16 overflow-hidden bg-white sm:h-20 lg:h-24">
+      {footerAccents.map((className) => (
         <img
           key={className}
           src={footerAccent}
           alt=""
-          className={`absolute hidden h-[233px] w-[233px] max-w-none opacity-30 2xl:block ${className}`}
+          className={`absolute size-[min(233px,42vw)] max-w-none select-none opacity-30 ${className}`}
         />
       ))}
     </div>
 
+    <footer className="relative overflow-hidden bg-white">
     <div className="relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
       <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
         {/* Brand */}
@@ -147,17 +142,6 @@ const Footer = () => (
       </div>
     </div>
 
-    <div aria-hidden="true" className="pointer-events-none relative h-20 overflow-hidden sm:h-24 lg:h-28">
-      {footerBottomAccents.map((className) => (
-        <img
-          key={className}
-          src={footerAccent}
-          alt=""
-          className={`absolute size-[min(233px,42vw)] max-w-none select-none opacity-30 ${className}`}
-        />
-      ))}
-    </div>
-
     <div className="relative z-10 bg-primary text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-[10px] sm:flex-row sm:px-6 lg:px-8">
         <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
@@ -174,7 +158,8 @@ const Footer = () => (
         </div>
       </div>
     </div>
-  </footer>
+    </footer>
+  </>
 );
 
 export default Footer;
