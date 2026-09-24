@@ -42,7 +42,7 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
               : 'border-primary/45 bg-white text-primary hover:border-primary hover:bg-primary-50'
           }`}
         >
-          {name}
+          {name === 'Ekstrakurikuler' ? 'Semua' : name}
         </button>
       );
     })}
@@ -137,8 +137,6 @@ const ActivityDetailDialog = ({ item, onClose }) => {
 };
 
 const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => {
-  const visibleItems = items.slice(0, 4);
-
   return (
     <section
       id="daftar-ekstrakurikuler"
@@ -149,11 +147,11 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
         <div className="mt-6 flex items-end justify-between gap-4">
           <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{title}</h2>
-          <p className="text-xs text-dark-500">{visibleItems.length} kegiatan</p>
+          <p className="text-xs text-dark-500">{items.length} kegiatan</p>
         </div>
         {items.length > 0 ? (
           <div className="mt-7">
-            <CardGrid items={visibleItems} onOpen={onOpen} />
+            <CardGrid items={items} onOpen={onOpen} />
           </div>
         ) : (
           <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">
@@ -178,7 +176,7 @@ const EkstrakurikulerPage = () => {
 
   const sectionTitle = keyword
     ? 'Hasil Pencarian'
-    : activeCategory === 'Ekstrakurikuler' ? 'Semua Ekstrakurikuler' : activeCategory;
+    : activeCategory === 'Ekstrakurikuler' ? 'Semua kegiatan' : activeCategory;
 
   return (
     <MainLayout>
