@@ -39,6 +39,9 @@ const JurusanHeroSection = () => (
           <img
             src={jurusanHero.image}
             alt="Siswa SMK Telkom Purwokerto sedang membuat program"
+            width={1920}
+            height={902}
+            fetchPriority="high"
             className="w-full rounded-[1.75rem] object-contain"
           />
         </div>

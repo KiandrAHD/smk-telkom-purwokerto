@@ -18,6 +18,10 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
           <img
             src={image}
             alt={name}
+            width={900}
+            height={450}
+            loading="lazy"
+            decoding="async"
             className="w-full aspect-[2/1] object-cover object-top transition-transform duration-500 group-hover:scale-110"
           />
         </div>

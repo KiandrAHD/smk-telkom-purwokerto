@@ -55,6 +55,9 @@ const HeroSection = () => (
           <img
             src={landingHero.image}
             alt="Siswa SMK Telkom Purwokerto"
+            width={1920}
+            height={902}
+            fetchPriority="high"
             className="w-full rounded-[1.75rem] object-contain"
           />
         </div>

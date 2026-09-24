@@ -1,10 +1,14 @@
 
-import heroPanel from '../assets/drive/header-jurusan.png';
+import heroPanel from '../assets/drive/header-jurusan.webp';
 import aboutVideo from '../assets/tentang/profil-hero.jpg';
 import jurusanRpl from '../assets/drive/jurusan-rpl.png';
 import jurusanPg from '../assets/drive/jurusan-pg.png';
 import jurusanTkj from '../assets/drive/jurusan-tkj.png';
 import jurusanTjat from '../assets/drive/jurusan-tjat.png';
+import jurusanRplCard from '../assets/drive/jurusan-rpl-card.webp';
+import jurusanPgCard from '../assets/drive/jurusan-pg-card.webp';
+import jurusanTkjCard from '../assets/drive/jurusan-tkj-card.webp';
+import jurusanTjatCard from '../assets/drive/jurusan-tjat-card.webp';
 import showcaseIot from '../assets/drive/showcase-projek-a.png';
 import showcaseSmartHome from '../assets/drive/showcase-mobil.png';
 import penampilanMusik from '../assets/drive/showcase-musik.png';
@@ -14,9 +18,9 @@ import prestasiGame from '../assets/jurusan/stock-hd/game-development.jpg';
 import prestasiIot from '../assets/jurusan/stock-hd/fiber-optic-network.jpg';
 import mapImg from '../assets/landing/map.jpg';
 
-import heroJurusan from '../assets/drive/header-jurusan.png';
+import heroJurusan from '../assets/drive/header-jurusan.webp';
 import heroPrestasi from '../assets/drive/showcase-projek-a.png';
-import heroBkk from '../assets/drive/header-bkk.png';
+import heroBkk from '../assets/drive/header-bkk.webp';
 import heroBerita from '../assets/drive/showcase-rumah.png';
 
 import logoTelkomColor from '../assets/bkk/logo-telkom.png';
@@ -40,7 +44,7 @@ import pakHerdi from '../assets/tentang/guru/pak-herdi.png';
 import pakNandar from '../assets/tentang/guru/pak-nandar.png';
 import pakRagil from '../assets/tentang/guru/pak-ragil.png';
 import { slugify } from '../utils/slug';
-import gedungSekolah from '../assets/drive/header-jurusan.png';
+import gedungSekolah from '../assets/drive/header-jurusan.webp';
 import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
@@ -51,7 +55,7 @@ import robotikSatu from '../assets/tentang/fasilitas/robotik-1.png';
 import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
 import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
-import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.png';
+import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.webp';
 import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
 import kegiatanEkskul2 from '../assets/ekstrakurikuler/kegiatan-2.png';
 import kegiatanEkskul3 from '../assets/ekstrakurikuler/kegiatan-3.png';
@@ -188,28 +192,28 @@ export const jurusanData = {
       icon: 'code',
       name: 'Rekayasa Perangkat Lunak (RPL)',
       desc: 'Menguasai pengembangan aplikasi, web, mobile, dan sistem informasi berbasis teknologi terkini.',
-      image: jurusanRpl,
+      image: jurusanRplCard,
       slug: 'rpl',
     },
     {
       icon: 'gamepad',
       name: 'Pengembangan Game (PG)',
       desc: 'Belajar desain game, pemrograman, dan produksi game hingga menjadi game developer profesional.',
-      image: jurusanPg,
+      image: jurusanPgCard,
       slug: 'pg',
     },
     {
       icon: 'network',
       name: 'Teknik Komputer dan Jaringan (TKJ)',
       desc: 'Mempelajari instalasi, konfigurasi, dan manajemen jaringan komputer dan server secara profesional.',
-      image: jurusanTkj,
+      image: jurusanTkjCard,
       slug: 'tkj',
     },
     {
       icon: 'tower',
       name: 'Teknik Jaringan Akses Telekomunikasi (TJAT)',
       desc: 'Menguasai teknologi jaringan akses telekomunikasi dan infrastruktur jaringan modern.',
-      image: jurusanTjat,
+      image: jurusanTjatCard,
       slug: 'tjat',
     },
   ],

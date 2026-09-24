@@ -36,6 +36,9 @@ const BkkHeroSection = () => (
           <img
             src={bkkHero.image}
             alt={bkkHero.imageAlt}
+            width="1920"
+            height="902"
+            fetchPriority="high"
             className="w-full rounded-[1.75rem] object-contain"
           />
         </div>

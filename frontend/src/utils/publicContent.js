@@ -1,4 +1,4 @@
-import heroPanel from '../assets/drive/header-jurusan.png';
+import heroPanel from '../assets/drive/header-jurusan.webp';
 import logoTelkom from '../assets/bkk/logo-telkom.png';
 
 export const formatPublicDate = (value, options = {}) => {

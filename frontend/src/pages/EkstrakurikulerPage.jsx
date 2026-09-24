@@ -229,6 +229,9 @@ const EkstrakurikulerPage = () => {
               <img
                 src={ekstrakurikulerData.heroImage}
                 alt="Siswa SMK Telkom Purwokerto mengeksplorasi teknologi"
+                width="1600"
+                height="769"
+                fetchPriority="high"
                 className="absolute inset-0 h-full w-full object-cover object-center"
               />
             </div>
