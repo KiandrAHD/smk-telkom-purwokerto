@@ -1,6 +1,6 @@
 const PublicDataState = ({ loading, error, empty, label }) => {
   if (loading) {
-    return <p className="py-8 text-center text-xs text-dark-500">Memuat {label}...</p>;
+    return <p key="loading" className="motion-feedback py-8 text-center text-xs text-dark-500">Memuat {label}...</p>;
   }
 
   if (error) {
@@ -11,7 +11,7 @@ const PublicDataState = ({ loading, error, empty, label }) => {
       // border tegak -- akibatnya kotak galat menempel ke bagian di atasnya.
       // Padding tidak bisa collapse, dan py-8 ini menyamakan iramanya dengan
       // keadaan "memuat" dan "kosong" di bawah.
-      <div className="py-8">
+      <div className="motion-feedback py-8">
         <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-xs text-red-700">
           {error}
         </p>
@@ -20,7 +20,7 @@ const PublicDataState = ({ loading, error, empty, label }) => {
   }
 
   if (empty) {
-    return <p className="py-8 text-center text-xs text-dark-500">Belum ada {label}.</p>;
+    return <p key="empty" className="motion-feedback py-8 text-center text-xs text-dark-500">Belum ada {label}.</p>;
   }
 
   return null;

@@ -74,7 +74,7 @@ const ActivityCard = ({ item, onOpen }) => (
 );
 
 const CardGrid = ({ items, onOpen }) => (
-  <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+  <div className="motion-filter-results grid grid-cols-2 gap-4 lg:grid-cols-4">
     {items.map((item) => (
       <div key={item.title} className="h-full">
         <ActivityCard item={item} onOpen={onOpen} />
@@ -101,7 +101,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
         onClose();
       }}
       aria-labelledby="judul-detail-kegiatan"
-      className="m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
+      className="motion-dialog m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
       <div className="relative max-h-[90vh] overflow-y-auto">
         <img src={item.image} alt={`Kegiatan ${item.title}`} className="aspect-[16/7] w-full object-cover" />
@@ -151,7 +151,7 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
         </div>
         {items.length > 0 ? (
           <div className="mt-7">
-            <CardGrid items={items} onOpen={onOpen} />
+            <CardGrid key={activeCategory} items={items} onOpen={onOpen} />
           </div>
         ) : (
           <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">
@@ -241,7 +241,6 @@ const EkstrakurikulerPage = () => {
       </section>
 
       <CategorySection
-        key={`${activeCategory}-${keyword}`}
         activeCategory={activeCategory}
         title={sectionTitle}
         items={filteredItems}

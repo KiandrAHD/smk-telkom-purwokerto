@@ -16,7 +16,7 @@ const StelaWidget = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
       {terbuka && (
-        <div className="w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-2xl shadow-card">
+        <div className="motion-chat-enter w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-2xl shadow-card">
           <div className="flex items-center gap-2.5 bg-primary px-4 py-3">
             <img src={maskot} alt="" aria-hidden="true" className="h-7 w-7 object-contain" />
             <span className="font-heading text-xs font-bold text-white">Tanya STELA</span>

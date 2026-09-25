@@ -59,7 +59,7 @@ const Navbar = () => {
                 >
                   <button
                     type="button"
-                    onClick={() => setIsTentangOpen((open) => !open)}
+                    onClick={() => setIsTentangOpen(true)}
                     className={`${linkClass(link)} inline-flex items-center gap-1`}
                     aria-expanded={isTentangOpen}
                     aria-haspopup="menu"
@@ -74,7 +74,7 @@ const Navbar = () => {
 
                   {isTentangOpen && (
                     <div
-                      className="absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
+                      className="motion-menu-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
                       role="menu"
                       aria-label="Submenu Tentang"
                     >
@@ -124,7 +124,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMobileOpen && (
-          <div className="lg:hidden border-t border-dark-100 py-4">
+          <div className="motion-menu-enter lg:hidden border-t border-dark-100 py-4">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
                 if (!link.children) {
@@ -155,7 +155,7 @@ const Navbar = () => {
                       />
                     </button>
                     {isTentangOpen && (
-                      <div className="ml-3 border-l border-dark-100 py-1 pl-2">
+                      <div className="motion-menu-enter ml-3 border-l border-dark-100 py-1 pl-2">
                         {link.children.map((child) => (
                           <Link
                             key={child.label}

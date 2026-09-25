@@ -21,7 +21,7 @@ const Modal = ({ terbuka, onTutup, judul, deskripsi, children, footer, lebar = '
       onClick={(e) => {
         if (e.target === ref.current) onTutup();
       }}
-      className="max-h-none max-w-none bg-transparent p-4 backdrop:bg-dark-950/60 open:fixed open:inset-0 open:m-auto open:flex open:h-full open:w-full open:items-center open:justify-center"
+      className="motion-dialog max-h-none max-w-none bg-transparent p-4 backdrop:bg-dark-950/60 open:fixed open:inset-0 open:m-auto open:flex open:h-full open:w-full open:items-center open:justify-center"
     >
       {terbuka && (
         <div className={`w-full ${lebar} rounded-2xl bg-white p-6 shadow-card`}>

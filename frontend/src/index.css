@@ -104,6 +104,40 @@ body {
   }
 }
 
+@keyframes motion-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes motion-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes motion-dialog-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.motion-filter-results { animation: motion-fade-up 0.2s ease-out both; }
+.motion-chat-enter { animation: motion-fade-up 0.18s ease-out both; }
+.motion-feedback { animation: motion-fade-up 0.16s ease-out both; }
+.motion-menu-enter { animation: motion-fade-in 0.16s ease-out both; }
+.motion-dialog[open] > div { animation: motion-dialog-enter 0.18s ease-out both; }
+.motion-dialog[open]::backdrop { animation: motion-fade-in 0.18s ease-out both; }
+
 @keyframes partners-bergerak {
   from {
     transform: translateX(-25%);

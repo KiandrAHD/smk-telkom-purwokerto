@@ -217,7 +217,7 @@ const RegistrationFormPage = () => {
 
           <div className="flex flex-wrap items-center gap-3">
             {draftTersimpan && (
-              <span className="flex items-center gap-1.5 text-[11px] font-medium text-green-600">
+              <span className="motion-feedback flex items-center gap-1.5 text-[11px] font-medium text-green-600">
                 <Check className="h-3.5 w-3.5" />
                 Draft tersimpan
               </span>
