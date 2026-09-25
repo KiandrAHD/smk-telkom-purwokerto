@@ -24,6 +24,7 @@ const LupaSandiPage = lazy(() => import('./pages/ppdb/LupaSandiPage'));
 const DokumenPesertaPage = lazy(() => import('./pages/ppdb/DokumenPesertaPage'));
 const SegeraHadirPage = lazy(() => import('./pages/SegeraHadirPage'));
 const Login = lazy(() => import('./page/Login/Login'));
+const AuthProvider = lazy(() => import('./context/AuthContext').then(({ AuthProvider: Provider }) => ({ default: Provider })));
 const PpdbProvider = lazy(() => import('./context/PpdbContext').then(({ PpdbProvider: Provider }) => ({ default: Provider })));
 const PpdbRegisterPage = lazy(() => import('./pages/ppdb/RegisterPage'));
 const PpdbLoginPage = lazy(() => import('./pages/ppdb/LoginPage'));
@@ -158,29 +159,30 @@ const App = () => {
         <Route path="/nexttel" element={<NextTelPage />} />
         <Route path="/ekstrakurikuler" element={<EkstrakurikulerPage />} />
 
-        <Route path="/login" element={<Login />} />
-
-        <Route element={<ProtectedRoute />}>
-          {/* Panel admin. AdminDataProvider dipasang di sini, bukan di main.jsx,
-              supaya halaman publik tidak ikut menanggung state-nya. */}
-          <Route
-            path="/dashboard"
-            element={
-              <AdminDataProvider>
-                <DashboardLayout />
-              </AdminDataProvider>
-            }
-          >
-            <Route index element={<DashboardHomePage />} />
-            {/* Tambah/edit berita dan detail PPDB kini memakai modal di dalam
-                halamannya masing-masing, jadi tidak ada rute terpisah lagi. */}
-            <Route path="berita" element={<AdminBeritaPage />} />
-            <Route path="pengumuman" element={<AdminPengumumanPage />} />
-            <Route path="ppdb" element={<AdminPpdbPage />} />
-            <Route path="jurusan" element={<DashboardJurusanPage />} />
-            <Route path="prestasi" element={<AdminPrestasiPage />} />
-            <Route path="bkk" element={<AdminBkkPage />} />
-            <Route path="pengaturan" element={<PengaturanPage />} />
+        <Route element={<AuthProvider><Outlet /></AuthProvider>}>
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            {/* Panel admin. AdminDataProvider dipasang di sini, bukan di main.jsx,
+                supaya halaman publik tidak ikut menanggung state-nya. */}
+            <Route
+              path="/dashboard"
+              element={
+                <AdminDataProvider>
+                  <DashboardLayout />
+                </AdminDataProvider>
+              }
+            >
+              <Route index element={<DashboardHomePage />} />
+              {/* Tambah/edit berita dan detail PPDB kini memakai modal di dalam
+                  halamannya masing-masing, jadi tidak ada rute terpisah lagi. */}
+              <Route path="berita" element={<AdminBeritaPage />} />
+              <Route path="pengumuman" element={<AdminPengumumanPage />} />
+              <Route path="ppdb" element={<AdminPpdbPage />} />
+              <Route path="jurusan" element={<DashboardJurusanPage />} />
+              <Route path="prestasi" element={<AdminPrestasiPage />} />
+              <Route path="bkk" element={<AdminBkkPage />} />
+              <Route path="pengaturan" element={<PengaturanPage />} />
+            </Route>
           </Route>
         </Route>
 

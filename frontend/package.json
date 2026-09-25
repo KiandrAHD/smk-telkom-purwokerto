@@ -17,7 +17,8 @@
     "aset:bersihkan": "node scripts/bersihkan-latar.mjs",
     "aset:ringankan": "node scripts/ringankan-aset.mjs",
     "aset:hero": "node scripts/buat-hero.mjs",
-    "bkk:uji": "node scripts/uji-bkk-filter.mjs"
+    "bkk:uji": "node scripts/uji-bkk-filter.mjs",
+    "performa:uji": "node scripts/uji-performa.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.111.0",

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
-import StelaChat from './StelaChat';
 import maskot from '../../assets/pengumuman/stela-bot.png';
+
+const StelaChat = lazy(() => import('./StelaChat'));
 
 // Gelembung chat yang mengambang di seluruh halaman publik. Sengaja tidak
 // dipasang di /stela karena di sana chat-nya sudah jadi isi halaman.
@@ -20,7 +21,9 @@ const StelaWidget = () => {
             <img src={maskot} alt="" aria-hidden="true" className="h-7 w-7 object-contain" />
             <span className="font-heading text-xs font-bold text-white">Tanya STELA</span>
           </div>
-          <StelaChat className="h-96 rounded-none border-0" />
+          <Suspense fallback={<div role="status" className="flex h-96 items-center justify-center bg-white text-xs text-dark-600">Memuat obrolan...</div>}>
+            <StelaChat className="h-96 rounded-none border-0" />
+          </Suspense>
         </div>
       )}
 
