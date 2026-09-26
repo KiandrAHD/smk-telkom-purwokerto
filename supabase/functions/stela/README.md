@@ -2,9 +2,10 @@
 
 Edge Function yang menjembatani widget chat di browser dengan penyedia AI.
 
-Mendukung **Anthropic (Claude)**, **Google Gemini**, dan **Groq**. Yang dipakai
+Mendukung **9Router**, **Anthropic (Claude)**, **Google Gemini**, dan **Groq**. Yang dipakai
 ditentukan oleh kunci mana yang terisi — tidak ada sakelar terpisah yang bisa
-lupa disetel. Urutan prioritas: Anthropic, Gemini, Groq.
+lupa disetel. Urutan prioritas untuk kunci yang valid: 9Router, Anthropic, Gemini, Groq.
+9Router juga memerlukan `NINEROUTER_URL` yang dapat dijangkau server.
 
 ### Kuota gratis dan failover model
 
@@ -41,6 +42,7 @@ Parameter thinking juga berbeda antar generasi: seri 2.5 memakai
 
 | | Gratis | Prompt penuh (28 rb token) | Praktisnya |
 | --- | --- | --- | --- |
+| **9Router** | mengikuti paket router | bergantung model dan layanan router | perlu URL API, key, dan model router yang tersedia |
 | **Gemini** | ya, permanen | muat | pilihan terbaik untuk situs publik |
 | **Groq** | ya, tapi 8.000 token/menit | **ditolak HTTP 413** | ~1-2 pertanyaan per menit |
 | **Anthropic** | tidak | muat, dan di-cache | termurah per jawaban bila berbayar |
@@ -61,7 +63,7 @@ API key **tidak boleh** diletakkan di frontend. Semua variabel `VITE_*` ikut dib
 | --- | --- | --- |
 | Untuk | mencoba dan mengembangkan | produksi |
 | Butuh Supabase | tidak | ya |
-| Yang diisi | `ANTHROPIC_API_KEY` di `frontend/.env` | secret Supabase + `VITE_SUPABASE_*` |
+| Yang diisi | satu key provider AI di `frontend/.env` | secret Supabase + `VITE_SUPABASE_*` |
 | Endpoint | `/api/stela` (dari `frontend/vite-plugin-stela.js`) | `/functions/v1/stela` |
 | Data dinamis | tidak ada, hanya data statis | berita/pengumuman/prestasi/BKK dari Supabase |
 
@@ -80,6 +82,9 @@ atau
 ```
 ANTHROPIC_API_KEY=sk-ant-xxxxx
 ```
+
+Untuk 9Router, isi `NINEROUTER_KEY` dan `NINEROUTER_URL` sesuai dashboard router;
+URL lokal hanya bisa dipakai oleh dev server lokal, bukan Edge Function Supabase.
 
 Kunci Gemini dari [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
 berbentuk `AIzaSy` diikuti 33 karakter. Kalau kunci Anda berawalan `AQ.` atau
@@ -164,8 +169,11 @@ Lalu deploy ulang fungsinya. Jangan mengedit `konten-sekolah.mjs` dengan tangan 
 
 | Secret | Bawaan | Kegunaan |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | — | wajib, kecuali memakai Gemini |
-| `GEMINI_API_KEY` | — | alternatif Anthropic; salah satu wajib ada |
+| `NINEROUTER_KEY` | — | kunci 9Router; diprioritaskan jika formatnya valid |
+| `NINEROUTER_URL` | — | wajib jika memakai 9Router; di produksi harus dapat dijangkau dari Supabase |
+| `NINEROUTER_MODEL` | `kr/claude-haiku-4.5` | opsional; model khusus 9Router |
+| `ANTHROPIC_API_KEY` | — | kunci Anthropic; isi salah satu key provider |
+| `GEMINI_API_KEY` | — | alternatif Anthropic |
 | `GROQ_API_KEY` | — | alternatif lain; berbentuk `gsk_` + 52 karakter |
 | `STELA_AKTIF` | `true` | isi `false` untuk mematikan STELA seketika |
 | `STELA_MAKS_PER_HARI` | `500` | plafon panggilan berbayar per hari |
@@ -302,4 +310,4 @@ biaya membatasi penyalahgunaan kuota.
 
 **STELA hanya tahu isi situs ini.** Ia diinstruksikan menolak mengarang dan mengarahkan ke Tata Usaha untuk hal yang tidak ada di data. Instruksi tersebut juga menutup upaya pengunjung menyuruh STELA keluar dari perannya lewat isi pesan maupun isi konten admin.
 
-API key Anthropic tidak pernah dimasukkan ke `frontend/.env`, source React, localStorage, atau response Edge Function. Error internal juga tidak diteruskan ke browser.
+API key provider boleh disimpan di `frontend/.env` untuk pengembangan lokal karena hanya dibaca oleh dev server. Jangan gunakan awalan `VITE_` atau memasukkannya ke source React, localStorage, maupun response Edge Function. Di produksi, simpan key sebagai Supabase Secret. Error internal juga tidak diteruskan ke browser.
