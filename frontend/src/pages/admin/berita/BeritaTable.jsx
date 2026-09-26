@@ -1,15 +1,10 @@
 import { Eye, Pencil, Trash2 } from 'lucide-react';
+import StatusBadge from '../../../components/dashboard/StatusBadge';
 
 const formatDate = (date) => {
   if (!date) return '-';
   return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium' }).format(new Date(date));
 };
-
-const StatusBadge = ({ status }) => (
-  <span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${status === 'published' ? 'bg-green-100 text-green-700' : 'bg-dark-100 text-dark-600'}`}>
-    {status === 'published' ? 'Published' : 'Draft'}
-  </span>
-);
 
 const ActionButtons = ({ item, onDetail, onEdit, onDelete }) => (
   <div className="flex items-center gap-1">
@@ -48,7 +43,7 @@ const BeritaTable = ({ items, onDetail, onEdit, onDelete }) => (
                 <p className="mt-1 truncate text-[11px] text-dark-400">/{item.slug}</p>
               </td>
               <td className="px-4 py-4 text-xs sm:px-5">{item.penulis || '-'}</td>
-              <td className="px-4 py-4 sm:px-5"><StatusBadge status={item.status} /></td>
+              <td className="px-4 py-4 sm:px-5"><StatusBadge nilai={item.status === 'published' ? 'Published' : 'Draft'} /></td>
               <td className="whitespace-nowrap px-4 py-4 text-xs text-dark-500 sm:px-5">{formatDate(item.created_at)}</td>
               <td className="px-4 py-4 sm:px-5"><div className="flex justify-end"><ActionButtons item={item} onDetail={onDetail} onEdit={onEdit} onDelete={onDelete} /></div></td>
             </tr>

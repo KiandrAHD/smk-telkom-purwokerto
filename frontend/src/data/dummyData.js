@@ -2641,22 +2641,6 @@ export const ppdbVerifikasi = {
   jedaKirimUlang: 59,
 };
 
-export const ppdbAgama = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'];
-
-export const ppdbTahunLulus = ['2027', '2026', '2025', '2024'];
-
-// `catatan` hanya dipakai baris terakhir, mengikuti desain yang menampilkan
-// keterangan kecil di bawah nama mata pelajarannya.
-export const ppdbMataPelajaran = [
-  { nama: 'Bahasa Indonesia' },
-  { nama: 'Matematika' },
-  { nama: 'Ilmu Pengetahuan Alam' },
-  { nama: 'Bahasa Inggris' },
-  { nama: 'Informatika / TIK', catatan: 'Dasar Keahlian Produktif' },
-];
-
-export const ppdbSemester = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5'];
-
 export const ppdbDokumen = [
   {
     id: 'pas-foto',
@@ -3482,7 +3466,7 @@ export const lupaSandi = {
   catatanJudul: 'Masih belum bisa masuk?',
   catatan: [
     'Pastikan alamat email yang dimasukkan sama dengan yang dipakai saat pendaftaran.',
-    'Tautan pemulihan hanya berlaku 60 menit sejak dikirim.',
+    'Tautan pemulihan memiliki masa berlaku terbatas. Jika kedaluwarsa, minta tautan baru.',
     'Bila email pendaftaran sudah tidak aktif, hubungi panitia PPDB untuk penggantian.',
   ],
 };

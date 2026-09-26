@@ -25,7 +25,8 @@ const PengaturanPage = () => {
 
   const simpan = (e) => {
     e.preventDefault();
-    if (tab === adminTabPengaturan[0]) setProfilSekolah(form);
+    if (tab !== adminTabPengaturan[0]) return;
+    setProfilSekolah(form);
     setTersimpan(true);
   };
 
@@ -104,6 +105,7 @@ const PengaturanPage = () => {
                 />
               </div>
             )}
+            {tab !== adminTabPengaturan[0] && <p className="mt-5 text-xs text-dark-500">Bagian ini masih berupa pratinjau. Perubahan belum tersimpan atau diterapkan pada website.</p>}
           </div>
 
           <aside className="flex flex-col">
@@ -126,6 +128,7 @@ const PengaturanPage = () => {
             >
               Ubah Logo
             </button>
+            <p className="mt-2 text-center text-[11px] text-dark-500">Logo baru hanya ditampilkan sebagai pratinjau dan belum disimpan.</p>
             <input
               ref={berkasLogoRef}
               type="file"
@@ -143,17 +146,12 @@ const PengaturanPage = () => {
             />
 
             <div className="mt-auto pt-10">
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-primary px-6 py-3.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5"
-              >
-                Simpan Perubahan
-              </button>
+              {tab === adminTabPengaturan[0] && <button type="submit" className="w-full rounded-xl bg-primary px-6 py-3.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5">Terapkan Profil untuk Sesi Ini</button>}
 
               {tersimpan && (
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-medium text-green-600">
                   <Check className="h-3.5 w-3.5" />
-                  Perubahan tersimpan.
+                  Pratinjau profil diterapkan untuk sesi ini.
                 </p>
               )}
             </div>

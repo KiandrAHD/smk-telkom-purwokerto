@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
 import maskot from '../../assets/pengumuman/stela-bot.png';
@@ -9,12 +9,22 @@ const StelaChat = lazy(() => import('./StelaChat'));
 // dipasang di /stela karena di sana chat-nya sudah jadi isi halaman.
 const StelaWidget = () => {
   const [terbuka, setTerbuka] = useState(false);
+  const [filterVisible, setFilterVisible] = useState(false);
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname !== '/ekstrakurikuler') return undefined;
+    const filters = document.getElementById('ekstrakurikuler-filters');
+    if (!filters) return undefined;
+    const observer = new IntersectionObserver(([entry]) => setFilterVisible(entry.isIntersecting));
+    observer.observe(filters);
+    return () => observer.disconnect();
+  }, [pathname]);
 
   if (pathname === '/stela') return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div className={`fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6 ${pathname === '/ekstrakurikuler' && filterVisible ? 'max-sm:invisible max-sm:pointer-events-none' : ''}`}>
       {terbuka && (
         <div className="motion-chat-enter w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-2xl shadow-card">
           <div className="flex items-center gap-2.5 bg-primary px-4 py-3">

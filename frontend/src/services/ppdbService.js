@@ -1,6 +1,7 @@
 import { ensureSupabase } from './supabase';
+import { preparePpdbSubmission } from '../utils/ppdbSubmission';
 
-const ppdbColumns = 'id, auth_user_id, nama_lengkap, nisn, asal_sekolah, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, no_hp, email, pilihan_jurusan, dokumen_url, status, catatan_admin, created_at, updated_at';
+const ppdbColumns = 'id, auth_user_id, nama_lengkap, nisn, nik, agama, asal_sekolah, tahun_lulus, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, no_hp, email, pilihan_jurusan, nilai_rapor, dokumen_url, status, catatan_admin, created_at, updated_at';
 const STORAGE_BUCKET = 'ppdb-documents';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -10,11 +11,6 @@ export const DUPLICATE_SUBMISSION_MESSAGE = 'Anda sudah memiliki pendaftaran PPD
 const throwIfError = ({ data, error }) => {
   if (error) throw error;
   return data;
-};
-
-const sanitizeFilename = (filename) => {
-  const cleaned = filename.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-  return cleaned || 'dokumen';
 };
 
 const buatErrorDuplicateSubmission = () => {
@@ -38,20 +34,8 @@ export async function submitPpdb(data) {
   if (existingError) throw existingError;
   if (existingSubmissions?.length) throw buatErrorDuplicateSubmission();
 
-  const { dokumen, biodata, ...legacyFields } = data;
-  const fields = biodata
-    ? {
-        nama_lengkap: biodata.namaLengkap,
-        nisn: biodata.nisn,
-        asal_sekolah: biodata.namaSmp,
-        tempat_lahir: biodata.tempatLahir,
-        tanggal_lahir: biodata.tanggalLahir || null,
-        jenis_kelamin: biodata.jenisKelamin,
-        alamat: biodata.alamat,
-        no_hp: biodata.whatsapp,
-        pilihan_jurusan: biodata.jurusan,
-      }
-    : legacyFields;
+  const { dokumen, biodata, nilai, ...legacyFields } = data;
+  const fields = biodata ? preparePpdbSubmission(biodata, nilai) : legacyFields;
   let documentPath = null;
   const ppdbId = globalThis.crypto?.randomUUID?.();
   if (!ppdbId) throw new Error('Browser tidak mendukung pembuatan ID pendaftaran yang aman.');
@@ -60,7 +44,7 @@ export async function submitPpdb(data) {
     if (!COMBINED_DOCUMENT_TYPES.includes(dokumen.type) || dokumen.size > MAX_FILE_SIZE) {
       throw new Error('Dokumen harus berupa PDF dengan ukuran maksimal 10MB.');
     }
-    documentPath = `submissions/${user.id}/${ppdbId}/${sanitizeFilename(dokumen.name)}`;
+    documentPath = `submissions/${user.id}/document.pdf`;
     const { error: uploadError } = await client.storage.from(STORAGE_BUCKET).upload(documentPath, dokumen, { upsert: false, contentType: dokumen.type });
     if (uploadError) throw uploadError;
   }
@@ -81,10 +65,17 @@ export async function submitPpdb(data) {
 
   if (insertError) {
     if (documentPath) {
+      let cleanupError;
       try {
-        await client.storage.from(STORAGE_BUCKET).remove([documentPath]);
-      } catch {
-        // Policy publik hanya mengizinkan upload; cleanup dilakukan best effort.
+        ({ error: cleanupError } = await client.storage.from(STORAGE_BUCKET).remove([documentPath]));
+      } catch (error) {
+        cleanupError = error;
+      }
+      if (cleanupError) {
+        const error = new Error('Pendaftaran gagal disimpan dan dokumen sementara belum dapat dihapus. Hubungi admin sekolah sebelum mencoba kembali.');
+        error.code = 'PPDB_UPLOAD_CLEANUP_FAILED';
+        error.cause = insertError;
+        throw error;
       }
     }
     if (insertError.code === '23505' && insertError.message?.includes('ppdb_one_submission_per_auth_user_idx')) {
@@ -92,6 +83,9 @@ export async function submitPpdb(data) {
     }
     throw insertError;
   }
+
+  const { error: draftDeleteError } = await client.from('ppdb_drafts').delete().eq('auth_user_id', user.id);
+  if (draftDeleteError) console.warn('Draft PPDB belum terhapus setelah pendaftaran:', draftDeleteError);
 
   return inserted;
 }
@@ -112,18 +106,58 @@ export async function getMyPpdb() {
   return throwIfError(await client.from('ppdb').select(ppdbColumns).eq('auth_user_id', userData.user.id).order('created_at', { ascending: false }));
 }
 
-export async function signUpPpdb(email, password) {
+export async function signUpPpdb(email, password, biodata) {
   const client = ensureSupabase();
   return throwIfError(await client.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${window.location.origin}/ppdb/verifikasi` },
+    options: {
+      emailRedirectTo: `${window.location.origin}/ppdb/verifikasi`,
+      data: { ppdb: {
+        nisn: biodata.nisn.trim(),
+        namaLengkap: biodata.namaLengkap.trim(),
+        whatsapp: biodata.whatsapp.trim(),
+        jurusan: biodata.jurusan,
+      } },
+    },
   }));
+}
+
+export async function getMyPpdbDraft(userId) {
+  const client = ensureSupabase();
+  if (!userId) throw new Error('Sesi PPDB tidak ditemukan.');
+  return throwIfError(await client.from('ppdb_drafts')
+    .select('biodata,nilai')
+    .eq('auth_user_id', userId)
+    .maybeSingle());
+}
+
+export async function savePpdbDraft(biodata, nilai) {
+  const client = ensureSupabase();
+  const { data: { user }, error } = await client.auth.getUser();
+  if (error) throw error;
+  if (!user) throw new Error('Sesi PPDB tidak ditemukan.');
+  return throwIfError(await client.from('ppdb_drafts')
+    .upsert({ auth_user_id: user.id, biodata, nilai, updated_at: new Date().toISOString() })
+    .select('updated_at')
+    .single());
 }
 
 export async function signInPpdb(email, password) {
   const client = ensureSupabase();
   return throwIfError(await client.auth.signInWithPassword({ email, password }));
+}
+
+export async function sendPpdbPasswordReset(email) {
+  const client = ensureSupabase();
+  return throwIfError(await client.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/ppdb/atur-sandi`,
+  }));
+}
+
+export async function updatePpdbPassword(password) {
+  const client = ensureSupabase();
+  return throwIfError(await client.auth.updateUser({ password }));
 }
 
 export async function resendPpdbVerification(email) {

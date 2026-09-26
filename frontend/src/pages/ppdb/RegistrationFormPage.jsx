@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import FormInput from '../../components/dashboard/FormInput';
 import PpdbPortalLayout from '../../components/ppdb/PpdbPortalLayout';
 import { usePpdb } from '../../context/PpdbContext';
-import { ppdbAgama, ppdbMataPelajaran, ppdbSemester, ppdbTahunLulus } from '../../data/dummyData';
+import { ppdbAgama, ppdbJurusanPilihan, ppdbMataPelajaran, ppdbSemester, ppdbTahunLulus } from '../../data/ppdbFormOptions';
 
 const JudulSeksi = ({ nomor, teks, kanan }) => (
   <div className="flex flex-wrap items-center justify-between gap-3">
@@ -17,7 +18,9 @@ const JudulSeksi = ({ nomor, teks, kanan }) => (
 
 const RegistrationFormPage = () => {
   const navigate = useNavigate();
-  const { biodata, nilai, isiBiodata, isiNilai, draftTersimpan, setDraftTersimpan } = usePpdb();
+  const { biodata, nilai, isiBiodata, isiNilai, draftTersimpan, simpanDraft } = usePpdb();
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [draftError, setDraftError] = useState('');
   const ubah = (kunci) => (e) => isiBiodata({ [kunci]: e.target.value });
 
   // Semua kolom bertanda `required`, jadi browser menahan submit dan menyorot
@@ -25,6 +28,18 @@ const RegistrationFormPage = () => {
   const kirim = (e) => {
     e.preventDefault();
     navigate('/ppdb/berkas');
+  };
+
+  const simpan = async () => {
+    setSavingDraft(true);
+    setDraftError('');
+    try {
+      await simpanDraft();
+    } catch {
+      setDraftError('Draft gagal disimpan. Silakan coba lagi.');
+    } finally {
+      setSavingDraft(false);
+    }
   };
 
   return (
@@ -40,6 +55,14 @@ const RegistrationFormPage = () => {
         {/* 1. Biodata */}
         <JudulSeksi nomor="1" teks="Biodata Diri Lengkap" />
         <div className="mt-6 space-y-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <FormInput label="NISN Siswa" wajib value={biodata.nisn} onChange={ubah('nisn')} inputMode="numeric" maxLength={10} required />
+            <FormInput label="Nama Lengkap" wajib value={biodata.namaLengkap} onChange={ubah('namaLengkap')} required />
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <FormInput label="Nomor WhatsApp" wajib type="tel" value={biodata.whatsapp} onChange={ubah('whatsapp')} required />
+            <FormInput label="Peminatan Jurusan" wajib as="select" value={biodata.jurusan} onChange={ubah('jurusan')} required options={[{ value: '', label: 'Pilih Jurusan' }, ...ppdbJurusanPilihan]} />
+          </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <FormInput
               label="NIK (Nomor Induk Kependudukan)"
@@ -192,6 +215,7 @@ const RegistrationFormPage = () => {
                           type="number"
                           min="0"
                           max="100"
+                          step="any"
                           required
                           aria-label={`${mapel.nama} ${s}`}
                           value={nilai[`${mapel.nama}|${s}`] ?? ''}
@@ -216,6 +240,7 @@ const RegistrationFormPage = () => {
           </Link>
 
           <div className="flex flex-wrap items-center gap-3">
+            {draftError && <span role="alert" className="text-[11px] text-primary">{draftError}</span>}
             {draftTersimpan && (
               <span className="motion-feedback flex items-center gap-1.5 text-[11px] font-medium text-green-600">
                 <Check className="h-3.5 w-3.5" />
@@ -224,10 +249,11 @@ const RegistrationFormPage = () => {
             )}
             <button
               type="button"
-              onClick={() => setDraftTersimpan(true)}
+              onClick={simpan}
+              disabled={savingDraft}
               className="rounded-full border border-dark-200 px-5 py-3 text-xs font-bold text-dark-700 transition-colors hover:border-primary hover:text-primary"
             >
-              Simpan Draft
+              {savingDraft ? 'Menyimpan...' : 'Simpan Draft'}
             </button>
             <button
               type="submit"

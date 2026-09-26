@@ -10,7 +10,6 @@ import { getMyPpdb, signInPpdb } from '../../services/ppdbService';
 const LoginPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ akun: '', sandi: '' });
-  const [ingat, setIngat] = useState(false);
   const [galat, setGalat] = useState('');
   const [mengirim, setMengirim] = useState(false);
 
@@ -39,7 +38,7 @@ const LoginPage = () => {
         <div className="p-8 sm:p-10">
           <h1 className="font-heading text-2xl font-extrabold text-dark-900">Masuk ke Akun Anda</h1>
           <p className="mt-1.5 text-xs text-dark-500">
-            Gunakan NISN atau Email yang sudah terdaftar.
+            Gunakan alamat email yang sudah terdaftar.
           </p>
 
           <form
@@ -74,16 +73,6 @@ const LoginPage = () => {
                 className="w-full rounded-xl border border-dark-200 bg-white px-4 py-3 text-xs text-dark-800 outline-none transition-all placeholder:text-dark-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
-
-            <label className="flex cursor-pointer items-center gap-2.5 text-[11px] text-dark-600">
-              <input
-                type="checkbox"
-                checked={ingat}
-                onChange={(e) => setIngat(e.target.checked)}
-                className="h-3.5 w-3.5 flex-shrink-0 accent-[color:var(--color-primary)]"
-              />
-              Ingat saya di perangkat ini
-            </label>
 
             {galat && <p role="alert" className="rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{galat}</p>}
 

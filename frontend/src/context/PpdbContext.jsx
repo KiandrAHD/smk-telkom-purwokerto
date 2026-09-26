@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ensureSupabase, supabaseSiap } from '../services/supabase';
-import { signOutPpdb } from '../services/ppdbService';
+import { getMyPpdbDraft, savePpdbDraft, signOutPpdb } from '../services/ppdbService';
+import { restoreSignupBiodata } from '../utils/ppdbIdentity';
 
 // Alur PPDB melewati beberapa halaman: daftar akun, isi formulir, unggah berkas,
 // lalu bukti submit. Kalau tiap halaman menyimpan state-nya sendiri, data hilang
@@ -34,6 +35,7 @@ export const PpdbProvider = ({ children }) => {
   const [draftTersimpan, setDraftTersimpan] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(supabaseSiap);
+  const [draftLoading, setDraftLoading] = useState(false);
   const userIdRef = useRef(null);
 
   const resetWizard = useCallback(() => {
@@ -41,7 +43,7 @@ export const PpdbProvider = ({ children }) => {
     setNilai({});
     setDokumen({});
     setNomorRegistrasi(null);
-      setDraftTersimpan(false);
+    setDraftTersimpan(false);
   }, []);
 
   useEffect(() => {
@@ -53,11 +55,17 @@ export const PpdbProvider = ({ children }) => {
     const client = ensureSupabase();
     const applyUser = (user) => {
       if (!mounted) return;
-      if (userIdRef.current && user?.id !== userIdRef.current) resetWizard();
-      if (!user) resetWizard();
+      const changedAccount = Boolean(userIdRef.current && user?.id !== userIdRef.current);
+      const newUser = Boolean(user && user.id !== userIdRef.current);
+      if (changedAccount || !user) resetWizard();
+      if (user) {
+        setBiodata((current) => restoreSignupBiodata(changedAccount ? BIODATA_KOSONG : current, user));
+      }
       userIdRef.current = user?.id ?? null;
       setCurrentUser(user ?? null);
       setAuthLoading(false);
+      if (!user) setDraftLoading(false);
+      if (newUser) setDraftLoading(true);
     };
 
     client.auth.getSession().then(({ data, error }) => {
@@ -75,6 +83,21 @@ export const PpdbProvider = ({ children }) => {
     };
   }, [resetWizard]);
 
+  useEffect(() => {
+    if (!currentUser?.id) return undefined;
+    let active = true;
+    void getMyPpdbDraft(currentUser.id)
+      .then((draft) => {
+        if (!active || !draft) return;
+        setBiodata((current) => ({ ...current, ...draft.biodata, email: currentUser.email }));
+        setNilai(draft.nilai);
+        setDraftTersimpan(true);
+      })
+      .catch((error) => console.warn('Draft PPDB tidak dapat dimuat:', error))
+      .finally(() => active && setDraftLoading(false));
+    return () => { active = false; };
+  }, [currentUser?.id, currentUser?.email]);
+
   const isiBiodata = useCallback((sebagian) => {
     setDraftTersimpan(false);
     setBiodata((lama) => ({ ...lama, ...sebagian }));
@@ -88,6 +111,11 @@ export const PpdbProvider = ({ children }) => {
   const isiDokumen = useCallback((id, berkas) => {
     setDokumen((lama) => ({ ...lama, [id]: berkas }));
   }, []);
+
+  const simpanDraft = useCallback(async () => {
+    await savePpdbDraft(biodata, nilai);
+    setDraftTersimpan(true);
+  }, [biodata, nilai]);
 
   const kirimPendaftaran = useCallback((nomor) => {
     setNomorRegistrasi(nomor);
@@ -112,16 +140,17 @@ export const PpdbProvider = ({ children }) => {
       nomorRegistrasi,
       currentUser,
       authLoading,
+      draftLoading,
       draftTersimpan,
       isiBiodata,
       isiNilai,
       isiDokumen,
-      setDraftTersimpan,
+      simpanDraft,
       kirimPendaftaran,
       logout,
       mulaiAkunBaru,
     }),
-    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, isiBiodata, isiNilai, isiDokumen, kirimPendaftaran, logout, mulaiAkunBaru]
+    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, draftLoading, isiBiodata, isiNilai, isiDokumen, simpanDraft, kirimPendaftaran, logout, mulaiAkunBaru]
   );
 
   return <PpdbContext.Provider value={nilaiContext}>{children}</PpdbContext.Provider>;

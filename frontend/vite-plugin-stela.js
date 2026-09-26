@@ -8,6 +8,7 @@ import {
   tanyaAI,
 } from '../supabase/functions/stela/inti.mjs';
 import { buatPenjaga } from '../supabase/functions/stela/penjaga-biaya.mjs';
+import { hitungHasilNextTel } from '../supabase/functions/nexttel/scoring.mjs';
 
 // Menyediakan POST /api/stela selama `npm run dev`, supaya STELA bisa diajak
 // bicara tanpa perlu punya proyek Supabase dan tanpa deploy Edge Function.
@@ -165,9 +166,7 @@ export const stelaDevPlugin = () => ({
       }
     });
 
-    // Endpoint lokal NextTel. Validasi ketatnya tetap di Edge Function; di sini
-    // cukup meneruskan payload supaya alur kuesioner bisa dicoba tanpa deploy
-    // Supabase. Pagar biaya yang sama ikut dipakai.
+    // Endpoint lokal NextTel memakai penilaian yang sama dengan Edge Function.
     server.middlewares.use('/api/nexttel', async (req, res) => {
       const kirim = (data, status) => {
         res.statusCode = status;
@@ -193,6 +192,8 @@ export const stelaDevPlugin = () => ({
 
       try {
         const badan = JSON.parse(mentah);
+        const result = hitungHasilNextTel(badan?.answers);
+        if (!result) return kirim({ error: 'Jawaban NextTel tidak valid.' }, 400);
         penjaga.catatPanggilan();
         const { teks } = await tanyaAI({
           baseUrl: baca('NINEROUTER_URL'),
@@ -205,9 +206,9 @@ export const stelaDevPlugin = () => ({
             content:
               'Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score. ' +
               JSON.stringify({
-                answers: badan?.answers,
-                scores: badan?.scores,
-                topRecommendation: badan?.topRecommendation,
+                answers: result.answers,
+                scores: result.scores,
+                topRecommendation: result.topRecommendation,
               }),
           }],
         });

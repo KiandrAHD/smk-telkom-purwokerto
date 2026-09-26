@@ -4,7 +4,7 @@ Dokumen ini menjelaskan database, Row Level Security (RLS), dan Storage untuk pl
 
 ## Menjalankan migration
 
-Migration dijalankan berurutan: `001_initial_schema.sql`, kemudian `002_ppdb_identity.sql`.
+Migration dijalankan berurutan dari `001_initial_schema.sql` sampai `006_ppdb_upload_and_input_guard.sql`. Terapkan migration `004` dan `005` sebelum frontend yang membaca kolom baru; `006` harus diterapkan bersama frontend yang memakai path upload baru.
 
 ### Supabase CLI
 
@@ -20,7 +20,7 @@ Jika project lokal sudah terhubung, `supabase db push` akan menjalankan migratio
 
 ### SQL Editor
 
-Alternatifnya, buka Supabase Dashboard → **SQL Editor**, lalu jalankan isi `001_initial_schema.sql` terlebih dahulu dan `002_ppdb_identity.sql` setelahnya. Migration kedua menambahkan ownership PPDB dan policy terkait.
+Alternatifnya, buka Supabase Dashboard → **SQL Editor**, lalu jalankan berkas migration menurut nomor. Jalankan hanya migration yang belum terpasang pada project tersebut.
 
 ## Struktur database
 
@@ -63,10 +63,10 @@ Migration membuat dua bucket:
 ### `ppdb-documents`
 
 - Bucket private; jangan memakai `getPublicUrl()` untuk dokumen PPDB.
-- User authenticated hanya dapat upload ke path `submissions/<auth_user_id>/<ppdb_id>/<nama-file>` miliknya.
-- Pengunjung tidak dapat membaca, mengubah, atau menghapus file.
+- User authenticated hanya dapat upload satu PDF pada path `submissions/<auth_user_id>/document.pdf` miliknya. File tidak dapat ditimpa; retry setelah kegagalan insert menghapus berkas sementara terlebih dahulu.
+- Pengunjung anonim tidak dapat membaca, mengubah, atau menghapus file. Pemilik dapat membaca dan menghapus berkas sementara yang belum terhubung dengan submission.
 - Admin dapat membaca dan mengelola file.
-- Simpan object path, misalnya `submissions/<id>/<nama-file>`, pada `ppdb.dokumen_url`. Saat admin perlu melihat file, buat signed URL dengan masa berlaku terbatas menggunakan Storage API.
+- Simpan object path pada `ppdb.dokumen_url`. Saat admin perlu melihat file, buat signed URL dengan masa berlaku terbatas menggunakan Storage API. Dokumen lama dengan path berbeda tetap dapat dibaca; berkas yatim lama dapat dibersihkan admin setelah diperiksa.
 
 ## Membuat admin pertama
 
@@ -100,7 +100,7 @@ Frontend memakai Supabase Auth untuk portal PPDB dan session admin. Query publik
 
 Submission baru hanya dapat dibuat oleh user authenticated, dengan `auth_user_id = auth.uid()`. User hanya dapat membaca submission miliknya sendiri, sedangkan admin tetap dapat membaca dan memperbarui seluruh submission melalui policy admin yang sudah ada.
 
-Flow PPDB menggunakan satu PDF gabungan. Object path disimpan pada `dokumen_url` dengan pola `submissions/<auth_user_id>/<ppdb_id>/<nama-file>`. Bucket tetap private dan dokumen hanya dibuka memakai signed URL. Jangan gunakan `getPublicUrl()` untuk dokumen PPDB.
+Flow PPDB menggunakan satu PDF gabungan. Setelah migration `006`, object path baru disimpan pada `dokumen_url` dengan pola `submissions/<auth_user_id>/document.pdf`; berkas yang sudah terdaftar tidak boleh dihapus pemilik. Bucket tetap private dan dokumen hanya dibuka memakai signed URL. Jangan gunakan `getPublicUrl()` untuk dokumen PPDB.
 
 Signup mengirim email konfirmasi melalui Supabase Auth dengan redirect ke `/ppdb/verifikasi`. Signup berhasil tidak selalu berarti email sudah diterima; periksa pengaturan email confirmation, URL Configuration, SMTP provider, spam, dan bounce di Supabase Dashboard.
 

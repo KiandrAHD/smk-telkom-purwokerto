@@ -31,7 +31,7 @@ const BarisDokumen = ({ berkas, onPilih }) => {
 
 const UploadDocumentsPage = () => {
   const navigate = useNavigate();
-  const { dokumen, isiDokumen, kirimPendaftaran, biodata } = usePpdb();
+  const { dokumen, isiDokumen, kirimPendaftaran, biodata, nilai } = usePpdb();
   const [galat, setGalat] = useState('');
   const [duplikat, setDuplikat] = useState(false);
   const [mengirim, setMengirim] = useState(false);
@@ -61,13 +61,15 @@ const UploadDocumentsPage = () => {
     setDuplikat(false);
     setMengirim(true);
     try {
-      const hasil = await submitPpdb({ biodata, dokumen: berkas });
+      const hasil = await submitPpdb({ biodata, nilai, dokumen: berkas });
       kirimPendaftaran(hasil.id);
       navigate('/ppdb/selesai');
     } catch (error) {
       if (error?.code === 'PPDB_DUPLICATE_SUBMISSION' || error?.message === DUPLICATE_SUBMISSION_MESSAGE) {
         setDuplikat(true);
         setGalat('Anda sudah memiliki pendaftaran PPDB.');
+      } else if (error?.code === 'PPDB_VALIDATION' || error?.code === 'PPDB_UPLOAD_CLEANUP_FAILED') {
+        setGalat(error.message);
       } else {
         setGalat('Pendaftaran gagal dikirim. Silakan coba lagi.');
       }

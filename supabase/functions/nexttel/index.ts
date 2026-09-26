@@ -3,6 +3,7 @@
 // sama. Sebelumnya ia hanya bisa Anthropic, dan kunci NEXTTEL_* tidak pernah
 // terdokumentasi di .env.example -- akibatnya fitur ini praktis mati.
 import { pilihPenyedia, tanyaAI } from '../stela/inti.mjs';
+import { hitungHasilNextTel } from './scoring.mjs';
 
 // Kunci khusus NextTel dipakai kalau ada (berguna untuk memisahkan tagihan),
 // selain itu jatuh ke kunci bersama supaya cukup mengisi satu kunci saja.
@@ -26,22 +27,15 @@ const MODEL = (PENYEDIA === 'ninerouter'
   || Deno.env.get('NEXTTEL_MODEL')
   || undefined;
 const ALLOWED_ORIGINS = (Deno.env.get('NEXTTEL_ALLOWED_ORIGINS') ?? '').split(',').map((origin) => origin.trim()).filter(Boolean);
-const MAJORS = ['RPL', 'PG', 'TKJ', 'TJAT'];
-const MAX_ANSWERS = 8;
-const MAX_TEXT = 400;
 const MAX_BODY = 6000;
 const MAX_REQUESTS = 20;
 const WINDOW_MS = 5 * 60 * 1000;
 const visits = new Map<string, { count: number; reset: number }>();
-const QUESTION_IDS = ['activity', 'interest', 'project', 'learning', 'problem', 'tool', 'work', 'future'];
-const OPTION_IDS = ['a', 'b', 'c', 'd'];
 
 const allowed = (origin: string | null) => ALLOWED_ORIGINS.includes('*') || (!origin && ALLOWED_ORIGINS.length === 0) || (!!origin && ALLOWED_ORIGINS.includes(origin));
 const cors = (origin: string | null) => ({ 'Access-Control-Allow-Origin': origin && allowed(origin) ? origin : ALLOWED_ORIGINS.includes('*') ? '*' : 'null', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Access-Control-Allow-Methods': 'POST, OPTIONS', Vary: 'Origin' });
 const reply = (body: unknown, status: number, origin: string | null) => new Response(JSON.stringify(body), { status, headers: { ...cors(origin), 'Content-Type': 'application/json' } });
 const fail = (origin: string | null) => reply({ error: 'NextTel sedang mengalami kendala. Silakan coba lagi.' }, 500, origin);
-const isMajor = (value: unknown): value is string => typeof value === 'string' && MAJORS.includes(value);
-const isScoreMap = (value: unknown) => value && typeof value === 'object' && MAJORS.every((major) => Number.isInteger((value as Record<string, unknown>)[major]) && Number((value as Record<string, unknown>)[major]) >= 0 && Number((value as Record<string, unknown>)[major]) <= 24);
 const rateLimited = (key: string) => { const now = Date.now(); const current = visits.get(key); if (!current || now > current.reset) { visits.set(key, { count: 1, reset: now + WINDOW_MS }); return false; } current.count += 1; return current.count > MAX_REQUESTS; };
 
 const systemPrompt = `Kamu adalah NextTel, AI rekomendasi jurusan SMK Telkom Purwokerto.
@@ -62,10 +56,9 @@ Deno.serve(async (request) => {
     const raw = await request.text();
     if (raw.length > MAX_BODY) return fail(origin);
     const body = JSON.parse(raw);
-    if (!Array.isArray(body.answers) || body.answers.length !== MAX_ANSWERS || !isScoreMap(body.scores) || !isMajor(body.topRecommendation)) return fail(origin);
-    const questionIds = body.answers.map((answer: Record<string, unknown>) => answer?.questionId);
-    if (body.answers.some((answer: Record<string, unknown>) => typeof answer?.questionId !== 'string' || typeof answer?.optionId !== 'string' || answer.questionId.length > 50 || answer.optionId.length > 2 || !QUESTION_IDS.includes(answer.questionId) || !OPTION_IDS.includes(answer.optionId)) || new Set(questionIds).size !== MAX_ANSWERS) return fail(origin);
-    const userData = JSON.stringify({ answers: body.answers, scores: body.scores, topRecommendation: body.topRecommendation }).slice(0, MAX_TEXT * 10);
+    const result = hitungHasilNextTel(body?.answers);
+    if (!result) return reply({ error: 'Jawaban NextTel tidak valid.' }, 400, origin);
+    const userData = JSON.stringify({ answers: result.answers, scores: result.scores, topRecommendation: result.topRecommendation });
     const { teks: text } = await tanyaAI({
       penyedia: PENYEDIA,
       apiKey: API_KEY,

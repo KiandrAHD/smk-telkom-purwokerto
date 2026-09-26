@@ -173,7 +173,7 @@ Route yang tersedia:
 
 `public.ppdb.auth_user_id` mereferensikan `auth.users.id`. Submission baru harus memiliki `auth_user_id` yang sama dengan `auth.uid()`. User hanya dapat membaca submission miliknya melalui RLS, dan unique partial index membatasi satu submission per akun.
 
-Email confirmation Supabase diarahkan ke `/ppdb/verifikasi`. Bucket `ppdb-documents` bersifat private. Path dokumen menggunakan `submissions/<auth_user_id>/<ppdb_id>/<filename>` dan dibuka menggunakan signed URL terbatas waktu, bukan public URL. Admin dapat membaca dan memperbarui data PPDB sesuai policy.
+Email confirmation Supabase diarahkan ke `/ppdb/verifikasi` dan pemulihan sandi ke `/ppdb/atur-sandi`; kedua URL harus diizinkan pada Supabase Auth. Bucket `ppdb-documents` bersifat private. Path unggahan baru menggunakan `submissions/<auth_user_id>/document.pdf` dan dibuka menggunakan signed URL terbatas waktu, bukan public URL. Admin dapat membaca dan memperbarui data PPDB sesuai policy.
 
 ## Supabase
 
@@ -212,9 +212,9 @@ Setelah snapshot berubah, deploy ulang function STELA.
 
 ## NextTel AI
 
-NextTel menggunakan kuesioner delapan pertanyaan. Scoring dilakukan di frontend untuk `RPL`, `PG`, `TKJ`, dan `TJAT`. Hasil dikirim ke `${VITE_SUPABASE_URL}/functions/v1/nexttel` untuk mendapatkan penjelasan.
+NextTel menggunakan kuesioner delapan pertanyaan. Scoring dilakukan di frontend untuk menampilkan hasil `RPL`, `PG`, `TKJ`, dan `TJAT`; delapan jawaban dikirim ke `${VITE_SUPABASE_URL}/functions/v1/nexttel` untuk mendapatkan penjelasan.
 
-Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, memvalidasi pertanyaan, pilihan, score, dan rekomendasi, menerapkan origin restriction serta rate limit, dan mengembalikan `explanation`, `strengths`, serta `learningSuggestions`. API key tidak pernah dikirim ke browser.
+Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, memvalidasi delapan jawaban, menghitung ulang skor serta rekomendasi, menerapkan origin restriction serta rate limit, dan mengembalikan `explanation`, `strengths`, serta `learningSuggestions`. API key tidak pernah dikirim ke browser.
 
 ## Environment Variables
 
@@ -326,7 +326,7 @@ Vercel   → React/Vite frontend
 Supabase → PostgreSQL, Auth, Storage, Edge Functions
 ```
 
-URL yang dirujuk oleh data aplikasi adalah `https://smk-telkom-purwokerto.vercel.app`. Repository tidak memiliki konfigurasi Vercel formal, sehingga deployment production tidak diklaim terverifikasi dari source. Supabase Authentication → URL Configuration harus memakai domain production aktual dan redirect PPDB harus sesuai `/ppdb/verifikasi`.
+URL yang dirujuk oleh data aplikasi adalah `https://smk-telkom-purwokerto.vercel.app`. Repository tidak memiliki konfigurasi Vercel formal, sehingga deployment production tidak diklaim terverifikasi dari source. Supabase Authentication → URL Configuration harus memakai domain production aktual serta mengizinkan redirect `/ppdb/verifikasi` dan `/ppdb/atur-sandi`.
 
 ## Security
 
@@ -370,7 +370,7 @@ URL yang dirujuk oleh data aplikasi adalah `https://smk-telkom-purwokerto.vercel
 
 ## Catatan
 
-- Terapkan migration `001`, `002`, lalu `003` secara berurutan.
+- Terapkan migration `001` sampai `006` secara berurutan. Jalankan `004` dan `005` sebelum frontend baru; terapkan `006` bersamaan dengan frontend baru karena path unggahan PPDB berubah.
 - Jurusan dan beberapa halaman dashboard lama masih menggunakan state context dan tidak dijamin bertahan setelah refresh.
 - Tidak semua data publik membaca Supabase.
 - `supabase/.temp/` adalah state lokal CLI dan tidak boleh di-commit.
@@ -554,7 +554,7 @@ Available routes:
 
 `public.ppdb.auth_user_id` references `auth.users.id`. New submissions must use an `auth_user_id` matching `auth.uid()`. Users can only read their own submissions through RLS, and a partial unique index limits one submission per account.
 
-Supabase email confirmation redirects to `/ppdb/verifikasi`. The `ppdb-documents` bucket is private. Document paths use `submissions/<auth_user_id>/<ppdb_id>/<filename>` and are opened through time-limited signed URLs, not public URLs. Administrators can read and update PPDB data according to policy.
+Supabase email confirmation redirects to `/ppdb/verifikasi` and password recovery to `/ppdb/atur-sandi`; allow both URLs in Supabase Auth. The `ppdb-documents` bucket is private. New uploads use `submissions/<auth_user_id>/document.pdf` and are opened through time-limited signed URLs, not public URLs. Administrators can read and update PPDB data according to policy.
 
 ## Supabase
 
@@ -563,6 +563,9 @@ Apply migrations in order:
 1. `001_initial_schema.sql` creates the `admins`, `berita`, `pengumuman`, `prestasi`, `bkk`, and `ppdb` tables, indexes, `updated_at` triggers, `is_admin()`, RLS, and both Storage buckets.
 2. `002_ppdb_identity.sql` adds `auth_user_id`, the `auth.users` foreign key, PPDB ownership RLS, and user-scoped document uploads.
 3. `003_ppdb_storage_owner_and_unique.sql` adds the owner object-read policy and the one-submission-per-account unique index.
+4. `004_ppdb_drafts.sql` adds an owner-only PPDB draft table.
+5. `005_ppdb_application_fields.sql` adds NIK, religion, graduation year, and report grades.
+6. `006_ppdb_upload_and_input_guard.sql` limits retained uploads to one path per account and validates new submissions. Apply `004` and `005` before deploying the updated frontend, then apply `006` together with it.
 
 `AuthContext` reads the Supabase session and checks the user in `public.admins`. `ProtectedRoute` redirects users without admin access to `/login`. The anon/publishable key may be used in the frontend because database access remains restricted by RLS; service-role keys must never be placed in the frontend.
 
@@ -593,9 +596,9 @@ Redeploy the STELA function after the snapshot changes.
 
 ## NextTel AI
 
-NextTel uses an eight-question questionnaire. Scoring runs in the frontend for `RPL`, `PG`, `TKJ`, and `TJAT`. The result is sent to `${VITE_SUPABASE_URL}/functions/v1/nexttel` for an explanation.
+NextTel uses an eight-question questionnaire. Frontend scoring displays the result for `RPL`, `PG`, `TKJ`, and `TJAT`; the eight answers are sent to `${VITE_SUPABASE_URL}/functions/v1/nexttel` for an explanation.
 
-The NextTel Edge Function uses server-side AI providers, including 9Router, validates questions, options, scores, and recommendations, applies origin and rate restrictions, and returns `explanation`, `strengths`, and `learningSuggestions`. API keys never reach the browser.
+The NextTel Edge Function uses server-side AI providers, including 9Router, validates the eight answers, recalculates scores and recommendations, applies origin and rate restrictions, and returns `explanation`, `strengths`, and `learningSuggestions`. API keys never reach the browser.
 
 ## Environment Variables
 
@@ -707,7 +710,7 @@ Vercel   → React/Vite frontend
 Supabase → PostgreSQL, Auth, Storage, Edge Functions
 ```
 
-Application data references `https://smk-telkom-purwokerto.vercel.app`. The repository has no formal Vercel configuration, so production deployment is not claimed as source-verified. Supabase Authentication → URL Configuration must use the actual production domain, and PPDB redirects must match `/ppdb/verifikasi`.
+Application data references `https://smk-telkom-purwokerto.vercel.app`. The repository has no formal Vercel configuration, so production deployment is not claimed as source-verified. Supabase Authentication → URL Configuration must use the actual production domain and allow redirects to `/ppdb/verifikasi` and `/ppdb/atur-sandi`.
 
 ## Security
 
@@ -744,14 +747,14 @@ Application data references `https://smk-telkom-purwokerto.vercel.app`. The repo
 | Major Management | Available through in-memory `AdminDataContext` |
 | Online PPDB | Available with Auth, verification, forms, upload, submission, and status |
 | STELA | Available; requires a configured provider/API key |
-| NextTel | Available; requires the Edge Function and Anthropic secret |
+| NextTel | Available; requires the Edge Function and a configured AI provider secret |
 | Supabase | Migrations, Auth, RLS, Storage, and Edge Functions are present in the repository |
 | Deployment | Vercel procedure is documented; actual deployment is not verified |
 | Automated Test Suite | No dedicated test runner found |
 
 ## Notes
 
-- Apply migrations `001`, `002`, then `003` in order.
+- Apply migrations `001` through `006` in order: `004` and `005` before the updated frontend, then `006` together with its new upload path.
 - Major data and some legacy dashboard pages remain in context state and are not guaranteed to survive a refresh.
 - Not all public data is read from Supabase.
 - `supabase/.temp/` is local CLI state and should not be committed.

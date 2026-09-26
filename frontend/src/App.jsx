@@ -21,6 +21,7 @@ const JurusanFaqPage = lazy(() => import('./pages/JurusanFaqPage'));
 const JurusanPerbandinganPage = lazy(() => import('./pages/JurusanPerbandinganPage'));
 const KetentuanPpdbPage = lazy(() => import('./pages/KetentuanPpdbPage'));
 const LupaSandiPage = lazy(() => import('./pages/ppdb/LupaSandiPage'));
+const AturSandiPage = lazy(() => import('./pages/ppdb/AturSandiPage'));
 const DokumenPesertaPage = lazy(() => import('./pages/ppdb/DokumenPesertaPage'));
 const SegeraHadirPage = lazy(() => import('./pages/SegeraHadirPage'));
 const Login = lazy(() => import('./page/Login/Login'));
@@ -129,6 +130,7 @@ const App = () => {
           }
         >
           <Route path="/ppdb/daftar" element={<PpdbRegisterPage />} />
+          <Route path="/ppdb/atur-sandi" element={<AturSandiPage />} />
           <Route path="/ppdb/masuk" element={<PpdbLoginPage />} />
           <Route path="/ppdb/verifikasi" element={<VerifyEmailPage />} />
           <Route path="/ppdb/formulir" element={<RegistrationFormPage />} />

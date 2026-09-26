@@ -17,10 +17,10 @@ const inisial = (nama) =>
 // lalu isi halamannya.
 const PpdbPortalLayout = ({ children }) => {
   const { pathname } = useLocation();
-  const { currentUser, authLoading, logout } = usePpdb();
+  const { currentUser, authLoading, draftLoading, logout } = usePpdb();
 
-  if (authLoading) {
-    return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">Memeriksa sesi PPDB...</div>;
+  if (authLoading || draftLoading) {
+    return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">{authLoading ? 'Memeriksa sesi PPDB...' : 'Memuat draft pendaftaran...'}</div>;
   }
 
   if (!currentUser) return <Navigate to="/ppdb/masuk" replace />;

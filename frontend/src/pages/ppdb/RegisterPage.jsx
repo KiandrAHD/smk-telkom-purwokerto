@@ -6,14 +6,8 @@ import PanelMerah from '../../components/ppdb/PanelMerah';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { usePpdb } from '../../context/PpdbContext';
 import { ppdbPanelDaftar } from '../../data/dummyData';
+import { ppdbJurusanPilihan } from '../../data/ppdbFormOptions';
 import { signUpPpdb } from '../../services/ppdbService';
-
-const ppdbJurusanPilihan = [
-  'Rekayasa Perangkat Lunak (RPL)',
-  'Pengembangan Game (PG)',
-  'Teknik Komputer dan Jaringan (TKJ)',
-  'Teknik Jaringan Akses Telekomunikasi (TJAT)',
-];
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -38,7 +32,7 @@ const RegisterPage = () => {
     setGalat('');
     setMengirim(true);
     try {
-      await signUpPpdb(biodata.email.trim(), sandi.kata);
+      await signUpPpdb(biodata.email.trim(), sandi.kata, biodata);
       navigate('/ppdb/verifikasi');
     } catch (error) {
       setGalat(error?.message?.includes('already registered')

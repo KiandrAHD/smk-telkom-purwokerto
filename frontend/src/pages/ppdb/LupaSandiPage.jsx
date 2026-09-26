@@ -4,10 +4,27 @@ import { ArrowRight, CheckCircle2, KeyRound } from 'lucide-react';
 import FormInput from '../../components/dashboard/FormInput';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { lupaSandi } from '../../data/dummyData';
+import { sendPpdbPasswordReset } from '../../services/ppdbService';
 
 const LupaSandiPage = () => {
   const [email, setEmail] = useState('');
   const [terkirim, setTerkirim] = useState(false);
+  const [mengirim, setMengirim] = useState(false);
+  const [galat, setGalat] = useState('');
+
+  const kirim = async (e) => {
+    e.preventDefault();
+    setMengirim(true);
+    setGalat('');
+    try {
+      await sendPpdbPasswordReset(email.trim());
+      setTerkirim(true);
+    } catch {
+      setGalat('Tautan pemulihan gagal dikirim. Silakan coba lagi.');
+    } finally {
+      setMengirim(false);
+    }
+  };
 
   return (
     <PpdbAuthLayout aksiLabel="Kembali ke Beranda" tinggiPita="h-52">
@@ -31,10 +48,7 @@ const LupaSandiPage = () => {
           </p>
         ) : (
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setTerkirim(true);
-            }}
+            onSubmit={kirim}
             className="mt-7 space-y-5"
           >
             <FormInput
@@ -48,11 +62,13 @@ const LupaSandiPage = () => {
             />
             <button
               type="submit"
+              disabled={mengirim}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5"
             >
-              {lupaSandi.ctaLabel}
+              {mengirim ? 'Mengirim...' : lupaSandi.ctaLabel}
               <ArrowRight className="h-4 w-4" />
             </button>
+            {galat && <p role="alert" className="text-center text-xs text-primary">{galat}</p>}
           </form>
         )}
 

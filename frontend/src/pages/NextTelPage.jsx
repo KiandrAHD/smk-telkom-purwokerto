@@ -4,6 +4,7 @@ import NextTelIntro from '../components/nexttel/NextTelIntro';
 import NextTelQuestionnaire from '../components/nexttel/NextTelQuestionnaire';
 import NextTelResult from '../components/nexttel/NextTelResult';
 import { jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
+import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
 
 const QUESTIONS = [
   { id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }, { id: 'b', label: 'Membuat game' }, { id: 'c', label: 'Mengatur jaringan' }, { id: 'd', label: 'Teknologi telekomunikasi' }] },
@@ -15,23 +16,6 @@ const QUESTIONS = [
   { id: 'work', prompt: 'Jenis karya apa yang ingin kamu buat?', options: [{ id: 'a', label: 'Aplikasi yang membantu orang' }, { id: 'b', label: 'Game yang seru dimainkan' }, { id: 'c', label: 'Jaringan yang aman dan cepat' }, { id: 'd', label: 'Infrastruktur telekomunikasi' }] },
   { id: 'future', prompt: 'Bayangan pekerjaan masa depan yang paling menarik?', options: [{ id: 'a', label: 'Software developer' }, { id: 'b', label: 'Game developer' }, { id: 'c', label: 'Network engineer' }, { id: 'd', label: 'Teknisi telekomunikasi' }] },
 ];
-
-const MAJOR_ORDER = ['RPL', 'PG', 'TKJ', 'TJAT'];
-const SCORE_BY_OPTION = {
-  a: { RPL: 3, PG: 1, TKJ: 0, TJAT: 0 },
-  b: { RPL: 1, PG: 3, TKJ: 0, TJAT: 0 },
-  c: { RPL: 0, PG: 0, TKJ: 3, TJAT: 1 },
-  d: { RPL: 0, PG: 0, TKJ: 1, TJAT: 3 },
-};
-
-const hitungHasil = (answers) => {
-  const scores = Object.fromEntries(MAJOR_ORDER.map((major) => [major, 0]));
-  Object.values(answers).forEach((optionId) => {
-    MAJOR_ORDER.forEach((major) => { scores[major] += SCORE_BY_OPTION[optionId][major]; });
-  });
-  const ranking = [...MAJOR_ORDER].sort((a, b) => scores[b] - scores[a] || MAJOR_ORDER.indexOf(a) - MAJOR_ORDER.indexOf(b)).map((major) => [major, scores[major]]);
-  return { scores, ranking, topRecommendation: ranking[0][0], maxScore: Math.max(...Object.values(scores), 1) };
-};
 
 const NextTelPage = () => {
   const [mode, setMode] = useState('intro');
@@ -48,7 +32,9 @@ const NextTelPage = () => {
   const mulai = () => { setMode('questionnaire'); setCurrentIndex(0); setAnswers({}); setError(null); };
   const jawab = (questionId, optionId) => setAnswers((previous) => ({ ...previous, [questionId]: optionId }));
   const selesai = async () => {
-    const computed = hitungHasil(answers);
+    const selectedAnswers = Object.entries(answers).map(([questionId, optionId]) => ({ questionId, optionId }));
+    const computed = hitungHasilNextTel(selectedAnswers);
+    if (!computed) return;
     setResult(computed);
     setMode('result');
     setLoading(true);
@@ -58,9 +44,7 @@ const NextTelPage = () => {
     controllerRef.current = controller;
     try {
       const response = await jelaskanRekomendasiNextTel({
-        answers: Object.entries(answers).map(([questionId, optionId]) => ({ questionId, optionId })),
-        scores: computed.scores,
-        topRecommendation: computed.topRecommendation,
+        answers: selectedAnswers,
       }, { signal: controller.signal });
       setExplanation(response);
     } catch (requestError) {
