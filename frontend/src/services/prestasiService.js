@@ -18,13 +18,6 @@ export async function getPrestasi() {
   );
 }
 
-export async function getPrestasiById(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('prestasi').select(prestasiColumns).eq('id', id).single(),
-  );
-}
-
 export async function getPrestasiBySlug(slug) {
   const supabase = ensureSupabase();
   return throwIfError(

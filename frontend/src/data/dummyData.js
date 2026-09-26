@@ -2320,9 +2320,6 @@ export const adminMenu = [
 
 /* ── Manajemen Berita ── */
 
-export const adminKategoriBerita = ['Prestasi', 'Kegiatan', 'PPDB', 'BKK'];
-export const adminStatusBerita = ['Published', 'Draft'];
-
 // Tanggal disimpan dalam format ISO supaya bisa langsung dipakai <input type="date">;
 // tampilannya diformat ke "24 Mei 2025" oleh helper tanggal.
 export const adminBerita = [
@@ -2349,17 +2346,6 @@ export const adminBerita = [
 ];
 
 /* ── Manajemen PPDB ── */
-
-export const adminPpdbStats = [
-  { label: 'Total Pendaftar', value: '1.248', nada: 'merah', icon: 'ppdb' },
-  { label: 'Pendaftar Baru', value: '312', nada: 'biru', icon: 'baru' },
-  { label: 'Sudah Diverifikasi', value: '856', nada: 'hijau', icon: 'verifikasi' },
-  { label: 'Belum Diverifikasi', value: '392', nada: 'oranye', icon: 'tunggu' },
-];
-
-// Kode program di panel admin memakai penamaan kurikulum terbaru (PPLG, TJKT,
-// DKV, AKL) sesuai desain, berbeda dari singkatan di situs publik.
-export const adminProgramKeahlian = ['PPLG', 'TJKT', 'DKV', 'AKL'];
 
 export const adminPendaftar = [
   {
@@ -2500,14 +2486,6 @@ export const adminPendaftar = [
   },
 ];
 
-// Berkas yang sama diminta dari setiap pendaftar, jadi disimpan sekali saja.
-export const adminBerkasPendaftar = [
-  { nama: 'Akta Kelahiran.pdf' },
-  { nama: 'Kartu Keluarga.pdf' },
-  { nama: 'Rapor Semester 1-5.pdf' },
-  { nama: 'Pas Foto 3x4.jpg' },
-];
-
 /* ── Manajemen Jurusan ── */
 
 export const adminJurusan = [
@@ -2519,8 +2497,6 @@ export const adminJurusan = [
 
 /* ── Manajemen Prestasi ── */
 
-export const adminTingkatPrestasi = ['Nasional', 'Provinsi', 'Kota'];
-
 export const adminPrestasi = [
   { id: 1, nama: 'Juara 1 Lomba IoT Tingkat Nasional', tingkat: 'Nasional', diraihOleh: 'Tim Siswa SMK Telkom Purwokerto', tanggal: '2025-05-24' },
   { id: 2, nama: 'Juara 2 Lomba Web Design', tingkat: 'Provinsi', diraihOleh: 'Daffa Alfarizi', tanggal: '2025-05-10' },
@@ -2529,13 +2505,6 @@ export const adminPrestasi = [
 ];
 
 /* ── Manajemen BKK ── */
-
-export const adminBkkStats = [
-  { label: 'Total Lowongan', value: '28', nada: 'hijau', icon: 'lowongan' },
-  { label: 'Perusahaan Mitra', value: '42', nada: 'biru', icon: 'mitra' },
-  { label: 'Siswa Terserap', value: '156', nada: 'oranye', icon: 'terserap' },
-  { label: 'Total Alumni', value: '1.256', nada: 'ungu', icon: 'alumni' },
-];
 
 export const adminLowongan = [
   { id: 1, posisi: 'Junior Programmer', perusahaan: 'PT Telkom Indonesia', tanggalPosting: '2025-05-24', batasLamaran: '2025-06-10' },

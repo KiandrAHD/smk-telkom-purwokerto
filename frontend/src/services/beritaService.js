@@ -34,13 +34,6 @@ export async function getPublishedBerita() {
   );
 }
 
-export async function getBeritaById(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('berita').select(beritaColumns).eq('id', id).single(),
-  );
-}
-
 export async function getBeritaBySlug(slug) {
   const supabase = ensureSupabase();
   return throwIfError(

@@ -30,11 +30,6 @@ export async function getActiveBkk() {
   );
 }
 
-export async function getBkkById(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(await supabase.from('bkk').select(bkkColumns).eq('id', id).single());
-}
-
 export async function createBkk(data) {
   const supabase = ensureSupabase();
   return throwIfError(await supabase.from('bkk').insert(data).select(bkkColumns).single());

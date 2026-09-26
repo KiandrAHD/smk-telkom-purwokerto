@@ -94,10 +94,6 @@ export async function getPpdb() {
   return throwIfError(await ensureSupabase().from('ppdb').select(ppdbColumns).order('created_at', { ascending: false }));
 }
 
-export async function getPpdbById(id) {
-  return throwIfError(await ensureSupabase().from('ppdb').select(ppdbColumns).eq('id', id).single());
-}
-
 export async function getMyPpdb() {
   const client = ensureSupabase();
   const { data: userData, error: userError } = await client.auth.getUser();

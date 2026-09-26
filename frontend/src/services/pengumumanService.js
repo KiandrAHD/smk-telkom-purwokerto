@@ -35,13 +35,6 @@ export async function getPublishedPengumuman() {
   );
 }
 
-export async function getPengumumanById(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('pengumuman').select(pengumumanColumns).eq('id', id).single(),
-  );
-}
-
 export async function getPengumumanBySlug(slug) {
   const supabase = ensureSupabase();
   return throwIfError(
