@@ -8,8 +8,8 @@ const Login = () => {
   const { signIn, loading, user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState('admin1234@admin.id');
-  const [password, setPassword] = useState('1234');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -93,19 +93,6 @@ const Login = () => {
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="Akun Admin" className="mb-2 block text-xs font-semibold text-dark-700">Akun Admin</label>
-            <div className="relative">
-              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-400" />
-              <div
-                id="Email_PW_Admin"
-                className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-3 text-sm text-dark-900 outline-none"
-              >
-                admin1234@admin.id (1234)
-              </div>
             </div>
           </div>
 

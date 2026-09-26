@@ -14,6 +14,7 @@ Platform digital sekolah yang mencakup website publik, dashboard administrator, 
 | `/profil-sekolah` | Profil, visi-misi, fasilitas, dan informasi sekolah |
 | `/tentang` | Redirect ke `/profil-sekolah` |
 | `/jurusan` | Program keahlian dan detail jurusan |
+| `/ekstrakurikuler` | Daftar kegiatan ekstrakurikuler, organisasi, prestasi, sentra, dan community |
 | `/prestasi` | Prestasi, galeri, dan detail prestasi |
 | `/bkk` | Bursa Kerja Khusus dan informasi karier |
 | `/berita` | Daftar dan detail berita |
@@ -42,16 +43,6 @@ Sebagian konten publik masih bersumber dari `frontend/src/data/dummyData.js`. Be
 
 Admin routes dilindungi `ProtectedRoute`. User admin harus terautentikasi melalui Supabase Auth dan memiliki relasi pada `public.admins`.
 
-### Demo Admin Login
-
-Email: `admin1234@admin.id`
-
-Password: `1234`
-
-> **Peringatan:** Credential di atas hanya untuk kebutuhan demo/testing. Jangan gunakan password tersebut untuk production. Segera ganti password akun admin production dengan password yang kuat dan unik.
-
-Credential hanya digunakan sebagai prefill UX. Password tidak disimpan di tabel `admins`.
-
 ## Tech Stack
 
 ### Frontend
@@ -77,8 +68,8 @@ Project tidak menggunakan Axios atau Framer Motion. Request HTTP menggunakan `fe
 
 ### AI dan deployment
 
-- STELA mendukung Anthropic, Google Gemini, dan Groq melalui Edge Function.
-- NextTel menggunakan scoring frontend dan Edge Function Anthropic untuk penjelasan hasil.
+- STELA mendukung 9Router, Anthropic, Google Gemini, dan Groq melalui Edge Function.
+- NextTel menggunakan scoring frontend dan Edge Function dengan provider AI server-side untuk penjelasan hasil.
 - Frontend dapat dideploy ke Vercel; database, Auth, Storage, dan Edge Functions berada di Supabase.
 
 ## Arsitektur
@@ -140,7 +131,10 @@ smk-telkom-purwokerto/
 │   ├── migrations/
 │   │   ├── 001_initial_schema.sql
 │   │   ├── 002_ppdb_identity.sql
-│   │   └── 003_ppdb_storage_owner_and_unique.sql
+│   │   ├── 003_ppdb_storage_owner_and_unique.sql
+│   │   ├── 004_ppdb_drafts.sql
+│   │   ├── 005_ppdb_application_fields.sql
+│   │   └── 006_ppdb_upload_and_input_guard.sql
 │   ├── README.md
 │   └── .temp/                 # State lokal CLI; jangan di-commit
 ├── README.md
@@ -182,6 +176,9 @@ Migration diterapkan berurutan:
 1. `001_initial_schema.sql` membuat tabel `admins`, `berita`, `pengumuman`, `prestasi`, `bkk`, `ppdb`, index, trigger `updated_at`, fungsi `is_admin()`, RLS, dan dua bucket Storage.
 2. `002_ppdb_identity.sql` menambahkan `auth_user_id`, foreign key ke `auth.users`, ownership RLS PPDB, serta pembatas upload dokumen per user.
 3. `003_ppdb_storage_owner_and_unique.sql` menambahkan policy pembacaan object milik user dan unique index satu submission per akun.
+4. `004_ppdb_drafts.sql` menambahkan tabel draft PPDB dengan akses hanya untuk pemilik akun.
+5. `005_ppdb_application_fields.sql` menambahkan NIK, agama, tahun lulus, dan nilai rapor.
+6. `006_ppdb_upload_and_input_guard.sql` membatasi path unggahan baru menjadi satu dokumen per akun dan memvalidasi data pendaftaran. Terapkan `004` dan `005` sebelum frontend baru, lalu `006` bersamaan dengan frontend baru.
 
 `AuthContext` membaca session Supabase dan memeriksa user pada `public.admins`. `ProtectedRoute` mengarahkan user tanpa akses admin ke `/login`. Anon/publishable key boleh berada di frontend karena akses database tetap dibatasi RLS; service-role key tidak boleh berada di frontend.
 
@@ -191,8 +188,8 @@ STELA adalah asisten virtual sekolah untuk pertanyaan tentang profil, jurusan, f
 
 - Production endpoint: `${VITE_SUPABASE_URL}/functions/v1/stela`.
 - Local endpoint: `/api/stela` dari `frontend/vite-plugin-stela.js`.
-- Provider: Anthropic, Google Gemini, dan Groq.
-- Prioritas provider: Anthropic, Gemini, lalu Groq.
+- Provider: 9Router, Anthropic, Google Gemini, dan Groq.
+- Prioritas provider: 9Router, Anthropic, Gemini, lalu Groq (hanya provider dengan kunci yang valid).
 - Model default dan fallback didefinisikan di `supabase/functions/stela/inti.mjs`.
 - Context dinamis mengambil Berita published, Pengumuman published, Prestasi, dan BKK aktif.
 - Context dinamis di-cache selama 60 detik.
@@ -214,7 +211,7 @@ Setelah snapshot berubah, deploy ulang function STELA.
 
 NextTel menggunakan kuesioner delapan pertanyaan. Scoring dilakukan di frontend untuk menampilkan hasil `RPL`, `PG`, `TKJ`, dan `TJAT`; delapan jawaban dikirim ke `${VITE_SUPABASE_URL}/functions/v1/nexttel` untuk mendapatkan penjelasan.
 
-Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, memvalidasi delapan jawaban, menghitung ulang skor serta rekomendasi, menerapkan origin restriction serta rate limit, dan mengembalikan `explanation`, `strengths`, serta `learningSuggestions`. API key tidak pernah dikirim ke browser.
+Edge Function NextTel menggunakan provider AI server-side (9Router, Anthropic, Gemini, atau Groq). Kunci khusus `NEXTTEL_*` dipakai jika tersedia; jika tidak, fungsi memakai kunci provider bersama. Fungsi memvalidasi delapan jawaban, menghitung ulang skor serta rekomendasi, menerapkan origin restriction serta rate limit, dan mengembalikan `explanation`, `strengths`, serta `learningSuggestions`. API key tidak pernah dikirim ke browser.
 
 ## Environment Variables
 
@@ -255,6 +252,9 @@ Edge Function NextTel menggunakan provider AI server-side, termasuk 9Router, mem
 | `SUPABASE_ANON_KEY` | REST context STELA | Tidak |
 | `NEXTTEL_ANTHROPIC_API_KEY` | Provider NextTel | Ya |
 | `NEXTTEL_NINEROUTER_KEY` | Provider 9Router khusus NextTel | Ya |
+| `NEXTTEL_GEMINI_API_KEY` | Provider Gemini khusus NextTel | Ya |
+| `NEXTTEL_GROQ_API_KEY` | Provider Groq khusus NextTel | Ya |
+| `NEXTTEL_NINEROUTER_URL` | URL 9Router khusus NextTel; wajib dapat dijangkau saat memakai 9Router | Tidak |
 | `NEXTTEL_NINEROUTER_MODEL` | Model 9Router khusus NextTel | Tidak |
 | `NEXTTEL_MODEL` | Model NextTel | Tidak |
 | `NEXTTEL_ALLOWED_ORIGINS` | Origin NextTel | Tidak |
@@ -263,7 +263,7 @@ Jangan commit `.env`, jangan menaruh service-role key di frontend, dan jangan me
 
 ## Instalasi dan Development
 
-Prasyarat: Node.js `^20.19.0` atau `>=22.12.0` dan npm.
+Prasyarat: Node.js `>=22.12.0` dan npm.
 
 ```bash
 git clone https://github.com/KiandrAHD/smk-telkom-purwokerto.git
@@ -337,12 +337,11 @@ URL yang dirujuk oleh data aplikasi adalah `https://smk-telkom-purwokerto.vercel
 - Bucket dokumen PPDB private dan hanya diakses dengan signed URL.
 - Pertahankan `auth_user_id = auth.uid()`.
 - Jangan commit `.env` atau secret.
-- Credential demo bukan credential production.
 - Rate limit/cost guard membantu mengurangi penyalahgunaan, tetapi billing limit provider juga harus diatur.
 
 ## Testing Checklist
 
-- Public: homepage, navigasi, profil, jurusan, prestasi, BKK, berita, pengumuman, STELA, dan NextTel.
+- Public: homepage, navigasi, profil, jurusan, ekstrakurikuler, prestasi, BKK, berita, pengumuman, STELA, dan NextTel.
 - Admin: login, protected route, dashboard, CRUD Berita, Pengumuman, Prestasi, BKK, PPDB, serta Jurusan.
 - PPDB: signup, verifikasi email, login, formulir, upload PDF, submit, status, duplicate protection, dan signed URL.
 - AI: validasi/rate limit/fallback STELA serta questionnaire, scoring, dan penjelasan NextTel.
@@ -363,7 +362,7 @@ URL yang dirujuk oleh data aplikasi adalah `https://smk-telkom-purwokerto.vercel
 | Manajemen Jurusan | Tersedia melalui `AdminDataContext` in-memory |
 | PPDB Online | Tersedia dengan Auth, verifikasi, formulir, upload, submit, dan status |
 | STELA | Tersedia; memerlukan provider/API key |
-| NextTel | Tersedia; memerlukan Edge Function dan secret Anthropic |
+| NextTel | Tersedia; memerlukan Edge Function dan secret salah satu provider AI |
 | Supabase | Migration, Auth, RLS, Storage, dan Edge Functions tersedia di repository |
 | Deployment | Prosedur Vercel tersedia; deployment aktual tidak diverifikasi |
 | Automated Test Suite | Tidak ditemukan test runner khusus |
@@ -395,6 +394,7 @@ This platform is a school digital application consisting of a public website, ad
 | `/profil-sekolah` | School profile, vision, facilities, and information |
 | `/tentang` | Redirects to `/profil-sekolah` |
 | `/jurusan` | Study programs and major details |
+| `/ekstrakurikuler` | Extracurricular activities, organizations, achievements, centers, and communities |
 | `/prestasi` | Achievements, gallery, and achievement details |
 | `/bkk` | Special Job Exchange and career information |
 | `/berita` | News list and details |
@@ -423,16 +423,6 @@ Some public content still comes from `frontend/src/data/dummyData.js`. News, ann
 
 Admin routes are protected by `ProtectedRoute`. An administrator must authenticate through Supabase Auth and have a relation in `public.admins`.
 
-### Demo Admin Login
-
-Email: `admin1234@admin.id`
-
-Password: `1234`
-
-> **Warning:** The credentials above are for demo/testing purposes only. Do not use this password in production. Replace the production admin password with a strong, unique password.
-
-The credentials are only prefilled for UX. Passwords are not stored in the `admins` table.
-
 ## Tech Stack
 
 ### Frontend
@@ -458,8 +448,8 @@ The project does not use Axios or Framer Motion. HTTP requests use the built-in 
 
 ### AI and deployment
 
-- STELA supports Anthropic, Google Gemini, and Groq through an Edge Function.
-- NextTel uses frontend scoring and an Anthropic Edge Function for result explanations.
+- STELA supports 9Router, Anthropic, Google Gemini, and Groq through an Edge Function.
+- NextTel uses frontend scoring and an Edge Function with server-side AI providers for result explanations.
 - The frontend can be deployed to Vercel; the database, Auth, Storage, and Edge Functions run on Supabase.
 
 ## Architecture
@@ -521,7 +511,10 @@ smk-telkom-purwokerto/
 │   ├── migrations/
 │   │   ├── 001_initial_schema.sql
 │   │   ├── 002_ppdb_identity.sql
-│   │   └── 003_ppdb_storage_owner_and_unique.sql
+│   │   ├── 003_ppdb_storage_owner_and_unique.sql
+│   │   ├── 004_ppdb_drafts.sql
+│   │   ├── 005_ppdb_application_fields.sql
+│   │   └── 006_ppdb_upload_and_input_guard.sql
 │   ├── README.md
 │   └── .temp/                 # Local CLI state; do not commit
 ├── README.md
@@ -575,8 +568,8 @@ STELA is a virtual school assistant for questions about the school profile, majo
 
 - Production endpoint: `${VITE_SUPABASE_URL}/functions/v1/stela`.
 - Local endpoint: `/api/stela` from `frontend/vite-plugin-stela.js`.
-- Providers: Anthropic, Google Gemini, and Groq.
-- Provider priority: Anthropic, Gemini, then Groq.
+- Providers: 9Router, Anthropic, Google Gemini, and Groq.
+- Provider priority: 9Router, Anthropic, Gemini, then Groq (only providers with valid keys).
 - Default and fallback models are defined in `supabase/functions/stela/inti.mjs`.
 - Dynamic context includes published news, published announcements, achievements, and active BKK entries.
 - Dynamic context is cached for 60 seconds.
@@ -598,7 +591,7 @@ Redeploy the STELA function after the snapshot changes.
 
 NextTel uses an eight-question questionnaire. Frontend scoring displays the result for `RPL`, `PG`, `TKJ`, and `TJAT`; the eight answers are sent to `${VITE_SUPABASE_URL}/functions/v1/nexttel` for an explanation.
 
-The NextTel Edge Function uses server-side AI providers, including 9Router, validates the eight answers, recalculates scores and recommendations, applies origin and rate restrictions, and returns `explanation`, `strengths`, and `learningSuggestions`. API keys never reach the browser.
+The NextTel Edge Function uses server-side AI providers (9Router, Anthropic, Gemini, or Groq). It uses a dedicated `NEXTTEL_*` key when available, falling back to the shared provider key. It validates all eight answers, recalculates scores and recommendations, applies origin and rate restrictions, and returns `explanation`, `strengths`, and `learningSuggestions`. API keys never reach the browser.
 
 ## Environment Variables
 
@@ -639,6 +632,9 @@ The NextTel Edge Function uses server-side AI providers, including 9Router, vali
 | `SUPABASE_ANON_KEY` | STELA REST context | No |
 | `NEXTTEL_ANTHROPIC_API_KEY` | NextTel provider | Yes |
 | `NEXTTEL_NINEROUTER_KEY` | NextTel 9Router provider | Yes |
+| `NEXTTEL_GEMINI_API_KEY` | NextTel Gemini provider | Yes |
+| `NEXTTEL_GROQ_API_KEY` | NextTel Groq provider | Yes |
+| `NEXTTEL_NINEROUTER_URL` | NextTel 9Router URL; must be reachable when using 9Router | No |
 | `NEXTTEL_NINEROUTER_MODEL` | NextTel 9Router model | No |
 | `NEXTTEL_MODEL` | NextTel model | No |
 | `NEXTTEL_ALLOWED_ORIGINS` | NextTel origins | No |
@@ -647,7 +643,7 @@ Never commit `.env`, place a service-role key in the frontend, or put an AI API 
 
 ## Installation and Development
 
-Prerequisites: Node.js `^20.19.0` or `>=22.12.0` and npm.
+Prerequisites: Node.js `>=22.12.0` and npm.
 
 ```bash
 git clone https://github.com/KiandrAHD/smk-telkom-purwokerto.git
@@ -721,12 +717,11 @@ Application data references `https://smk-telkom-purwokerto.vercel.app`. The repo
 - Keep PPDB documents in the private bucket and use signed URLs.
 - Preserve `auth_user_id = auth.uid()` ownership.
 - Never commit `.env` or secrets.
-- Demo credentials are not production credentials.
 - Rate limits and cost guards reduce abuse, but provider billing limits must also be configured.
 
 ## Testing Checklist
 
-- Public: homepage, navigation, profile, majors, achievements, BKK, news, announcements, STELA, and NextTel.
+- Public: homepage, navigation, profile, majors, extracurriculars, achievements, BKK, news, announcements, STELA, and NextTel.
 - Admin: login, protected routes, dashboard, News, Announcement, Achievement, BKK, PPDB, and Major CRUD.
 - PPDB: signup, email verification, login, form, PDF upload, submission, status, duplicate protection, and signed document URLs.
 - AI: STELA validation/rate-limit/provider fallback and NextTel questionnaire, scoring, and explanation.
