@@ -12,6 +12,7 @@ const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = f
         <img
           src={image}
           alt={imageAlt || title}
+          loading="lazy"
           className="w-full aspect-[16/9] object-cover object-top transition-transform duration-500 group-hover:scale-110"
         />
       </div>

@@ -17,6 +17,10 @@ const images = [
   'ekstrakurikuler/organisasi/paskibra.webp',
   'ekstrakurikuler/kegiatan/brand-ambassador.webp',
   'ekstrakurikuler/kegiatan/stematel-art.webp',
+  'jurusan/stock-hd/rpl-software-development.webp',
+  'jurusan/stock-hd/server-monitoring.webp',
+  'jurusan/stock-hd/game-development.webp',
+  'jurusan/stock-hd/fiber-optic-network.webp',
 ];
 for (const image of images) {
   const file = path.join(root, 'src/assets', image);
@@ -26,4 +30,4 @@ for (const image of images) {
   assert(bytes < 350 * 1024, `Gambar terlalu besar: ${image} (${Math.round(bytes / 1024)} KB)`);
 }
 
-console.log(`uji-performa: JavaScript awal ${Math.round(entryBytes / 1024)} KB; enam gambar utama di bawah 350 KB.`);
+console.log(`uji-performa: JavaScript awal ${Math.round(entryBytes / 1024)} KB; ${images.length} gambar utama di bawah 350 KB.`);

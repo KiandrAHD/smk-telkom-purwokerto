@@ -12,10 +12,10 @@ import jurusanTjatCard from '../assets/drive/jurusan-tjat-card.webp';
 import showcaseIot from '../assets/drive/showcase-projek-a.png';
 import showcaseSmartHome from '../assets/drive/showcase-mobil.png';
 import penampilanMusik from '../assets/drive/showcase-musik.png';
-import prestasiWeb from '../assets/jurusan/stock-hd/rpl-software-development.jpg';
-import prestasiNetwork from '../assets/jurusan/stock-hd/server-monitoring.jpg';
-import prestasiGame from '../assets/jurusan/stock-hd/game-development.jpg';
-import prestasiIot from '../assets/jurusan/stock-hd/fiber-optic-network.jpg';
+import prestasiWeb from '../assets/jurusan/stock-hd/rpl-software-development.webp';
+import prestasiNetwork from '../assets/jurusan/stock-hd/server-monitoring.webp';
+import prestasiGame from '../assets/jurusan/stock-hd/game-development.webp';
+import prestasiIot from '../assets/jurusan/stock-hd/fiber-optic-network.webp';
 import mapImg from '../assets/landing/map.jpg';
 
 import heroJurusan from '../assets/drive/header-jurusan.webp';
