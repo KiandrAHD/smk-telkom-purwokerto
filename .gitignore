@@ -1,1 +1,8 @@
 /supabase/.temp/
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+*.log
+frontend/error_log
