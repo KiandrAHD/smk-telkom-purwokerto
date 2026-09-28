@@ -5,20 +5,28 @@
 import { pilihPenyedia, tanyaAI } from '../stela/inti.mjs';
 import { hitungHasilNextTel } from './scoring.mjs';
 
-// Kunci khusus NextTel dipakai kalau ada (berguna untuk memisahkan tagihan),
-// selain itu jatuh ke kunci bersama supaya cukup mengisi satu kunci saja.
-const KUNCI: Record<string, string | undefined> = {
-  ninerouter: Deno.env.get('NEXTTEL_NINEROUTER_KEY') ?? Deno.env.get('NINEROUTER_KEY'),
-  anthropic: Deno.env.get('NEXTTEL_ANTHROPIC_API_KEY') ?? Deno.env.get('ANTHROPIC_API_KEY'),
-  gemini: Deno.env.get('NEXTTEL_GEMINI_API_KEY') ?? Deno.env.get('GEMINI_API_KEY'),
-  groq: Deno.env.get('NEXTTEL_GROQ_API_KEY') ?? Deno.env.get('GROQ_API_KEY'),
+const KUNCI_KHUSUS: Record<string, string | undefined> = {
+  gemini: Deno.env.get('NEXTTEL_GEMINI_API_KEY'),
+  ninerouter: Deno.env.get('NEXTTEL_NINEROUTER_KEY'),
+  anthropic: Deno.env.get('NEXTTEL_ANTHROPIC_API_KEY'),
+  groq: Deno.env.get('NEXTTEL_GROQ_API_KEY'),
 };
-const PENYEDIA = pilihPenyedia({
-  ninerouterKey: KUNCI.ninerouter,
-  anthropicKey: KUNCI.anthropic,
-  geminiKey: KUNCI.gemini,
-  groqKey: KUNCI.groq,
-});
+const KUNCI_BERSAMA: Record<string, string | undefined> = {
+  ninerouter: Deno.env.get('NINEROUTER_KEY'),
+  anthropic: Deno.env.get('ANTHROPIC_API_KEY'),
+  gemini: Deno.env.get('GEMINI_API_KEY'),
+  groq: Deno.env.get('GROQ_API_KEY'),
+};
+const KUNCI = Object.fromEntries(
+  Object.keys(KUNCI_KHUSUS).map((penyedia) => [penyedia, KUNCI_KHUSUS[penyedia] ?? KUNCI_BERSAMA[penyedia]]),
+) as Record<string, string | undefined>;
+const PENYEDIA = Object.entries(KUNCI_KHUSUS).find(([, key]) => key)?.[0]
+  ?? pilihPenyedia({
+    ninerouterKey: KUNCI_BERSAMA.ninerouter,
+    anthropicKey: KUNCI_BERSAMA.anthropic,
+    geminiKey: KUNCI_BERSAMA.gemini,
+    groqKey: KUNCI_BERSAMA.groq,
+  });
 const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
 // Dibiarkan undefined supaya failover daftar model ikut aktif.
 const MODEL = (PENYEDIA === 'ninerouter'
