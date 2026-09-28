@@ -54,6 +54,16 @@ body {
   overflow-x: hidden;
 }
 
+.guru-accent-horizontal {
+  background-image: url('./assets/tentang/guru-accent-horizontal.png');
+  background-size: 106px 20px;
+}
+
+.guru-accent-vertical {
+  background-image: url('./assets/tentang/guru-accent-vertical.png');
+  background-size: 21px 243px;
+}
+
 /* Umpan balik interaksi untuk SEMUA elemen yang bisa dipencet — satu aturan di
    layer base, bukan diulang di ratusan className. Sengaja memakai filter, bukan
    transform, supaya tidak menimpa utility transform yang sudah dipakai kartu
