@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-r
 import ScrollToTop from './components/ScrollToTop';
 import LandingPage from './pages/LandingPage';
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
+const GuruPage = lazy(() => import('./pages/GuruPage'));
 const JurusanPage = lazy(() => import('./pages/JurusanPage'));
 const PrestasiPage = lazy(() => import('./pages/PrestasiPage'));
 const BkkPage = lazy(() => import('./pages/BkkPage'));
@@ -51,6 +52,7 @@ const EkstrakurikulerPage = lazy(() => import('./pages/EkstrakurikulerPage'));
 const PAGE_META = {
   '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
   '/profil-sekolah': ['Profil Sekolah | SMK Telkom Purwokerto', 'Kenali profil, visi misi, dan fasilitas SMK Telkom Purwokerto.'],
+  '/profil-sekolah/guru': ['Profil Guru | SMK Telkom Purwokerto', 'Kenali kepala sekolah, guru, dan tenaga pendidik SMK Telkom Purwokerto.'],
   '/jurusan': ['Jurusan SMK Telkom Purwokerto', 'Pilih program keahlian teknologi sesuai minat dan bakatmu.'],
   '/prestasi': ['Prestasi SMK Telkom Purwokerto', 'Lihat prestasi dan pencapaian siswa SMK Telkom Purwokerto.'],
   '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
@@ -89,6 +91,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/profil-sekolah" element={<ProfileSekolahPage />} />
+        <Route path="/profil-sekolah/guru" element={<GuruPage />} />
         <Route path="/tentang" element={<Navigate to="/profil-sekolah" replace />} />
         <Route path="/jurusan" element={<JurusanPage />} />
         <Route path="/prestasi" element={<PrestasiPage />} />
