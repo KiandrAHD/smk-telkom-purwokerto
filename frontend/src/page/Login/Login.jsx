@@ -53,9 +53,14 @@ const Login = () => {
           <p className="mt-2 text-sm text-dark-500">Masuk untuk mengelola konten sekolah.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-7 space-y-5 sm:mt-8">
+        <div className="mt-6 rounded-xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-dark-700">
+          <p className="font-semibold text-primary">Akses Penilaian Lomba</p>
+          <p className="mt-1 leading-relaxed">Juri dapat masuk dengan email dan password admin yang dibagikan terpisah oleh tim.</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           <div>
-            <label htmlFor="email" className="mb-2 block text-xs font-semibold text-dark-700">Email</label>
+            <label htmlFor="email" className="mb-2 block text-xs font-semibold text-dark-700">Email Admin</label>
             <div className="relative">
               <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-400" />
               <input
@@ -66,13 +71,13 @@ const Login = () => {
                 autoComplete="email"
                 required
                 className="w-full rounded-lg border border-dark-200 py-3 pl-10 pr-3 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                placeholder="admin@sekolah.sch.id"
+                placeholder="Masukkan email admin"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-2 block text-xs font-semibold text-dark-700">Password</label>
+            <label htmlFor="password" className="mb-2 block text-xs font-semibold text-dark-700">Password Admin</label>
             <div className="relative">
               <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-400" />
               <input

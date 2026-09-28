@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   BriefcaseBusiness,
   GraduationCap,
@@ -27,13 +27,13 @@ const ikon = {
 
 const DashboardSidebar = ({ onPilihMenu }) => (
   <div className="flex h-full flex-col bg-white">
-    <div className="flex items-center gap-3 px-6 py-6">
+    <Link to="/" onClick={onPilihMenu} aria-label="Kembali ke beranda SMK Telkom Purwokerto" className="flex items-center gap-3 rounded-lg px-6 py-6 transition-colors hover:bg-dark-50">
       <Logo className="h-11 w-11" />
       <div>
         <p className="font-heading text-base font-extrabold leading-tight text-dark-900">SMK Telkom</p>
         <p className="text-xs text-dark-500">Purwokerto</p>
       </div>
-    </div>
+    </Link>
 
     <p className="px-6 pb-3 text-[10px] font-bold uppercase tracking-[0.12em] text-dark-400">
       Menu Utama
@@ -81,14 +81,6 @@ const DashboardSidebar = ({ onPilihMenu }) => (
             {baris}
           </p>
         ))}
-        <a
-          href={adminSekolah.website}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-2.5 block text-[11px] font-medium text-primary hover:underline"
-        >
-          {adminSekolah.website}
-        </a>
       </div>
     </div>
   </div>

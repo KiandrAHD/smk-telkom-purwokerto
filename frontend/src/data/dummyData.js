@@ -2303,7 +2303,6 @@ export const adminSekolah = {
     'Purwokerto Kidul, Kec. Purwokerto Sel.',
     'Kabupaten Banyumas, Jawa Tengah 53141',
   ],
-  website: 'https://smk-telkom-purwokerto.vercel.app/',
 };
 
 // Nama ikon dipetakan ke komponennya di DashboardSidebar, jadi berkas data ini
