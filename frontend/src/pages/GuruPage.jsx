@@ -49,28 +49,44 @@ function GuruCarousel() {
         </div>
 
         <div className="relative">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12" aria-live="polite">
-            {guruData.slice(page * pageSize, (page + 1) * pageSize).map((guru) => (
-              <Link
-                key={guru.nama}
-                to={'/profil-sekolah/guru/' + slugify(guru.nama)}
-                aria-label={'Lihat profil ' + guru.nama}
-                className="group relative block aspect-[322/426] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cd091d]"
-              >
-                <article className="relative h-full bg-white p-[10px] transition-transform duration-300 group-hover:-translate-y-1">
-                  <img src={guru.image} alt={'Foto ' + guru.nama} loading="lazy" className="h-full w-full rounded-[10px] object-cover object-top" />
-                  <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
-                  <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
-                  <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
-                  <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
-                  <div className="absolute bottom-[12%] left-[8%] right-[8%] min-h-[76px] rounded-[16px] bg-white px-4 py-3 shadow-[0_0_18px_rgba(0,0,0,0.16)] sm:min-h-[86px]">
-                    <h3 className="text-sm font-extrabold leading-snug tracking-wide text-black sm:text-base xl:text-xl">{guru.nama}</h3>
-                    <p className="mt-1 text-[11px] font-medium leading-snug text-black/65 sm:text-xs xl:text-sm">{guru.jabatan}</p>
-                  </div>
-                </article>
-              </Link>
-            ))}
+          <div className="overflow-hidden">
+            <div
+              key={pageSize}
+              className="flex transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+              style={{ transform: `translate3d(-${page * 100}%, 0, 0)` }}
+            >
+              {Array.from({ length: pageCount }, (_, pageIndex) => (
+                <div
+                  key={pageIndex}
+                  className="grid min-w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12"
+                  aria-hidden={pageIndex !== page}
+                  inert={pageIndex !== page}
+                >
+                  {guruData.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize).map((guru) => (
+                    <Link
+                      key={guru.nama}
+                      to={'/profil-sekolah/guru/' + slugify(guru.nama)}
+                      aria-label={'Lihat profil ' + guru.nama}
+                      className="group relative block aspect-[322/426] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#cd091d]"
+                    >
+                      <article className="relative h-full bg-white p-[10px] transition-transform duration-300 group-hover:-translate-y-1">
+                        <img src={guru.image} alt={'Foto ' + guru.nama} loading="lazy" className="h-full w-full rounded-[10px] object-cover object-top" />
+                        <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
+                        <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
+                        <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
+                        <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
+                        <div className="absolute bottom-[12%] left-[8%] right-[8%] min-h-[76px] rounded-[16px] bg-white px-4 py-3 shadow-[0_0_18px_rgba(0,0,0,0.16)] sm:min-h-[86px]">
+                          <h3 className="text-sm font-extrabold leading-snug tracking-wide text-black sm:text-base xl:text-xl">{guru.nama}</h3>
+                          <p className="mt-1 text-[11px] font-medium leading-snug text-black/65 sm:text-xs xl:text-sm">{guru.jabatan}</p>
+                        </div>
+                      </article>
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
+          <span className="sr-only" aria-live="polite">Halaman {page + 1} dari {pageCount}</span>
 
           {pageCount > 1 && (
             <nav aria-label="Navigasi profil guru" className="mt-8 flex items-center justify-center gap-3 sm:mt-14">
