@@ -55,7 +55,17 @@ const Login = () => {
 
         <div className="mt-6 rounded-xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-dark-700">
           <p className="font-semibold text-primary">Akses Penilaian Lomba</p>
-          <p className="mt-1 leading-relaxed">Juri dapat masuk dengan email dan password admin yang dibagikan terpisah oleh tim.</p>
+          <p className="mt-1 leading-relaxed">Juri dapat menggunakan akun demo berikut untuk menilai dashboard admin.</p>
+          <dl className="mt-3 space-y-1 rounded-lg border border-primary-100 bg-white p-3 text-xs">
+            <div className="flex flex-wrap gap-x-2">
+              <dt className="font-semibold text-dark-700">Email</dt>
+              <dd className="select-all break-all">admin1234@admin.id</dd>
+            </div>
+            <div className="flex flex-wrap gap-x-2">
+              <dt className="font-semibold text-dark-700">Password</dt>
+              <dd className="select-all">1234</dd>
+            </div>
+          </dl>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">
