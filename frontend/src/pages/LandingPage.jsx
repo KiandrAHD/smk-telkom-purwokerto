@@ -6,6 +6,7 @@ import RibbonDivider from '../components/RibbonDivider';
 import DepartmentsSection from '../components/DepartmentsSection';
 import PartnersSection from '../components/PartnersSection';
 import AchievementsSection from '../components/AchievementsSection';
+import GuruPreviewSection from '../components/GuruPreviewSection';
 import StelaAISection from '../components/StelaAISection';
 import CTASection from '../components/CTASection';
 
@@ -27,6 +28,9 @@ const LandingPage = () => (
     </Reveal>
     <Reveal>
       <AchievementsSection />
+    </Reveal>
+    <Reveal>
+      <GuruPreviewSection />
     </Reveal>
     <Reveal>
       <StelaAISection />
