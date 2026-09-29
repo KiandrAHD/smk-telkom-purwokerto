@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CTASection from '../components/CTASection';
+import Reveal from '../components/Reveal';
 import RibbonDivider from '../components/RibbonDivider';
 import StelaAISection from '../components/StelaAISection';
 import { guruData, kepalaSekolah } from '../data/dummyData';
@@ -41,12 +42,12 @@ function GuruCarousel() {
     <section aria-labelledby="guru-list-title" className="relative overflow-hidden bg-white py-8 lg:py-12">
       <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-24 top-4 w-48 opacity-35 sm:w-60" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 text-center">
+        <Reveal className="mb-8 text-center">
           <h2 id="guru-list-title" className="font-heading text-2xl font-extrabold leading-tight text-dark-900 sm:text-3xl">
             Guru &amp; Tenaga Pendidik
           </h2>
           <p className="mt-1 text-sm font-semibold text-primary sm:text-base">SMK Telkom Purwokerto</p>
-        </div>
+        </Reveal>
 
         <div className="relative">
           <div className="overflow-hidden">
@@ -58,29 +59,30 @@ function GuruCarousel() {
               {Array.from({ length: pageCount }, (_, pageIndex) => (
                 <div
                   key={pageIndex}
-                  className="grid min-w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+                  className="grid min-w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-14"
                   aria-hidden={pageIndex !== page}
                   inert={pageIndex !== page}
                 >
-                  {guruData.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize).map((guru) => (
-                    <Link
-                      key={guru.nama}
-                      to={'/profil-sekolah/guru/' + slugify(guru.nama)}
-                      aria-label={'Lihat profil ' + guru.nama}
-                      className="group relative block aspect-[322/426] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-                    >
-                      <article className="relative h-full bg-white p-[10px] transition-transform duration-300 group-hover:-translate-y-1">
-                        <img src={guru.image} alt={'Foto ' + guru.nama} loading="lazy" className="h-full w-full rounded-[10px] object-cover object-top" />
-                        <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
-                        <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
-                        <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
-                        <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
-                        <div className="absolute bottom-[12%] left-[8%] right-[8%] min-h-[70px] rounded-xl bg-white px-3 py-2 shadow-card sm:min-h-[78px]">
-                          <h3 className="font-heading text-sm font-bold leading-snug text-dark-900 sm:text-base">{guru.nama}</h3>
-                          <p className="mt-1 text-[11px] leading-snug text-dark-500 sm:text-xs">{guru.jabatan}</p>
-                        </div>
-                      </article>
-                    </Link>
+                  {guruData.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize).map((guru, cardIndex) => (
+                    <Reveal key={guru.nama} className={['', 'delay-100', 'delay-200', 'delay-300'][cardIndex]}>
+                      <Link
+                        to={'/profil-sekolah/guru/' + slugify(guru.nama)}
+                        aria-label={'Lihat profil ' + guru.nama}
+                        className="group relative block aspect-[322/426] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                      >
+                        <article className="relative h-full bg-white p-[10px] transition-transform duration-300 group-hover:-translate-y-1">
+                          <img src={guru.image} alt={'Foto ' + guru.nama} loading="lazy" className="h-full w-full rounded-[10px] object-cover object-top" />
+                          <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
+                          <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
+                          <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
+                          <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
+                          <div className="absolute bottom-[12%] left-[6%] right-[6%] min-h-[70px] rounded-xl bg-white px-3 py-2 shadow-card sm:min-h-[78px]">
+                            <h3 className="font-heading text-sm font-bold leading-snug text-dark-900 sm:text-base">{guru.nama}</h3>
+                            <p className="mt-1 text-[11px] leading-snug text-dark-500 sm:text-xs">{guru.jabatan}</p>
+                          </div>
+                        </article>
+                      </Link>
+                    </Reveal>
                   ))}
                 </div>
               ))}
@@ -144,7 +146,7 @@ function GuruPage() {
         <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -right-12 top-0 w-48 opacity-35 sm:w-64" />
         <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-20 bottom-0 w-48 opacity-35 sm:w-64" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto grid overflow-hidden rounded-2xl border border-primary/30 bg-white shadow-card md:grid-cols-[38%_62%]">
+          <Reveal className="mx-auto grid overflow-hidden rounded-[20px] border-2 border-[#cd091d] bg-white shadow-[0_0_24px_rgba(130,130,130,0.25)] md:grid-cols-[38%_62%]">
             <div className="relative min-h-[280px] overflow-hidden bg-white md:min-h-[420px]">
               <img src={headmasterAccent} alt="" aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 h-full w-auto max-w-none" />
               <img src={kepalaSekolah.image} alt={'Foto ' + kepalaSekolah.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain object-bottom" />
@@ -165,14 +167,14 @@ function GuruPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <GuruCarousel />
-      <RibbonDivider />
-      <StelaAISection />
-      <CTASection />
+      <Reveal><RibbonDivider /></Reveal>
+      <Reveal><StelaAISection /></Reveal>
+      <Reveal><CTASection /></Reveal>
     </MainLayout>
   );
 }
