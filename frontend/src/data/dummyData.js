@@ -2290,7 +2290,7 @@ export const newsletterBerita = {
    ========================================================= */
 
 export const adminProfil = {
-  nama: 'Admin SMK Telkom',
+  nama: 'Admin SMK Telkom Purwokerto',
   peran: 'Administrator',
   notifikasi: 5,
   placeholderCari: 'Cari sesuatu...',
@@ -2489,10 +2489,10 @@ export const adminPendaftar = [
 /* ── Manajemen Jurusan ── */
 
 export const adminJurusan = [
-  { id: 1, nama: 'PPLG (Pengembangan Perangkat Lunak dan Gim)', kode: 'PPLG', deskripsi: 'Mempelajari pengembangan software dan gim.', jumlahSiswa: 342 },
-  { id: 2, nama: 'TJKT (Teknik Jaringan Komputer dan Telekomunikasi)', kode: 'TJKT', deskripsi: 'Mempelajari jaringan komputer dan telekomunikasi.', jumlahSiswa: 318 },
-  { id: 3, nama: 'DKV (Desain Komunikasi Visual)', kode: 'DKV', deskripsi: 'Mempelajari desain grafis dan multimedia.', jumlahSiswa: 210 },
-  { id: 4, nama: 'AKL (Akuntansi dan Keuangan Lembaga)', kode: 'AKL', deskripsi: 'Mempelajari akuntansi dan keuangan.', jumlahSiswa: 186 },
+  { id: 1, nama: 'Rekayasa Perangkat Lunak (RPL)', kode: 'RPL', deskripsi: 'Fokus pada pengembangan perangkat lunak seperti aplikasi web, mobile, dan sistem informasi.', jumlahSiswa: null, slug: 'rpl' },
+  { id: 2, nama: 'Pengembangan Game (PG)', kode: 'PG', deskripsi: 'Fokus pada pengembangan game, desain, pemrograman, dan produksi game.', jumlahSiswa: null, slug: 'pg' },
+  { id: 3, nama: 'Teknik Komputer dan Jaringan (TKJ)', kode: 'TKJ', deskripsi: 'Fokus pada infrastruktur jaringan komputer, keamanan siber, dan cloud computing.', jumlahSiswa: null, slug: 'tkj' },
+  { id: 4, nama: 'Teknik Jaringan Akses Telekomunikasi (TJAT)', kode: 'TJAT', deskripsi: 'Fokus pada jaringan akses telekomunikasi, fiber optic, broadband, dan infrastruktur konektivitas.', jumlahSiswa: null, slug: 'tjat' },
 ];
 
 /* ── Manajemen Prestasi ── */
@@ -2532,7 +2532,7 @@ export const adminProfilSekolah = {
 };
 
 export const adminAkun = {
-  namaLengkap: 'Admin SMK Telkom',
+  namaLengkap: 'Admin SMK Telkom Purwokerto',
   email: 'admin@smktelkom-pwt.sch.id',
   peran: 'Administrator',
 };
