@@ -3,7 +3,7 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import footerAccent from '../assets/landing/footer-accent.png';
+import footerAccent from '../assets/landing/figma-section-accent.png';
 
 const socialIcons = {
   instagram: FaInstagram,

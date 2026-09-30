@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Bot, CheckCircle2, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jurusanData, jurusanQuiz } from '../../data/dummyData';
+import SectionAccents from '../SectionAccents';
 
 // Rekomendasi = jurusan dengan skor tertinggi dari opsi yang dipilih.
 const recommend = (picked) => {
@@ -30,8 +31,9 @@ const JurusanQuizSection = () => {
   const resultHref = cocok ? `/jurusan/${cocok.slug}` : '/jurusan';
 
   return (
-    <section id="quiz-jurusan" className="bg-white py-8 lg:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="quiz-jurusan" className="relative bg-white py-8 lg:py-12">
+      <SectionAccents variant="departmentsQuiz" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-6 rounded-3xl bg-primary-50 p-6 sm:p-8 lg:grid-cols-[30%_1fr_28%]">
           {/* Ajakan */}
           <div className="flex items-start gap-4">

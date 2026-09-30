@@ -9,8 +9,8 @@ import { guruData, kepalaSekolah } from '../data/dummyData';
 import MainLayout from '../layouts/MainLayout';
 import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
-import watermark from '../assets/landing/telkom-accent.png';
-import headmasterAccent from '../assets/tentang/guru-accent-headmaster.svg';
+import SectionAccents from '../components/SectionAccents';
+import headmasterAccent from '../assets/tentang/figma-guru-headmaster.svg';
 
 const getPageSize = () => {
   if (typeof window === 'undefined') return 4;
@@ -40,7 +40,7 @@ function GuruCarousel() {
 
   return (
     <section aria-labelledby="guru-list-title" className="relative overflow-hidden bg-white py-8 lg:py-12">
-      <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-24 top-4 w-48 opacity-35 sm:w-60" />
+      <SectionAccents variant="teachers" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mb-8 text-center">
           <h2 id="guru-list-title" className="font-heading text-2xl font-extrabold leading-tight text-dark-900 sm:text-3xl">
@@ -143,8 +143,7 @@ function GuruPage() {
       </section>
 
       <section aria-labelledby="kepala-sekolah-title" className="relative overflow-hidden bg-white py-8 lg:py-12">
-        <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -right-12 top-0 w-48 opacity-35 sm:w-64" />
-        <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-20 bottom-0 w-48 opacity-35 sm:w-64" />
+        <SectionAccents variant="headmaster" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mx-auto grid overflow-hidden rounded-[20px] border-2 border-[#cd091d] bg-white shadow-[0_0_24px_rgba(130,130,130,0.25)] md:grid-cols-[38%_62%]">
             <div className="relative min-h-[280px] overflow-hidden bg-white md:min-h-[420px]">

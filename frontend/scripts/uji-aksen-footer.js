@@ -56,5 +56,25 @@
   if (document.documentElement.scrollWidth > innerWidth) {
     throw new Error('Halaman memiliki overflow horizontal.');
   }
+  const sectionCounts = {
+    departments: 8, achievements: 4, schoolTeachers: 7,
+    headmaster: 3, teachers: 3, departmentsQuiz: 6, activities: 7,
+  };
+  document.querySelectorAll('[data-accent-section]').forEach((layer) => {
+    const images = [...layer.querySelectorAll('img')];
+    const variant = layer.dataset.accentSection;
+    const style = getComputedStyle(layer);
+    if (images.length !== sectionCounts[variant] || style.position !== 'absolute'
+      || style.pointerEvents !== 'none' || layer.getAttribute('aria-hidden') !== 'true') {
+      throw new Error(`Lapisan aksen ${variant} tidak sesuai jumlah atau batas dekorasi.`);
+    }
+    if (images.some((image) => !image.complete || !image.naturalWidth
+      || image.getBoundingClientRect().width <= 0)) {
+      throw new Error(`Aksen ${variant} gagal dimuat atau berukuran nol.`);
+    }
+    if (images.some((image) => intersects(visibleBounds(image), footer.getBoundingClientRect()))) {
+      throw new Error(`Lapisan aksen ${variant} keluar ke footer.`);
+    }
+  });
   console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 8 aksen utuh tanpa overlap.`);
 })();

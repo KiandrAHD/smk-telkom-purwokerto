@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import watermark from '../assets/landing/telkom-accent.png';
+import watermark from '../assets/landing/figma-section-accent.png';
 import { guruData } from '../data/dummyData';
 import { slugify } from '../utils/slug';
 
@@ -9,7 +9,7 @@ const GuruPreviewSection = () => {
 
   return (
     <section aria-labelledby="guru-preview-title" className="relative overflow-hidden bg-white py-8 lg:py-12 font-['Plus_Jakarta_Sans']">
-      <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-20 top-4 w-48 opacity-25 sm:w-60" />
+      <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-20 top-4 w-48 sm:w-60" />
       <div className="relative mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p className="text-xs font-bold text-primary">#TenagaPendidik</p>

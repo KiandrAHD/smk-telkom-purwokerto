@@ -2,19 +2,11 @@ import { useState } from 'react';
 import { ArrowRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
-import watermark from '../../assets/landing/footer-accent.png';
+import SectionAccents from '../SectionAccents';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
+import photoAccent from '../../assets/tentang/figma-guru-photo-accent.png';
 
 const PER_PAGE = 4;
-
-const accentPositions = [
-  'right-[min(99px,5.36vw)] top-0',
-  'right-[max(-86px,-4.66vw)] top-[min(163px,8.83vw)]',
-  'right-[min(89px,4.82vw)] top-[min(420px,22.74vw)] -rotate-90',
-  'left-[min(188px,10.18vw)] top-[min(494px,26.75vw)]',
-  'left-[min(372px,20.14vw)] top-[min(658px,35.63vw)] rotate-90',
-  'left-[max(-55px,-2.98vw)] top-[min(683px,36.98vw)] -rotate-90',
-];
 
 const TentangKepalaSekolahSection = () => {
   const [expanded, setExpanded] = useState(false);
@@ -25,16 +17,7 @@ const TentangKepalaSekolahSection = () => {
 
   return (
     <section id="guru" className="relative overflow-x-clip bg-white py-8 lg:py-12 min-[1660px]:py-14">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden overflow-x-clip min-[1660px]:block">
-        {accentPositions.map((position) => (
-          <img
-            key={position}
-            src={watermark}
-            alt=""
-            className={`absolute size-[min(235px,12.72vw)] max-w-none select-none opacity-30 ${position}`}
-          />
-        ))}
-      </div>
+      <SectionAccents variant="schoolTeachers" />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8 min-[1660px]:max-w-[1621px] min-[1660px]:grid-cols-[610px_964px] min-[1660px]:gap-[47px] min-[1660px]:px-0">
         {/* Kepala Sekolah */}
@@ -95,6 +78,7 @@ const TentangKepalaSekolahSection = () => {
                       className="absolute inset-0 h-full w-full object-cover object-top"
                       loading={i < 4 ? 'eager' : 'lazy'}
                     />
+                    <img src={photoAccent} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full select-none mix-blend-multiply" />
                   </div>
                   <div className="px-1 pb-2 pt-2 [overflow-wrap:anywhere]">
                     <h3 className="font-heading text-xs font-bold leading-relaxed text-primary">

@@ -1,30 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
-import footerAccent from '../assets/landing/footer-accent.png';
+import SectionAccents from '../components/SectionAccents';
+import ribbon from '../assets/landing/figma-ribbon.png';
 import { ekstrakurikulerData } from '../data/dummyData';
 
 const STAT_ICONS = [BriefcaseBusiness, Trophy, UsersRound, Bookmark];
-
-const AccentPattern = () => (
-  <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-    {[
-      '-left-[108px] top-8',
-      '-left-[82px] top-[265px]',
-      '-left-[112px] top-[520px]',
-      '-right-[105px] top-12',
-      '-right-[72px] top-[285px]',
-      '-right-[112px] top-[535px]',
-    ].map((position) => (
-      <img
-        key={position}
-        src={footerAccent}
-        alt=""
-        className={`absolute hidden h-[235px] w-[235px] max-w-none select-none opacity-30 lg:block ${position}`}
-      />
-    ))}
-  </div>
-);
 
 const CategoryTabs = ({ activeCategory, onSelect }) => (
   <div id="ekstrakurikuler-filters" className="mx-auto grid max-w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
@@ -142,7 +123,9 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
       id="daftar-ekstrakurikuler"
       className="relative overflow-hidden bg-white py-8 lg:py-12"
     >
-      <AccentPattern />
+      <SectionAccents variant="activities" />
+      {/* Pita muat di padding existing; proporsi aset tetap dan konten tidak bergeser. */}
+      <img src={ribbon} alt="" aria-hidden="true" data-figma-node="59:337" className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-8 w-full select-none object-contain lg:h-12" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
         <div className="mt-6 flex items-end justify-between gap-4">
