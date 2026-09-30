@@ -9,24 +9,19 @@ import { adminTabPengaturan } from '../../data/dummyData';
 const PengaturanPage = () => {
   const { profilSekolah, setProfilSekolah, akun, setAkun, pengaturanUmum, setPengaturanUmum } = useAdminData();
   const [tab, setTab] = useState(adminTabPengaturan[0]);
-  const [form, setForm] = useState(profilSekolah);
   const [tersimpan, setTersimpan] = useState(false);
   const [logo, setLogo] = useState(null);
   const berkasLogoRef = useRef(null);
 
-  useEffect(() => { setForm(profilSekolah); }, [profilSekolah]);
   useEffect(() => () => { if (logo) URL.revokeObjectURL(logo); }, [logo]);
 
   const ubah = (setter) => (kunci) => (e) => {
     setTersimpan(false);
-    setter((f) => ({ ...f, [kunci]: e.target.value }));
+    setter((data) => ({ ...data, [kunci]: e.target.value }));
   };
 
   const simpan = (e) => {
     e.preventDefault();
-    if (tab === adminTabPengaturan[0]) setProfilSekolah(form);
-    if (tab === adminTabPengaturan[1]) setAkun(akun);
-    if (tab === adminTabPengaturan[2]) setPengaturanUmum(pengaturanUmum);
     setTersimpan(true);
   };
 
@@ -70,12 +65,12 @@ const PengaturanPage = () => {
 
             {tab === adminTabPengaturan[0] && (
               <div className="mt-6 space-y-5">
-                <FormInput label="Nama Sekolah" value={form.namaSekolah} onChange={ubah(setForm)('namaSekolah')} required />
-                <FormInput label="NPSN" value={form.npsn} onChange={ubah(setForm)('npsn')} required />
-                <FormInput label="Alamat" value={form.alamat} onChange={ubah(setForm)('alamat')} required />
-                <FormInput label="No. Telepon" value={form.telepon} onChange={ubah(setForm)('telepon')} required />
-                <FormInput label="Email" type="email" value={form.email} onChange={ubah(setForm)('email')} required />
-                <FormInput label="Website" value={form.website} onChange={ubah(setForm)('website')} required />
+                <FormInput label="Nama Sekolah" value={profilSekolah.namaSekolah} onChange={ubah(setProfilSekolah)('namaSekolah')} required />
+                <FormInput label="NPSN" value={profilSekolah.npsn} onChange={ubah(setProfilSekolah)('npsn')} required />
+                <FormInput label="Alamat" value={profilSekolah.alamat} onChange={ubah(setProfilSekolah)('alamat')} required />
+                <FormInput label="No. Telepon" value={profilSekolah.telepon} onChange={ubah(setProfilSekolah)('telepon')} required />
+                <FormInput label="Email" type="email" value={profilSekolah.email} onChange={ubah(setProfilSekolah)('email')} required />
+                <FormInput label="Website" value={profilSekolah.website} onChange={ubah(setProfilSekolah)('website')} required />
               </div>
             )}
 
