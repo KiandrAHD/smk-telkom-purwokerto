@@ -30,7 +30,7 @@
     }
     left.forEach((image, index) => {
       const a = image.getBoundingClientRect();
-      const b = right[index].getBoundingClientRect();
+      const b = right[count === 3 ? count - 1 - index : index].getBoundingClientRect();
       const differences = [
         a.left + b.right - center.left - center.right,
         a.top - b.top, a.width - b.width, a.height - b.height,

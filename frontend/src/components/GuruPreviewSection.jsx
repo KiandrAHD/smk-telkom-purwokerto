@@ -9,7 +9,7 @@ const GuruPreviewSection = () => {
 
   return (
     <section aria-labelledby="guru-preview-title" className="relative overflow-hidden bg-white py-8 lg:py-12 font-['Plus_Jakarta_Sans']">
-      <img src={watermark} alt="" aria-hidden="true" className="pointer-events-none absolute -left-20 top-4 w-48 sm:w-60" />
+      <img src={watermark} alt="" aria-hidden="true" data-figma-node="24:759" className="pointer-events-none absolute -left-20 top-4 w-48 sm:w-60 [transform:matrix(-1,8.742278367890322e-8,-8.742278367890322e-8,-1,0,0)]" />
       <div className="relative mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p className="text-xs font-bold text-primary">#TenagaPendidik</p>
@@ -36,7 +36,7 @@ const GuruPreviewSection = () => {
                   loading="lazy"
                   className="h-full w-full rounded-[10px] object-cover object-top"
                 />
-                <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
+                <div aria-hidden="true" className="guru-accent-horizontal-top pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
                 <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
                 <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
                 <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />

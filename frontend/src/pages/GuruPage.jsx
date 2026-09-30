@@ -72,7 +72,7 @@ function GuruCarousel() {
                       >
                         <article className="relative h-full bg-white p-[10px] transition-transform duration-300 group-hover:-translate-y-1">
                           <img src={guru.image} alt={'Foto ' + guru.nama} loading="lazy" className="h-full w-full rounded-[10px] object-cover object-top" />
-                          <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
+                          <div aria-hidden="true" className="guru-accent-horizontal-top pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
                           <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
                           <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
                           <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />

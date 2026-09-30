@@ -494,3 +494,60 @@ Sesuai permintaan terbaru, footer sekarang memiliki sepuluh motif: dua pada masi
 Pemeriksaan terbaru lulus pada Profil Guru di 320/390/768/1024/1280/1536/1920px, termasuk emulasi 1536px/DPR1.25 dan 1280px/DPR1.5. Beranda dan Ekstrakurikuler juga lulus pada 1280px/DPR1.5. Skrip memeriksa jumlah 2+2/3+3, simetri posisi/ukuran dengan toleransi 0.5px, celah bawah yang merata, pemuatan gambar, clipping, overlap konten/bar/aksen lain/tombol STELA untuk band bawah, dan overflow horizontal. Lint, build dan diff check lulus. DPR yang diuji adalah emulasi browser, bukan perubahan Windows display scaling.
 
 Keterangan delapan motif dan tabel verifikasi di atas merupakan snapshot implementasi sebelum permintaan simetri ini. Pemeriksaan ulang kini memakai sepuluh motif; ini penyesuaian sesuai permintaan pengguna, bukan klaim koordinat global pixel-perfect Figma.
+
+## Pembaruan orientasi (30 September 2026)
+
+Bagian ini menggantikan keterangan pencerminan bentuk kanan pada pembaruan sebelumnya. Simetri posisi dan jumlah 2+2/3+3 dipertahankan, tetapi bentuk motif mengikuti sumber Figma tanpa refleksi horizontal.
+
+Figma diperiksa kembali secara langsung pada keenam frame di atas. Profil Sekolah kini memiliki 16 mask setelah desain dirapikan; total snapshot terbaru 107 mask. Tabel mask sebelumnya merupakan snapshot lama. Semua 38 ID yang dipakai SectionAccents masih ditemukan dan matriks terbarunya direkam di [figma-accent-orientation.json](figma-accent-orientation.json).
+
+Sudut di bawah memakai koordinat layar/CSS: positif searah jarum jam. Matriks native, bukan angka sudut yang dibulatkan, dipakai dalam implementasi.
+
+| Elemen | Sumber Figma | Website sebelum | Perbaikan |
+| --- | --- | --- | --- |
+| Dua motif footer kanan atas | 12:234; tegak, tanpa refleksi | Wrapper scaleX(-1), bentuk terbalik horizontal | Hapus refleksi; pakai matriks tegak native |
+| Tiga motif footer kanan bawah | 12:212 untuk seperempat putaran berlawanan jarum jam dan 12:206/12:209 untuk tegak | Wrapper scaleX(-1) mencerminkan bentuk dan mengubah urutan visual | Hapus refleksi; urutan kiri-ke-kanan -90°, -90°, 0° pada kedua grup sesuai orientasi sumber; slot tetap simetris |
+| Bingkai atas kartu Guru dan preview Beranda | Export 12:3384, 119 × 20 px; orientasi berlawanan dengan tile bawah 12:1398 | Memakai tile bawah yang sama pada sisi atas | Pakai figma-guru-horizontal-top.png asli; bingkai bawah/vertikal dipertahankan |
+| Watermark preview Guru Beranda | 24:759, putaran 180° | 0° | Putar memakai matriks native atas persetujuan pengguna. Node sumber berada di luar frame, sehingga ini adaptasi yang disetujui, bukan mismatch placement yang terkonfirmasi |
+| 38 motif SectionAccents | Matriks native dari tujuh varian section | Sudut arah sudah benar, dibulatkan lima desimal; deviasi maksimum sekitar 0.000005° | Ganti rotate utility dengan matriks sumber penuh tanpa mengubah pusat, ukuran atau urutan layer |
+
+Bingkai vertikal kiri/kanan memang berorientasi sama di Figma; tidak ditambahkan pencerminan. Aksen kepala sekolah berupa SVG native, motif foto Profil Sekolah berupa export komposit, dan pita berupa export bitmap. Orientasinya dipertahankan. Cabang laurel existing tidak menunjukkan mismatch yang terkonfirmasi; PanelMerah PPDB tidak memiliki pasangan dalam enam frame tersebut, sehingga tidak diklaim terverifikasi terhadap sumber ini.
+
+### Kode orientasi yang diterapkan
+
+```css
+.footer-accent {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+.footer-accent-turned {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 0);
+}
+.guru-accent-horizontal-top {
+  background-image: url('./assets/tentang/figma-guru-horizontal-top.png');
+  background-size: 119px 20px;
+}
+```
+
+GuruPreviewSection memakai [transform:matrix(-1,8.742278367890322e-8,-8.742278367890322e-8,-1,0,0)] pada watermark. Nilai lengkap setiap motif section tersedia dalam komponen SectionAccents dan fixture JSON; tidak ada pembalikan tanda sudut Figma secara sembarang.
+
+### Verifikasi setelah perbaikan
+
+- node scripts/uji-arah-aksen.mjs lulus: 38 matriks, dua orientasi footer, kedua pemakai bingkai atas, dimensi export, dan matriks watermark.
+- npm.cmd run lint, npm.cmd run build, serta git diff --check lulus.
+- Pemeriksaan Chrome lokal pada Beranda, Profil Sekolah, Profil Guru, Jurusan, Prestasi, dan Ekstrakurikuler di 1280px: semua node section ditemukan, orientasi computed CSS sesuai sumber (toleransi serialisasi 0.000001 per koefisien), tanpa tambahan rotate/refleksi wrapper.
+- Footer lulus uji jumlah 10, simetri slot dengan toleransi 0.5px, celah merata, gambar termuat, tanpa clipping, overlap konten/bar/aksen lain/STELA pada band bawah, atau overflow horizontal.
+- Profil Guru diuji pada 320, 390, 768, 1024, 1280, 1536, dan 1920px. Emulasi 1536px/DPR1.25 dan 1280px/DPR1.5 lulus. Beranda juga lulus pada kedua DPR tersebut, Ekstrakurikuler pada 1280px/DPR1.5.
+- Log error/warn yang tertangkap selama pemeriksaan tab kosong. Screenshot footer dan kartu guru diperiksa setelah animasi selesai; tidak ada perubahan pada isi/layout halaman.
+
+Tidak ditemukan ketidaksesuaian orientasi pada elemen yang dapat dipasangkan dengan sumber dan telah diperiksa. Matriks implementasi sama secara numerik dengan Figma. Namun hasil raster seluruh halaman belum diklaim PIXEL-PERFECT: posisi global tetap adaptasi per section, footer 10 motif mengikuti permintaan pengguna, dan antialiasing dapat berbeda antar DPR/browser. DPR di atas merupakan emulasi, bukan perubahan Windows display scaling.
+
+Jalankan ulang dari frontend:
+
+```powershell
+node scripts/uji-arah-aksen.mjs
+npm.cmd run lint
+npm.cmd run build
+git diff --check
+```
+
+Jalankan scripts/uji-aksen-footer.js di Console DevTools untuk memeriksa simetri dan batas dekorasi pada viewport lain.

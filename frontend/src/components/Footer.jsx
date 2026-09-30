@@ -37,7 +37,7 @@ const Footer = () => (
         <img src={footerAccent} alt="" className="footer-accent" />
         <img src={footerAccent} alt="" className="footer-accent" />
       </div>
-      <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none -scale-x-100">
+      <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none">
         <img src={footerAccent} alt="" className="footer-accent" />
         <img src={footerAccent} alt="" className="footer-accent" />
       </div>
@@ -134,13 +134,13 @@ const Footer = () => (
     {/* Band ini mengikuti tinggi konten, bukan koordinat top tetap. */}
     <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
       <div className="footer-accent-group">
-        <img src={footerAccent} alt="" className="footer-accent -rotate-90" />
-        <img src={footerAccent} alt="" className="footer-accent -rotate-90" />
+        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
+        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
         <img src={footerAccent} alt="" className="footer-accent" />
       </div>
-      <div className="footer-accent-group justify-self-end -scale-x-100">
-        <img src={footerAccent} alt="" className="footer-accent -rotate-90" />
-        <img src={footerAccent} alt="" className="footer-accent -rotate-90" />
+      <div className="footer-accent-group justify-self-end">
+        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
+        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
         <img src={footerAccent} alt="" className="footer-accent" />
       </div>
     </div>

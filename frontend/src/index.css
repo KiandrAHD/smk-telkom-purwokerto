@@ -59,6 +59,11 @@ body {
   background-size: 106px 20px;
 }
 
+.guru-accent-horizontal-top {
+  background-image: url('./assets/tentang/figma-guru-horizontal-top.png');
+  background-size: 119px 20px;
+}
+
 .guru-accent-vertical {
   background-image: url('./assets/tentang/figma-guru-vertical.png');
   background-size: 21px 243px;
@@ -84,6 +89,11 @@ body {
   object-fit: contain;
   /* Export asli memuat alpha 0.68; hasil akhir mengikuti fill footer Figma 0.30. */
   opacity: calc(0.3 / 0.68);
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+
+.footer-accent-turned {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 0);
 }
 
 /* Motif muat utuh di gutter; tidak perlu dipotong untuk menghindari teks. */
