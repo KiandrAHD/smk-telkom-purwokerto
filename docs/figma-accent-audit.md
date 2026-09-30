@@ -486,3 +486,11 @@ git diff --check
 ```
 
 Jalankan scripts/uji-aksen-footer.js di Console DevTools untuk memeriksa footer dan layer section. Uji keenam route pada viewport di tabel, termasuk ketika kategori/filter berubah. Penyamaan raster penuh membutuhkan penyamaan layout pada viewport target; itu sengaja tidak dilakukan karena pengguna melarang perubahan layout.
+
+## Pembaruan simetri footer (30 September 2026)
+
+Sesuai permintaan terbaru, footer sekarang memiliki sepuluh motif: dua pada masing-masing sisi atas dan tiga pada masing-masing sisi bawah. Kedua wrapper kanan dicerminkan horizontal. Inset band bawah dibuat sama, dengan grid yang mengecilkan motif pada layar sempit dan menyisakan ruang untuk tombol STELA. Isi, ukuran container teks, warna, dan tinggi band tetap dipertahankan.
+
+Pemeriksaan terbaru lulus pada Profil Guru di 320/390/768/1024/1280/1536/1920px, termasuk emulasi 1536px/DPR1.25 dan 1280px/DPR1.5. Beranda dan Ekstrakurikuler juga lulus pada 1280px/DPR1.5. Skrip memeriksa jumlah 2+2/3+3, simetri posisi/ukuran dengan toleransi 0.5px, celah bawah yang merata, pemuatan gambar, clipping, overlap konten/bar/aksen lain/tombol STELA untuk band bawah, dan overflow horizontal. Lint, build dan diff check lulus. DPR yang diuji adalah emulasi browser, bukan perubahan Windows display scaling.
+
+Keterangan delapan motif dan tabel verifikasi di atas merupakan snapshot implementasi sebelum permintaan simetri ini. Pemeriksaan ulang kini memakai sepuluh motif; ini penyesuaian sesuai permintaan pengguna, bukan klaim koordinat global pixel-perfect Figma.

@@ -92,6 +92,7 @@ body {
   inset-block: 0;
   width: max(var(--footer-accent-gutter), calc((100% - 80rem) / 2));
   display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   align-items: center;
   justify-items: center;
   gap: 1rem;
@@ -100,7 +101,6 @@ body {
 
 .footer-accent-side-left {
   left: 0;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
 .footer-accent-side-right {
@@ -114,12 +114,26 @@ body {
 
 /* Aliran normal menempatkan motif bawah setelah daftar Menu/Kontak selesai. */
 .footer-accent-band {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  min-height: calc(var(--footer-accent-size) + 2rem);
   gap: 1rem;
   padding-block: 1rem;
-  /* Ruang untuk tombol STELA yang mengambang di pojok kanan bawah. */
-  padding-right: 6rem;
+  /* Inset kiri/kanan sama dan tetap memberi ruang untuk tombol STELA. */
+  padding-inline: clamp(5rem, 8vw, 6rem);
+}
+
+.footer-accent-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.25rem;
+  width: min(100%, calc(3 * var(--footer-accent-size) + 0.5rem));
+}
+
+.footer-accent-band .footer-accent {
+  width: 100%;
+  height: auto;
 }
 
 /* Umpan balik interaksi untuk SEMUA elemen yang bisa dipencet — satu aturan di
