@@ -1,0 +1,56 @@
+// Jalankan isi berkas ini di Console DevTools pada setiap viewport/zoom yang diuji.
+(() => {
+  const footer = document.querySelector('footer');
+  if (!footer) throw new Error('Footer belum dimuat.');
+
+  const accents = [...footer.querySelectorAll('img[alt=""]')];
+  const content = footer.querySelector('.footer-content');
+  const bottomBar = footer.querySelector('.footer-bottom-bar');
+  if (accents.length !== 8 || !content || !bottomBar) {
+    throw new Error('Delapan aksen dan area konten/footer bawah harus tersedia.');
+  }
+  if (accents.some((image) => !image.complete || image.naturalWidth === 0)) {
+    throw new Error('Tunggu gambar aksen selesai dimuat; periksa Network jika gagal.');
+  }
+
+  const intersects = (a, b) => (
+    a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top
+  );
+
+  // Ukur area gambar yang benar-benar tidak terpotong ancestor overflow.
+  const visibleBounds = (element) => {
+    const bounds = element.getBoundingClientRect().toJSON();
+    for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+      const style = getComputedStyle(parent);
+      const clip = parent.getBoundingClientRect();
+      if (['hidden', 'clip', 'auto', 'scroll'].includes(style.overflowX)) {
+        bounds.left = Math.max(bounds.left, clip.left);
+        bounds.right = Math.min(bounds.right, clip.right);
+      }
+      if (['hidden', 'clip', 'auto', 'scroll'].includes(style.overflowY)) {
+        bounds.top = Math.max(bounds.top, clip.top);
+        bounds.bottom = Math.min(bounds.bottom, clip.bottom);
+      }
+    }
+    return bounds;
+  };
+
+  const areas = accents.map(visibleBounds);
+  const protectedAreas = [content, bottomBar].map((element) => element.getBoundingClientRect());
+  areas.forEach((area, index) => {
+    if (area.right <= area.left || area.bottom <= area.top) {
+      throw new Error(`Aksen ${index + 1} hilang pada lebar ${innerWidth}px.`);
+    }
+    if (protectedAreas.some((protectedArea) => intersects(area, protectedArea))) {
+      throw new Error(`Aksen ${index + 1} bertabrakan dengan konten footer.`);
+    }
+    if (areas.slice(index + 1).some((other) => intersects(area, other))) {
+      throw new Error(`Aksen ${index + 1} bertabrakan dengan aksen lain.`);
+    }
+  });
+
+  if (document.documentElement.scrollWidth > innerWidth) {
+    throw new Error('Halaman memiliki overflow horizontal.');
+  }
+  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 8 aksen terlihat tanpa overlap.`);
+})();
