@@ -165,7 +165,8 @@ const Login = () => {
           </div>
         ) : (
           <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-center text-xs font-semibold text-amber-800">
-            Akun demo belum dikonfigurasi.
+            <p>admin1234@admin.id</p>
+            <p>1234</p>
           </div>
         )}
 
