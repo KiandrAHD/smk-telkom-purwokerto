@@ -1,9 +1,11 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import {
   adminBerita,
+  adminAkun,
   adminJurusan,
   adminLowongan,
   adminPendaftar,
+  adminPengaturanUmum,
   adminPrestasi,
   adminProfilSekolah,
 } from '../data/dummyData';
@@ -27,6 +29,8 @@ export const AdminDataProvider = ({ children }) => {
   const [prestasi, setPrestasi] = useState(adminPrestasi);
   const [lowongan, setLowongan] = useState(adminLowongan);
   const [profilSekolah, setProfilSekolah] = useState(adminProfilSekolah);
+  const [akun, setAkun] = useState(adminAkun);
+  const [pengaturanUmum, setPengaturanUmum] = useState(adminPengaturanUmum);
 
   const simpanBerita = useCallback((data) => {
     setBerita((lama) =>
@@ -80,6 +84,10 @@ export const AdminDataProvider = ({ children }) => {
       prestasi,
       lowongan,
       profilSekolah,
+      akun,
+      setAkun,
+      pengaturanUmum,
+      setPengaturanUmum,
       simpanBerita,
       hapusBerita,
       ubahStatusPendaftar,
@@ -99,6 +107,10 @@ export const AdminDataProvider = ({ children }) => {
       prestasi,
       lowongan,
       profilSekolah,
+      akun,
+      setAkun,
+      pengaturanUmum,
+      setPengaturanUmum,
       simpanBerita,
       hapusBerita,
       ubahStatusPendaftar,

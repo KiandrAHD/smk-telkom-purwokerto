@@ -54,7 +54,12 @@ const JurusanPage = () => {
     },
     { key: 'kode', header: 'Kode Jurusan', kelas: 'w-36' },
     { key: 'deskripsi', header: 'Deskripsi' },
-    { key: 'jumlahSiswa', header: 'Jumlah Siswa', kelas: 'w-32' },
+    {
+      key: 'jumlahSiswa',
+      header: 'Jumlah Siswa',
+      kelas: 'w-32',
+      render: (j) => <span>{j.jumlahSiswa ?? '-'}</span>,
+    },
     {
       key: 'aksi',
       header: 'Aksi',
@@ -114,14 +119,14 @@ const JurusanPage = () => {
             label="Nama Jurusan"
             value={form.nama}
             onChange={ubah('nama')}
-            placeholder="Contoh: PPLG (Pengembangan Perangkat Lunak dan Gim)"
+            placeholder="Contoh: Rekayasa Perangkat Lunak (RPL)"
             required
           />
           <FormInput
             label="Kode Jurusan"
             value={form.kode}
             onChange={ubah('kode')}
-            placeholder="Contoh: PPLG"
+            placeholder="Contoh: RPL"
             required
           />
           <FormInput

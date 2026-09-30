@@ -4,14 +4,11 @@ import FormInput from '../../components/dashboard/FormInput';
 import Logo from '../../components/Logo';
 import PageHeader from '../../components/dashboard/PageHeader';
 import { useAdminData } from '../../context/AdminDataContext';
-import { adminAkun, adminPengaturanUmum, adminTabPengaturan } from '../../data/dummyData';
+import { adminTabPengaturan } from '../../data/dummyData';
 
 const PengaturanPage = () => {
-  const { profilSekolah, setProfilSekolah } = useAdminData();
+  const { profilSekolah, setProfilSekolah, akun, setAkun, pengaturanUmum, setPengaturanUmum } = useAdminData();
   const [tab, setTab] = useState(adminTabPengaturan[0]);
-  const [form, setForm] = useState(profilSekolah);
-  const [akun, setAkun] = useState(adminAkun);
-  const [umum, setUmum] = useState(adminPengaturanUmum);
   const [tersimpan, setTersimpan] = useState(false);
   const [logo, setLogo] = useState(null);
   const berkasLogoRef = useRef(null);
@@ -20,15 +17,19 @@ const PengaturanPage = () => {
 
   const ubah = (setter) => (kunci) => (e) => {
     setTersimpan(false);
-    setter((f) => ({ ...f, [kunci]: e.target.value }));
+    setter((data) => ({ ...data, [kunci]: e.target.value }));
   };
 
   const simpan = (e) => {
     e.preventDefault();
-    if (tab !== adminTabPengaturan[0]) return;
-    setProfilSekolah(form);
     setTersimpan(true);
   };
+
+  const labelSimpan = {
+    [adminTabPengaturan[0]]: 'Terapkan Profil untuk Sesi Ini',
+    [adminTabPengaturan[1]]: 'Terapkan Akun untuk Sesi Ini',
+    [adminTabPengaturan[2]]: 'Terapkan Pengaturan untuk Sesi Ini',
+  }[tab];
 
   return (
     <section>
@@ -64,12 +65,12 @@ const PengaturanPage = () => {
 
             {tab === adminTabPengaturan[0] && (
               <div className="mt-6 space-y-5">
-                <FormInput label="Nama Sekolah" value={form.namaSekolah} onChange={ubah(setForm)('namaSekolah')} required />
-                <FormInput label="NPSN" value={form.npsn} onChange={ubah(setForm)('npsn')} required />
-                <FormInput label="Alamat" value={form.alamat} onChange={ubah(setForm)('alamat')} required />
-                <FormInput label="No. Telepon" value={form.telepon} onChange={ubah(setForm)('telepon')} required />
-                <FormInput label="Email" type="email" value={form.email} onChange={ubah(setForm)('email')} required />
-                <FormInput label="Website" value={form.website} onChange={ubah(setForm)('website')} required />
+                <FormInput label="Nama Sekolah" value={profilSekolah.namaSekolah} onChange={ubah(setProfilSekolah)('namaSekolah')} required />
+                <FormInput label="NPSN" value={profilSekolah.npsn} onChange={ubah(setProfilSekolah)('npsn')} required />
+                <FormInput label="Alamat" value={profilSekolah.alamat} onChange={ubah(setProfilSekolah)('alamat')} required />
+                <FormInput label="No. Telepon" value={profilSekolah.telepon} onChange={ubah(setProfilSekolah)('telepon')} required />
+                <FormInput label="Email" type="email" value={profilSekolah.email} onChange={ubah(setProfilSekolah)('email')} required />
+                <FormInput label="Website" value={profilSekolah.website} onChange={ubah(setProfilSekolah)('website')} required />
               </div>
             )}
 
@@ -79,19 +80,19 @@ const PengaturanPage = () => {
                 <FormInput label="Email" type="email" value={akun.email} onChange={ubah(setAkun)('email')} required />
                 <FormInput label="Peran" value={akun.peran} disabled readOnly />
                 <p className="text-[11px] leading-relaxed text-dark-400">
-                  Penggantian kata sandi dilakukan lewat Supabase Auth, bukan dari halaman ini.
+                  Perubahan di tab ini hanya berlaku selama sesi admin saat ini. Perubahan email akun Supabase dilakukan lewat dasbor Supabase, bukan dari halaman ini.
                 </p>
               </div>
             )}
 
-            {tab === adminTabPengaturan[2] && (
+{tab === adminTabPengaturan[2] && (
               <div className="mt-6 space-y-5">
-                <FormInput label="Tahun Ajaran" value={umum.tahunAjaran} onChange={ubah(setUmum)('tahunAjaran')} required />
+                <FormInput label="Tahun Ajaran" value={pengaturanUmum.tahunAjaran} onChange={ubah(setPengaturanUmum)('tahunAjaran')} required />
                 <FormInput
                   label="Status PPDB"
                   as="select"
-                  value={umum.statusPpdb}
-                  onChange={ubah(setUmum)('statusPpdb')}
+                  value={pengaturanUmum.statusPpdb}
+                  onChange={ubah(setPengaturanUmum)('statusPpdb')}
                   options={['Dibuka', 'Ditutup']}
                 />
                 <FormInput
@@ -99,13 +100,20 @@ const PengaturanPage = () => {
                   type="number"
                   min="1"
                   max="50"
-                  value={umum.beritaPerHalaman}
-                  onChange={ubah(setUmum)('beritaPerHalaman')}
+                  value={pengaturanUmum.beritaPerHalaman}
+                  onChange={ubah(setPengaturanUmum)('beritaPerHalaman')}
                   required
                 />
+                <p className="text-[11px] leading-relaxed text-dark-400">
+                  Perubahan hanya berlaku selama sesi admin saat ini.
+                </p>
               </div>
             )}
-            {tab !== adminTabPengaturan[0] && <p className="mt-5 text-xs text-dark-500">Bagian ini masih berupa pratinjau. Perubahan belum tersimpan atau diterapkan pada website.</p>}
+            {tab !== adminTabPengaturan[0] && (
+              <p className="mt-5 text-xs text-dark-500">
+                Perubahan pada formulir ini hanya berlaku selama sesi admin dan tidak disimpan ke database permanen.
+              </p>
+            )}
           </div>
 
           <aside className="flex flex-col">
@@ -146,13 +154,20 @@ const PengaturanPage = () => {
             />
 
             <div className="mt-auto pt-10">
-              {tab === adminTabPengaturan[0] && <button type="submit" className="w-full rounded-xl bg-primary px-6 py-3.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5">Terapkan Profil untuk Sesi Ini</button>}
+              <button type="submit" className="w-full rounded-xl bg-primary px-6 py-3.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5">
+                {labelSimpan}
+              </button>
 
               {tersimpan && (
-                <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-medium text-green-600">
-                  <Check className="h-3.5 w-3.5" />
-                  Pratinjau profil diterapkan untuk sesi ini.
-                </p>
+                <div className="mt-3 text-center">
+                  <p className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-green-600">
+                    <Check className="h-3.5 w-3.5" />
+                    Perubahan berhasil diterapkan untuk sesi admin ini.
+                  </p>
+                  <p className="mt-1 text-[10px] text-dark-400">
+                    Perubahan ini hanya berlaku selama sesi admin.
+                  </p>
+                </div>
               )}
             </div>
           </aside>
