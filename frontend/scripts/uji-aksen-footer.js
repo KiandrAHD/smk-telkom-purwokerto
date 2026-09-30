@@ -41,6 +41,10 @@
     if (area.right <= area.left || area.bottom <= area.top) {
       throw new Error(`Aksen ${index + 1} hilang pada lebar ${innerWidth}px.`);
     }
+    const full = accents[index].getBoundingClientRect();
+    if (['left', 'right', 'top', 'bottom'].some((edge) => Math.abs(area[edge] - full[edge]) > 0.5)) {
+      throw new Error(`Aksen ${index + 1} terpotong pada lebar ${innerWidth}px.`);
+    }
     if (protectedAreas.some((protectedArea) => intersects(area, protectedArea))) {
       throw new Error(`Aksen ${index + 1} bertabrakan dengan konten footer.`);
     }
@@ -52,5 +56,5 @@
   if (document.documentElement.scrollWidth > innerWidth) {
     throw new Error('Halaman memiliki overflow horizontal.');
   }
-  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 8 aksen terlihat tanpa overlap.`);
+  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 8 aksen utuh tanpa overlap.`);
 })();

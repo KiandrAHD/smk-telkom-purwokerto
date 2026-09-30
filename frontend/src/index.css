@@ -66,7 +66,7 @@ body {
 
 /* Aksen footer memiliki area sendiri; zoom tidak dapat memindahkannya ke teks. */
 .site-footer {
-  --footer-accent-size: clamp(3rem, 12vw, 14.5625rem);
+  --footer-accent-size: clamp(2rem, 8vw, 8rem);
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
   isolation: isolate;
 }
@@ -85,31 +85,30 @@ body {
   opacity: 0.3;
 }
 
-/* Crop hanya dekorasi di sisi luar; outline dan focus ring konten tetap bebas. */
+/* Motif muat utuh di gutter; tidak perlu dipotong untuk menghindari teks. */
 .footer-accent-side {
   position: absolute;
   inset-block: 0;
   width: max(var(--footer-accent-gutter), calc((100% - 80rem) / 2));
   display: grid;
   align-items: center;
+  justify-items: center;
   gap: 1rem;
-  overflow: hidden;
+  padding-inline: clamp(0.25rem, 0.8vw, 1rem);
 }
 
 .footer-accent-side-left {
   left: 0;
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  justify-items: end;
 }
 
 .footer-accent-side-right {
   right: 0;
-  justify-items: start;
 }
 
 .footer-accent-side .footer-accent {
-  height: 100%;
-  max-height: var(--footer-accent-size);
+  width: min(100%, var(--footer-accent-size));
+  height: auto;
 }
 
 /* Aliran normal menempatkan motif bawah setelah daftar Menu/Kontak selesai. */
@@ -117,7 +116,9 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  overflow: hidden;
+  padding-block: 1rem;
+  /* Ruang untuk tombol STELA yang mengambang di pojok kanan bawah. */
+  padding-right: 6rem;
 }
 
 /* Umpan balik interaksi untuk SEMUA elemen yang bisa dipencet — satu aturan di
