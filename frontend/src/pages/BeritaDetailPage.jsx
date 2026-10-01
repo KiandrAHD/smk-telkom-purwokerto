@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
@@ -6,11 +7,9 @@ import MainLayout from '../layouts/MainLayout';
 import { getBeritaBySlug, getPublishedBerita } from '../services/beritaService';
 import { toBeritaItem } from '../utils/publicContent';
 
-// Isi halaman diambil dari slug di URL, bukan ditulis ulang di sini — kartu mana
-// pun yang diklik akan membuka data miliknya sendiri. Slug yang tidak dikenal
-// (misal /prestasi/galeri yang halamannya belum dibangun) jatuh ke Segera Hadir.
-const BeritaDetailPage = () => {
-  const { slug } = useParams();
+const BeritaDetail = ({ slug }) => {
+  const { t } = useLanguage();
+
   const [item, setItem] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +17,7 @@ const BeritaDetailPage = () => {
 
   useEffect(() => {
     let active = true;
-    Promise.all([getBeritaBySlug(slug), getPublishedBerita()])
+    Promise.all([getBeritaBySlug(slug), getPublishedBerita().catch(() => [])])
       .then(([row, rows]) => {
         if (!active) return;
         const current = toBeritaItem(row);
@@ -32,14 +31,19 @@ const BeritaDetailPage = () => {
     return () => { active = false; };
   }, [slug]);
 
-  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">Memuat berita...</p></MainLayout>;
-  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{error || 'Berita tidak ditemukan.'}</p></MainLayout>;
+  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t("Memuat berita...")}</p></MainLayout>;
+  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t(error || 'Berita tidak ditemukan.')}</p></MainLayout>;
 
   return (
-    <DetailLayout item={item} backTo="/berita" backLabel="Berita">
+    <DetailLayout item={item} backTo="/berita" backLabel={t("Berita")}>
       <BeritaDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );
+};
+
+const BeritaDetailPage = () => {
+  const { slug } = useParams();
+  return <BeritaDetail key={slug} slug={slug} />;
 };
 
 export default BeritaDetailPage;

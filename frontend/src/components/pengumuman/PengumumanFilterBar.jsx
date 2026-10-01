@@ -1,9 +1,12 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { Search } from 'lucide-react';
 import { pengumumanFilter } from '../../data/dummyData';
 
 // `chips` sengaja kosong secara bawaan: barisnya hanya pantas muncul kalau
 // memang ada kategori yang bisa dibedakan (lihat PengumumanDaftarSection).
-const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => (
+const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => {
+  const { t } = useLanguage();
+  return (
   <div className="flex flex-wrap items-center gap-2">
     {chips.map((c) => (
       <button
@@ -17,22 +20,23 @@ const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => (
             : 'border border-dark-200 text-dark-600 hover:border-primary hover:text-primary'
         }`}
       >
-        {c}
+        {c === 'Semua' ? t(c) : c}
       </button>
     ))}
 
     <label className="relative ml-auto">
-      <span className="sr-only">{pengumumanFilter.searchPlaceholder}</span>
+      <span className="sr-only">{t(pengumumanFilter.searchPlaceholder)}</span>
       <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dark-600" />
       <input
         type="search"
         value={query}
         onChange={(e) => onQuery(e.target.value)}
-        placeholder={pengumumanFilter.searchPlaceholder}
+        placeholder={t(pengumumanFilter.searchPlaceholder)}
         className="w-[150px] rounded-lg border border-dark-200 py-2 pl-8 pr-3 text-[11px] font-bold text-dark-900 outline-none transition-colors placeholder:text-dark-600 focus:border-primary"
       />
     </label>
   </div>
-);
+  );
+};
 
 export default PengumumanFilterBar;

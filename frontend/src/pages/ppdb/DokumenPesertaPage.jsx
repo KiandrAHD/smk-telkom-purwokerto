@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { ArrowLeft, BookOpen, CalendarDays, Download, Printer } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from '../../components/Logo';
@@ -9,15 +10,16 @@ import { dokumenPeserta, ppdbMeta } from '../../data/dummyData';
 const ikon = { cetak: Printer, jadwal: CalendarDays, panduan: BookOpen };
 
 const DokumenPesertaPage = () => {
+  const { t } = useLanguage();
   const { nomorRegistrasi, biodata, currentUser } = usePpdb();
   const nomor = nomorRegistrasi ?? '-';
 
   return (
     <PpdbPortalLayout>
       <h1 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">
-        {dokumenPeserta.title}
+        {t(dokumenPeserta.title)}
       </h1>
-      <p className="mt-1.5 text-xs text-dark-500">{dokumenPeserta.deskripsi}</p>
+      <p className="mt-1.5 text-xs text-dark-500">{t(dokumenPeserta.deskripsi)}</p>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[22rem_1fr]">
         {/* Kartu peserta */}
@@ -29,7 +31,7 @@ const DokumenPesertaPage = () => {
               </span>
               <div className="min-w-0">
                 <p className="font-heading text-[11px] font-extrabold leading-tight text-white">
-                  {dokumenPeserta.kartuJudul}
+                  {t(dokumenPeserta.kartuJudul)}
                 </p>
                 <p className="text-[10px] text-white/75">{ppdbMeta.namaSekolah}</p>
               </div>
@@ -41,11 +43,11 @@ const DokumenPesertaPage = () => {
                 ['Nama Lengkap', biodata.namaLengkap || '-'],
                 ['NISN', biodata.nisn || '-'],
                 ['Email', currentUser?.email || biodata.email || '-'],
-                ['Peminatan', biodata.jurusan || 'Belum dipilih'],
+                ['Peminatan', biodata.jurusan || t('Belum dipilih')],
               ].map(([label, nilai]) => (
                 <div key={label}>
                   <dt className="text-[10px] font-bold uppercase tracking-wide text-dark-400">
-                    {label}
+                    {t(label)}
                   </dt>
                   <dd className="mt-1 font-heading text-xs font-bold text-dark-900">{nilai}</dd>
                 </div>
@@ -53,7 +55,7 @@ const DokumenPesertaPage = () => {
             </dl>
 
             <p className="border-t border-dark-100 px-5 py-3 text-[10px] leading-relaxed text-dark-500">
-              {dokumenPeserta.kartuCatatan}
+              {t(dokumenPeserta.kartuCatatan)}
             </p>
           </div>
         </Reveal>
@@ -62,7 +64,7 @@ const DokumenPesertaPage = () => {
           {/* Berkas yang bisa diunduh */}
           <Reveal className="delay-100">
             <div className="rounded-2xl border border-dark-100 bg-white p-6 shadow-card">
-              <h2 className="font-heading text-sm font-extrabold text-dark-900">Berkas Peserta</h2>
+              <h2 className="font-heading text-sm font-extrabold text-dark-900">{t("Berkas Peserta")}</h2>
 
               <div className="mt-4 space-y-3">
                 {dokumenPeserta.berkas.map((b) => {
@@ -77,9 +79,9 @@ const DokumenPesertaPage = () => {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block font-heading text-xs font-bold text-dark-900">
-                          {b.judul}
+                          {t(b.judul)}
                         </span>
-                        <span className="mt-0.5 block text-[11px] text-dark-500">{b.deskripsi}</span>
+                        <span className="mt-0.5 block text-[11px] text-dark-500">{t(b.deskripsi)}</span>
                       </span>
                       {/* Berkas sungguhan belum tersedia; tombol memakai cetak
                           bawaan browser supaya tetap melakukan sesuatu yang nyata. */}
@@ -88,9 +90,7 @@ const DokumenPesertaPage = () => {
                         onClick={() => window.print()}
                         className="flex flex-shrink-0 items-center gap-1.5 rounded-full border border-primary px-4 py-2 text-[11px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
                       >
-                        <Download className="h-3.5 w-3.5" />
-                        Unduh
-                      </button>
+                        <Download className="h-3.5 w-3.5" />{t("Unduh")} </button>
                     </div>
                   );
                 })}
@@ -101,20 +101,20 @@ const DokumenPesertaPage = () => {
           {/* Tahapan seleksi */}
           <Reveal className="delay-200">
             <div className="rounded-2xl border border-dark-100 bg-white p-6 shadow-card">
-              <h2 className="font-heading text-sm font-extrabold text-dark-900">Tahapan Seleksi</h2>
+              <h2 className="font-heading text-sm font-extrabold text-dark-900">{t("Tahapan Seleksi")}</h2>
 
               <ol className="mt-5 space-y-5">
-                {dokumenPeserta.tahapan.map((t, i) => (
-                  <li key={t.nama} className="relative flex gap-4 pl-1">
+                {dokumenPeserta.tahapan.map((stage, i) => (
+                  <li key={stage.nama} className="relative flex gap-4 pl-1">
                     <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-primary-50 font-heading text-[11px] font-bold text-primary">
                       {i + 1}
                     </span>
                     <div className="min-w-0">
-                      <p className="font-heading text-xs font-bold text-dark-900">{t.nama}</p>
-                      <p className="mt-0.5 text-[11px] text-dark-500">{t.ket}</p>
+                      <p className="font-heading text-xs font-bold text-dark-900">{t(stage.nama)}</p>
+                      <p className="mt-0.5 text-[11px] text-dark-500">{t(stage.ket)}</p>
                     </div>
                     <span className="ml-auto flex-shrink-0 text-[11px] font-semibold text-primary">
-                      {t.tanggal}
+                      {t(stage.tanggal)}
                     </span>
                   </li>
                 ))}
@@ -126,9 +126,7 @@ const DokumenPesertaPage = () => {
             to="/ppdb/selesai"
             className="inline-flex items-center gap-2 text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Kembali ke Status Pendaftaran
-          </Link>
+            <ArrowLeft className="h-3.5 w-3.5" />{t("Kembali ke Status Pendaftaran")} </Link>
         </div>
       </div>
     </PpdbPortalLayout>

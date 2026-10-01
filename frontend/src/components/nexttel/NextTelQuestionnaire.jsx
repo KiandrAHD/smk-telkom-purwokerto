@@ -1,7 +1,9 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import NextTelProgress from './NextTelProgress';
 
 const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNext, onBack }) => {
+  const { t } = useLanguage();
   const question = questions[currentIndex];
   const selected = answers[question.id];
   const isLast = currentIndex === questions.length - 1;
@@ -9,11 +11,11 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
   return (
     <div className="mx-auto max-w-2xl rounded-3xl border border-dark-100 bg-white p-5 shadow-card sm:p-8">
       <NextTelProgress current={currentIndex + 1} total={questions.length} />
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Pilih satu jawaban</p>
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">{t("Pilih satu jawaban")}</p>
       <h1 className="mt-3 font-heading text-2xl font-extrabold leading-snug text-dark-900 sm:text-3xl">
-        {question.prompt}
+        {t(question.prompt)}
       </h1>
-      <div className="mt-7 space-y-3" role="radiogroup" aria-label={question.prompt}>
+      <div className="mt-7 space-y-3" role="radiogroup" aria-label={t(question.prompt)}>
         {question.options.map((option) => {
           const active = selected === option.id;
           return (
@@ -32,7 +34,7 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
               <span className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${active ? 'bg-primary text-white' : 'bg-dark-100 text-dark-600'}`}>
                 {option.id.toUpperCase()}
               </span>
-              <span className="pt-1">{option.label}</span>
+              <span className="pt-1">{t(option.label)}</span>
             </button>
           );
         })}
@@ -44,15 +46,14 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
           disabled={currentIndex === 0}
           className="inline-flex items-center gap-2 rounded-full border border-dark-200 px-5 py-2.5 text-xs font-bold text-dark-600 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
         >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Kembali
-        </button>
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {t("Kembali")} </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!selected}
           className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-opacity hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {isLast ? 'Lihat hasil' : 'Lanjut'} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          {t(isLast ? 'Lihat hasil' : 'Lanjut')} <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
     </div>

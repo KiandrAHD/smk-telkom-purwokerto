@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Satu komponen untuk input, select, dan textarea. Label, jarak, dan gaya fokus
 // jadi seragam di seluruh form admin, dan id-nya dibuat otomatis lewat useId
@@ -12,6 +13,7 @@ const FormInput = ({
   wrapperClassName = '',
   ...props
 }) => {
+  const { t } = useLanguage();
   const id = useId();
   const gaya =
     'w-full rounded-lg border border-dark-200 bg-white px-3 py-2.5 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary';
@@ -20,7 +22,7 @@ const FormInput = ({
     <div className={wrapperClassName}>
       {label && (
         <label htmlFor={id} className="mb-1.5 block text-xs font-semibold text-dark-700">
-          {label}
+          {t(label)}
           {wajib && <span className="ml-0.5 text-primary">*</span>}
         </label>
       )}
@@ -30,11 +32,11 @@ const FormInput = ({
           {options?.map((opsi) =>
             typeof opsi === 'string' ? (
               <option key={opsi} value={opsi}>
-                {opsi}
+                {t(opsi)}
               </option>
             ) : (
               <option key={opsi.value} value={opsi.value}>
-                {opsi.label}
+                {t(opsi.label)}
               </option>
             )
           )}

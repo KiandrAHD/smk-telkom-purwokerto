@@ -1,3 +1,5 @@
+import { useLanguage } from '../../context/LanguageContext';
+import { formatPublicDate } from '../../utils/publicContent';
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -5,6 +7,8 @@ import { beritaSorot } from '../../data/dummyData';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
 const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
+  const { t, locale } = useLanguage();
+
   const [active, setActive] = useState(0);
   const sourceItems = items;
   const featured = sourceItems[active % sourceItems.length];
@@ -24,7 +28,7 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
             <span className="rounded bg-primary-50 px-2.5 py-1 text-[9px] font-bold text-primary">
               {featured.kategori}
             </span>
-            <span className="text-[10px] text-dark-500">{featured.date}</span>
+            <span className="text-[10px] text-dark-500">{formatPublicDate(featured.iso, {}, locale)}</span>
           </div>
 
           <h2 className="mt-3 max-w-md font-heading text-xl sm:text-2xl font-extrabold leading-snug text-dark-900">
@@ -38,14 +42,14 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
             to={`/berita/${featured.slug}`}
             className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
           >
-            {beritaSorot.ctaText}
+            {t(beritaSorot.ctaText)}
           </Link>
         </div>
 
         {/* Trending — klik untuk menukar berita sorotan di kiri */}
         <div>
           <h2 className="font-heading text-lg sm:text-xl font-extrabold text-dark-900">
-            {beritaSorot.trendingTitle}
+            {t(beritaSorot.trendingTitle)}
           </h2>
 
           <div className="mt-4 space-y-3">
@@ -62,7 +66,7 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
                 <p className="mt-1.5 font-heading text-[11px] font-bold leading-snug text-dark-900">
                   {item.title}
                 </p>
-                <p className="mt-1.5 text-[9px] text-dark-400">{item.date}</p>
+                <p className="mt-1.5 text-[9px] text-dark-400">{formatPublicDate(item.iso, {}, locale)}</p>
               </button>
             ))}
           </div>
@@ -73,7 +77,7 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
                 to="/berita/trending"
                 className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-3.5 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
               >
-                {beritaSorot.trendingCta}
+                {t(beritaSorot.trendingCta)}
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </div>

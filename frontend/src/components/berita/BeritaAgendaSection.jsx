@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from "react";
 import { Mail } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -11,6 +12,8 @@ import { slugify } from "../../utils/slug";
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard. Di sini ada DUA
 // tautan yang menunjuk ke /berita/agenda, jadi keduanya ikut dimatikan.
 const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
+  const { t } = useLanguage();
+
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
@@ -27,14 +30,14 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
         <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
-              {agendaEvent.title}
+              {t(agendaEvent.title)}
             </h2>
             {tampilkanLihatSemua && (
               <Link
                 to="/berita/agenda"
                 className="text-[10px] font-bold text-primary hover:underline"
               >
-                {agendaEvent.linkText}
+                {t(agendaEvent.linkText)}
               </Link>
             )}
           </div>
@@ -50,18 +53,18 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
                     <span className="font-heading text-base font-extrabold leading-none text-primary">
                       {ev.day}
                     </span>
-                    <span className="text-[8px] text-primary">{ev.month}</span>
+                    <span className="text-[8px] text-primary">{t(ev.month)}</span>
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block font-heading text-[10px] font-bold leading-snug text-dark-900">
-                      {ev.title}
+                      {t(ev.title)}
                     </span>
                     <span className="block text-[8px] text-dark-400">
-                      {ev.venue}
+                      {t(ev.venue)}
                     </span>
                   </span>
                   <span className="flex-shrink-0 rounded bg-primary-50 px-2 py-1 text-[8px] font-bold text-primary">
-                    {ev.tag}
+                    {t(ev.tag)}
                   </span>
                 </Link>
               </li>
@@ -73,7 +76,7 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
               to="/berita/agenda"
               className="mt-4 inline-block text-[10px] font-bold text-primary hover:underline"
             >
-              {agendaEvent.ctaText}
+              {t(agendaEvent.ctaText)}
             </Link>
           )}
         </div>
@@ -82,13 +85,13 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
         <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
-              {galeriKegiatan.title}
+              {t(galeriKegiatan.title)}
             </h2>
             <Link
               to="/galeri"
               className="text-[10px] font-bold text-primary hover:underline"
             >
-              {galeriKegiatan.linkText}
+              {t(galeriKegiatan.linkText)}
             </Link>
           </div>
 
@@ -101,7 +104,7 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
               >
                 <img
                   src={g.image}
-                  alt={g.alt}
+                  alt={t(g.alt)}
                   loading="lazy"
                   className="aspect-[4/3] w-full rounded-lg object-cover object-top transition-transform duration-500 group-hover:scale-110"
                 />
@@ -115,20 +118,20 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
           <div className="flex items-center gap-2.5">
             <Mail className="h-5 w-5 text-primary" />
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
-              {newsletterBerita.title}
+              {t(newsletterBerita.title)}
             </h2>
           </div>
 
           <h3 className="mt-4 font-heading text-base font-extrabold text-dark-900">
-            {newsletterBerita.heading}
+            {t(newsletterBerita.heading)}
           </h3>
           <p className="mt-2 text-[9px] leading-relaxed text-dark-500">
-            {newsletterBerita.description}
+            {t(newsletterBerita.description)}
           </p>
 
           <form onSubmit={submit} className="mt-4">
             <label>
-              <span className="sr-only">{newsletterBerita.placeholder}</span>
+              <span className="sr-only">{t(newsletterBerita.placeholder)}</span>
               <input
                 type="email"
                 required
@@ -137,7 +140,7 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
                   setEmail(e.target.value);
                   setSent(false);
                 }}
-                placeholder={newsletterBerita.placeholder}
+                placeholder={t(newsletterBerita.placeholder)}
                 className="w-full rounded-lg border border-dark-200 px-3 py-2.5 text-[10px] text-dark-700 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
               />
             </label>
@@ -145,7 +148,7 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
               type="submit"
               className="mt-3 w-full rounded-full bg-primary py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
             >
-              {newsletterBerita.ctaText}
+              {t(newsletterBerita.ctaText)}
             </button>
           </form>
 
@@ -155,10 +158,10 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
           >
             {sent ? (
               <span className="font-semibold text-primary">
-                {newsletterBerita.successText}
+                {t(newsletterBerita.successText)}
               </span>
             ) : (
-              newsletterBerita.note
+              t(newsletterBerita.note)
             )}
           </p>
         </div>

@@ -1,5 +1,7 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../Logo';
+import LanguageToggle from '../LanguageToggle';
 import ribbon from '../../assets/landing/ribbon.png';
 import { ppdbMeta } from '../../data/dummyData';
 
@@ -7,11 +9,12 @@ import { ppdbMeta } from '../../data/dummyData';
 // Pita merah di atas dibuat lebih tinggi dari isinya supaya kartu putih di
 // tengah terlihat mengambang di atasnya, seperti pada desain.
 const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children }) => {
+  const { t } = useLanguage();
   const { pathname } = useLocation();
 
   return (
   <div className="flex min-h-screen flex-col bg-dark-50">
-    <div className={`relative ${tinggiPita} bg-gradient-to-r from-primary-700 via-primary to-primary-600`}>
+    <div className={`relative ${tinggiPita} max-sm:h-64 bg-gradient-to-r from-primary-700 via-primary to-primary-600`}>
       {/* Revisi tim: pita bermotif logo dari beranda dipakai sebagai tekstur
           header supaya tidak sekadar blok merah polos. */}
       <img
@@ -21,7 +24,7 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
         className="pointer-events-none absolute inset-x-0 bottom-0 w-full opacity-20 mix-blend-overlay"
       />
 
-      <header className="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6">
+      <header className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
         <Link to="/" className="flex items-center gap-3">
           {/* Revisi tim: inisial "T" diganti logo resmi sekolah. */}
           <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-white p-1.5 shadow-card">
@@ -31,16 +34,19 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
             <span className="block font-heading text-sm font-extrabold leading-tight text-white">
               {ppdbMeta.namaSekolah}
             </span>
-            <span className="block text-[11px] text-white/75">{ppdbMeta.sistem}</span>
+            <span className="block text-[11px] text-white/75">{t(ppdbMeta.sistem)}</span>
           </span>
         </Link>
 
-        <Link
-          to={aksiTo}
-          className="flex-shrink-0 rounded-full bg-white px-5 py-2.5 text-[11px] font-bold text-dark-900 shadow-card transition-transform hover:-translate-y-0.5"
-        >
-          {aksiLabel}
-        </Link>
+        <div className="ml-auto flex items-center gap-2">
+          <LanguageToggle />
+          <Link
+            to={aksiTo}
+            className="flex-shrink-0 rounded-full bg-white px-5 py-2.5 text-[11px] font-bold text-dark-900 shadow-card transition-transform hover:-translate-y-0.5"
+          >
+            {t(aksiLabel)}
+          </Link>
+        </div>
       </header>
     </div>
 

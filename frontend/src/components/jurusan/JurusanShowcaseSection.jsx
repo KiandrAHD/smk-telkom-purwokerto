@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { projectShowcase } from '../../data/dummyData';
 import { slugify } from '../../utils/slug';
 
 const JurusanShowcaseSection = () => {
+  const { t, language } = useLanguage();
   const items = projectShowcase.items;
   const [start, setStart] = useState(0);
   const [direction, setDirection] = useState('next');
@@ -21,16 +23,16 @@ const JurusanShowcaseSection = () => {
     <section className="overflow-hidden bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {projectShowcase.title}{' '}
+          {language === 'en' ? t('Pameran Proyek Siswa') : <>{projectShowcase.title}{' '}
           <span className="text-primary">{projectShowcase.titleAccent}</span>{' '}
-          {projectShowcase.titleTail}
+          {projectShowcase.titleTail}</>}
         </h2>
 
         <div className="relative mt-7">
           <button
             type="button"
             onClick={() => move(-1)}
-            aria-label="Project sebelumnya"
+            aria-label={t("Project sebelumnya")}
             className="absolute -left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-600 shadow-md transition-colors hover:text-primary lg:-left-5"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -38,7 +40,7 @@ const JurusanShowcaseSection = () => {
           <button
             type="button"
             onClick={() => move(1)}
-            aria-label="Project berikutnya"
+            aria-label={t("Project berikutnya")}
             className="absolute -right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-600 shadow-md transition-colors hover:text-primary lg:-right-5"
           >
             <ChevronRight className="h-4 w-4" />
@@ -58,7 +60,7 @@ const JurusanShowcaseSection = () => {
                 <div className="relative">
                   <img
                     src={item.image}
-                    alt={item.title.replace('\n', ' ')}
+                    alt={t(item.title).replace('\n', ' ')}
                     className="w-full aspect-[16/10] object-cover object-top"
                   />
                   <span
@@ -68,7 +70,7 @@ const JurusanShowcaseSection = () => {
                   </span>
                 </div>
                 <h3 className="whitespace-pre-line px-4 py-3 font-heading text-xs font-bold leading-snug text-dark-900">
-                  {item.title}
+                  {t(item.title)}
                 </h3>
               </Link>
             ))}
@@ -81,7 +83,7 @@ const JurusanShowcaseSection = () => {
               key={item.tag}
               type="button"
               onClick={() => move(i - start)}
-              aria-label={`Mulai dari project ${item.tag}`}
+              aria-label={t('Mulai dari project {tag}', { tag: item.tag })}
               aria-current={i === start}
               className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${
                 i === start ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'

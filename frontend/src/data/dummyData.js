@@ -49,9 +49,6 @@ import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
-import robotikTiga from '../assets/tentang/fasilitas/robotik-3.png';
-import robotikDua from '../assets/tentang/fasilitas/robotik-2.png';
-import robotikSatu from '../assets/tentang/fasilitas/robotik-1.png';
 import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
 import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
@@ -407,6 +404,14 @@ export const nilaiStematel = [
   },
 ];
 
+// Snapshot konten resmi; jumlah artikel arsip tidak sama dengan jumlah gelar.
+export const officialContentAudit = {
+  checkedAt: '1 Oktober 2026',
+  prestasiSourceUrl: 'https://smktelkom-pwt.sch.id/wp-json/wp/v2/posts?categories=5',
+  pengumumanSourceUrl: 'https://smktelkom-pwt.sch.id/wp-json/wp/v2/posts?categories=8',
+  alumniSourceUrl: 'https://smktelkom-pwt.sch.id/',
+};
+
 // ── Timeline ──
 // ── Profil sekolah dalam video + galeri fasilitas ──
 export const profilVideo = {
@@ -422,9 +427,6 @@ export const profilVideo = {
     { image: ruangKelasSatu, alt: 'Ruang kelas SMK Telkom Purwokerto' },
     { image: ruangKelasDua, alt: 'Kegiatan belajar siswa di ruang kelas' },
     { image: laboratoriumTjkt, alt: 'Laboratorium TKJ dengan perangkat jaringan fiber optik' },
-    { image: robotikSatu, alt: 'Robot hexapod untuk praktik pemrograman dan robotik' },
-    { image: robotikDua, alt: 'Robot barista sebagai sarana praktik siswa' },
-    { image: robotikTiga, alt: 'Demonstrasi robot barista di laboratorium robotik' },
   ],
 };
 

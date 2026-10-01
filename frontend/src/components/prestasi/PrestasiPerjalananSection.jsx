@@ -1,17 +1,21 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, User } from 'lucide-react';
 import { hallOfFame, perjalananPrestasi } from '../../data/dummyData';
+import ContentImage from '../ContentImage';
 
 const PER_PAGE = 4;
 
 const PrestasiPerjalananSection = () => {
+  const { t } = useLanguage();
+
   const [year, setYear] = useState(perjalananPrestasi.defaultYear);
   const [start, setStart] = useState(0);
 
   const move = (step) =>
     setStart((s) => (s + step + hallOfFame.items.length) % hallOfFame.items.length);
   const shown = Array.from(
-    { length: PER_PAGE },
+    { length: Math.min(PER_PAGE, hallOfFame.items.length) },
     (_, i) => hallOfFame.items[(start + i) % hallOfFame.items.length]
   );
 
@@ -21,7 +25,7 @@ const PrestasiPerjalananSection = () => {
         {/* Perjalanan Prestasi */}
         <div>
           <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-            {perjalananPrestasi.title}
+            {t(perjalananPrestasi.title)}
           </h2>
 
           <div className="mt-6 flex items-end gap-2">
@@ -59,37 +63,45 @@ const PrestasiPerjalananSection = () => {
                     <span
                       className={`text-[8px] ${on ? 'text-primary' : 'text-dark-400'}`}
                     >
-                      {y.label}
+                      {t(y.label)}
                     </span>
                   </span>
                 </button>
               );
             })}
           </div>
+          <p className="mt-4 text-[10px] leading-relaxed text-dark-500">
+            {t(perjalananPrestasi.note)}{' '}
+            <a href={perjalananPrestasi.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">{t("Sumber arsip resmi")}</a>
+          </p>
         </div>
 
-        {/* Hall of Fame */}
+        {/* Bukti prestasi dan foto dari publikasi resmi sekolah. */}
         <div className="relative">
           <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-            {hallOfFame.title}
+            {t(hallOfFame.title)}
           </h2>
 
-          <button
-            type="button"
-            onClick={() => move(-1)}
-            aria-label="Alumni sebelumnya"
-            className="absolute -left-3 top-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-500 shadow-md transition-colors hover:text-primary"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => move(1)}
-            aria-label="Alumni berikutnya"
-            className="absolute -right-3 top-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-500 shadow-md transition-colors hover:text-primary"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
+          {hallOfFame.items.length > PER_PAGE && (
+            <>
+              <button
+                type="button"
+                onClick={() => move(-1)}
+                aria-label={t("Bukti prestasi sebelumnya")}
+                className="absolute -left-3 top-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-500 shadow-md transition-colors hover:text-primary"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => move(1)}
+                aria-label={t("Bukti prestasi berikutnya")}
+                className="absolute -right-3 top-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-500 shadow-md transition-colors hover:text-primary"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </>
+          )}
 
           <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {shown.map((person) => (
@@ -97,23 +109,21 @@ const PrestasiPerjalananSection = () => {
                 key={person.name}
                 className="rounded-xl border border-dark-100 bg-white p-3 text-center shadow-card"
               >
-                <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-dark-200">
-                  <User className="h-6 w-6 text-dark-400" />
-                </span>
+                <ContentImage src={person.image} alt={t(person.imageAlt)} loading="lazy" className="aspect-[4/5] w-full rounded-lg object-contain" />
                 <h3 className="mt-2.5 font-heading text-[10px] font-bold text-dark-900">
                   {person.name}
                 </h3>
-                <p className="mt-1 text-[8px] leading-snug text-dark-500">{person.achievement}</p>
+                <p className="mt-1 text-[8px] leading-snug text-dark-500">{t(person.achievement)}</p>
                 <div className="mt-2.5 flex items-center gap-1.5 border-t border-dark-100 pt-2 text-left">
                   <span className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-primary">
                     <User className="h-2.5 w-2.5 text-white" />
                   </span>
                   <span className="min-w-0 text-[8px] leading-tight text-dark-600">
-                    {person.role}
-                    <br />
-                    {person.company}
+                    {t(person.role)}
+                    {person.company && <><br />{person.company}</>}
                   </span>
                 </div>
+                <a href={person.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-[10px] font-semibold text-primary underline underline-offset-2">{t("Lihat bukti resmi")}</a>
               </article>
             ))}
           </div>

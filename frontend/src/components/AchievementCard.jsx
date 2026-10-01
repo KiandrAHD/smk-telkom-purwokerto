@@ -1,15 +1,20 @@
+import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
+import ContentImage from './ContentImage';
 
-const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = false }) => (
+const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = false }) => {
+  const { t } = useLanguage();
+  return (
   <Link
     to={`/prestasi/${slug}`}
+    aria-label={t('Lihat detail prestasi: {title}', { title })}
     className={`group block overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
       highlight ? 'border-primary' : 'border-dark-100 hover:border-primary'
     }`}
   >
     <article>
       <div className="overflow-hidden">
-        <img
+        <ContentImage
           src={image}
           alt={imageAlt || title}
           loading="lazy"
@@ -24,6 +29,7 @@ const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = f
       </div>
     </article>
   </Link>
-);
+  );
+};
 
 export default AchievementCard;

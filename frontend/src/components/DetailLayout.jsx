@@ -3,22 +3,27 @@ import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import Reveal from './Reveal';
 import VideoEmbed from './VideoEmbed';
+import ContentImage from './ContentImage';
+import { useLanguage } from '../context/LanguageContext';
+import { formatPublicDate } from '../utils/publicContent';
 
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
 // kategori apa pun: seluruh isinya datang dari objek `item` yang dicari lewat
 // slug di halaman detail masing-masing, jadi tidak ada teks yang dipaku di sini.
 // Penekanan yang berbeda tiap kategori dititipkan lewat `children`.
-const DetailLayout = ({ item, backTo, backLabel, children }) => (
+const DetailLayout = ({ item, backTo, backLabel, children }) => {
+  const { t, locale } = useLanguage();
+  return (
   <MainLayout>
     <article className="bg-white py-8 lg:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-primary">
           <Link to="/" className="hover:underline">
-            Beranda
+            {t('Beranda')}
           </Link>
           <ChevronRight className="h-3 w-3" />
           <Link to={backTo} className="hover:underline">
-            {backLabel}
+            {t(backLabel)}
           </Link>
           <ChevronRight className="h-3 w-3" />
           <span className="text-dark-500">{item.title}</span>
@@ -30,7 +35,7 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           </span>
           {item.date && <span className="flex items-center gap-1.5 text-[11px] text-dark-500">
             <CalendarDays className="h-3.5 w-3.5" />
-            {item.date}
+            {item.iso ? formatPublicDate(item.iso, {}, locale) : t(item.date)}
           </span>}
           {item.author && <span className="text-[11px] text-dark-500">{item.author}</span>}
         </div>
@@ -42,15 +47,13 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           <p className="mt-2 text-sm font-semibold text-primary">{item.subtitle}</p>
         )}
 
-        {item.image && (
-          <div className="mt-7 overflow-hidden rounded-2xl">
-            <img
-              src={item.image}
-              alt={item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi'}
-              className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
-            />
-          </div>
-        )}
+        <div className="mt-7 overflow-hidden rounded-2xl">
+          <ContentImage
+            src={item.image}
+            alt={item.imageAlt || t('Foto ilustrasi; dokumentasi belum terverifikasi')}
+            className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
+          />
+        </div>
 
         {item.imageNote && (
           <p className="mt-2 text-[10px] text-dark-400">{item.imageNote}</p>
@@ -105,11 +108,12 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           className="mt-9 inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4" />
-          Kembali ke {backLabel}
+          {t('Kembali ke {label}', { label: t(backLabel) })}
         </Link>
       </div>
     </article>
   </MainLayout>
-);
+  );
+};
 
 export default DetailLayout;

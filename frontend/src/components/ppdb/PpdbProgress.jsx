@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { ppdbLangkahPortal } from '../../data/dummyData';
@@ -8,6 +9,7 @@ import { ppdbLangkahPortal } from '../../data/dummyData';
 // Garis pengisi memakai transisi lebar, jadi saat pengguna menekan "Lanjut"
 // perpindahannya terlihat bergerak, bukan meloncat.
 const PpdbProgress = () => {
+  const { t } = useLanguage();
   const { pathname } = useLocation();
   const aktif = Math.max(
     0,
@@ -16,7 +18,7 @@ const PpdbProgress = () => {
   const persen = ppdbLangkahPortal.length > 1 ? (aktif / (ppdbLangkahPortal.length - 1)) * 100 : 0;
 
   return (
-    <nav aria-label="Progres pendaftaran" className="mb-7">
+    <nav aria-label={t("Progres pendaftaran")} className="mb-7">
       <ol className="relative flex items-start justify-between">
         {/* Rel abu + garis merah yang memanjang. Keduanya diletakkan di belakang
             titik langkah, sejajar dengan pusat lingkaran (h-9 -> 18px). */}
@@ -52,7 +54,7 @@ const PpdbProgress = () => {
                   kini || selesai ? 'text-dark-900' : 'text-dark-400'
                 }`}
               >
-                {langkah.label}
+                {t(langkah.label)}
               </span>
             </li>
           );

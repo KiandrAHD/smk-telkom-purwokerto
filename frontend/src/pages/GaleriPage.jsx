@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import HalamanHeader from '../components/HalamanHeader';
@@ -7,7 +8,9 @@ import { galeriDetail, galeriIndex } from '../data/dummyData';
 
 const JEDA = ['', 'delay-100', 'delay-200', 'delay-300'];
 
-const GaleriPage = () => (
+const GaleriPage = () => {
+  const { t } = useLanguage();
+  return (
   <MainLayout>
     <HalamanHeader {...galeriIndex} />
 
@@ -21,17 +24,17 @@ const GaleriPage = () => (
             >
               <img
                 src={foto.image}
-                alt={foto.title}
+                alt={t(foto.title)}
                 loading="lazy"
                 className="aspect-[4/3] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
               />
               <div className="flex flex-1 flex-col px-5 py-4">
-                <StatusBadge nilai={foto.kategori} nada="merah" />
+                <StatusBadge nilai={t(foto.kategori)} nada="merah" />
                 <h2 className="mt-3 font-heading text-sm font-bold leading-snug text-dark-900">
-                  {foto.title}
+                  {t(foto.title)}
                 </h2>
-                <p className="mt-1.5 text-[11px] leading-relaxed text-dark-500">{foto.subtitle}</p>
-                <p className="mt-auto pt-3 text-[11px] font-bold text-primary">Lihat Detail</p>
+                <p className="mt-1.5 text-[11px] leading-relaxed text-dark-500">{t(foto.subtitle)}</p>
+                <p className="mt-auto pt-3 text-[11px] font-bold text-primary">{t("Lihat Detail")}</p>
               </div>
             </Link>
           </Reveal>
@@ -39,6 +42,7 @@ const GaleriPage = () => (
       </div>
     </section>
   </MainLayout>
-);
+  );
+};
 
 export default GaleriPage;

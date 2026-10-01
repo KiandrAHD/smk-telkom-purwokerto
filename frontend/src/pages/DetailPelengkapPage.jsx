@@ -1,4 +1,5 @@
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 import DetailLayout from '../components/DetailLayout';
 import SegeraHadirPage from './SegeraHadirPage';
 import {
@@ -31,6 +32,7 @@ const KOLEKSI = {
 };
 
 const DetailPelengkapPage = ({ jenis }) => {
+  const { t } = useLanguage();
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
   const koleksi = KOLEKSI[jenis];
@@ -38,8 +40,21 @@ const DetailPelengkapPage = ({ jenis }) => {
 
   if (!item) return <SegeraHadirPage />;
 
+  const displayItem = {
+    ...item,
+    title: t(item.title),
+    kategori: t(item.kategori),
+    subtitle: t(item.subtitle),
+    date: t(item.date),
+    imageAlt: jenis === 'guru' ? t('Foto {name}', { name: item.title }) : t(item.imageAlt),
+    imageNote: t(item.imageNote),
+    lead: t(item.lead),
+    body: item.body.map((paragraph) => t(paragraph)),
+    facts: item.facts?.map((fact) => ({ ...fact, label: t(fact.label), value: t(fact.value) })),
+    video: item.video && { ...item.video, title: t(item.video.title), desc: t(item.video.desc) },
+  };
   const kembaliKeBerita = jenis === 'galeri' && searchParams.get('from') === 'berita';
-  return <DetailLayout item={item} backTo={kembaliKeBerita ? '/berita' : koleksi.backTo} backLabel={kembaliKeBerita ? 'Berita' : koleksi.backLabel} />;
+  return <DetailLayout item={displayItem} backTo={kembaliKeBerita ? '/berita' : koleksi.backTo} backLabel={t(kembaliKeBerita ? 'Berita' : koleksi.backLabel)} />;
 };
 
 export default DetailPelengkapPage;

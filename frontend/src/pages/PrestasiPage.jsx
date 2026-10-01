@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
@@ -13,6 +14,8 @@ import { getPrestasi } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
 
 const PrestasiPage = () => {
+  const { t } = useLanguage();
+
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -30,7 +33,7 @@ const PrestasiPage = () => {
     <MainLayout>
       <PrestasiHeroSection />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label="prestasi" />
+        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />
       </div>
       <Reveal><PrestasiUnggulanSection items={items} /></Reveal>
       <RibbonDivider />

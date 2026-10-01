@@ -1,14 +1,17 @@
+import { useLanguage } from '../../context/LanguageContext';
 import VideoEmbed from '../VideoEmbed';
 import bg from '../../assets/landing/partners-bg.png';
 import { mitraIndustri, videoHighlight } from '../../data/dummyData';
 
-const PrestasiDukunganSection = () => (
+const PrestasiDukunganSection = () => {
+  const { t } = useLanguage();
+  return (
   <section className="bg-white py-8 lg:py-12">
     <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
       {/* Didukung & Diakui Oleh */}
       <div>
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {videoHighlight.sectionTitle}
+          {t(videoHighlight.sectionTitle)}
         </h2>
         {/* Latar diletakkan absolut agar tinggi pita mengikuti barisan logo —
             di layar sempit logonya membungkus ke baris kedua, tidak terpotong. */}
@@ -35,19 +38,21 @@ const PrestasiDukunganSection = () => (
       {/* Video Highlight */}
       <div>
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {videoHighlight.title}
+          {t(videoHighlight.title)}
         </h2>
         <div className="mt-6">
           <VideoEmbed
             videoId={videoHighlight.video.videoId}
             poster={videoHighlight.video.poster}
-            title={videoHighlight.videoTitle}
-            desc={videoHighlight.videoDesc}
+            title={t(videoHighlight.videoTitle)}
+            desc={t(videoHighlight.videoDesc)}
+            posterHasPlayIcon
           />
         </div>
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default PrestasiDukunganSection;

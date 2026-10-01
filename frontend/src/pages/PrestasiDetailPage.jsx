@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
@@ -6,11 +7,9 @@ import MainLayout from '../layouts/MainLayout';
 import { getPrestasi, getPrestasiBySlug } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
 
-// Isi halaman diambil dari slug di URL, bukan ditulis ulang di sini — kartu mana
-// pun yang diklik akan membuka data miliknya sendiri. Slug yang tidak dikenal
-// (misal /prestasi/galeri yang halamannya belum dibangun) jatuh ke Segera Hadir.
-const PrestasiDetailPage = () => {
-  const { slug } = useParams();
+const PrestasiDetail = ({ slug }) => {
+  const { t } = useLanguage();
+
   const [item, setItem] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +17,7 @@ const PrestasiDetailPage = () => {
 
   useEffect(() => {
     let active = true;
-    Promise.all([getPrestasiBySlug(slug), getPrestasi()])
+    Promise.all([getPrestasiBySlug(slug), getPrestasi().catch(() => [])])
       .then(([row, rows]) => {
         if (!active) return;
         setItem(toPrestasiItem(row));
@@ -31,14 +30,20 @@ const PrestasiDetailPage = () => {
     return () => { active = false; };
   }, [slug]);
 
-  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">Memuat prestasi...</p></MainLayout>;
-  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{error || 'Prestasi tidak ditemukan.'}</p></MainLayout>;
+  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t("Memuat prestasi...")}</p></MainLayout>;
+  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t(error || 'Prestasi tidak ditemukan.')}</p></MainLayout>;
 
   return (
-    <DetailLayout item={item} backTo="/prestasi" backLabel="Prestasi">
+    <DetailLayout item={item} backTo="/prestasi" backLabel={t("Prestasi")}>
       <PrestasiDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );
+};
+
+const PrestasiDetailPage = () => {
+  const { slug } = useParams();
+  // Slug baru memulai state baru; error/isi prestasi sebelumnya tidak ikut terbawa.
+  return <PrestasiDetail key={slug} slug={slug} />;
 };
 
 export default PrestasiDetailPage;

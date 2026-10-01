@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useMemo, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,6 +11,8 @@ import { daftarPengumuman } from '../../data/dummyData';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
 const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => {
+  const { t } = useLanguage();
+
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
 
@@ -58,9 +61,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
                 ))}
               </div>
             ) : (
-              <p className="py-12 text-center text-xs text-dark-500">
-                Tidak ada pengumuman yang cocok dengan filter itu.
-              </p>
+              <p className="py-12 text-center text-xs text-dark-500">{t("Tidak ada pengumuman yang cocok dengan filter itu.")}</p>
             )}
 
             {tampilkanLihatSemua && (
@@ -69,7 +70,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
                   to="/pengumuman/semua"
                   className="inline-flex items-center gap-3 rounded-full border border-primary px-7 py-3 font-heading text-xs font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
                 >
-                  {daftarPengumuman.ctaText}
+                  {t(daftarPengumuman.ctaText)}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -77,7 +78,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
           </div>
 
           <div className="space-y-5">
-            <PengumumanPopulerCard />
+            <PengumumanPopulerCard items={items} />
             <PengumumanBantuanCard />
           </div>
         </div>

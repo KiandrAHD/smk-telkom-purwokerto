@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
-
 const LandingPage = lazy(() => import('./pages/LandingPage'));
+import { useLanguage } from './context/LanguageContext';
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
 const GuruPage = lazy(() => import('./pages/GuruPage'));
 const JurusanPage = lazy(() => import('./pages/JurusanPage'));
@@ -60,7 +60,7 @@ const PAGE_META = {
   '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
   '/berita': ['Berita SMK Telkom Purwokerto', 'Berita terbaru dari SMK Telkom Purwokerto.'],
   '/pengumuman': ['Pengumuman SMK Telkom Purwokerto', 'Pengumuman resmi SMK Telkom Purwokerto.'],
-  '/ppdb': ['PPDB Online SMK Telkom Purwokerto', 'Daftar PPDB online SMK Telkom Purwokerto.'],
+  '/ppdb': ['SPMB 2027/2028 | SMK Telkom Purwokerto', 'Portal pendaftaran SPMB Tahun Ajaran 2027/2028 SMK Telkom Purwokerto.'],
   '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
   '/nexttel': ['NextTel AI | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
   '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
@@ -69,13 +69,14 @@ const PAGE_META = {
 };
 
 const PageMetadata = () => {
+  const { t } = useLanguage();
   const { pathname } = useLocation();
   useEffect(() => {
-    const key = Object.keys(PAGE_META).find((path) => pathname === path || (path === '/dashboard' && pathname.startsWith('/dashboard/')));
+    const key = Object.keys(PAGE_META).find((path) => pathname === path || (['/dashboard', '/ppdb'].includes(path) && pathname.startsWith(`${path}/`)));
     const [title, description] = PAGE_META[key] || ['SMK Telkom Purwokerto', 'Website resmi SMK Telkom Purwokerto.'];
-    document.title = title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
-  }, [pathname]);
+    document.title = t(title);
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t(description));
+  }, [pathname, t]);
   return null;
 };
 
@@ -85,11 +86,12 @@ const LegacyProfileGuruRedirect = () => {
 };
 
 const App = () => {
+  const { t } = useLanguage();
   return (
     <>
       <ScrollToTop />
       <PageMetadata />
-      <Suspense fallback={<div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">Memuat halaman...</div>}>
+      <Suspense fallback={<div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/profil-sekolah" element={<ProfileSekolahPage />} />

@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
@@ -7,7 +8,9 @@ import { ekstrakurikulerData } from '../data/dummyData';
 
 const STAT_ICONS = [BriefcaseBusiness, Trophy, UsersRound, Bookmark];
 
-const CategoryTabs = ({ activeCategory, onSelect }) => (
+const CategoryTabs = ({ activeCategory, onSelect }) => {
+  const { t } = useLanguage();
+  return (
   <div id="ekstrakurikuler-filters" className="mx-auto grid max-w-full grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:justify-center">
     {ekstrakurikulerData.categories.map((name) => {
       const active = activeCategory === name;
@@ -23,36 +26,39 @@ const CategoryTabs = ({ activeCategory, onSelect }) => (
               : 'border-primary/45 bg-white text-primary hover:border-primary hover:bg-primary-50'
           }`}
         >
-          {name === 'Ekstrakurikuler' ? 'Semua' : name}
+          {t(name === 'Ekstrakurikuler' ? 'Semua' : name)}
         </button>
       );
     })}
   </div>
-);
+  );
+};
 
-const ActivityCard = ({ item, onOpen }) => (
+const ActivityCard = ({ item, onOpen }) => {
+  const { t } = useLanguage();
+  return (
   <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white transition-colors duration-200 hover:border-primary">
     <div className="aspect-[2/1] flex-none overflow-hidden">
       <img
         src={item.image}
-        alt={`Kegiatan ${item.title}`}
+        alt={t('Kegiatan {title}', { title: t(item.title) })}
         loading="lazy"
         className="h-full w-full object-cover"
       />
     </div>
     <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 pt-4">
-      <h3 className="font-heading text-[13px] font-bold leading-snug text-primary">{item.title}</h3>
-      <p className="mt-1.5 line-clamp-5 text-[10px] leading-relaxed text-dark-500">{item.description}</p>
+      <h3 className="font-heading text-[13px] font-bold leading-snug text-primary">{t(item.title)}</h3>
+      <p className="mt-1.5 line-clamp-5 text-[10px] leading-relaxed text-dark-500">{t(item.description)}</p>
       <button
         type="button"
         onClick={() => onOpen(item)}
         className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[10px] font-bold text-primary transition-colors hover:text-primary-800"
-      >
-        Selengkapnya <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
+      >{t("Selengkapnya")} <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
       </button>
     </div>
   </article>
-);
+  );
+};
 
 const CardGrid = ({ items, onOpen }) => (
   <div className="motion-filter-results grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -65,6 +71,7 @@ const CardGrid = ({ items, onOpen }) => (
 );
 
 const ActivityDetailDialog = ({ item, onClose }) => {
+  const { t } = useLanguage();
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -85,29 +92,29 @@ const ActivityDetailDialog = ({ item, onClose }) => {
       className="motion-dialog m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
       <div className="relative max-h-[90vh] overflow-y-auto">
-        <img src={item.image} alt={`Kegiatan ${item.title}`} className="aspect-[16/7] w-full object-cover" />
+        <img src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className="aspect-[16/7] w-full object-cover" />
         <button
           type="button"
           onClick={() => dialogRef.current?.close()}
-          aria-label="Tutup penjelasan kegiatan"
+          aria-label={t("Tutup penjelasan kegiatan")}
           className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-dark-200 bg-white text-dark-800 transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <X className="h-4 w-4" />
         </button>
         <div className="p-5 sm:p-7">
           <span className="inline-flex rounded-full bg-primary-50 px-3 py-1 text-[10px] font-bold text-primary">
-            {item.category}
+            {t(item.category)}
           </span>
           <h2 id="judul-detail-kegiatan" className="mt-3 font-heading text-2xl font-extrabold text-dark-900 sm:text-3xl">
-            {item.title}
+            {t(item.title)}
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-dark-600">{item.description}</p>
-          <h3 className="mt-6 font-heading text-sm font-bold text-dark-900">Yang dipelajari dan dikembangkan</h3>
+          <p className="mt-3 text-sm leading-relaxed text-dark-600">{t(item.description)}</p>
+          <h3 className="mt-6 font-heading text-sm font-bold text-dark-900">{t("Yang dipelajari dan dikembangkan")}</h3>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {item.focus.map((focus) => (
               <li key={focus} className="flex items-center gap-2 rounded-xl bg-dark-50 px-3 py-2 text-xs font-medium text-dark-700">
                 <span aria-hidden="true" className="h-2 w-2 flex-none rounded-full bg-primary" />
-                {focus}
+                {t(focus)}
               </li>
             ))}
           </ul>
@@ -118,6 +125,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
 };
 
 const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => {
+  const { t } = useLanguage();
   return (
     <section
       id="daftar-ekstrakurikuler"
@@ -129,17 +137,15 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
         <div className="mt-6 flex items-end justify-between gap-4">
-          <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{title}</h2>
-          <p className="text-xs text-dark-500">{items.length} kegiatan</p>
+          <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{t(title)}</h2>
+          <p className="text-xs text-dark-500">{t('{count} kegiatan', { count: items.length })}</p>
         </div>
         {items.length > 0 ? (
           <div className="mt-7">
             <CardGrid key={activeCategory} items={items} onOpen={onOpen} />
           </div>
         ) : (
-          <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">
-            Kegiatan yang dicari belum ditemukan.
-          </p>
+          <p className="mt-7 rounded-2xl border border-dashed border-dark-200 py-16 text-center text-sm text-dark-500">{t("Kegiatan yang dicari belum ditemukan.")} </p>
         )}
       </div>
     </section>
@@ -147,15 +153,16 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
 };
 
 const EkstrakurikulerPage = () => {
+  const { t, locale } = useLanguage();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('Ekstrakurikuler');
   const [selectedItem, setSelectedItem] = useState(null);
-  const keyword = search.trim().toLocaleLowerCase('id-ID');
+  const keyword = search.trim().toLocaleLowerCase(locale);
 
   const filteredItems = useMemo(() => ekstrakurikulerData.items.filter((item) => (
     (activeCategory === 'Ekstrakurikuler' || item.category === activeCategory)
-    && `${item.title} ${item.category} ${item.description}`.toLocaleLowerCase('id-ID').includes(keyword)
-  )), [activeCategory, keyword]);
+    && `${item.title} ${item.category} ${item.description} ${t(item.title)} ${t(item.category)} ${t(item.description)}`.toLocaleLowerCase(locale).includes(keyword)
+  )), [activeCategory, keyword, locale, t]);
 
   const sectionTitle = keyword
     ? 'Hasil Pencarian'
@@ -169,20 +176,20 @@ const EkstrakurikulerPage = () => {
             <div className="grid overflow-hidden rounded-[1.75rem] lg:min-h-[390px] lg:grid-cols-[38%_1fr]">
             <div className="flex flex-col justify-center px-4 py-7 sm:px-6 lg:px-7 lg:py-8">
               <span className="w-fit rounded-full border border-primary/35 px-2 py-0.5 text-[8px] font-bold tracking-wide text-primary">
-                {ekstrakurikulerData.eyebrow}
+                {t(ekstrakurikulerData.eyebrow)}
               </span>
               <h1 className="mt-4 font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
-                {ekstrakurikulerData.title}
+                {t(ekstrakurikulerData.title)}
               </h1>
-              <p className="mt-2 text-sm font-medium text-dark-500">{ekstrakurikulerData.subtitle}</p>
+              <p className="mt-2 text-sm font-medium text-dark-500">{t(ekstrakurikulerData.subtitle)}</p>
 
               <label className="mt-5 flex h-11 w-full max-w-md items-center rounded-full border border-dark-200 bg-white pl-4 focus-within:border-primary">
                 <input
                   type="search"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  aria-label="Cari kegiatan"
-                  placeholder="Cari Kegiatan...."
+                  aria-label={t("Cari kegiatan")}
+                  placeholder={t("Cari Kegiatan....")}
                   className="min-w-0 flex-1 bg-transparent text-xs text-dark-700 outline-none placeholder:text-dark-400 sm:text-sm"
                 />
                 <span className="mr-1 grid h-9 w-9 flex-none place-items-center rounded-full bg-primary text-white">
@@ -199,7 +206,7 @@ const EkstrakurikulerPage = () => {
                         <Icon className="h-5 w-5" />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-[10px] font-medium leading-tight text-dark-600">{stat.label}</p>
+                        <p className="text-[10px] font-medium leading-tight text-dark-600">{t(stat.label)}</p>
                         <p className="mt-0.5 font-heading text-lg font-bold leading-none text-dark-900">{stat.value}</p>
                       </div>
                     </div>
@@ -211,7 +218,7 @@ const EkstrakurikulerPage = () => {
             <div className="relative min-h-[260px] overflow-hidden lg:min-h-0">
               <img
                 src={ekstrakurikulerData.heroImage}
-                alt="Siswa SMK Telkom Purwokerto mengeksplorasi teknologi"
+                alt={t("Siswa SMK Telkom Purwokerto mengeksplorasi teknologi")}
                 width="1600"
                 height="769"
                 fetchPriority="high"

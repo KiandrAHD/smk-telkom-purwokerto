@@ -1,16 +1,18 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
-import { Award, Building2, Cpu, Handshake, MonitorSmartphone } from 'lucide-react';
+import { Award, Building2, Cpu, GraduationCap, Trophy } from 'lucide-react';
 import { timelineData } from '../../data/dummyData';
 
-const icons = [Building2, Award, Handshake, MonitorSmartphone, Cpu];
+const icons = [Building2, GraduationCap, Trophy, Award, Cpu];
 
 const TentangTimelineSection = () => {
+  const { t } = useLanguage();
   const [active, setActive] = useState(0);
 
   return (
     <section id="perjalanan" className="bg-white py-6 lg:py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-heading text-xl font-extrabold text-primary">Perjalanan Kami</h2>
+        <h2 className="font-heading text-xl font-extrabold text-primary">{t("Perjalanan Kami")}</h2>
 
         <ol className="relative mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-4">
           {/* Garis putus-putus penghubung (desktop) */}
@@ -48,12 +50,13 @@ const TentangTimelineSection = () => {
                   </span>
 
                   <h3 className="mt-3 font-heading text-xs font-bold text-dark-900">
-                    {item.title}
+                    {t(item.title)}
                   </h3>
                   <p className="mt-1 max-w-[15rem] text-[10px] leading-relaxed text-dark-500">
-                    {item.desc}
+                    {t(item.desc)}
                   </p>
                 </button>
+                <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-[10px] text-primary underline underline-offset-2">{t("Sumber resmi")} </a>
               </li>
             );
           })}

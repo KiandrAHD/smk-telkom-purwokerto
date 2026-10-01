@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
@@ -12,6 +13,8 @@ import { getActiveBkk } from '../services/bkkService';
 import { toBkkItem } from '../utils/publicContent';
 
 const BkkPage = () => {
+  const { t } = useLanguage();
+
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -29,7 +32,7 @@ const BkkPage = () => {
     <MainLayout>
       <BkkHeroSection />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label="lowongan aktif" />
+        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("lowongan aktif")} />
       </div>
       <Reveal><BkkLowonganSection items={items} /></Reveal>
       <Reveal><BkkPklSection /></Reveal>

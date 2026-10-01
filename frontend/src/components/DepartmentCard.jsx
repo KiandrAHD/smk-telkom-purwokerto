@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight, Code2, Gamepad2, Network, RadioTower } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ const icons = {
 };
 
 const DepartmentCard = ({ icon, name, desc, image, slug }) => {
+  const { t } = useLanguage();
   const Icon = icons[icon];
 
   return (
@@ -17,7 +19,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
         <div className="overflow-hidden">
           <img
             src={image}
-            alt={name}
+            alt={t(name)}
             width={900}
             height={450}
             loading="lazy"
@@ -32,15 +34,13 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
 
       <div className="flex flex-1 flex-col px-4 pb-3 pt-7">
         <h3 className="font-heading text-[13px] font-bold leading-snug text-dark-900">
-          {name}
+          {t(name)}
         </h3>
-        <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{desc}</p>
+        <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{t(desc)}</p>
         <Link
           to={`/jurusan/${slug}`}
           className="mt-auto inline-flex items-center justify-between gap-2 pt-3 text-[10px] font-bold text-primary hover:underline"
-        >
-          Selengkapnya
-          <ArrowRight className="h-3.5 w-3.5" />
+        >{t("Selengkapnya")} <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
     </article>

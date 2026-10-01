@@ -1,13 +1,16 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
-import { pengumumanHero, pengumumanStats } from '../../data/dummyData';
+import { officialContentAudit, pengumumanHero, pengumumanStats } from '../../data/dummyData';
 
 // Hero ini dulu terasa datar dibanding halaman lain karena tiga hal yang
 // dipunyai Jurusan/Prestasi/BKK tapi tidak ada di sini: chip penanda di atas
 // judul, garis tepi bernuansa merah, dan bilah statistik yang mengunci bagian
 // bawah panel. Ketiganya sekarang disamakan.
-const PengumumanHeroSection = () => (
+const PengumumanHeroSection = () => {
+  const { t } = useLanguage();
+  return (
   <section className="bg-white pt-4 pb-6">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
@@ -19,24 +22,24 @@ const PengumumanHeroSection = () => (
                 yang sudah tersedia di navbar. Halaman detail tetap memakai
                 breadcrumb sendiri lewat DetailLayout karena letaknya lebih dalam. */}
             <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-              {pengumumanHero.badge}
+              {t(pengumumanHero.badge)}
             </span>
 
             <h1 className="mt-4 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
-              {pengumumanHero.heading}
+              {t(pengumumanHero.heading)}
               {'\n'}
-              <span className="text-primary">{pengumumanHero.headingAccent}</span>
+              <span className="text-primary">{t(pengumumanHero.headingAccent)}</span>
             </h1>
 
             <p className="mt-4 max-w-md text-xs sm:text-sm leading-relaxed text-dark-500">
-              {pengumumanHero.description}
+              {t(pengumumanHero.description)}
             </p>
 
             <Link
               to="/ppdb"
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
             >
-              {pengumumanHero.ctaText}
+              {t(pengumumanHero.ctaText)}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -44,15 +47,20 @@ const PengumumanHeroSection = () => (
           {/* Ilustrasi megafon + ponsel di atas sapuan merah (satu aset dari Figma) */}
           <img
             src={pengumumanHero.image}
-            alt="Pengumuman SMK Telkom Purwokerto"
+            alt={t("Pengumuman SMK Telkom Purwokerto")}
             className="w-full rounded-[1.75rem] object-contain"
           />
         </div>
 
         <HeroStatsBar items={pengumumanStats} />
       </div>
+      <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
+        {t('Rekap arsip pengumuman situs resmi per {date}; bukan jumlah kartu dashboard.', { date: t(officialContentAudit.checkedAt) })}{' '}
+        <a href={officialContentAudit.pengumumanSourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">{t("Lihat sumber")}</a>
+      </p>
     </div>
   </section>
-);
+  );
+};
 
 export default PengumumanHeroSection;

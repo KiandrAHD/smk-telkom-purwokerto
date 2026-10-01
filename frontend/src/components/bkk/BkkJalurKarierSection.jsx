@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ArrowRight, Award, BookOpen, Briefcase, Building2, Kanban, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -6,6 +7,8 @@ import { jalurKarier } from '../../data/dummyData';
 const icons = [BookOpen, Kanban, Building2, Briefcase, Lightbulb, Award];
 
 const BkkJalurKarierSection = () => {
+  const { t } = useLanguage();
+
   const [tab, setTab] = useState(jalurKarier.tabs[0]);
   const steps = jalurKarier.steps[tab];
 
@@ -16,23 +19,23 @@ const BkkJalurKarierSection = () => {
           {/* Judul + tab jurusan */}
           <div className="flex flex-wrap items-center gap-3">
             <h2 className="font-heading text-lg sm:text-xl font-extrabold text-dark-900">
-              {jalurKarier.title}
+              {t(jalurKarier.title)}
             </h2>
-            <div role="tablist" aria-label="Jalur karier per jurusan" className="flex flex-wrap gap-2">
-              {jalurKarier.tabs.map((t) => (
+            <div role="tablist" aria-label={t("Jalur karier per jurusan")} className="flex flex-wrap gap-2">
+              {jalurKarier.tabs.map((kode) => (
                 <button
-                  key={t}
+                  key={kode}
                   type="button"
                   role="tab"
-                  aria-selected={tab === t}
-                  onClick={() => setTab(t)}
+                  aria-selected={tab === kode}
+                  onClick={() => setTab(kode)}
                   className={`rounded-full border px-3.5 py-1.5 text-[10px] font-bold transition-colors ${
-                    tab === t
+                    tab === kode
                       ? 'border-primary bg-primary text-white'
                       : 'border-dark-200 text-dark-600 hover:border-primary hover:text-primary'
                   }`}
                 >
-                  {t}
+                  {kode}
                 </button>
               ))}
             </div>
@@ -55,10 +58,10 @@ const BkkJalurKarierSection = () => {
                     </span>
                   </span>
                   <h3 className="mt-4 font-heading text-[11px] font-bold text-dark-900">
-                    {step.title}
+                    {t(step.title)}
                   </h3>
                   <p className="mt-1 max-w-[9rem] text-[9px] leading-relaxed text-dark-500">
-                    {step.desc}
+                    {t(step.desc)}
                   </p>
                 </li>
               );
@@ -70,7 +73,7 @@ const BkkJalurKarierSection = () => {
               to={`/bkk/roadmap/${tab.toLowerCase()}`}
               className="inline-flex items-center gap-2 rounded-full border border-primary/40 px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
-              {jalurKarier.ctaText}
+              {t(jalurKarier.ctaText)}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>

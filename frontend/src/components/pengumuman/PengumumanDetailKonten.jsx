@@ -1,3 +1,5 @@
+import { useLanguage } from '../../context/LanguageContext';
+import { formatPublicDate } from '../../utils/publicContent';
 import { Link } from 'react-router-dom';
 import { AlarmClock, ArrowRight, FileText, Phone } from 'lucide-react';
 import Reveal from '../Reveal';
@@ -7,6 +9,8 @@ import Reveal from '../Reveal';
 // berkas yang perlu disiapkan. Pembaca pengumuman datang untuk tahu "kapan" dan
 // "harus apa", bukan untuk membaca cerita.
 const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
+  const { t, locale } = useLanguage();
+
   const lainnya = relatedItems.slice(0, 3);
 
   return (
@@ -32,9 +36,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
 
       {item.langkah && (
         <section className="mt-9">
-          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">
-            Langkah yang Perlu Dilakukan
-          </h2>
+          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{t("Langkah yang Perlu Dilakukan")}</h2>
           <ol className="mt-5 space-y-3">
             {item.langkah.map((langkah, i) => (
               <Reveal
@@ -56,9 +58,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
         {item.berkas && (
           <div className="rounded-2xl border border-dark-100 bg-dark-50 px-5 py-4">
             <h3 className="flex items-center gap-2 font-heading text-xs font-bold text-dark-900">
-              <FileText className="h-4 w-4 text-primary" />
-              Berkas yang Disiapkan
-            </h3>
+              <FileText className="h-4 w-4 text-primary" />{t("Berkas yang Disiapkan")}</h3>
             <ul className="mt-3 space-y-1.5">
               {item.berkas.map((berkas) => (
                 <li key={berkas} className="flex gap-2 text-[11px] leading-relaxed text-dark-600">
@@ -73,9 +73,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
         {item.kontak && (
           <div className="rounded-2xl border border-dark-100 bg-dark-50 px-5 py-4">
             <h3 className="flex items-center gap-2 font-heading text-xs font-bold text-dark-900">
-              <Phone className="h-4 w-4 text-primary" />
-              Butuh Penjelasan?
-            </h3>
+              <Phone className="h-4 w-4 text-primary" />{t("Butuh Penjelasan?")}</h3>
             <p className="mt-3 font-heading text-[11px] font-bold text-dark-900">
               {item.kontak.nama}
             </p>
@@ -98,9 +96,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
 
       {lainnya.length > 0 && (
         <section className="mt-10">
-          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">
-            Pengumuman Lainnya
-          </h2>
+          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{t("Pengumuman Lainnya")}</h2>
           <div className="mt-5 space-y-2.5">
             {lainnya.map((p) => (
               <Link
@@ -113,7 +109,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
                     {p.title}
                   </span>
                   <span className="mt-0.5 block text-[10px] text-dark-400">
-                    {p.kategori} · {p.date}
+                    {p.kategori} · {formatPublicDate(p.iso, {}, locale)}
                   </span>
                 </span>
                 <ArrowRight className="h-4 w-4 flex-shrink-0 text-primary" />

@@ -3,7 +3,9 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import footerAccent from '../assets/landing/figma-section-accent.png';
+import footerAccentFill from '../assets/footer/figma-footer-fill.svg';
+import competitionSupporters from '../assets/footer/competition-supporters.png';
+import { useLanguage } from '../context/LanguageContext';
 
 const socialIcons = {
   instagram: FaInstagram,
@@ -11,9 +13,27 @@ const socialIcons = {
   tiktok: FaTiktok,
 };
 
-const LinkColumn = ({ title, links }) => (
+const supporterLogos = [
+  { id: 'jagoan', name: 'Jagoan Hosting', href: 'https://www.jagoanhosting.com/' },
+  { id: 'komdigi', name: 'Kementerian Komunikasi dan Digital Republik Indonesia' },
+  { id: 'garuda', name: 'Garuda Spark Innovation Hub' },
+  { id: 'ngalup', name: 'NGALUP.CO' },
+  { id: 'jhic', name: 'Jagoan Hosting Innovation Competition 2026' },
+];
+
+const FooterAccent = ({ node }) => (
+  <div className="footer-accent" data-figma-node={node}>
+    <div className="footer-accent-art">
+      <img src={footerAccentFill} alt="" className="footer-accent-shape" />
+    </div>
+  </div>
+);
+
+const LinkColumn = ({ title, links }) => {
+  const { t } = useLanguage();
+  return (
   <div className="min-w-0">
-    <h3 className="font-heading text-xs font-bold text-dark-900">{title}</h3>
+    <h3 className="font-heading text-xs font-bold text-dark-900">{t(title)}</h3>
     <ul className="mt-3 space-y-2">
       {links.map((link) => (
         <li key={link.label}>
@@ -21,25 +41,26 @@ const LinkColumn = ({ title, links }) => (
             to={link.href}
             className="text-[11px] text-dark-500 transition-colors hover:text-primary"
           >
-            {link.label}
+            {t(link.label)}
           </Link>
         </li>
       ))}
     </ul>
   </div>
-);
+  );
+};
 
-const Footer = () => (
+const Footer = () => {
+  const { t } = useLanguage();
+  return (
   <footer className="site-footer bg-white">
     <div className="relative pt-7 lg:pt-9">
-      {/* Area dekorasi samping tidak memasuki container teks saat layar menyempit. */}
+      {/* Keep decorative motifs inside the reserved margins, away from footer content. */}
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-left pointer-events-none select-none">
-        <img src={footerAccent} alt="" className="footer-accent" />
-        <img src={footerAccent} alt="" className="footer-accent" />
+        {['90:536', '90:542'].map((node) => <FooterAccent key={node} node={node} />)}
       </div>
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none">
-        <img src={footerAccent} alt="" className="footer-accent" />
-        <img src={footerAccent} alt="" className="footer-accent" />
+        {['90:539', '90:523'].map((node) => <FooterAccent key={node} node={node} />)}
       </div>
 
       <div className="footer-content relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
@@ -55,7 +76,7 @@ const Footer = () => (
               </span>
             </div>
             <p className="mt-3 max-w-xs text-[11px] leading-relaxed text-dark-500">
-              {footerData.tagline}
+              {t(footerData.tagline)}
             </p>
             <div className="mt-4 flex items-center gap-3">
               {footerData.socials.map((social) => {
@@ -74,6 +95,29 @@ const Footer = () => (
                 );
               })}
             </div>
+
+            {/* Lima logo memakai bitmap asli; CSS hanya membatasi area putih tiap logo. */}
+            <div className="mt-6 max-w-[280px]">
+              <h3 className="font-heading text-xs font-bold text-dark-900">Supported by</h3>
+              <ul className="footer-supporters mt-3" aria-label={t('Pendukung lomba')}>
+                {supporterLogos.map(({ id, name, href }) => {
+                  const logo = (
+                    <span className={`footer-supporter-logo footer-supporter-logo-${id}`}>
+                      <img src={competitionSupporters} alt={name} loading="lazy" decoding="async" width="1920" height="1080" />
+                    </span>
+                  );
+                  return (
+                    <li key={id} className={id === 'jhic' ? 'col-span-2' : undefined}>
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer" className="footer-supporter-link" aria-label={t('Kunjungi {name}', { name })}>
+                          {logo}
+                        </a>
+                      ) : logo}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
 
           <LinkColumn title="Menu" links={footerData.menu} />
@@ -81,7 +125,7 @@ const Footer = () => (
 
           {/* Kontak */}
           <div className="min-w-0 [overflow-wrap:anywhere]">
-            <h3 className="font-heading text-xs font-bold text-dark-900">Kontak</h3>
+            <h3 className="font-heading text-xs font-bold text-dark-900">{t('Kontak')}</h3>
             <ul className="mt-3 space-y-2 text-[11px] text-dark-500">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
@@ -116,12 +160,12 @@ const Footer = () => (
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Buka lokasi SMK Telkom Purwokerto di Google Maps"
+              aria-label={t('Buka lokasi SMK Telkom Purwokerto di Google Maps')}
               className="block overflow-hidden rounded-xl transition-transform hover:scale-[1.01]"
             >
               <img
                 src={footerData.map}
-                alt="Peta lokasi SMK Telkom Purwokerto"
+                alt={t('Peta lokasi SMK Telkom Purwokerto')}
                 loading="lazy"
                 className="w-full rounded-xl border border-dark-100 object-cover"
               />
@@ -131,37 +175,28 @@ const Footer = () => (
       </div>
     </div>
 
-    {/* Band ini mengikuti tinggi konten, bukan koordinat top tetap. */}
+    {/* Normal flow reserves space below the supporter logos; motifs cannot overlap them. */}
     <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
-      <div className="footer-accent-group">
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
-      <div className="footer-accent-group justify-self-end">
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
+      {['90:514', '90:508', '90:520', '90:517', '90:511'].map((node) => <FooterAccent key={node} node={node} />)}
     </div>
-
     <div className="footer-bottom-bar relative bg-primary text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-[10px] sm:flex-row sm:px-6 lg:px-8">
         <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
         <div className="flex items-center gap-3">
-          <span className="underline underline-offset-2">Kebijakan Privasi</span>
+          <span className="underline underline-offset-2">{t('Kebijakan Privasi')}</span>
           <span aria-hidden="true" className="h-3 border-l border-white/60" />
           <Link
             to="/login"
             className="inline-flex items-center gap-1.5 underline-offset-2 transition-opacity hover:opacity-80 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             <LockKeyhole className="h-3 w-3" aria-hidden="true" />
-            Akses Staf & Admin
+            {t('Akses Staf & Admin')}
           </Link>
         </div>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

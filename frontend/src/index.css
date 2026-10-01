@@ -69,10 +69,12 @@ body {
   background-size: 21px 243px;
 }
 
-/* Aksen footer memiliki area sendiri; zoom tidak dapat memindahkannya ke teks. */
+/* Native Figma motifs occupy reserved margins and a separate bottom row. */
 .site-footer {
-  --footer-accent-size: clamp(2rem, 8vw, 8rem);
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
+  --footer-accent-size: clamp(2rem, 6vw, 6rem);
+  position: relative;
+  container-type: inline-size;
   isolation: isolate;
 }
 
@@ -80,70 +82,161 @@ body {
   width: calc(100% - 2 * var(--footer-accent-gutter));
 }
 
-.footer-accent {
-  display: block;
-  width: var(--footer-accent-size);
-  height: var(--footer-accent-size);
-  max-width: none;
-  flex-shrink: 0;
-  object-fit: contain;
-  /* Export asli memuat alpha 0.68; hasil akhir mengikuti fill footer Figma 0.30. */
-  opacity: calc(0.3 / 0.68);
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
-}
-
-.footer-accent-turned {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 0);
-}
-
-/* Motif muat utuh di gutter; tidak perlu dipotong untuk menghindari teks. */
 .footer-accent-side {
   position: absolute;
-  inset-block: 0;
-  width: max(var(--footer-accent-gutter), calc((100% - 80rem) / 2));
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
+  inset-block: 2rem;
+  width: var(--footer-accent-gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-items: center;
   gap: 1rem;
-  padding-inline: clamp(0.25rem, 0.8vw, 1rem);
+  padding-inline: 0.25rem;
 }
-
 .footer-accent-side-left {
   left: 0;
 }
-
 .footer-accent-side-right {
   right: 0;
 }
-
-.footer-accent-side .footer-accent {
+.footer-accent-band {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.25rem, 1vw, 1rem);
+  padding: 1rem clamp(4rem, 8vw, 6rem);
+}
+.footer-accent {
+  position: relative;
   width: min(100%, var(--footer-accent-size));
-  height: auto;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+.footer-accent-art {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 232.934326171875px;
+  height: 232.934326171875px;
+  transform-origin: top left;
+  transform: scale(calc(100cqw / 232.934326171875px)) var(--footer-accent-orientation, matrix(1, 0, 0, 1, 0, 0));
 }
 
-/* Aliran normal menempatkan motif bawah setelah daftar Menu/Kontak selesai. */
-.footer-accent-band {
+.footer-accent-shape {
+  position: absolute;
+  left: 28.31273078918457px;
+  top: 13.199074745178223px;
+  max-width: none;
+  mask-image: url('./assets/footer/figma-footer-mask.png');
+  mask-size: 232.934326171875px 232.934326171875px;
+  mask-position: -28.31273078918457px -13.199074745178223px;
+  mask-repeat: no-repeat;
+}
+
+.footer-accent[data-figma-node='90:508'] {
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+.footer-accent[data-figma-node='90:511'] {
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+.footer-accent[data-figma-node='90:514'] {
+  --footer-accent-orientation: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 232.934326171875);
+}
+.footer-accent[data-figma-node='90:517'] {
+  --footer-accent-orientation: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 232.934326171875);
+}
+.footer-accent[data-figma-node='90:520'] {
+  --footer-accent-orientation: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 232.934326171875);
+}
+.footer-accent[data-figma-node='90:523'] {
+  --footer-accent-orientation: matrix(-1, 8.742278367890322e-8, -8.742278367890322e-8, -1, 232.934326171875, 232.934326171875);
+}
+.footer-accent[data-figma-node='90:536'] {
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+.footer-accent[data-figma-node='90:539'] {
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+.footer-accent[data-figma-node='90:542'] {
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
+}
+
+/* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.
+   Setiap area menyertakan 2px tepi putih agar anti-alias logo tetap utuh. */
+.footer-supporters {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  min-height: calc(var(--footer-accent-size) + 2rem);
-  gap: 1rem;
-  padding-block: 1rem;
-  /* Inset kiri/kanan sama dan tetap memberi ruang untuk tombol STELA. */
-  padding-inline: clamp(5rem, 8vw, 6rem);
+  gap: 1rem 0.75rem;
 }
 
-.footer-accent-group {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.25rem;
-  width: min(100%, calc(3 * var(--footer-accent-size) + 0.5rem));
-}
-
-.footer-accent-band .footer-accent {
+.footer-supporter-logo {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-inline: auto;
   width: 100%;
+}
+
+.footer-supporter-logo img {
+  position: absolute;
+  display: block;
+  max-width: none;
   height: auto;
+}
+
+.footer-supporter-link {
+  display: block;
+}
+
+.footer-supporter-logo-jagoan {
+  aspect-ratio: 186 / 61;
+  max-width: 100px;
+}
+.footer-supporter-logo-jagoan img {
+  width: 1032.258065%;
+  left: -202.150538%;
+  top: -760.655738%;
+}
+
+.footer-supporter-logo-komdigi {
+  aspect-ratio: 128 / 111;
+  max-width: 60px;
+}
+.footer-supporter-logo-komdigi img {
+  width: 1500%;
+  left: -489.0625%;
+  top: -399.099099%;
+}
+
+.footer-supporter-logo-garuda {
+  aspect-ratio: 179 / 96;
+  max-width: 85px;
+}
+.footer-supporter-logo-garuda img {
+  width: 1072.625698%;
+  left: -450.837989%;
+  top: -468.75%;
+}
+
+.footer-supporter-logo-ngalup {
+  aspect-ratio: 376 / 63;
+  max-width: 100px;
+}
+.footer-supporter-logo-ngalup img {
+  width: 510.638298%;
+  left: -273.404255%;
+  top: -741.269841%;
+}
+
+.footer-supporter-logo-jhic {
+  aspect-ratio: 319 / 176;
+  max-width: 100px;
+}
+.footer-supporter-logo-jhic img {
+  width: 601.880878%;
+  left: -457.366771%;
+  top: -230.113636%;
 }
 
 /* Umpan balik interaksi untuk SEMUA elemen yang bisa dipencet — satu aturan di

@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -41,9 +42,10 @@ const AMBIL = {
 const KOLEKSI = {
   'pengumuman-populer': {
     eyebrow: 'Pengumuman',
-    title: 'Pengumuman Populer',
-    deskripsi: 'Pengumuman yang paling banyak dibaca pengunjung dalam periode terakhir.',
+    title: 'Pengumuman Terbaru',
+    deskripsi: 'Pengumuman resmi sekolah yang terbaru, diurutkan berdasarkan tanggal.',
     Section: PengumumanPopulerCard,
+    sumber: 'pengumuman',
     kembali: { to: '/pengumuman', label: 'Pengumuman' },
   },
   'pengumuman-semua': {
@@ -57,7 +59,7 @@ const KOLEKSI = {
   'pengumuman-timeline': {
     eyebrow: 'Pengumuman',
     title: 'Timeline Pengumuman',
-    deskripsi: 'Urutan waktu pengumuman dan agenda sekolah, dari hari ini sampai bulan depan.',
+    deskripsi: 'Rekap publikasi pengumuman pada arsip situs resmi, disertai tanggal pemeriksaan.',
     Section: PengumumanTimelineBar,
     kembali: { to: '/pengumuman', label: 'Pengumuman' },
   },
@@ -79,7 +81,7 @@ const KOLEKSI = {
   'berita-agenda': {
     eyebrow: 'Berita',
     title: 'Agenda Sekolah',
-    deskripsi: 'Kegiatan dan acara sekolah yang akan berlangsung dalam waktu dekat.',
+    deskripsi: 'Informasi kegiatan dan acara sekolah. Periksa tanggal pada setiap agenda.',
     Section: BeritaAgendaSection,
     kembali: { to: '/berita', label: 'Berita' },
   },
@@ -94,6 +96,8 @@ const KOLEKSI = {
 };
 
 const KoleksiPage = ({ jenis }) => {
+  const { t } = useLanguage();
+
   const koleksi = KOLEKSI[jenis];
   const ambil = koleksi?.sumber ? AMBIL[koleksi.sumber] : null;
 
@@ -132,7 +136,7 @@ const KoleksiPage = ({ jenis }) => {
             className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-5 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4" />
-            Kembali ke {koleksi.kembali.label}
+            {t('Kembali ke {label}', { label: t(koleksi.kembali.label) })}
           </Link>
         }
       />

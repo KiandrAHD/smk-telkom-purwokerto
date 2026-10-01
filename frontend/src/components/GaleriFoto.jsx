@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import Reveal from './Reveal';
@@ -10,6 +11,8 @@ const JEDA = ['', 'delay-100', 'delay-200', 'delay-300', 'delay-100', 'delay-200
 // browser, bukan div buatan sendiri: tombol Esc, penguncian fokus, dan lapisan
 // latar sudah ditangani browser, jadi tidak perlu menulis ulang semuanya.
 const GaleriFoto = ({ items, title, description }) => {
+  const { t } = useLanguage();
+
   const [aktif, setAktif] = useState(null);
   const dialogRef = useRef(null);
 
@@ -36,7 +39,7 @@ const GaleriFoto = ({ items, title, description }) => {
             <button
               type="button"
               onClick={() => setAktif(i)}
-              aria-label={`Perbesar foto: ${foto.alt}`}
+              aria-label={t('Perbesar foto: {alt}', { alt: foto.alt })}
               className="group block w-full overflow-hidden rounded-xl border border-dark-100 bg-dark-50"
             >
               <img
@@ -75,7 +78,7 @@ const GaleriFoto = ({ items, title, description }) => {
             <button
               type="button"
               onClick={() => setAktif(null)}
-              aria-label="Tutup foto"
+              aria-label={t("Tutup foto")}
               className="absolute -top-3 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-dark-900 transition-colors hover:bg-white"
             >
               <X className="h-5 w-5" />
@@ -86,7 +89,7 @@ const GaleriFoto = ({ items, title, description }) => {
                 <button
                   type="button"
                   onClick={() => geser(-1)}
-                  aria-label="Foto sebelumnya"
+                  aria-label={t("Foto sebelumnya")}
                   className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-dark-900 transition-colors hover:bg-white"
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -94,7 +97,7 @@ const GaleriFoto = ({ items, title, description }) => {
                 <button
                   type="button"
                   onClick={() => geser(1)}
-                  aria-label="Foto berikutnya"
+                  aria-label={t("Foto berikutnya")}
                   className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-dark-900 transition-colors hover:bg-white"
                 >
                   <ChevronRight className="h-5 w-5" />

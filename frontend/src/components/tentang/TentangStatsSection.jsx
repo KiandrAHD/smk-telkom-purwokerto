@@ -1,8 +1,9 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useEffect, useRef, useState } from 'react';
-import { Briefcase, Building2, GraduationCap, Users } from 'lucide-react';
+import { Briefcase, Building2, GraduationCap, Trophy, Users } from 'lucide-react';
 import { aboutStats } from '../../data/dummyData';
 
-const icons = { users: Users, graduationCap: GraduationCap, building: Building2, briefcase: Briefcase };
+const icons = { users: Users, graduationCap: GraduationCap, building: Building2, briefcase: Briefcase, trophy: Trophy };
 
 // Pecah "2.200+" jadi angka + imbuhan supaya angkanya bisa dihitung naik.
 // Pemisah ribuan ikut dibuang dari angka dan dari imbuhan, lalu dipasang ulang
@@ -13,6 +14,7 @@ const parse = (value) => ({
 });
 
 const CountUp = ({ value, run }) => {
+  const { locale } = useLanguage();
   const { target, suffix } = parse(value);
   // null = animasi belum menyentuh angka ini. Nilai akhir dipakai sebagai kondisi default
   // supaya angkanya tetap benar kalau rAF tidak pernah jalan (tab latar, pane tanpa render).
@@ -33,13 +35,14 @@ const CountUp = ({ value, run }) => {
 
   return (
     <span>
-      {(n ?? target).toLocaleString('id-ID')}
+      {(n ?? target).toLocaleString(locale)}
       {suffix}
     </span>
   );
 };
 
 const TentangStatsSection = () => {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -79,7 +82,7 @@ const TentangStatsSection = () => {
                     <p className="font-heading text-xl font-extrabold text-dark-900">
                       <CountUp value={stat.value} run={visible} />
                     </p>
-                    <p className="text-[11px] text-dark-500">{stat.label}</p>
+                    <p className="text-[11px] text-dark-500">{t(stat.label)}</p>
                   </div>
                 </div>
               );

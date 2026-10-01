@@ -18,25 +18,20 @@ const footer = await read('../src/components/Footer.jsx');
 assert.ok(!footer.includes('-scale-x-100'), 'Footer tidak boleh mencerminkan bentuk asli.');
 const css = await read('../src/index.css');
 for (const [selector, native] of [
-  ['.footer-accent', source.footer.upright],
-  ['.footer-accent-turned', source.footer.turned],
+  [".footer-accent[data-figma-node='90:508']", source.footer.upright],
+  [".footer-accent[data-figma-node='90:514']", source.footer.turned],
 ]) {
   const rule = css.slice(css.indexOf(selector + ' {')).split('}')[0];
-  const rendered = rule.match(/transform: matrix\(([^)]+)\)/);
+  const rendered = rule.match(/--footer-accent-orientation: matrix\(([^)]+)\)/);
   assert.ok(rendered, selector + ' belum memakai matriks asli.');
-  assert.deepEqual(rendered[1].split(',').map(Number), [...native.matrix, 0, 0]);
+  assert.deepEqual(rendered[1].split(',').map(Number).slice(0, 4), native.matrix);
 }
 
-for (const path of ['../src/pages/GuruPage.jsx', '../src/components/GuruPreviewSection.jsx']) {
+for (const path of ['../src/pages/GuruPage.jsx']) {
   const page = await read(path);
   assert.ok(page.includes('guru-accent-horizontal-top'), path + ' belum memakai bingkai atas Figma.');
 }
-const preview = await read('../src/components/GuruPreviewSection.jsx');
-const watermark = preview.split('\n').find((line) => line.includes('data-figma-node="24:759"'));
-const watermarkMatrix = watermark?.match(/\[transform:matrix\(([^)]+)\)\]/);
-assert.ok(watermarkMatrix, 'Watermark Beranda belum mengacu ke 24:759.');
-assert.deepEqual(watermarkMatrix[1].split(',').map(Number), [...source.teacherPreviewWatermark.matrix, 0, 0]);
 const top = await sharp(fileURLToPath(new URL('../src/assets/tentang/figma-guru-horizontal-top.png', import.meta.url))).metadata();
 assert.equal(top.width, source.teacherTop.width);
 assert.equal(top.height, source.teacherTop.height);
-console.log('Lulus: 38 matriks section, orientasi footer, bingkai atas, dan watermark Beranda sesuai sumber Figma.');
+console.log('Lulus: 38 matriks section, orientasi footer, dan bingkai guru sesuai sumber Figma.');

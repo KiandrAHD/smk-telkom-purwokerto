@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
+import LanguageToggle from './LanguageToggle';
+import { useLanguage } from '../context/LanguageContext';
 import { ctaMasukPpdb, navLinks } from '../data/dummyData';
 
 const prefetchByHref = {
@@ -21,6 +23,7 @@ const prefetchRoute = (href) => {
 };
 
 const Navbar = () => {
+  const { t } = useLanguage();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isTentangOpen, setIsTentangOpen] = useState(false);
@@ -43,7 +46,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 bg-white">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 lg:h-20 items-center justify-between gap-6">
+        <div className="flex h-16 lg:h-20 items-center justify-between gap-3">
           {/* Brand */}
           <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
             <Logo className="w-9 h-9 lg:w-10 lg:h-10" />
@@ -55,14 +58,14 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop menu */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden xl:flex items-center gap-5">
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
-<Link key={link.label} to={link.href} className={linkClass(link)} onMouseEnter={() => prefetchRoute(link.href)}>
-                {link.label}
-                {activeBar(link)}
-              </Link>
+                  <Link key={link.label} to={link.href} className={linkClass(link)} onMouseEnter={() => prefetchRoute(link.href)}>
+                    {t(link.label)}
+                    {activeBar(link)}
+                  </Link>
                 );
               }
 
@@ -80,7 +83,7 @@ const Navbar = () => {
                     aria-expanded={isTentangOpen}
                     aria-haspopup="menu"
                   >
-                    {link.label}
+                    {t(link.label)}
                     <ChevronDown
                       className={`h-3.5 w-3.5 transition-transform ${isTentangOpen ? 'rotate-180' : ''}`}
                       aria-hidden="true"
@@ -92,23 +95,23 @@ const Navbar = () => {
                     <div
                       className="motion-menu-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
                       role="menu"
-                      aria-label="Submenu Tentang"
+                      aria-label={t('Submenu Tentang')}
                     >
                       {link.children.map((child) => (
-<Link
-                        key={child.label}
-                        to={child.href}
-                        role="menuitem"
-                        onMouseEnter={() => prefetchRoute(child.href)}
-                        onClick={() => setIsTentangOpen(false)}
-                        className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                          location.pathname === child.href
-                            ? 'bg-primary-50 text-primary'
-                            : 'text-dark-700 hover:bg-dark-50 hover:text-primary'
-                        }`}
-                      >
-                        {child.label}
-                      </Link>
+                        <Link
+                          key={child.label}
+                          to={child.href}
+                          role="menuitem"
+                          onMouseEnter={() => prefetchRoute(child.href)}
+                          onClick={() => setIsTentangOpen(false)}
+                          className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                            location.pathname === child.href
+                              ? 'bg-primary-50 text-primary'
+                              : 'text-dark-700 hover:bg-dark-50 hover:text-primary'
+                          }`}
+                        >
+                          {t(child.label)}
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -118,12 +121,13 @@ const Navbar = () => {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="ml-auto flex items-center gap-2 xl:ml-0">
+            <LanguageToggle />
             <Link
               to={ctaMasukPpdb.href}
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="hidden xl:inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
-              {ctaMasukPpdb.label}
+              {t(ctaMasukPpdb.label)}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -132,8 +136,8 @@ const Navbar = () => {
           <button
             type="button"
             onClick={() => setIsMobileOpen((open) => !open)}
-            className="lg:hidden flex h-10 w-10 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
-            aria-label={isMobileOpen ? 'Tutup menu' : 'Buka menu'}
+            className="xl:hidden flex h-10 w-10 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
+            aria-label={t(isMobileOpen ? 'Tutup menu' : 'Buka menu')}
           >
             {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -141,7 +145,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMobileOpen && (
-          <div className="motion-menu-enter lg:hidden border-t border-dark-100 py-4">
+          <div className="motion-menu-enter xl:hidden border-t border-dark-100 py-4">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
                 if (!link.children) {
@@ -153,7 +157,7 @@ const Navbar = () => {
                       onClick={() => setIsMobileOpen(false)}
                       className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
                     >
-                      {link.label}
+                      {t(link.label)}
                     </Link>
                   );
                 }
@@ -166,7 +170,7 @@ const Navbar = () => {
                       className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
                       aria-expanded={isTentangOpen}
                     >
-                      {link.label}
+                      {t(link.label)}
                       <ChevronDown
                         className={`h-4 w-4 transition-transform ${isTentangOpen ? 'rotate-180' : ''}`}
                         aria-hidden="true"
@@ -185,7 +189,7 @@ const Navbar = () => {
                             }}
                             className="block rounded-lg px-3 py-2 text-sm font-medium text-dark-600 hover:bg-dark-50 hover:text-primary"
                           >
-                            {child.label}
+                            {t(child.label)}
                           </Link>
                         ))}
                       </div>
@@ -198,7 +202,7 @@ const Navbar = () => {
                 onClick={() => setIsMobileOpen(false)}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
-                {ctaMasukPpdb.label}
+                {t(ctaMasukPpdb.label)}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

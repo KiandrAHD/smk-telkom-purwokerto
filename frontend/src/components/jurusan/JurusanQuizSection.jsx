@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ArrowRight, Bot, CheckCircle2, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -17,6 +18,7 @@ const recommend = (picked) => {
 };
 
 const JurusanQuizSection = () => {
+  const { t } = useLanguage();
   const [started, setStarted] = useState(false);
   const [picked, setPicked] = useState([]);
 
@@ -41,18 +43,17 @@ const JurusanQuizSection = () => {
               <Bot className="h-7 w-7 text-white" />
             </span>
             <div>
-              <h2 className="font-heading text-sm font-extrabold text-dark-900">
-                Belum Tahu Memilih <span className="text-primary">Jurusan?</span>
+              <h2 className="font-heading text-sm font-extrabold text-dark-900">{t("Belum Tahu Memilih")} <span className="text-primary">{t("Jurusan?")}</span>
               </h2>
               <p className="mt-2 text-[10px] leading-relaxed text-dark-500">
-                {jurusanQuiz.description}
+                {t(jurusanQuiz.description)}
               </p>
               <button
                 type="button"
                 onClick={() => setStarted(true)}
                 className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-800"
               >
-                {jurusanQuiz.ctaText}
+                {t(jurusanQuiz.ctaText)}
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -75,7 +76,7 @@ const JurusanQuizSection = () => {
                       : 'border-dark-100 bg-white text-dark-700 enabled:hover:border-primary'
                   }`}
                 >
-                  {opt.text}
+                  {t(opt.text)}
                 </button>
               );
             })}
@@ -90,26 +91,26 @@ const JurusanQuizSection = () => {
               fill="currentColor"
               strokeWidth={0}
             />
-            <p className="text-[9px] font-bold text-primary">{jurusanQuiz.resultLabel}</p>
+            <p className="text-[9px] font-bold text-primary">{t(jurusanQuiz.resultLabel)}</p>
 
             {result ? (
               <>
                 <h3 className="mt-1.5 font-heading text-xs font-extrabold leading-snug text-dark-900">
-                  {result.name}
+                  {t(result.name)}
                 </h3>
-                <p className="mt-1 text-[9px] text-dark-500">{jurusanQuiz.resultNote}</p>
+                <p className="mt-1 text-[9px] text-dark-500">{t(jurusanQuiz.resultNote)}</p>
                 <div className="mt-3 flex items-center gap-2">
                   <Link
                     to={resultHref}
                     className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
                   >
-                    {result.cta}
+                    {t(result.cta)}
                     <ArrowRight className="h-2.5 w-2.5" />
                   </Link>
                   <button
                     type="button"
                     onClick={() => setPicked([])}
-                    aria-label={jurusanQuiz.resetText}
+                    aria-label={t(jurusanQuiz.resetText)}
                     className="relative text-dark-400 transition-colors before:absolute before:-inset-2 before:content-[''] hover:text-primary"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
@@ -118,9 +119,9 @@ const JurusanQuizSection = () => {
               </>
             ) : (
               <p className="mt-2 text-[9px] leading-relaxed text-dark-400">
-                {started
+                {t(started
                   ? 'Pilih minat di samping untuk melihat rekomendasi.'
-                  : 'Tekan “Mulai Sekarang” untuk mulai menjawab.'}
+                  : 'Tekan “Mulai Sekarang” untuk mulai menjawab.')}
               </p>
             )}
           </div>

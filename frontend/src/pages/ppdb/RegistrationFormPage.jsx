@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
@@ -6,17 +7,21 @@ import PpdbPortalLayout from '../../components/ppdb/PpdbPortalLayout';
 import { usePpdb } from '../../context/PpdbContext';
 import { ppdbAgama, ppdbJurusanPilihan, ppdbMataPelajaran, ppdbSemester, ppdbTahunLulus } from '../../data/ppdbFormOptions';
 
-const JudulSeksi = ({ nomor, teks, kanan }) => (
+const JudulSeksi = ({ nomor, teks, kanan }) => {
+  const { t } = useLanguage();
+  return (
   <div className="flex flex-wrap items-center justify-between gap-3">
     <h2 className="flex items-center gap-3 font-heading text-sm font-extrabold text-dark-900">
       <span aria-hidden="true" className="h-5 w-1 flex-shrink-0 rounded-full bg-primary" />
-      {nomor}. {teks}
+      {nomor}. {t(teks)}
     </h2>
     {kanan}
   </div>
 );
+};
 
 const RegistrationFormPage = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { biodata, nilai, isiBiodata, isiNilai, draftTersimpan, simpanDraft } = usePpdb();
   const [savingDraft, setSavingDraft] = useState(false);
@@ -44,58 +49,54 @@ const RegistrationFormPage = () => {
 
   return (
     <PpdbPortalLayout>
-      <h1 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">
-        Formulir Pendaftaran Utama
-      </h1>
-      <p className="mt-1.5 text-xs text-dark-500">
-        Lengkapi biodata diri dan riwayat akademik Anda di bawah ini dengan sebenar-benarnya.
-      </p>
+      <h1 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{t("Formulir Pendaftaran Utama")} </h1>
+      <p className="mt-1.5 text-xs text-dark-500">{t("Lengkapi biodata diri dan riwayat akademik Anda di bawah ini dengan sebenar-benarnya.")} </p>
 
       <form onSubmit={kirim} className="mt-6 rounded-2xl border border-dark-100 bg-white p-6 shadow-card sm:p-8">
         {/* 1. Biodata */}
         <JudulSeksi nomor="1" teks="Biodata Diri Lengkap" />
         <div className="mt-6 space-y-5">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <FormInput label="NISN Siswa" wajib value={biodata.nisn} onChange={ubah('nisn')} inputMode="numeric" maxLength={10} required />
-            <FormInput label="Nama Lengkap" wajib value={biodata.namaLengkap} onChange={ubah('namaLengkap')} required />
+            <FormInput label={t("NISN Siswa")} wajib value={biodata.nisn} onChange={ubah('nisn')} inputMode="numeric" maxLength={10} required />
+            <FormInput label={t("Nama Lengkap")} wajib value={biodata.namaLengkap} onChange={ubah('namaLengkap')} required />
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <FormInput label="Nomor WhatsApp" wajib type="tel" value={biodata.whatsapp} onChange={ubah('whatsapp')} required />
-            <FormInput label="Peminatan Jurusan" wajib as="select" value={biodata.jurusan} onChange={ubah('jurusan')} required options={[{ value: '', label: 'Pilih Jurusan' }, ...ppdbJurusanPilihan]} />
+            <FormInput label={t("Nomor WhatsApp")} wajib type="tel" value={biodata.whatsapp} onChange={ubah('whatsapp')} required />
+            <FormInput label={t("Peminatan Jurusan")} wajib as="select" value={biodata.jurusan} onChange={ubah('jurusan')} required options={[{ value: '', label: t('Pilih Jurusan') }, ...ppdbJurusanPilihan.map((value) => ({ value, label: t(value) }))]} />
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <FormInput
-              label="NIK (Nomor Induk Kependudukan)"
+              label={t("NIK (Nomor Induk Kependudukan)")}
               wajib
               value={biodata.nik}
               onChange={ubah('nik')}
-              placeholder="16 Digit NIK di Kartu Keluarga"
+              placeholder={t("16 Digit NIK di Kartu Keluarga")}
               inputMode="numeric"
               maxLength={16}
               required
             />
             <FormInput
-              label="Agama"
+              label={t("Agama")}
               wajib
               as="select"
               value={biodata.agama}
               onChange={ubah('agama')}
               required
-              options={[{ value: '', label: 'Pilih Agama' }, ...ppdbAgama]}
+              options={[{ value: '', label: t('Pilih Agama') }, ...ppdbAgama.map((value) => ({ value, label: t(value) }))]}
             />
           </div>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <FormInput
-              label="Tempat Lahir"
+              label={t("Tempat Lahir")}
               wajib
               value={biodata.tempatLahir}
               onChange={ubah('tempatLahir')}
-              placeholder="Sesuai Akta Kelahiran"
+              placeholder={t("Sesuai Akta Kelahiran")}
               required
             />
             <FormInput
-              label="Tanggal Lahir"
+              label={t("Tanggal Lahir")}
               wajib
               type="date"
               value={biodata.tanggalLahir}
@@ -105,8 +106,7 @@ const RegistrationFormPage = () => {
           </div>
 
           <fieldset>
-            <legend className="mb-2 text-[11px] font-bold text-dark-700">
-              Jenis Kelamin<span className="ml-0.5 text-primary">*</span>
+            <legend className="mb-2 text-[11px] font-bold text-dark-700">{t("Jenis Kelamin")}<span className="ml-0.5 text-primary">*</span>
             </legend>
             <div className="flex flex-wrap gap-6">
               {['Laki-laki', 'Perempuan'].map((pilihan) => (
@@ -120,20 +120,20 @@ const RegistrationFormPage = () => {
                     required
                     className="h-3.5 w-3.5 accent-[color:var(--color-primary)]"
                   />
-                  {pilihan}
+                  {t(pilihan)}
                 </label>
               ))}
             </div>
           </fieldset>
 
           <FormInput
-            label="Alamat Lengkap (Domisili)"
+            label={t("Alamat Lengkap (Domisili)")}
             wajib
             as="textarea"
             rows={3}
             value={biodata.alamat}
             onChange={ubah('alamat')}
-            placeholder="Nama Jalan, RT/RW, Desa/Kelurahan, Kecamatan"
+            placeholder={t("Nama Jalan, RT/RW, Desa/Kelurahan, Kecamatan")}
             required
           />
         </div>
@@ -143,21 +143,21 @@ const RegistrationFormPage = () => {
           <JudulSeksi nomor="2" teks="Informasi Sekolah Asal" />
           <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-[1fr_12rem]">
             <FormInput
-              label="Nama SMP / MTs"
+              label={t("Nama SMP / MTs")}
               wajib
               value={biodata.namaSmp}
               onChange={ubah('namaSmp')}
-              placeholder="Contoh: SMP Negeri 1 Purwokerto"
+              placeholder={t("Contoh: SMP Negeri 1 Purwokerto")}
               required
             />
             <FormInput
-              label="Tahun Lulus"
+              label={t("Tahun Lulus")}
               wajib
               as="select"
               value={biodata.tahunLulus}
               onChange={ubah('tahunLulus')}
               required
-              options={[{ value: '', label: 'Pilih' }, ...ppdbTahunLulus]}
+              options={[{ value: '', label: t('Pilih') }, ...ppdbTahunLulus]}
             />
           </div>
         </div>
@@ -168,23 +168,16 @@ const RegistrationFormPage = () => {
             nomor="3"
             teks="Nilai Rapor (Semester 1 - 5)"
             kanan={
-              <span className="rounded-full bg-orange-50 px-3.5 py-1.5 text-[10px] font-bold text-orange-600">
-                Skala Nilai: 0 - 100
-              </span>
+              <span className="rounded-full bg-orange-50 px-3.5 py-1.5 text-[10px] font-bold text-orange-600">{t("Skala Nilai: 0 - 100")} </span>
             }
           />
-          <p className="mt-3 text-[11px] leading-relaxed text-dark-500">
-            Masukkan nilai pengetahuan dari mata pelajaran utama. Pastikan nilai sesuai dengan rapor
-            asli yang nantinya akan diunggah.
-          </p>
+          <p className="mt-3 text-[11px] leading-relaxed text-dark-500">{t("Masukkan nilai pengetahuan dari mata pelajaran utama. Pastikan nilai sesuai dengan rapor asli yang nantinya akan diunggah.")} </p>
 
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[40rem] border-collapse text-left">
               <thead>
                 <tr className="bg-dark-50">
-                  <th scope="col" className="rounded-l-xl px-4 py-3 text-[11px] font-bold text-dark-600">
-                    Mata Pelajaran
-                  </th>
+                  <th scope="col" className="rounded-l-xl px-4 py-3 text-[11px] font-bold text-dark-600">{t("Mata Pelajaran")} </th>
                   {ppdbSemester.map((s, i) => (
                     <th
                       key={s}
@@ -193,7 +186,7 @@ const RegistrationFormPage = () => {
                         i === ppdbSemester.length - 1 ? 'rounded-r-xl' : ''
                       }`}
                     >
-                      {s}
+                      {t(s)}
                     </th>
                   ))}
                 </tr>
@@ -202,10 +195,10 @@ const RegistrationFormPage = () => {
                 {ppdbMataPelajaran.map((mapel) => (
                   <tr key={mapel.nama} className="border-b border-dark-100 last:border-b-0">
                     <th scope="row" className="px-4 py-3 text-xs font-medium text-dark-700">
-                      {mapel.nama}
+                      {t(mapel.nama)}
                       {mapel.catatan && (
                         <span className="mt-0.5 block text-[9px] font-normal text-dark-400">
-                          {mapel.catatan}
+                          {t(mapel.catatan)}
                         </span>
                       )}
                     </th>
@@ -217,7 +210,7 @@ const RegistrationFormPage = () => {
                           max="100"
                           step="any"
                           required
-                          aria-label={`${mapel.nama} ${s}`}
+                          aria-label={`${t(mapel.nama)} ${t(s)}`}
                           value={nilai[`${mapel.nama}|${s}`] ?? ''}
                           onChange={(e) => isiNilai(mapel.nama, s, e.target.value)}
                           className="w-full rounded-lg border border-dark-200 px-2 py-2 text-center text-xs text-dark-800 outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/10"
@@ -235,17 +228,13 @@ const RegistrationFormPage = () => {
           <Link
             to="/ppdb/masuk"
             className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary"
-          >
-            &larr; Batal &amp; Kembali
-          </Link>
+          >{t("← Batal & Kembali")} </Link>
 
           <div className="flex flex-wrap items-center gap-3">
-            {draftError && <span role="alert" className="text-[11px] text-primary">{draftError}</span>}
+            {draftError && <span role="alert" className="text-[11px] text-primary">{t(draftError)}</span>}
             {draftTersimpan && (
               <span className="motion-feedback flex items-center gap-1.5 text-[11px] font-medium text-green-600">
-                <Check className="h-3.5 w-3.5" />
-                Draft tersimpan
-              </span>
+                <Check className="h-3.5 w-3.5" />{t("Draft tersimpan")} </span>
             )}
             <button
               type="button"
@@ -253,14 +242,12 @@ const RegistrationFormPage = () => {
               disabled={savingDraft}
               className="rounded-full border border-dark-200 px-5 py-3 text-xs font-bold text-dark-700 transition-colors hover:border-primary hover:text-primary"
             >
-              {savingDraft ? 'Menyimpan...' : 'Simpan Draft'}
+              {t(savingDraft ? 'Menyimpan...' : 'Simpan Draft')}
             </button>
             <button
               type="submit"
               className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5"
-            >
-              Lanjut ke Berkas
-              <ArrowRight className="h-4 w-4" />
+            >{t("Lanjut ke Berkas")} <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>

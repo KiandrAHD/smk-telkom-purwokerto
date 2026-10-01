@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, KeyRound } from 'lucide-react';
@@ -7,6 +8,7 @@ import { lupaSandi } from '../../data/dummyData';
 import { sendPpdbPasswordReset } from '../../services/ppdbService';
 
 const LupaSandiPage = () => {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [terkirim, setTerkirim] = useState(false);
   const [mengirim, setMengirim] = useState(false);
@@ -33,18 +35,18 @@ const LupaSandiPage = () => {
           <KeyRound className="h-7 w-7 text-primary" />
         </span>
 
-        <p className="mt-6 text-center text-[11px] font-bold text-primary">{lupaSandi.badge}</p>
+        <p className="mt-6 text-center text-[11px] font-bold text-primary">{t(lupaSandi.badge)}</p>
         <h1 className="mt-2 text-center font-heading text-2xl font-extrabold text-dark-900">
-          {lupaSandi.judul}
+          {t(lupaSandi.judul)}
         </h1>
         <p className="mt-3 text-center text-xs leading-relaxed text-dark-500">
-          {lupaSandi.deskripsi}
+          {t(lupaSandi.deskripsi)}
         </p>
 
         {terkirim ? (
           <p className="mt-7 flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 px-5 py-4 text-[11px] leading-relaxed text-dark-700">
             <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-600" />
-            {lupaSandi.pesanTerkirim}
+            {t(lupaSandi.pesanTerkirim)}
           </p>
         ) : (
           <form
@@ -52,7 +54,7 @@ const LupaSandiPage = () => {
             className="mt-7 space-y-5"
           >
             <FormInput
-              label="Alamat Email Terdaftar"
+              label={t("Alamat Email Terdaftar")}
               wajib
               type="email"
               value={email}
@@ -65,16 +67,16 @@ const LupaSandiPage = () => {
               disabled={mengirim}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5"
             >
-              {mengirim ? 'Mengirim...' : lupaSandi.ctaLabel}
+              {t(mengirim ? 'Mengirim...' : lupaSandi.ctaLabel)}
               <ArrowRight className="h-4 w-4" />
             </button>
-            {galat && <p role="alert" className="text-center text-xs text-primary">{galat}</p>}
+            {galat && <p role="alert" className="text-center text-xs text-primary">{t(galat)}</p>}
           </form>
         )}
 
         <div className="mt-6 rounded-xl bg-dark-50 px-5 py-4">
           <p className="font-heading text-[11px] font-bold text-dark-900">
-            {lupaSandi.catatanJudul}
+            {t(lupaSandi.catatanJudul)}
           </p>
           <ul className="mt-2 space-y-1.5">
             {lupaSandi.catatan.map((c) => (
@@ -82,17 +84,14 @@ const LupaSandiPage = () => {
                 <span aria-hidden="true" className="text-dark-400">
                   &bull;
                 </span>
-                {c}
+                {t(c)}
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-dark-500">
-          Sudah ingat sandinya?{' '}
-          <Link to="/ppdb/masuk" className="font-heading font-bold text-primary hover:underline">
-            Masuk ke Portal PPDB
-          </Link>
+        <p className="mt-6 text-center text-[11px] text-dark-500">{t("Sudah ingat sandinya?")}{' '}
+          <Link to="/ppdb/masuk" className="font-heading font-bold text-primary hover:underline">{t("Masuk ke Portal SPMB")} </Link>
         </p>
       </div>
     </PpdbAuthLayout>

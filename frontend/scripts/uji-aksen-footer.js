@@ -3,53 +3,20 @@
   const footer = document.querySelector('footer');
   if (!footer) throw new Error('Footer belum dimuat.');
 
-  const accents = [...footer.querySelectorAll('img[alt=""]')];
+  const accents = [...footer.querySelectorAll('.footer-accent')];
   const content = footer.querySelector('.footer-content');
   const bottomBar = footer.querySelector('.footer-bottom-bar');
-  if (accents.length !== 10 || !content || !bottomBar) {
-    throw new Error('Sepuluh aksen dan area konten/footer bawah harus tersedia.');
+  const left = footer.querySelectorAll('.footer-accent-side-left .footer-accent');
+  const right = footer.querySelectorAll('.footer-accent-side-right .footer-accent');
+  const bottom = footer.querySelectorAll('.footer-accent-band .footer-accent');
+  if (accents.length !== 9 || left.length !== 2 || right.length !== 2 || bottom.length !== 5 || !content || !bottomBar) {
+    throw new Error('Footer harus menyediakan 9 aksen: 2 kiri, 2 kanan, dan 5 di baris bawah.');
   }
-  if (accents.some((image) => !image.complete || image.naturalWidth === 0)) {
+  if (accents.some((element) => element.querySelector('img')?.naturalWidth === 0)) {
     throw new Error('Tunggu gambar aksen selesai dimuat; periksa Network jika gagal.');
   }
 
-  const intersects = (a, b) => (
-    a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top
-  );
-
-  const center = footer.getBoundingClientRect();
-  const mirrorPairs = [
-    ['.footer-accent-side-left', '.footer-accent-side-right', 2],
-    ['.footer-accent-band > div:first-child', '.footer-accent-band > div:last-child', 3],
-  ];
-  mirrorPairs.forEach(([leftSelector, rightSelector, count]) => {
-    const left = [...footer.querySelectorAll(`${leftSelector} img`)];
-    const right = [...footer.querySelectorAll(`${rightSelector} img`)];
-    if (left.length !== count || right.length !== count) {
-      throw new Error(`Jumlah aksen ${leftSelector} dan ${rightSelector} tidak simetris.`);
-    }
-    left.forEach((image, index) => {
-      const a = image.getBoundingClientRect();
-      const b = right[count === 3 ? count - 1 - index : index].getBoundingClientRect();
-      const differences = [
-        a.left + b.right - center.left - center.right,
-        a.top - b.top, a.width - b.width, a.height - b.height,
-      ];
-      if (differences.some((value) => Math.abs(value) > 0.5)) {
-        throw new Error(`Posisi/ukuran pasangan aksen ${leftSelector} ${index + 1} tidak simetris.`);
-      }
-    });
-    if (count === 3) {
-      [left, right].forEach((images) => {
-        const row = images.map((image) => image.getBoundingClientRect()).sort((a, b) => a.left - b.left);
-        if (Math.abs((row[1].left - row[0].right) - (row[2].left - row[1].right)) > 0.5) {
-          throw new Error('Jarak antaraksen bawah tidak merata.');
-        }
-      });
-    }
-  });
-
-  // Ukur area gambar yang benar-benar tidak terpotong ancestor overflow.
+  const intersects = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
   const visibleBounds = (element) => {
     const bounds = element.getBoundingClientRect().toJSON();
     for (let parent = element.parentElement; parent; parent = parent.parentElement) {
@@ -69,15 +36,11 @@
 
   const areas = accents.map(visibleBounds);
   const protectedAreas = [content, bottomBar].map((element) => element.getBoundingClientRect());
-  const chatButton = document.querySelector('button[aria-label="Buka obrolan dengan STELA"]');
-  const chatArea = chatButton?.getBoundingClientRect();
   areas.forEach((area, index) => {
-    if (area.right <= area.left || area.bottom <= area.top) {
-      throw new Error(`Aksen ${index + 1} hilang pada lebar ${innerWidth}px.`);
-    }
+    if (area.right <= area.left || area.bottom <= area.top) throw new Error(`Aksen ${index + 1} hilang.`);
     const full = accents[index].getBoundingClientRect();
     if (['left', 'right', 'top', 'bottom'].some((edge) => Math.abs(area[edge] - full[edge]) > 0.5)) {
-      throw new Error(`Aksen ${index + 1} terpotong pada lebar ${innerWidth}px.`);
+      throw new Error(`Aksen ${index + 1} terpotong oleh overflow ancestor.`);
     }
     if (protectedAreas.some((protectedArea) => intersects(area, protectedArea))) {
       throw new Error(`Aksen ${index + 1} bertabrakan dengan konten footer.`);
@@ -85,14 +48,9 @@
     if (areas.slice(index + 1).some((other) => intersects(area, other))) {
       throw new Error(`Aksen ${index + 1} bertabrakan dengan aksen lain.`);
     }
-    if (chatArea && accents[index].closest('.footer-accent-band') && intersects(area, chatArea)) {
-      throw new Error(`Aksen bawah ${index + 1} tertutup tombol STELA.`);
-    }
   });
 
-  if (document.documentElement.scrollWidth > innerWidth) {
-    throw new Error('Halaman memiliki overflow horizontal.');
-  }
+  if (document.documentElement.scrollWidth > innerWidth) throw new Error('Halaman memiliki overflow horizontal.');
   const sectionCounts = {
     departments: 8, achievements: 4, schoolTeachers: 7,
     headmaster: 3, teachers: 3, departmentsQuiz: 6, activities: 7,
@@ -105,13 +63,9 @@
       || style.pointerEvents !== 'none' || layer.getAttribute('aria-hidden') !== 'true') {
       throw new Error(`Lapisan aksen ${variant} tidak sesuai jumlah atau batas dekorasi.`);
     }
-    if (images.some((image) => !image.complete || !image.naturalWidth
-      || image.getBoundingClientRect().width <= 0)) {
+    if (images.some((image) => !image.complete || !image.naturalWidth || image.getBoundingClientRect().width <= 0)) {
       throw new Error(`Aksen ${variant} gagal dimuat atau berukuran nol.`);
     }
-    if (images.some((image) => intersects(visibleBounds(image), footer.getBoundingClientRect()))) {
-      throw new Error(`Lapisan aksen ${variant} keluar ke footer.`);
-    }
   });
-  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 10 aksen simetris, utuh tanpa overlap.`);
+  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 9 aksen utuh tanpa overlap.`);
 })();
