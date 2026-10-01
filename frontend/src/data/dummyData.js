@@ -55,7 +55,6 @@ import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.webp';
 import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
 import kegiatanEkskul2 from '../assets/ekstrakurikuler/kegiatan-2.png';
-import kegiatanEkskul3 from '../assets/ekstrakurikuler/kegiatan-3.png';
 import kegiatanEkskul4 from '../assets/ekstrakurikuler/kegiatan-4.png';
 import organisasiMpk from '../assets/ekstrakurikuler/organisasi/mpk.jpg';
 import organisasiOsis from '../assets/ekstrakurikuler/organisasi/osis.jpg';
@@ -79,6 +78,8 @@ import fotoStematelArt from '../assets/ekstrakurikuler/kegiatan/stematel-art.web
 import fotoStematelReader from '../assets/ekstrakurikuler/kegiatan/stematel-reader.jpg';
 import fotoTeamKonten from '../assets/ekstrakurikuler/kegiatan/team-konten.jpg';
 import fotoWirausaha from '../assets/ekstrakurikuler/kegiatan/wirausaha.jpg';
+import fotoVoli from '../assets/ekstrakurikuler/kegiatan/voli.jpeg';
+import fotoHandball from '../assets/ekstrakurikuler/kegiatan/handball.jpeg';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -270,9 +271,9 @@ export const ekstrakurikulerData = {
     { title: 'Information Network Cabling (INC)', category: 'Prestasi', description: 'Siswa mempelajari dasar penataan kabel dan koneksi jaringan komputer. Kegiatan praktik membantu memahami pemasangan, pengujian, dan perawatan jaringan secara aman.', focus: ['Jenis kabel jaringan', 'Konektor', 'Pemasangan kabel', 'Pengujian koneksi'], image: fotoInc },
     { title: '3D Game Art (Animasi)', category: 'Prestasi', description: 'Kegiatan ini mengembangkan keterampilan membuat aset visual tiga dimensi dan animasi untuk gim. Siswa berlatih mengolah ide menjadi karakter atau objek digital.', focus: ['Dasar pemodelan 3D', 'Desain karakter', 'Animasi', 'Aset gim'], image: fotoGameArt3d },
     { title: 'Bulu Tangkis', category: 'Prestasi', description: 'Ekskul ini menjadi tempat siswa berlatih teknik dan strategi permainan bulu tangkis. Latihan membantu meningkatkan kebugaran, koordinasi, dan sportivitas.', focus: ['Servis dan pukulan', 'Gerak kaki', 'Strategi permainan', 'Sportivitas'], image: fotoBuluTangkis },
-    { title: 'Voli', category: 'Prestasi', description: 'Siswa berlatih dasar permainan bola voli, strategi tim, dan komunikasi di lapangan. Kegiatan mendorong kebugaran serta sikap sportif.', focus: ['Passing', 'Servis', 'Kerja sama tim', 'Sportivitas'], image: kegiatanEkskul1 },
+    { title: 'Voli', category: 'Prestasi', description: 'Siswa berlatih dasar permainan bola voli, strategi tim, dan komunikasi di lapangan. Kegiatan mendorong kebugaran serta sikap sportif.', focus: ['Passing', 'Servis', 'Kerja sama tim', 'Sportivitas'], image: fotoVoli },
     { title: 'Bela Diri', category: 'Prestasi', description: 'Ekskul ini melatih kebugaran dan keterampilan dasar bela diri dalam suasana disiplin dan saling menghormati. Siswa juga belajar mengendalikan diri serta menjaga keselamatan saat berlatih.', focus: ['Teknik dasar', 'Kebugaran', 'Disiplin', 'Pengendalian diri'], image: kegiatanEkskul2 },
-    { title: 'Hand Ball/Bola Tangan', category: 'Prestasi', description: 'Siswa mengenal aturan dan teknik dasar permainan bola tangan serta berlatih menyusun strategi bersama tim. Kegiatan ini melatih koordinasi, kebugaran, dan kerja sama.', focus: ['Teknik melempar dan menangkap', 'Aturan permainan', 'Strategi tim', 'Kebugaran'], image: kegiatanEkskul3 },
+    { title: 'Hand Ball/Bola Tangan', category: 'Prestasi', description: 'Siswa mengenal aturan dan teknik dasar permainan bola tangan serta berlatih menyusun strategi bersama tim. Kegiatan ini melatih koordinasi, kebugaran, dan kerja sama.', focus: ['Teknik melempar dan menangkap', 'Aturan permainan', 'Strategi tim', 'Kebugaran'], image: fotoHandball },
     { title: 'Wirausaha', category: 'Sentra', description: 'Ekstrakurikuler Wirausaha di SMK Telkom Purwokerto secara resmi diwadahi melalui Sentra Kewirausahaan serta program inkubasi bisnis sekolah.', focus: ['Ide bisnis', 'Perencanaan usaha', 'Pemasaran', 'Pengelolaan keuangan dasar'], image: fotoWirausaha },
     { title: 'PIK-R', category: 'Sentra', description: 'PIK-R Satria adalah wadah resmi bagi siswa untuk saling berbagi, berkonsultasi, dan mendapatkan edukasi mengenai kehidupan remaja.', focus: ['Konseling sebaya', 'Komunikasi sehat', 'Perencanaan masa depan', 'Edukasi remaja'], image: organisasiPikRSatria },
     { title: 'ROHIS', category: 'Sentra', description: 'ROHIS SMK Telkom Purwokerto adalah organisasi keagamaan sekolah yang berfungsi sebagai pusat syiar Islam, pembinaan akhlak, serta pengembangan karakter religius siswa.', focus: ['Pembinaan akhlak', 'Kegiatan keagamaan', 'Kepemimpinan', 'Kepedulian sosial'], image: fotoRohis },
