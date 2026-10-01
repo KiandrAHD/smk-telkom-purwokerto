@@ -81,20 +81,20 @@ body {
   width: calc(100% - 2 * var(--footer-accent-gutter));
 }
 
-/* Scale the original edge positions without changing the footer content grid. */
+/* Frame 106:90: accents start at y=4029; the red bar clips them at y=4343. */
 .footer-accent-side {
   position: absolute;
   left: 0;
   top: 0;
   width: 1847px;
-  height: 350px;
+  height: 314px;
   overflow: hidden;
   transform-origin: left top;
   transform: scale(calc(100cqw / 1847px));
 }
 .footer-accent-band {
   position: relative;
-  height: calc(129 * 100cqw / 1847);
+  height: calc(93 * 100cqw / 1847);
   overflow: hidden;
 }
 .footer-accent-canvas {
@@ -102,7 +102,7 @@ body {
   left: 0;
   bottom: 0;
   width: 1847px;
-  height: 350px;
+  height: 314px;
   transform-origin: left bottom;
   transform: scale(calc(100cqw / 1847px));
 }

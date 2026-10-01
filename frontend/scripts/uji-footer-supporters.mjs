@@ -24,6 +24,13 @@ try {
     ['90:536', '90:542', '90:539', '90:508', '90:511', '90:514', '90:517', '90:520', '90:523'],
     'The edge and bottom groups retain the native Figma layer order, including the off-canvas motif.');
   assert.ok(html.includes('footer-accent-canvas'), 'The bottom composition has a separate clipping canvas.');
+  const css = await readFile(new URL('../src/index.css', import.meta.url), 'utf8');
+  for (const selector of ['.footer-accent-side', '.footer-accent-canvas']) {
+    const rule = css.slice(css.indexOf(selector + ' {')).split('}')[0];
+    assert.ok(rule.includes('height: 314px;'), `${selector} clips at the red bar in frame 106:90 (4343 - 4029).`);
+  }
+  const band = css.slice(css.indexOf('.footer-accent-band {')).split('}')[0];
+  assert.ok(band.includes('height: calc(93 * 100cqw / 1847);'), 'The visible bottom band ends at the native cutoff (314 - 221).');
   assert.ok(html.indexOf('footer-accent-band') > html.indexOf('footer-supporters'), 'Motif bawah berada setelah konten, bukan di belakang logo.');
   for (const node of ['90:508', '90:511', '90:514', '90:517', '90:520', '90:523', '90:536', '90:539', '90:542']) {
     assert.ok(html.includes(`data-figma-node="${node}"`), `Motif ${node} tetap ada.`);
