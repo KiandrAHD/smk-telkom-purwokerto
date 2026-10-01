@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, CheckCircle2, Printer } from 'lucide-react';
 import PpdbPortalLayout from '../../components/ppdb/PpdbPortalLayout';
@@ -21,6 +22,7 @@ const TEKS = {
 };
 
 const SubmitSuccessPage = () => {
+  const { t } = useLanguage();
   const { nomorRegistrasi } = usePpdb();
 
   return (
@@ -31,8 +33,8 @@ const SubmitSuccessPage = () => {
           <CheckCircle2 className="h-5 w-5" />
         </span>
         <div className="min-w-0">
-          <h1 className="font-heading text-base font-extrabold text-dark-900">{ppdbSukses.judul}</h1>
-          <p className="mt-1.5 text-[11px] leading-relaxed text-dark-600">{ppdbSukses.pesan}</p>
+          <h1 className="font-heading text-base font-extrabold text-dark-900">{t(ppdbSukses.judul)}</h1>
+          <p className="mt-1.5 text-[11px] leading-relaxed text-dark-600">{t(ppdbSukses.pesan)}</p>
         </div>
       </div>
 
@@ -43,7 +45,7 @@ const SubmitSuccessPage = () => {
           <Reveal key={kartu.label} className={['', 'delay-100', 'delay-200'][i] ?? ''}>
             <div className="h-full rounded-2xl border border-dark-100 bg-white px-5 py-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg">
             <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-dark-400">
-              {kartu.label}
+              {t(kartu.label)}
             </p>
 
             <p
@@ -55,7 +57,7 @@ const SubmitSuccessPage = () => {
                 <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${TITIK[kartu.titikNilai]}`} />
               )}
               {/* Nomor registrasi dibuat saat submit, bukan ditulis di data. */}
-              {kartu.nilai ?? nomorRegistrasi ?? '-'}
+              {kartu.nilai != null ? t(kartu.nilai) : nomorRegistrasi ?? '-'}
             </p>
 
             <p
@@ -66,7 +68,7 @@ const SubmitSuccessPage = () => {
               {kartu.titikCatatan && (
                 <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${TITIK[kartu.titikCatatan]}`} />
               )}
-              {kartu.catatan}
+              {t(kartu.catatan)}
             </p>
             </div>
           </Reveal>
@@ -75,7 +77,7 @@ const SubmitSuccessPage = () => {
 
       {/* Langkah selanjutnya */}
       <div className="mt-6 rounded-2xl border border-dark-100 bg-white p-6 shadow-card">
-        <h2 className="font-heading text-sm font-extrabold text-dark-900">{ppdbSukses.langkahJudul}</h2>
+        <h2 className="font-heading text-sm font-extrabold text-dark-900">{t(ppdbSukses.langkahJudul)}</h2>
 
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
           {ppdbSukses.langkah.map((langkah) => {
@@ -91,9 +93,9 @@ const SubmitSuccessPage = () => {
                 </span>
                 <span className="min-w-0">
                   <span className="block font-heading text-xs font-bold text-dark-900">
-                    {langkah.judul}
+                    {t(langkah.judul)}
                   </span>
-                  <span className="mt-0.5 block text-[11px] text-dark-500">{langkah.deskripsi}</span>
+                  <span className="mt-0.5 block text-[11px] text-dark-500">{t(langkah.deskripsi)}</span>
                 </span>
                 <ArrowRight className="ml-auto h-4 w-4 flex-shrink-0 text-dark-300 transition-colors group-hover:text-primary" />
               </Link>
@@ -106,7 +108,7 @@ const SubmitSuccessPage = () => {
             {/* Maskot STELA dipakai ulang dari halaman Pengumuman supaya baris
                 bantuan tidak terasa kosong dan tetap satu identitas. */}
             <img src={maskot} alt="" aria-hidden="true" className="h-9 w-9 flex-shrink-0 object-contain" />
-            {ppdbSukses.bantuanTeks}
+            {t(ppdbSukses.bantuanTeks)}
           </p>
           <a
             href={ppdbMeta.waHelpdesk}
@@ -114,7 +116,7 @@ const SubmitSuccessPage = () => {
             rel="noreferrer"
             className="inline-flex items-center gap-1.5 font-heading text-[11px] font-bold text-primary hover:underline"
           >
-            {ppdbSukses.bantuanCta}
+            {t(ppdbSukses.bantuanCta)}
             <ArrowRight className="h-3.5 w-3.5" />
           </a>
         </div>

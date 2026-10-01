@@ -1,10 +1,13 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jurusanCompare } from '../../data/dummyData';
 
-const Stars = ({ score }) => (
-  <span className="inline-flex items-center gap-0.5" aria-label={`${score} dari 5`}>
+const Stars = ({ score }) => {
+  const { t } = useLanguage();
+  return (
+  <span className="inline-flex items-center gap-0.5" aria-label={t('{score} dari 5', { score })}>
     {[1, 2, 3, 4, 5].map((n) => {
       const filled = score >= n;
       const half = !filled && score >= n - 0.5;
@@ -23,25 +26,25 @@ const Stars = ({ score }) => (
       );
     })}
   </span>
-);
+  );
+};
 
 const JurusanCompareSection = () => {
+  const { t } = useLanguage();
   const [active, setActive] = useState(null);
 
   return (
     <section className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {jurusanCompare.title} <span className="text-primary">{jurusanCompare.titleAccent}</span>
+          {t(jurusanCompare.title)} <span className="text-primary">{t(jurusanCompare.titleAccent)}</span>
         </h2>
 
         <div className="mt-6 overflow-x-auto">
           <table className="w-full min-w-[44rem] border-collapse text-left">
             <thead>
               <tr className="bg-dark-50">
-                <th className="border border-dark-100 px-4 py-2.5 text-[11px] font-bold text-dark-700">
-                  Aspek
-                </th>
+                <th className="border border-dark-100 px-4 py-2.5 text-[11px] font-bold text-dark-700">{t("Aspek")} </th>
                 {jurusanCompare.columns.map((col, i) => (
                   <th
                     key={col}
@@ -51,7 +54,7 @@ const JurusanCompareSection = () => {
                       active === i ? 'bg-primary text-white' : 'text-dark-700'
                     }`}
                   >
-                    {col}
+                    {t(col)}
                   </th>
                 ))}
               </tr>
@@ -63,7 +66,7 @@ const JurusanCompareSection = () => {
                     scope="row"
                     className="border border-dark-100 px-4 py-2.5 text-[10px] font-medium text-dark-600"
                   >
-                    {row.aspek}
+                    {t(row.aspek)}
                   </th>
                   {row.values.map((val, i) => (
                     <td
@@ -77,10 +80,10 @@ const JurusanCompareSection = () => {
                       {row.type === 'stars' && <Stars score={val} />}
                       {row.type === 'badge' && (
                         <span className="inline-block rounded bg-dark-50 px-2 py-1 text-[9px] font-semibold text-dark-600">
-                          {val}
+                          {t(val)}
                         </span>
                       )}
-                      {row.type === 'text' && val}
+                      {row.type === 'text' && t(val)}
                     </td>
                   ))}
                 </tr>
@@ -94,7 +97,7 @@ const JurusanCompareSection = () => {
             to="/jurusan/perbandingan"
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-6 py-2.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
           >
-            {jurusanCompare.ctaText}
+            {t(jurusanCompare.ctaText)}
           </Link>
         </div>
       </div>

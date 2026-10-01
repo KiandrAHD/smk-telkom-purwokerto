@@ -1,10 +1,10 @@
-export const formatPublicDate = (value, options = {}) => {
-  if (!value) return 'Tanggal belum tersedia';
+export const formatPublicDate = (value, options = {}, locale = 'id-ID') => {
+  if (!value) return locale === 'en-US' ? 'Date unavailable' : 'Tanggal belum tersedia';
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Tanggal belum tersedia';
+  if (Number.isNaN(date.getTime())) return locale === 'en-US' ? 'Date unavailable' : 'Tanggal belum tersedia';
 
-  return new Intl.DateTimeFormat('id-ID', {
+  return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',

@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 const ImageContent = ({ src, alt, className = '', ...props }) => {
+  const { t } = useLanguage();
   const [failed, setFailed] = useState(false);
 
   if (!src || failed) {
     return (
-      <div role="img" aria-label="Foto belum tersedia" className={`${className} flex items-center justify-center bg-dark-50 px-3 text-center text-xs text-dark-500`}>
-        Foto belum tersedia
+      <div role="img" aria-label={t('Foto belum tersedia')} className={`${className} flex items-center justify-center bg-dark-50 px-3 text-center text-xs text-dark-500`}>
+        {t('Foto belum tersedia')}
       </div>
     );
   }

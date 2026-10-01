@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight, Code2, Gamepad2, Network, RadioTower } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jurusanData, jurusanTags } from '../../data/dummyData';
@@ -5,12 +6,11 @@ import { jurusanData, jurusanTags } from '../../data/dummyData';
 const icons = { code: Code2, gamepad: Gamepad2, network: Network, tower: RadioTower };
 
 const JurusanListSection = () => {
+  const { t } = useLanguage();
   return (
     <section id="daftar-jurusan" className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          Jelajahi Jurusan Kami
-        </h2>
+        <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">{t("Jelajahi Jurusan Kami")} </h2>
 
         <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {jurusanData.items.map((item) => {
@@ -24,7 +24,7 @@ const JurusanListSection = () => {
                   <div className="overflow-hidden">
                     <img
                       src={item.image}
-                      alt={item.name}
+                      alt={t(item.name)}
                       className="w-full aspect-[2/1] object-cover object-top transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
@@ -35,9 +35,9 @@ const JurusanListSection = () => {
 
                 <div className="flex flex-1 flex-col px-4 pb-4 pt-7">
                   <h3 className="font-heading text-[13px] font-bold leading-snug text-primary">
-                    {item.name}
+                    {t(item.name)}
                   </h3>
-                  <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{item.desc}</p>
+                  <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{t(item.desc)}</p>
 
                   <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
                     {jurusanTags.map((tag) => (
@@ -45,7 +45,7 @@ const JurusanListSection = () => {
                         key={tag}
                         className="rounded bg-dark-50 px-2 py-1 text-[9px] font-bold text-dark-600"
                       >
-                        {tag}
+                        {t(tag)}
                       </span>
                     ))}
                   </div>
@@ -53,9 +53,7 @@ const JurusanListSection = () => {
                   <Link
                     to={`/jurusan/${item.slug}`}
                     className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold text-primary hover:underline"
-                  >
-                    Selengkapnya
-                    <ArrowRight className="h-3 w-3" />
+                  >{t("Selengkapnya")} <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
               </article>

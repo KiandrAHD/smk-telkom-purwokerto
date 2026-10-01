@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import VideoEmbed from './VideoEmbed';
 import { landingAbout } from '../data/dummyData';
@@ -6,7 +7,9 @@ import accreditationOverlay from '../assets/tentang/badge-akreditasi-overlay.png
 import facilitiesIcon from '../assets/tentang/badge-fasilitas.svg';
 import teacherIcon from '../assets/tentang/badge-guru.svg';
 
-const AboutSection = () => (
+const AboutSection = () => {
+  const { t } = useLanguage();
+  return (
   <section id="tentang" className="bg-white py-4 lg:py-6">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-[42%_1fr] items-start gap-8 lg:gap-12">
@@ -15,8 +18,8 @@ const AboutSection = () => (
         <VideoEmbed
           videoId={landingAbout.video.videoId}
           poster={landingAbout.video.poster}
-          title={landingAbout.video.title}
-          desc={landingAbout.video.desc}
+          title={t(landingAbout.video.title)}
+          desc={t(landingAbout.video.desc)}
           rasio="aspect-[646/488]"
           showCaption={false}
           posterHasPlayIcon
@@ -25,10 +28,10 @@ const AboutSection = () => (
         {/* Teks + badge */}
         <div>
           <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-primary">
-            {landingAbout.title}
+            {t(landingAbout.title)}
           </h2>
           <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-dark-500">
-            {landingAbout.description}
+            {t(landingAbout.description)}
           </p>
 
           <div className="mt-6 grid auto-rows-fr grid-cols-2 gap-4">
@@ -46,10 +49,10 @@ const AboutSection = () => (
                 {index === 3 && <span aria-hidden="true" className="hidden w-[66px] shrink-0 sm:block" />}
                 <div className="min-w-0">
                   <p className="font-heading text-sm font-bold leading-tight sm:text-base">
-                    {badge.title}
+                    {t(badge.title)}
                   </p>
                   <p className="mt-2 text-xs leading-relaxed text-white/85">
-                    {badge.desc}
+                    {t(badge.desc)}
                   </p>
                 </div>
               </div>
@@ -60,12 +63,13 @@ const AboutSection = () => (
             to="/profil-sekolah"
             className="mt-5 inline-flex items-center rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
           >
-            {landingAbout.ctaText}
+            {t(landingAbout.ctaText)}
           </Link>
         </div>
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default AboutSection;

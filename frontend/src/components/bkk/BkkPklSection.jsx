@@ -1,9 +1,12 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { pklData } from '../../data/dummyData';
 import { slugify } from '../../utils/slug';
 
-const BkkPklSection = () => (
+const BkkPklSection = () => {
+  const { t } = useLanguage();
+  return (
   <section id="pkl" className="bg-white py-8 lg:py-12">
     <div className="max-w-7xl mx-auto grid grid-cols-1 gap-5 px-4 sm:px-6 lg:grid-cols-[1fr_26%] lg:px-8">
       {/* Kartu PKL */}
@@ -19,16 +22,16 @@ const BkkPklSection = () => (
                 alt={pkl.company}
                 className="h-7 w-auto max-w-[6rem] self-start object-contain"
               />
-              <h3 className="mt-3.5 font-heading text-xs font-bold text-dark-900">{pkl.role}</h3>
+              <h3 className="mt-3.5 font-heading text-xs font-bold text-dark-900">{t(pkl.role)}</h3>
               <p className="mt-1 text-[9px] text-dark-500">{pkl.company}</p>
-              <p className="text-[9px] text-dark-500">{pkl.location}</p>
-              <p className="mt-3 text-[10px] font-bold text-primary">{pkl.kuota}</p>
-              <p className="mt-0.5 text-[9px] text-primary">{pkl.kota}</p>
+              <p className="text-[9px] text-dark-500">{t(pkl.location)}</p>
+              <p className="mt-3 text-[10px] font-bold text-primary">{t(pkl.kuota)}</p>
+              <p className="mt-0.5 text-[9px] text-primary">{t(pkl.kota)}</p>
               <Link
                 to={`/bkk/pkl/${slugify(`${pkl.role} ${pkl.company}`)}`}
                 className="mt-3.5 inline-flex items-center justify-center gap-1.5 rounded-full border border-dark-200 px-2.5 py-1.5 text-[8px] font-bold text-dark-500 transition-colors hover:border-primary hover:text-primary"
               >
-                {pklData.ctaText}
+                {t(pklData.ctaText)}
                 <ArrowRight className="h-2 w-2" />
               </Link>
             </article>
@@ -39,7 +42,7 @@ const BkkPklSection = () => (
       {/* Ajakan tanya STELA */}
       <div className="flex flex-col items-center rounded-2xl bg-primary-100 px-5 py-6 text-center">
         <h2 className="whitespace-pre-line font-heading text-[11px] font-extrabold leading-snug text-primary-900">
-          {pklData.stela.title}
+          {t(pklData.stela.title)}
         </h2>
         <img
           src={pklData.stela.mascot}
@@ -51,12 +54,13 @@ const BkkPklSection = () => (
           to="/stela"
           className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
         >
-          {pklData.stela.ctaText}
+          {t(pklData.stela.ctaText)}
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default BkkPklSection;

@@ -1,6 +1,9 @@
+import { useLanguage } from '../context/LanguageContext';
+
 const PublicDataState = ({ loading, error, empty, label }) => {
+  const { t } = useLanguage();
   if (loading) {
-    return <p key="loading" className="motion-feedback py-8 text-center text-xs text-dark-500">Memuat {label}...</p>;
+    return <p key="loading" role="status" className="motion-feedback py-8 text-center text-xs text-dark-500">{t('Memuat {label}...', { label: t(label) })}</p>;
   }
 
   if (error) {
@@ -13,14 +16,14 @@ const PublicDataState = ({ loading, error, empty, label }) => {
       // keadaan "memuat" dan "kosong" di bawah.
       <div className="motion-feedback py-8">
         <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-xs text-red-700">
-          {error}
+          {t(error)}
         </p>
       </div>
     );
   }
 
   if (empty) {
-    return <p key="empty" className="motion-feedback py-8 text-center text-xs text-dark-500">Belum ada {label}.</p>;
+    return <p key="empty" className="motion-feedback py-8 text-center text-xs text-dark-500">{t('Belum ada {label}.', { label: t(label) })}</p>;
   }
 
   return null;

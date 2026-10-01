@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Play } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 // Pemutar video dengan pola "facade": yang dimuat pertama cuma gambar sampul,
 // iframe YouTube baru disisipkan setelah tombol putar ditekan. Alasannya bukan
@@ -9,6 +10,7 @@ import { Play } from 'lucide-react';
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
 const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', showCaption = true, posterHasPlayIcon = false }) => {
+  const { t } = useLanguage();
   const [diputar, setDiputar] = useState(false);
 
   return (
@@ -26,7 +28,7 @@ const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', show
           <button
             type="button"
             onClick={() => setDiputar(true)}
-            aria-label={`Putar video: ${title}`}
+            aria-label={t('Putar video: {title}', { title: t(title) })}
             className="group absolute inset-0 h-full w-full"
           >
             <img
@@ -49,10 +51,10 @@ const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', show
         <figcaption className="bg-white px-5 py-4">
           {title && (
             <p className="whitespace-pre-line font-heading text-xs font-bold leading-snug text-dark-900 sm:text-sm">
-              {title}
+              {t(title)}
             </p>
           )}
-          {desc && <p className="mt-1 text-[10px] leading-relaxed text-dark-500 sm:text-xs">{desc}</p>}
+          {desc && <p className="mt-1 text-[10px] leading-relaxed text-dark-500 sm:text-xs">{t(desc)}</p>}
         </figcaption>
       )}
     </figure>

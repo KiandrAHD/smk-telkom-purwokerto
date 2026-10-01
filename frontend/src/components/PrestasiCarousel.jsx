@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import AchievementCard from './AchievementCard';
 
@@ -20,6 +21,7 @@ const getCarouselIndex = (scrollLeft, maxScroll, step, groups) => {
 };
 
 const PrestasiCarousel = ({ items }) => {
+  const { t } = useLanguage();
   const trackRef = useRef(null);
   const stepRef = useRef(1);
   const drag = useRef({ down: false, moved: false, startX: 0, startLeft: 0 });
@@ -147,7 +149,7 @@ const PrestasiCarousel = ({ items }) => {
             key={i}
             type="button"
             onClick={() => goTo(i)}
-            aria-label={`Ke slide prestasi ${i + 1}`}
+            aria-label={t('Ke slide prestasi {number}', { number: i + 1 })}
             aria-current={i === active}
             className={`relative h-2 w-2 rounded-full transition-colors before:absolute before:-inset-2 before:content-[''] ${
               i === active ? 'w-6 bg-primary' : 'bg-dark-200 hover:bg-primary/50'

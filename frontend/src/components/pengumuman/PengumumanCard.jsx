@@ -1,3 +1,5 @@
+import { useLanguage } from '../../context/LanguageContext';
+import { formatPublicDate } from '../../utils/publicContent';
 import { ArrowRight, CalendarDays, Info, Trophy, Volume2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { daftarPengumuman } from '../../data/dummyData';
@@ -16,6 +18,8 @@ const Tag = ({ children }) => (
 );
 
 const PengumumanCard = ({ item }) => {
+  const { t, locale } = useLanguage();
+
   const Ikon = ikon[item.icon] || Info;
 
   return (
@@ -38,9 +42,9 @@ const PengumumanCard = ({ item }) => {
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-1.5 font-heading text-[10px] font-extrabold text-dark-600">
             <CalendarDays className="h-3 w-3 flex-shrink-0" />
-            {item.date}
+            {formatPublicDate(item.iso, {}, locale)}
           </span>
-          {item.penting && <Tag>Penting!</Tag>}
+          {item.penting && <Tag>{t("Penting!")}</Tag>}
         </div>
       </div>
 
@@ -58,7 +62,7 @@ const PengumumanCard = ({ item }) => {
           to={`/pengumuman/${item.slug}`}
           className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 font-heading text-[10px] font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
         >
-          {daftarPengumuman.detailText}
+          {t(daftarPengumuman.detailText)}
           <ArrowRight className="h-3 w-3" />
         </Link>
       </div>

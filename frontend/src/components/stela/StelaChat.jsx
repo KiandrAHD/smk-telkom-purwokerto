@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertCircle, Send } from 'lucide-react';
@@ -58,6 +59,7 @@ const IsiPesan = ({ teks }) =>
   });
 
 const StelaChat = ({ className = '', tampilkanSaran = true }) => {
+  const { t } = useLanguage();
   const [riwayat, setRiwayat] = useState([{ role: 'assistant', content: stelaData.sapaan }]);
   const [masukan, setMasukan] = useState('');
   const [memuat, setMemuat] = useState(false);
@@ -141,7 +143,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
                   : 'rounded-bl-sm bg-dark-50 text-dark-700'
               }`}
             >
-              {pesan.role === 'assistant' ? <IsiPesan teks={pesan.content} /> : pesan.content}
+              {pesan.role === 'assistant' ? <IsiPesan teks={i === 0 ? t(pesan.content) : pesan.content} /> : pesan.content}
             </p>
           </div>
         ))}
@@ -149,7 +151,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
         {memuat && (
           <div className="flex justify-start">
             <p className="rounded-2xl rounded-bl-sm bg-dark-50 px-4 py-3">
-              <span className="sr-only">STELA sedang mengetik</span>
+              <span className="sr-only">{t("STELA sedang mengetik")}</span>
               <span className="flex gap-1" aria-hidden="true">
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dark-400" />
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dark-400 delay-100" />
@@ -162,15 +164,13 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
         {galat && (
           <div role="alert" className="flex items-start gap-2 rounded-xl bg-primary-50 px-4 py-3 text-[11px] leading-relaxed text-primary-900">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
-            <span className="flex-1">{galat}</span>
+            <span className="flex-1">{t(galat)}</span>
             <button
               type="button"
               onClick={() => kirim(pertanyaanGagal, true)}
               disabled={memuat || !pertanyaanGagal}
               className="flex-shrink-0 font-semibold text-primary underline disabled:opacity-50"
-            >
-              Coba lagi
-            </button>
+            >{t("Coba lagi")} </button>
           </div>
         )}
 
@@ -183,7 +183,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
                 onClick={() => kirim(saran)}
                 className="rounded-full border border-dark-200 px-3 py-1.5 text-left text-[10px] font-medium text-dark-600 transition-colors hover:border-primary hover:text-primary"
               >
-                {saran}
+                {t(saran)}
               </button>
             ))}
           </div>
@@ -199,9 +199,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
         }}
         className="flex items-end gap-2 border-t border-dark-100 bg-white px-3 py-3"
       >
-        <label htmlFor="stela-masukan" className="sr-only">
-          Tulis pertanyaan untuk STELA
-        </label>
+        <label htmlFor="stela-masukan" className="sr-only">{t("Tulis pertanyaan untuk STELA")} </label>
         <textarea
           id="stela-masukan"
           rows={1}
@@ -216,13 +214,13 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
             }
           }}
           maxLength={1000}
-          placeholder={stelaData.placeholder}
+          placeholder={t(stelaData.placeholder)}
           className="max-h-28 min-h-[2.5rem] flex-1 resize-none rounded-xl border border-dark-200 px-3.5 py-2.5 text-xs text-dark-700 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
         />
         <button
           type="submit"
           disabled={memuat || !masukan.trim()}
-          aria-label="Kirim pertanyaan"
+          aria-label={t("Kirim pertanyaan")}
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Send className="h-4 w-4" />

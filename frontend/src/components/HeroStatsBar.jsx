@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import {
   AlarmClock,
   Briefcase,
@@ -39,7 +40,9 @@ const ikon = {
 // persis di hero Jurusan, Prestasi, dan BKK; disatukan di sini supaya perubahan
 // berikutnya cukup dikerjakan di satu tempat. Hero Pengumuman ikut memakainya
 // sejak statistiknya dipindah masuk ke panel hero.
-const HeroStatsBar = ({ items }) => (
+const HeroStatsBar = ({ items }) => {
+  const { t } = useLanguage();
+  return (
   <div className="relative z-10 mx-1 -mt-6 rounded-2xl border border-dark-100 bg-white shadow-card lg:mx-16 lg:mt-5 xl:-mt-7">
     <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
       {items.map((stat) => {
@@ -51,13 +54,14 @@ const HeroStatsBar = ({ items }) => (
             </span>
             <div>
               <p className="font-heading text-xl font-extrabold text-dark-900">{stat.value}</p>
-              <p className="text-[11px] text-dark-500">{stat.label}</p>
+              <p className="text-[11px] text-dark-500">{t(stat.label)}</p>
             </div>
           </div>
         );
       })}
     </div>
   </div>
-);
+  );
+};
 
 export default HeroStatsBar;

@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { ArrowRight, FileText } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
@@ -7,7 +8,9 @@ import { panduanDetail, panduanIndex } from '../data/dummyData';
 
 const JEDA = ['', 'delay-100', 'delay-200', 'delay-300'];
 
-const PanduanPage = () => (
+const PanduanPage = () => {
+  const { t } = useLanguage();
+  return (
   <MainLayout>
     <HalamanHeader {...panduanIndex} />
 
@@ -23,15 +26,13 @@ const PanduanPage = () => (
                 <FileText className="h-5 w-5" />
               </span>
               <p className="mt-4 text-[10px] font-bold uppercase tracking-wide text-primary">
-                {panduan.kategori}
+                {t(panduan.kategori)}
               </p>
               <h2 className="mt-1.5 font-heading text-base font-extrabold leading-snug text-dark-900">
-                {panduan.title}
+                {t(panduan.title)}
               </h2>
-              <p className="mt-2 text-xs leading-relaxed text-dark-500">{panduan.lead}</p>
-              <span className="mt-auto flex items-center gap-1.5 pt-5 text-[11px] font-bold text-primary">
-                Baca Panduan
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              <p className="mt-2 text-xs leading-relaxed text-dark-500">{t(panduan.lead)}</p>
+              <span className="mt-auto flex items-center gap-1.5 pt-5 text-[11px] font-bold text-primary">{t("Baca Panduan")}<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
               </span>
             </Link>
           </Reveal>
@@ -39,6 +40,7 @@ const PanduanPage = () => (
       </div>
     </section>
   </MainLayout>
-);
+  );
+};
 
 export default PanduanPage;

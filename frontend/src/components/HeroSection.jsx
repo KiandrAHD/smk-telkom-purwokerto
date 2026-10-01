@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight, Bot, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
@@ -8,7 +9,9 @@ const icons = {
   sparkles: Sparkles,
 };
 
-const HeroSection = () => (
+const HeroSection = () => {
+  const { t } = useLanguage();
+  return (
   <section className="bg-white pb-6 pt-4 lg:pb-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
@@ -20,17 +23,17 @@ const HeroSection = () => (
             {/* Chip yang sama dipakai enam hero lain; sebelumnya di sini cuma
                 teks merah polos, jadi hero Beranda terlihat lain sendiri. */}
             <span className="mt-4 inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-              {landingHero.hashtag}
+              {t(landingHero.hashtag)}
             </span>
 
             <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
-              {landingHero.title}
+              {t(landingHero.title)}
               <br />
-              <span className="text-primary">{landingHero.titleAccent}</span>
+              <span className="text-primary">{t(landingHero.titleAccent)}</span>
             </h1>
 
             <p className="mt-4 max-w-md text-xs sm:text-sm leading-relaxed text-dark-500">
-              {landingHero.description}
+              {t(landingHero.description)}
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -38,14 +41,14 @@ const HeroSection = () => (
                 to={landingHero.primaryCta.href}
                 className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
               >
-                {landingHero.primaryCta.label}
+                {t(landingHero.primaryCta.label)}
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to={landingHero.secondaryCta.href}
                 className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
               >
-                {landingHero.secondaryCta.label}
+                {t(landingHero.secondaryCta.label)}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -54,7 +57,7 @@ const HeroSection = () => (
           {/* Panel merah + foto + watermark TELKOM (satu aset dari Figma) */}
           <img
             src={landingHero.image}
-            alt="Siswa SMK Telkom Purwokerto"
+            alt={t("Siswa SMK Telkom Purwokerto")}
             width={1920}
             height={902}
             fetchPriority="high"
@@ -74,16 +77,16 @@ const HeroSection = () => (
                   </span>
                   <div className="min-w-0">
                     <p className="font-heading text-sm font-bold text-dark-900">
-                      {item.title}
+                      {t(item.title)}
                     </p>
                     <p className="mt-1 text-[10px] leading-snug text-dark-500">
-                      {item.desc}
+                      {t(item.desc)}
                     </p>
                     <Link
                       to={item.href}
                       className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-primary hover:underline"
                     >
-                      {item.linkLabel}
+                      {t(item.linkLabel)}
                       {/* flex-shrink-0 supaya panahnya tidak gepeng saat kolom
                           menyempit di layar kecil. */}
                       <ArrowRight className="h-3 w-3 flex-shrink-0" />
@@ -97,6 +100,7 @@ const HeroSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default HeroSection;

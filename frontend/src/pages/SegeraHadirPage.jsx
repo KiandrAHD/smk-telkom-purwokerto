@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { ArrowLeft, Hammer } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
@@ -23,6 +24,8 @@ const titleCase = (segment) =>
     .join(' ');
 
 const SegeraHadirPage = () => {
+  const { t } = useLanguage();
+
   const { pathname } = useLocation();
   const parts = pathname.split('/').filter(Boolean);
 
@@ -40,14 +43,11 @@ const SegeraHadirPage = () => {
             <Hammer className="h-6 w-6 text-primary" />
           </span>
 
-          <p className="mt-6 text-[11px] font-bold text-primary">Segera Hadir</p>
+          <p className="mt-6 text-[11px] font-bold text-primary">{t("Segera Hadir")}</p>
           <h1 className="mt-2 font-heading text-2xl sm:text-3xl font-extrabold text-dark-900">
-            {title}
+            {t(title)}
           </h1>
-          <p className="mt-4 text-xs sm:text-sm leading-relaxed text-dark-500">
-            Halaman ini sedang kami siapkan. Navigasinya sudah terhubung, jadi begitu
-            isinya selesai kamu akan langsung mendarat di halaman yang benar.
-          </p>
+          <p className="mt-4 text-xs sm:text-sm leading-relaxed text-dark-500">{t("Halaman ini sedang kami siapkan. Navigasinya sudah terhubung, jadi begitu isinya selesai kamu akan langsung mendarat di halaman yang benar.")}</p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -55,14 +55,12 @@ const SegeraHadirPage = () => {
               className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
             >
               <ArrowLeft className="h-4 w-4" />
-              Kembali ke {parentLabel}
+              {t('Kembali ke {label}', { label: t(parentLabel) })}
             </Link>
             <Link
               to="/"
               className="inline-flex items-center rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
-            >
-              Ke Beranda
-            </Link>
+            >{t("Ke Beranda")}</Link>
           </div>
         </div>
       </section>

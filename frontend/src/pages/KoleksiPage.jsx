@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -95,6 +96,8 @@ const KOLEKSI = {
 };
 
 const KoleksiPage = ({ jenis }) => {
+  const { t } = useLanguage();
+
   const koleksi = KOLEKSI[jenis];
   const ambil = koleksi?.sumber ? AMBIL[koleksi.sumber] : null;
 
@@ -133,7 +136,7 @@ const KoleksiPage = ({ jenis }) => {
             className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-5 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4" />
-            Kembali ke {koleksi.kembali.label}
+            {t('Kembali ke {label}', { label: t(koleksi.kembali.label) })}
           </Link>
         }
       />

@@ -69,9 +69,10 @@ body {
   background-size: 21px 243px;
 }
 
-/* Figma footer: nine native motifs on the original 1847 × 350 canvas. */
+/* Native Figma motifs occupy reserved margins and a separate bottom row. */
 .site-footer {
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
+  --footer-accent-size: clamp(2rem, 6vw, 6rem);
   position: relative;
   container-type: inline-size;
   isolation: isolate;
@@ -81,29 +82,44 @@ body {
   width: calc(100% - 2 * var(--footer-accent-gutter));
 }
 
-.footer-accent-layer {
+.footer-accent-side {
   position: absolute;
-  inset: 0;
-  overflow: hidden;
+  inset-block: 2rem;
+  width: var(--footer-accent-gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-inline: 0.25rem;
 }
-
-.footer-accent-canvas {
-  position: absolute;
+.footer-accent-side-left {
   left: 0;
-  bottom: 0;
-  width: 1847px;
-  height: 350px;
-  transform-origin: left bottom;
-  transform: scale(calc(100cqw / 1847px));
 }
-
+.footer-accent-side-right {
+  right: 0;
+}
+.footer-accent-band {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.25rem, 1vw, 1rem);
+  padding: 1rem clamp(4rem, 8vw, 6rem);
+}
 .footer-accent {
+  position: relative;
+  width: min(100%, var(--footer-accent-size));
+  aspect-ratio: 1;
+  margin-inline: auto;
+  container-type: inline-size;
+}
+.footer-accent-art {
   position: absolute;
   left: 0;
   top: 0;
   width: 232.934326171875px;
   height: 232.934326171875px;
   transform-origin: top left;
+  transform: scale(calc(100cqw / 232.934326171875px)) var(--footer-accent-orientation, matrix(1, 0, 0, 1, 0, 0));
 }
 
 .footer-accent-shape {
@@ -118,31 +134,31 @@ body {
 }
 
 .footer-accent[data-figma-node='90:508'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 274, 222.99951171875);
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
 }
 .footer-accent[data-figma-node='90:511'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1585, 226.99951171875);
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
 }
 .footer-accent[data-figma-node='90:514'] {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 93, 453.9345703125);
+  --footer-accent-orientation: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 232.934326171875);
 }
 .footer-accent[data-figma-node='90:517'] {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1404, 457.9345703125);
+  --footer-accent-orientation: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 232.934326171875);
 }
 .footer-accent[data-figma-node='90:520'] {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1203, 453.9345703125);
+  --footer-accent-orientation: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 232.934326171875);
 }
 .footer-accent[data-figma-node='90:523'] {
-  transform: matrix(-1, 8.742278367890322e-8, -8.742278367890322e-8, -1, 333.934326171875, 620.9345703125);
+  --footer-accent-orientation: matrix(-1, 8.742278367890322e-8, -8.742278367890322e-8, -1, 232.934326171875, 232.934326171875);
 }
 .footer-accent[data-figma-node='90:536'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -140, 0);
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
 }
 .footer-accent[data-figma-node='90:539'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1695, 39);
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
 }
 .footer-accent[data-figma-node='90:542'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -130, 185);
+  --footer-accent-orientation: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
 }
 
 /* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.

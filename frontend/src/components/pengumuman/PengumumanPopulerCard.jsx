@@ -1,22 +1,22 @@
+import { useLanguage } from '../../context/LanguageContext';
+import { formatPublicDate } from '../../utils/publicContent';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // tampilkanLihatSemua dimatikan saat komponen ini menjadi isi halaman
 // /pengumuman/populer itu sendiri. Di sana tombolnya akan menunjuk ke halaman
 // yang sedang dibuka -- tombol yang diklik tapi tidak ke mana-mana.
-const PengumumanPopulerCard = ({ items = [], tampilkanLihatSemua = true }) => (
+const PengumumanPopulerCard = ({ items = [], tampilkanLihatSemua = true }) => {
+  const { t, locale } = useLanguage();
+  return (
   <div className="rounded-xl bg-white p-4 shadow-card">
     <div className="flex items-center justify-between gap-3">
-      <h2 className="font-heading text-sm font-extrabold text-dark-900">
-        Pengumuman Terbaru
-      </h2>
+      <h2 className="font-heading text-sm font-extrabold text-dark-900">{t("Pengumuman Terbaru")}</h2>
       {tampilkanLihatSemua && (
         <Link
           to="/pengumuman/populer"
           className="inline-flex items-center gap-1.5 rounded-full border border-primary px-2.5 py-1 font-heading text-[10px] font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
-        >
-          Lihat Semua
-          <ArrowRight className="h-2.5 w-2.5" />
+        >{t("Lihat Semua")}<ArrowRight className="h-2.5 w-2.5" />
         </Link>
       )}
     </div>
@@ -35,7 +35,7 @@ const PengumumanPopulerCard = ({ items = [], tampilkanLihatSemua = true }) => (
                 {item.title}
               </span>
               <span className="mt-1 flex flex-wrap items-center gap-2 font-heading text-[9px] font-extrabold text-dark-600">
-                {item.date}
+                {formatPublicDate(item.iso, {}, locale)}
               </span>
             </span>
           </Link>
@@ -43,6 +43,7 @@ const PengumumanPopulerCard = ({ items = [], tampilkanLihatSemua = true }) => (
       ))}
     </ul>
   </div>
-);
+  );
+};
 
 export default PengumumanPopulerCard;

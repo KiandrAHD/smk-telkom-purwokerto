@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
@@ -7,6 +8,8 @@ import { getPublishedPengumuman, getPengumumanBySlug } from '../services/pengumu
 import { toPengumumanItem } from '../utils/publicContent';
 
 const PengumumanDetail = ({ slug }) => {
+  const { t } = useLanguage();
+
   const [item, setItem] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,11 +30,11 @@ const PengumumanDetail = ({ slug }) => {
     return () => { active = false; };
   }, [slug]);
 
-  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">Memuat pengumuman...</p></MainLayout>;
-  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{error || 'Pengumuman tidak ditemukan.'}</p></MainLayout>;
+  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t("Memuat pengumuman...")}</p></MainLayout>;
+  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t(error || 'Pengumuman tidak ditemukan.')}</p></MainLayout>;
 
   return (
-    <DetailLayout item={item} backTo="/pengumuman" backLabel="Pengumuman">
+    <DetailLayout item={item} backTo="/pengumuman" backLabel={t("Pengumuman")}>
       <PengumumanDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );

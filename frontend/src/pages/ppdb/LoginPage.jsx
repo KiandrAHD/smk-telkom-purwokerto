@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
@@ -8,6 +9,7 @@ import { ppdbPanelMasuk } from '../../data/dummyData';
 import { getMyPpdb, signInPpdb } from '../../services/ppdbService';
 
 const LoginPage = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [form, setForm] = useState({ akun: '', sandi: '' });
   const [galat, setGalat] = useState('');
@@ -36,60 +38,52 @@ const LoginPage = () => {
         <PanelMerah {...ppdbPanelMasuk} className="rounded-2xl" />
 
         <div className="p-8 sm:p-10">
-          <h1 className="font-heading text-2xl font-extrabold text-dark-900">Masuk ke Akun Anda</h1>
-          <p className="mt-1.5 text-xs text-dark-500">
-            Gunakan alamat email yang sudah terdaftar.
-          </p>
+          <h1 className="font-heading text-2xl font-extrabold text-dark-900">{t("Masuk ke Akun Anda")}</h1>
+          <p className="mt-1.5 text-xs text-dark-500">{t("Gunakan alamat email yang sudah terdaftar.")} </p>
 
           <form
             onSubmit={kirim}
             className="mt-7 space-y-5"
           >
             <FormInput
-              label="Alamat Email"
+              label={t("Alamat Email")}
               wajib
               value={form.akun}
               onChange={ubah('akun')}
-              placeholder="Masukkan alamat email"
+              placeholder={t("Masukkan alamat email")}
               required
             />
 
             <div>
               <div className="mb-2 flex items-center justify-between gap-3">
-                <span className="text-[11px] font-bold text-dark-700">
-                  Kata Sandi<span className="ml-0.5 text-primary">*</span>
+                <span className="text-[11px] font-bold text-dark-700">{t("Kata Sandi")}<span className="ml-0.5 text-primary">*</span>
                 </span>
-                <Link to="/lupa-sandi" className="text-[11px] font-semibold text-primary hover:underline">
-                  Lupa Sandi?
-                </Link>
+                <Link to="/lupa-sandi" className="text-[11px] font-semibold text-primary hover:underline">{t("Lupa Sandi?")} </Link>
               </div>
               <input
                 type="password"
                 value={form.sandi}
                 onChange={ubah('sandi')}
-                placeholder="Masukkan Kata Sandi"
+                placeholder={t("Masukkan Kata Sandi")}
                 required
-                aria-label="Kata Sandi"
+                aria-label={t("Kata Sandi")}
                 className="w-full rounded-xl border border-dark-200 bg-white px-4 py-3 text-xs text-dark-800 outline-none transition-all placeholder:text-dark-400 focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </div>
 
-            {galat && <p role="alert" className="rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{galat}</p>}
+            {galat && <p role="alert" className="rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{t(galat)}</p>}
 
             <button
               type="submit"
               disabled={mengirim}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {mengirim ? 'Memeriksa...' : 'Masuk Sekarang'}
+              {t(mengirim ? 'Memeriksa...' : 'Masuk Sekarang')}
               <ArrowRight className="h-4 w-4" />
             </button>
 
-            <p className="text-center text-[11px] text-dark-500">
-              Belum memiliki akun SPMB?{' '}
-              <Link to="/ppdb/daftar" className="font-heading font-bold text-primary hover:underline">
-                Daftar Akun Baru
-              </Link>
+            <p className="text-center text-[11px] text-dark-500">{t("Belum memiliki akun SPMB?")}{' '}
+              <Link to="/ppdb/daftar" className="font-heading font-bold text-primary hover:underline">{t("Daftar Akun Baru")} </Link>
             </p>
           </form>
         </div>

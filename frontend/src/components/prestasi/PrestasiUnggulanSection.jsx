@@ -1,9 +1,12 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { prestasiUnggulan } from '../../data/dummyData';
 
 const PrestasiUnggulanSection = ({ items = [] }) => {
+  const { t } = useLanguage();
+
   const [active, setActive] = useState(0);
   const sourceItems = items;
   const featured = sourceItems[active % sourceItems.length];
@@ -17,7 +20,7 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
     <section className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {prestasiUnggulan.title}
+          {t(prestasiUnggulan.title)}
         </h2>
 
         <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_38%]">
@@ -36,7 +39,7 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
               to={`/prestasi/${featured.slug}`}
               className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/40 px-3 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
             >
-              {prestasiUnggulan.ctaText}
+              {t(prestasiUnggulan.ctaText)}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>

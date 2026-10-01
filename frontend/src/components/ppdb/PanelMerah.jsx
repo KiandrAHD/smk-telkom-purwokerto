@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { BellRing, CheckCircle2, Radar } from 'lucide-react';
 import { ppdbMeta } from '../../data/dummyData';
 import fotoSiswa from '../../assets/ppdb/login-spmb-2027-2028.png';
@@ -16,7 +17,9 @@ const ikon = {
 // tiga lapis identitas yang sudah dipakai situs utama — gradien merah Telkom,
 // pita bermotif logo (ribbon.png) yang juga jadi pemisah section di beranda, dan
 // watermark logo besar. Semuanya aria-hidden karena murni dekorasi.
-const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuanTeks, foto = true, className = '' }) => (
+const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuanTeks, foto = true, className = '' }) => {
+  const { t } = useLanguage();
+  return (
   <div
     className={`relative flex flex-col overflow-hidden bg-gradient-to-br from-primary-600 via-primary to-primary-800 p-8 text-white sm:p-10 ${className}`}
   >
@@ -48,15 +51,15 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
     <div className="relative flex h-full flex-col">
       {badge && (
         <span className="inline-flex w-fit items-center rounded-full bg-white/20 px-4 py-1.5 text-[11px] font-bold backdrop-blur-sm">
-          {badge}
+          {t(badge)}
         </span>
       )}
 
       <h2 className="mt-7 whitespace-pre-line font-heading text-3xl font-extrabold leading-tight sm:text-4xl">
-        {judul}
+        {t(judul)}
       </h2>
 
-      <p className="mt-4 max-w-sm text-xs leading-relaxed text-white/85 sm:text-sm">{deskripsi}</p>
+      <p className="mt-4 max-w-sm text-xs leading-relaxed text-white/85 sm:text-sm">{t(deskripsi)}</p>
 
       <ul className="mt-8 space-y-3">
         {fitur.map((f) => {
@@ -67,7 +70,7 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
               className="flex items-center gap-3 rounded-xl bg-white/12 px-4 py-3 text-xs font-medium backdrop-blur-sm transition-colors hover:bg-white/20"
             >
               <Ikon className="h-4 w-4 flex-shrink-0" />
-              {f.teks}
+              {t(f.teks)}
             </li>
           );
         })}
@@ -80,7 +83,7 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
         <div className="mt-7 hidden min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/25 sm:block">
           <img
             src={fotoSiswa}
-            alt="Siswa SMK Telkom Purwokerto sedang belajar"
+            alt={t("Siswa SMK Telkom Purwokerto sedang belajar")}
             className="h-full min-h-32 w-full object-cover transition-transform duration-700 hover:scale-105"
           />
         </div>
@@ -88,7 +91,7 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
 
       {bantuanTeks && (
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-8 text-[11px]">
-          <span className="text-white/70">{bantuanLabel}</span>
+          <span className="text-white/70">{t(bantuanLabel)}</span>
           <a
             // Nomor diambil dari ppdbMeta, bukan ditulis di sini. Sebelumnya
             // panel ini memuat nomor placeholder sendiri, sehingga tombol
@@ -98,12 +101,13 @@ const PanelMerah = ({ badge, judul, deskripsi, fitur = [], bantuanLabel, bantuan
             rel="noreferrer"
             className="font-heading font-bold text-white underline-offset-4 hover:underline"
           >
-            {bantuanTeks}
+            {t(bantuanTeks)}
           </a>
         </div>
       )}
     </div>
   </div>
 );
+};
 
 export default PanelMerah;

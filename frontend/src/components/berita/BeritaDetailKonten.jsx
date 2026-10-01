@@ -1,3 +1,5 @@
+import { useLanguage } from '../../context/LanguageContext';
+import { formatPublicDate } from '../../utils/publicContent';
 import { Link } from 'react-router-dom';
 import { CalendarDays, Quote } from 'lucide-react';
 import GaleriFoto from '../GaleriFoto';
@@ -6,6 +8,8 @@ import ContentImage from '../ContentImage';
 // Bagian khas halaman detail Berita: yang ditonjolkan dokumentasinya — kutipan
 // narasumber, galeri liputan, lalu berita lain pada kategori yang sama.
 const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
+  const { t, locale } = useLanguage();
+
   // Utamakan berita sekategori; kalau belum cukup tiga, lengkapi dari kategori
   // lain supaya baris rekomendasinya tidak pernah tampil setengah kosong.
   const terkait = relatedItems.slice(0, 3);
@@ -26,15 +30,13 @@ const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
 
       <GaleriFoto
         items={item.galeri}
-        title="Galeri Liputan"
-        description="Dokumentasi foto dari kegiatan yang diberitakan."
+        title={t("Galeri Liputan")}
+        description={t("Dokumentasi foto dari kegiatan yang diberitakan.")}
       />
 
       {terkait.length > 0 && (
         <section className="mt-10">
-          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">
-            Berita Lainnya
-          </h2>
+          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{t("Berita Lainnya")}</h2>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
             {terkait.map((b) => (
               <Link
@@ -59,7 +61,7 @@ const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
                   </h3>
                   <span className="mt-1.5 flex items-center gap-1 text-[9px] text-dark-400">
                     <CalendarDays className="h-2.5 w-2.5" />
-                    {b.date}
+                    {formatPublicDate(b.iso, {}, locale)}
                   </span>
                 </div>
               </Link>

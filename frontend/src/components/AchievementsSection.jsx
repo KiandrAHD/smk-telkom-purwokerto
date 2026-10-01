@@ -1,3 +1,4 @@
+import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import PrestasiCarousel from './PrestasiCarousel';
 import PublicDataState from './PublicDataState';
@@ -8,6 +9,7 @@ import { getPrestasi } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
 
 const AchievementsSection = () => {
+  const { t } = useLanguage();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -36,10 +38,10 @@ const AchievementsSection = () => {
         />
         <div className="text-center">
           <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-primary">
-            {prestasiData.title}
+            {t(prestasiData.title)}
           </h2>
           <p className="mt-2 whitespace-pre-line text-xs leading-relaxed text-dark-500">
-            {prestasiData.subtitle}
+            {t(prestasiData.subtitle)}
           </p>
         </div>
         <img
@@ -51,7 +53,7 @@ const AchievementsSection = () => {
       </div>
 
       {/* Kartu prestasi — carousel horizontal, dot ada di dalamnya */}
-      <PublicDataState loading={loading} error={error} empty={!loading && !error && !items.length} label="prestasi" />
+      <PublicDataState loading={loading} error={t(error)} empty={!loading && !error && !items.length} label="prestasi" />
       {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} />}
 
     </div>

@@ -1,6 +1,6 @@
 # Implementasi Footer dan Perbaikan Tampilan — 1 Oktober 2026
 
-Dokumen ini memperbarui implementasi footer terdahulu. Kode lengkap di bawah disalin dari working tree saat penyusunan dokumen, untuk React, React Router, dan Tailwind CSS v4 yang sudah digunakan proyek. Token warna dan font tetap mengikuti index.css.
+Dokumen ini merupakan arsip implementasi footer sebelum perbaikan overlap terbaru. Canvas absolut dan kode di bawah sudah digantikan oleh margin dekoratif serta baris aksen dalam alur normal. Implementasi aktif berada di src/components/Footer.jsx dan src/index.css; hasil verifikasi terbaru dicatat di [public-ui-update-2026-10-01.md](public-ui-update-2026-10-01.md). Bentuk, warna, dan aset native tetap dipertahankan.
 
 ## Status lima perbaikan
 

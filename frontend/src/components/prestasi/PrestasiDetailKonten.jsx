@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import GaleriFoto from '../GaleriFoto';
@@ -8,6 +9,8 @@ import ContentImage from '../ContentImage';
 // angka sorotan, tahapan menuju podium, lalu foto-fotonya. Seluruh isinya datang
 // dari objek `item`, jadi tiap prestasi menampilkan datanya sendiri.
 const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
+  const { t } = useLanguage();
+
   const lainnya = relatedItems.slice(0, 3);
 
   return (
@@ -32,9 +35,7 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
 
       {item.perjalanan && (
         <section className="mt-10">
-          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">
-            Perjalanan Menuju Podium
-          </h2>
+          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{t("Perjalanan Menuju Podium")}</h2>
           <ol className="mt-5 space-y-4 border-l-2 border-primary-100 pl-6">
             {item.perjalanan.map((tahap, i) => (
               <Reveal key={tahap.tahap} as="li" className="relative">
@@ -53,15 +54,13 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
 
       <GaleriFoto
         items={item.galeri}
-        title="Momen Juara"
-        description="Dokumentasi kegiatan dan hasil karya di balik prestasi ini."
+        title={t("Momen Juara")}
+        description={t("Dokumentasi kegiatan dan hasil karya di balik prestasi ini.")}
       />
 
       {lainnya.length > 0 && (
         <section className="mt-10">
-          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">
-            Prestasi Lainnya
-          </h2>
+          <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{t("Prestasi Lainnya")}</h2>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
             {lainnya.map((p) => (
               <Link

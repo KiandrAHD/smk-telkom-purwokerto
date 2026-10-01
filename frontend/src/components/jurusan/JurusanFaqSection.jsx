@@ -1,3 +1,4 @@
+import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -5,6 +6,7 @@ import stelaCard from '../../assets/landing/stela-card.jpg';
 import { jurusanFaq, stelaData } from '../../data/dummyData';
 
 const JurusanFaqSection = () => {
+  const { t, language } = useLanguage();
   const [open, setOpen] = useState(null);
 
   return (
@@ -13,7 +15,7 @@ const JurusanFaqSection = () => {
         {/* Akordeon FAQ */}
         <div>
           <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-primary">
-            {jurusanFaq.title} <span className="text-dark-900">{jurusanFaq.titleAccent}</span>
+            {t(jurusanFaq.title)} <span className="text-dark-900">{t(jurusanFaq.titleAccent)}</span>
           </h2>
 
           <div className="mt-6 space-y-3">
@@ -34,7 +36,7 @@ const JurusanFaqSection = () => {
                       aria-controls={`faq-panel-${i}`}
                       className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left"
                     >
-                      <span className="text-xs font-medium text-dark-800">{item.q}</span>
+                      <span className="text-xs font-medium text-dark-800">{t(item.q)}</span>
                       <Plus
                         className={`h-4 w-4 flex-shrink-0 text-primary transition-transform ${
                           isOpen ? 'rotate-45' : ''
@@ -47,7 +49,7 @@ const JurusanFaqSection = () => {
                       id={`faq-panel-${i}`}
                       className="border-t border-dark-100 px-4 py-3 text-[11px] leading-relaxed text-dark-500"
                     >
-                      {item.a}
+                      {t(item.a)}
                     </p>
                   )}
                 </div>
@@ -59,13 +61,19 @@ const JurusanFaqSection = () => {
             to="/jurusan/faq"
             className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
           >
-            {jurusanFaq.ctaText}
+            {t(jurusanFaq.ctaText)}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {/* Kartu STELA — potongan kiri dari aset kartu penuh, sesuai crop di Figma */}
-        <Link to="/stela" className="relative block overflow-hidden rounded-2xl">
+        {language === 'en' ? (
+          <Link to="/stela" className="flex flex-col justify-center rounded-2xl bg-primary p-6 text-white sm:p-8">
+            <h2 className="whitespace-pre-line font-heading text-2xl font-extrabold">{t(stelaData.title)}</h2>
+            <p className="mt-3 text-xs leading-relaxed text-white/85">{t(stelaData.description)}</p>
+            <span className="mt-5 inline-flex items-center gap-2 text-xs font-bold">{t(stelaData.ctaText)}<ArrowRight className="h-4 w-4" /></span>
+          </Link>
+        ) : <Link to="/stela" className="relative block overflow-hidden rounded-2xl">
           <img
             src={stelaCard}
             alt=""
@@ -73,9 +81,9 @@ const JurusanFaqSection = () => {
             className="h-full min-h-[10rem] w-full object-cover object-left"
           />
           <span className="sr-only">
-            {stelaData.title.replace('\n', ' ')}. {stelaData.description}
+            {t(stelaData.title).replace('\n', ' ')}. {t(stelaData.description)}
           </span>
-        </Link>
+        </Link>}
       </div>
     </section>
   );
