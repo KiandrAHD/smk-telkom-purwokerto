@@ -31,6 +31,7 @@ const PpdbProvider = lazy(() => import('./context/PpdbContext').then(({ PpdbProv
 const PpdbRegisterPage = lazy(() => import('./pages/ppdb/RegisterPage'));
 const PpdbLoginPage = lazy(() => import('./pages/ppdb/LoginPage'));
 const VerifyEmailPage = lazy(() => import('./pages/ppdb/VerifyEmailPage'));
+const ConfirmEmailPage = lazy(() => import('./pages/ppdb/ConfirmEmailPage'));
 const RegistrationFormPage = lazy(() => import('./pages/ppdb/RegistrationFormPage'));
 const UploadDocumentsPage = lazy(() => import('./pages/ppdb/UploadDocumentsPage'));
 const SubmitSuccessPage = lazy(() => import('./pages/ppdb/SubmitSuccessPage'));
@@ -136,6 +137,7 @@ const App = () => {
           <Route path="/ppdb/atur-sandi" element={<AturSandiPage />} />
           <Route path="/ppdb/masuk" element={<PpdbLoginPage />} />
           <Route path="/ppdb/verifikasi" element={<VerifyEmailPage />} />
+<Route path="/auth/confirm" element={<ConfirmEmailPage />} />
           <Route path="/ppdb/formulir" element={<RegistrationFormPage />} />
           <Route path="/ppdb/berkas" element={<UploadDocumentsPage />} />
           <Route path="/ppdb/selesai" element={<SubmitSuccessPage />} />

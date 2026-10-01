@@ -27,11 +27,11 @@ const PETA = {
   Nasional: 'merah',
   Provinsi: 'biru',
   Kota: 'ungu',
-  // program keahlian
-  PPLG: 'ungu',
-  TJKT: 'ungu',
-  DKV: 'ungu',
-  AKL: 'ungu',
+  // program keahlian resmi
+  RPL: 'ungu',
+  PG: 'ungu',
+  TKJ: 'ungu',
+  TJAT: 'ungu',
 };
 
 const StatusBadge = ({ nilai, nada }) => (

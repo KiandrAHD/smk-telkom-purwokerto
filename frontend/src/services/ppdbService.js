@@ -108,7 +108,7 @@ export async function signUpPpdb(email, password, biodata) {
     email,
     password,
     options: {
-      emailRedirectTo: `${window.location.origin}/ppdb/verifikasi`,
+      emailRedirectTo: `${window.location.origin}/auth/confirm`,
       data: { ppdb: {
         nisn: biodata.nisn.trim(),
         namaLengkap: biodata.namaLengkap.trim(),
@@ -161,7 +161,7 @@ export async function resendPpdbVerification(email) {
   return throwIfError(await client.auth.resend({
     type: 'signup',
     email,
-    options: { emailRedirectTo: `${window.location.origin}/ppdb/verifikasi` },
+    options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
   }));
 }
 
@@ -170,8 +170,37 @@ export async function signOutPpdb() {
   return throwIfError(await client.auth.signOut());
 }
 
+const PPDB_STATUS = new Set(['menunggu', 'diproses', 'diterima', 'ditolak']);
+
 export async function updatePpdbStatus(id, status, catatanAdmin) {
-  return throwIfError(await ensureSupabase().from('ppdb').update({ status, catatan_admin: catatanAdmin?.trim() || null }).eq('id', id).select(ppdbColumns).single());
+  if (!id || !PPDB_STATUS.has(status)) {
+    throw new Error('Data status pendaftar tidak valid.');
+  }
+
+  try {
+    const client = ensureSupabase();
+    const { data: userData, error: userError } = await client.auth.getUser();
+    if (userError) throw userError;
+    if (!userData?.user) throw new Error('Sesi admin tidak ditemukan. Silakan masuk kembali.');
+
+    return throwIfError(await client
+      .from('ppdb')
+      .update({ status, catatan_admin: catatanAdmin?.trim() || null })
+      .eq('id', id)
+      .select(ppdbColumns)
+      .single());
+  } catch (error) {
+    const details = {
+      operation: 'updatePpdbStatus',
+      httpStatus: error.status || error.statusCode || null,
+      code: error.code || 'unknown',
+      message: error.message || 'No message',
+    };
+    console.error('PPDB update status failed:', details);
+    const diagnostic = new Error(`PPDB status update gagal. HTTP: ${details.httpStatus || 'unknown'}. Kode: ${details.code}. Pesan: ${details.message}.`);
+    diagnostic.code = error.code;
+    throw diagnostic;
+  }
 }
 
 export async function getPpdbDocumentUrl(path, expiresIn = 300) {

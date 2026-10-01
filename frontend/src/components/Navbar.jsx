@@ -4,6 +4,22 @@ import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { ctaMasukPpdb, navLinks } from '../data/dummyData';
 
+const prefetchByHref = {
+  '/profil-sekolah': () => import('../pages/TentangPage'),
+  '/profil-sekolah/guru': () => import('../pages/GuruPage'),
+  '/jurusan': () => import('../pages/JurusanPage'),
+  '/prestasi': () => import('../pages/PrestasiPage'),
+  '/bkk': () => import('../pages/BkkPage'),
+  '/berita': () => import('../pages/BeritaPage'),
+  '/pengumuman': () => import('../pages/PengumumanPage'),
+  '/nexttel': () => import('../pages/NextTelPage'),
+  '/ppdb': () => import('../pages/ppdb/LoginPage'),
+};
+
+const prefetchRoute = (href) => {
+  prefetchByHref[href]?.();
+};
+
 const Navbar = () => {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -43,10 +59,10 @@ const Navbar = () => {
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
-                  <Link key={link.label} to={link.href} className={linkClass(link)}>
-                    {link.label}
-                    {activeBar(link)}
-                  </Link>
+<Link key={link.label} to={link.href} className={linkClass(link)} onMouseEnter={() => prefetchRoute(link.href)}>
+                {link.label}
+                {activeBar(link)}
+              </Link>
                 );
               }
 
@@ -79,19 +95,20 @@ const Navbar = () => {
                       aria-label="Submenu Tentang"
                     >
                       {link.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          to={child.href}
-                          role="menuitem"
-                          onClick={() => setIsTentangOpen(false)}
-                          className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                            location.pathname === child.href
-                              ? 'bg-primary-50 text-primary'
-                              : 'text-dark-700 hover:bg-dark-50 hover:text-primary'
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
+<Link
+                        key={child.label}
+                        to={child.href}
+                        role="menuitem"
+                        onMouseEnter={() => prefetchRoute(child.href)}
+                        onClick={() => setIsTentangOpen(false)}
+                        className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                          location.pathname === child.href
+                            ? 'bg-primary-50 text-primary'
+                            : 'text-dark-700 hover:bg-dark-50 hover:text-primary'
+                        }`}
+                      >
+                        {child.label}
+                      </Link>
                       ))}
                     </div>
                   )}
@@ -132,6 +149,7 @@ const Navbar = () => {
                     <Link
                       key={link.label}
                       to={link.href}
+                      onMouseEnter={() => prefetchRoute(link.href)}
                       onClick={() => setIsMobileOpen(false)}
                       className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
                     >
@@ -160,6 +178,7 @@ const Navbar = () => {
                           <Link
                             key={child.label}
                             to={child.href}
+                            onMouseEnter={() => prefetchRoute(child.href)}
                             onClick={() => {
                               setIsTentangOpen(false);
                               setIsMobileOpen(false);
