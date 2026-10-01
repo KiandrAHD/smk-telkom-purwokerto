@@ -1,9 +1,10 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
-import { ArrowRight, Bot, CheckCircle2, RotateCcw } from 'lucide-react';
+import { ArrowRight, Check, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jurusanData, jurusanQuiz } from '../../data/dummyData';
 import SectionAccents from '../SectionAccents';
+import stelaBot from '../../assets/pengumuman/stela-bot.png';
 
 // Rekomendasi = jurusan dengan skor tertinggi dari opsi yang dipilih.
 const recommend = (picked) => {
@@ -26,7 +27,7 @@ const JurusanQuizSection = () => {
     setPicked((prev) => (prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]));
 
   const key = recommend(picked);
-  const result = key ? jurusanQuiz.results[key] : null;
+  const result = key ? jurusanQuiz.results[key] : !started ? jurusanQuiz.results.RPL : null;
   // Tujuan tombol hasil diambil dari kartu jurusan yang namanya cocok, jadi
   // rekomendasi selalu mendarat di halaman detail jurusan yang benar.
   const cocok = jurusanData.items.find((item) => item.name === result?.name);
@@ -36,22 +37,20 @@ const JurusanQuizSection = () => {
     <section id="quiz-jurusan" className="relative bg-white py-8 lg:py-12">
       <SectionAccents variant="departmentsQuiz" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-6 rounded-3xl bg-primary-50 p-6 sm:p-8 lg:grid-cols-[30%_1fr_28%]">
+        <div className="grid grid-cols-1 items-center gap-6 rounded-2xl bg-primary/7 p-5 sm:p-6 lg:grid-cols-[1.4fr_1fr_0.8fr] lg:gap-5 lg:p-4 xl:gap-6 xl:p-5">
           {/* Ajakan */}
-          <div className="flex items-start gap-4">
-            <span className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary">
-              <Bot className="h-7 w-7 text-white" />
-            </span>
-            <div>
-              <h2 className="font-heading text-sm font-extrabold text-dark-900">{t("Belum Tahu Memilih")} <span className="text-primary">{t("Jurusan?")}</span>
+          <div className="flex min-w-0 items-center gap-4">
+            <img src={stelaBot} alt="" width="250" height="252" className="h-auto w-24 flex-none sm:w-32 lg:w-36 xl:w-44" />
+            <div className="min-w-0">
+              <h2 className="font-heading text-sm font-extrabold leading-snug text-dark-900 xl:text-base">{t("Belum Tahu Memilih")} <span className="text-primary">{t("Jurusan?")}</span>
               </h2>
-              <p className="mt-2 text-[10px] leading-relaxed text-dark-500">
+              <p className="mt-3 text-xs leading-snug text-dark-600">
                 {t(jurusanQuiz.description)}
               </p>
               <button
                 type="button"
                 onClick={() => setStarted(true)}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-800"
+                className="mt-5 inline-flex min-h-11 items-center justify-center gap-3 rounded-xl bg-primary px-6 py-3 text-xs font-bold tracking-wider text-white transition-colors hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:text-sm"
               >
                 {t(jurusanQuiz.ctaText)}
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -60,9 +59,10 @@ const JurusanQuizSection = () => {
           </div>
 
           {/* Pilihan minat */}
-          <div className="space-y-2.5">
+          <div className="flex min-w-0 flex-col items-start gap-4">
             {jurusanQuiz.options.map((opt, i) => {
               const on = picked.includes(i);
+              const highlighted = started ? on : i === 1;
               return (
                 <button
                   key={opt.text}
@@ -70,10 +70,10 @@ const JurusanQuizSection = () => {
                   disabled={!started}
                   aria-pressed={on}
                   onClick={() => toggle(i)}
-                  className={`block w-full rounded-xl border px-4 py-3 text-left text-[11px] transition-all disabled:cursor-not-allowed disabled:opacity-60 ${
-                    on
-                      ? 'border-primary bg-primary text-white'
-                      : 'border-dark-100 bg-white text-dark-700 enabled:hover:border-primary'
+                  className={`min-h-11 max-w-full rounded-xl px-5 py-3 text-left text-xs leading-snug text-dark-900 transition-colors disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${i % 2 === 1 ? 'self-end' : ''} ${
+                    highlighted
+                      ? 'bg-primary/10'
+                      : 'bg-white enabled:hover:bg-primary/10'
                   }`}
                 >
                   {t(opt.text)}
@@ -83,38 +83,36 @@ const JurusanQuizSection = () => {
           </div>
 
           {/* Hasil rekomendasi */}
-          <div className="relative rounded-2xl border border-primary/40 bg-white p-4 shadow-card">
-            <CheckCircle2
-              className={`absolute -right-2 -top-2 h-6 w-6 rounded-full bg-white transition-opacity ${
-                result ? 'text-primary opacity-100' : 'text-dark-200 opacity-60'
-              }`}
-              fill="currentColor"
-              strokeWidth={0}
-            />
+          <div aria-live="polite" className="relative min-w-0 rounded-2xl border-2 border-primary/20 bg-white p-4 shadow-[0_0_12px_2px_rgba(200,16,46,0.18)] lg:p-4 xl:p-5">
+            {result && (
+              <span aria-hidden="true" className="absolute right-3 top-0 grid h-7 w-7 -translate-y-1/4 place-items-center rounded-full bg-primary text-white">
+                <Check className="h-4 w-4" strokeWidth={3} />
+              </span>
+            )}
             <p className="text-[9px] font-bold text-primary">{t(jurusanQuiz.resultLabel)}</p>
 
             {result ? (
               <>
-                <h3 className="mt-1.5 font-heading text-xs font-extrabold leading-snug text-dark-900">
+                <h3 className="mt-1.5 font-heading text-base font-extrabold leading-tight text-dark-900">
                   {t(result.name)}
                 </h3>
-                <p className="mt-1 text-[9px] text-dark-500">{t(jurusanQuiz.resultNote)}</p>
-                <div className="mt-3 flex items-center gap-2">
+                <p className="mt-2 text-[11px] text-dark-600">{t(jurusanQuiz.resultNote)}</p>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
                   <Link
                     to={resultHref}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-primary px-3 py-1.5 text-[9px] font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-md border border-primary/60 px-3 py-2 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     {t(result.cta)}
                     <ArrowRight className="h-2.5 w-2.5" />
                   </Link>
-                  <button
+                  {started && <button
                     type="button"
                     onClick={() => setPicked([])}
                     aria-label={t(jurusanQuiz.resetText)}
-                    className="relative text-dark-400 transition-colors before:absolute before:-inset-2 before:content-[''] hover:text-primary"
+                    className="grid h-11 w-11 place-items-center rounded-md text-dark-500 transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
-                  </button>
+                  </button>}
                 </div>
               </>
             ) : (
