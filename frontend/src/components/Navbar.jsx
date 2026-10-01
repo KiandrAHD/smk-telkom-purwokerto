@@ -6,6 +6,22 @@ import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
 import { ctaMasukPpdb, navLinks } from '../data/dummyData';
 
+const prefetchByHref = {
+  '/profil-sekolah': () => import('../pages/TentangPage'),
+  '/profil-sekolah/guru': () => import('../pages/GuruPage'),
+  '/jurusan': () => import('../pages/JurusanPage'),
+  '/prestasi': () => import('../pages/PrestasiPage'),
+  '/bkk': () => import('../pages/BkkPage'),
+  '/berita': () => import('../pages/BeritaPage'),
+  '/pengumuman': () => import('../pages/PengumumanPage'),
+  '/nexttel': () => import('../pages/NextTelPage'),
+  '/ppdb': () => import('../pages/ppdb/LoginPage'),
+};
+
+const prefetchRoute = (href) => {
+  prefetchByHref[href]?.();
+};
+
 const Navbar = () => {
   const { t } = useLanguage();
   const location = useLocation();
@@ -46,7 +62,7 @@ const Navbar = () => {
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
-                  <Link key={link.label} to={link.href} className={linkClass(link)}>
+                  <Link key={link.label} to={link.href} className={linkClass(link)} onMouseEnter={() => prefetchRoute(link.href)}>
                     {t(link.label)}
                     {activeBar(link)}
                   </Link>
@@ -86,6 +102,7 @@ const Navbar = () => {
                           key={child.label}
                           to={child.href}
                           role="menuitem"
+                          onMouseEnter={() => prefetchRoute(child.href)}
                           onClick={() => setIsTentangOpen(false)}
                           className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                             location.pathname === child.href
@@ -136,6 +153,7 @@ const Navbar = () => {
                     <Link
                       key={link.label}
                       to={link.href}
+                      onMouseEnter={() => prefetchRoute(link.href)}
                       onClick={() => setIsMobileOpen(false)}
                       className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
                     >
@@ -164,6 +182,7 @@ const Navbar = () => {
                           <Link
                             key={child.label}
                             to={child.href}
+                            onMouseEnter={() => prefetchRoute(child.href)}
                             onClick={() => {
                               setIsTentangOpen(false);
                               setIsMobileOpen(false);
