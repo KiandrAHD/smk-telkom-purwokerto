@@ -429,31 +429,44 @@ export const profilVideo = {
   ],
 };
 
+// Snapshot konten resmi; jumlah artikel arsip tidak sama dengan jumlah gelar.
+export const officialContentAudit = {
+  checkedAt: '1 Oktober 2026',
+  prestasiSourceUrl: 'https://smktelkom-pwt.sch.id/wp-json/wp/v2/posts?categories=5',
+  pengumumanSourceUrl: 'https://smktelkom-pwt.sch.id/wp-json/wp/v2/posts?categories=8',
+  alumniSourceUrl: 'https://smktelkom-pwt.sch.id/',
+};
+
 export const timelineData = [
   {
     year: '1993',
     title: 'Sekolah Berdiri',
-    desc: 'SMK Telkom Purwokerto diresmikan pada 30 Januari 1993.',
-  },
-  {
-    year: '2016',
-    title: 'Akreditasi A',
-    desc: 'Terakreditasi A dengan standar mutu nasional.',
-  },
-  {
-    year: '2020',
-    title: 'Kerja Sama Industri',
-    desc: 'Memperluas kolaborasi dan berbagai mitra industri terkemuka.',
+    desc: 'Didirikan dan diresmikan pada 30 Januari 1993 oleh Soesilo Soedarman, berdasarkan surat izin tanggal 22 Januari 1993.',
+    sourceUrl: 'https://smktelkom-pwt.sch.id/profil/',
   },
   {
     year: '2023',
-    title: 'Digital Smart School',
-    desc: 'Transformasi digital dalam pembelajaran dan manajemen sekolah.',
+    title: 'SMK Pusat Keunggulan',
+    desc: 'Ditetapkan sebagai SMK Pusat Keunggulan bidang Teknologi Informasi oleh Kemendikbud.',
+    sourceUrl: 'https://smktelkom-pwt.sch.id/',
+  },
+  {
+    year: '2024',
+    title: 'Prestasi di Delapan Bidang LKS',
+    desc: 'Siswa meraih kejuaraan pada delapan bidang Lomba Kompetensi Siswa 2024.',
+    sourceUrl: 'https://smktelkom-pwt.sch.id/uncategorized/stematel-boyong-medali-lks-2024/',
+  },
+  {
+    year: '2025',
+    title: 'Dua Penghargaan CABDIN AWARD',
+    desc: 'Meraih Terbaik 1 bidang kesiswaan dan Terbaik 3 transformasi digitalisasi pada CABDIN AWARD 2025.',
+    sourceUrl: 'https://smktelkom-pwt.sch.id/berita/stematel-raih-2-penghargaan-dalam-cabdin-award-2025/',
   },
   {
     year: '2026',
-    title: 'AI & Future Ready',
-    desc: 'Berfokus pada AI, IoT, dan teknologi masa depan untuk generasi inovator.',
+    title: 'IHT AI Agentic Teacher',
+    desc: 'Seluruh guru mengikuti pelatihan pemanfaatan AI untuk pembelajaran dan produktivitas pada 23–24 September 2026.',
+    sourceUrl: 'https://smktelkom-pwt.sch.id/berita/smk-telkom-purwokerto-gelar-iht-ai-agentic-teacher-guru-kembangkan-beragam-solusi-pembelajaran-berbasis-ai/',
   },
 ];
 
@@ -656,10 +669,10 @@ export const prestasiHero = {
 };
 
 export const prestasiStats = [
-  { value: '150+', label: 'Total Prestasi', icon: 'trofi' },
-  { value: '50+', label: 'Tingkat Nasional', icon: 'nasional' },
-  { value: '15+', label: 'Tingkat Internasional', icon: 'internasional' },
-  { value: '100+', label: 'Juara 1', icon: 'medali' },
+  { value: '59', label: 'Prestasi Nasional & Internasional 2025', icon: 'trofi' },
+  { value: '139', label: 'Artikel Arsip Prestasi', icon: 'nasional' },
+  { value: '31', label: 'Artikel Prestasi 2024', icon: 'internasional' },
+  { value: '27', label: 'Artikel Prestasi 2025', icon: 'medali' },
 ];
 
 export const prestasiUnggulan = {
@@ -757,55 +770,57 @@ export const galeriPrestasi = {
 };
 
 export const perjalananPrestasi = {
-  title: 'Perjalanan Prestasi',
+  title: 'Rekam Publikasi Prestasi',
+  note: 'Jumlah artikel kategori prestasi pada situs resmi; bukan jumlah gelar.',
+  sourceUrl: officialContentAudit.prestasiSourceUrl,
   years: [
-    { year: '2021', count: '12', label: 'Prestasi' },
-    { year: '2022', count: '18', label: 'Prestasi' },
-    { year: '2023', count: '25', label: 'Prestasi' },
-    { year: '2024', count: '35', label: 'Prestasi' },
-    { year: '2025', count: '40+', label: 'Prestasi' },
+    { year: '2021', count: '10', label: 'Artikel' },
+    { year: '2022', count: '15', label: 'Artikel' },
+    { year: '2023', count: '14', label: 'Artikel' },
+    { year: '2024', count: '31', label: 'Artikel' },
+    { year: '2025', count: '27', label: 'Artikel' },
   ],
-  defaultYear: '2024',
+  defaultYear: '2025',
 };
 
 export const hallOfFame = {
-  title: 'Hall of Fame',
+  title: 'Bukti Prestasi',
   items: [
     {
-      name: 'Muhammad Iqbal',
-      achievement: 'Juara 1 LKS Nasional 2023 Web Technologies',
-      role: 'Software Engineer',
-      company: 'Tokopedia',
+      name: 'Muhammad Daffa Izzati',
+      achievement: 'Juara 2 Web Technology pada LKS 2024',
+      role: 'XII RPL 3 pada LKS 2024',
+      company: '',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-13-at-14.58.34.jpeg',
+      imageAlt: 'Dokumentasi resmi hasil LKS 2024 SMK Telkom Purwokerto',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/uncategorized/stematel-boyong-medali-lks-2024/',
     },
     {
-      name: 'Aisyah Nur Fadillah',
-      achievement: 'Medal Emas WorldSkills Asia 2022',
-      role: 'UI/UX Designer',
-      company: 'Traveloka',
+      name: 'Tim Aicademy',
+      achievement: 'Juara 3 Nasional Jagoan Hosting Infrastructure Competition 2025',
+      role: 'Lima peserta JHIC 2025 dari SMK Telkom Purwokerto',
+      company: '',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-17-at-09.13.58.jpeg',
+      imageAlt: 'Dokumentasi resmi tim Aicademy peraih Juara 3 JHIC 2025',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/berita/6197/',
     },
     {
-      name: 'Rizky Pratama',
-      achievement: 'Juara 1 IoT Challenge Telkom 2023',
-      role: 'IoT Engineer',
-      company: 'Telkom Indonesia',
+      name: 'Tim English Fest UMP 2026',
+      achievement: 'Juara 3 dan Juara Harapan tingkat nasional pada English Fest UMP 2026',
+      role: 'Enam siswa peserta Speech, Vlog, dan Scrabble',
+      company: '',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-10-at-15.52.16.jpeg',
+      imageAlt: 'Dokumentasi resmi prestasi siswa pada English Fest UMP 2026',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/berita/stematel-raih-prestasi-english-fest-ump-2026/',
     },
     {
-      name: 'Dewi Anggraini',
-      achievement: 'Silver Medal Huawei ICT Competition 2023',
-      role: 'Network Engineer',
-      company: 'Huawei',
-    },
-    {
-      name: 'Bagas Nugroho',
-      achievement: 'Juara 2 Gemastik Game Development 2022',
-      role: 'Game Developer',
-      company: 'Agate',
-    },
-    {
-      name: 'Salsabila Putri',
-      achievement: 'Bronze Medal WorldSkills Asia 2023',
-      role: 'Cloud Engineer',
-      company: 'AWS',
+      name: 'Hanif Rizki Ardianto',
+      achievement: 'Awardee Fully Funded Green Environment Leadership melalui inovasi pengolahan sampah plastik berbasis IoT',
+      role: 'XI PPLG 1 pada artikel tahun 2026',
+      company: '',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/08/Hanif-Rizki-Ardianto.jpg',
+      imageAlt: 'Dokumentasi resmi penghargaan Green Environment Leadership untuk Hanif Rizki Ardianto',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/siswa-smk-telkom-purwokerto-raih-awardee-fully-funded-green-environment-leadership-berkat-inovasi-pengolahan-sampah-plastik-berbasis-iot/',
     },
   ],
 };
@@ -989,24 +1004,28 @@ export const kisahAlumni = {
   title: 'Kisah Sukses Alumni',
   items: [
     {
-      name: 'Rizky Pratama',
-      meta: 'Alumni RPL 2020',
-      role: 'Software Engineer di Tokopedia',
-      quote:
-        'Ilmu yang saya dapatkan di SMK Telkom Purwokerto sangat bermanfaat dalam karier saya saat ini',
+      name: 'Prof. Dr. Ir. Moh. Khairudin, M.T., Ph.D.',
+      meta: 'Lulusan 1998',
+      role: 'Guru Besar Universitas Negeri Yogyakarta',
+      summary: 'Khairudin menilai pendidikan teknologi dan pembentukan karakter di sekolah menjadi bekal bagi perjalanan akademik dan kariernya.',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/aaass.jpg',
+      sourceUrl: officialContentAudit.alumniSourceUrl,
     },
     {
-      name: 'Dewi Anggraini',
-      meta: 'Alumni TJAT 2019',
-      role: 'Network Engineer di Telkom Indonesia',
-      quote:
-        'Pembelajaran praktik dan bimbingan guru membuat saya siap menghadapi dunia kerja',
+      name: 'Dr. Tenia Wahyuningrum, S.Kom., M.T.',
+      meta: 'Lulusan 2001',
+      role: 'Direktur Telkom University Purwokerto',
+      summary: 'Tenia menyoroti kemampuan alumni untuk bersaing dan melanjutkan pendidikan tinggi di Telkom University.',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdaddd.jpg',
+      sourceUrl: officialContentAudit.alumniSourceUrl,
     },
     {
-      name: 'Aldo Permana',
-      meta: 'Alumni PG 2021',
-      role: 'Game Developer di Agate Studio',
-      quote: 'Sekolah ini bukan hanya mengajarkan teori, tapi juga kreativitas tanpa batas',
+      name: 'Alfa Putra Kurnia',
+      meta: 'Alumni TKJ',
+      role: 'Co-founder & CEO Arkademy.com',
+      summary: 'Alfa mengaitkan kesiapan menghadapi dunia bisnis dengan keterampilan, pengetahuan, dan sikap yang dipelajari di sekolah.',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdasd.jpg',
+      sourceUrl: officialContentAudit.alumniSourceUrl,
     },
   ],
   resources: [
@@ -1050,13 +1069,29 @@ export const ppdbBanner = {
 };
 
 export const infoPenting = {
-  title: 'Informasi Penting Hari ini',
+  title: 'Informasi Resmi',
   linkText: 'Lihat Semua',
   items: [
-    'SPMB DIGITEST 1 Tahun Ajaran 2027/2028 Resmi Dibuka',
-    'Workshop AI Untuk Siswa Besok',
-    'Deadline LKS 3 Hari Lagi',
-    'Libur Nasional Minggu Depan',
+    {
+      title: 'Hasil seleksi calon guru PPLG: psikotes online 3 Oktober 2026',
+      date: '1 Oktober 2026',
+      href: 'https://smktelkom-pwt.sch.id/pengumuman/pengumuman-hasil-seleksi-tes-tertulis-microteaching-calon-guru-pplg/',
+    },
+    {
+      title: 'SPMB DIGITEST 1 Tahun Ajaran 2027/2028 Resmi Dibuka',
+      date: '25 September 2026',
+      href: 'https://smktelkom-pwt.sch.id/pengumuman/spmb-digitest-1-ta-2027-2028-smk-telkom-purwokerto-resmi-dibuka-saatnya-jadi-bagian-dari-nextgens-stematel/',
+    },
+    {
+      title: 'STEMATEL Next Pathway: tiga jalur pendidikan, karier, dan wirausaha',
+      date: '24 September 2026',
+      href: 'https://smktelkom-pwt.sch.id/pengumuman/stematel-next-pathway-hadirkan-tiga-jalur-untuk-membentuk-masa-depan-siswa/',
+    },
+    {
+      title: 'Pendaftaran guru Pengembangan Gim ditutup pada 29 September 2026',
+      date: '23 September 2026',
+      href: 'https://smktelkom-pwt.sch.id/pengumuman/lowongan-pekerjaan-guru-produktif-pengembangan-gim-smk-telkom-purwokerto/',
+    },
   ],
 };
 
@@ -1066,10 +1101,10 @@ export const infoPenting = {
 // Prestasi, dan BKK. Kolom `desc` ikut dibuang bersama PengumumanStatsSection:
 // bilah hero hanya menampilkan angka dan labelnya.
 export const pengumumanStats = [
-  { value: '45', label: 'Total Pengumuman', icon: 'megaphone' },
-  { value: '12', label: 'Event & Kegiatan', icon: 'kalender' },
-  { value: '5', label: 'Deadline Terdekat', icon: 'alarm' },
-  { value: '8', label: 'Agenda Minggu Ini', icon: 'agenda' },
+  { value: '259', label: 'Artikel Arsip Pengumuman Resmi', icon: 'megaphone' },
+  { value: '1', label: 'Artikel Terbit 1 Oktober 2026', icon: 'kalender' },
+  { value: '1', label: 'Artikel Pekan 28 Sep–4 Okt 2026', icon: 'alarm' },
+  { value: '2027/2028', label: 'Tahun Ajaran SPMB', icon: 'agenda' },
 ];
 
 export const pengumumanFilter = {
@@ -1080,12 +1115,12 @@ export const pengumumanFilter = {
 };
 
 export const pengumumanTimeline = {
-  linkText: 'Lihat Time Line Lengkap',
+  linkText: 'Lihat Rekap',
   items: [
-    { label: 'Hari Ini', count: '3 Pengumuman' },
-    { label: 'Besok', count: '4 Pengumuman' },
-    { label: 'Minggu Ini', count: '8 Pengumuman' },
-    { label: 'Bulan Ini', count: '15 Pengumuman' },
+    { label: 'Arsip Resmi', count: '259 Artikel' },
+    { label: '1 Oktober 2026', count: '1 Artikel' },
+    { label: '28 Sep–4 Okt 2026', count: '1 Artikel' },
+    { label: 'Oktober 2026', count: '1 Artikel' },
   ],
 };
 

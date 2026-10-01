@@ -71,13 +71,16 @@ const PengumumanPpdbSection = ({ tampilkanLihatSemua = true }) => (
 
           <ul className="mt-5 space-y-2.5">
             {infoPenting.items.map((item) => (
-              <li key={item} className="flex items-center gap-3">
+              <li key={item.href} className="flex items-start gap-3">
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
                   <ClipboardList className="h-3 w-3 text-white" />
                 </span>
-                <span className="font-heading text-[11px] font-semibold leading-snug text-dark-900">
-                  {item}
-                </span>
+                <div className="min-w-0">
+                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] font-semibold leading-snug text-dark-900 hover:text-primary hover:underline">
+                    {item.title}
+                  </a>
+                  <p className="mt-1 text-[10px] text-dark-500">{item.date}</p>
+                </div>
               </li>
             ))}
           </ul>

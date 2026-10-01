@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
-import { pengumumanHero, pengumumanStats } from '../../data/dummyData';
+import { officialContentAudit, pengumumanHero, pengumumanStats } from '../../data/dummyData';
 
 // Hero ini dulu terasa datar dibanding halaman lain karena tiga hal yang
 // dipunyai Jurusan/Prestasi/BKK tapi tidak ada di sini: chip penanda di atas
@@ -51,6 +51,10 @@ const PengumumanHeroSection = () => (
 
         <HeroStatsBar items={pengumumanStats} />
       </div>
+      <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
+        Rekap arsip pengumuman situs resmi per {officialContentAudit.checkedAt}; bukan jumlah kartu dashboard.{' '}
+        <a href={officialContentAudit.pengumumanSourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Lihat sumber</a>
+      </p>
     </div>
   </section>
 );

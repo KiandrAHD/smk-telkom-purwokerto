@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Award, Building2, Cpu, Handshake, MonitorSmartphone } from 'lucide-react';
+import { Award, Building2, Cpu, GraduationCap, Trophy } from 'lucide-react';
 import { timelineData } from '../../data/dummyData';
 
-const icons = [Building2, Award, Handshake, MonitorSmartphone, Cpu];
+const icons = [Building2, GraduationCap, Trophy, Award, Cpu];
 
 const TentangTimelineSection = () => {
   const [active, setActive] = useState(0);
@@ -54,6 +54,9 @@ const TentangTimelineSection = () => {
                     {item.desc}
                   </p>
                 </button>
+                <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-[10px] text-primary underline underline-offset-2">
+                  Sumber resmi
+                </a>
               </li>
             );
           })}

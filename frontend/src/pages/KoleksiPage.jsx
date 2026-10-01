@@ -58,7 +58,7 @@ const KOLEKSI = {
   'pengumuman-timeline': {
     eyebrow: 'Pengumuman',
     title: 'Timeline Pengumuman',
-    deskripsi: 'Urutan waktu pengumuman dan agenda sekolah, dari hari ini sampai bulan depan.',
+    deskripsi: 'Rekap publikasi pengumuman pada arsip situs resmi, disertai tanggal pemeriksaan.',
     Section: PengumumanTimelineBar,
     kembali: { to: '/pengumuman', label: 'Pengumuman' },
   },

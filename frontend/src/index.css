@@ -146,6 +146,82 @@ body {
   height: auto;
 }
 
+/* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.
+   Setiap area menyertakan 2px tepi putih agar anti-alias logo tetap utuh. */
+.footer-supporters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 1rem 0.75rem;
+}
+
+.footer-supporter-logo {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.footer-supporter-logo img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+}
+
+.footer-supporter-link {
+  display: block;
+}
+
+.footer-supporter-logo-jagoan {
+  aspect-ratio: 186 / 61;
+}
+.footer-supporter-logo-jagoan img {
+  width: 1032.258065%;
+  left: -202.150538%;
+  top: -760.655738%;
+}
+
+.footer-supporter-logo-komdigi {
+  aspect-ratio: 128 / 111;
+  max-width: 80px;
+}
+.footer-supporter-logo-komdigi img {
+  width: 1500%;
+  left: -489.0625%;
+  top: -399.099099%;
+}
+
+.footer-supporter-logo-garuda {
+  aspect-ratio: 179 / 96;
+  max-width: 120px;
+}
+.footer-supporter-logo-garuda img {
+  width: 1072.625698%;
+  left: -450.837989%;
+  top: -468.75%;
+}
+
+.footer-supporter-logo-ngalup {
+  aspect-ratio: 376 / 63;
+}
+.footer-supporter-logo-ngalup img {
+  width: 510.638298%;
+  left: -273.404255%;
+  top: -741.269841%;
+}
+
+.footer-supporter-logo-jhic {
+  aspect-ratio: 319 / 176;
+  max-width: 140px;
+}
+.footer-supporter-logo-jhic img {
+  width: 601.880878%;
+  left: -457.366771%;
+  top: -230.113636%;
+}
+
 /* Umpan balik interaksi untuk SEMUA elemen yang bisa dipencet — satu aturan di
    layer base, bukan diulang di ratusan className. Sengaja memakai filter, bukan
    transform, supaya tidak menimpa utility transform yang sudah dipakai kartu

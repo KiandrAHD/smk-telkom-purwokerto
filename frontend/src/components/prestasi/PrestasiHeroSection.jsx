@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import HeroStatsBar from '../HeroStatsBar';
-import { prestasiHero, prestasiStats } from '../../data/dummyData';
+import { officialContentAudit, prestasiHero, prestasiStats } from '../../data/dummyData';
 
 const PrestasiHeroSection = () => (
   <section className="bg-white pt-4 pb-6">
@@ -44,6 +44,10 @@ const PrestasiHeroSection = () => (
 
         <HeroStatsBar items={prestasiStats} />
       </div>
+      <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
+        Rekap situs resmi per {officialContentAudit.checkedAt}. Angka artikel arsip berbeda dari jumlah prestasi.{' '}
+        <a href={officialContentAudit.prestasiSourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Lihat sumber</a>
+      </p>
     </div>
   </section>
 );

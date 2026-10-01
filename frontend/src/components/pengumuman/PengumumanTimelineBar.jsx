@@ -1,10 +1,15 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { pengumumanTimeline } from '../../data/dummyData';
+import { officialContentAudit, pengumumanTimeline } from '../../data/dummyData';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
 const PengumumanTimelineBar = ({ tampilkanLihatSemua = true }) => (
-  <div className="grid grid-cols-2 gap-y-5 rounded-lg border border-dark-200 px-5 py-6 sm:grid-cols-4 lg:grid-cols-[repeat(4,auto)_1fr] lg:gap-x-[4.5rem] lg:px-8">
+  <div className="rounded-lg border border-dark-200 px-5 py-6 lg:px-8">
+    <p className="mb-4 text-[10px] leading-relaxed text-dark-500">
+      Publikasi dalam arsip situs resmi, diperiksa {officialContentAudit.checkedAt}.{' '}
+      <a href={officialContentAudit.pengumumanSourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Sumber</a>
+    </p>
+    <div className="grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-4 lg:grid-cols-[repeat(4,minmax(0,1fr))_auto]">
     {pengumumanTimeline.items.map((item) => (
       <div key={item.label}>
         <p className="font-heading text-sm font-bold text-dark-900">{item.label}</p>
@@ -21,6 +26,7 @@ const PengumumanTimelineBar = ({ tampilkanLihatSemua = true }) => (
         <ArrowRight className="h-4 w-4" />
       </Link>
     )}
+    </div>
   </div>
 );
 

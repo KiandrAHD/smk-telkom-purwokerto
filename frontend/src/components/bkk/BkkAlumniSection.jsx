@@ -1,7 +1,8 @@
-import { ArrowRight, GraduationCap, Lightbulb } from 'lucide-react';
+import { ArrowRight, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { kisahAlumni } from '../../data/dummyData';
 import { slugify } from '../../utils/slug';
+import ContentImage from '../ContentImage';
 
 const BkkAlumniSection = () => (
   <section className="bg-white py-8 lg:py-12">
@@ -17,18 +18,17 @@ const BkkAlumniSection = () => (
               className="rounded-xl border border-dark-100 bg-white p-4 transition-all hover:-translate-y-1 hover:border-primary"
             >
               <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary-50">
-                  <GraduationCap className="h-5 w-5 text-primary" />
-                </span>
+                <ContentImage src={alum.image} alt={alum.name} loading="lazy" className="h-10 w-10 flex-shrink-0 rounded-full object-cover" />
                 <figcaption className="min-w-0">
                   <p className="font-heading text-[11px] font-bold text-dark-900">{alum.name}</p>
                   <p className="text-[8px] text-dark-500">{alum.meta}</p>
                   <p className="text-[8px] text-dark-500">{alum.role}</p>
                 </figcaption>
               </div>
-              <blockquote className="mt-3 text-[9px] italic leading-relaxed text-dark-600">
-                “{alum.quote}”
-              </blockquote>
+              <p className="mt-3 text-[9px] leading-relaxed text-dark-600">{alum.summary}</p>
+              <a href={alum.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-[9px] text-primary underline underline-offset-2">
+                Ringkasan testimoni dari situs resmi
+              </a>
             </figure>
           ))}
         </div>

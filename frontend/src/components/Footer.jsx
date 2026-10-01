@@ -4,12 +4,21 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
 import footerAccent from '../assets/landing/figma-section-accent.png';
+import competitionSupporters from '../assets/footer/competition-supporters.png';
 
 const socialIcons = {
   instagram: FaInstagram,
   youtube: FaYoutube,
   tiktok: FaTiktok,
 };
+
+const supporterLogos = [
+  { id: 'jagoan', name: 'Jagoan Hosting', href: 'https://www.jagoanhosting.com/' },
+  { id: 'komdigi', name: 'Kementerian Komunikasi dan Digital Republik Indonesia' },
+  { id: 'garuda', name: 'Garuda Spark Innovation Hub' },
+  { id: 'ngalup', name: 'NGALUP.CO' },
+  { id: 'jhic', name: 'Jagoan Hosting Innovation Competition 2026' },
+];
 
 const LinkColumn = ({ title, links }) => (
   <div className="min-w-0">
@@ -73,6 +82,29 @@ const Footer = () => (
                   </a>
                 );
               })}
+            </div>
+
+            {/* Lima logo memakai bitmap asli; CSS hanya membatasi area putih tiap logo. */}
+            <div className="mt-6 max-w-[280px]">
+              <h3 className="font-heading text-xs font-bold text-dark-900">Supported by</h3>
+              <ul className="footer-supporters mt-3" aria-label="Pendukung lomba">
+                {supporterLogos.map(({ id, name, href }) => {
+                  const logo = (
+                    <span className={`footer-supporter-logo footer-supporter-logo-${id}`}>
+                      <img src={competitionSupporters} alt={name} loading="lazy" decoding="async" width="1920" height="1080" />
+                    </span>
+                  );
+                  return (
+                    <li key={id} className={id === 'jhic' ? 'col-span-2' : undefined}>
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer" className="footer-supporter-link" aria-label={`Kunjungi ${name}`}>
+                          {logo}
+                        </a>
+                      ) : logo}
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
 
