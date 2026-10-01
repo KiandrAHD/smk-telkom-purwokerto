@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import stelaCard from '../../assets/landing/stela-card.jpg';
+import stelaCardEn from '../../assets/landing/stela-card-en.png';
 import { jurusanFaq, stelaData } from '../../data/dummyData';
 
 const JurusanFaqSection = () => {
@@ -67,23 +68,17 @@ const JurusanFaqSection = () => {
         </div>
 
         {/* Kartu STELA — potongan kiri dari aset kartu penuh, sesuai crop di Figma */}
-        {language === 'en' ? (
-          <Link to="/stela" className="flex flex-col justify-center rounded-2xl bg-primary p-6 text-white sm:p-8">
-            <h2 className="whitespace-pre-line font-heading text-2xl font-extrabold">{t(stelaData.title)}</h2>
-            <p className="mt-3 text-xs leading-relaxed text-white/85">{t(stelaData.description)}</p>
-            <span className="mt-5 inline-flex items-center gap-2 text-xs font-bold">{t(stelaData.ctaText)}<ArrowRight className="h-4 w-4" /></span>
-          </Link>
-        ) : <Link to="/stela" className="relative block overflow-hidden rounded-2xl">
+        <Link to="/stela" className="relative block overflow-hidden rounded-2xl">
           <img
-            src={stelaCard}
+            src={language === 'en' ? stelaCardEn : stelaCard}
             alt=""
             aria-hidden="true"
-            className="h-full min-h-[10rem] w-full object-cover object-left"
+            className={language === 'en' ? 'block h-auto w-full' : 'h-full min-h-[10rem] w-full object-cover object-left'}
           />
           <span className="sr-only">
             {t(stelaData.title).replace('\n', ' ')}. {t(stelaData.description)}
           </span>
-        </Link>}
+        </Link>
       </div>
     </section>
   );

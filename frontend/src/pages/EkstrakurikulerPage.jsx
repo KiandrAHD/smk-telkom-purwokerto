@@ -129,12 +129,11 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
   return (
     <section
       id="daftar-ekstrakurikuler"
-      className="relative overflow-hidden bg-white py-8 lg:py-12"
+      className="relative overflow-hidden bg-white pb-8 lg:pb-12"
     >
       <SectionAccents variant="activities" />
-      {/* Pita muat di padding existing; proporsi aset tetap dan konten tidak bergeser. */}
-      <img src={ribbon} alt="" aria-hidden="true" data-figma-node="59:337" className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-8 w-full select-none object-contain lg:h-12" />
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <img src={ribbon} alt="" aria-hidden="true" width="1847" height="190" data-figma-node="59:337" className="pointer-events-none relative block h-auto w-full select-none" />
+      <div className="relative z-10 mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:mt-12 lg:px-8">
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
         <div className="mt-6 flex items-end justify-between gap-4">
           <h2 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{t(title)}</h2>

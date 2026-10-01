@@ -1,60 +1,51 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { heroData } from '../../data/dummyData';
+import profilHeroEnglish from '../../assets/tentang/profil-hero-en.jpeg';
 
 const TentangHeroSection = () => {
   const { t, language } = useLanguage();
   return (
-  <section className="bg-white pt-4 pb-6">
+  <section className="bg-white pt-4">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-[38%_1fr] items-start gap-6 lg:gap-4">
-          {/* Kolom teks */}
-          <div className="px-3 pt-6 lg:pl-4 lg:pt-6">
-            <span className="mt-3 inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-              {t(heroData.hashtag)}
-            </span>
+      <div className="relative isolate flex flex-col overflow-hidden rounded-[20px] border border-primary/30 bg-white pb-12 lg:block lg:min-h-[408px] lg:pb-16">
+        <div className="relative order-2 mt-6 aspect-[1277/652] overflow-hidden lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:aspect-auto lg:w-[72%]">
+          {/* Keep the crop window at the source panel ratio to exclude viewer margins. */}
+          <div className="relative aspect-[1277/652] w-full overflow-hidden rounded-[20px] lg:absolute lg:right-0 lg:top-1/2 lg:h-full lg:w-auto lg:-translate-y-1/2">
+            <img
+              src={language === 'en' ? profilHeroEnglish : heroData.image}
+              alt={`${t('Gedung SMK Telkom Purwokerto')}. ${heroData.badges.map((badge) => `${t(badge.title)}: ${t(badge.desc)}`).join('. ')}`}
+              className={language === 'en' ? 'absolute left-[-2.82%] top-[-39.72%] w-[105.48%] max-w-none' : 'h-full w-full object-cover'}
+            />
+          </div>
+        </div>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1] hidden bg-linear-to-r from-white from-30% via-white/95 via-40% to-transparent to-62% lg:block" />
 
-            <h1 className="mt-4 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
+        <div className="relative order-1 z-10 px-6 pt-6 sm:px-8 lg:w-[44%] lg:px-8 lg:pt-7">
+            <nav aria-label={language === 'en' ? 'Breadcrumb' : 'Jejak navigasi'} className="flex items-center gap-2 text-xs text-dark-500">
+              <Link to="/" className="transition-colors hover:text-primary">{t('Beranda')}</Link>
+              <ChevronRight aria-hidden="true" className="h-3 w-3" />
+              <span aria-current="page" className="font-semibold text-dark-700">{language === 'en' ? 'About Us' : 'Profil Sekolah'}</span>
+            </nav>
+
+            <h1 className="mt-5 whitespace-pre-line font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
               {t(heroData.heading)}
               {'\n'}
               <span className="text-primary">{t(heroData.headingAccent)}</span>
             </h1>
 
-            <p className="mt-4 max-w-md text-xs sm:text-sm leading-relaxed text-dark-500">
+            <p className="mt-4 max-w-md text-xs leading-relaxed text-dark-600 sm:text-sm lg:text-[13px]">
               {t(heroData.description)}
             </p>
 
-            <Link
-              to="/ppdb"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
+            <a
+              href="#profil"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-semibold text-white transition-colors hover:bg-primary-800"
             >
-              {t(heroData.ctaText)}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {/* Panel merah + gedung + poin keunggulan (satu aset dari Figma) */}
-          {language === 'en' ? (
-            <div className="overflow-hidden rounded-[1.75rem] bg-primary">
-              <div className="aspect-[2/1] overflow-hidden">
-                <img src={heroData.image} alt={t('Gedung SMK Telkom Purwokerto')} className="w-[150%] max-w-none" />
-              </div>
-              <div className="grid grid-cols-3 gap-3 px-4 py-5 text-center text-white">
-                {heroData.badges.map((badge) => (
-                  <div key={badge.title}>
-                    <p className="font-heading text-xs font-bold sm:text-sm">{t(badge.title)}</p>
-                    <p className="mt-1 text-[10px] leading-relaxed text-white/85">{t(badge.desc)}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : <img
-            src={heroData.image}
-            alt={t("Gedung SMK Telkom Purwokerto")}
-            className="w-full rounded-[1.75rem] object-contain"
-          />}
+              {t('Jelajahi Sekolah Kami')}
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </a>
         </div>
       </div>
     </div>

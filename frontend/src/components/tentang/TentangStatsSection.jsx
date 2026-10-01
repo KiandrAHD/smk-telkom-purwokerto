@@ -64,25 +64,25 @@ const TentangStatsSection = () => {
   }, []);
 
   return (
-    <section className="bg-white pb-6">
+    <section className="relative z-10 -mt-10 bg-transparent pb-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           ref={ref}
-          className="rounded-2xl border border-dark-100 bg-white shadow-card"
+          className="mx-4 rounded-2xl border border-dark-100 bg-white shadow-card sm:mx-6"
         >
-          <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+          <div className="grid grid-cols-2 gap-y-1 px-2 py-2 sm:px-3 lg:grid-cols-4 lg:divide-x lg:divide-dark-100 lg:py-3">
             {aboutStats.map((stat) => {
               const Icon = icons[stat.icon];
               return (
-                <div key={stat.label} className="flex items-center gap-3 px-6 py-5">
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
-                    <Icon className="h-5 w-5 text-white" />
+                <div key={stat.label} className="flex min-w-0 items-center gap-2 px-2 py-3 sm:gap-3 sm:px-4">
+                  <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary sm:h-10 sm:w-10">
+                    <Icon aria-hidden="true" className="h-4 w-4 text-white sm:h-5 sm:w-5" />
                   </span>
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-heading text-xl font-extrabold text-dark-900">
                       <CountUp value={stat.value} run={visible} />
                     </p>
-                    <p className="text-[11px] text-dark-500">{t(stat.label)}</p>
+                    <p className="text-[10px] leading-relaxed text-dark-500 sm:text-[11px]">{t(stat.label)}</p>
                   </div>
                 </div>
               );
