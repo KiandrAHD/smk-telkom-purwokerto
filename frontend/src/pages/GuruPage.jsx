@@ -5,7 +5,7 @@ import CTASection from '../components/CTASection';
 import Reveal from '../components/Reveal';
 import RibbonDivider from '../components/RibbonDivider';
 import StelaAISection from '../components/StelaAISection';
-import { guruData, kepalaSekolah } from '../data/dummyData';
+import { guruData, kepalaSekolah, visiMisi } from '../data/dummyData';
 import MainLayout from '../layouts/MainLayout';
 import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
@@ -161,8 +161,8 @@ function GuruPage() {
                   <p className="mt-1 flex items-start gap-1 text-xs leading-relaxed text-dark-600"><Quote aria-hidden="true" className="mt-0.5 h-3 w-3 shrink-0 fill-primary text-primary" /> Kepala Sekolah</p>
                 </div>
                 <div>
-                  <p className="font-heading text-sm font-bold text-primary">Motto</p>
-                  <p className="mt-1 flex items-start gap-1 text-xs leading-relaxed text-dark-600"><Quote aria-hidden="true" className="mt-0.5 h-3 w-3 shrink-0 fill-primary text-primary" /> Memimpin dengan Inovasi, Mencetak Talenta Digital Masa Depan</p>
+                  <p className="font-heading text-sm font-bold text-primary">Visi Sekolah</p>
+                  <p className="mt-1 text-xs leading-relaxed text-dark-600">{visiMisi.visi}</p>
                 </div>
               </div>
             </div>

@@ -25,6 +25,7 @@ const TentangProfilVideoSection = () => (
           poster={profilVideo.video.poster}
           title={profilVideo.video.title}
           desc={profilVideo.video.desc}
+          posterHasPlayIcon
         />
       </div>
 

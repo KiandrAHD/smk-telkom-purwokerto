@@ -8,7 +8,7 @@ import { Play } from 'lucide-react';
 //
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
-const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video' }) => {
+const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', showCaption = true, posterHasPlayIcon = false }) => {
   const [diputar, setDiputar] = useState(false);
 
   return (
@@ -35,17 +35,17 @@ const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video' }) =>
               aria-hidden="true"
               className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
             />
-            <span className="absolute inset-0 bg-dark-950/35 transition-colors group-hover:bg-dark-950/20" />
-            <span className="absolute inset-0 flex items-center justify-center">
+            {!posterHasPlayIcon && <span className="absolute inset-0 bg-dark-950/35 transition-colors group-hover:bg-dark-950/20" />}
+            {!posterHasPlayIcon && <span className="absolute inset-0 flex items-center justify-center">
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-card transition-transform duration-300 group-hover:scale-110 sm:h-16 sm:w-16">
                 <Play className="ml-1 h-6 w-6 text-white sm:h-7 sm:w-7" fill="currentColor" />
               </span>
-            </span>
+            </span>}
           </button>
         )}
       </div>
 
-      {(title || desc) && (
+      {showCaption && (title || desc) && (
         <figcaption className="bg-white px-5 py-4">
           {title && (
             <p className="whitespace-pre-line font-heading text-xs font-bold leading-snug text-dark-900 sm:text-sm">

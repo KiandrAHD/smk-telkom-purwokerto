@@ -41,9 +41,10 @@ const AMBIL = {
 const KOLEKSI = {
   'pengumuman-populer': {
     eyebrow: 'Pengumuman',
-    title: 'Pengumuman Populer',
-    deskripsi: 'Pengumuman yang paling banyak dibaca pengunjung dalam periode terakhir.',
+    title: 'Pengumuman Terbaru',
+    deskripsi: 'Pengumuman resmi sekolah yang terbaru, diurutkan berdasarkan tanggal.',
     Section: PengumumanPopulerCard,
+    sumber: 'pengumuman',
     kembali: { to: '/pengumuman', label: 'Pengumuman' },
   },
   'pengumuman-semua': {
@@ -79,7 +80,7 @@ const KOLEKSI = {
   'berita-agenda': {
     eyebrow: 'Berita',
     title: 'Agenda Sekolah',
-    deskripsi: 'Kegiatan dan acara sekolah yang akan berlangsung dalam waktu dekat.',
+    deskripsi: 'Informasi kegiatan dan acara sekolah. Periksa tanggal pada setiap agenda.',
     Section: BeritaAgendaSection,
     kembali: { to: '/berita', label: 'Berita' },
   },

@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom';
+import ContentImage from './ContentImage';
 
 const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = false }) => (
   <Link
     to={`/prestasi/${slug}`}
+    aria-label={`Lihat detail prestasi: ${title}`}
     className={`group block overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
       highlight ? 'border-primary' : 'border-dark-100 hover:border-primary'
     }`}
   >
     <article>
       <div className="overflow-hidden">
-        <img
+        <ContentImage
           src={image}
           alt={imageAlt || title}
           loading="lazy"

@@ -1,9 +1,27 @@
+import { useEffect, useState } from 'react';
 import PrestasiCarousel from './PrestasiCarousel';
+import PublicDataState from './PublicDataState';
 import SectionAccents from './SectionAccents';
 import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
+import { getPrestasi } from '../services/prestasiService';
+import { toPrestasiItem } from '../utils/publicContent';
 
-const AchievementsSection = () => (
+const AchievementsSection = () => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    getPrestasi()
+      .then((rows) => active && setItems(rows.map(toPrestasiItem)))
+      .catch(() => active && setError('Prestasi belum dapat dimuat. Silakan coba lagi nanti.'))
+      .finally(() => active && setLoading(false));
+    return () => { active = false; };
+  }, []);
+
+  return (
   <section id="prestasi" className="relative overflow-hidden bg-white py-8 lg:py-12 2xl:min-h-[635px]">
     <SectionAccents variant="achievements" />
 
@@ -33,10 +51,12 @@ const AchievementsSection = () => (
       </div>
 
       {/* Kartu prestasi — carousel horizontal, dot ada di dalamnya */}
-      <PrestasiCarousel />
+      <PublicDataState loading={loading} error={error} empty={!loading && !error && !items.length} label="prestasi" />
+      {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} />}
 
     </div>
   </section>
-);
+  );
+};
 
 export default AchievementsSection;

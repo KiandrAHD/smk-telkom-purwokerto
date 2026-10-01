@@ -36,7 +36,7 @@ const RegisterPage = () => {
       navigate('/ppdb/verifikasi');
     } catch (error) {
       setGalat(error?.message?.includes('already registered')
-        ? 'Email tersebut sudah terdaftar. Silakan masuk ke portal PPDB.'
+        ? 'Email tersebut sudah terdaftar. Silakan masuk ke portal SPMB.'
         : 'Pendaftaran akun gagal. Silakan periksa koneksi lalu coba lagi.');
     } finally {
       setMengirim(false);
@@ -138,7 +138,7 @@ const RegisterPage = () => {
               <span>
                 Saya menyatakan data di atas benar dan menyetujui{' '}
                 <Link to="/ketentuan-ppdb" className="font-semibold text-primary hover:underline">
-                  Ketentuan PPDB SMK Telkom Purwokerto
+                  Ketentuan SPMB SMK Telkom Purwokerto
                 </Link>
               </span>
             </label>
@@ -161,7 +161,7 @@ const RegisterPage = () => {
             <p className="text-center text-[11px] text-dark-500">
               Sudah pernah mendaftar?{' '}
               <Link to="/ppdb/masuk" className="font-heading font-bold text-primary hover:underline">
-                Masuk ke Portal PPDB
+                Masuk ke Portal SPMB
               </Link>
             </p>
           </form>

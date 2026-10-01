@@ -97,7 +97,7 @@ const VerifyEmailPage = () => {
         <div className="mx-auto max-w-md rounded-3xl border border-green-200 bg-white p-8 text-center shadow-card sm:p-10">
           <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
           <h1 className="mt-6 font-heading text-2xl font-extrabold text-dark-900">Email berhasil diverifikasi</h1>
-          <p className="mt-3 text-xs leading-relaxed text-dark-500">Akunmu sudah aktif. Lanjutkan untuk melengkapi pendaftaran PPDB.</p>
+          <p className="mt-3 text-xs leading-relaxed text-dark-500">Akunmu sudah aktif. Lanjutkan untuk melengkapi pendaftaran SPMB.</p>
           <button type="button" onClick={lanjut} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Lanjutkan Pendaftaran</button>
         </div>
       </PpdbAuthLayout>

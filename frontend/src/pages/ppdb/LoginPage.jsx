@@ -86,7 +86,7 @@ const LoginPage = () => {
             </button>
 
             <p className="text-center text-[11px] text-dark-500">
-              Belum memiliki akun PPDB?{' '}
+              Belum memiliki akun SPMB?{' '}
               <Link to="/ppdb/daftar" className="font-heading font-bold text-primary hover:underline">
                 Daftar Akun Baru
               </Link>

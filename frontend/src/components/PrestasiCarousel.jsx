@@ -1,27 +1,43 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import AchievementCard from './AchievementCard';
-import { prestasiData } from '../data/dummyData';
 
 // Lebar kartu disamakan persis dengan grid aslinya (gap-5 = 1.25rem):
 // 1 kolom di mobile, 2 di sm, 4 di lg.
 const CARD_WIDTH = 'w-full sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-3.75rem)/4)]';
 
-const PrestasiCarousel = () => {
+const getCarouselMetrics = (width, cardWidth, gap, count) => {
+  const perPage = Math.max(1, Math.round((width + gap) / (cardWidth + gap)));
+  return { groups: Math.max(1, Math.ceil(count / perPage)), step: perPage * (cardWidth + gap) };
+};
+
+const getCarouselIndex = (scrollLeft, maxScroll, step, groups) => {
+  const left = Math.max(0, Math.min(scrollLeft, maxScroll));
+  const previous = Math.min(Math.floor(left / step), groups - 1);
+  const next = Math.min(previous + 1, groups - 1);
+  // Halaman terakhir bisa lebih pendek; gunakan posisi scroll sebenarnya.
+  return left - Math.min(previous * step, maxScroll) <= Math.min(next * step, maxScroll) - left
+    ? previous : next;
+};
+
+const PrestasiCarousel = ({ items }) => {
   const trackRef = useRef(null);
+  const stepRef = useRef(1);
   const drag = useRef({ down: false, moved: false, startX: 0, startLeft: 0 });
 
   const [groups, setGroups] = useState(1);
   const [active, setActive] = useState(0);
   const [dragging, setDragging] = useState(false);
 
-  // Jumlah slide diturunkan dari geometri scroll itu sendiri: berapa layar penuh
-  // isi track. Satu elemen, satu pembacaan — tidak perlu menyamakan lebar track
-  // dengan lebar kartu yang breakpoint-nya berubah di waktu berbeda.
+  // Gap ikut dihitung agar halaman terakhir tidak hilang atau menjadi dot tambahan.
   const measure = useCallback(() => {
     const el = trackRef.current;
-    if (!el || !el.clientWidth) return;
-    setGroups(Math.max(1, Math.round(el.scrollWidth / el.clientWidth)));
-  }, []);
+    if (!el?.clientWidth || !el.firstElementChild) return;
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    const metrics = getCarouselMetrics(el.clientWidth, el.firstElementChild.getBoundingClientRect().width, gap, items.length);
+    stepRef.current = metrics.step;
+    setGroups(metrics.groups);
+    setActive(getCarouselIndex(el.scrollLeft, Math.max(0, el.scrollWidth - el.clientWidth), metrics.step, metrics.groups));
+  }, [items.length]);
 
   useEffect(() => {
     measure();
@@ -41,25 +57,20 @@ const PrestasiCarousel = () => {
       ro.disconnect();
       window.removeEventListener('resize', measure);
     };
-  }, [measure]);
+  }, [measure, items]);
 
   // Dot aktif dibaca dari posisi scroll, bukan disimpan terpisah — jadi tetap
   // benar baik saat digeser lewat swipe, drag, scrollbar, maupun klik dot.
   const syncActive = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
-    const i = el.clientWidth ? Math.round(el.scrollLeft / el.clientWidth) : 0;
-    setActive(Math.min(Math.max(i, 0), groups - 1));
+    setActive(getCarouselIndex(el.scrollLeft, Math.max(0, el.scrollWidth - el.clientWidth), stepRef.current, groups));
   }, [groups]);
-
-  useEffect(() => {
-    syncActive();
-  }, [syncActive]);
 
   const goTo = (i) => {
     const el = trackRef.current;
     if (!el) return;
-    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' });
+    el.scrollTo({ left: i * stepRef.current, behavior: 'smooth' });
   };
 
   // Drag dengan mouse. Sentuh sengaja tidak ditangani di sini — swipe native
@@ -68,21 +79,18 @@ const PrestasiCarousel = () => {
     if (e.pointerType !== 'mouse') return;
     const el = trackRef.current;
     drag.current = { down: true, moved: false, startX: e.clientX, startLeft: el.scrollLeft };
-    setDragging(true);
-    // Penangkapan pointer bersifat pelengkap: kalau browser menolak pointerId-nya,
-    // geseran tetap jalan lewat event biasa dan carousel tidak tersangkut di
-    // keadaan "sedang digeser".
-    try {
-      el.setPointerCapture(e.pointerId);
-    } catch {
-      /* pointer sudah tidak aktif */
-    }
   };
 
   const onPointerMove = (e) => {
     if (!drag.current.down) return;
     const dx = e.clientX - drag.current.startX;
-    if (Math.abs(dx) > 5) drag.current.moved = true;
+    if (!drag.current.moved) {
+      if (Math.abs(dx) <= 5) return;
+      drag.current.moved = true;
+      setDragging(true);
+      // Capture hanya setelah drag: klik biasa harus tetap menuju Link kartu.
+      try { trackRef.current.setPointerCapture(e.pointerId); } catch { /* pointer tidak aktif */ }
+    }
     trackRef.current.scrollLeft = drag.current.startLeft - dx;
   };
 
@@ -94,7 +102,7 @@ const PrestasiCarousel = () => {
     if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
 
     // Snap baru menyala lagi setelah drag selesai, lalu didorong ke slide terdekat.
-    requestAnimationFrame(() => goTo(Math.round(el.scrollLeft / el.clientWidth)));
+    if (drag.current.moved) requestAnimationFrame(() => goTo(getCarouselIndex(el.scrollLeft, Math.max(0, el.scrollWidth - el.clientWidth), stepRef.current, groups)));
   };
 
   // Menggeser bukan mengeklik. Klik dicegat di fase capture supaya <Link> di
@@ -117,6 +125,7 @@ const PrestasiCarousel = () => {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        onPointerLeave={onPointerUp}
         onClickCapture={onClickCapture}
         className={`mt-7 -my-2 flex gap-5 overflow-x-auto py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&_img]:pointer-events-none ${
           dragging
@@ -124,9 +133,9 @@ const PrestasiCarousel = () => {
             : 'cursor-grab snap-x snap-mandatory scroll-smooth'
         }`}
       >
-        {prestasiData.items.map((item, i) => (
-          <div key={item.title} className={`shrink-0 snap-start ${CARD_WIDTH}`}>
-            <AchievementCard {...item} highlight={i === 0} />
+        {items.map((item, i) => (
+          <div key={item.id || item.slug} className={`shrink-0 snap-start ${CARD_WIDTH}`}>
+            <AchievementCard {...item} category={item.kategori} highlight={i === 0} />
           </div>
         ))}
       </div>
@@ -151,4 +160,3 @@ const PrestasiCarousel = () => {
 };
 
 export default PrestasiCarousel;
-

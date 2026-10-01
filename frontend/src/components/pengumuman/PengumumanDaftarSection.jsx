@@ -77,7 +77,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
           </div>
 
           <div className="space-y-5">
-            <PengumumanPopulerCard />
+            <PengumumanPopulerCard items={items} />
             <PengumumanBantuanCard />
           </div>
         </div>

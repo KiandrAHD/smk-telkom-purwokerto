@@ -6,11 +6,7 @@ import MainLayout from '../layouts/MainLayout';
 import { getBeritaBySlug, getPublishedBerita } from '../services/beritaService';
 import { toBeritaItem } from '../utils/publicContent';
 
-// Isi halaman diambil dari slug di URL, bukan ditulis ulang di sini — kartu mana
-// pun yang diklik akan membuka data miliknya sendiri. Slug yang tidak dikenal
-// (misal /prestasi/galeri yang halamannya belum dibangun) jatuh ke Segera Hadir.
-const BeritaDetailPage = () => {
-  const { slug } = useParams();
+const BeritaDetail = ({ slug }) => {
   const [item, setItem] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +14,7 @@ const BeritaDetailPage = () => {
 
   useEffect(() => {
     let active = true;
-    Promise.all([getBeritaBySlug(slug), getPublishedBerita()])
+    Promise.all([getBeritaBySlug(slug), getPublishedBerita().catch(() => [])])
       .then(([row, rows]) => {
         if (!active) return;
         const current = toBeritaItem(row);
@@ -40,6 +36,11 @@ const BeritaDetailPage = () => {
       <BeritaDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );
+};
+
+const BeritaDetailPage = () => {
+  const { slug } = useParams();
+  return <BeritaDetail key={slug} slug={slug} />;
 };
 
 export default BeritaDetailPage;

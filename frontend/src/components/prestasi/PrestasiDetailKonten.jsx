@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import GaleriFoto from '../GaleriFoto';
 import Reveal from '../Reveal';
+import ContentImage from '../ContentImage';
 
 // Bagian khas halaman detail Prestasi: yang ditonjolkan adalah momen juaranya —
 // angka sorotan, tahapan menuju podium, lalu foto-fotonya. Seluruh isinya datang
@@ -69,7 +70,7 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform duration-300 hover:-translate-y-1"
               >
                 <div className="overflow-hidden">
-                  <img
+                  <ContentImage
                     src={p.image}
                     alt={p.title}
                     loading="lazy"

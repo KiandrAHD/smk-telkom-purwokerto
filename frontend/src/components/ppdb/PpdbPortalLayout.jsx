@@ -20,7 +20,7 @@ const PpdbPortalLayout = ({ children }) => {
   const { currentUser, authLoading, draftLoading, logout } = usePpdb();
 
   if (authLoading || draftLoading) {
-    return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">{authLoading ? 'Memeriksa sesi PPDB...' : 'Memuat draft pendaftaran...'}</div>;
+    return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">{authLoading ? 'Memeriksa sesi SPMB...' : 'Memuat draft pendaftaran...'}</div>;
   }
 
   if (!currentUser) return <Navigate to="/ppdb/masuk" replace />;
@@ -44,7 +44,7 @@ const PpdbPortalLayout = ({ children }) => {
               <button type="button" onClick={() => void logout()} className="text-[10px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">Keluar</button>
             </div>
             <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary font-heading text-xs font-bold text-white">
-              {inisial(currentUser.email || 'PPDB')}
+              {inisial(currentUser.email || 'SPMB')}
             </span>
           </div>
         </div>

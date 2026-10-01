@@ -136,11 +136,13 @@ const BkkLowonganSection = ({ items = [] }) => {
                 key={job.role}
                 className="flex flex-col rounded-2xl border border-dark-100 bg-white p-4 shadow-card transition-transform hover:-translate-y-1"
               >
-                <img
+                {job.logo && <img
+                  key={job.logo}
                   src={job.logo}
                   alt={job.company}
+                  onError={({ currentTarget }) => { currentTarget.hidden = true; }}
                   className="h-8 w-auto max-w-[7rem] self-start object-contain"
-                />
+                />}
                 <h3 className="mt-4 font-heading text-sm font-bold text-dark-900">{job.role}</h3>
                 <p className="mt-1 text-[10px] text-dark-500">{job.company}</p>
                 <p className="mt-1.5 flex items-center gap-1 text-[10px] text-dark-500">
@@ -161,16 +163,15 @@ const BkkLowonganSection = ({ items = [] }) => {
 
                 <p className="mt-3 text-[11px] font-bold text-primary">{job.deadlineLabel}</p>
 
-                <a
-                  href={job.link_pendaftaran || '#'}
-                  target={job.link_pendaftaran ? '_blank' : undefined}
-                  rel={job.link_pendaftaran ? 'noreferrer' : undefined}
-                  onClick={(event) => { if (!job.link_pendaftaran) event.preventDefault(); }}
+                {job.link_pendaftaran ? <a
+                  href={job.link_pendaftaran}
+                  target="_blank"
+                  rel="noreferrer"
                   className="mt-4 inline-flex items-center justify-center gap-1.5 rounded-full border border-dark-200 px-3 py-2 text-[9px] font-bold text-dark-600 transition-colors hover:border-primary hover:text-primary"
                 >
                   {lowonganPopuler.ctaText}
                   <ArrowRight className="h-2.5 w-2.5" />
-                </a>
+                </a> : <p className="mt-4 text-[10px] text-dark-500">Tautan lamaran belum tersedia.</p>}
               </article>
             ))}
           </div>

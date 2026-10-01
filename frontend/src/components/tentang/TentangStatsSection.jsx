@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Briefcase, Building2, GraduationCap, Users } from 'lucide-react';
+import { Briefcase, Building2, GraduationCap, Trophy, Users } from 'lucide-react';
 import { aboutStats } from '../../data/dummyData';
 
-const icons = { users: Users, graduationCap: GraduationCap, building: Building2, briefcase: Briefcase };
+const icons = { users: Users, graduationCap: GraduationCap, building: Building2, briefcase: Briefcase, trophy: Trophy };
 
 // Pecah "2.200+" jadi angka + imbuhan supaya angkanya bisa dihitung naik.
 // Pemisah ribuan ikut dibuang dari angka dan dari imbuhan, lalu dipasang ulang

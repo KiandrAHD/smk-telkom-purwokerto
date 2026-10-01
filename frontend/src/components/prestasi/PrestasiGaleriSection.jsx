@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { galeriPrestasi } from '../../data/dummyData';
+import ContentImage from '../ContentImage';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
 const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
@@ -73,7 +74,7 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
               >
                 <div className="relative overflow-hidden">
-                  <img
+                  <ContentImage
                     src={item.image}
                     alt={item.imageAlt || item.title}
                     className="w-full aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-110"

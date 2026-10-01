@@ -6,11 +6,7 @@ import MainLayout from '../layouts/MainLayout';
 import { getPublishedPengumuman, getPengumumanBySlug } from '../services/pengumumanService';
 import { toPengumumanItem } from '../utils/publicContent';
 
-// Isi halaman diambil dari slug di URL, bukan ditulis ulang di sini — kartu mana
-// pun yang diklik akan membuka data miliknya sendiri. Slug yang tidak dikenal
-// (misal /prestasi/galeri yang halamannya belum dibangun) jatuh ke Segera Hadir.
-const PengumumanDetailPage = () => {
-  const { slug } = useParams();
+const PengumumanDetail = ({ slug }) => {
   const [item, setItem] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +14,7 @@ const PengumumanDetailPage = () => {
 
   useEffect(() => {
     let active = true;
-    Promise.all([getPengumumanBySlug(slug), getPublishedPengumuman()])
+    Promise.all([getPengumumanBySlug(slug), getPublishedPengumuman().catch(() => [])])
       .then(([row, rows]) => {
         if (!active) return;
         setItem(toPengumumanItem(row));
@@ -39,6 +35,11 @@ const PengumumanDetailPage = () => {
       <PengumumanDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );
+};
+
+const PengumumanDetailPage = () => {
+  const { slug } = useParams();
+  return <PengumumanDetail key={slug} slug={slug} />;
 };
 
 export default PengumumanDetailPage;

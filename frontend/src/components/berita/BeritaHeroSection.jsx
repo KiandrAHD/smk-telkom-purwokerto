@@ -77,7 +77,7 @@ const BeritaHeroSection = ({ items = [] }) => {
               to={`/berita/${item.slug}`}
               className="inline-flex items-center gap-1 text-[10px] font-bold text-primary hover:underline"
             >
-              {breakingNews.linkText}
+              Baca Berita
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>

@@ -32,7 +32,7 @@ const TentangKepalaSekolahSection = () => {
               className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-contain p-1 min-[1660px]:h-[321px] min-[1660px]:w-[257px] min-[1660px]:p-0"
             />
             <div className="min-w-0">
-              <Quote className="h-4 w-4 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" />
+              {!expanded && <Quote className="h-4 w-4 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" />}
               <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600 min-[1660px]:text-[18px] min-[1660px]:leading-[1.45]">
                 {expanded ? kepalaSekolah.quoteFull : kepalaSekolah.quote}
               </p>
@@ -45,7 +45,7 @@ const TentangKepalaSekolahSection = () => {
                 aria-expanded={expanded}
                 className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-dark-200 px-3 py-1.5 text-[10px] font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
               >
-                {expanded ? 'Tutup Sambutan' : kepalaSekolah.ctaText}
+                {expanded ? 'Tutup Ringkasan' : kepalaSekolah.ctaText}
                 <ArrowRight
                   className={`h-3 w-3 transition-transform ${expanded ? 'rotate-90' : ''}`}
                 />

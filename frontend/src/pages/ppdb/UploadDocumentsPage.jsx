@@ -67,7 +67,7 @@ const UploadDocumentsPage = () => {
     } catch (error) {
       if (error?.code === 'PPDB_DUPLICATE_SUBMISSION' || error?.message === DUPLICATE_SUBMISSION_MESSAGE) {
         setDuplikat(true);
-        setGalat('Anda sudah memiliki pendaftaran PPDB.');
+        setGalat('Anda sudah memiliki pendaftaran SPMB.');
       } else if (error?.code === 'PPDB_VALIDATION' || error?.code === 'PPDB_UPLOAD_CLEANUP_FAILED') {
         setGalat(error.message);
       } else {

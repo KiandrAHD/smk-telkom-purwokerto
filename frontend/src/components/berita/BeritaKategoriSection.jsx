@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { kategoriBerita } from '../../data/dummyData';
+import ContentImage from '../ContentImage';
 
 const BeritaKategoriSection = ({ items = [] }) => {
   const [chip, setChip] = useState('Semua');
@@ -108,7 +109,7 @@ const BeritaKategoriSection = ({ items = [] }) => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform hover:-translate-y-1"
               >
                 <div className="relative overflow-hidden">
-                  <img
+                  <ContentImage
                     src={n.image}
                     alt={n.title}
                     className="w-full aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-110"

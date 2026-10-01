@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import Reveal from './Reveal';
 import VideoEmbed from './VideoEmbed';
+import ContentImage from './ContentImage';
 
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
 // kategori apa pun: seluruh isinya datang dari objek `item` yang dicari lewat
@@ -42,15 +43,13 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => (
           <p className="mt-2 text-sm font-semibold text-primary">{item.subtitle}</p>
         )}
 
-        {item.image && (
-          <div className="mt-7 overflow-hidden rounded-2xl">
-            <img
-              src={item.image}
-              alt={item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi'}
-              className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
-            />
-          </div>
-        )}
+        <div className="mt-7 overflow-hidden rounded-2xl">
+          <ContentImage
+            src={item.image}
+            alt={item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi'}
+            className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
+          />
+        </div>
 
         {item.imageNote && (
           <p className="mt-2 text-[10px] text-dark-400">{item.imageNote}</p>

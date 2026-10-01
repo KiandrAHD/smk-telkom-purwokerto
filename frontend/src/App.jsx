@@ -58,7 +58,7 @@ const PAGE_META = {
   '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
   '/berita': ['Berita SMK Telkom Purwokerto', 'Berita terbaru dari SMK Telkom Purwokerto.'],
   '/pengumuman': ['Pengumuman SMK Telkom Purwokerto', 'Pengumuman resmi SMK Telkom Purwokerto.'],
-  '/ppdb': ['PPDB Online SMK Telkom Purwokerto', 'Daftar PPDB online SMK Telkom Purwokerto.'],
+  '/ppdb': ['SPMB 2027/2028 | SMK Telkom Purwokerto', 'Portal pendaftaran SPMB Tahun Ajaran 2027/2028 SMK Telkom Purwokerto.'],
   '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
   '/nexttel': ['NextTel AI | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
   '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
@@ -69,7 +69,7 @@ const PAGE_META = {
 const PageMetadata = () => {
   const { pathname } = useLocation();
   useEffect(() => {
-    const key = Object.keys(PAGE_META).find((path) => pathname === path || (path === '/dashboard' && pathname.startsWith('/dashboard/')));
+    const key = Object.keys(PAGE_META).find((path) => pathname === path || (['/dashboard', '/ppdb'].includes(path) && pathname.startsWith(`${path}/`)));
     const [title, description] = PAGE_META[key] || ['SMK Telkom Purwokerto', 'Website resmi SMK Telkom Purwokerto.'];
     document.title = title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', description);

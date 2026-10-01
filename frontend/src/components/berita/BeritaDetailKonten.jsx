@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CalendarDays, Quote } from 'lucide-react';
 import GaleriFoto from '../GaleriFoto';
+import ContentImage from '../ContentImage';
 
 // Bagian khas halaman detail Berita: yang ditonjolkan dokumentasinya — kutipan
 // narasumber, galeri liputan, lalu berita lain pada kategori yang sama.
@@ -42,7 +43,7 @@ const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
                 className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white shadow-card transition-transform duration-300 hover:-translate-y-1"
               >
                 <div className="overflow-hidden">
-                  <img
+                  <ContentImage
                     src={b.image}
                     alt={b.title}
                     loading="lazy"
