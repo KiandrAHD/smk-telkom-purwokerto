@@ -25,6 +25,8 @@ try {
     'The edge and bottom groups retain the native Figma layer order, including the off-canvas motif.');
   assert.ok(html.includes('footer-accent-canvas'), 'The bottom composition has a separate clipping canvas.');
   const css = await readFile(new URL('../src/index.css', import.meta.url), 'utf8');
+  const side = css.slice(css.indexOf('.footer-accent-side {')).split('}')[0];
+  assert.ok(side.includes('overflow: visible;'), 'The decorative side canvas must not crop motifs before the existing footer body boundary.');
   for (const selector of ['.footer-accent-side', '.footer-accent-canvas']) {
     const rule = css.slice(css.indexOf(selector + ' {')).split('}')[0];
     assert.ok(rule.includes('height: 314px;'), `${selector} clips at the red bar in frame 106:90 (4343 - 4029).`);

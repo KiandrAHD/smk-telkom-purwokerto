@@ -88,7 +88,9 @@ body {
   top: 0;
   width: 1847px;
   height: 314px;
-  overflow: hidden;
+  /* Let the existing footer body clip the edges; this scaled canvas must not
+     cut the second left motif in the middle of a taller footer. */
+  overflow: visible;
   transform-origin: left top;
   transform: scale(calc(100cqw / 1847px));
 }
