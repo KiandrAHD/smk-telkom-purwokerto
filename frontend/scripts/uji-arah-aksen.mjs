@@ -22,7 +22,7 @@ for (const [selector, native] of [
   [".footer-accent[data-figma-node='90:514']", source.footer.turned],
 ]) {
   const rule = css.slice(css.indexOf(selector + ' {')).split('}')[0];
-  const rendered = rule.match(/--footer-accent-orientation: matrix\(([^)]+)\)/);
+  const rendered = rule.match(/transform: matrix\(([^)]+)\)/);
   assert.ok(rendered, selector + ' belum memakai matriks asli.');
   assert.deepEqual(rendered[1].split(',').map(Number).slice(0, 4), native.matrix);
 }

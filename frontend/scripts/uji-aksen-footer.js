@@ -9,8 +9,8 @@
   const left = footer.querySelectorAll('.footer-accent-side-left .footer-accent');
   const right = footer.querySelectorAll('.footer-accent-side-right .footer-accent');
   const bottom = footer.querySelectorAll('.footer-accent-band .footer-accent');
-  if (accents.length !== 9 || left.length !== 2 || right.length !== 2 || bottom.length !== 5 || !content || !bottomBar) {
-    throw new Error('Footer harus menyediakan 9 aksen: 2 kiri, 2 kanan, dan 5 di baris bawah.');
+  if (accents.length !== 9 || left.length !== 2 || right.length !== 1 || bottom.length !== 6 || !content || !bottomBar) {
+    throw new Error('Footer harus menyediakan 9 layer Figma: 2 kiri, 1 kanan, dan 6 di canvas bawah.');
   }
   if (accents.some((element) => element.querySelector('img')?.naturalWidth === 0)) {
     throw new Error('Tunggu gambar aksen selesai dimuat; periksa Network jika gagal.');
@@ -34,18 +34,17 @@
     return bounds;
   };
 
-  const areas = accents.map(visibleBounds);
-  const protectedAreas = [content, bottomBar].map((element) => element.getBoundingClientRect());
+  const areas = accents.map((element) => visibleBounds(element.querySelector('img')));
+  const protectedAreas = [content.firstElementChild, bottomBar].map((element) => element.getBoundingClientRect());
   areas.forEach((area, index) => {
-    if (area.right <= area.left || area.bottom <= area.top) throw new Error(`Aksen ${index + 1} hilang.`);
-    const full = accents[index].getBoundingClientRect();
-    if (['left', 'right', 'top', 'bottom'].some((edge) => Math.abs(area[edge] - full[edge]) > 0.5)) {
-      throw new Error(`Aksen ${index + 1} terpotong oleh overflow ancestor.`);
+    if (area.right <= area.left || area.bottom <= area.top) {
+      if (accents[index].dataset.figmaNode === '90:523') return; // Intentionally outside the original Figma canvas.
+      throw new Error(`Aksen ${index + 1} hilang.`);
     }
     if (protectedAreas.some((protectedArea) => intersects(area, protectedArea))) {
       throw new Error(`Aksen ${index + 1} bertabrakan dengan konten footer.`);
     }
-    if (areas.slice(index + 1).some((other) => intersects(area, other))) {
+    if (areas.slice(index + 1).some((other) => other.right > other.left && other.bottom > other.top && intersects(area, other))) {
       throw new Error(`Aksen ${index + 1} bertabrakan dengan aksen lain.`);
     }
   });
@@ -67,5 +66,5 @@
       throw new Error(`Aksen ${variant} gagal dimuat atau berukuran nol.`);
     }
   });
-  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 9 aksen utuh tanpa overlap.`);
+  console.log(`Lulus: ${innerWidth}px, DPR ${devicePixelRatio}; 9 layer aksen dengan clipping Figma tanpa overlap.`);
 })();

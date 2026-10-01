@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
 import { jurusanHero, jurusanStats } from '../../data/dummyData';
+import jurusanHeroImage from '../../assets/drive/jurusan-hero-students.jpeg';
 
 const JurusanHeroSection = () => {
   const { t } = useLanguage();
@@ -38,14 +39,14 @@ const JurusanHeroSection = () => {
             </Link>
           </div>
 
-          {/* Foto siswa + cuplikan kode + maskot (satu aset dari Figma) */}
+          {/* Preserve the complete supplied artwork at its original aspect ratio. */}
           <img
-            src={jurusanHero.image}
-            alt={t("Siswa SMK Telkom Purwokerto sedang membuat program")}
-            width={1920}
-            height={902}
+            src={jurusanHeroImage}
+            alt={t('Siswa SMK Telkom Purwokerto')}
+            width={2300}
+            height={1080}
             fetchPriority="high"
-            className="w-full rounded-[1.75rem] object-contain"
+            className="h-auto w-full rounded-[1.75rem] object-contain"
           />
         </div>
 

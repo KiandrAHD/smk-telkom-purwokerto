@@ -23,9 +23,7 @@ const supporterLogos = [
 
 const FooterAccent = ({ node }) => (
   <div className="footer-accent" data-figma-node={node}>
-    <div className="footer-accent-art">
-      <img src={footerAccentFill} alt="" className="footer-accent-shape" />
-    </div>
+    <img src={footerAccentFill} alt="" className="footer-accent-shape" />
   </div>
 );
 
@@ -54,13 +52,13 @@ const Footer = () => {
   const { t } = useLanguage();
   return (
   <footer className="site-footer bg-white">
-    <div className="relative pt-7 lg:pt-9">
-      {/* Keep decorative motifs inside the reserved margins, away from footer content. */}
+    <div className="relative overflow-hidden pt-7 lg:pt-9">
+      {/* Native Figma coordinates and clipping, with content kept in its existing grid. */}
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-left pointer-events-none select-none">
         {['90:536', '90:542'].map((node) => <FooterAccent key={node} node={node} />)}
       </div>
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none">
-        {['90:539', '90:523'].map((node) => <FooterAccent key={node} node={node} />)}
+        <FooterAccent node="90:539" />
       </div>
 
       <div className="footer-content relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
@@ -177,7 +175,9 @@ const Footer = () => {
 
     {/* Normal flow reserves space below the supporter logos; motifs cannot overlap them. */}
     <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
-      {['90:514', '90:508', '90:520', '90:517', '90:511'].map((node) => <FooterAccent key={node} node={node} />)}
+      <div className="footer-accent-canvas">
+        {['90:508', '90:511', '90:514', '90:517', '90:520', '90:523'].map((node) => <FooterAccent key={node} node={node} />)}
+      </div>
     </div>
     <div className="footer-bottom-bar relative bg-primary text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-[10px] sm:flex-row sm:px-6 lg:px-8">
