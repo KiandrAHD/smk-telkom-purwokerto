@@ -6,6 +6,7 @@ import accreditation from '../assets/tentang/badge-akreditasi.png';
 import accreditationOverlay from '../assets/tentang/badge-akreditasi-overlay.png';
 import facilitiesIcon from '../assets/tentang/badge-fasilitas.svg';
 import teacherIcon from '../assets/tentang/badge-guru.svg';
+import curriculumIcon from '../assets/tentang/badge-kurikulum.svg';
 
 const AboutSection = () => {
   const { t } = useLanguage();
@@ -46,7 +47,7 @@ const AboutSection = () => {
                 </span>}
                 {index === 1 && <img src={facilitiesIcon} alt="" aria-hidden="true" className="shrink-0" />}
                 {index === 2 && <img src={teacherIcon} alt="" aria-hidden="true" className="shrink-0" />}
-                {index === 3 && <span aria-hidden="true" className="hidden w-[66px] shrink-0 sm:block" />}
+                {index === 3 && <img src={curriculumIcon} alt="" aria-hidden="true" width="68" height="68" className="shrink-0" />}
                 <div className="min-w-0">
                   <p className="font-heading text-sm font-bold leading-tight sm:text-base">
                     {t(badge.title)}
