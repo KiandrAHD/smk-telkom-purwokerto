@@ -1,29 +1,71 @@
-# Implementasi Footer dan Konten Resmi — 1 Oktober 2026
+# Implementasi Footer dan Perbaikan Tampilan — 1 Oktober 2026
 
-Kode di bawah merupakan salinan lengkap komponen Footer saat ini beserta CSS footer yang dipakai proyek. Gunakan pada stack React, React Router, dan Tailwind CSS v4 yang sudah terpasang; token warna dan font tetap mengikuti index.css proyek.
+Dokumen ini memperbarui implementasi footer terdahulu. Kode lengkap di bawah disalin dari working tree saat penyusunan dokumen, untuk React, React Router, dan Tailwind CSS v4 yang sudah digunakan proyek. Token warna dan font tetap mengikuti index.css.
+
+## Status lima perbaikan
+
+| Poin | Status implementasi | Lokasi |
+| --- | --- | --- |
+| 1. Logo yang hilang | Menunggu gambar logo khusus dari pengguna; belum mengganti spacer dengan simbol yang ditebak. | src/components/AboutSection.jsx, badge Kurikulum Industri. |
+| 2. Empat aksen Beranda | Variant achievements menggunakan pola posisi relatif, batas ukuran, aset, dan matriks orientasi yang sama dengan empat motif kanan schoolTeachers. Tinggi kedua section dapat berbeda sehingga koordinat global halaman tidak sama. | src/components/SectionAccents.jsx. |
+| 3. Section video duplikat | Dihapus dari /profil-sekolah berdasarkan konfirmasi pengguna. Video pada Tentang SMK Telkom, komponen video/galeri shared, dan aset shared tetap dipertahankan. | src/pages/TentangPage.jsx, src/data/dummyData.js. |
+| 4. Logo pendukung | Lima logo diperkecil dengan batas lebar 100/60/85/100/100 px. | src/index.css, .footer-supporter-logo-<id>. |
+| 5. Aksen footer | Susunan simetris 10 motif dan band tambahan diganti dengan 9 node native dari frame footer Figma 90:496. Pemeriksaan browser ulang masih harus diselesaikan sebelum klaim final. | src/components/Footer.jsx, src/index.css. |
 
 ## Berkas dan dependensi lokal
 
 | Berkas | Fungsi |
 | --- | --- |
-| frontend/src/components/Footer.jsx | Komponen footer lengkap; logo berada setelah ikon media sosial. |
-| frontend/src/index.css | Gutter aksen samping, band bawah pada aliran normal, dan viewport sprite logo. |
-| frontend/src/assets/footer/competition-supporters.png | Bitmap unggahan asli berukuran 1920 × 1080; tidak diedit atau dipotong. |
-| frontend/src/assets/landing/figma-section-accent.png | Aset aksen native yang sudah dipakai website. |
-| frontend/src/data/dummyData.js | footerData dan snapshot informasi resmi melalui officialContentAudit. |
-| frontend/scripts/uji-footer-supporters.mjs | Pemeriksaan render jumlah logo, nama aksesibel, tautan, dimensi PNG, serta jumlah aksen. |
+| frontend/src/components/Footer.jsx | Komponen footer lengkap; logo pendukung tetap setelah ikon media sosial. |
+| frontend/src/index.css | Canvas aksen 1847 × 350, matriks setiap node, mask, serta viewport sprite logo. |
+| frontend/src/assets/footer/competition-supporters.png | Unggahan asli 1920 × 1080, tanpa perubahan bitmap. |
+| frontend/src/assets/footer/figma-footer-mask.png | Mask native Figma yang membentuk motif Telkom. |
+| frontend/src/assets/footer/figma-footer-fill.svg | Fill native Figma #CECECE dengan fill-opacity 0.3. |
+| frontend/src/data/dummyData.js | footerData dan metadata officialContentAudit yang sudah digunakan. |
+| frontend/scripts/uji-footer-supporters.mjs | Pemeriksaan render 5 logo, 9 node, ukuran canvas, fill, dan mask. |
+| frontend/scripts/uji-galeri-fasilitas.mjs | Menjaga video utama dan galeri RPL setelah section duplikat dihapus. |
 
-Lima logo memakai satu PNG sebagai sprite CSS. Wrapper masing-masing logo menampilkan area logo dengan tambahan 2 px tepi putih agar anti-alias tetap utuh; bentuk dan warna bitmap sumber dipertahankan. Grid dua kolom menempatkan badge JHIC di tengah baris terakhir. Hanya Jagoan Hosting memiliki tujuan tautan yang sudah terverifikasi; empat logo lain tidak diberi URL yang ditebak.
+Kelima logo memakai satu PNG sebagai sprite CSS. Wrapper mempertahankan tambahan 2 px tepi putih untuk anti-alias; grid dua kolom tetap menempatkan badge JHIC di tengah baris terakhir. Tautan logo tetap mengikuti sumber yang sebelumnya diverifikasi, tanpa menambahkan tujuan baru.
 
-## Batas kesesuaian Figma
+## Ukuran lima logo
 
-Group footer Figma 24:776 memiliki 9 motif dengan penempatan yang dapat menimbulkan clipping dan overlap. Website mempertahankan keputusan simetris sebelumnya: 2 motif kiri, 2 kanan, 3 bawah kiri, dan 3 bawah kanan, sehingga totalnya 10. Aset native, arah 0° dan −90°, serta opacity efektif 0,30 dipertahankan. Posisi responsif menggunakan gutter terpisah dan band bawah pada aliran normal agar dekorasi tidak memasuki area teks.
+Dimensi merupakan batas maksimum wrapper; logo dapat lebih kecil jika kolom footer lebih sempit. Tinggi dihitung dari aspect-ratio asli viewport sprite, bukan dipaksa sama.
 
-Implementasi ini tidak diklaim pixel-perfect terhadap jumlah dan koordinat group Figma tersebut. Perbedaannya disengaja untuk memenuhi permintaan simetri dan larangan overlap; CSS tidak menambahkan aksen di dalam teks footer.
+| Logo | Batas lebar sebelumnya | Batas lebar sekarang | Tinggi pada batas baru |
+| --- | --- | --- | --- |
+| Jagoan Hosting | 100% lebar kolom, tanpa max-width | 100 px | 32.8 px |
+| KOMDIGI | 80 px | 60 px | 52.0 px |
+| Garuda Spark | 120 px | 85 px | 45.6 px |
+| NGALUP.CO | 100% lebar kolom, tanpa max-width | 100 px | 16.8 px |
+| JHIC | 140 px | 100 px | 55.2 px |
+
+## Referensi literal Figma dan batas kesesuaian
+
+Sumber saat ini adalah frame footer 90:496 pada file Figma ca2iX76GpJSr0QC7Qyv9RV. Canvas lokal berukuran 1847 × 350 px. Sembilan node berikut mengikuti urutan render yang sama dengan daftar footerAccentNodes; warna fill seluruh motif #CECECE, fill-opacity 0.3. Grup setiap motif berukuran 232.934326171875 × 232.934326171875 px.
+
+X/Y pada tabel merupakan origin translasi matriks lokal, bukan bounding box setelah rotasi. Angka desimal dan matriks lengkap dipertahankan dalam CSS di bawah.
+
+| Urutan | Node | X lokal (px) | Y lokal (px) | Orientasi CSS |
+| --- | --- | --- | --- | --- |
+| 0 | 90:508 | 274 | 222.99951171875 | 0°, epsilon native dipertahankan |
+| 1 | 90:511 | 1585 | 226.99951171875 | 0°, epsilon native dipertahankan |
+| 2 | 90:514 | 93 | 453.9345703125 | −90°, epsilon native dipertahankan |
+| 3 | 90:517 | 1404 | 457.9345703125 | −90°, epsilon native dipertahankan |
+| 4 | 90:520 | 1203 | 453.9345703125 | −90°, epsilon native dipertahankan |
+| 5 | 90:523 | 333.934326171875 | 620.9345703125 | 180°, epsilon native dipertahankan |
+| 6 | 90:536 | −140 | 0 | 0°, epsilon native dipertahankan |
+| 7 | 90:539 | 1695 | 39 | 0°, epsilon native dipertahankan |
+| 8 | 90:542 | −130 | 185 | 0°, epsilon native dipertahankan |
+
+Fill SVG berukuran 187.121 × 187.414 px, dengan offset lokal 28.31273078918457 / 13.199074745178223 px dan mask berukuran 232.934326171875 px pada kedua sumbu. Motif yang berada di luar canvas mengikuti clipping sumber; jumlah node DOM tidak sama dengan jumlah motif yang terlihat utuh. Tidak ada penambahan motif atau band yang mengubah tinggi layout.
+
+Canvas mengikuti lebar footer melalui scale(100cqw / 1847px) dan ditambatkan ke bawah footer. Pada lebar 1847 CSS px, skala canvas menjadi 1 sehingga koordinat lokal identik dengan tabel. Posisi Y absolut halaman tetap mengikuti tinggi konten website yang sudah ada, termasuk logo tambahan dan section lain; implementasi ini tidak menyatakan koordinat global halaman identik dengan Figma. Pada breakpoint lain, geometri canvas diskalakan secara proporsional, bukan mempertahankan ukuran pixel desktop.
+
+Layer aksen bersifat pointer-events:none dan aria-hidden. Konten menggunakan relative z-10 agar dekorasi tidak mengambil interaksi atau menutupi teks. Kesamaan path/mask/fill dan koordinat lokal perlu dibedakan dari jaminan pixel-perfect seluruh footer pada semua ukuran layar. Pengujian geometri serta perbandingan screenshot masih diperlukan.
 
 ## Komponen lengkap
 
-Lokasi: frontend/src/components/Footer.jsx. Komentar di JSX menjelaskan pemisahan aksen dan penambahan logo. Kontak, menu, peta, serta tautan sosial tetap dirender dari footerData yang sudah ada.
+Lokasi: frontend/src/components/Footer.jsx. Gunakan aset lokal dan footerData yang sudah tersedia di proyek.
 
 ```jsx
 import { LockKeyhole, Mail, MapPin, Phone } from 'lucide-react';
@@ -31,7 +73,7 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import footerAccent from '../assets/landing/figma-section-accent.png';
+import footerAccentFill from '../assets/footer/figma-footer-fill.svg';
 import competitionSupporters from '../assets/footer/competition-supporters.png';
 
 const socialIcons = {
@@ -47,6 +89,8 @@ const supporterLogos = [
   { id: 'ngalup', name: 'NGALUP.CO' },
   { id: 'jhic', name: 'Jagoan Hosting Innovation Competition 2026' },
 ];
+
+const footerAccentNodes = ['90:508', '90:511', '90:514', '90:517', '90:520', '90:523', '90:536', '90:539', '90:542'];
 
 const LinkColumn = ({ title, links }) => (
   <div className="min-w-0">
@@ -68,16 +112,17 @@ const LinkColumn = ({ title, links }) => (
 
 const Footer = () => (
   <footer className="site-footer bg-white">
+    {/* Native Figma mask and fill retain the original nine motifs and clipping. */}
+    <div aria-hidden="true" className="footer-accent-layer pointer-events-none select-none">
+      <div className="footer-accent-canvas" data-figma-node="90:496" data-figma-width="1847" data-figma-height="350">
+        {footerAccentNodes.map((node) => (
+          <div key={node} className="footer-accent" data-figma-node={node}>
+            <img src={footerAccentFill} alt="" className="footer-accent-shape" />
+          </div>
+        ))}
+      </div>
+    </div>
     <div className="relative pt-7 lg:pt-9">
-      {/* Area dekorasi samping tidak memasuki container teks saat layar menyempit. */}
-      <div aria-hidden="true" className="footer-accent-side footer-accent-side-left pointer-events-none select-none">
-        <img src={footerAccent} alt="" className="footer-accent" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
-      <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none">
-        <img src={footerAccent} alt="" className="footer-accent" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
 
       <div className="footer-content relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
@@ -191,20 +236,6 @@ const Footer = () => (
       </div>
     </div>
 
-    {/* Band ini mengikuti tinggi konten, bukan koordinat top tetap. */}
-    <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
-      <div className="footer-accent-group">
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
-      <div className="footer-accent-group justify-self-end">
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
-    </div>
-
     <div className="footer-bottom-bar relative bg-primary text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-[10px] sm:flex-row sm:px-6 lg:px-8">
         <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
@@ -229,13 +260,14 @@ export default Footer;
 
 ## CSS lengkap yang relevan
 
-Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dalam stylesheet proyek, bukan seluruh file index.css.
+Lokasi: frontend/src/index.css. Gantikan blok footer yang lama dengan potongan ini; jangan mengganti seluruh stylesheet.
 
 ```css
-/* Aksen footer memiliki area sendiri; zoom tidak dapat memindahkannya ke teks. */
+/* Figma footer: nine native motifs on the original 1847 × 350 canvas. */
 .site-footer {
-  --footer-accent-size: clamp(2rem, 8vw, 8rem);
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
+  position: relative;
+  container-type: inline-size;
   isolation: isolate;
 }
 
@@ -243,70 +275,68 @@ Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dala
   width: calc(100% - 2 * var(--footer-accent-gutter));
 }
 
-.footer-accent {
-  display: block;
-  width: var(--footer-accent-size);
-  height: var(--footer-accent-size);
-  max-width: none;
-  flex-shrink: 0;
-  object-fit: contain;
-  /* Export asli memuat alpha 0.68; hasil akhir mengikuti fill footer Figma 0.30. */
-  opacity: calc(0.3 / 0.68);
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
-}
-
-.footer-accent-turned {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 0);
-}
-
-/* Motif muat utuh di gutter; tidak perlu dipotong untuk menghindari teks. */
-.footer-accent-side {
+.footer-accent-layer {
   position: absolute;
-  inset-block: 0;
-  width: max(var(--footer-accent-gutter), calc((100% - 80rem) / 2));
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  justify-items: center;
-  gap: 1rem;
-  padding-inline: clamp(0.25rem, 0.8vw, 1rem);
+  inset: 0;
+  overflow: hidden;
 }
 
-.footer-accent-side-left {
+.footer-accent-canvas {
+  position: absolute;
   left: 0;
+  bottom: 0;
+  width: 1847px;
+  height: 350px;
+  transform-origin: left bottom;
+  transform: scale(calc(100cqw / 1847px));
 }
 
-.footer-accent-side-right {
-  right: 0;
+.footer-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 232.934326171875px;
+  height: 232.934326171875px;
+  transform-origin: top left;
 }
 
-.footer-accent-side .footer-accent {
-  width: min(100%, var(--footer-accent-size));
-  height: auto;
+.footer-accent-shape {
+  position: absolute;
+  left: 28.31273078918457px;
+  top: 13.199074745178223px;
+  max-width: none;
+  mask-image: url('./assets/footer/figma-footer-mask.png');
+  mask-size: 232.934326171875px 232.934326171875px;
+  mask-position: -28.31273078918457px -13.199074745178223px;
+  mask-repeat: no-repeat;
 }
 
-/* Aliran normal menempatkan motif bawah setelah daftar Menu/Kontak selesai. */
-.footer-accent-band {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  min-height: calc(var(--footer-accent-size) + 2rem);
-  gap: 1rem;
-  padding-block: 1rem;
-  /* Inset kiri/kanan sama dan tetap memberi ruang untuk tombol STELA. */
-  padding-inline: clamp(5rem, 8vw, 6rem);
+.footer-accent[data-figma-node='90:508'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 274, 222.99951171875);
 }
-
-.footer-accent-group {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.25rem;
-  width: min(100%, calc(3 * var(--footer-accent-size) + 0.5rem));
+.footer-accent[data-figma-node='90:511'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1585, 226.99951171875);
 }
-
-.footer-accent-band .footer-accent {
-  width: 100%;
-  height: auto;
+.footer-accent[data-figma-node='90:514'] {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 93, 453.9345703125);
+}
+.footer-accent[data-figma-node='90:517'] {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1404, 457.9345703125);
+}
+.footer-accent[data-figma-node='90:520'] {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1203, 453.9345703125);
+}
+.footer-accent[data-figma-node='90:523'] {
+  transform: matrix(-1, 8.742278367890322e-8, -8.742278367890322e-8, -1, 333.934326171875, 620.9345703125);
+}
+.footer-accent[data-figma-node='90:536'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -140, 0);
+}
+.footer-accent[data-figma-node='90:539'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1695, 39);
+}
+.footer-accent[data-figma-node='90:542'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -130, 185);
 }
 
 /* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.
@@ -339,6 +369,7 @@ Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dala
 
 .footer-supporter-logo-jagoan {
   aspect-ratio: 186 / 61;
+  max-width: 100px;
 }
 .footer-supporter-logo-jagoan img {
   width: 1032.258065%;
@@ -348,7 +379,7 @@ Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dala
 
 .footer-supporter-logo-komdigi {
   aspect-ratio: 128 / 111;
-  max-width: 80px;
+  max-width: 60px;
 }
 .footer-supporter-logo-komdigi img {
   width: 1500%;
@@ -358,7 +389,7 @@ Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dala
 
 .footer-supporter-logo-garuda {
   aspect-ratio: 179 / 96;
-  max-width: 120px;
+  max-width: 85px;
 }
 .footer-supporter-logo-garuda img {
   width: 1072.625698%;
@@ -368,6 +399,7 @@ Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dala
 
 .footer-supporter-logo-ngalup {
   aspect-ratio: 376 / 63;
+  max-width: 100px;
 }
 .footer-supporter-logo-ngalup img {
   width: 510.638298%;
@@ -377,7 +409,7 @@ Lokasi: frontend/src/index.css. Tambahkan atau gantikan blok footer berikut dala
 
 .footer-supporter-logo-jhic {
   aspect-ratio: 319 / 176;
-  max-width: 140px;
+  max-width: 100px;
 }
 .footer-supporter-logo-jhic img {
   width: 601.880878%;
@@ -416,28 +448,28 @@ Jalankan dari direktori frontend:
 
 ```bash
 node scripts/uji-footer-supporters.mjs
+node scripts/uji-galeri-fasilitas.mjs
 node scripts/uji-konten-resmi.mjs
 npm run lint
 npm run build
 ```
 
-Pada pemeriksaan visual, ukur .footer-supporter-logo sebagai area logo yang terlihat. Bounding box img sprite lebih besar daripada wrapper karena memuat kelima logo dan ruang putih sumber; overflow:hidden membatasi tampilannya tanpa mengubah bitmap.
+Pada pemeriksaan logo, ukur .footer-supporter-logo sebagai area yang terlihat. Bounding box img sprite lebih besar daripada wrapper karena juga memuat logo lain dan ruang putih sumber; overflow:hidden pada wrapper membatasi tampilan.
 
-## Hasil verifikasi
+## Hasil tiga putaran verifikasi
 
-| Pemeriksaan | Hasil |
-| --- | --- |
-| ESLint seluruh frontend | Lulus. |
-| Build produksi Vite | Lulus; peringatan chunk utama sekitar 584 kB tetap ada dan berada di luar lingkup perubahan footer/konten. |
-| Render footer | Tepat 5 logo bernama aksesibel dan 10 motif simetris. |
-| Bukti prestasi dengan 0/1/3/4/6 data | Tidak crash atau menduplikasi kartu; navigasi muncul hanya jika lebih dari 4 data. |
-| Footer pada lebar 390/768/911/1094/1366 CSS px | Tidak ada scroll horizontal, motif keluar viewport, atau perpotongan aksen dengan area teks. Kelima logo termuat. |
-| Simulasi skala | Lebar 1094 px dengan DPR 1,25 dan 911 px dengan DPR 1,5 lulus pemeriksaan geometri. Pengaturan display Windows tidak diubah. |
-| Empat section terkait | Profil Sekolah, BKK, Pengumuman dan rekapnya diperiksa pada 390/768/911/1094 px tanpa overflow horizontal. Prestasi diperiksa pada 390/768/1094/1366 px dengan empat foto bukti termuat. |
-| Foto alumni | Ketiga foto resmi termuat tanpa fallback gambar. |
-| Console browser lokal | Tidak ada error atau warning yang tertangkap selama pemeriksaan halaman terkait. |
-| git diff --check | Lulus. |
+Pemeriksaan berikut dijalankan pada implementasi sembilan motif ini, menggunakan preview lokal React/Vite di Chromium. Simulasi DPR bukan penggantian pengaturan Windows atau pengujian browser zoom nyata.
 
-Data prestasi yang dikelola melalui dashboard masih memuat placeholder dan satu foto yang belum tersedia. Data tersebut tetap dipertahankan sesuai keputusan pengguna sebelumnya, sehingga laporan ini tidak menyatakan seluruh informasi dan gambar di website sudah tervalidasi. Foto bukti baru dan avatar alumni memakai URL HTTPS situs resmi; jika sumber dihapus, ContentImage yang sudah ada menyediakan fallback.
+| Putaran | Pemeriksaan | Hasil |
+| --- | --- | --- |
+| 1 | Jumlah 9 node, ukuran canvas, fill #CECECE / 0.3, mask native, dan matriks setiap node terhadap metadata Figma. | Lulus SSR dan pemeriksaan source; mask PNG asli 466 × 466, fill SVG asli 187.121 × 187.414, sembilan ID sesuai. |
+| 2 | Perbandingan bentuk, clipping, posisi lokal, ukuran, urutan layer, serta keterbacaan teks pada viewport 1847 CSS px. | Screenshot dibandingkan dengan crop footer frame Beranda 90:85; delapan motif memotong area terlihat, satu berada di luar area seperti sumber. Canvas mengikuti lebar footer yang tersedia setelah scrollbar; bukan pemaksaan posisi Y halaman Figma. |
+| 3 | Breakpoint mobile/tablet/laptop dan simulasi DPR 1.25/1.5; periksa overflow, pembacaan teks, serta lima logo. | Lulus lebar 390, 768, 1094, 1366 CSS px; tidak ada overflow horizontal. Sembilan node dan lima logo termuat. Simulasi 1094/DPR 1.25 serta 1024/DPR 1.5 juga lulus. Dekorasi di bawah konten z-index 10. |
 
-Tangkapan footer lengkap tersedia di D:/LombaTelkom/qa-output/footer-supporters-complete.png. Perubahan hanya berada pada working tree; tidak ada commit atau push otomatis.
+Selisih koordinat setelah normalisasi skala tercatat paling besar 0.042 px pada canvas sumber (kurang dari 0.009 CSS px pada ukuran layar), akibat pembulatan rendering. SVG native juga membulatkan dimensi metadata ke tiga desimal. Karena tinggi konten, typography/footer grid existing, dan posisi Y seluruh halaman berbeda dari Figma, hasil ini tidak diklaim sebagai perbandingan screenshot seluruh halaman yang 100% pixel-identical. Aset, jumlah, orientasi, matriks, dan clipping lokal mengikuti sumber; layout konten tetap mengikuti website.
+
+Video utama dan galeri fasilitas shared lulus scripts/uji-galeri-fasilitas.mjs; halaman /profil-sekolah menampilkan satu tombol video utama dan tidak memuat teks section duplikat. Empat class posisi, ukuran relatif, dan transform aksen Prestasi dibandingkan dengan empat aksen kanan schoolTeachers dan identik. Pemeriksaan npm run lint, npm run build, dan SSR footer lulus. Build masih memberi peringatan chunk utama sekitar 620 kB, di luar lingkup lima perbaikan ini. Tidak ditemukan console error/warning pada preview yang diperiksa.
+
+Bukti screenshot berada di D:/LombaTelkom/qa-output/footer-after-1366.jpg dan footer-after-390.jpg; referensi Figma di footer-figma-reference.png. Pengaturan viewport, DPR, dan reduced motion sementara dikembalikan setelah pengujian.
+
+Data dashboard yang sebelumnya memakai placeholder tetap dipertahankan sesuai keputusan pengguna; tidak ada klaim seluruh informasi atau gambar website sudah tervalidasi. Ringkasan sumber resmi di atas dipertahankan sebagai provenance pekerjaan sebelumnya. Tidak ada commit atau push otomatis.

@@ -17,12 +17,21 @@ try {
   }
   assert.equal((supporters.match(/<a\b/g) ?? []).length, 1, 'Hanya URL pendukung yang terverifikasi ditautkan.');
   assert.ok(supporters.includes('href="https://www.jagoanhosting.com/"'));
-  assert.equal((html.match(/class="footer-accent(?: footer-accent-turned)?"/g) ?? []).length, 10, 'Jumlah aksen simetris tetap 2 + 2 + 3 + 3.');
+  assert.equal((html.match(/class="footer-accent"/g) ?? []).length, 9, 'Sembilan motif literal sesuai layer footer Figma.');
+  assert.ok(html.includes('data-figma-width="1847" data-figma-height="350"'));
+  assert.ok(!html.includes('footer-accent-band'), 'Tidak ada band dekoratif ekstra yang mengubah tinggi layout.');
+  for (const node of ['90:508', '90:511', '90:514', '90:517', '90:520', '90:523', '90:536', '90:539', '90:542']) {
+    assert.ok(html.includes(`data-figma-node="${node}"`), `Motif ${node} tetap ada.`);
+  }
   assert.ok(html.indexOf('Supported by') > html.indexOf('TikTok SMK Telkom Purwokerto'));
   const png = await readFile(new URL('../src/assets/footer/competition-supporters.png', import.meta.url));
   assert.equal(png.readUInt32BE(16), 1920);
   assert.equal(png.readUInt32BE(20), 1080);
-  console.log('Footer: 5 logo bernama aksesibel, URL terverifikasi, dan 10 aksen simetris terjaga.');
+  const svg = await readFile(new URL('../src/assets/footer/figma-footer-fill.svg', import.meta.url), 'utf8');
+  assert.ok(svg.includes('fill="#CECECE" fill-opacity="0.3"'), 'Fill native Figma tetap asli.');
+  const mask = await readFile(new URL('../src/assets/footer/figma-footer-mask.png', import.meta.url));
+  assert.ok(mask.length > 0, 'Mask native Figma tersedia.');
+  console.log('Footer: 5 logo bernama aksesibel, URL terverifikasi, serta 9 motif dan fill native Figma terjaga.');
 } finally {
   await server.close();
 }

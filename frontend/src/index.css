@@ -69,10 +69,11 @@ body {
   background-size: 21px 243px;
 }
 
-/* Aksen footer memiliki area sendiri; zoom tidak dapat memindahkannya ke teks. */
+/* Figma footer: nine native motifs on the original 1847 × 350 canvas. */
 .site-footer {
-  --footer-accent-size: clamp(2rem, 8vw, 8rem);
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
+  position: relative;
+  container-type: inline-size;
   isolation: isolate;
 }
 
@@ -80,70 +81,68 @@ body {
   width: calc(100% - 2 * var(--footer-accent-gutter));
 }
 
-.footer-accent {
-  display: block;
-  width: var(--footer-accent-size);
-  height: var(--footer-accent-size);
-  max-width: none;
-  flex-shrink: 0;
-  object-fit: contain;
-  /* Export asli memuat alpha 0.68; hasil akhir mengikuti fill footer Figma 0.30. */
-  opacity: calc(0.3 / 0.68);
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 0, 0);
-}
-
-.footer-accent-turned {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 0, 0);
-}
-
-/* Motif muat utuh di gutter; tidak perlu dipotong untuk menghindari teks. */
-.footer-accent-side {
+.footer-accent-layer {
   position: absolute;
-  inset-block: 0;
-  width: max(var(--footer-accent-gutter), calc((100% - 80rem) / 2));
-  display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  justify-items: center;
-  gap: 1rem;
-  padding-inline: clamp(0.25rem, 0.8vw, 1rem);
+  inset: 0;
+  overflow: hidden;
 }
 
-.footer-accent-side-left {
+.footer-accent-canvas {
+  position: absolute;
   left: 0;
+  bottom: 0;
+  width: 1847px;
+  height: 350px;
+  transform-origin: left bottom;
+  transform: scale(calc(100cqw / 1847px));
 }
 
-.footer-accent-side-right {
-  right: 0;
+.footer-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 232.934326171875px;
+  height: 232.934326171875px;
+  transform-origin: top left;
 }
 
-.footer-accent-side .footer-accent {
-  width: min(100%, var(--footer-accent-size));
-  height: auto;
+.footer-accent-shape {
+  position: absolute;
+  left: 28.31273078918457px;
+  top: 13.199074745178223px;
+  max-width: none;
+  mask-image: url('./assets/footer/figma-footer-mask.png');
+  mask-size: 232.934326171875px 232.934326171875px;
+  mask-position: -28.31273078918457px -13.199074745178223px;
+  mask-repeat: no-repeat;
 }
 
-/* Aliran normal menempatkan motif bawah setelah daftar Menu/Kontak selesai. */
-.footer-accent-band {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  min-height: calc(var(--footer-accent-size) + 2rem);
-  gap: 1rem;
-  padding-block: 1rem;
-  /* Inset kiri/kanan sama dan tetap memberi ruang untuk tombol STELA. */
-  padding-inline: clamp(5rem, 8vw, 6rem);
+.footer-accent[data-figma-node='90:508'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 274, 222.99951171875);
 }
-
-.footer-accent-group {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.25rem;
-  width: min(100%, calc(3 * var(--footer-accent-size) + 0.5rem));
+.footer-accent[data-figma-node='90:511'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1585, 226.99951171875);
 }
-
-.footer-accent-band .footer-accent {
-  width: 100%;
-  height: auto;
+.footer-accent[data-figma-node='90:514'] {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 93, 453.9345703125);
+}
+.footer-accent[data-figma-node='90:517'] {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1404, 457.9345703125);
+}
+.footer-accent[data-figma-node='90:520'] {
+  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1203, 453.9345703125);
+}
+.footer-accent[data-figma-node='90:523'] {
+  transform: matrix(-1, 8.742278367890322e-8, -8.742278367890322e-8, -1, 333.934326171875, 620.9345703125);
+}
+.footer-accent[data-figma-node='90:536'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -140, 0);
+}
+.footer-accent[data-figma-node='90:539'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1695, 39);
+}
+.footer-accent[data-figma-node='90:542'] {
+  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -130, 185);
 }
 
 /* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.
@@ -176,6 +175,7 @@ body {
 
 .footer-supporter-logo-jagoan {
   aspect-ratio: 186 / 61;
+  max-width: 100px;
 }
 .footer-supporter-logo-jagoan img {
   width: 1032.258065%;
@@ -185,7 +185,7 @@ body {
 
 .footer-supporter-logo-komdigi {
   aspect-ratio: 128 / 111;
-  max-width: 80px;
+  max-width: 60px;
 }
 .footer-supporter-logo-komdigi img {
   width: 1500%;
@@ -195,7 +195,7 @@ body {
 
 .footer-supporter-logo-garuda {
   aspect-ratio: 179 / 96;
-  max-width: 120px;
+  max-width: 85px;
 }
 .footer-supporter-logo-garuda img {
   width: 1072.625698%;
@@ -205,6 +205,7 @@ body {
 
 .footer-supporter-logo-ngalup {
   aspect-ratio: 376 / 63;
+  max-width: 100px;
 }
 .footer-supporter-logo-ngalup img {
   width: 510.638298%;
@@ -214,7 +215,7 @@ body {
 
 .footer-supporter-logo-jhic {
   aspect-ratio: 319 / 176;
-  max-width: 140px;
+  max-width: 100px;
 }
 .footer-supporter-logo-jhic img {
   width: 601.880878%;

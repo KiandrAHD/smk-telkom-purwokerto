@@ -49,12 +49,7 @@ import gedungSekolah from '../assets/drive/header-jurusan.webp';
 import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
-import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
-import robotikTiga from '../assets/tentang/fasilitas/robotik-3.png';
-import robotikDua from '../assets/tentang/fasilitas/robotik-2.png';
-import robotikSatu from '../assets/tentang/fasilitas/robotik-1.png';
 import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
-import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.webp';
 import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
@@ -407,27 +402,6 @@ export const nilaiStematel = [
     desc: 'Berkolaborasi untuk menciptakan kebersamaan.',
   },
 ];
-
-// ── Timeline ──
-// ── Profil sekolah dalam video + galeri fasilitas ──
-export const profilVideo = {
-  eyebrow: 'Profil Sekolah',
-  title: 'Lihat Langsung Suasananya',
-  description:
-    'Satu video singkat untuk mengenal gedung, laboratorium, dan keseharian belajar di SMK Telkom Purwokerto sebelum kamu datang berkunjung.',
-  video: { ...videoProfilSekolah },
-  galeriTitle: 'Fasilitas Sekolah',
-  galeriDesc: 'Ruang belajar dan laboratorium yang dipakai siswa setiap hari.',
-  galeri: [
-    { image: kelasInovasi, alt: 'Ruang kelas inovasi dengan area belajar kolaboratif' },
-    { image: ruangKelasSatu, alt: 'Ruang kelas SMK Telkom Purwokerto' },
-    { image: ruangKelasDua, alt: 'Kegiatan belajar siswa di ruang kelas' },
-    { image: laboratoriumTjkt, alt: 'Laboratorium TJKT dengan perangkat jaringan fiber optik' },
-    { image: robotikSatu, alt: 'Robot hexapod untuk praktik pemrograman dan robotik' },
-    { image: robotikDua, alt: 'Robot barista sebagai sarana praktik siswa' },
-    { image: robotikTiga, alt: 'Demonstrasi robot barista di laboratorium robotik' },
-  ],
-};
 
 // Snapshot konten resmi; jumlah artikel arsip tidak sama dengan jumlah gelar.
 export const officialContentAudit = {

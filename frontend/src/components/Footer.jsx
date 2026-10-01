@@ -3,7 +3,7 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import footerAccent from '../assets/landing/figma-section-accent.png';
+import footerAccentFill from '../assets/footer/figma-footer-fill.svg';
 import competitionSupporters from '../assets/footer/competition-supporters.png';
 
 const socialIcons = {
@@ -19,6 +19,8 @@ const supporterLogos = [
   { id: 'ngalup', name: 'NGALUP.CO' },
   { id: 'jhic', name: 'Jagoan Hosting Innovation Competition 2026' },
 ];
+
+const footerAccentNodes = ['90:508', '90:511', '90:514', '90:517', '90:520', '90:523', '90:536', '90:539', '90:542'];
 
 const LinkColumn = ({ title, links }) => (
   <div className="min-w-0">
@@ -40,16 +42,17 @@ const LinkColumn = ({ title, links }) => (
 
 const Footer = () => (
   <footer className="site-footer bg-white">
+    {/* Native Figma mask and fill retain the original nine motifs and clipping. */}
+    <div aria-hidden="true" className="footer-accent-layer pointer-events-none select-none">
+      <div className="footer-accent-canvas" data-figma-node="90:496" data-figma-width="1847" data-figma-height="350">
+        {footerAccentNodes.map((node) => (
+          <div key={node} className="footer-accent" data-figma-node={node}>
+            <img src={footerAccentFill} alt="" className="footer-accent-shape" />
+          </div>
+        ))}
+      </div>
+    </div>
     <div className="relative pt-7 lg:pt-9">
-      {/* Area dekorasi samping tidak memasuki container teks saat layar menyempit. */}
-      <div aria-hidden="true" className="footer-accent-side footer-accent-side-left pointer-events-none select-none">
-        <img src={footerAccent} alt="" className="footer-accent" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
-      <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none">
-        <img src={footerAccent} alt="" className="footer-accent" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
 
       <div className="footer-content relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
@@ -160,20 +163,6 @@ const Footer = () => (
             </a>
           </div>
         </div>
-      </div>
-    </div>
-
-    {/* Band ini mengikuti tinggi konten, bukan koordinat top tetap. */}
-    <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
-      <div className="footer-accent-group">
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent" />
-      </div>
-      <div className="footer-accent-group justify-self-end">
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent footer-accent-turned" />
-        <img src={footerAccent} alt="" className="footer-accent" />
       </div>
     </div>
 
