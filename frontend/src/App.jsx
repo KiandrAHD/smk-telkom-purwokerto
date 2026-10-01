@@ -1,7 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
-import LandingPage from './pages/LandingPage';
+
+const LandingPage = lazy(() => import('./pages/LandingPage'));
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
 const GuruPage = lazy(() => import('./pages/GuruPage'));
 const JurusanPage = lazy(() => import('./pages/JurusanPage'));
