@@ -1,6 +1,6 @@
 
 import heroPanel from '../assets/drive/header-jurusan.webp';
-import aboutVideo from '../assets/tentang/profil-video-figma.png';
+import aboutVideo from '../assets/tentang/profil-hero.jpg';
 import jurusanRpl from '../assets/drive/jurusan-rpl.png';
 import jurusanPg from '../assets/drive/jurusan-pg.webp';
 import jurusanTkj from '../assets/drive/jurusan-tkj.webp';
@@ -32,7 +32,6 @@ import showcaseRpl from '../assets/drive/jurusan-rpl.png';
 import showcasePg from '../assets/drive/jurusan-pg.webp';
 import showcaseTkj from '../assets/drive/jurusan-tkj.webp';
 import showcaseTjat from '../assets/drive/jurusan-tjat.webp';
-import praktikKabel from '../assets/drive/showcase-kabel.png';
 
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
@@ -49,12 +48,15 @@ import gedungSekolah from '../assets/drive/header-jurusan.webp';
 import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import guruGroup from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
+import kelasInovasi from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
 import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg';
+import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.webp';
 import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
 import kegiatanEkskul2 from '../assets/ekstrakurikuler/kegiatan-2.png';
 import kegiatanEkskul3 from '../assets/ekstrakurikuler/kegiatan-3.png';
+import kegiatanEkskul4 from '../assets/ekstrakurikuler/kegiatan-4.png';
 import organisasiMpk from '../assets/ekstrakurikuler/organisasi/mpk.jpg';
 import organisasiOsis from '../assets/ekstrakurikuler/organisasi/osis.jpg';
 import organisasiPaskibra from '../assets/ekstrakurikuler/organisasi/paskibra.webp';
@@ -114,7 +116,7 @@ export const navLinks = [
 // ditulis ulang di tiga tempat dan berisiko beda sendiri saat diubah.
 // Tujuannya halaman masuk portal, bukan laman info /ppdb — di sana sudah ada
 // tautan "Daftar Akun Baru" untuk pendaftar yang belum punya akun.
-export const ctaMasukPpdb = { label: 'Masuk SPMB', href: '/ppdb/masuk' };
+export const ctaMasukPpdb = { label: 'Masuk PPDB', href: '/ppdb/masuk' };
 
 export const landingHero = {
   hashtag: '#DigitalSmartSchool',
@@ -132,8 +134,8 @@ export const landingHero = {
 export const quickLinks = [
   {
     icon: 'userPlus',
-    title: 'SPMB',
-    desc: 'Informasi pendaftaran siswa baru tahun ajaran 2027/2028',
+    title: 'PPDB',
+    desc: 'Informasi pendaftaran siswa baru tahun ajaran 2026/2027',
     linkLabel: 'Daftar Sekarang',
     href: '/ppdb',
   },
@@ -159,7 +161,6 @@ export const quickLinks = [
 // Prestasi. Ganti `videoId` di sini kalau videonya diperbarui.
 export const videoProfilSekolah = {
   videoId: 'w68QaEXd7iw',
-  poster: aboutVideo,
   title: 'Video Profil SMK Telkom Purwokerto',
   desc: 'Mengenal program keahlian, fasilitas, dan keseharian belajar di SMK Telkom Purwokerto.',
 };
@@ -171,7 +172,7 @@ export const landingAbout = {
   image: aboutVideo,
   video: { ...videoProfilSekolah, poster: aboutVideo },
   badges: [
-    { title: 'Akreditasi A', desc: 'Mutu Pendidikan' },
+    { title: 'Akreditasi A', desc: 'BAN – SMK' },
     { title: 'Fasilitas Modern', desc: 'Berstandar Industri' },
     { title: 'Guru Kompeten', desc: 'Sertifikasi Industri' },
     { title: 'Kurikulum Industri', desc: 'Berbasis Project' },
@@ -262,9 +263,9 @@ export const ekstrakurikulerData = {
     { title: 'Robotik', category: 'Prestasi', description: 'Ekstrakurikuler Robotik SMK Telkom Purwokerto merupakan program kejuruan unggulan untuk mengasah keahlian masa depan di bidang otomasi dan teknologi digital.', focus: ['Elektronika dasar', 'Pemrograman', 'Otomasi', 'Pemecahan masalah'], image: fotoRobotik },
     { title: 'E-Sport', category: 'Prestasi', description: 'Ekstrakurikuler E-Sport SMK Telkom Purwokerto merupakan wadah resmi bagi siswa yang tertarik mengembangkan bakat di dunia gim kompetitif dan industri kreatif digital.', focus: ['Strategi permainan', 'Komunikasi tim', 'Pengambilan keputusan', 'Sportivitas digital'], image: fotoEsport },
     { title: 'Desain Grafis', category: 'Prestasi', description: 'Kegiatan ini mengembangkan kemampuan siswa membuat karya visual dengan prinsip desain dan perangkat digital. Siswa berlatih menyusun elemen visual untuk menyampaikan pesan secara menarik.', focus: ['Komposisi visual', 'Tipografi', 'Warna', 'Desain digital'], image: fotoDesainGrafis },
-    { title: 'Web Technologies', category: 'Prestasi', description: 'Ekskul ini mengenalkan teknologi pengembangan web, mulai dari struktur halaman hingga fitur interaktif sederhana. Kegiatannya melatih logika, kreativitas, dan kerja berbasis proyek.', focus: ['HTML dan CSS', 'Dasar JavaScript', 'Desain antarmuka', 'Proyek web'], image: jurusanRpl },
+    { title: 'Web Technologies', category: 'Prestasi', description: 'Ekskul ini mengenalkan teknologi pengembangan web, mulai dari struktur halaman hingga fitur interaktif sederhana. Kegiatannya melatih logika, kreativitas, dan kerja berbasis proyek.', focus: ['HTML dan CSS', 'Dasar JavaScript', 'Desain antarmuka', 'Proyek web'], image: kegiatanEkskul2 },
     { title: 'AI / Artificial Intelligence', category: 'Prestasi', description: 'Siswa mengenal konsep dasar kecerdasan buatan dan mencoba penerapannya melalui proyek sederhana. Kegiatan juga membahas penggunaan AI secara kritis dan bertanggung jawab.', focus: ['Konsep AI', 'Data', 'Model sederhana', 'Etika AI'], image: fotoAI },
-    { title: 'IT Software', category: 'Prestasi', description: 'Kegiatan ini mengajak siswa mempelajari proses pembuatan perangkat lunak, dari merancang solusi hingga menguji program. Siswa mengembangkan kemampuan pemecahan masalah melalui latihan dan proyek.', focus: ['Logika pemrograman', 'Perancangan aplikasi', 'Pengujian perangkat lunak', 'Pemecahan masalah'], image: jurusanRpl },
+    { title: 'IT Software', category: 'Prestasi', description: 'Kegiatan ini mengajak siswa mempelajari proses pembuatan perangkat lunak, dari merancang solusi hingga menguji program. Siswa mengembangkan kemampuan pemecahan masalah melalui latihan dan proyek.', focus: ['Logika pemrograman', 'Perancangan aplikasi', 'Pengujian perangkat lunak', 'Pemecahan masalah'], image: kegiatanEkskul4 },
     { title: 'Cyber Security (EISS)', category: 'Prestasi', description: 'Ekskul ini mengenalkan keamanan digital dan cara melindungi perangkat serta informasi. Siswa berlatih mengenali risiko siber melalui kegiatan yang aman dan bertanggung jawab.', focus: ['Keamanan akun', 'Privasi digital', 'Pengenalan ancaman siber', 'Etika keamanan'], image: kegiatanEkskul1 },
     { title: 'Information Network Cabling (INC)', category: 'Prestasi', description: 'Siswa mempelajari dasar penataan kabel dan koneksi jaringan komputer. Kegiatan praktik membantu memahami pemasangan, pengujian, dan perawatan jaringan secara aman.', focus: ['Jenis kabel jaringan', 'Konektor', 'Pemasangan kabel', 'Pengujian koneksi'], image: fotoInc },
     { title: '3D Game Art (Animasi)', category: 'Prestasi', description: 'Kegiatan ini mengembangkan keterampilan membuat aset visual tiga dimensi dan animasi untuk gim. Siswa berlatih mengolah ide menjadi karakter atau objek digital.', focus: ['Dasar pemodelan 3D', 'Desain karakter', 'Animasi', 'Aset gim'], image: fotoGameArt3d },
@@ -287,15 +288,15 @@ export const ekstrakurikulerData = {
 export const stelaData = {
   title: 'Tanyakan apa saja\nke STELA',
   description:
-    'STELA (Stematel Learning Assistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, SPMB, dan informasi lainnya seputar SMK Telkom Purwokerto',
+    'STELA (Stematel Learning Assistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto',
   ctaText: 'Tanya STELA Sekarang',
   // Sapaan pembuka dan pertanyaan contoh untuk halaman /stela. Ditaruh di sini,
   // bukan di komponen, supaya bisa diubah tanpa menyentuh kode.
   sapaan:
-    'Halo! Aku STELA, asisten SMK Telkom Purwokerto. Tanya apa saja soal jurusan, SPMB, prestasi, atau fasilitas sekolah ya.',
+    'Halo! Aku STELA, asisten SMK Telkom Purwokerto. Tanya apa saja soal jurusan, PPDB, prestasi, atau fasilitas sekolah ya.',
   saran: [
     'Apa saja jurusan di SMK Telkom Purwokerto?',
-    'Bagaimana pendaftaran SPMB 2027/2028?',
+    'Kapan PPDB gelombang 2 ditutup?',
     'Prestasi apa yang pernah diraih sekolah ini?',
     'Jurusan apa yang cocok kalau saya suka jaringan?',
   ],
@@ -316,7 +317,7 @@ export const stelaData = {
 export const ctaBanner = {
   title: 'Sudah Menemukan Jurusan yang Tepat?',
   description: 'Daftarkan dirimu sekarang dan mulai langkah pertama menuju masa depanmu!',
-  ctaText: 'Daftar SPMB Sekarang',
+  ctaText: 'Daftar PPDB Sekarang',
   href: '/ppdb',
 };
 
@@ -360,10 +361,10 @@ export const heroData = {
 
 // ── Stats Section ──
 export const aboutStats = [
-  { value: '1.030', label: 'Siswa Aktif', icon: 'users' },
-  { value: '57', label: 'Guru Profesional', icon: 'graduationCap' },
-  { value: '59', label: 'Prestasi Nasional & Internasional (2025)', icon: 'trophy' },
-  { value: '45', label: 'Ruang Kelas & Laboratorium', icon: 'building' },
+  { value: '2.200+', label: 'Siswa Aktif', icon: 'users' },
+  { value: '40+', label: 'Tenaga Pendidik', icon: 'graduationCap' },
+  { value: '120+', label: 'Mitra Industri', icon: 'building' },
+  { value: '98%', label: 'Lulusan Industri', icon: 'briefcase' },
 ];
 
 // ── About Description Section ──
@@ -375,8 +376,8 @@ export const aboutDescription = {
 
 // ── Visi & Misi ──
 export const visiMisi = {
-  visi: 'School of Global Technopreneur',
-  misi: 'Menyelenggarakan pendidikan berbasis industri yang adaptif, inovatif, dan berkarakter unggul untuk membangun peradaban Society 5.0.',
+  visi: 'Menjadi sekolah vokasi berbasis teknologi yang unggul secara akademik, berkarakter, dan berdaya saing global.',
+  misi: 'Menyelenggarakan pendidikan vokasi bermutu, mengembangkan potensi peserta didik, serta menjalin kerja sama strategis dengan dunia industri.',
 };
 
 // ── Nilai-Nilai Stematel ──
@@ -411,36 +412,49 @@ export const officialContentAudit = {
   alumniSourceUrl: 'https://smktelkom-pwt.sch.id/',
 };
 
+// ── Timeline ──
+// ── Profil sekolah dalam video + galeri fasilitas ──
+export const profilVideo = {
+  eyebrow: 'Profil Sekolah',
+  title: 'Lihat Langsung Suasananya',
+  description:
+    'Satu video singkat untuk mengenal gedung, laboratorium, dan keseharian belajar di SMK Telkom Purwokerto sebelum kamu datang berkunjung.',
+  video: { ...videoProfilSekolah, poster: gedungSekolah },
+  galeriTitle: 'Fasilitas Sekolah',
+  galeriDesc: 'Ruang belajar dan laboratorium yang dipakai siswa setiap hari.',
+  galeri: [
+    { image: kelasInovasi, alt: 'Ruang kelas inovasi dengan area belajar kolaboratif' },
+    { image: ruangKelasSatu, alt: 'Ruang kelas SMK Telkom Purwokerto' },
+    { image: ruangKelasDua, alt: 'Kegiatan belajar siswa di ruang kelas' },
+    { image: laboratoriumTjkt, alt: 'Laboratorium TKJ dengan perangkat jaringan fiber optik' },
+  ],
+};
+
 export const timelineData = [
   {
-    year: '1993',
+    year: '2012',
     title: 'Sekolah Berdiri',
-    desc: 'Didirikan dan diresmikan pada 30 Januari 1993 oleh Soesilo Soedarman, berdasarkan surat izin tanggal 22 Januari 1993.',
-    sourceUrl: 'https://smktelkom-pwt.sch.id/profil/',
+    desc: 'SMK Telkom Purwokerto didirikan di Purwokerto.',
+  },
+  {
+    year: '2016',
+    title: 'Akreditasi A',
+    desc: 'Terakreditasi A dengan standar mutu nasional.',
+  },
+  {
+    year: '2020',
+    title: 'Kerja Sama Industri',
+    desc: 'Memperluas kolaborasi dan berbagai mitra industri terkemuka.',
   },
   {
     year: '2023',
-    title: 'SMK Pusat Keunggulan',
-    desc: 'Ditetapkan sebagai SMK Pusat Keunggulan bidang Teknologi Informasi oleh Kemendikbud.',
-    sourceUrl: 'https://smktelkom-pwt.sch.id/',
-  },
-  {
-    year: '2024',
-    title: 'Prestasi di Delapan Bidang LKS',
-    desc: 'Siswa meraih kejuaraan pada delapan bidang Lomba Kompetensi Siswa 2024.',
-    sourceUrl: 'https://smktelkom-pwt.sch.id/uncategorized/stematel-boyong-medali-lks-2024/',
-  },
-  {
-    year: '2025',
-    title: 'Dua Penghargaan CABDIN AWARD',
-    desc: 'Meraih Terbaik 1 bidang kesiswaan dan Terbaik 3 transformasi digitalisasi pada CABDIN AWARD 2025.',
-    sourceUrl: 'https://smktelkom-pwt.sch.id/berita/stematel-raih-2-penghargaan-dalam-cabdin-award-2025/',
+    title: 'Digital Smart School',
+    desc: 'Transformasi digital dalam pembelajaran dan manajemen sekolah.',
   },
   {
     year: '2026',
-    title: 'IHT AI Agentic Teacher',
-    desc: 'Seluruh guru mengikuti pelatihan pemanfaatan AI untuk pembelajaran dan produktivitas pada 23–24 September 2026.',
-    sourceUrl: 'https://smktelkom-pwt.sch.id/berita/smk-telkom-purwokerto-gelar-iht-ai-agentic-teacher-guru-kembangkan-beragam-solusi-pembelajaran-berbasis-ai/',
+    title: 'AI & Future Ready',
+    desc: 'Berfokus pada AI, IoT, dan teknologi masa depan untuk generasi inovator.',
   },
 ];
 
@@ -450,10 +464,10 @@ export const kepalaSekolah = {
   title: 'Kepala SMK Telkom Purwokerto',
   image: profilKepsek,
   quote:
-    'SMK Telkom Purwokerto memasuki babak baru sebagai sekolah vokasi berbasis teknologi yang berkomitmen mencetak talenta digital berstandar global.',
+    'Kami berkomitmen untuk mencetak generasi yang tidak hanya cerdas secara akademik, tetapi juga berkarakter kuat, berkompeten, dan siap bersaing di era digital global.',
   quoteFull:
-    'Ringkasan sambutan: Kepala sekolah menekankan pembelajaran berbasis proyek, kurikulum industri, sertifikasi internasional, dan komunikasi global. Orang tua serta mitra diajak mendukung siswa agar mampu berkarya dan berkontribusi pada ekonomi digital Indonesia.',
-  ctaText: 'Baca Ringkasan',
+    'Kami berkomitmen untuk mencetak generasi yang tidak hanya cerdas secara akademik, tetapi juga berkarakter kuat, berkompeten, dan siap bersaing di era digital global. Melalui kurikulum berbasis industri, pendampingan intensif, dan budaya belajar yang kolaboratif, kami menyiapkan setiap siswa agar mampu berinovasi, beradaptasi dengan perkembangan teknologi, serta memberi manfaat nyata bagi masyarakat.',
+  ctaText: 'Sambutan Lengkap',
 };
 
 // ── Guru & Tenaga Pendidik ──
@@ -487,7 +501,7 @@ export const footerData = {
   informasi: [
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
-    { label: 'SPMB', href: '/ppdb' },
+    { label: 'PPDB', href: '/ppdb' },
     { label: 'STELA AI', href: '/stela' },
     { label: 'NextTel AI', href: '/nexttel' },
   ],
@@ -643,10 +657,10 @@ export const prestasiHero = {
 };
 
 export const prestasiStats = [
-  { value: '59', label: 'Prestasi Nasional & Internasional 2025', icon: 'trofi' },
-  { value: '139', label: 'Artikel Arsip Prestasi', icon: 'nasional' },
-  { value: '31', label: 'Artikel Prestasi 2024', icon: 'internasional' },
-  { value: '27', label: 'Artikel Prestasi 2025', icon: 'medali' },
+  { value: '150+', label: 'Total Prestasi', icon: 'trofi' },
+  { value: '50+', label: 'Tingkat Nasional', icon: 'nasional' },
+  { value: '15+', label: 'Tingkat Internasional', icon: 'internasional' },
+  { value: '100+', label: 'Juara 1', icon: 'medali' },
 ];
 
 export const prestasiUnggulan = {
@@ -744,69 +758,67 @@ export const galeriPrestasi = {
 };
 
 export const perjalananPrestasi = {
-  title: 'Rekam Publikasi Prestasi',
-  note: 'Jumlah artikel kategori prestasi pada situs resmi; bukan jumlah gelar.',
-  sourceUrl: officialContentAudit.prestasiSourceUrl,
+  title: 'Perjalanan Prestasi',
   years: [
-    { year: '2021', count: '10', label: 'Artikel' },
-    { year: '2022', count: '15', label: 'Artikel' },
-    { year: '2023', count: '14', label: 'Artikel' },
-    { year: '2024', count: '31', label: 'Artikel' },
-    { year: '2025', count: '27', label: 'Artikel' },
+    { year: '2021', count: '12', label: 'Prestasi' },
+    { year: '2022', count: '18', label: 'Prestasi' },
+    { year: '2023', count: '25', label: 'Prestasi' },
+    { year: '2024', count: '35', label: 'Prestasi' },
+    { year: '2025', count: '40+', label: 'Prestasi' },
   ],
-  defaultYear: '2025',
+  defaultYear: '2024',
 };
 
 export const hallOfFame = {
-  title: 'Bukti Prestasi',
+  title: 'Hall of Fame',
   items: [
     {
-      name: 'Muhammad Daffa Izzati',
-      achievement: 'Juara 2 Web Technology pada LKS 2024',
-      role: 'XII RPL 3 pada LKS 2024',
-      company: '',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2024/03/WhatsApp-Image-2024-03-13-at-14.58.34.jpeg',
-      imageAlt: 'Dokumentasi resmi hasil LKS 2024 SMK Telkom Purwokerto',
-      sourceUrl: 'https://smktelkom-pwt.sch.id/uncategorized/stematel-boyong-medali-lks-2024/',
+      name: 'Muhammad Iqbal',
+      achievement: 'Juara 1 LKS Nasional 2023 Web Technologies',
+      role: 'Software Engineer',
+      company: 'Tokopedia',
     },
     {
-      name: 'Tim Aicademy',
-      achievement: 'Juara 3 Nasional Jagoan Hosting Infrastructure Competition 2025',
-      role: 'Lima peserta JHIC 2025 dari SMK Telkom Purwokerto',
-      company: '',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-17-at-09.13.58.jpeg',
-      imageAlt: 'Dokumentasi resmi tim Aicademy peraih Juara 3 JHIC 2025',
-      sourceUrl: 'https://smktelkom-pwt.sch.id/berita/6197/',
+      name: 'Aisyah Nur Fadillah',
+      achievement: 'Medal Emas WorldSkills Asia 2022',
+      role: 'UI/UX Designer',
+      company: 'Traveloka',
     },
     {
-      name: 'Tim English Fest UMP 2026',
-      achievement: 'Juara 3 dan Juara Harapan tingkat nasional pada English Fest UMP 2026',
-      role: 'Enam siswa peserta Speech, Vlog, dan Scrabble',
-      company: '',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-10-at-15.52.16.jpeg',
-      imageAlt: 'Dokumentasi resmi prestasi siswa pada English Fest UMP 2026',
-      sourceUrl: 'https://smktelkom-pwt.sch.id/berita/stematel-raih-prestasi-english-fest-ump-2026/',
+      name: 'Rizky Pratama',
+      achievement: 'Juara 1 IoT Challenge Telkom 2023',
+      role: 'IoT Engineer',
+      company: 'Telkom Indonesia',
     },
     {
-      name: 'Hanif Rizki Ardianto',
-      achievement: 'Awardee Fully Funded Green Environment Leadership melalui inovasi pengolahan sampah plastik berbasis IoT',
-      role: 'XI PPLG 1 pada artikel tahun 2026',
-      company: '',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/08/Hanif-Rizki-Ardianto.jpg',
-      imageAlt: 'Dokumentasi resmi penghargaan Green Environment Leadership untuk Hanif Rizki Ardianto',
-      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/siswa-smk-telkom-purwokerto-raih-awardee-fully-funded-green-environment-leadership-berkat-inovasi-pengolahan-sampah-plastik-berbasis-iot/',
+      name: 'Dewi Anggraini',
+      achievement: 'Silver Medal Huawei ICT Competition 2023',
+      role: 'Network Engineer',
+      company: 'Huawei',
+    },
+    {
+      name: 'Bagas Nugroho',
+      achievement: 'Juara 2 Gemastik Game Development 2022',
+      role: 'Game Developer',
+      company: 'Agate',
+    },
+    {
+      name: 'Salsabila Putri',
+      achievement: 'Bronze Medal WorldSkills Asia 2023',
+      role: 'Cloud Engineer',
+      company: 'AWS',
     },
   ],
 };
 
 export const videoHighlight = {
   sectionTitle: 'Didukung & Diakui Oleh',
-  title: 'Video Profil Sekolah',
-  videoTitle: videoProfilSekolah.title,
-  videoDesc: videoProfilSekolah.desc,
+  title: 'Video Highlight',
+  videoTitle: 'Highlight Prestasi SMK Telkom Purwokerto\nTahun 2024',
+  videoDesc: 'Perjalanan, kerja keras, dan momen terbaik siswa SMK Telkom Purwokerto',
   // ponytail: memakai video profil resmi sekolah karena reel khusus prestasi
   // belum ada. Ganti `videoId` di sini begitu videonya tersedia.
-  video: { ...videoProfilSekolah },
+  video: { ...videoProfilSekolah, poster: showcaseIot },
 };
 
 /* =========================================================
@@ -978,28 +990,24 @@ export const kisahAlumni = {
   title: 'Kisah Sukses Alumni',
   items: [
     {
-      name: 'Prof. Dr. Ir. Moh. Khairudin, M.T., Ph.D.',
-      meta: 'Lulusan 1998',
-      role: 'Guru Besar Universitas Negeri Yogyakarta',
-      summary: 'Khairudin menilai pendidikan teknologi dan pembentukan karakter di sekolah menjadi bekal bagi perjalanan akademik dan kariernya.',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/aaass.jpg',
-      sourceUrl: officialContentAudit.alumniSourceUrl,
+      name: 'Rizky Pratama',
+      meta: 'Alumni RPL 2020',
+      role: 'Software Engineer di Tokopedia',
+      quote:
+        'Ilmu yang saya dapatkan di SMK Telkom Purwokerto sangat bermanfaat dalam karier saya saat ini',
     },
     {
-      name: 'Dr. Tenia Wahyuningrum, S.Kom., M.T.',
-      meta: 'Lulusan 2001',
-      role: 'Direktur Telkom University Purwokerto',
-      summary: 'Tenia menyoroti kemampuan alumni untuk bersaing dan melanjutkan pendidikan tinggi di Telkom University.',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdaddd.jpg',
-      sourceUrl: officialContentAudit.alumniSourceUrl,
+      name: 'Dewi Anggraini',
+      meta: 'Alumni TJAT 2019',
+      role: 'Network Engineer di Telkom Indonesia',
+      quote:
+        'Pembelajaran praktik dan bimbingan guru membuat saya siap menghadapi dunia kerja',
     },
     {
-      name: 'Alfa Putra Kurnia',
-      meta: 'Alumni TKJ',
-      role: 'Co-founder & CEO Arkademy.com',
-      summary: 'Alfa mengaitkan kesiapan menghadapi dunia bisnis dengan keterampilan, pengetahuan, dan sikap yang dipelajari di sekolah.',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdasd.jpg',
-      sourceUrl: officialContentAudit.alumniSourceUrl,
+      name: 'Aldo Permana',
+      meta: 'Alumni PG 2021',
+      role: 'Game Developer di Agate Studio',
+      quote: 'Sekolah ini bukan hanya mengajarkan teori, tapi juga kreativitas tanpa batas',
     },
   ],
   resources: [
@@ -1023,49 +1031,33 @@ export const pengumumanHero = {
   heading: 'Semua Kabar Resmi',
   headingAccent: 'Ada di Satu Tempat.',
   description:
-    'Jadwal SPMB, agenda sekolah, sampai pengumuman harian dikumpulkan di sini supaya tidak ada informasi penting yang terlewat.',
-  ctaText: 'Lihat Info SPMB',
+    'Jadwal PPDB, agenda sekolah, sampai pengumuman harian dikumpulkan di sini supaya tidak ada informasi penting yang terlewat.',
+  ctaText: 'Lihat Info PPDB',
   image: pengumumanHeroImg,
 };
 
 export const ppdbBanner = {
-  title: 'SPMB 2027/2028',
+  title: 'PPDB 2027',
   titleAccent: 'Resmi Dibuka!',
   // Hanya chip tanggal mulai yang berikon kalender di desain.
   chips: [
-    { label: 'Tahun Ajaran 2027/2028', icon: true },
-    { label: 'DIGITEST 1' },
+    { label: '20 Mei 2026', icon: true },
+    { label: 'Deadline 30 Juni 2026' },
   ],
   description:
-    'SPMB DIGITEST 1 Tahun Ajaran 2027/2028 telah dibuka. Lihat informasi pendaftaran dan persiapkan langkah berikutnya.',
-  ctaText: 'Lihat Pendaftaran',
+    'Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 telah resmi dibuka, Segera daftar dan bergabung bersama kami',
+  ctaText: '20 Mei 2026',
   href: '/ppdb',
 };
 
 export const infoPenting = {
-  title: 'Informasi Resmi',
+  title: 'Informasi Penting Hari ini',
   linkText: 'Lihat Semua',
   items: [
-    {
-      title: 'Hasil seleksi calon guru PPLG: psikotes online 3 Oktober 2026',
-      date: '1 Oktober 2026',
-      href: 'https://smktelkom-pwt.sch.id/pengumuman/pengumuman-hasil-seleksi-tes-tertulis-microteaching-calon-guru-pplg/',
-    },
-    {
-      title: 'SPMB DIGITEST 1 Tahun Ajaran 2027/2028 Resmi Dibuka',
-      date: '25 September 2026',
-      href: 'https://smktelkom-pwt.sch.id/pengumuman/spmb-digitest-1-ta-2027-2028-smk-telkom-purwokerto-resmi-dibuka-saatnya-jadi-bagian-dari-nextgens-stematel/',
-    },
-    {
-      title: 'STEMATEL Next Pathway: tiga jalur pendidikan, karier, dan wirausaha',
-      date: '24 September 2026',
-      href: 'https://smktelkom-pwt.sch.id/pengumuman/stematel-next-pathway-hadirkan-tiga-jalur-untuk-membentuk-masa-depan-siswa/',
-    },
-    {
-      title: 'Pendaftaran guru Pengembangan Gim ditutup pada 29 September 2026',
-      date: '23 September 2026',
-      href: 'https://smktelkom-pwt.sch.id/pengumuman/lowongan-pekerjaan-guru-produktif-pengembangan-gim-smk-telkom-purwokerto/',
-    },
+    'PPDB Gelombang 2 Resmi Dibuka',
+    'Workshop AI Untuk Siswa Besok',
+    'Deadline LKS 3 Hari Lagi',
+    'Libur Nasional Minggu Depan',
   ],
 };
 
@@ -1075,10 +1067,10 @@ export const infoPenting = {
 // Prestasi, dan BKK. Kolom `desc` ikut dibuang bersama PengumumanStatsSection:
 // bilah hero hanya menampilkan angka dan labelnya.
 export const pengumumanStats = [
-  { value: '259', label: 'Artikel Arsip Pengumuman Resmi', icon: 'megaphone' },
-  { value: '1', label: 'Artikel Terbit 1 Oktober 2026', icon: 'kalender' },
-  { value: '1', label: 'Artikel Pekan 28 Sep–4 Okt 2026', icon: 'alarm' },
-  { value: '2027/2028', label: 'Tahun Ajaran SPMB', icon: 'agenda' },
+  { value: '45', label: 'Total Pengumuman', icon: 'megaphone' },
+  { value: '12', label: 'Event & Kegiatan', icon: 'kalender' },
+  { value: '5', label: 'Deadline Terdekat', icon: 'alarm' },
+  { value: '8', label: 'Agenda Minggu Ini', icon: 'agenda' },
 ];
 
 export const pengumumanFilter = {
@@ -1089,12 +1081,12 @@ export const pengumumanFilter = {
 };
 
 export const pengumumanTimeline = {
-  linkText: 'Lihat Rekap',
+  linkText: 'Lihat Time Line Lengkap',
   items: [
-    { label: 'Arsip Resmi', count: '259 Artikel' },
-    { label: '1 Oktober 2026', count: '1 Artikel' },
-    { label: '28 Sep–4 Okt 2026', count: '1 Artikel' },
-    { label: 'Oktober 2026', count: '1 Artikel' },
+    { label: 'Hari Ini', count: '3 Pengumuman' },
+    { label: 'Besok', count: '4 Pengumuman' },
+    { label: 'Minggu Ini', count: '8 Pengumuman' },
+    { label: 'Bulan Ini', count: '15 Pengumuman' },
   ],
 };
 
@@ -1232,9 +1224,9 @@ export const jurusanDetail = [
       { role: 'Quality Assurance', desc: 'Menguji perangkat lunak agar bebas cacat sebelum sampai ke pengguna.' },
     ],
     galeri: [
-      { image: showcaseRpl, alt: 'Siswa menggunakan komputer untuk pemrograman' },
-      { image: kegiatanEkskul1, alt: 'Siswa berdiskusi dan belajar menggunakan laptop' },
-      { image: ruangKelasSatu, alt: 'Ruang kelas SMK Telkom Purwokerto' },
+      { image: showcaseRpl, alt: 'Aplikasi web karya siswa RPL' },
+      { image: labKomputer, alt: 'Laboratorium RPL dengan komputer spesifikasi pengembangan' },
+      { image: heroPanel, alt: 'Siswa RPL mengerjakan proyek secara berkelompok' },
     ],
   },
   {
@@ -1281,9 +1273,9 @@ export const jurusanDetail = [
       { role: 'Game Tester', desc: 'Menemukan cacat dan bagian yang membingungkan sebelum game dirilis.' },
     ],
     galeri: [
-      { image: showcasePg, alt: 'Siswa mencoba perangkat VR di kelas pengembangan gim' },
-      { image: fotoGameArt3d, alt: 'Kegiatan 3D Game Art dan animasi' },
-      { image: ruangKelasSatu, alt: 'Ruang kelas SMK Telkom Purwokerto' },
+      { image: showcasePg, alt: 'Permainan buatan siswa Pengembangan Game' },
+      { image: laboratoriumTjkt, alt: 'Foto ilustrasi: peralatan praktik fiber optik di laboratorium sekolah' },
+      { image: heroPanel, alt: 'Sesi playtest permainan bersama pemain' },
     ],
   },
   {
@@ -1330,9 +1322,9 @@ export const jurusanDetail = [
       { role: 'IT Support', desc: 'Menangani kebutuhan perangkat dan jaringan pengguna di kantor.' },
     ],
     galeri: [
-      { image: kegiatanEkskul3, alt: 'Siswa memasang kabel pada rak jaringan' },
-      { image: fotoInc, alt: 'Kegiatan pemasangan kabel jaringan' },
-      { image: laboratoriumTjkt, alt: 'Peralatan praktik fiber optik di laboratorium sekolah' },
+      { image: showcaseTkj, alt: 'Foto ilustrasi: dua siswa membawa perangkat komputer' },
+      { image: heroPanel, alt: 'Siswa TKJ praktik konfigurasi jaringan di kelas' },
+      { image: labKomputer, alt: 'Praktik administrasi server oleh siswa TKJ' },
     ],
   },
   {
@@ -1379,9 +1371,9 @@ export const jurusanDetail = [
       { role: 'Survey Technician', desc: 'Memetakan jalur dan menghitung kebutuhan material sebelum pemasangan.' },
     ],
     galeri: [
-      { image: praktikKabel, alt: 'Siswa praktik pemasangan kabel dengan perlengkapan keselamatan' },
-      { image: showcaseTjat, alt: 'Siswa memanjat menara telekomunikasi dengan perlengkapan keselamatan' },
-      { image: laboratoriumTjkt, alt: 'Peralatan praktik fiber optik di laboratorium sekolah' },
+      { image: showcaseTjat, alt: 'Praktik penyambungan kabel fiber optic' },
+      { image: heroPanel, alt: 'Siswa TJAT berlatih pengukuran jalur fiber' },
+      { image: labKomputer, alt: 'Simulasi jaringan akses FTTH di laboratorium' },
     ],
   },
 ];
@@ -2072,7 +2064,7 @@ export const beritaHero = {
     'Ikuti semua informasi terkini tentang prestasi, kegiatan, event, dan inovasi di SMK Telkom Purwokerto',
   ctaText: 'Jelajahi Berita',
   image: heroBerita,
-  imageAlt: 'Maket proyek Smart Home karya siswa kelas XII TJKT 4',
+  imageAlt: 'Maket proyek Smart Home karya siswa kelas XII TKJ 4',
 };
 
 export const breakingNews = {
@@ -2237,8 +2229,10 @@ export const kategoriBerita = {
   ],
 };
 
+// CATATAN: di Figma judul kolom event dan kolom newsletter dua-duanya tertulis
+// "Kategori Berita" (hasil salin dari section di atasnya). Ditiru sesuai desain.
 export const agendaEvent = {
-  title: 'Agenda Sekolah',
+  title: 'Kategori Berita',
   linkText: 'Lihat Semua',
   ctaText: 'Lihat Semua Event',
   items: [
@@ -2280,7 +2274,7 @@ export const galeriKegiatan = {
 };
 
 export const newsletterBerita = {
-  title: 'Newsletter',
+  title: 'Kategori Berita',
   heading: 'Dapatkan Berita Terbaru',
   description:
     'Berlangganan newsletter kami untuk mendapatkan update berita dan informasi terbaru.',
@@ -2360,7 +2354,7 @@ export const adminPendaftar = [
     id: 1,
     nama: 'Rizky Pratama',
     asalSekolah: 'SMP Negeri 1 Purwokerto',
-    program: 'PPLG',
+    program: 'RPL',
     tanggal: '2025-05-25',
     status: 'Diverifikasi',
     tempatLahir: 'Purwokerto',
@@ -2370,14 +2364,14 @@ export const adminPendaftar = [
     alamat: 'Jl. Merdeka No. 10, Purwokerto',
     telepon: '0812-3456-7890',
     email: 'rizky.pratama@email.com',
-    pilihan1: 'PPLG',
-    pilihan2: 'TJKT',
+    pilihan1: 'RPL',
+    pilihan2: 'TKJ',
   },
   {
     id: 2,
     nama: 'Salsabila Azzahra',
     asalSekolah: 'SMP Muhammadiyah 2',
-    program: 'TJKT',
+    program: 'TKJ',
     tanggal: '2025-05-25',
     status: 'Belum Diverifikasi',
     tempatLahir: 'Banyumas',
@@ -2387,14 +2381,14 @@ export const adminPendaftar = [
     alamat: 'Jl. Gatot Subroto No. 22, Banyumas',
     telepon: '0813-2244-8899',
     email: 'salsabila.azzahra@email.com',
-    pilihan1: 'TJKT',
-    pilihan2: 'PPLG',
+    pilihan1: 'TKJ',
+    pilihan2: 'RPL',
   },
   {
     id: 3,
     nama: 'Fajar Maulana',
     asalSekolah: 'SMP Negeri 3 Purwokerto',
-    program: 'DKV',
+    program: 'PG',
     tanggal: '2025-05-24',
     status: 'Diverifikasi',
     tempatLahir: 'Purbalingga',
@@ -2404,14 +2398,14 @@ export const adminPendaftar = [
     alamat: 'Jl. Ahmad Yani No. 5, Purbalingga',
     telepon: '0857-1122-3344',
     email: 'fajar.maulana@email.com',
-    pilihan1: 'DKV',
-    pilihan2: 'PPLG',
+    pilihan1: 'PG',
+    pilihan2: 'RPL',
   },
   {
     id: 4,
     nama: 'Nadya Putri',
     asalSekolah: 'SMP Islam Al Ayyubi',
-    program: 'AKL',
+    program: 'TKJ',
     tanggal: '2025-05-24',
     status: 'Belum Diverifikasi',
     tempatLahir: 'Cilacap',
@@ -2421,14 +2415,14 @@ export const adminPendaftar = [
     alamat: 'Jl. Diponegoro No. 41, Cilacap',
     telepon: '0895-6677-1200',
     email: 'nadya.putri@email.com',
-    pilihan1: 'AKL',
-    pilihan2: 'DKV',
+    pilihan1: 'TKJ',
+    pilihan2: 'PG',
   },
   {
     id: 5,
     nama: 'Daffa Alfarizi',
     asalSekolah: 'SMP Negeri 2 Purwokerto',
-    program: 'PPLG',
+    program: 'RPL',
     tanggal: '2025-05-23',
     status: 'Diverifikasi',
     tempatLahir: 'Purwokerto',
@@ -2438,14 +2432,14 @@ export const adminPendaftar = [
     alamat: 'Jl. S. Parman No. 88, Purwokerto',
     telepon: '0821-9090-1122',
     email: 'daffa.alfarizi@email.com',
-    pilihan1: 'PPLG',
-    pilihan2: 'TJKT',
+    pilihan1: 'RPL',
+    pilihan2: 'TKJ',
   },
   {
     id: 6,
     nama: 'Aisyah Nur Fadillah',
     asalSekolah: 'SMP Negeri 5 Purwokerto',
-    program: 'DKV',
+    program: 'PG',
     tanggal: '2025-05-23',
     status: 'Belum Diverifikasi',
     tempatLahir: 'Purwokerto',
@@ -2455,14 +2449,14 @@ export const adminPendaftar = [
     alamat: 'Jl. Sudirman No. 17, Purwokerto',
     telepon: '0838-4455-6677',
     email: 'aisyah.nur@email.com',
-    pilihan1: 'DKV',
-    pilihan2: 'AKL',
+    pilihan1: 'PG',
+    pilihan2: 'TKJ',
   },
   {
     id: 7,
     nama: 'Bagas Nugroho',
     asalSekolah: 'SMP Negeri 4 Purwokerto',
-    program: 'TJKT',
+    program: 'TKJ',
     tanggal: '2025-05-22',
     status: 'Diverifikasi',
     tempatLahir: 'Banjarnegara',
@@ -2472,14 +2466,14 @@ export const adminPendaftar = [
     alamat: 'Jl. Pemuda No. 3, Banjarnegara',
     telepon: '0812-7788-9911',
     email: 'bagas.nugroho@email.com',
-    pilihan1: 'TJKT',
-    pilihan2: 'PPLG',
+    pilihan1: 'TKJ',
+    pilihan2: 'RPL',
   },
   {
     id: 8,
     nama: 'Salma Khairunnisa',
     asalSekolah: 'SMP Muhammadiyah 1',
-    program: 'AKL',
+    program: 'TKJ',
     tanggal: '2025-05-22',
     status: 'Belum Diverifikasi',
     tempatLahir: 'Kebumen',
@@ -2489,8 +2483,8 @@ export const adminPendaftar = [
     alamat: 'Jl. Veteran No. 60, Kebumen',
     telepon: '0896-3322-1144',
     email: 'salma.khairunnisa@email.com',
-    pilihan1: 'AKL',
-    pilihan2: 'DKV',
+    pilihan1: 'TKJ',
+    pilihan2: 'PG',
   },
 ];
 
@@ -2559,10 +2553,10 @@ export const adminPengaturanUmum = {
 
 export const ppdbMeta = {
   namaSekolah: 'SMK Telkom Purwokerto',
-  sistem: 'Sistem SPMB 2027/2028',
-  portal: 'Portal SPMB 2027/2028',
+  sistem: 'PPDB System 2027/2028',
+  portal: 'Portal PPDB 2027',
   tahun: '2027',
-  hakCipta: `© ${new Date().getFullYear()} SMK Telkom Purwokerto. All Rights Reserved.`,
+  hakCipta: '© 2027 SMK Telkom Purwokerto. All Rights Reserved.',
   // 0812-2970-1800. Format wa.me memakai kode negara tanpa 0 dan tanpa
   // tanda baca: 0812... menjadi 62812...
   waHelpdesk: 'https://wa.me/6281229701800',
@@ -2579,7 +2573,7 @@ export const ppdbPanelDaftar = {
     { icon: 'kirim', teks: 'Notifikasi kelulusan via WhatsApp & Portal' },
   ],
   bantuanLabel: 'Butuh bantuan?',
-  bantuanTeks: 'CS SPMB Telkom',
+  bantuanTeks: 'CS PPDB Telkom',
 };
 
 export const ppdbPanelMasuk = {
@@ -2592,12 +2586,12 @@ export const ppdbPanelMasuk = {
   bantuanTeks: 'Bantuan Login',
 };
 
-// Nama jurusan mengikuti penamaan kurikulum terbaru, sama dengan panel admin.
+// Nama jurusan resmi SMK Telkom Purwokerto (4 program keahlian).
 export const ppdbJurusanPilihan = [
-  'PPLG (Pengembangan Perangkat Lunak dan Gim)',
-  'TJKT (Teknik Jaringan Komputer dan Telekomunikasi)',
-  'DKV (Desain Komunikasi Visual)',
-  'AKL (Akuntansi dan Keuangan Lembaga)',
+  'Rekayasa Perangkat Lunak (RPL)',
+  'Pengembangan Gim (PG)',
+  'Teknik Komputer dan Jaringan (TKJ)',
+  'Teknik Jaringan Akses Telekomunikasi (TJAT)',
 ];
 
 export const ppdbVerifikasi = {
@@ -2661,7 +2655,7 @@ export const ppdbLangkahPortal = [
 export const ppdbSukses = {
   judul: 'Pendaftaran Berhasil Disubmit!',
   pesan:
-    'Terima kasih telah melengkapi seluruh rangkaian data dan berkas. Data Anda saat ini berada di dalam antrean verifikasi oleh panitia SPMB SMK Telkom Purwokerto.',
+    'Terima kasih telah melengkapi seluruh rangkaian data dan berkas. Data Anda saat ini berada di dalam antrean verifikasi oleh panitia PPDB SMK Telkom Purwokerto.',
   kartu: [
     // nilai null diisi nomor registrasi hasil submit, bukan ditulis di sini
     { label: 'Nomor Registrasi', nilai: null, catatan: 'Aktif & Terdaftar', titikCatatan: 'hijau' },
@@ -2683,7 +2677,7 @@ export const ppdbSukses = {
   langkah: [
     {
       icon: 'cetak',
-      judul: 'Cetak Kartu Peserta SPMB',
+      judul: 'Cetak Kartu Peserta PPDB',
       deskripsi: 'Unduh bukti pendaftaran format PDF',
     },
     {
@@ -2693,7 +2687,7 @@ export const ppdbSukses = {
     },
   ],
   bantuanTeks: 'Butuh bantuan atau ada kesalahan input data?',
-  bantuanCta: 'Hubungi Panitia SPMB via WhatsApp',
+  bantuanCta: 'Hubungi Panitia PPDB via WhatsApp',
 };
 
 // Dipakai header portal setelah calon siswa masuk.
@@ -2712,7 +2706,7 @@ export const ppdbAkunContoh = {
 /* ── Agenda kegiatan: /berita/agenda/:slug ── */
 export const agendaDetail = [
   {
-    slug: 'seminar-cyber-security-bersama-telkom',
+    slug: 'semianar-cyber-security-bersama-telkom',
     kategori: 'Event',
     title: 'Seminar Cyber Security bersama Telkom',
     subtitle: 'Aula SMK Telkom Purwokerto, 24 Mei',
@@ -2813,7 +2807,7 @@ export const galeriDetail = [
     ],
     facts: [
       { label: 'Ruang', value: 'Studio Multimedia' },
-      { label: 'Dipakai oleh', value: 'Jurusan PG dan DKV' },
+      { label: 'Dipakai oleh', value: 'Jurusan PG dan PG' },
     ],
   },
   {
@@ -3000,7 +2994,7 @@ export const pklDetailLengkap = [
       { label: 'Perusahaan', value: 'Huawei Indonesia' },
       { label: 'Lokasi', value: 'Belum diverifikasi' },
       { label: 'Kuota', value: '6 siswa' },
-      { label: 'Jurusan disarankan', value: 'PPLG dan RPL' },
+      { label: 'Jurusan disarankan', value: 'RPL dan RPL' },
     ],
   },
 ];
@@ -3379,7 +3373,7 @@ export const perbandinganLengkap = {
 /* ── Ketentuan PPDB: /ketentuan-ppdb ── */
 export const ketentuanPpdb = {
   eyebrow: 'Dokumen Resmi',
-  title: 'Ketentuan SPMB SMK Telkom Purwokerto',
+  title: 'Ketentuan PPDB SMK Telkom Purwokerto',
   deskripsi: 'Ketentuan yang berlaku bagi seluruh calon peserta didik pada Penerimaan Peserta Didik Baru tahun ajaran 2027/2028.',
   diperbarui: 'Diperbarui 20 Mei 2026',
   bagian: [
@@ -3406,7 +3400,7 @@ export const ketentuanPpdb = {
       butir: [
         'Seluruh data yang diisikan harus benar dan dapat dipertanggungjawabkan.',
         'Data yang terbukti tidak benar dapat menggugurkan pendaftaran, termasuk setelah dinyatakan diterima.',
-        'Perubahan data setelah pendaftaran dikirim hanya dapat dilakukan lewat panitia SPMB.',
+        'Perubahan data setelah pendaftaran dikirim hanya dapat dilakukan lewat panitia PPDB.',
         'Satu calon peserta didik hanya diperbolehkan memiliki satu akun pendaftaran.',
       ],
     },
@@ -3414,21 +3408,21 @@ export const ketentuanPpdb = {
       judul: 'Perlindungan Data Pribadi',
       butir: [
         'Data yang dikumpulkan hanya digunakan untuk keperluan seleksi dan administrasi penerimaan.',
-        'Berkas pendaftaran tidak dibagikan ke pihak lain di luar kepentingan penyelenggaraan SPMB.',
+        'Berkas pendaftaran tidak dibagikan ke pihak lain di luar kepentingan penyelenggaraan PPDB.',
         'Pendaftar berhak meminta penghapusan data apabila membatalkan pendaftaran.',
       ],
     },
     {
       judul: 'Pengumuman Hasil',
       butir: [
-        'Hasil seleksi diumumkan melalui portal SPMB dan pemberitahuan WhatsApp.',
+        'Hasil seleksi diumumkan melalui portal PPDB dan pemberitahuan WhatsApp.',
         'Keputusan panitia bersifat final dan tidak dapat diganggu gugat.',
         'Peserta yang dinyatakan diterima wajib melakukan daftar ulang sesuai jadwal.',
       ],
     },
   ],
   kontakTeks: 'Ada bagian yang belum jelas?',
-  kontakCta: 'Hubungi Panitia SPMB',
+  kontakCta: 'Hubungi Panitia PPDB',
 };
 
 /* ── Lupa sandi: /lupa-sandi ── */
@@ -3444,20 +3438,20 @@ export const lupaSandi = {
   catatan: [
     'Pastikan alamat email yang dimasukkan sama dengan yang dipakai saat pendaftaran.',
     'Tautan pemulihan memiliki masa berlaku terbatas. Jika kedaluwarsa, minta tautan baru.',
-    'Bila email pendaftaran sudah tidak aktif, hubungi panitia SPMB untuk penggantian.',
+    'Bila email pendaftaran sudah tidak aktif, hubungi panitia PPDB untuk penggantian.',
   ],
 };
 
 /* ── Dokumen peserta: /ppdb/dokumen-peserta ── */
 export const dokumenPeserta = {
   eyebrow: 'Berkas Peserta',
-  title: 'Dokumen Peserta SPMB',
+  title: 'Dokumen Peserta PPDB',
   deskripsi:
     'Kartu peserta dan jadwal seleksi untuk dibawa saat mengikuti tahapan tes. Simpan atau cetak sebelum hari pelaksanaan.',
-  kartuJudul: 'Kartu Peserta SPMB',
+  kartuJudul: 'Kartu Peserta PPDB',
   kartuCatatan: 'Tunjukkan kartu ini saat registrasi ulang dan pelaksanaan tes.',
   berkas: [
-    { icon: 'cetak', judul: 'Kartu Peserta SPMB', deskripsi: 'Bukti pendaftaran resmi, format PDF' },
+    { icon: 'cetak', judul: 'Kartu Peserta PPDB', deskripsi: 'Bukti pendaftaran resmi, format PDF' },
     { icon: 'jadwal', judul: 'Jadwal Seleksi', deskripsi: 'Tanggal tes tertulis dan wawancara' },
     { icon: 'panduan', judul: 'Panduan Tes Seleksi', deskripsi: 'Materi yang diujikan dan tata tertib' },
   ],

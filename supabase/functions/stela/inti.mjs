@@ -107,7 +107,7 @@ export const ANGGARAN_KONTEKS = {
   // artinya hanya SATU pertanyaan per menit. 3.000 memberi ~3.500, jadi dua
   // pertanyaan per menit masih lolos. Untuk situs yang ramai, Gemini jauh
   // lebih longgar.
-  groq: 3000,
+  groq: 2999,
 };
 
 // Groq dan 9Router berbicara format OpenAI.
