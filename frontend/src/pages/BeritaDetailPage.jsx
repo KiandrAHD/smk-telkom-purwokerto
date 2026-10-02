@@ -1,6 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
 import BeritaDetailKonten from '../components/berita/BeritaDetailKonten';
 import MainLayout from '../layouts/MainLayout';
@@ -9,6 +9,8 @@ import { toBeritaItem } from '../utils/publicContent';
 
 const BeritaDetail = ({ slug }) => {
   const { t } = useLanguage();
+  const [searchParams] = useSearchParams();
+  const fromGallery = searchParams.get('from') === 'galeri';
 
   const [item, setItem] = useState(null);
   const [related, setRelated] = useState([]);
@@ -35,7 +37,7 @@ const BeritaDetail = ({ slug }) => {
   if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t(error || 'Berita tidak ditemukan.')}</p></MainLayout>;
 
   return (
-    <DetailLayout item={item} backTo="/berita" backLabel={t("Berita")}>
+    <DetailLayout item={item} backTo={fromGallery ? '/galeri' : '/berita'} backLabel={t(fromGallery ? 'Galeri' : 'Berita')}>
       <BeritaDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );

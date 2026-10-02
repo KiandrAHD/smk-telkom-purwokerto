@@ -3,16 +3,16 @@ import { useState } from "react";
 import { Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
-  agendaEvent,
   galeriKegiatan,
   newsletterBerita,
 } from "../../data/dummyData";
-import { slugify } from "../../utils/slug";
+import { formatPublicDate, getBeritaCategories, getBeritaGallery } from '../../utils/publicContent';
+import ContentImage from '../ContentImage';
 
-// Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard. Di sini ada DUA
-// tautan yang menunjuk ke /berita/agenda, jadi keduanya ikut dimatikan.
-const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
-  const { t } = useLanguage();
+const BeritaAgendaSection = ({ items = [], tampilkanLihatSemua = true }) => {
+  const { t, locale } = useLanguage();
+  const categories = getBeritaCategories(items);
+  const gallery = getBeritaGallery(items);
 
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
@@ -24,59 +24,54 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
   };
 
   return (
-    <section className="bg-white py-8 lg:py-12">
+    <section aria-label={t('Kategori dan galeri berita')} className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 gap-5 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
-        {/* Agenda event */}
+        {/* Kategori berasal dari berita yang sedang ditampilkan. */}
         <div className="rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-heading text-sm font-extrabold text-dark-900">
-              {t(agendaEvent.title)}
+              {t('Kategori Berita')}
             </h2>
             {tampilkanLihatSemua && (
               <Link
-                to="/berita/agenda"
+                to="/berita#kategori-berita"
                 className="text-[10px] font-bold text-primary hover:underline"
               >
-                {t(agendaEvent.linkText)}
+                {t('Lihat Semua')}
               </Link>
             )}
           </div>
 
           <ul className="mt-4 space-y-3">
-            {agendaEvent.items.map((ev) => (
-              <li key={ev.title}>
-                <Link
-                  to={`/berita/agenda/${slugify(ev.title)}`}
-                  className="flex items-center gap-3 rounded-xl border border-dark-100 px-3 py-2.5 transition-colors hover:border-primary"
-                >
-                  <span className="flex w-9 flex-shrink-0 flex-col items-center">
-                    <span className="font-heading text-base font-extrabold leading-none text-primary">
-                      {ev.day}
-                    </span>
-                    <span className="text-[8px] text-primary">{t(ev.month)}</span>
+            {categories.map((category) => (
+              <li key={category.name} className="rounded-xl border border-dark-100 px-3 py-2.5">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="font-heading text-xs font-bold text-dark-900">{category.name}</h3>
+                  <span className="rounded bg-primary-50 px-2 py-1 text-[9px] font-bold text-primary">
+                    {t('{count} berita', { count: category.items.length })}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block font-heading text-[10px] font-bold leading-snug text-dark-900">
-                      {t(ev.title)}
-                    </span>
-                    <span className="block text-[8px] text-dark-400">
-                      {t(ev.venue)}
-                    </span>
-                  </span>
-                  <span className="flex-shrink-0 rounded bg-primary-50 px-2 py-1 text-[8px] font-bold text-primary">
-                    {t(ev.tag)}
-                  </span>
-                </Link>
+                </div>
+                <ul className="mt-2 space-y-2">
+                  {category.items.map((item) => (
+                    <li key={item.slug}>
+                      <Link to={`/berita/${item.slug}`} className="block text-[10px] font-semibold leading-snug text-dark-700 hover:text-primary hover:underline">
+                        {item.title}
+                      </Link>
+                      <p className="mt-1 text-[9px] text-dark-400">{formatPublicDate(item.iso, {}, locale)}</p>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
+          {categories.length === 0 && <p className="mt-4 text-xs text-dark-500">{t('Tidak ada berita yang cocok dengan filter itu.')}</p>}
 
           {tampilkanLihatSemua && (
             <Link
-              to="/berita/agenda"
+              to="/berita#kategori-berita"
               className="mt-4 inline-block text-[10px] font-bold text-primary hover:underline"
             >
-              {t(agendaEvent.ctaText)}
+              {t('Lihat Semua Berita')}
             </Link>
           )}
         </div>
@@ -96,21 +91,23 @@ const BeritaAgendaSection = ({ tampilkanLihatSemua = true }) => {
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-3">
-            {galeriKegiatan.items.map((g) => (
+            {gallery.map((g) => (
               <Link
-                key={g.alt}
-                to={`/galeri/${slugify(g.alt)}?from=berita`}
+                key={g.slug}
+                to={`/berita/${g.slug}?from=galeri`}
                 className="group block overflow-hidden rounded-lg"
               >
-                <img
+                <ContentImage
                   src={g.image}
-                  alt={t(g.alt)}
+                  alt={g.title}
                   loading="lazy"
                   className="aspect-[4/3] w-full rounded-lg object-cover object-top transition-transform duration-500 group-hover:scale-110"
                 />
+                <span className="mt-1.5 block text-[10px] font-semibold leading-snug text-dark-700 group-hover:text-primary">{g.title}</span>
               </Link>
             ))}
           </div>
+          {gallery.length === 0 && <p className="mt-4 text-xs text-dark-500">{t('Belum ada foto berita yang ditampilkan.')}</p>}
         </div>
 
         {/* Langganan newsletter */}

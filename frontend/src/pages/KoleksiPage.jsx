@@ -80,9 +80,10 @@ const KOLEKSI = {
   },
   'berita-agenda': {
     eyebrow: 'Berita',
-    title: 'Agenda Sekolah',
-    deskripsi: 'Informasi kegiatan dan acara sekolah. Periksa tanggal pada setiap agenda.',
+    title: 'Kategori Berita',
+    deskripsi: 'Kategori dan dokumentasi dari berita sekolah yang sudah diterbitkan.',
     Section: BeritaAgendaSection,
+    sumber: 'berita',
     kembali: { to: '/berita', label: 'Berita' },
   },
   'prestasi-galeri': {

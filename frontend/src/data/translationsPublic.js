@@ -1,4 +1,11 @@
 export default {
+  'Kategori dan galeri berita': 'News categories and gallery',
+  'Lihat Semua Berita': 'View All News',
+  '{count} berita': '{count} news articles',
+  'Belum ada foto berita yang ditampilkan.': 'There are no photos for the displayed news.',
+  'foto berita': 'news photos',
+  'Foto kegiatan dari berita sekolah yang sudah diterbitkan, diurutkan dari yang terbaru.': 'Activity photos from published school news, ordered from newest to oldest.',
+  'Kategori dan dokumentasi dari berita sekolah yang sudah diterbitkan.': 'Categories and documentation from published school news.',
   'lowongan aktif': 'active vacancies',
   berita: 'news',
   pengumuman: 'announcements',

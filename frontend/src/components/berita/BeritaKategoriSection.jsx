@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { kategoriBerita } from '../../data/dummyData';
 import ContentImage from '../ContentImage';
 
-const BeritaKategoriSection = ({ items = [] }) => {
+const BeritaKategoriSection = ({ items = [], children }) => {
   const { t, locale } = useLanguage();
 
   const [chip, setChip] = useState('Semua');
@@ -52,6 +52,7 @@ const BeritaKategoriSection = ({ items = [] }) => {
   };
 
   return (
+    <>
     <section id="kategori-berita" className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
@@ -181,6 +182,9 @@ const BeritaKategoriSection = ({ items = [] }) => {
         </p>
       </div>
     </section>
+    {/* Teruskan hasil yang terlihat tanpa menyimpan salinan state di halaman induk. */}
+    {children?.(shown)}
+    </>
   );
 };
 

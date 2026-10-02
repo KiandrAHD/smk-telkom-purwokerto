@@ -36,8 +36,11 @@ const BeritaPage = () => {
       </div>
       <Reveal><BeritaSorotSection items={items} /></Reveal>
       <RibbonDivider />
-      <Reveal><BeritaKategoriSection items={items} /></Reveal>
-      <Reveal><BeritaAgendaSection /></Reveal>
+      <Reveal>
+        <BeritaKategoriSection items={items}>
+          {(shown) => <BeritaAgendaSection items={shown} />}
+        </BeritaKategoriSection>
+      </Reveal>
       <Reveal><StelaAISection /></Reveal>
     </MainLayout>
   );

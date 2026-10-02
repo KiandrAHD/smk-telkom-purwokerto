@@ -20,6 +20,19 @@ export const splitContent = (value) =>
 
 export const normalizeImage = (value) => typeof value === 'string' ? value.trim() : '';
 
+// Kategori dan galeri memakai item yang sama dengan daftar berita, termasuk hasil filter.
+export const getBeritaCategories = (items) => {
+  const groups = new Map();
+  for (const item of items) {
+    const name = item.kategori || 'Berita';
+    if (!groups.has(name)) groups.set(name, { name, items: [] });
+    groups.get(name).items.push(item);
+  }
+  return [...groups.values()];
+};
+
+export const getBeritaGallery = (items) => items.filter((item) => item.slug && normalizeImage(item.image));
+
 const contentWithLead = (value, summary) => {
   const paragraphs = splitContent(value);
   const lead = summary || paragraphs[0] || '';
