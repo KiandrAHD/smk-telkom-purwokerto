@@ -3,8 +3,9 @@ import MainLayout from '../layouts/MainLayout';
 import NextTelIntro from '../components/nexttel/NextTelIntro';
 import NextTelQuestionnaire from '../components/nexttel/NextTelQuestionnaire';
 import NextTelResult from '../components/nexttel/NextTelResult';
-import { jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
+import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
 import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
+import { useLanguage } from '../context/LanguageContext';
 
 const QUESTIONS = [
   { id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }, { id: 'b', label: 'Membuat game' }, { id: 'c', label: 'Mengatur jaringan' }, { id: 'd', label: 'Teknologi telekomunikasi' }] },
@@ -18,6 +19,7 @@ const QUESTIONS = [
 ];
 
 const NextTelPage = () => {
+  const { language } = useLanguage();
   const [mode, setMode] = useState('intro');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -45,10 +47,14 @@ const NextTelPage = () => {
     try {
       const response = await jelaskanRekomendasiNextTel({
         answers: selectedAnswers,
+        language,
       }, { signal: controller.signal });
       setExplanation(response);
     } catch (requestError) {
-      if (requestError?.name !== 'AbortError') setError(PESAN_NEXTTEL_GAGAL);
+      if (requestError?.name !== 'AbortError') {
+        setExplanation(hasilFallbackNextTel(computed, language));
+        setError(PESAN_NEXTTEL_GAGAL);
+      }
     } finally {
       if (controllerRef.current === controller) { controllerRef.current = null; setLoading(false); }
     }
