@@ -51,9 +51,9 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
           <PengumumanTimelineBar />
         </div>
 
-        {/* Kolom kartu 65,5% dan sidebar 34,5%, mengikuti pembagian di Figma. */}
-        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_34%] lg:gap-8">
-          <div>
+        {/* Figma: kartu 1065 px, jarak 72 px, sidebar 565 px. */}
+        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1065fr_565fr] lg:gap-x-[4.23%]">
+          <div className="@container">
             {shown.length > 0 ? (
               <div className="space-y-4">
                 {shown.map((item, i) => (
@@ -65,10 +65,10 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
             )}
 
             {tampilkanLihatSemua && (
-              <div className="mt-7 flex justify-center">
+              <div className="mt-4 flex justify-start">
                 <Link
                   to="/pengumuman/semua"
-                  className="inline-flex items-center gap-3 rounded-full border border-primary px-7 py-3 font-heading text-xs font-extrabold text-primary transition-colors hover:bg-primary hover:text-white"
+                  className="inline-flex min-h-11 items-center justify-between gap-6 rounded-md border border-primary px-6 py-3 font-['Plus_Jakarta_Sans'] text-xs font-extrabold tracking-wide text-primary transition-colors hover:bg-primary hover:text-white sm:w-[47.4%]"
                 >
                   {t(daftarPengumuman.ctaText)}
                   <ArrowRight className="h-4 w-4" />

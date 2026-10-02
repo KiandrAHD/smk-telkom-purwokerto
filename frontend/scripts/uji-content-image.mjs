@@ -39,6 +39,12 @@ try {
   const present = renderToStaticMarkup(createElement(ContentImage, { src: '/photo.jpg', alt: 'Dokumentasi' }));
   assert.ok(present.includes('<img'));
   assert.ok(present.includes('src="/photo.jpg"'));
+  const { default: PengumumanCard } = await server.ssrLoadModule('/src/components/pengumuman/PengumumanCard.jsx');
+  const announcementMarkup = (gambar_url) => renderToStaticMarkup(createElement(MemoryRouter, null,
+    createElement(PengumumanCard, { item: toPengumumanItem({ judul: 'Poster SPMB', slug: 'poster-spmb', gambar_url }) })));
+  assert.ok(announcementMarkup('/poster-spmb.png').includes('src="/poster-spmb.png"'), 'Kartu pengumuman harus menampilkan foto dari data yang sama.');
+  assert.ok(announcementMarkup('').includes('Foto belum tersedia'), 'Pengumuman tanpa foto tetap memakai fallback yang jujur.');
+  assert.ok(announcementMarkup('/poster-spmb.png').includes('href="/pengumuman/poster-spmb"'));
   console.log('Foto dan logo kosong tidak memakai gambar pengganti; foto valid tetap dirender.');
 } finally {
   await server.close();

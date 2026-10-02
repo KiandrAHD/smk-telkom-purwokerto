@@ -1,33 +1,33 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { butuhBantuan } from '../../data/dummyData';
+import { stelaData } from '../../data/dummyData';
+import stelaPanel from '../../assets/pengumuman/figma-stela-panel.png';
+import stelaCardEn from '../../assets/landing/stela-card-en.png';
 
 const PengumumanBantuanCard = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   return (
-  <div className="relative min-h-[210px] overflow-hidden rounded-xl bg-primary-200 p-4 shadow-card">
-    <h2 className="font-heading text-base font-extrabold text-primary-800">
-      {t(butuhBantuan.title)}
-    </h2>
-    <p className="mt-1.5 max-w-[13rem] font-heading text-[10px] font-extrabold leading-snug text-dark-600">
-      {t(butuhBantuan.description)}
-    </p>
-
+  <div className="font-['Plus_Jakarta_Sans']">
+    {/* Figma menempatkan ilustrasi/chat dan tombol sebagai dua bagian terpisah. */}
+    <div className="relative aspect-[565/265] overflow-hidden rounded-xl bg-[#830b19]">
+      <img
+        src={language === 'en' ? stelaCardEn : stelaPanel}
+        alt=""
+        aria-hidden="true"
+        className={language === 'en' ? 'absolute -left-[56%] h-full w-[156%] max-w-none' : 'h-full w-full object-cover'}
+      />
+    </div>
+    <div className="sr-only">
+      <h2>{t(stelaData.title).replace('\n', ' ')}</h2>
+      {stelaData.chats.map((chat) => <p key={chat.from}>{t(chat.text)}</p>)}
+    </div>
     <Link
       to="/stela"
-      className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 font-heading text-[11px] font-extrabold text-primary shadow-sm transition-colors hover:bg-primary-50"
+      className="mt-4 flex min-h-11 w-full items-center rounded-xl bg-[#cd0b20] px-5 py-3 text-base font-extrabold tracking-[0.05em] text-white shadow-md transition-colors hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:text-xl"
     >
-      {t(butuhBantuan.ctaText)}
-      <ArrowRight className="h-3.5 w-3.5" />
+      {t(stelaData.ctaText)}
     </Link>
 
-    <img
-      src={butuhBantuan.mascot}
-      alt=""
-      aria-hidden="true"
-      className="pointer-events-none absolute bottom-3 right-3 w-[112px] select-none object-contain"
-    />
   </div>
   );
 };
