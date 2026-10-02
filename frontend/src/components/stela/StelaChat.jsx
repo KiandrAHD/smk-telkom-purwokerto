@@ -91,18 +91,30 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
     const pertanyaan = teks.trim();
     if (!pertanyaan || memuat) return;
 
-    // Sapaan pembuka tidak ikut dikirim: itu tulisan kita sendiri, bukan bagian
-    // percakapan, dan Claude menolak riwayat yang diawali pesan assistant.
+    // Sapaan pembuka tidak ikut dikirim ke API (Claude/Gemini/OpenAI menolak riwayat yang diawali assistant tanpa user)
     let basis = riwayat.slice(1);
-    const pesanTerakhir = basis[basis.length - 1];
-    if (!ulang && pertanyaanGagal && pesanTerakhir?.role === 'user' && pesanTerakhir.content === pertanyaanGagal) {
-      basis = basis.slice(0, -1);
+
+    // Jika pertanyaan sebelumnya gagal dan pengguna mengetik pertanyaan BARU (bukan retry),
+    // hapus pertanyaan gagal yang menggantung dari basis dan riwayat UI agar tidak terjadi penumpukan giliran user.
+    if (!ulang && pertanyaanGagal) {
+      const pesanTerakhir = basis[basis.length - 1];
+      if (pesanTerakhir?.role === 'user' && pesanTerakhir.content === pertanyaanGagal) {
+        basis = basis.slice(0, -1);
+        setRiwayat((lama) => {
+          const s = lama.slice(0, -1);
+          return [...s, { role: 'user', content: pertanyaan }];
+        });
+      } else {
+        setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);
+      }
+    } else if (!ulang) {
+      setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);
     }
+
     const percakapan = ulang
       ? basis
       : [...basis, { role: 'user', content: pertanyaan }];
 
-    if (!ulang) setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);
     setMasukan('');
     setGalat(null);
     setMemuat(true);
@@ -116,9 +128,6 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
       setPertanyaanGagal('');
     } catch (error) {
       if (!aktifRef.current || error?.name === 'AbortError') return;
-      // Pesan dari layanan ditulis sendiri oleh tim dan sudah aman ditampilkan.
-      // Menampilkannya apa adanya jauh menolong saat penyebabnya sepele — misal
-      // ANTHROPIC_API_KEY yang belum diisi — dan tetap generik di produksi.
       setGalat(error?.message || PESAN_STELA_GAGAL);
       setPertanyaanGagal(pertanyaan);
     } finally {
