@@ -29,7 +29,6 @@ const BkkAlumniSection = () => {
                 </figcaption>
               </div>
               <p className="mt-3 text-[11px] leading-relaxed text-dark-600">{t(alum.summary)}</p>
-              <a href={alum.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-[10px] text-primary underline underline-offset-2">{t("Ringkasan testimoni dari situs resmi")}</a>
             </figure>
           ))}
         </div>

@@ -70,10 +70,6 @@ const PrestasiPerjalananSection = () => {
               );
             })}
           </div>
-          <p className="mt-4 text-[10px] leading-relaxed text-dark-500">
-            {t(perjalananPrestasi.note)}{' '}
-            <a href={perjalananPrestasi.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">{t("Sumber arsip resmi")}</a>
-          </p>
         </div>
 
         {/* Bukti prestasi dan foto dari publikasi resmi sekolah. */}
@@ -123,7 +119,6 @@ const PrestasiPerjalananSection = () => {
                     {person.company && <><br />{person.company}</>}
                   </span>
                 </div>
-                <a href={person.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-[10px] font-semibold text-primary underline underline-offset-2">{t("Lihat profil alumni")}</a>
               </article>
             ))}
           </div>
