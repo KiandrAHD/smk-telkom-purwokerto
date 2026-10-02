@@ -153,11 +153,13 @@ Deno.serve(async (req) => {
 
   const hasilValidasi = periksaPesan((badan as Record<string, unknown>)?.messages);
   if (!hasilValidasi.pesan) return balas({ error: hasilValidasi.galat }, 400, origin);
+  const requestedLanguage = (badan as Record<string, unknown>)?.language;
+  if (requestedLanguage !== undefined && requestedLanguage !== 'en' && requestedLanguage !== 'id') return balas({ error: 'Unsupported language.' }, 400, origin);
 
   // Pertanyaan pembuka yang sama tidak dibeli dua kali. Di situs sekolah ini
   // lapisan yang paling banyak menghemat: satu jawaban tersimpan bisa melayani
   // puluhan pengunjung yang menanyakan hal serupa.
-  const bahasa = deteksiBahasa(hasilValidasi.pesan[hasilValidasi.pesan.length - 1]?.content ?? '');
+  const bahasa = requestedLanguage ?? deteksiBahasa(hasilValidasi.pesan[hasilValidasi.pesan.length - 1]?.content ?? '');
   const tersimpan = penjaga.ambilCache(hasilValidasi.pesan, bahasa);
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 

@@ -30,8 +30,8 @@ const GaleriFoto = ({ items, title, description }) => {
 
   return (
     <section className="mt-10">
-      <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{title}</h2>
-      {description && <p className="mt-1.5 text-xs text-dark-500">{description}</p>}
+      <h2 className="font-heading text-lg font-extrabold text-dark-900 sm:text-xl">{t(title)}</h2>
+      {description && <p className="mt-1.5 text-xs text-dark-500">{t(description)}</p>}
 
       <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
         {items.map((foto, i) => (
@@ -39,12 +39,12 @@ const GaleriFoto = ({ items, title, description }) => {
             <button
               type="button"
               onClick={() => setAktif(i)}
-              aria-label={t('Perbesar foto: {alt}', { alt: foto.alt })}
+              aria-label={t('Perbesar foto: {alt}', { alt: t(foto.alt) })}
               className="group block w-full overflow-hidden rounded-xl border border-dark-100 bg-dark-50"
             >
               <img
                 src={foto.image}
-                alt={foto.alt}
+                alt={t(foto.alt)}
                 loading="lazy"
                 className="aspect-[4/3] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
               />
@@ -65,11 +65,11 @@ const GaleriFoto = ({ items, title, description }) => {
           <figure className="relative w-full max-w-3xl">
             <img
               src={items[aktif].image}
-              alt={items[aktif].alt}
+              alt={t(items[aktif].alt)}
               className="max-h-[70vh] w-full rounded-xl object-contain"
             />
             <figcaption className="mt-3 text-center text-xs font-medium text-white">
-              {items[aktif].alt}
+              {t(items[aktif].alt)}
               <span className="ml-2 text-white/60">
                 {aktif + 1}/{items.length}
               </span>

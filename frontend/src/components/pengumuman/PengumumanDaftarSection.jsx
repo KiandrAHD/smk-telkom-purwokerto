@@ -37,10 +37,10 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
     return items.filter((item) => {
       const byChip = chip === 'Semua' || item.kategori === chip;
       const byText =
-        !q || item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q);
+        !q || [item.title, item.desc, t(item.title), t(item.desc)].join(' ').toLowerCase().includes(q);
       return byChip && byText;
     });
-  }, [chip, query, items]);
+  }, [chip, query, items, t]);
 
   // Halaman utama adalah pratinjau; daftar lengkap memakai hasil filter yang sama.
   const totalPages = Math.max(1, Math.ceil(shown.length / ITEMS_PER_PAGE));

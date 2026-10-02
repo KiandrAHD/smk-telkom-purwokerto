@@ -129,8 +129,9 @@ export const stelaDevPlugin = () => ({
 
       const { pesan, galat } = periksaPesan(badan?.messages);
       if (!pesan) return kirim({ error: galat }, 400);
+      if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
 
-      const bahasa = deteksiBahasa(pesan[pesan.length - 1]?.content ?? '');
+      const bahasa = badan.language ?? deteksiBahasa(pesan[pesan.length - 1]?.content ?? '');
       const tersimpan = penjaga.ambilCache(pesan, bahasa);
       if (tersimpan) {
         server.config.logger.info('  [stela] dijawab dari cache, tanpa panggilan API');
@@ -195,6 +196,8 @@ export const stelaDevPlugin = () => ({
 
       try {
         const badan = JSON.parse(mentah);
+        if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
+        const language = badan.language ?? 'id';
         const result = hitungHasilNextTel(badan?.answers);
         if (!result) return kirim({ error: 'Jawaban NextTel tidak valid.' }, 400);
         penjaga.catatPanggilan();
@@ -203,7 +206,8 @@ export const stelaDevPlugin = () => ({
           penyedia,
           apiKey,
           model,
-          instruksiKustom: INSTRUKSI_NEXTTEL,
+          instruksiKustom: language === 'en' ? INSTRUKSI_NEXTTEL.replace('Gunakan Bahasa Indonesia yang ramah, singkat, dan mudah dipahami siswa SMP.', 'Respond entirely in friendly, concise English suitable for junior high school students. Use English program names, preserving RPL, PG, TKJ, and TJAT codes.') : INSTRUKSI_NEXTTEL,
+          language,
           pesan: [{
             role: 'user',
             content:

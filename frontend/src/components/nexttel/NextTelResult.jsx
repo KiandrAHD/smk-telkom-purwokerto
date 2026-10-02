@@ -9,7 +9,8 @@ const LABELS = {
 };
 
 const NextTelResult = ({ result, explanation, loading, error, onRetry, onRestart }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const languageChanged = explanation?.language && explanation.language !== language;
   return (
   <div className="mx-auto max-w-3xl space-y-5">
     <div className="rounded-3xl bg-primary px-6 py-8 text-white shadow-card sm:px-10">
@@ -43,27 +44,27 @@ const NextTelResult = ({ result, explanation, loading, error, onRetry, onRestart
         <h2 className="font-heading text-lg font-extrabold text-dark-900">{t("Kenapa jurusan ini cocok?")}</h2>
       </div>
       {loading && <p className="mt-5 text-sm text-dark-500">{t("NextTel sedang menyiapkan penjelasan...")}</p>}
-      {error && (
+      {(error || languageChanged) && (
         <div role="alert" className="mt-5 flex items-start gap-3 rounded-2xl bg-primary-50 p-4 text-sm text-primary-900">
           <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
-          <span className="flex-1">{t(error)}</span>
+          <span className="flex-1">{t(languageChanged ? 'Coba lagi untuk mendapatkan penjelasan dalam bahasa yang dipilih.' : error)}</span>
           <button type="button" onClick={onRetry} className="font-bold underline">{t("Coba lagi")}</button>
         </div>
       )}
-      {explanation && !loading && (
+      {explanation && !loading && !languageChanged && (
         <>
-          <p className="mt-5 text-sm leading-relaxed text-dark-600">{explanation.explanation}</p>
+          <p className="mt-5 text-sm leading-relaxed text-dark-600">{t(explanation.explanation)}</p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <div>
               <h3 className="text-sm font-bold text-dark-900">{t("Yang mungkin kamu sukai")}</h3>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-dark-600">
-                {explanation.strengths.map((item) => <li key={item}>{item}</li>)}
+                {explanation.strengths.map((item) => <li key={item}>{t(item)}</li>)}
               </ul>
             </div>
             <div>
               <h3 className="text-sm font-bold text-dark-900">{t("Tips mulai belajar")}</h3>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-dark-600">
-                {explanation.learningSuggestions.map((item) => <li key={item}>{item}</li>)}
+                {explanation.learningSuggestions.map((item) => <li key={item}>{t(item)}</li>)}
               </ul>
             </div>
           </div>

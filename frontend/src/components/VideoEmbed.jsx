@@ -20,7 +20,7 @@ const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', show
         {diputar ? (
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
-            title={title}
+            title={t(title)}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="absolute inset-0 h-full w-full"

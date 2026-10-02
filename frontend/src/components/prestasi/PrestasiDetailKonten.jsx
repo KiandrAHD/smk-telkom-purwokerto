@@ -23,10 +23,10 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
               className="rounded-2xl bg-primary px-3 py-4 text-center text-white transition-transform duration-300 hover:-translate-y-1"
             >
               <p className="font-heading text-lg font-extrabold leading-none sm:text-2xl">
-                {s.angka}
+                {t(s.angka)}
               </p>
               <p className="mt-1.5 text-[9px] leading-tight text-white/85 sm:text-[10px]">
-                {s.label}
+                {t(s.label)}
               </p>
             </div>
           ))}
@@ -43,9 +43,9 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
                   {i + 1}
                 </span>
                 <h3 className="font-heading text-xs font-bold text-dark-900 sm:text-sm">
-                  {tahap.tahap}
+                  {t(tahap.tahap)}
                 </h3>
-                <p className="mt-1 text-xs leading-relaxed text-dark-500">{tahap.isi}</p>
+                <p className="mt-1 text-xs leading-relaxed text-dark-500">{t(tahap.isi)}</p>
               </Reveal>
             ))}
           </ol>
@@ -71,7 +71,7 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
                 <div className="overflow-hidden">
                   <ContentImage
                     src={p.image}
-                    alt={p.title}
+                    alt={t(p.title)}
                     loading="lazy"
                     className="aspect-[16/9] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                   />
@@ -79,10 +79,10 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
                 <div className="px-4 py-3">
                   <span className="flex items-center gap-1.5 text-[9px] font-bold text-primary">
                     <Trophy className="h-3 w-3" />
-                    {p.kategori}
+                    {t(p.kategori)}
                   </span>
                   <h3 className="mt-1 font-heading text-[11px] font-bold leading-snug text-dark-900">
-                    {p.title}
+                    {t(p.title)}
                   </h3>
                 </div>
               </Link>

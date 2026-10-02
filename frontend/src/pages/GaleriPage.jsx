@@ -53,17 +53,17 @@ const GaleriPage = () => {
             >
               <ContentImage
                 src={foto.image}
-                alt={foto.title}
+                alt={t(foto.title)}
                 loading="lazy"
                 className="aspect-[4/3] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
               />
               <div className="flex flex-1 flex-col px-5 py-4">
                 <StatusBadge nilai={foto.kategori} nada="merah" />
                 <h2 className="mt-3 font-heading text-sm font-bold leading-snug text-dark-900">
-                  {foto.title}
+                  {t(foto.title)}
                 </h2>
                 <p className="mt-1.5 text-[11px] text-dark-400">{formatPublicDate(foto.iso, {}, locale)}</p>
-                <p className="mt-1.5 text-[11px] leading-relaxed text-dark-500">{foto.excerpt}</p>
+                <p className="mt-1.5 text-[11px] leading-relaxed text-dark-500">{t(foto.excerpt)}</p>
                 <p className="mt-auto pt-3 text-[11px] font-bold text-primary">{t("Lihat Detail")}</p>
               </div>
             </Link>

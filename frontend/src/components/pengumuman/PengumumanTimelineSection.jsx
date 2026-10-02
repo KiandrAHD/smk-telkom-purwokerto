@@ -21,9 +21,9 @@ const PengumumanTimelineSection = ({ items = [] }) => {
                   {formatPublicDate(item.iso, {}, locale)}
                 </time>
                 <h2 className="mt-2 font-heading text-base font-bold leading-relaxed text-dark-900">
-                  <Link to={`/pengumuman/${item.slug}`} className="hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">{item.title}</Link>
+                  <Link to={`/pengumuman/${item.slug}`} className="hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">{t(item.title)}</Link>
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-dark-600">{item.lead || item.desc}</p>
+                <p className="mt-2 text-sm leading-relaxed text-dark-600">{t(item.lead || item.desc)}</p>
                 <Link to={`/pengumuman/${item.slug}`} className="mt-4 inline-flex min-h-11 items-center gap-2 text-xs font-bold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">
                   {t('Lihat Detail')}<ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>

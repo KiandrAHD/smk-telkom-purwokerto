@@ -38,7 +38,7 @@ try {
   const nav = render(createElement(Navbar));
   assert.ok(nav.includes('Announcements'));
   assert.ok(nav.includes('href="/pengumuman"'));
-  assert.ok(nav.includes('Ganti ke Bahasa Indonesia'));
+  assert.ok(nav.includes('Switch to Indonesian'));
   const footer = render(createElement(Footer));
   assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 8);
   assert.ok(footer.includes('Staff &amp; Admin Access'));

@@ -26,47 +26,47 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
             {t(backLabel)}
           </Link>
           <ChevronRight className="h-3 w-3" />
-          <span className="text-dark-500">{item.title}</span>
+          <span className="text-dark-500">{t(item.title)}</span>
         </nav>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <span className="rounded bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-            {item.kategori}
+            {t(item.kategori)}
           </span>
           {item.date && <span className="flex items-center gap-1.5 text-[11px] text-dark-500">
             <CalendarDays className="h-3.5 w-3.5" />
             {item.iso ? formatPublicDate(item.iso, {}, locale) : t(item.date)}
           </span>}
-          {item.author && <span className="text-[11px] text-dark-500">{item.author}</span>}
+          {item.author && <span className="text-[11px] text-dark-500">{t(item.author)}</span>}
         </div>
 
         <h1 className="mt-4 font-heading text-2xl sm:text-3xl font-extrabold leading-tight text-dark-900">
-          {item.title}
+          {t(item.title)}
         </h1>
         {item.subtitle && (
-          <p className="mt-2 text-sm font-semibold text-primary">{item.subtitle}</p>
+          <p className="mt-2 text-sm font-semibold text-primary">{t(item.subtitle)}</p>
         )}
 
         <div className="mt-7 overflow-hidden rounded-2xl">
           <ContentImage
             src={item.image}
-            alt={item.imageAlt || t('Foto ilustrasi; dokumentasi belum terverifikasi')}
+            alt={t(item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi')}
             className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
           />
         </div>
 
         {item.imageNote && (
-          <p className="mt-2 text-[10px] text-dark-400">{item.imageNote}</p>
+          <p className="mt-2 text-[10px] text-dark-400">{t(item.imageNote)}</p>
         )}
 
         <p className="mt-7 text-sm sm:text-base font-medium leading-relaxed text-dark-700">
-          {item.lead}
+          {t(item.lead)}
         </p>
 
         <div className="mt-5 space-y-4">
           {item.body.map((paragraf) => (
             <p key={paragraf} className="text-xs sm:text-sm leading-relaxed text-dark-500">
-              {paragraf}
+              {t(paragraf)}
             </p>
           ))}
         </div>
@@ -90,10 +90,10 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
               {item.facts.map((fakta) => (
                 <div key={fakta.label} className="bg-white px-5 py-4">
                   <dt className="text-[10px] font-bold uppercase tracking-wide text-dark-400">
-                    {fakta.label}
+                    {t(fakta.label)}
                   </dt>
                   <dd className="mt-1 font-heading text-xs font-bold text-dark-900">
-                    {fakta.value}
+                    {t(fakta.value)}
                   </dd>
                 </div>
               ))}

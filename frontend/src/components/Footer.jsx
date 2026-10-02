@@ -101,7 +101,7 @@ const Footer = () => {
                 {supporterLogos.map(({ id, name, href }) => {
                   const logo = (
                     <span className={`footer-supporter-logo footer-supporter-logo-${id}`}>
-                      <img src={competitionSupporters} alt={name} loading="lazy" decoding="async" width="1920" height="1080" />
+                      <img src={competitionSupporters} alt={t(name)} loading="lazy" decoding="async" width="1920" height="1080" />
                     </span>
                   );
                   return (
@@ -127,7 +127,7 @@ const Footer = () => {
             <ul className="mt-3 space-y-2 text-[11px] text-dark-500">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
-                {footerData.kontak.address}
+                {t(footerData.kontak.address)}
               </li>
               <li>
                 <a
