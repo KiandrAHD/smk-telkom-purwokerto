@@ -69,6 +69,7 @@ const KOLEKSI = {
     title: 'Informasi Penting',
     deskripsi: 'Hal-hal yang perlu segera diketahui calon siswa, siswa, dan orang tua.',
     Section: PengumumanPpdbSection,
+    sumber: 'pengumuman',
     kembali: { to: '/pengumuman', label: 'Pengumuman' },
   },
   'berita-trending': {
@@ -159,7 +160,7 @@ const KoleksiPage = ({ jenis }) => {
           ke mana-mana. Tombol kembali sudah tersedia di kepala halaman. */}
       <Reveal>
         {ambil ? (
-          <Section items={items} tampilkanLihatSemua={false} />
+          <Section items={items} loading={loading} error={error} tampilkanLihatSemua={false} />
         ) : (
           <Section tampilkanLihatSemua={false} />
         )}

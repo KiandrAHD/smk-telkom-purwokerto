@@ -56,7 +56,6 @@ const PengumumanHeroSection = () => {
       </div>
       <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
         {t('Rekap arsip pengumuman situs resmi per {date}; bukan jumlah kartu dashboard.', { date: t(officialContentAudit.checkedAt) })}{' '}
-        <a href={officialContentAudit.pengumumanSourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">{t("Lihat sumber")}</a>
       </p>
     </div>
   </section>

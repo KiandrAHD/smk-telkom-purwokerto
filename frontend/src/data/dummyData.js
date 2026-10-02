@@ -44,6 +44,7 @@ import pakHerdi from '../assets/tentang/guru/pak-herdi.png';
 import pakNandar from '../assets/tentang/guru/pak-nandar.png';
 import pakRagil from '../assets/tentang/guru/pak-ragil.png';
 import { slugify } from '../utils/slug';
+import { getUniqueProjects } from '../utils/publicContent';
 import gedungSekolah from '../assets/drive/header-jurusan.webp';
 import labKomputer from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import perpustakaan from '../assets/tentang/fasilitas/kelas-inovasi.jpg';
@@ -1102,12 +1103,6 @@ export const ppdbBanner = {
 export const infoPenting = {
   title: 'Informasi Penting Hari ini',
   linkText: 'Lihat Semua',
-  items: [
-    'PPDB Gelombang 2 Resmi Dibuka',
-    'Workshop AI Untuk Siswa Besok',
-    'Deadline LKS 3 Hari Lagi',
-    'Libur Nasional Minggu Depan',
-  ],
 };
 
 // Hanya kartu pertama yang punya ikon megafon di dalam lingkarannya; tiga sisanya
@@ -3124,9 +3119,9 @@ export const roadmapDetail = [
 
 /* ── Project showcase: /jurusan/project/:slug ── */
 // Daftar dan detail memakai satu sumber supaya judul, foto, dan bukti selalu sesuai.
-export const projectDetail = projectShowcase.items.map((item) => ({
+export const projectDetail = getUniqueProjects(projectShowcase.items).map((item) => ({
   ...item,
-  slug: slugify(item.title),
+  slug: item.slug || slugify(item.title),
   kategori: item.tag,
   subtitle: item.author,
   date: item.iso,

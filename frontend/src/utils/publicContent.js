@@ -20,6 +20,34 @@ export const splitContent = (value) =>
 
 export const normalizeImage = (value) => typeof value === 'string' ? value.trim() : '';
 
+// ID/slug mengenali salinan; judul + pembuat menangkap salinan dengan ID baru.
+// ponytail: judul + pembuat identik dianggap satu karya; pakai ID kanonis saja jika karya berbeda punya pasangan yang sama.
+export const getUniqueProjects = (items) => {
+  const seen = new Set();
+  const normalize = (value) => String(value || '').trim().replace(/\s+/g, ' ').toLowerCase();
+  return items.filter((item) => {
+    const keys = [
+      item.id != null ? `id:${item.id}` : '',
+      item.slug ? `slug:${normalize(item.slug)}` : '',
+      item.title ? `title:${normalize(item.title)}|${normalize(item.author)}` : '',
+    ].filter(Boolean);
+    if (!keys.length || keys.some((key) => seen.has(key))) return false;
+    keys.forEach((key) => seen.add(key));
+    return true;
+  });
+};
+
+const schoolDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit',
+});
+export const getSchoolDateKey = (value) => {
+  if (!value || !Number.isFinite(new Date(value).getTime())) return '';
+  return schoolDateFormatter.format(new Date(value));
+};
+
+export const getPengumumanHariIni = (items, now = new Date()) => items.filter((item) =>
+  item.status === 'published' && getSchoolDateKey(item.iso) === getSchoolDateKey(now));
+
 // Konten impor menyimpan atribusi "Sumber: URL"; buka artikel aslinya, bukan endpoint API.
 export const getContentSource = (content) => {
   const match = String(content || '').match(/\bSumber:\s*(https?:\/\/[^\s<>"']+)/i);
@@ -39,16 +67,19 @@ export const sortPengumumanTimeline = (items) => {
 };
 
 export const getPengumumanCounts = (items, now = new Date()) => {
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-  const afterTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
+  // Batas kalender WIB dibuat sebagai tanggal UTC sintetis agar zona browser tidak menggesernya.
+  const today = new Date(`${getSchoolDateKey(now)}T00:00:00Z`);
+  const tomorrow = new Date(today);
+  tomorrow.setUTCDate(today.getUTCDate() + 1);
+  const afterTomorrow = new Date(today);
+  afterTomorrow.setUTCDate(today.getUTCDate() + 2);
   const weekStart = new Date(today);
-  weekStart.setDate(today.getDate() - (today.getDay() + 6) % 7); // Minggu kalender dimulai Senin.
+  weekStart.setUTCDate(today.getUTCDate() - (today.getUTCDay() + 6) % 7); // Minggu dimulai Senin.
   const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 7);
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const dates = items.map((item) => new Date(item.iso));
+  weekEnd.setUTCDate(weekStart.getUTCDate() + 7);
+  const monthStart = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+  const monthEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 1));
+  const dates = items.map((item) => new Date(`${getSchoolDateKey(item.iso)}T00:00:00Z`));
   return [[today, tomorrow], [tomorrow, afterTomorrow], [weekStart, weekEnd], [monthStart, monthEnd]]
     .map(([start, end]) => dates.filter((date) => date >= start && date < end).length);
 };

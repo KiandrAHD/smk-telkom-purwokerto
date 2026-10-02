@@ -24,7 +24,7 @@ const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => {
       </button>
     ))}
 
-    <label className="relative ml-auto">
+    <label className="relative ml-auto w-full sm:w-auto">
       <span className="sr-only">{t(pengumumanFilter.searchPlaceholder)}</span>
       <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dark-600" />
       <input
@@ -32,7 +32,7 @@ const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => {
         value={query}
         onChange={(e) => onQuery(e.target.value)}
         placeholder={t(pengumumanFilter.searchPlaceholder)}
-        className="w-[150px] rounded-lg border border-dark-200 py-2 pl-8 pr-3 text-[11px] font-bold text-dark-900 outline-none transition-colors placeholder:text-dark-600 focus:border-primary"
+        className="min-h-11 w-full scroll-mt-24 rounded-lg border border-dark-200 py-2 pl-8 pr-3 text-xs font-semibold text-dark-900 outline-none transition-colors placeholder:text-dark-600 focus:border-primary sm:w-[220px] lg:scroll-mt-28"
       />
     </label>
   </div>

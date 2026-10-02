@@ -29,7 +29,7 @@ const PengumumanPage = () => {
   return (
     <MainLayout>
       <PengumumanHeroSection />
-      <Reveal><PengumumanPpdbSection /></Reveal>
+      <Reveal><PengumumanPpdbSection items={items} loading={loading} error={error} /></Reveal>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("pengumuman")} />
       </div>

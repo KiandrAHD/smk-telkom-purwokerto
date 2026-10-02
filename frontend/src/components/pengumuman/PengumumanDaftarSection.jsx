@@ -37,7 +37,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
   }, [chip, query, items]);
 
   return (
-    <section className="bg-white pb-8 lg:pb-12">
+    <section id="daftar-pengumuman" className="scroll-mt-24 bg-white pb-8 pt-6 lg:scroll-mt-28 lg:pb-12 lg:pt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PengumumanFilterBar
           chip={chip}

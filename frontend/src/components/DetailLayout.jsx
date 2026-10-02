@@ -103,7 +103,8 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
 
         {children}
 
-        {item.sourceUrl && (
+        {/* Halaman sekolah dan proyek memakai konten lokal; tombol sumber berita tetap tersedia. */}
+        {item.sourceUrl && !['/prestasi', '/pengumuman', '/jurusan'].includes(backTo) && (
           <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/40 px-5 py-2 text-xs font-bold text-primary hover:bg-primary-50 focus-visible:outline-2 focus-visible:outline-primary">
             {t('Lihat sumber')}<ChevronRight className="h-4 w-4" aria-hidden="true" />
           </a>

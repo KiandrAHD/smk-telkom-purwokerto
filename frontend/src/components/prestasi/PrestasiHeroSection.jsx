@@ -49,7 +49,6 @@ const PrestasiHeroSection = () => {
       </div>
       <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
         {t('Rekap situs resmi per {date}. Angka artikel arsip berbeda dari jumlah prestasi.', { date: t(officialContentAudit.checkedAt) })}{' '}
-        <a href={officialContentAudit.prestasiSourceUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">{t("Lihat sumber")}</a>
       </p>
     </div>
   </section>

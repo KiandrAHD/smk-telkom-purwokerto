@@ -21,7 +21,7 @@ const getCarouselIndex = (scrollLeft, maxScroll, step, groups) => {
     ? previous : next;
 };
 
-const PrestasiCarousel = ({ items }) => {
+const PrestasiCarousel = ({ items, renderCard, labels = {} }) => {
   const { t } = useLanguage();
   const trackRef = useRef(null);
   const stepRef = useRef(1);
@@ -141,7 +141,7 @@ const PrestasiCarousel = ({ items }) => {
       >
         {items.map((item, i) => (
           <div key={item.id || item.slug} className={`shrink-0 snap-start ${CARD_WIDTH}`}>
-            <AchievementCard {...item} category={item.kategori} highlight={i === 0} />
+            {renderCard ? renderCard(item) : <AchievementCard {...item} category={item.kategori} highlight={i === 0} />}
           </div>
         ))}
       </div>
@@ -152,7 +152,7 @@ const PrestasiCarousel = ({ items }) => {
           type="button"
           onClick={() => goTo(active - 1)}
           disabled={active === 0}
-          aria-label={t('Prestasi sebelumnya')}
+          aria-label={t(labels.previous || 'Prestasi sebelumnya')}
           className="mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         ><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>}
         {Array.from({ length: groups }).map((_, i) => (
@@ -160,7 +160,7 @@ const PrestasiCarousel = ({ items }) => {
             key={i}
             type="button"
             onClick={() => goTo(i)}
-            aria-label={t('Ke slide prestasi {number}', { number: i + 1 })}
+            aria-label={t(labels.slide || 'Ke slide prestasi {number}', { number: i + 1 })}
             aria-current={i === active}
             className={`relative h-2 w-2 rounded-full transition-colors before:absolute before:-inset-2 before:content-[''] ${
               i === active ? 'w-6 bg-primary' : 'bg-dark-200 hover:bg-primary/50'
@@ -171,7 +171,7 @@ const PrestasiCarousel = ({ items }) => {
           type="button"
           onClick={() => goTo(active + 1)}
           disabled={active === groups - 1}
-          aria-label={t('Prestasi berikutnya')}
+          aria-label={t(labels.next || 'Prestasi berikutnya')}
           className="ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         ><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>}
       </div>

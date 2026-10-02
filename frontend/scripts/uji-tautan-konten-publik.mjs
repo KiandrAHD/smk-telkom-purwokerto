@@ -34,7 +34,33 @@ try {
   assert.ok(!unggulan.includes('Pengumuman uji 3'));
   assert.equal(render(Unggulan, { items: [] }), '');
 
-  const { sortPengumumanTimeline, getPengumumanCounts, getContentSource, toPengumumanItem } = await server.ssrLoadModule('/src/utils/publicContent.js');
+  const { sortPengumumanTimeline, getPengumumanCounts, getContentSource, toPengumumanItem, getUniqueProjects, getPengumumanHariIni } = await server.ssrLoadModule('/src/utils/publicContent.js');
+  assert.deepEqual(getUniqueProjects([
+    { id: '1', title: 'ASISTANI', author: 'Tim A' },
+    { id: '1', title: 'Judul diubah', author: 'Tim A' },
+    { id: '2', title: '  asistani  ', author: 'tim a' },
+    { id: '3', title: 'ASISTANI', author: 'Tim B' },
+    { slug: 'senimart', title: 'Senimart' },
+    { slug: 'senimart', title: 'Salinan Senimart' },
+  ]).map(item => item.title), ['ASISTANI', 'ASISTANI', 'Senimart']);
+  assert.deepEqual(getUniqueProjects([]), []);
+  const daily = [
+    { slug: 'hari-ini', iso: '2026-10-01T17:00:00Z', status: 'published', title: 'Pengumuman hari ini' },
+    { slug: 'kemarin', iso: '2026-10-01T16:59:59Z', status: 'published', title: 'Pengumuman kemarin' },
+    { slug: 'draft', iso: '2026-10-02', status: 'draft', title: 'Draf rahasia' },
+    { slug: 'besok', iso: '2026-10-02T17:00:00Z', status: 'published', title: 'Besok' },
+  ];
+  assert.deepEqual(getPengumumanHariIni(daily, new Date('2026-10-02T08:00:00Z')).map(item => item.slug), ['hari-ini']);
+  assert.equal(getPengumumanHariIni([{ iso: '2026-10-02', status: 'published' }], new Date('2026-10-02T08:00:00Z')).length, 1, 'Tanggal tanpa jam tetap dihitung sebagai tanggal WIB yang sama.');
+  assert.equal(getPengumumanHariIni([{ iso: 'tanggal rusak', status: 'published' }], new Date('2026-10-02T08:00:00Z')).length, 0);
+  assert.deepEqual(getPengumumanCounts(daily.filter(item => item.status === 'published'), new Date('2026-10-02T08:00:00Z')), [1, 1, 3, 3], 'Ringkasan dan daftar hari ini menggunakan batas WIB yang sama.');
+  const { default: InfoHariIni } = await server.ssrLoadModule('/src/components/pengumuman/PengumumanPpdbSection.jsx');
+  const dailyMarkup = render(InfoHariIni, { items: daily, now: new Date('2026-10-02T08:00:00Z') });
+  assert.ok(dailyMarkup.includes('Pengumuman hari ini') && dailyMarkup.includes('href="/pengumuman/hari-ini"'));
+  assert.ok(!dailyMarkup.includes('Draf rahasia') && !dailyMarkup.includes('Pengumuman kemarin'));
+  assert.ok(render(InfoHariIni, { items: [], now: new Date('2026-10-02') }).includes('Belum ada pengumuman yang diterbitkan hari ini.'));
+  assert.ok(render(InfoHariIni, { loading: true }).includes('Memuat pengumuman'));
+  assert.ok(render(InfoHariIni, { error: 'Pengumuman gagal dimuat.' }).includes('Pengumuman gagal dimuat.'));
   const dated = [
     { slug: 'baru', title: 'Pengumuman terbaru', iso: '2026-10-02', desc: 'Isi terbaru' },
     { slug: 'tanpa-tanggal', title: 'Tanpa tanggal', iso: '', desc: 'Isi tanpa tanggal' },
@@ -43,9 +69,9 @@ try {
   ];
   assert.deepEqual(sortPengumumanTimeline(dated).map((item) => item.slug), ['lama', 'baru', 'besok', 'tanpa-tanggal']);
   assert.equal(dated[0].slug, 'baru', 'Timeline tidak boleh mengubah urutan data di halaman induk.');
-  assert.deepEqual(getPengumumanCounts(dated, new Date(2026, 9, 2, 12)), [1, 1, 3, 2]);
-  assert.deepEqual(getPengumumanCounts([], new Date(2026, 9, 2)), [0, 0, 0, 0]);
-  assert.deepEqual(getPengumumanCounts([{ iso: '2026-12-31T12:00:00' }, { iso: '2027-01-01T12:00:00' }], new Date(2026, 11, 31)), [1, 1, 2, 1]);
+  assert.deepEqual(getPengumumanCounts(dated, new Date('2026-10-02T08:00:00Z')), [1, 1, 3, 2]);
+  assert.deepEqual(getPengumumanCounts([], new Date('2026-10-02T08:00:00Z')), [0, 0, 0, 0]);
+  assert.deepEqual(getPengumumanCounts([{ iso: '2026-12-31T12:00:00+07:00' }, { iso: '2027-01-01T12:00:00+07:00' }], new Date('2026-12-31T00:00:00+07:00')), [1, 1, 2, 1]);
   const { default: Timeline } = await server.ssrLoadModule('/src/components/pengumuman/PengumumanTimelineSection.jsx');
   const timeline = render(Timeline, { items: dated });
   assert.equal((timeline.match(/<article/g) || []).length, 4);
@@ -69,10 +95,17 @@ try {
   }
   const { default: DetailLayout } = await server.ssrLoadModule('/src/components/DetailLayout.jsx');
   const detail = render(DetailLayout, { item: projectDetail[0], backTo: '/jurusan', backLabel: 'Jurusan' });
-  assert.ok(detail.includes(`href="${projectDetail[0].sourceUrl}"`));
-  assert.ok(detail.includes('Lihat sumber'));
+  assert.ok(!detail.includes('Lihat sumber'), 'Detail proyek pada screenshot juga tidak menampilkan tombol sumber.');
+  for (const backTo of ['/prestasi', '/pengumuman']) {
+    assert.ok(!render(DetailLayout, { item: projectDetail[0], backTo, backLabel: 'Kembali' }).includes('Lihat sumber'));
+  }
+  assert.ok(render(DetailLayout, { item: projectDetail[0], backTo: '/berita', backLabel: 'Berita' }).includes('Lihat sumber'), 'Sumber berita di luar lingkup tetap tersedia.');
+  for (const path of ['prestasi/PrestasiHeroSection', 'pengumuman/PengumumanHeroSection']) {
+    const { default: Hero } = await server.ssrLoadModule(`/src/components/${path}.jsx`);
+    assert.ok(!render(Hero, {}).includes('Lihat sumber'));
+  }
 
-  console.log('Lulus: tautan publik, maksimal tiga prestasi unggulan, timeline kronologis, hitungan kalender, sumber artikel, dan detail proyek sesuai.');
+  console.log('Lulus: deduplikasi proyek, informasi hari ini/batas WIB/status, loading/error, tombol sumber, maksimal tiga prestasi, dan timeline.');
 } finally {
   await server.close();
 }

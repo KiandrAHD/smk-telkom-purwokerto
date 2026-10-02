@@ -1,4 +1,6 @@
 export default {
+  'Ke slide project {number}': 'Go to project slide {number}',
+  'Belum ada pengumuman yang diterbitkan hari ini.': 'No announcements have been published today.',
   'Prestasi sebelumnya': 'Previous achievements',
   'Prestasi berikutnya': 'Next achievements',
   'Dari pengumuman terlama hingga terbaru.': 'From the oldest announcement to the newest.',

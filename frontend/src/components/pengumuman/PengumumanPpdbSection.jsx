@@ -2,10 +2,14 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight, BellRing, CalendarDays, ClipboardList, Volume2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { infoPenting, ppdbBanner } from '../../data/dummyData';
+import { formatPublicDate, getPengumumanHariIni } from '../../utils/publicContent';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
-const PengumumanPpdbSection = ({ tampilkanLihatSemua = true }) => {
-  const { t } = useLanguage();
+const PengumumanPpdbSection = ({ items = [], loading = false, error = '', now = new Date(), tampilkanLihatSemua = true }) => {
+  const { t, locale } = useLanguage();
+  const today = getPengumumanHariIni(items, now);
+  const latest = items.filter((item) => item.status === 'published' && item.slug && item.title).slice(0, 3);
+  const shown = today.length ? today : latest;
   return (
   <section className="bg-white py-4 lg:py-6">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,21 +76,27 @@ const PengumumanPpdbSection = ({ tampilkanLihatSemua = true }) => {
             </Link>
           )}
 
-          <ul className="mt-5 space-y-2.5">
-            {infoPenting.items.map((item) => (
-              <li key={item.href} className="flex items-start gap-3">
+          {loading ? <p role="status" className="mt-5 text-sm text-dark-500">{t('Memuat pengumuman...')}</p>
+            : error ? <p role="alert" className="mt-5 text-sm text-primary">{t(error)}</p>
+            : <>
+          {!today.length && <p className="mt-5 text-xs leading-relaxed text-dark-500">{t('Belum ada pengumuman yang diterbitkan hari ini.')}</p>}
+          {!today.length && latest.length > 0 && <h3 className="mt-4 font-heading text-sm font-bold text-dark-900">{t('Pengumuman Terbaru')}</h3>}
+          <ul className="mt-5 space-y-3">
+            {shown.map((item) => (
+              <li key={item.id || item.slug} className="flex items-start gap-3">
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
                   <ClipboardList className="h-3 w-3 text-white" />
                 </span>
                 <div className="min-w-0">
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] font-semibold leading-snug text-dark-900 hover:text-primary hover:underline">
-                    {t(item.title)}
-                  </a>
-                  <p className="mt-1 text-[10px] text-dark-500">{t(item.date)}</p>
+                  <Link to={`/pengumuman/${item.slug}`} className="font-heading text-xs font-semibold leading-relaxed text-dark-900 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">
+                    {item.title}
+                  </Link>
+                  <p className="mt-1 text-[11px] text-dark-500">{formatPublicDate(item.iso, { timeZone: 'Asia/Jakarta' }, locale)}</p>
                 </div>
               </li>
             ))}
           </ul>
+          </>}
         </div>
       </div>
     </div>
