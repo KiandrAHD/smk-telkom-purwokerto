@@ -3,7 +3,7 @@ import english from '../data/translations';
 export const LANGUAGE_STORAGE_KEY = 'smk-telkom-language';
 
 export function readLanguage() {
-  try { return localStorage.getItem(LANGUAGE_STORAGE_KEY) === 'en' ? 'en' : 'id'; }
+  try { return sessionStorage.getItem(LANGUAGE_STORAGE_KEY) === 'en' ? 'en' : 'id'; }
   catch { return 'id'; }
 }
 

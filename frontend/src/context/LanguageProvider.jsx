@@ -18,7 +18,7 @@ export default function LanguageProvider({ children }) {
     setLanguage: (next) => {
       if (!['id', 'en'].includes(next)) return;
       setSelected(next);
-      try { localStorage.setItem(LANGUAGE_STORAGE_KEY, next); } catch { /* Storage may be disabled. */ }
+      try { sessionStorage.setItem(LANGUAGE_STORAGE_KEY, next); } catch { /* Storage may be disabled. */ }
     },
   }), [language]);
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
