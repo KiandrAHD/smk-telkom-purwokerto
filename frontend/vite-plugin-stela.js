@@ -1,7 +1,6 @@
 import { loadEnv } from 'vite';
 import {
   BATAS,
-  MODEL_CADANGAN,
   kunciBermasalah,
   periksaPesan,
   pilihPenyedia,
@@ -59,7 +58,14 @@ export const stelaDevPlugin = () => ({
       geminiKey: kunci.gemini,
       groqKey: kunci.groq,
     };
-    const penyedia = pilihPenyedia(argKunci);
+        const nexttelProvider = pilihPenyedia(argKunci);
+    const stelaGeminiModel = 'gemini-3.6-flash';
+    const geminiAvailable = typeof kunci.gemini === 'string' && kunci.gemini.trim().length > 0;
+    const stelaGeminiCandidates = geminiAvailable ? [
+      { penyedia: 'gemini', apiKey: kunci.gemini, model: stelaGeminiModel },
+      { penyedia: 'gemini', apiKey: kunci.gemini, model: 'gemini-3.5-flash-lite' },
+    ] : [];
+    const penyedia = nexttelProvider;
     for (const rusak of kunciBermasalah(argKunci)) {
       server.config.logger.warn(
         `  [33m➜[0m  Kunci ${rusak.toUpperCase()} diabaikan: bentuknya tidak sesuai. Kosongkan atau ganti baris itu di frontend/.env.`,
@@ -70,20 +76,22 @@ export const stelaDevPlugin = () => ({
     // cadangannya dan bisa berpindah model saat kuota satu model habis.
     // Mengisinya dengan MODEL_BAWAAN akan mematikan failover, karena model
     // yang dipilih manual sengaja dihormati apa adanya.
-    const model = (penyedia === 'ninerouter' ? baca('NINEROUTER_MODEL') : undefined)
-      || baca('STELA_MODEL')
-      || undefined;
-    const labelModel = model ?? `${MODEL_CADANGAN[penyedia]?.length ?? 1} model bergantian`;
-
+    const model = penyedia === 'ninerouter'
+      ? baca('NINEROUTER_MODEL')
+      : penyedia === 'anthropic'
+        ? baca('STELA_ANTHROPIC_MODEL')
+        : penyedia === 'gemini'
+          ? baca('STELA_GEMINI_MODEL')
+          : baca('STELA_GROQ_MODEL');
     const penjaga = buatPenjaga({
       aktif: baca('STELA_AKTIF') !== 'false',
       maksPerHari: Number(baca('STELA_MAKS_PER_HARI')) || MAKS_PER_HARI_DEV,
     });
 
     server.config.logger.info(
-      penyedia
-        ? `  \x1b[32m➜\x1b[0m  STELA lokal siap di /api/stela (${penyedia}, ${labelModel}, maks ${penjaga.statistik().maksPerHari}/hari)`
-        : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi NINEROUTER_KEY, GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env',
+      stelaGeminiCandidates.length
+        ? `  \x1b[32m➜\x1b[0m  STELA lokal siap di /api/stela (gemini, ${stelaGeminiModel}, maks ${penjaga.statistik().maksPerHari}/hari)`
+        : '  \x1b[33m➜\x1b[0m  STELA nonaktif: isi GEMINI_API_KEY di frontend/.env',
     );
 
     server.middlewares.use('/api/stela', async (req, res) => {
@@ -94,11 +102,11 @@ export const stelaDevPlugin = () => ({
       };
 
       if (req.method !== 'POST') return kirim({ error: 'Gunakan metode POST.' }, 405);
-      if (!penyedia) {
+      if (!stelaGeminiCandidates.length) {
         return kirim(
           {
             error:
-              'Kunci AI belum diisi. Isi NINEROUTER_KEY, GROQ_API_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env, lalu jalankan ulang dev server.',
+              'Kunci Gemini belum diisi. Isi GEMINI_API_KEY di frontend/.env, lalu jalankan ulang dev server.',
           },
           503,
         );
@@ -131,7 +139,8 @@ export const stelaDevPlugin = () => ({
       if (!pesan) return kirim({ error: galat }, 400);
       if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
 
-      const bahasa = badan.language ?? deteksiBahasa(pesan[pesan.length - 1]?.content ?? '');
+      const latestUserMessage = [...pesan].reverse().find((message) => message.role === 'user');
+      const bahasa = badan.language ?? deteksiBahasa(latestUserMessage?.content ?? '');
       const tersimpan = penjaga.ambilCache(pesan, bahasa);
       if (tersimpan) {
         server.config.logger.info('  [stela] dijawab dari cache, tanpa panggilan API');
@@ -141,14 +150,9 @@ export const stelaDevPlugin = () => ({
       try {
         penjaga.catatPanggilan();
         const { teks, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
-          baseUrl: baca('NINEROUTER_URL'),
-          penyedia,
-          apiKey,
-          model,
+          daftarPenyedia: stelaGeminiCandidates,
           pesan,
           bahasa,
-          // Tanpa Supabase di lokal, data dinamis memang tidak ada. STELA tetap
-          // menjawab dari data sekolah statis yang sudah lengkap.
           contextPublik:
             'Data dinamis publik tidak tersedia di mode pengembangan lokal. Gunakan data sekolah statis.',
         });

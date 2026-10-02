@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ensureSupabase, supabaseSiap } from '../services/supabase';
-import { getMyPpdbDraft, savePpdbDraft, signOutPpdb } from '../services/ppdbService';
+import { getMyPpdb, getMyPpdbDraft, savePpdbDraft, signOutPpdb } from '../services/ppdbService';
 import { restoreSignupBiodata } from '../utils/ppdbIdentity';
 
 // Alur PPDB melewati beberapa halaman: daftar akun, isi formulir, unggah berkas,
@@ -86,6 +86,12 @@ export const PpdbProvider = ({ children }) => {
   useEffect(() => {
     if (!currentUser?.id) return undefined;
     let active = true;
+    void getMyPpdb()
+      .then((submissions) => {
+        if (!active || !submissions?.[0]) return;
+        setNomorRegistrasi(submissions[0].id);
+      })
+      .catch((error) => console.warn('Pendaftaran PPDB tidak dapat dimuat:', error));
     void getMyPpdbDraft(currentUser.id)
       .then((draft) => {
         if (!active || !draft) return;

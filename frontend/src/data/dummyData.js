@@ -2562,11 +2562,37 @@ export const ppdbMeta = {
   portal: 'Portal PPDB 2027',
   tahun: '2027',
   hakCipta: '© 2027 SMK Telkom Purwokerto. All Rights Reserved.',
-  // 0812-2970-1800. Format wa.me memakai kode negara tanpa 0 dan tanpa
-  // tanda baca: 0812... menjadi 62812...
-  waHelpdesk: 'https://wa.me/6281229701800',
-  waHelpdeskTampil: '0812-2970-1800',
+  waHelpdesk: 'https://wa.me/6285136971361',
+  waHelpdeskTampil: '0851-3697-1361',
+  namaKontak: 'Tim FlexBox',
 };
+
+const FLEXBOX_MESSAGES = {
+  umum: 'Halo Tim FlexBox, saya membutuhkan bantuan terkait website PPDB SMK Telkom Purwokerto.',
+  ppdb: 'Halo Tim FlexBox, saya membutuhkan bantuan terkait proses pendaftaran PPDB SMK Telkom Purwokerto.',
+  pendaftaran: 'Halo Tim FlexBox, saya mengalami kendala saat melengkapi pendaftaran PPDB.',
+  status: 'Halo Tim FlexBox, saya ingin menanyakan status pendaftaran PPDB saya.',
+  dokumen: 'Halo Tim FlexBox, saya mengalami kendala saat mengunggah dokumen PPDB.',
+  verifikasi: 'Halo Tim FlexBox, saya mengalami kendala saat verifikasi email PPDB.',
+};
+
+const FLEXBOX_SENSITIVE_VALUE = /((?:password|kata\s*sandi|api[_ -]?key|access[_ -]?token|refresh[_ -]?token|token|secret))\s*[:=]\s*[^\s,;]+/gi;
+
+const bersihkanDataFlexBox = (value) => value.trim().replace(FLEXBOX_SENSITIVE_VALUE, '$1: [disembunyikan]');
+
+export const buatPesanFlexBox = (konteks = 'umum', data = {}) => {
+  const fields = [
+    ['Nama', data.nama],
+    ['Email', data.email],
+    ['Nomor pendaftaran', data.nomorPendaftaran],
+    ['Halaman', data.halaman],
+    ['Kendala', data.kendala],
+  ].filter(([, value]) => typeof value === 'string' && value.trim());
+  return [FLEXBOX_MESSAGES[konteks] || FLEXBOX_MESSAGES.umum, ...fields.map(([label, value]) => `${label}: ${bersihkanDataFlexBox(value)}`)].join('\n');
+};
+
+export const buatLinkFlexBox = (konteks = 'umum', data = {}) =>
+  `${ppdbMeta.waHelpdesk}?text=${encodeURIComponent(buatPesanFlexBox(konteks, data))}`;
 
 export const ppdbPanelDaftar = {
   badge: 'Langkah 1 dari 2',
@@ -2578,7 +2604,7 @@ export const ppdbPanelDaftar = {
     { icon: 'kirim', teks: 'Notifikasi kelulusan via WhatsApp & Portal' },
   ],
   bantuanLabel: 'Butuh bantuan?',
-  bantuanTeks: 'CS PPDB Telkom',
+  bantuanTeks: 'Hubungi Tim FlexBox di WhatsApp',
 };
 
 export const ppdbPanelMasuk = {

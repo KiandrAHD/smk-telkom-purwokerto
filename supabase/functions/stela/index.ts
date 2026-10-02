@@ -10,9 +10,7 @@ import {
   BATAS,
   deteksiBahasa,
   keluaranAman,
-  kunciBermasalah,
   periksaPesan,
-  pilihPenyedia,
   tanyaAI,
 } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
@@ -23,23 +21,17 @@ const KUNCI: Record<string, string | undefined> = {
   gemini: Deno.env.get('GEMINI_API_KEY'),
   groq: Deno.env.get('GROQ_API_KEY'),
 };
-const PENYEDIA = pilihPenyedia({
-  ninerouterKey: KUNCI.ninerouter,
-  anthropicKey: KUNCI.anthropic,
-  geminiKey: KUNCI.gemini,
-  groqKey: KUNCI.groq,
-});
-const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
-
-// Daftar penyedia untuk failover
-const DAFTAR_PENYEDIA = Object.keys(KUNCI)
-  .filter((nama) => KUNCI[nama] && !kunciBermasalah({ [nama + 'Key']: KUNCI[nama] }).length)
-  .map((nama) => ({
-    penyedia: nama,
-    apiKey: KUNCI[nama],
-    model: (nama === 'ninerouter' ? Deno.env.get('NINEROUTER_MODEL') : undefined) || Deno.env.get('STELA_MODEL'),
-    baseUrl: Deno.env.get('NINEROUTER_URL'),
-  }));
+const STELA_GEMINI_MODEL = Deno.env.get('STELA_GEMINI_MODEL') || 'gemini-3.6-flash';
+const STELA_GEMINI_FALLBACK_MODEL = 'gemini-3.5-flash-lite';
+const geminiAvailable =
+  typeof KUNCI.gemini === 'string' &&
+  KUNCI.gemini.trim().length > 0;
+const STELA_CANDIDATES = geminiAvailable
+  ? [
+    { penyedia: 'gemini', apiKey: KUNCI.gemini, model: STELA_GEMINI_MODEL },
+    { penyedia: 'gemini', apiKey: KUNCI.gemini, model: STELA_GEMINI_FALLBACK_MODEL },
+  ]
+  : [];
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
@@ -132,7 +124,7 @@ Deno.serve(async (req) => {
   if (!originDiizinkan(origin)) return balas({ error: 'Origin tidak diizinkan.' }, 403, origin);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: headersCors(origin) });
   if (req.method !== 'POST') return balas({ error: 'Gunakan metode POST.' }, 405, origin);
-  if (!PENYEDIA) return balas({ error: 'STELA sedang tidak tersedia.' }, 503, origin);
+  if (STELA_CANDIDATES.length === 0) return balas({ error: 'STELA sedang tidak tersedia.' }, 503, origin);
 
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? req.headers.get('cf-connecting-ip') ?? 'tanpa-ip';
   const ditolak = penjaga.periksa(ip);
@@ -159,7 +151,8 @@ Deno.serve(async (req) => {
   // Pertanyaan pembuka yang sama tidak dibeli dua kali. Di situs sekolah ini
   // lapisan yang paling banyak menghemat: satu jawaban tersimpan bisa melayani
   // puluhan pengunjung yang menanyakan hal serupa.
-  const bahasa = requestedLanguage ?? deteksiBahasa(hasilValidasi.pesan[hasilValidasi.pesan.length - 1]?.content ?? '');
+  const latestUserMessage = [...hasilValidasi.pesan].reverse().find((message) => message.role === 'user');
+  const bahasa = requestedLanguage ?? deteksiBahasa(latestUserMessage?.content ?? '');
   const tersimpan = penjaga.ambilCache(hasilValidasi.pesan, bahasa);
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 
@@ -174,11 +167,8 @@ Deno.serve(async (req) => {
     // Dihitung sebelum panggilan, bukan sesudah: kalau dihitung setelah sukses,
     // permintaan yang gagal di tengah lolos dari hitungan padahal tetap dibayar.
     penjaga.catatPanggilan();
-    const { teks, tokenMasuk, tokenKeluar } = await tanyaAI({
-      penyedia: PENYEDIA,
-      apiKey: API_KEY,
-      model: undefined,
-      daftarPenyedia: DAFTAR_PENYEDIA,
+    const { teks, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
+      daftarPenyedia: STELA_CANDIDATES,
       pesan: hasilValidasi.pesan,
       contextPublik,
       bahasa,
@@ -188,7 +178,7 @@ Deno.serve(async (req) => {
 
     penjaga.simpanCache(hasilValidasi.pesan, teks, bahasa);
     const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
-    console.log(`stela ${terpakaiHariIni}/${maksPerHari} | token ${tokenMasuk}/${tokenKeluar}`);
+    console.log(`stela provider=gemini model=${modelDipakai} ${terpakaiHariIni}/${maksPerHari} | token ${tokenMasuk}/${tokenKeluar}`);
     return balas({ reply: teks }, 200, origin);
   } catch (error) {
     console.error('Kesalahan STELA', error instanceof Error ? error.message : 'unknown');
