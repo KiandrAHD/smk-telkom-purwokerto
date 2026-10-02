@@ -1,16 +1,14 @@
 import { supabaseSiap } from './supabase';
 
-// Widget chat TIDAK memanggil Claude langsung. Semua permintaan lewat backend,
-// karena di sanalah API key disimpan — kalau key ditaruh di sini, ia ikut
-// terbundel ke browser dan bisa dibaca siapa saja lewat DevTools.
+// Widget chat tidak memanggil Gemini langsung. Semua permintaan lewat backend,
+// karena API key hanya disimpan di server dan tidak pernah masuk ke bundel browser.
 //
 // Ada dua backend, dan yang dipakai ditentukan otomatis:
 //
 //   1. Edge Function Supabase — dipakai begitu VITE_SUPABASE_URL terisi.
-//      Ini jalur produksi.
+//      Ini jalur produksi dan menggunakan Gemini.
 //   2. /api/stela — endpoint lokal dari vite-plugin-stela.js, hanya hidup
-//      selama `npm run dev`. Cukup ANTHROPIC_API_KEY di frontend/.env, tanpa
-//      perlu proyek Supabase. Ini yang membuat STELA bisa dicoba sejak awal.
+//      selama `npm run dev`. Endpoint lokal ini juga hanya menggunakan Gemini.
 const PAKAI_EDGE_FUNCTION = supabaseSiap;
 const ALAMAT = PAKAI_EDGE_FUNCTION
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stela`
@@ -22,7 +20,7 @@ export const stelaSiap = PAKAI_EDGE_FUNCTION || import.meta.env.DEV;
 
 export const PESAN_STELA_GAGAL = 'STELA sedang mengalami kendala. Silakan coba lagi.';
 export const PESAN_STELA_BELUM_SIAP =
-  'STELA belum dikonfigurasi. Isi NINEROUTER_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
+  'STELA belum dikonfigurasi. Isi GEMINI_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
 
 export const tanyaStela = async (pesan, { signal } = {}) => {
   if (!stelaSiap) throw new Error(PESAN_STELA_BELUM_SIAP);

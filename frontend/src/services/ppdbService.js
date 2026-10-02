@@ -6,6 +6,7 @@ const STORAGE_BUCKET = 'ppdb-documents';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const COMBINED_DOCUMENT_TYPES = ['application/pdf'];
+const EMAIL_CONFIRM_REDIRECT = () => `${window.location.origin}/auth/confirm?next=/ppdb/verifikasi`;
 export const DUPLICATE_SUBMISSION_MESSAGE = 'Anda sudah memiliki pendaftaran PPDB. Silakan melihat status pendaftaran Anda.';
 
 const throwIfError = ({ data, error }) => {
@@ -108,7 +109,7 @@ export async function signUpPpdb(email, password, biodata) {
     email,
     password,
     options: {
-      emailRedirectTo: `${window.location.origin}/auth/confirm`,
+      emailRedirectTo: EMAIL_CONFIRM_REDIRECT(),
       data: { ppdb: {
         nisn: biodata.nisn.trim(),
         namaLengkap: biodata.namaLengkap.trim(),
@@ -161,7 +162,7 @@ export async function resendPpdbVerification(email) {
   return throwIfError(await client.auth.resend({
     type: 'signup',
     email,
-    options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
+    options: { emailRedirectTo: EMAIL_CONFIRM_REDIRECT() },
   }));
 }
 

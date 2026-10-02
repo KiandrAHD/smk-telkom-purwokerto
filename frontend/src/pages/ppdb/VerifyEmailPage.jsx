@@ -60,9 +60,27 @@ const VerifyEmailPage = () => {
     return () => window.clearTimeout(timer);
   }, [sisa]);
 
-  const lanjut = () => {
-    if (currentUser || verifiedUser) navigate('/ppdb/formulir');
-    else navigate('/ppdb/masuk');
+  const lanjut = async () => {
+    const user = verifiedUser || currentUser;
+    if (!user) {
+      navigate('/ppdb/masuk');
+      return;
+    }
+    try {
+      const { data, error } = await ensureSupabase().auth.getUser();
+      if (error) throw error;
+      const refreshedUser = data?.user;
+      if (refreshedUser?.email_confirmed_at) {
+        setVerifiedUser(refreshedUser);
+        setState('verified');
+        navigate('/ppdb/formulir');
+        return;
+      }
+      setState('unverified');
+      setFeedback('Email belum terverifikasi. Silakan klik tautan konfirmasi dari email Anda terlebih dahulu.');
+    } catch {
+      setFeedback('Status verifikasi tidak dapat diperiksa. Silakan coba lagi.');
+    }
   };
 
   const kirimUlang = async () => {
