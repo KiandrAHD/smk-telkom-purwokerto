@@ -28,7 +28,6 @@ const AboutSection = () => {
             desc={t(landingAbout.video.desc)}
             rasio="aspect-[646/488]"
             showCaption={false}
-            posterHasPlayIcon
           />
         </Reveal>
 

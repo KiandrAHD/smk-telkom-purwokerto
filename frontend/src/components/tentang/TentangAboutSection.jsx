@@ -24,7 +24,7 @@ const TentangAboutSection = () => {
             <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4" />
           </a>
         </div>
-        <VideoEmbed {...videoProfilSekolah} title={t(videoProfilSekolah.title)} desc={t(videoProfilSekolah.desc)} showCaption={false} posterHasPlayIcon />
+        <VideoEmbed {...videoProfilSekolah} title={t(videoProfilSekolah.title)} desc={t(videoProfilSekolah.desc)} showCaption={false} />
       </div>
     </div>
   </section>
