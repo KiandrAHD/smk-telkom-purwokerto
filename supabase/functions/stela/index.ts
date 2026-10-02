@@ -151,11 +151,14 @@ Deno.serve(async (req) => {
 
   const hasilValidasi = periksaPesan((badan as Record<string, unknown>)?.messages);
   if (!hasilValidasi.pesan) return balas({ error: hasilValidasi.galat }, 400, origin);
+  const requestedLanguage = (badan as Record<string, unknown>)?.language;
+  if (requestedLanguage !== undefined && requestedLanguage !== 'en' && requestedLanguage !== 'id') return balas({ error: 'Unsupported language.' }, 400, origin);
+  const language = requestedLanguage === 'en' ? 'en' : 'id';
 
   // Pertanyaan pembuka yang sama tidak dibeli dua kali. Di situs sekolah ini
   // lapisan yang paling banyak menghemat: satu jawaban tersimpan bisa melayani
   // puluhan pengunjung yang menanyakan hal serupa.
-  const tersimpan = penjaga.ambilCache(hasilValidasi.pesan);
+  const tersimpan = penjaga.ambilCache(hasilValidasi.pesan, language);
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 
   try {
@@ -174,12 +177,13 @@ Deno.serve(async (req) => {
       apiKey: API_KEY,
       model: MODEL,
       pesan: hasilValidasi.pesan,
+      language,
       contextPublik,
     });
 
     if (!teks) return balas({ error: 'STELA sedang tidak tersedia.' }, 502, origin);
 
-    penjaga.simpanCache(hasilValidasi.pesan, teks);
+    penjaga.simpanCache(hasilValidasi.pesan, teks, language);
     const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
     console.log(`stela ${terpakaiHariIni}/${maksPerHari} | token ${tokenMasuk}/${tokenKeluar}`);
     return balas({ reply: teks }, 200, origin);

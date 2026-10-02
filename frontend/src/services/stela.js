@@ -24,7 +24,7 @@ export const PESAN_STELA_GAGAL = 'STELA sedang mengalami kendala. Silakan coba l
 export const PESAN_STELA_BELUM_SIAP =
   'STELA belum dikonfigurasi. Isi NINEROUTER_KEY, GEMINI_API_KEY, atau ANTHROPIC_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
 
-export const tanyaStela = async (pesan, { signal } = {}) => {
+export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
   if (!stelaSiap) throw new Error(PESAN_STELA_BELUM_SIAP);
 
   try {
@@ -39,7 +39,7 @@ export const tanyaStela = async (pesan, { signal } = {}) => {
           ? { Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` }
           : {}),
       },
-      body: JSON.stringify({ messages: pesan }),
+      body: JSON.stringify({ messages: pesan, language }),
     });
 
     const data = await tanggapan.json().catch(() => ({}));

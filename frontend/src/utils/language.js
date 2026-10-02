@@ -9,6 +9,12 @@ export function readLanguage() {
 
 export function translate(text, language, variables = {}) {
   if (typeof text !== 'string') return text;
-  const value = language === 'en' && Object.hasOwn(english, text) ? english[text] : text;
+  let value = text;
+  if (language === 'en') {
+    if (Object.hasOwn(english, text)) value = english[text];
+    // Imported articles contain separate paragraphs and an attribution URL.
+    else if (text.includes('\n')) value = text.split(/(\n+)/).map((part) => /^\n+$/.test(part) ? part : translate(part, language)).join('');
+    else if (/^Sumber:\s*https?:\/\//.test(text)) value = text.replace(/^Sumber:/, 'Source:');
+  }
   return value.replace(/\{(\w+)\}/g, (token, key) => Object.hasOwn(variables, key) ? String(variables[key]) : token);
 }

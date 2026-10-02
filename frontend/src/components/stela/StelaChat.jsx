@@ -59,7 +59,7 @@ const IsiPesan = ({ teks }) =>
   });
 
 const StelaChat = ({ className = '', tampilkanSaran = true }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [riwayat, setRiwayat] = useState([{ role: 'assistant', content: stelaData.sapaan }]);
   const [masukan, setMasukan] = useState('');
   const [memuat, setMemuat] = useState(false);
@@ -110,9 +110,9 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
     controllerRef.current = controller;
 
     try {
-      const jawaban = await tanyaStela(percakapan, { signal: controller.signal });
+      const jawaban = await tanyaStela(percakapan, { signal: controller.signal, language });
       if (!aktifRef.current) return;
-      setRiwayat((lama) => [...lama, { role: 'assistant', content: jawaban }]);
+      setRiwayat((lama) => [...lama, { role: 'assistant', content: jawaban, language }]);
       setPertanyaanGagal('');
     } catch (error) {
       if (!aktifRef.current || error?.name === 'AbortError') return;
@@ -144,7 +144,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
                   : 'rounded-bl-sm bg-dark-50 text-dark-700'
               }`}
             >
-              {pesan.role === 'assistant' ? <IsiPesan teks={i === 0 ? t(pesan.content) : pesan.content} /> : pesan.content}
+              {pesan.role === 'assistant' ? <IsiPesan teks={i === 0 ? t(pesan.content) : pesan.language === language ? t(pesan.content) : t('Tanyakan kembali untuk mendapatkan jawaban dalam bahasa yang dipilih.')} /> : pesan.content}
             </p>
           </div>
         ))}

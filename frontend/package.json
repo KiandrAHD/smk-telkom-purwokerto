@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "animasi:uji": "node scripts/uji-animasi.mjs",
-    "bahasa:uji": "node scripts/uji-bahasa.mjs && node scripts/uji-bahasa-portal.mjs",
+    "bahasa:uji": "node scripts/uji-bahasa.mjs && node scripts/uji-bahasa-portal.mjs && node scripts/uji-bahasa-konten.mjs",
     "preview": "vite preview",
     "stela:konten": "node scripts/buat-konten-stela.mjs",
     "foto:pertajam": "node scripts/pertajam-foto.mjs",

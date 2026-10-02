@@ -39,7 +39,7 @@ try {
   assert.ok(questionnaire.includes('View Results'));
   assert.ok(questionnaire.includes('Building applications'));
 
-  // AI output stays in its source language even if it matches a catalog key.
+  // Catalogued assistant copy follows the selected language.
   const result = render(createElement(NextTelResult, {
     result: { topRecommendation: 'RPL', ranking: [['RPL', 8]], maxScore: 8 },
     explanation: { explanation: 'Rekomendasi utama', strengths: ['Ringkasan skor'], learningSuggestions: ['Mulai ulang'] },
@@ -47,9 +47,9 @@ try {
   }));
   assert.ok(result.includes('Software Engineering (RPL)'));
   assert.ok(result.includes('Score Summary'));
-  assert.ok(result.includes('>Rekomendasi utama</p>'));
-  assert.ok(result.includes('>Ringkasan skor</li>'));
-  assert.ok(result.includes('>Mulai ulang</li>'));
+  assert.ok(result.includes('>Top Recommendation</p>'));
+  assert.ok(result.includes('>Score Summary</li>'));
+  assert.ok(result.includes(`>${value.t('Mulai ulang')}</li>`));
 
   const chat = render(createElement(StelaChat));
   assert.ok(chat.includes(value.t(stelaData.sapaan)));
@@ -60,7 +60,7 @@ try {
   assert.ok(form.includes('value={pilihan}'), 'Nilai jenis kelamin tetap sumber, bukan hasil terjemahan.');
   assert.ok(form.includes('nilai[`${mapel.nama}|${s}`]'), 'Key nilai rapor tetap sama saat bahasa berubah.');
   assert.ok(!form.includes('key={t('), 'Pergantian bahasa tidak mengganti key input formulir.');
-  console.log('Bahasa portal: label Inggris, nilai pilihan/rapor tetap, greeting lokal, serta respons AI sumber terverifikasi.');
+  console.log('Bahasa portal: English labels and assistant copy; submitted option values and report keys remain unchanged.');
 } finally {
   await server.close();
 }

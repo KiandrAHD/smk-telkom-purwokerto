@@ -128,8 +128,10 @@ export const stelaDevPlugin = () => ({
 
       const { pesan, galat } = periksaPesan(badan?.messages);
       if (!pesan) return kirim({ error: galat }, 400);
+      if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
+      const language = badan.language === 'en' ? 'en' : 'id';
 
-      const tersimpan = penjaga.ambilCache(pesan);
+      const tersimpan = penjaga.ambilCache(pesan, language);
       if (tersimpan) {
         server.config.logger.info('  [stela] dijawab dari cache, tanpa panggilan API');
         return kirim({ reply: tersimpan }, 200);
@@ -143,6 +145,7 @@ export const stelaDevPlugin = () => ({
           apiKey,
           model,
           pesan,
+          language,
           // Tanpa Supabase di lokal, data dinamis memang tidak ada. STELA tetap
           // menjawab dari data sekolah statis yang sudah lengkap.
           contextPublik:
@@ -150,7 +153,7 @@ export const stelaDevPlugin = () => ({
         });
         if (!teks) return kirim({ error: 'STELA tidak memberi jawaban.' }, 502);
 
-        penjaga.simpanCache(pesan, teks);
+        penjaga.simpanCache(pesan, teks, language);
         const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
         server.config.logger.info(
           `  [stela] ${terpakaiHariIni}/${maksPerHari} hari ini | model ${modelDipakai} | token masuk ${tokenMasuk}, keluar ${tokenKeluar}`,
@@ -192,6 +195,8 @@ export const stelaDevPlugin = () => ({
 
       try {
         const badan = JSON.parse(mentah);
+        if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
+        const language = badan.language === 'en' ? 'en' : 'id';
         const result = hitungHasilNextTel(badan?.answers);
         if (!result) return kirim({ error: 'Jawaban NextTel tidak valid.' }, 400);
         penjaga.catatPanggilan();
@@ -200,7 +205,8 @@ export const stelaDevPlugin = () => ({
           penyedia,
           apiKey,
           model,
-          instruksiKustom: INSTRUKSI_NEXTTEL,
+          instruksiKustom: language === 'en' ? INSTRUKSI_NEXTTEL.replace('Gunakan Bahasa Indonesia yang ramah, singkat, dan mudah dipahami siswa SMP.', 'Respond entirely in friendly, concise English suitable for junior high school students. Use English program names, preserving RPL, PG, TKJ, and TJAT codes.') : INSTRUKSI_NEXTTEL,
+          language,
           pesan: [{
             role: 'user',
             content:

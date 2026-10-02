@@ -5,7 +5,7 @@ import { ArrowRight, MapPin } from 'lucide-react';
 import { bkkSearch, lowonganPopuler } from '../../data/dummyData';
 import { opsiFilter, saringLowongan } from '../../utils/bkkFilter';
 
-const Select = ({ label, value, onChange, options }) => (
+const Select = ({ label, value, onChange, options, t }) => (
   <label className="min-w-0 flex-1">
     <span className="sr-only">{label}</span>
     <select
@@ -18,7 +18,7 @@ const Select = ({ label, value, onChange, options }) => (
       <option value="">{label}</option>
       {options.map((opt) => (
         <option key={opt} value={opt}>
-          {opt}
+          {t(opt)}
         </option>
       ))}
     </select>
@@ -85,12 +85,14 @@ const BkkLowonganSection = ({ items = [] }) => {
               value={lokasi}
               onChange={setLokasi}
               options={lokasiOptions}
+              t={t}
             />
             <Select
               label={t(bkkSearch.placeholders.tipe)}
               value={tipe}
               onChange={setTipe}
               options={tipeOptions}
+              t={t}
             />
             {/* Penyaringan berjalan langsung setiap ketikan, jadi tidak ada yang
                 perlu "dicari". Tombolnya mengosongkan filter -- dan dulu memang
@@ -120,7 +122,7 @@ const BkkLowonganSection = ({ items = [] }) => {
                         : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'
                     }`}
                   >
-                    {c === 'Semua' ? t(c) : c}
+                    {t(c)}
                   </button>
                 );
               })}
@@ -147,11 +149,11 @@ const BkkLowonganSection = ({ items = [] }) => {
                   onError={({ currentTarget }) => { currentTarget.hidden = true; }}
                   className="h-8 w-auto max-w-[7rem] self-start object-contain"
                 />}
-                <h3 className="mt-4 font-heading text-sm font-bold text-dark-900">{job.role}</h3>
+                <h3 className="mt-4 font-heading text-sm font-bold text-dark-900">{t(job.role)}</h3>
                 <p className="mt-1 text-[10px] text-dark-500">{job.company}</p>
                 <p className="mt-1.5 flex items-center gap-1 text-[10px] text-dark-500">
                   <MapPin className="h-3 w-3 flex-shrink-0" />
-                  {job.lokasi ? job.location : t('Lokasi belum tersedia')}
+                  {t(job.lokasi ? job.location : 'Lokasi belum tersedia')}
                 </p>
 
                 <div className="mt-3 flex flex-wrap gap-1.5">
@@ -160,7 +162,7 @@ const BkkLowonganSection = ({ items = [] }) => {
                       key={b}
                       className="rounded border border-dark-200 px-2 py-1 text-[9px] font-semibold text-dark-600"
                     >
-                      {b}
+                      {t(b)}
                     </span>
                   ))}
                 </div>

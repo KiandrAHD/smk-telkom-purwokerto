@@ -93,9 +93,9 @@ export const buatPenjaga = ({
     // Cache hanya untuk pertanyaan pembuka satu pesan. Percakapan lanjutan
     // jawabannya bergantung konteks sebelumnya, jadi menyimpannya berisiko
     // memberi jawaban yang keliru ke orang lain.
-    ambilCache(pesan) {
+    ambilCache(pesan, language = 'id') {
       if (pesan.length !== 1) return null;
-      const kunci = kunciPertanyaan(pesan[0].content);
+      const kunci = `${language}:${kunciPertanyaan(pesan[0].content)}`;
       const isi = cache.get(kunci);
       if (!isi) return null;
       if (Date.now() > isi.kedaluwarsa) {
@@ -108,11 +108,11 @@ export const buatPenjaga = ({
       return isi.jawaban;
     },
 
-    simpanCache(pesan, jawaban) {
+    simpanCache(pesan, jawaban, language = 'id') {
       if (pesan.length !== 1 || !jawaban) return;
       // Map mempertahankan urutan sisip, jadi entri terlama ada di depan.
       if (cache.size >= maksCache) cache.delete(cache.keys().next().value);
-      cache.set(kunciPertanyaan(pesan[0].content), {
+      cache.set(`${language}:${kunciPertanyaan(pesan[0].content)}`, {
         jawaban,
         kedaluwarsa: Date.now() + ttlCacheMs,
       });

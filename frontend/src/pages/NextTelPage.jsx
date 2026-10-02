@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import MainLayout from '../layouts/MainLayout';
 import NextTelIntro from '../components/nexttel/NextTelIntro';
 import NextTelQuestionnaire from '../components/nexttel/NextTelQuestionnaire';
@@ -18,6 +19,7 @@ const QUESTIONS = [
 ];
 
 const NextTelPage = () => {
+  const { language } = useLanguage();
   const [mode, setMode] = useState('intro');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -45,8 +47,9 @@ const NextTelPage = () => {
     try {
       const response = await jelaskanRekomendasiNextTel({
         answers: selectedAnswers,
+        language,
       }, { signal: controller.signal });
-      setExplanation(response);
+      setExplanation({ ...response, language });
     } catch (requestError) {
       if (requestError?.name !== 'AbortError') setError(PESAN_NEXTTEL_GAGAL);
     } finally {

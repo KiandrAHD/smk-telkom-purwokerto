@@ -41,7 +41,7 @@ const PengumumanPopulerCard = ({ items = [], tampilkanLihatSemua = true }) => {
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-extrabold leading-snug tracking-wide text-dark-900">
-                {item.title}
+                {t(item.title)}
               </span>
               <span className="mt-1 flex flex-wrap items-center gap-2 text-xs font-bold text-dark-600">
                 {formatPublicDate(item.iso, {}, locale)}

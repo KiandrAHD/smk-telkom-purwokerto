@@ -7,7 +7,7 @@ const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = f
   return (
   <Link
     to={`/prestasi/${slug}`}
-    aria-label={t('Lihat detail prestasi: {title}', { title })}
+    aria-label={t('Lihat detail prestasi: {title}', { title: t(title) })}
     className={`group block overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
       highlight ? 'border-primary' : 'border-dark-100 hover:border-primary'
     }`}
@@ -16,16 +16,16 @@ const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = f
       <div className="overflow-hidden">
         <ContentImage
           src={image}
-          alt={imageAlt || title}
+          alt={t(imageAlt || title)}
           loading="lazy"
           className="w-full aspect-[16/9] object-cover object-top transition-transform duration-500 group-hover:scale-110"
         />
       </div>
       <div className="px-4 py-2.5">
         <h3 className="whitespace-pre-line font-heading text-sm font-bold leading-snug text-dark-900">
-          {title}
+          {t(title)}
         </h3>
-        <p className="mt-1 text-[10px] text-dark-500">{category}</p>
+        <p className="mt-1 text-[10px] text-dark-500">{t(category)}</p>
       </div>
     </article>
   </Link>

@@ -64,6 +64,8 @@ Deno.serve(async (request) => {
     const raw = await request.text();
     if (raw.length > MAX_BODY) return fail(origin);
     const body = JSON.parse(raw);
+    if (body?.language !== undefined && body.language !== 'en' && body.language !== 'id') return reply({ error: 'Unsupported language.' }, 400, origin);
+    const language = body?.language === 'en' ? 'en' : 'id';
     const result = hitungHasilNextTel(body?.answers);
     if (!result) return reply({ error: 'Jawaban NextTel tidak valid.' }, 400, origin);
     const userData = JSON.stringify({ answers: result.answers, scores: result.scores, topRecommendation: result.topRecommendation });
@@ -72,7 +74,8 @@ Deno.serve(async (request) => {
       apiKey: API_KEY,
       model: MODEL,
       baseUrl: Deno.env.get('NEXTTEL_NINEROUTER_URL') ?? Deno.env.get('NINEROUTER_URL'),
-      instruksiKustom: systemPrompt,
+      instruksiKustom: language === 'en' ? systemPrompt.replace('Gunakan Bahasa Indonesia yang ramah, singkat, dan mudah dipahami siswa SMP.', 'Respond entirely in friendly, concise English suitable for junior high school students. Use English program names, preserving RPL, PG, TKJ, and TJAT codes.') : systemPrompt,
+      language,
       pesan: [{ role: 'user', content: `Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n${userData}` }],
     });
     if (typeof text !== 'string' || !text) return fail(origin);
