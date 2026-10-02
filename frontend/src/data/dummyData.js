@@ -814,48 +814,6 @@ export const perjalananPrestasi = {
   defaultYear: '2024',
 };
 
-export const hallOfFame = {
-  title: 'Hall of Fame',
-  items: [
-    {
-      name: 'Muhammad Iqbal',
-      achievement: 'Juara 1 LKS Nasional 2023 Web Technologies',
-      role: 'Software Engineer',
-      company: 'Tokopedia',
-    },
-    {
-      name: 'Aisyah Nur Fadillah',
-      achievement: 'Medal Emas WorldSkills Asia 2022',
-      role: 'UI/UX Designer',
-      company: 'Traveloka',
-    },
-    {
-      name: 'Rizky Pratama',
-      achievement: 'Juara 1 IoT Challenge Telkom 2023',
-      role: 'IoT Engineer',
-      company: 'Telkom Indonesia',
-    },
-    {
-      name: 'Dewi Anggraini',
-      achievement: 'Silver Medal Huawei ICT Competition 2023',
-      role: 'Network Engineer',
-      company: 'Huawei',
-    },
-    {
-      name: 'Bagas Nugroho',
-      achievement: 'Juara 2 Gemastik Game Development 2022',
-      role: 'Game Developer',
-      company: 'Agate',
-    },
-    {
-      name: 'Salsabila Putri',
-      achievement: 'Bronze Medal WorldSkills Asia 2023',
-      role: 'Cloud Engineer',
-      company: 'AWS',
-    },
-  ],
-};
-
 export const videoHighlight = {
   sectionTitle: 'Didukung & Diakui Oleh',
   title: 'Video Highlight',
@@ -1066,6 +1024,15 @@ export const kisahAlumni = {
     'Latihan soal dan tips',
     'Panduan pengembangan karier',
   ],
+};
+
+export const hallOfFame = {
+  title: 'Hall of Fame',
+  items: kisahAlumni.items.map((alum) => ({
+    ...alum,
+    achievement: alum.meta,
+    imageAlt: alum.name,
+  })),
 };
 
 /* =========================================================

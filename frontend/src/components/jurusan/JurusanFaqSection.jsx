@@ -12,7 +12,7 @@ const JurusanFaqSection = () => {
 
   return (
     <section id="faq-jurusan" className="bg-white py-8 lg:py-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_40%] lg:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 px-4 sm:px-6 lg:px-8">
         {/* Akordeon FAQ */}
         <div>
           <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-primary">
@@ -67,13 +67,16 @@ const JurusanFaqSection = () => {
           </Link>
         </div>
 
-        {/* Kartu STELA — potongan kiri dari aset kartu penuh, sesuai crop di Figma */}
-        <Link to="/stela" className="relative block overflow-hidden rounded-2xl">
+        {/* Artwork lengkap diberi lebar penuh agar teks kedua bahasa terbaca. */}
+        <Link to="/stela" aria-label={t(stelaData.ctaText)} className="block overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
           <img
             src={language === 'en' ? stelaCardEn : stelaCard}
             alt=""
             aria-hidden="true"
-            className={language === 'en' ? 'block h-auto w-full' : 'h-full min-h-[10rem] w-full object-cover object-left'}
+            width={language === 'en' ? 2172 : 2200}
+            height={language === 'en' ? 724 : 693}
+            loading="lazy"
+            className="block h-auto w-full"
           />
           <span className="sr-only">
             {t(stelaData.title).replace('\n', ' ')}. {t(stelaData.description)}

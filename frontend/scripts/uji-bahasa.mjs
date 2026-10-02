@@ -18,6 +18,13 @@ try {
   assert.equal(translate('Nama dari dashboard', 'en'), 'Nama dari dashboard');
   assert.equal(translate('constructor', 'en'), 'constructor');
   const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
+  const { aboutStats, visiMisi, timelineData, kepalaSekolah } = await server.ssrLoadModule('/src/data/dummyData.js');
+  const profileTexts = [...aboutStats.map((item) => item.label), ...Object.values(visiMisi), ...timelineData.flatMap((item) => [item.title, item.desc]), kepalaSekolah.quote, kepalaSekolah.quoteFull, kepalaSekolah.ctaText, 'Masuk PPDB'];
+  for (const text of profileTexts) {
+    if (['Digital Smart School', 'AI & Future Ready'].includes(text)) continue;
+    assert.notEqual(translate(text, 'en'), text, `Profile English translation missing: ${text}`);
+    assert.equal(translate(text, 'id'), text, 'Indonesian content must remain unchanged.');
+  }
   const { default: FormInput } = await server.ssrLoadModule('/src/components/dashboard/FormInput.jsx');
   const { default: Navbar } = await server.ssrLoadModule('/src/components/Navbar.jsx');
   const { default: Footer } = await server.ssrLoadModule('/src/components/Footer.jsx');
