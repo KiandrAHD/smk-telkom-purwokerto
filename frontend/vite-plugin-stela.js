@@ -1,7 +1,6 @@
 import { loadEnv } from 'vite';
 import {
   BATAS,
-  MODEL_CADANGAN,
   kunciBermasalah,
   periksaPesan,
   pilihPenyedia,
