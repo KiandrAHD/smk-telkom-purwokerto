@@ -21,15 +21,15 @@ const BkkAlumniSection = () => {
               className="rounded-xl border border-dark-100 bg-white p-4 transition-all hover:-translate-y-1 hover:border-primary"
             >
               <div className="flex items-center gap-3">
-                <ContentImage src={alum.image} alt={alum.name} loading="lazy" className="h-10 w-10 flex-shrink-0 rounded-full object-cover" />
+                <ContentImage src={alum.image} alt={alum.name} loading="lazy" className="h-12 w-12 flex-shrink-0 rounded-full object-cover" />
                 <figcaption className="min-w-0">
-                  <p className="font-heading text-[11px] font-bold text-dark-900">{alum.name}</p>
-                  <p className="text-[8px] text-dark-500">{t(alum.meta)}</p>
-                  <p className="text-[8px] text-dark-500">{t(alum.role)}</p>
+                  <p className="font-heading text-xs font-bold text-dark-900">{alum.name}</p>
+                  <p className="mt-1 text-[10px] text-dark-500">{t(alum.meta)}</p>
+                  <p className="text-[10px] text-dark-500">{t(alum.role)}</p>
                 </figcaption>
               </div>
-              <p className="mt-3 text-[9px] leading-relaxed text-dark-600">{t(alum.summary)}</p>
-              <a href={alum.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-[9px] text-primary underline underline-offset-2">{t("Ringkasan testimoni dari situs resmi")}</a>
+              <p className="mt-3 text-[11px] leading-relaxed text-dark-600">{t(alum.summary)}</p>
+              <a href={alum.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-[10px] text-primary underline underline-offset-2">{t("Ringkasan testimoni dari situs resmi")}</a>
             </figure>
           ))}
         </div>
@@ -37,29 +37,32 @@ const BkkAlumniSection = () => {
 
       {/* Sumber daya karier */}
       <div className="flex flex-col rounded-2xl border border-dark-100 bg-white p-5 shadow-card">
-        <ul className="space-y-4">
+        <ul className="space-y-3">
           {kisahAlumni.resources.map((item) => (
             <li key={item}>
               <Link
                 to={`/bkk/panduan/${slugify(item)}`}
-                className="group flex items-center gap-2.5 text-[10px] text-dark-600 transition-colors hover:text-primary"
+                className="group flex items-center gap-3 py-1.5 text-xs text-dark-600 transition-colors hover:text-primary"
               >
                 <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-primary/30">
                   <Lightbulb className="h-3.5 w-3.5 text-primary" />
                 </span>
-                {t(item)}
+                <span className="min-w-0 leading-relaxed">{t(item)}</span>
               </Link>
             </li>
           ))}
         </ul>
 
-        <Link
-          to="/bkk/panduan"
-          aria-label={t("Lihat semua sumber daya karier")}
-          className="mt-auto flex items-center justify-end rounded-full border border-primary/40 px-4 py-2 text-primary transition-colors hover:bg-primary hover:text-white"
-        >
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+        <div className="mt-auto pt-5">
+          <Link
+            to="/bkk/panduan"
+            aria-label={t("Lihat semua sumber daya karier")}
+            className="flex items-center justify-between gap-3 rounded-full border border-primary/40 px-4 py-3 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
+          >
+            {t("Lihat Semua Panduan")}
+            <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </div>
   </section>

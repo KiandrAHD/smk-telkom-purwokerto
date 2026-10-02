@@ -26,7 +26,17 @@ try {
   const alumni = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(AlumniSection)));
   assert.ok(alumni.includes('Ringkasan testimoni dari situs resmi'));
   assert.ok(!alumni.includes('<blockquote'), 'Parafrasa tidak boleh ditampilkan sebagai kutipan langsung.');
-  for (const item of kisahAlumni.items) assert.ok(alumni.includes(item.sourceUrl));
+  for (const item of kisahAlumni.items) {
+    assert.equal(new URL(item.sourceUrl).hostname, 'smktelkom-pwt.sch.id', 'Profil harus menyertakan sumber resmi sekolah.');
+    assert.equal(new URL(item.image).hostname, 'smktelkom-pwt.sch.id', 'Foto harus berasal dari profil resmi sekolah.');
+    assert.ok(item.summary?.trim(), 'Ringkasan alumni tidak boleh kosong.');
+    assert.ok(alumni.includes(`href="${item.sourceUrl}"`), 'Bukti harus bisa dibuka dari kartu alumni.');
+    assert.ok(alumni.includes(`src="${item.image}"`), 'Foto profil harus tampil pada kartu alumni.');
+  }
+  assert.ok(alumni.includes('Lihat Semua Panduan'), 'Tombol panduan harus memiliki teks yang terlihat.');
+  const { default: PanduanPage } = await server.ssrLoadModule('/src/pages/PanduanPage.jsx');
+  const panduan = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(PanduanPage)));
+  assert.ok((panduan.match(/<a\b[^>]*>.*?<\/a>/gs) ?? []).some(link => link.includes('href="/bkk"') && link.includes('Kembali ke BKK')), 'Daftar panduan harus memiliki tombol kembali ke BKK.');
   console.log('Bukti prestasi aman pada 0/1/3/4/6 item; tautan sumber dan ringkasan alumni terpasang.');
 } finally {
   await server.close();

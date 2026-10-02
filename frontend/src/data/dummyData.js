@@ -1000,26 +1000,31 @@ export const jalurKarier = {
 
 export const kisahAlumni = {
   title: 'Kisah Sukses Alumni',
+  // Profil, foto, dan ringkasan testimoni dari bagian Alumni Mendunia, diperiksa 2 Oktober 2026.
   items: [
     {
-      name: 'Rizky Pratama',
-      meta: 'Alumni RPL 2020',
-      role: 'Software Engineer di Tokopedia',
-      quote:
-        'Ilmu yang saya dapatkan di SMK Telkom Purwokerto sangat bermanfaat dalam karier saya saat ini',
+      name: 'Prof. Dr. Ir. Moh. Khairudin, M.T., Ph.D.',
+      meta: 'Lulusan 1998',
+      role: 'Guru Besar Universitas Negeri Yogyakarta',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/aaass.jpg',
+      summary: 'Khairudin menilai pendidikan teknologi dan pembentukan karakter di sekolah menjadi bekal bagi perjalanan akademik dan kariernya.',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/',
     },
     {
-      name: 'Dewi Anggraini',
-      meta: 'Alumni TJAT 2019',
-      role: 'Network Engineer di Telkom Indonesia',
-      quote:
-        'Pembelajaran praktik dan bimbingan guru membuat saya siap menghadapi dunia kerja',
+      name: 'Dr. Tenia Wahyuningrum, S.Kom., M.T.',
+      meta: 'Lulusan 2001',
+      role: 'Direktur Telkom University Purwokerto',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdaddd.jpg',
+      summary: 'Tenia menyoroti kemampuan alumni untuk bersaing dan melanjutkan pendidikan tinggi di Telkom University.',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/',
     },
     {
-      name: 'Aldo Permana',
-      meta: 'Alumni PG 2021',
-      role: 'Game Developer di Agate Studio',
-      quote: 'Sekolah ini bukan hanya mengajarkan teori, tapi juga kreativitas tanpa batas',
+      name: 'Alfa Putra Kurnia',
+      meta: 'Alumni TKJ',
+      role: 'Co-founder & CEO Arkademy.com',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdasd.jpg',
+      summary: 'Alfa mengaitkan kesiapan menghadapi dunia bisnis dengan keterampilan, pengetahuan, dan sikap yang dipelajari di sekolah.',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/',
     },
   ],
   resources: [

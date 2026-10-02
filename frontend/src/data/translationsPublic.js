@@ -44,6 +44,7 @@ export default {
   'Foto berikutnya': 'Next photo',
   'Ringkasan testimoni dari situs resmi': 'Testimonial summary from the official website',
   'Lihat semua sumber daya karier': 'View all career resources',
+  'Lihat Semua Panduan': 'View All Guides',
   'Jalur karier per jurusan': 'Career paths by study program',
   'Tautan lamaran belum tersedia.': 'Application link is not available yet.',
   'Tidak ada lowongan yang cocok. Coba ubah filter atau tekan “{reset}”.': 'No matching vacancies. Try changing the filters or select “{reset}”.',

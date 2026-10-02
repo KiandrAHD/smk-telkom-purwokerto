@@ -1,6 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText } from 'lucide-react';
+import { ArrowLeft, ArrowRight, FileText } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import HalamanHeader from '../components/HalamanHeader';
 import Reveal from '../components/Reveal';
@@ -12,7 +12,15 @@ const PanduanPage = () => {
   const { t } = useLanguage();
   return (
   <MainLayout>
-    <HalamanHeader {...panduanIndex} />
+    <HalamanHeader
+      {...panduanIndex}
+      aksi={
+        <Link to="/bkk" className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-5 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+          {t('Kembali ke {label}', { label: 'BKK' })}
+        </Link>
+      }
+    />
 
     <section className="bg-white px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-2">
