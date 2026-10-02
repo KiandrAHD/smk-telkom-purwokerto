@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { createServer } from 'vite';
 
 const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
@@ -112,6 +112,23 @@ try {
     const { default: Hero } = await server.ssrLoadModule(`/src/components/${path}.jsx`);
     assert.ok(!render(Hero, {}).includes('Lihat sumber'));
   }
+
+  const { guruDetail } = await server.ssrLoadModule('/src/data/dummyData.js');
+  const { default: DetailPelengkapPage } = await server.ssrLoadModule('/src/pages/DetailPelengkapPage.jsx');
+  for (const guru of guruDetail) {
+    assert.ok(!/Informasi tersebut merupakan riwayat|Dokumen tersebut tidak mencantumkan|tetapi pembagian mapel/.test(guru.lead));
+    for (const [query, target, label] of [
+      ['?from=profil-sekolah', '/profil-sekolah', 'Profil Sekolah'],
+      ['', '/profil-sekolah/guru', 'Profil Guru'],
+      ['?from=https://example.com', '/profil-sekolah/guru', 'Profil Guru'],
+    ]) {
+      const markup = renderToStaticMarkup(createElement(MemoryRouter, { initialEntries: [`/profil-sekolah/guru/${guru.slug}${query}`] },
+        createElement(Routes, null, createElement(Route, { path: '/profil-sekolah/guru/:slug', element: createElement(DetailPelengkapPage, { jenis: 'guru' }) }))));
+      assert.ok(markup.includes(`href="${target}"`) && markup.includes(`Kembali ke ${label}`), `${guru.title}: tombol kembali harus mengikuti asal yang dikenal.`);
+    }
+  }
+  const { default: GuruSection } = await server.ssrLoadModule('/src/components/tentang/TentangKepalaSekolahSection.jsx');
+  assert.equal((render(GuruSection, {}).match(/\?from=profil-sekolah/g) || []).length, 4, 'Semua kartu guru pada Profil Sekolah membawa penanda asal.');
 
   console.log('Lulus: empat proyek tanpa indikator, indikator carousel lain, deduplikasi, informasi hari ini/batas WIB/status, loading/error, tombol sumber, maksimal tiga prestasi, dan timeline.');
 } finally {

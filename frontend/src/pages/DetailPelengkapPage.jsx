@@ -54,7 +54,10 @@ const DetailPelengkapPage = ({ jenis }) => {
     video: item.video && { ...item.video, title: t(item.video.title), desc: t(item.video.desc) },
   };
   const kembaliKeBerita = jenis === 'galeri' && searchParams.get('from') === 'berita';
-  return <DetailLayout item={displayItem} backTo={kembaliKeBerita ? '/berita' : koleksi.backTo} backLabel={t(kembaliKeBerita ? 'Berita' : koleksi.backLabel)} />;
+  const kembaliKeProfilSekolah = jenis === 'guru' && searchParams.get('from') === 'profil-sekolah';
+  const backTo = kembaliKeProfilSekolah ? '/profil-sekolah' : kembaliKeBerita ? '/berita' : koleksi.backTo;
+  const backLabel = kembaliKeProfilSekolah ? 'Profil Sekolah' : kembaliKeBerita ? 'Berita' : koleksi.backLabel;
+  return <DetailLayout item={displayItem} backTo={backTo} backLabel={t(backLabel)} />;
 };
 
 export default DetailPelengkapPage;

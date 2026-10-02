@@ -71,7 +71,7 @@ const TentangKepalaSekolahSection = () => {
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
-                to={`/profil-sekolah/guru/${slugify(guru.nama)}`}
+                to={`/profil-sekolah/guru/${slugify(guru.nama)}?from=profil-sekolah`}
                 className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none min-[1660px]:w-[206px]"
               >
                 <article className="h-full min-w-0">
