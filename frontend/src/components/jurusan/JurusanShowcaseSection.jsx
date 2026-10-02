@@ -21,7 +21,7 @@ const JurusanShowcaseSection = () => {
         </h2>
 
         {/* Carousel native yang sama dengan prestasi: setiap proyek hanya dirender sekali, tanpa putaran ulang. */}
-        <PrestasiCarousel items={items}
+        <PrestasiCarousel items={items} showIndicators={false}
           labels={{ previous: 'Project sebelumnya', next: 'Project berikutnya', slide: 'Ke slide project {number}' }}
           renderCard={(item) => (
               <Link

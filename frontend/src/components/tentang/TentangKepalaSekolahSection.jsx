@@ -66,7 +66,8 @@ const TentangKepalaSekolahSection = () => {
           <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:ml-[51px] min-[1660px]:mt-[14px] min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500 min-[1660px]:sr-only">{t("Jabatan organisasi mengikuti SK Pengawakan 2026/2027; mata pelajaran tidak tercantum dalam SK.")} </p>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 xl:grid-cols-4 min-[1660px]:ml-[45px] min-[1660px]:mt-[38px] min-[1660px]:grid-cols-[repeat(4,206px)] min-[1660px]:gap-5">
+          {/* Key memulai ulang animasi masuk ketika halaman guru berubah. */}
+          <div key={`${currentPage}-${perPage}`} className="mt-4 grid animate-masuk-halaman grid-cols-1 gap-4 motion-reduce:animate-none min-[400px]:grid-cols-2 xl:grid-cols-4 min-[1660px]:ml-[45px] min-[1660px]:mt-[38px] min-[1660px]:grid-cols-[repeat(4,206px)] min-[1660px]:gap-5">
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
@@ -96,6 +97,7 @@ const TentangKepalaSekolahSection = () => {
               </Link>
             ))}
           </div>
+          <span className="sr-only" aria-live="polite">{t('Halaman {page} dari {total}', { page: currentPage + 1, total: pages })}</span>
 
           {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
           {pages > 1 && (

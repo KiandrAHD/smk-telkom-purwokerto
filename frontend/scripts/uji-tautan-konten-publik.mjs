@@ -93,6 +93,14 @@ try {
     assert.ok(item.description && item.author && item.sourceUrl, 'Proyek harus menyertakan deskripsi, pembuat, dan sumber.');
     assert.ok(projectDetail.some((detail) => detail.title === item.title && detail.sourceUrl === item.sourceUrl && detail.image === item.image), 'Kartu harus menuju detail dengan sumber yang sama.');
   }
+  const { default: Showcase } = await server.ssrLoadModule('/src/components/jurusan/JurusanShowcaseSection.jsx');
+  const showcase = render(Showcase, {});
+  assert.equal((showcase.match(/href="\/jurusan\/project\//g) || []).length, 4, 'Empat proyek tetap dapat dibuka tanpa indikator.');
+  assert.ok(!showcase.includes('Ke slide project'), 'Showcase Jurusan tidak menampilkan indikator pil.');
+  const { default: Carousel } = await server.ssrLoadModule('/src/components/PrestasiCarousel.jsx');
+  const carouselProps = { items: [{ id: 'uji' }], renderCard: () => createElement('p', null, 'Kartu uji') };
+  assert.ok(render(Carousel, carouselProps).includes('Ke slide prestasi'), 'Indikator carousel lainnya tetap tersedia.');
+  assert.ok(!render(Carousel, { ...carouselProps, showIndicators: false }).includes('Ke slide prestasi'));
   const { default: DetailLayout } = await server.ssrLoadModule('/src/components/DetailLayout.jsx');
   const detail = render(DetailLayout, { item: projectDetail[0], backTo: '/jurusan', backLabel: 'Jurusan' });
   assert.ok(!detail.includes('Lihat sumber'), 'Detail proyek pada screenshot juga tidak menampilkan tombol sumber.');
@@ -105,7 +113,7 @@ try {
     assert.ok(!render(Hero, {}).includes('Lihat sumber'));
   }
 
-  console.log('Lulus: deduplikasi proyek, informasi hari ini/batas WIB/status, loading/error, tombol sumber, maksimal tiga prestasi, dan timeline.');
+  console.log('Lulus: empat proyek tanpa indikator, indikator carousel lain, deduplikasi, informasi hari ini/batas WIB/status, loading/error, tombol sumber, maksimal tiga prestasi, dan timeline.');
 } finally {
   await server.close();
 }

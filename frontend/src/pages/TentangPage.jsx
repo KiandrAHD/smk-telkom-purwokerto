@@ -9,7 +9,6 @@ import RibbonDivider from '../components/RibbonDivider';
 import TentangKepalaSekolahSection from '../components/tentang/TentangKepalaSekolahSection';
 import StelaAISection from '../components/StelaAISection';
 import CTASection from '../components/CTASection';
-import AchievementsSection from '../components/AchievementsSection';
 
 const ProfileSekolahPage = () => (
   <MainLayout>
@@ -29,9 +28,6 @@ const ProfileSekolahPage = () => (
     <RibbonDivider />
     <Reveal>
       <TentangKepalaSekolahSection />
-    </Reveal>
-    <Reveal>
-      <AchievementsSection />
     </Reveal>
     <Reveal>
       <StelaAISection />

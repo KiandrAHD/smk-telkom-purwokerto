@@ -21,7 +21,7 @@ const getCarouselIndex = (scrollLeft, maxScroll, step, groups) => {
     ? previous : next;
 };
 
-const PrestasiCarousel = ({ items, renderCard, labels = {} }) => {
+const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = true }) => {
   const { t } = useLanguage();
   const trackRef = useRef(null);
   const stepRef = useRef(1);
@@ -146,8 +146,8 @@ const PrestasiCarousel = ({ items, renderCard, labels = {} }) => {
         ))}
       </div>
 
-      {/* Indikator carousel */}
-      <div className="mt-6 flex items-center justify-center gap-2">
+      {/* Panah tetap tersedia pada layar kecil meskipun indikator disembunyikan. */}
+      {(groups > 1 || showIndicators) && <div className="mt-6 flex items-center justify-center gap-2">
         {groups > 1 && <button
           type="button"
           onClick={() => goTo(active - 1)}
@@ -155,7 +155,7 @@ const PrestasiCarousel = ({ items, renderCard, labels = {} }) => {
           aria-label={t(labels.previous || 'Prestasi sebelumnya')}
           className="mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         ><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>}
-        {Array.from({ length: groups }).map((_, i) => (
+        {showIndicators && Array.from({ length: groups }).map((_, i) => (
           <button
             key={i}
             type="button"
@@ -174,7 +174,7 @@ const PrestasiCarousel = ({ items, renderCard, labels = {} }) => {
           aria-label={t(labels.next || 'Prestasi berikutnya')}
           className="ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         ><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>}
-      </div>
+      </div>}
     </>
   );
 };
