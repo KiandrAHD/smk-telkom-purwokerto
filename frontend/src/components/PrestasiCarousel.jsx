@@ -126,6 +126,7 @@ const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = tru
           jarak vertikal section. */}
       <div
         ref={trackRef}
+        data-lenis-prevent-horizontal
         onScroll={syncActive}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

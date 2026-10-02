@@ -2,8 +2,11 @@ import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DepartmentCard from './DepartmentCard';
+import Reveal from './Reveal';
 import SectionAccents from './SectionAccents';
 import { jurusanData } from '../data/dummyData';
+
+const revealDelays = ['delay-0', 'delay-100', 'delay-200', 'delay-300'];
 
 const DepartmentsSection = () => {
   const { t } = useLanguage();
@@ -20,8 +23,10 @@ const DepartmentsSection = () => {
       </h2>
 
       <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {jurusanData.items.map((item) => (
-          <DepartmentCard key={item.name} {...item} />
+        {jurusanData.items.map((item, index) => (
+          <Reveal key={item.name} className={`h-full ${revealDelays[index] ?? 'delay-0'}`}>
+            <DepartmentCard {...item} />
+          </Reveal>
         ))}
       </div>
 

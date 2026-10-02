@@ -65,7 +65,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
   const [memuat, setMemuat] = useState(false);
   const [galat, setGalat] = useState(null);
   const [pertanyaanGagal, setPertanyaanGagal] = useState('');
-  const bawahRef = useRef(null);
+  const pesanRef = useRef(null);
   const controllerRef = useRef(null);
   const aktifRef = useRef(true);
 
@@ -83,7 +83,8 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
   }, []);
 
   useEffect(() => {
-    bawahRef.current?.scrollIntoView({ block: 'end' });
+    const viewport = pesanRef.current;
+    viewport?.scrollTo({ top: viewport.scrollHeight, behavior: 'instant' });
   }, [riwayat, memuat]);
 
   const kirim = async (teks, ulang = false) => {
@@ -130,7 +131,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
 
   return (
     <div className={`flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white ${className}`}>
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite" aria-atomic="false">
+      <div ref={pesanRef} data-lenis-prevent className="flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite" aria-atomic="false">
         {riwayat.map((pesan, i) => (
           <div
             key={i}
@@ -189,7 +190,6 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
           </div>
         )}
 
-        <div ref={bawahRef} />
       </div>
 
       <form

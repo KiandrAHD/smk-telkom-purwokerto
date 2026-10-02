@@ -45,6 +45,10 @@ html {
   scroll-behavior: smooth;
 }
 
+html.lenis {
+  scroll-behavior: auto;
+}
+
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -240,6 +244,10 @@ body {
    transform, supaya tidak menimpa utility transform yang sudah dipakai kartu
    (hover:-translate-y-1, -scale-x-100). */
 @layer base {
+  :where(main section[id]) {
+    scroll-margin-top: 6rem;
+  }
+
   button:not(:disabled),
   summary,
   [role='button'],
@@ -329,7 +337,13 @@ body {
 }
 
 .partners-marquee {
-  animation: partners-bergerak 18s linear infinite;
+  animation: partners-bergerak 30s linear infinite;
+}
+
+#mitra:hover .partners-marquee,
+#mitra:focus-within .partners-marquee,
+#mitra[data-paused='true'] .partners-marquee {
+  animation-play-state: paused;
 }
 
 /* Dipakai komponen <Reveal>. Kelas `.visible` dipasang oleh IntersectionObserver
@@ -344,9 +358,19 @@ body {
   transition-timing-function: ease-out;
 }
 
-.reveal.visible {
+.reveal.visible,
+.reveal:focus-within,
+.reveal:has(:target) {
   opacity: 1;
   transform: none;
+}
+
+.reveal .department-photo {
+  transition-duration: 1.6s;
+}
+
+.reveal:not(.visible):not(:focus-within) .department-photo {
+  transform: scale(1.03);
 }
 
 /* Saat dicetak, isi harus tampil utuh tanpa menunggu discroll — halaman
@@ -355,6 +379,14 @@ body {
   .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  [data-word] {
+    opacity: 1 !important;
+  }
+
+  .department-photo {
+    transform: none !important;
   }
 }
 
@@ -369,6 +401,11 @@ body {
     opacity: 1;
     transform: none;
     transition-property: none;
+  }
+
+  .department-photo {
+    transform: none !important;
+    transition: none;
   }
 
   .partners-marquee {
