@@ -6,7 +6,15 @@
 // juga oleh server pengembangan lokal (frontend/vite-plugin-stela.js).
 // Pagar biayanya ada di ./penjaga-biaya.mjs.
 
-import { BATAS, kunciBermasalah, periksaPesan, pilihPenyedia, tanyaAI } from './inti.mjs';
+import {
+  BATAS,
+  deteksiBahasa,
+  keluaranAman,
+  kunciBermasalah,
+  periksaPesan,
+  pilihPenyedia,
+  tanyaAI,
+} from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
 
 const KUNCI: Record<string, string | undefined> = {
@@ -23,21 +31,15 @@ const PENYEDIA = pilihPenyedia({
 });
 const API_KEY = PENYEDIA ? KUNCI[PENYEDIA] : undefined;
 
-// Kunci yang terisi tapi bentuknya salah akan diabaikan, bukan dipakai lalu
-// gagal. Dicatat sekali saat boot supaya penyebabnya terlihat di log.
-for (const rusak of kunciBermasalah({
-  ninerouterKey: KUNCI.ninerouter,
-  anthropicKey: KUNCI.anthropic,
-  geminiKey: KUNCI.gemini,
-  groqKey: KUNCI.groq,
-})) {
-  console.warn(`Kunci ${rusak.toUpperCase()} diabaikan: bentuknya tidak sesuai.`);
-}
-// Dibiarkan undefined kalau tidak disetel, supaya tanyaAI memakai daftar
-// cadangannya dan berpindah model saat kuota satu model habis.
-const MODEL = (PENYEDIA === 'ninerouter' ? Deno.env.get('NINEROUTER_MODEL') : undefined)
-  || Deno.env.get('STELA_MODEL')
-  || undefined;
+// Daftar penyedia untuk failover
+const DAFTAR_PENYEDIA = Object.keys(KUNCI)
+  .filter((nama) => KUNCI[nama] && !kunciBermasalah({ [nama + 'Key']: KUNCI[nama] }).length)
+  .map((nama) => ({
+    penyedia: nama,
+    apiKey: KUNCI[nama],
+    model: (nama === 'ninerouter' ? Deno.env.get('NINEROUTER_MODEL') : undefined) || Deno.env.get('STELA_MODEL'),
+    baseUrl: Deno.env.get('NINEROUTER_URL'),
+  }));
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
@@ -155,7 +157,8 @@ Deno.serve(async (req) => {
   // Pertanyaan pembuka yang sama tidak dibeli dua kali. Di situs sekolah ini
   // lapisan yang paling banyak menghemat: satu jawaban tersimpan bisa melayani
   // puluhan pengunjung yang menanyakan hal serupa.
-  const tersimpan = penjaga.ambilCache(hasilValidasi.pesan);
+  const bahasa = deteksiBahasa(hasilValidasi.pesan[hasilValidasi.pesan.length - 1]?.content ?? '');
+  const tersimpan = penjaga.ambilCache(hasilValidasi.pesan, bahasa);
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 
   try {
@@ -172,14 +175,16 @@ Deno.serve(async (req) => {
     const { teks, tokenMasuk, tokenKeluar } = await tanyaAI({
       penyedia: PENYEDIA,
       apiKey: API_KEY,
-      model: MODEL,
+      model: undefined,
+      daftarPenyedia: DAFTAR_PENYEDIA,
       pesan: hasilValidasi.pesan,
       contextPublik,
+      bahasa,
     });
 
     if (!teks) return balas({ error: 'STELA sedang tidak tersedia.' }, 502, origin);
 
-    penjaga.simpanCache(hasilValidasi.pesan, teks);
+    penjaga.simpanCache(hasilValidasi.pesan, teks, bahasa);
     const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
     console.log(`stela ${terpakaiHariIni}/${maksPerHari} | token ${tokenMasuk}/${tokenKeluar}`);
     return balas({ reply: teks }, 200, origin);
