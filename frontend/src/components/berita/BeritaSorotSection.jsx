@@ -26,16 +26,16 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
         <div className="lg:pl-24">
           <div className="flex items-center gap-3">
             <span className="rounded bg-primary-50 px-2.5 py-1 text-[9px] font-bold text-primary">
-              {featured.kategori}
+              {t(featured.kategori)}
             </span>
             <span className="text-[10px] text-dark-500">{formatPublicDate(featured.iso, {}, locale)}</span>
           </div>
 
           <h2 className="mt-3 max-w-md font-heading text-xl sm:text-2xl font-extrabold leading-snug text-dark-900">
-            {featured.title}
+            {t(featured.title)}
           </h2>
           <p className="mt-3 max-w-md text-[11px] leading-relaxed text-dark-500">
-            {featured.desc}
+            {t(featured.desc)}
           </p>
 
           <Link
@@ -61,10 +61,10 @@ const BeritaSorotSection = ({ items = [], tampilkanLihatSemua = true }) => {
                 className="block w-full rounded-xl border border-dark-100 bg-white px-4 py-3 text-left shadow-card transition-all hover:-translate-y-0.5 hover:border-primary"
               >
                 <span className="inline-block rounded bg-primary-50 px-2 py-0.5 text-[8px] font-bold uppercase text-primary">
-                  {item.kategori}
+                  {t(item.kategori)}
                 </span>
                 <p className="mt-1.5 font-heading text-[11px] font-bold leading-snug text-dark-900">
-                  {item.title}
+                  {t(item.title)}
                 </p>
                 <p className="mt-1.5 text-[9px] text-dark-400">{formatPublicDate(item.iso, {}, locale)}</p>
               </button>

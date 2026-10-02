@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, CircleAlert, Mail } from 'lucide-react';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
@@ -13,6 +14,7 @@ const errorMessage = (code) => {
 const safeNextPath = (value) => (value?.startsWith('/') && !value.startsWith('//') ? value : '/ppdb/verifikasi');
 
 const ConfirmEmailPage = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [state, setState] = useState(supabaseSiap ? 'checking' : 'error');
@@ -103,14 +105,14 @@ const ConfirmEmailPage = () => {
     <PpdbAuthLayout aksiLabel="Kembali ke Beranda">
       <div className="mx-auto max-w-md rounded-3xl border border-dark-100 bg-white p-8 text-center shadow-card sm:p-10">
         {state === 'checking' ? <Mail className="mx-auto h-14 w-14 text-primary" /> : isSuccess ? <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" /> : state === 'ready' ? <Mail className="mx-auto h-14 w-14 text-primary" /> : <CircleAlert className="mx-auto h-14 w-14 text-primary" />}
-        <h1 className="mt-6 font-heading text-2xl font-extrabold text-dark-900">{state === 'checking' ? 'Konfirmasi Email' : isSuccess ? 'Email Berhasil Dikonfirmasi' : state === 'ready' ? 'Konfirmasi Email' : 'Konfirmasi Email Gagal'}</h1>
-        <p role={state === 'error' ? 'alert' : 'status'} className="mt-3 text-sm leading-relaxed text-dark-500">{message}</p>
+        <h1 className="mt-6 font-heading text-2xl font-extrabold text-dark-900">{t(state === 'checking' ? 'Konfirmasi Email' : isSuccess ? 'Email Berhasil Dikonfirmasi' : state === 'ready' ? 'Konfirmasi Email' : 'Konfirmasi Email Gagal')}</h1>
+        <p role={state === 'error' ? 'alert' : 'status'} className="mt-3 text-sm leading-relaxed text-dark-500">{t(message)}</p>
         {state === 'ready' ? (
-          <button type="button" disabled={confirming} onClick={confirmEmail} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60">{confirming ? 'Mengonfirmasi...' : 'Konfirmasi Email'}</button>
+          <button type="button" disabled={confirming} onClick={confirmEmail} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60">{t(confirming ? 'Mengonfirmasi...' : 'Konfirmasi Email')}</button>
         ) : isSuccess ? (
-          <button type="button" onClick={() => navigate('/ppdb/formulir', { replace: true })} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">Lanjutkan Pendaftaran</button>
+          <button type="button" onClick={() => navigate('/ppdb/formulir', { replace: true })} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Lanjutkan Pendaftaran')}</button>
         ) : state === 'error' ? (
-          <Link to="/ppdb/masuk" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">Kembali ke Masuk PPDB</Link>
+          <Link to="/ppdb/masuk" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Kembali ke Masuk PPDB')}</Link>
         ) : null}
       </div>
     </PpdbAuthLayout>

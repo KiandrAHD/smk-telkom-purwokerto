@@ -47,7 +47,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary-50 font-heading text-[11px] font-bold text-primary">
                   {i + 1}
                 </span>
-                <p className="text-xs leading-relaxed text-dark-600">{langkah}</p>
+                <p className="text-xs leading-relaxed text-dark-600">{t(langkah)}</p>
               </Reveal>
             ))}
           </ol>
@@ -63,7 +63,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
               {item.berkas.map((berkas) => (
                 <li key={berkas} className="flex gap-2 text-[11px] leading-relaxed text-dark-600">
                   <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-primary" />
-                  {berkas}
+                  {t(berkas)}
                 </li>
               ))}
             </ul>
@@ -75,10 +75,10 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
             <h3 className="flex items-center gap-2 font-heading text-xs font-bold text-dark-900">
               <Phone className="h-4 w-4 text-primary" />{t("Butuh Penjelasan?")}</h3>
             <p className="mt-3 font-heading text-[11px] font-bold text-dark-900">
-              {item.kontak.nama}
+              {t(item.kontak.nama)}
             </p>
             <p className="mt-0.5 text-[11px] leading-relaxed text-dark-500">
-              {item.kontak.detail}
+              {t(item.kontak.detail)}
             </p>
           </div>
         )}
@@ -89,7 +89,7 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
           to={item.aksi.href}
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-xs font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
         >
-          {item.aksi.label}
+          {t(item.aksi.label)}
           <ArrowRight className="h-4 w-4" />
         </Link>
       )}
@@ -106,10 +106,10 @@ const PengumumanDetailKonten = ({ item, relatedItems = [] }) => {
               >
                 <span className="min-w-0">
                   <span className="block font-heading text-[11px] font-bold text-dark-900">
-                    {p.title}
+                    {t(p.title)}
                   </span>
                   <span className="mt-0.5 block text-[10px] text-dark-400">
-                    {p.kategori} · {formatPublicDate(p.iso, {}, locale)}
+                    {t(p.kategori)} · {formatPublicDate(p.iso, {}, locale)}
                   </span>
                 </span>
                 <ArrowRight className="h-4 w-4 flex-shrink-0 text-primary" />

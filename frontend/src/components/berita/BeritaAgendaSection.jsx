@@ -46,7 +46,7 @@ const BeritaAgendaSection = ({ items = [], tampilkanLihatSemua = true }) => {
             {categories.map((category) => (
               <li key={category.name} className="rounded-xl border border-dark-100 px-3 py-2.5">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-heading text-xs font-bold text-dark-900">{category.name}</h3>
+                  <h3 className="font-heading text-xs font-bold text-dark-900">{t(category.name)}</h3>
                   <span className="rounded bg-primary-50 px-2 py-1 text-[9px] font-bold text-primary">
                     {t('{count} berita', { count: category.items.length })}
                   </span>
@@ -55,7 +55,7 @@ const BeritaAgendaSection = ({ items = [], tampilkanLihatSemua = true }) => {
                   {category.items.map((item) => (
                     <li key={item.slug}>
                       <Link to={`/berita/${item.slug}`} className="block text-[10px] font-semibold leading-snug text-dark-700 hover:text-primary hover:underline">
-                        {item.title}
+                        {t(item.title)}
                       </Link>
                       <p className="mt-1 text-[9px] text-dark-400">{formatPublicDate(item.iso, {}, locale)}</p>
                     </li>
@@ -99,11 +99,11 @@ const BeritaAgendaSection = ({ items = [], tampilkanLihatSemua = true }) => {
               >
                 <ContentImage
                   src={g.image}
-                  alt={g.title}
+                  alt={t(g.title)}
                   loading="lazy"
                   className="aspect-[4/3] w-full rounded-lg object-cover object-top transition-transform duration-500 group-hover:scale-110"
                 />
-                <span className="mt-1.5 block text-[10px] font-semibold leading-snug text-dark-700 group-hover:text-primary">{g.title}</span>
+                <span className="mt-1.5 block text-[10px] font-semibold leading-snug text-dark-700 group-hover:text-primary">{t(g.title)}</span>
               </Link>
             ))}
           </div>

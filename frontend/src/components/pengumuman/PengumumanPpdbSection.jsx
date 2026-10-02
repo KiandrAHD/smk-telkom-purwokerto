@@ -89,7 +89,7 @@ const PengumumanPpdbSection = ({ items = [], loading = false, error = '', now = 
                 </span>
                 <div className="min-w-0">
                   <Link to={`/pengumuman/${item.slug}`} className="font-heading text-xs font-semibold leading-relaxed text-dark-900 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">
-                    {item.title}
+                    {t(item.title)}
                   </Link>
                   <p className="mt-1 text-[11px] text-dark-500">{formatPublicDate(item.iso, { timeZone: 'Asia/Jakarta' }, locale)}</p>
                 </div>

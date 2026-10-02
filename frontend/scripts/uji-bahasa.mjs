@@ -8,9 +8,12 @@ const server = await createServer({ appType: 'custom', logLevel: 'silent', serve
 try {
   const { translate, readLanguage } = await server.ssrLoadModule('/src/utils/language.js');
   assert.equal(readLanguage(), 'id', 'Storage unavailable uses Indonesian.');
-  globalThis.localStorage = { getItem: () => 'unexpected' };
-  assert.equal(readLanguage(), 'id', 'Unsupported language cannot enter state.');
   globalThis.localStorage = { getItem: () => 'en' };
+  globalThis.sessionStorage = { getItem: () => null };
+  assert.equal(readLanguage(), 'id', 'A new session defaults to Indonesian despite an old English preference.');
+  globalThis.sessionStorage = { getItem: () => 'unexpected' };
+  assert.equal(readLanguage(), 'id', 'Unsupported language cannot enter state.');
+  globalThis.sessionStorage = { getItem: () => 'en' };
   assert.equal(readLanguage(), 'en');
   assert.equal(translate('Beranda', 'en'), 'Home');
   assert.equal(translate('Beranda', 'id'), 'Beranda');
@@ -18,6 +21,13 @@ try {
   assert.equal(translate('Nama dari dashboard', 'en'), 'Nama dari dashboard');
   assert.equal(translate('constructor', 'en'), 'constructor');
   const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
+  const { aboutStats, visiMisi, timelineData, kepalaSekolah } = await server.ssrLoadModule('/src/data/dummyData.js');
+  const profileTexts = [...aboutStats.map((item) => item.label), ...Object.values(visiMisi), ...timelineData.flatMap((item) => [item.title, item.desc]), kepalaSekolah.quote, kepalaSekolah.quoteFull, kepalaSekolah.ctaText, 'Masuk PPDB'];
+  for (const text of profileTexts) {
+    if (['Digital Smart School', 'AI & Future Ready'].includes(text)) continue;
+    assert.notEqual(translate(text, 'en'), text, `Profile English translation missing: ${text}`);
+    assert.equal(translate(text, 'id'), text, 'Indonesian content must remain unchanged.');
+  }
   const { default: FormInput } = await server.ssrLoadModule('/src/components/dashboard/FormInput.jsx');
   const { default: Navbar } = await server.ssrLoadModule('/src/components/Navbar.jsx');
   const { default: Footer } = await server.ssrLoadModule('/src/components/Footer.jsx');
@@ -31,15 +41,16 @@ try {
   const nav = render(createElement(Navbar));
   assert.ok(nav.includes('Announcements'));
   assert.ok(nav.includes('href="/pengumuman"'));
-  assert.ok(nav.includes('Ganti ke Bahasa Indonesia'));
+  assert.ok(nav.includes('Switch to Indonesian'));
   const footer = render(createElement(Footer));
-  assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 9);
+  assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 8);
   assert.ok(footer.includes('Staff &amp; Admin Access'));
   const teachers = render(createElement(Teachers));
   assert.ok(teachers.includes('href="/profil-sekolah/guru"'));
   assert.match(teachers, /View All Teacher Profiles/i);
-  console.log('Bahasa: default/fallback, persistence reading, interpolation, routes, form values, teacher CTA, and nine footer motifs pass.');
+  console.log('Bahasa: default/fallback, persistence reading, interpolation, routes, form values, teacher CTA, and eight footer motifs pass.');
 } finally {
   delete globalThis.localStorage;
+  delete globalThis.sessionStorage;
   await server.close();
 }

@@ -56,7 +56,6 @@ const TentangTimelineSection = () => {
                     {t(item.desc)}
                   </p>
                 </button>
-                <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-[10px] text-primary underline underline-offset-2">{t("Sumber resmi")} </a>
               </li>
             );
           })}

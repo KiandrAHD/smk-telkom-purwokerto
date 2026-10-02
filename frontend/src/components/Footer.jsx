@@ -32,7 +32,7 @@ const LinkColumn = ({ title, links }) => {
   return (
   <div className="min-w-0">
     <h3 className="font-heading text-xs font-bold text-dark-900">{t(title)}</h3>
-    <ul className="mt-3 space-y-2">
+    <ul className="mt-3 space-y-2 text-[11px] leading-relaxed">
       {links.map((link) => (
         <li key={link.label}>
           <Link
@@ -52,17 +52,17 @@ const Footer = () => {
   const { t } = useLanguage();
   return (
   <footer className="site-footer bg-white">
-    <div className="relative overflow-hidden pt-7 lg:pt-9">
-      {/* Native Figma coordinates and clipping, with content kept in its existing grid. */}
+    <div className="relative overflow-hidden pt-6 lg:pt-8">
+      {/* Accent Element / Group 478: original masks, positions and rotations. */}
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-left pointer-events-none select-none">
-        {['90:536', '90:542'].map((node) => <FooterAccent key={node} node={node} />)}
+        {['125:161', '125:167'].map((node) => <FooterAccent key={node} node={node} />)}
       </div>
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-right pointer-events-none select-none">
-        <FooterAccent node="90:539" />
+        <FooterAccent node="125:164" />
       </div>
 
-      <div className="footer-content relative z-10 mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8 lg:pb-9">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr_1.4fr]">
+      <div className="footer-content relative z-10 mx-auto max-w-7xl px-4 pb-2 sm:px-6 lg:px-8 lg:pb-3">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-6 lg:grid-cols-[1.3fr_0.8fr_0.8fr_1.3fr] lg:gap-x-8">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3">
@@ -95,17 +95,17 @@ const Footer = () => {
             </div>
 
             {/* Lima logo memakai bitmap asli; CSS hanya membatasi area putih tiap logo. */}
-            <div className="mt-6 max-w-[280px]">
+            <div className="mt-4 max-w-[280px]">
               <h3 className="font-heading text-xs font-bold text-dark-900">Supported by</h3>
               <ul className="footer-supporters mt-3" aria-label={t('Pendukung lomba')}>
                 {supporterLogos.map(({ id, name, href }) => {
                   const logo = (
                     <span className={`footer-supporter-logo footer-supporter-logo-${id}`}>
-                      <img src={competitionSupporters} alt={name} loading="lazy" decoding="async" width="1920" height="1080" />
+                      <img src={competitionSupporters} alt={t(name)} loading="lazy" decoding="async" width="1920" height="1080" />
                     </span>
                   );
                   return (
-                    <li key={id} className={id === 'jhic' ? 'col-span-2' : undefined}>
+                    <li key={id}>
                       {href ? (
                         <a href={href} target="_blank" rel="noopener noreferrer" className="footer-supporter-link" aria-label={t('Kunjungi {name}', { name })}>
                           {logo}
@@ -122,12 +122,12 @@ const Footer = () => {
           <LinkColumn title="Informasi" links={footerData.informasi} />
 
           {/* Kontak */}
-          <div className="min-w-0 [overflow-wrap:anywhere]">
+          <div className="footer-contact col-span-2 min-w-0 [overflow-wrap:anywhere] lg:col-span-1">
             <h3 className="font-heading text-xs font-bold text-dark-900">{t('Kontak')}</h3>
             <ul className="mt-3 space-y-2 text-[11px] text-dark-500">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
-                {footerData.kontak.address}
+                {t(footerData.kontak.address)}
               </li>
               <li>
                 <a
@@ -148,10 +148,7 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
-          </div>
-
-          {/* Peta lokasi */}
-          <div className="col-span-2 lg:col-span-1">
+            {/* Peta berada langsung di bawah rincian kontak pada semua ukuran layar. */}
             <a
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                 footerData.kontak.mapsQuery ?? footerData.kontak.address
@@ -159,28 +156,28 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t('Buka lokasi SMK Telkom Purwokerto di Google Maps')}
-              className="block overflow-hidden rounded-xl transition-transform hover:scale-[1.01]"
+              className="mt-3 block overflow-hidden rounded-xl transition-transform hover:scale-[1.01] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
               <img
                 src={footerData.map}
                 alt={t('Peta lokasi SMK Telkom Purwokerto')}
                 loading="lazy"
-                className="w-full rounded-xl border border-dark-100 object-cover"
+                className="h-auto w-full rounded-xl border border-dark-100"
               />
             </a>
           </div>
         </div>
       </div>
-    </div>
 
-    {/* Normal flow reserves space below the supporter logos; motifs cannot overlap them. */}
-    <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
-      <div className="footer-accent-canvas">
-        {['90:508', '90:511', '90:514', '90:517', '90:520', '90:523'].map((node) => <FooterAccent key={node} node={node} />)}
+      {/* Both accent canvases share the same bottom edge. */}
+      <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
+        <div className="footer-accent-canvas">
+          {['125:136', '125:139', '125:142', '125:145', '125:148'].map((node) => <FooterAccent key={node} node={node} />)}
+        </div>
       </div>
     </div>
     <div className="footer-bottom-bar relative bg-primary text-white">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-[10px] sm:flex-row sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 pl-4 pr-24 py-2 text-[10px] sm:flex-row sm:pl-6 lg:pl-8 2xl:pr-8">
         <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
         <div className="flex items-center gap-3">
           <span className="underline underline-offset-2">{t('Kebijakan Privasi')}</span>

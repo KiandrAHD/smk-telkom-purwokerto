@@ -1,6 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { formatPublicDate } from '../../utils/publicContent';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { ArrowRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { galeriPrestasi } from '../../data/dummyData';
@@ -21,14 +21,14 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const nilaiUnik = [...new Set(sourceItems.flatMap((item) => [item.level, item.kategori].filter(Boolean)))].sort();
   const filters = nilaiUnik.length > 1 ? ['Semua', ...nilaiUnik] : [];
 
-  const shown = useMemo(() => {
+  const shown = (() => {
     const q = query.trim().toLowerCase();
     return sourceItems.filter((item) => {
       const byTag = filter === 'Semua' || item.tags?.includes(filter) || item.level === filter || item.kategori === filter;
-      const byText = !q || item.title.toLowerCase().includes(q) || item.level.toLowerCase().includes(q);
+      const byText = !q || [item.title, item.level, t(item.title), t(item.level)].join(' ').toLowerCase().includes(q);
       return byTag && byText;
     });
-  }, [filter, query, sourceItems]);
+  })();
 
   return (
     <section id="galeri-prestasi" className="bg-white py-8 lg:py-12">
@@ -51,7 +51,7 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
                   : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'
               }`}
             >
-              {f === 'Semua' ? t(f) : f}
+              {t(f)}
             </button>
           ))}
 
@@ -80,24 +80,24 @@ const PrestasiGaleriSection = ({ items = [], tampilkanLihatSemua = true }) => {
                 <div className="relative overflow-hidden">
                   <ContentImage
                     src={item.image}
-                    alt={item.imageAlt || item.title}
+                    alt={t(item.imageAlt || item.title)}
                     className="w-full aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                   <span className="absolute bottom-1.5 left-1.5 rounded bg-primary px-1.5 py-0.5 text-[8px] font-bold text-white">
-                    {item.level}
+                    {t(item.level)}
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col px-3 py-2.5">
                   <h3 className="font-heading text-[10px] font-bold leading-snug text-dark-900">
-                    {item.title}
+                    {t(item.title)}
                   </h3>
                   <div className="mt-auto flex items-end justify-between gap-2 pt-2">
                     <p className="text-[9px] text-dark-400">{formatPublicDate(item.iso, {}, locale)}</p>
                     <ArrowRight className="h-3 w-3 flex-shrink-0 text-primary" />
                   </div>
                   {item.imageNote && (
-                    <p className="mt-1 text-[8px] leading-snug text-dark-400">{item.imageNote}</p>
+                    <p className="mt-1 text-[8px] leading-snug text-dark-400">{t(item.imageNote)}</p>
                   )}
                 </div>
               </Link>

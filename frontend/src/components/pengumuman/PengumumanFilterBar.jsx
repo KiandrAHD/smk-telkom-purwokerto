@@ -20,7 +20,7 @@ const PengumumanFilterBar = ({ chip, onChip, query, onQuery, chips = [] }) => {
             : 'border border-dark-200 text-dark-600 hover:border-primary hover:text-primary'
         }`}
       >
-        {c === 'Semua' ? t(c) : c}
+        {t(c)}
       </button>
     ))}
 

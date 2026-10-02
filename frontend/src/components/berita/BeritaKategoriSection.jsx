@@ -33,13 +33,13 @@ const BeritaKategoriSection = ({ items = [], children }) => {
     const list = sourceItems.filter((n) => {
       const byChip = chip === 'Semua' || n.kategori === chip;
       const byText =
-        !q || n.title.toLowerCase().includes(q) || n.excerpt.toLowerCase().includes(q);
+        !q || [n.title, n.excerpt, t(n.title), t(n.excerpt)].join(' ').toLowerCase().includes(q);
       return byChip && byText;
     });
     return [...list].sort((a, b) =>
       sort === 'terbaru' ? b.iso.localeCompare(a.iso) : a.iso.localeCompare(b.iso)
     );
-  }, [chip, query, sort, sourceItems]);
+  }, [chip, query, sort, sourceItems, t]);
 
   const shown = matched.slice(0, shownCount);
   const hasMore = shownCount < matched.length;
@@ -73,7 +73,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
                   : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'
               }`}
             >
-              {c === 'Semua' ? t(c) : c}
+              {t(c)}
             </button>
           ))}
 
@@ -116,23 +116,23 @@ const BeritaKategoriSection = ({ items = [], children }) => {
                 <div className="relative overflow-hidden">
                   <ContentImage
                     src={n.image}
-                    alt={n.title}
+                    alt={t(n.title)}
                     className="w-full aspect-[16/10] object-cover object-top transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                   <span className="absolute bottom-1.5 left-1.5 rounded bg-primary px-1.5 py-0.5 text-[8px] font-bold text-white">
-                    {n.kategori}
+                    {t(n.kategori)}
                   </span>
                 </div>
 
                 <div className="flex flex-1 flex-col px-3 py-3">
                   <h3 className="font-heading text-[11px] font-bold leading-snug text-dark-900">
-                    {n.title}
+                    {t(n.title)}
                   </h3>
                   <p className="mt-1.5 text-[9px] text-dark-400">
-                    {formatPublicDate(n.iso, {}, locale)} &nbsp;·&nbsp; {n.author}
+                    {formatPublicDate(n.iso, {}, locale)} &nbsp;·&nbsp; {t(n.author)}
                   </p>
-                  <p className="mt-1.5 text-[9px] leading-relaxed text-dark-500">{n.excerpt}</p>
+                  <p className="mt-1.5 text-[9px] leading-relaxed text-dark-500">{t(n.excerpt)}</p>
                   <Link
                     to={`/berita/${n.slug}`}
                     className="mt-auto pt-3 text-[10px] font-bold text-primary hover:underline"

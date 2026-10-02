@@ -20,10 +20,10 @@ const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
         <blockquote className="mt-9 rounded-2xl border-l-4 border-primary bg-primary-50 px-6 py-5">
           <Quote className="h-5 w-5 text-primary" />
           <p className="mt-2 font-heading text-sm font-semibold leading-relaxed text-dark-900 sm:text-base">
-            {item.kutipan.teks}
+            {t(item.kutipan.teks)}
           </p>
           <footer className="mt-2.5 text-[11px] font-medium text-dark-500">
-            — {item.kutipan.oleh}
+            — {t(item.kutipan.oleh)}
           </footer>
         </blockquote>
       )}
@@ -47,17 +47,17 @@ const BeritaDetailKonten = ({ item, relatedItems = [] }) => {
                 <div className="overflow-hidden">
                   <ContentImage
                     src={b.image}
-                    alt={b.title}
+                    alt={t(b.title)}
                     loading="lazy"
                     className="aspect-[16/9] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
                 <div className="px-4 py-3">
                   <span className="rounded bg-primary-50 px-2 py-0.5 text-[9px] font-bold text-primary">
-                    {b.kategori}
+                    {t(b.kategori)}
                   </span>
                   <h3 className="mt-1.5 font-heading text-[11px] font-bold leading-snug text-dark-900">
-                    {b.title}
+                    {t(b.title)}
                   </h3>
                   <span className="mt-1.5 flex items-center gap-1 text-[9px] text-dark-400">
                     <CalendarDays className="h-2.5 w-2.5" />

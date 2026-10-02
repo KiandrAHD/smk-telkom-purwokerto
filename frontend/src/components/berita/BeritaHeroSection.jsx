@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { beritaHero, breakingNews } from '../../data/dummyData';
 
 const BeritaHeroSection = ({ items = [] }) => {
-  const { t, locale } = useLanguage();
+  const { t, locale, language } = useLanguage();
 
   const [i, setI] = useState(0);
   const breakingItems = items;
@@ -33,9 +33,9 @@ const BeritaHeroSection = ({ items = [] }) => {
               </span>
 
               <h1 className="mt-3 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
-                {t(beritaHero.title)}
+                {language === 'en' ? 'Latest News &' : t(beritaHero.title)}
                 {'\n'}
-                <span className="text-primary">{t(beritaHero.titleAccent)}</span>
+                <span className="text-primary">{language === 'en' ? 'Activities' : t(beritaHero.titleAccent)}</span>
               </h1>
 
               <p className="mt-4 max-w-sm text-[11px] sm:text-xs leading-relaxed text-dark-500">
@@ -75,7 +75,7 @@ const BeritaHeroSection = ({ items = [] }) => {
             className="flex min-w-0 flex-1 flex-wrap items-center gap-x-4 gap-y-1 rounded-lg bg-primary-50 px-4 py-2.5"
           >
             <span className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
-            <p className="min-w-0 flex-1 text-[11px] font-semibold text-dark-800">{item.text}</p>
+            <p className="min-w-0 flex-1 text-[11px] font-semibold text-dark-800">{t(item.text)}</p>
             <span className="text-[10px] text-dark-500">{formatPublicDate(item.iso, {}, locale)}</span>
             <Link
               to={`/berita/${item.slug}`}

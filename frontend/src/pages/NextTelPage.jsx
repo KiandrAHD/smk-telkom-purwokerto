@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import MainLayout from '../layouts/MainLayout';
 import NextTelIntro from '../components/nexttel/NextTelIntro';
 import NextTelQuestionnaire from '../components/nexttel/NextTelQuestionnaire';
 import NextTelResult from '../components/nexttel/NextTelResult';
 import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
 import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
-import { useLanguage } from '../context/LanguageContext';
 
 const QUESTIONS = [
   { id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }, { id: 'b', label: 'Membuat game' }, { id: 'c', label: 'Mengatur jaringan' }, { id: 'd', label: 'Teknologi telekomunikasi' }] },
@@ -49,10 +49,10 @@ const NextTelPage = () => {
         answers: selectedAnswers,
         language,
       }, { signal: controller.signal });
-      setExplanation(response);
+      setExplanation({ ...response, language });
     } catch (requestError) {
       if (requestError?.name !== 'AbortError') {
-        setExplanation(hasilFallbackNextTel(computed, language));
+        setExplanation({ ...hasilFallbackNextTel(computed, language), language });
         setError(PESAN_NEXTTEL_GAGAL);
       }
     } finally {
