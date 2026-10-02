@@ -21,6 +21,22 @@ try {
   assert.ok(!collection.includes('href="/pengumuman/populer"'));
   assert.ok(!render(PengumumanPopulerCard, {}).includes('ppdb-gelombang-1-dibuka'));
 
+  const { default: DaftarPengumuman } = await server.ssrLoadModule('/src/components/pengumuman/PengumumanDaftarSection.jsx');
+  const daftarItems = Array.from({ length: 12 }, (_, i) => ({ slug: `daftar-uji-${i}`, title: `Pengumuman ${i}`, desc: 'Isi pengumuman', iso: '2026-10-02' }));
+  const preview = render(DaftarPengumuman, { items: daftarItems });
+  assert.equal((preview.match(/<article/g) || []).length, 5, 'Daftar utama dibatasi lima pengumuman.');
+  assert.ok(preview.includes('href="/pengumuman/semua"') && !preview.includes('Pagination pengumuman'));
+  const fullList = render(DaftarPengumuman, { items: daftarItems, tampilkanLihatSemua: false });
+  assert.equal((fullList.match(/<article/g) || []).length, 5, 'Daftar lengkap juga dibatasi lima pengumuman per halaman.');
+  assert.ok(fullList.includes('Halaman 1 dari 3') && fullList.includes('Pagination pengumuman'));
+  assert.ok(!fullList.includes('href="/pengumuman/semua"'));
+  for (const length of [1, 5]) {
+    const onePage = render(DaftarPengumuman, { items: daftarItems.slice(0, length), tampilkanLihatSemua: false });
+    assert.ok(onePage.includes('Halaman 1 dari 1'));
+    assert.equal((onePage.match(/disabled=""/g) || []).length, 2, 'Kedua tombol nonaktif jika hanya ada satu halaman.');
+  }
+  assert.ok(!render(DaftarPengumuman, { tampilkanLihatSemua: false }).includes('Pagination pengumuman'), 'Data kosong tidak menampilkan pagination.');
+
   const { default: BeritaHeroSection } = await server.ssrLoadModule('/src/components/berita/BeritaHeroSection.jsx');
   const berita = render(BeritaHeroSection, { items: [{ slug: 'berita-uji', text: 'Berita untuk pengujian', date: 'Tanggal uji' }] });
   assert.ok(berita.includes('href="/berita/berita-uji"'));
@@ -130,7 +146,7 @@ try {
   const { default: GuruSection } = await server.ssrLoadModule('/src/components/tentang/TentangKepalaSekolahSection.jsx');
   assert.equal((render(GuruSection, {}).match(/\?from=profil-sekolah/g) || []).length, 4, 'Semua kartu guru pada Profil Sekolah membawa penanda asal.');
 
-  console.log('Lulus: empat proyek tanpa indikator, indikator carousel lain, deduplikasi, informasi hari ini/batas WIB/status, loading/error, tombol sumber, maksimal tiga prestasi, dan timeline.');
+  console.log('Lulus: pagination pengumuman (5 item), navigasi guru, empat proyek tanpa indikator, deduplikasi, informasi hari ini, tombol sumber, maksimal tiga prestasi, dan timeline.');
 } finally {
   await server.close();
 }

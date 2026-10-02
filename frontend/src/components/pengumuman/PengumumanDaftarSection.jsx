@@ -1,6 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { useMemo, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PengumumanFilterBar from './PengumumanFilterBar';
 import PengumumanTimelineBar from './PengumumanTimelineBar';
@@ -10,11 +10,15 @@ import PengumumanBantuanCard from './PengumumanBantuanCard';
 import { daftarPengumuman } from '../../data/dummyData';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
+const ITEMS_PER_PAGE = 5;
+
 const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const { t } = useLanguage();
 
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const sectionRef = useRef(null);
 
   // Sama seperti di Berita: tabel `pengumuman` tidak punya kolom kategori,
   // jadi barisan chip-nya dulu berisi sepuluh kategori yang tak satu pun bisa
@@ -36,14 +40,23 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
     });
   }, [chip, query, items]);
 
+  // Halaman utama adalah pratinjau; daftar lengkap memakai hasil filter yang sama.
+  const totalPages = Math.max(1, Math.ceil(shown.length / ITEMS_PER_PAGE));
+  const currentPage = tampilkanLihatSemua ? 1 : Math.min(page, totalPages);
+  const pageItems = shown.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const changePage = (nextPage) => {
+    setPage(Math.max(1, Math.min(nextPage, totalPages)));
+    sectionRef.current?.scrollIntoView({ block: 'start' });
+  };
+
   return (
-    <section id="daftar-pengumuman" className="scroll-mt-24 bg-white pb-8 pt-6 lg:scroll-mt-28 lg:pb-12 lg:pt-8">
+    <section ref={sectionRef} id="daftar-pengumuman" className="scroll-mt-24 bg-white pb-8 pt-6 lg:scroll-mt-28 lg:pb-12 lg:pt-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PengumumanFilterBar
           chip={chip}
-          onChip={setChip}
+          onChip={(value) => { setChip(value); setPage(1); }}
           query={query}
-          onQuery={setQuery}
+          onQuery={(value) => { setQuery(value); setPage(1); }}
           chips={kategoriChips}
         />
 
@@ -56,12 +69,24 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
           <div className="@container">
             {shown.length > 0 ? (
               <div className="space-y-4">
-                {shown.map((item, i) => (
-                  <PengumumanCard key={`${item.title}-${i}`} item={item} />
+                {pageItems.map((item) => (
+                  <PengumumanCard key={item.slug} item={item} />
                 ))}
               </div>
             ) : (
               <p className="py-12 text-center text-xs text-dark-500">{t("Tidak ada pengumuman yang cocok dengan filter itu.")}</p>
+            )}
+
+            {!tampilkanLihatSemua && shown.length > 0 && (
+              <nav aria-label={t('Pagination pengumuman')} className="mt-6 flex flex-wrap items-center justify-between gap-3">
+                <button type="button" onClick={() => changePage(currentPage - 1)} disabled={currentPage === 1} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-dark-200 px-4 py-2 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                  <ChevronLeft className="h-4 w-4" aria-hidden="true" />{t('Sebelumnya')}
+                </button>
+                <p aria-live="polite" className="text-xs text-dark-600">{t('Halaman {page} dari {total}', { page: currentPage, total: totalPages })}</p>
+                <button type="button" onClick={() => changePage(currentPage + 1)} disabled={currentPage === totalPages} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-dark-200 px-4 py-2 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                  {t('Berikutnya')}<ChevronRight className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </nav>
             )}
 
             {tampilkanLihatSemua && (

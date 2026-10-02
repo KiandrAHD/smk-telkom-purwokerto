@@ -549,4 +549,8 @@ export default {
   "Topik dasar Fisika meliputi besaran dan satuan, gerak, gaya, energi, gelombang, listrik, serta penerapannya pada perangkat dan pekerjaan teknik.": "Basic Physics topics include quantities and units, motion, forces, energy, waves, electricity, and their applications in technical equipment and work.",
   "Siswa dilatih membaca data, menggunakan alat ukur, menguji dugaan melalui percobaan, menghitung hasil, dan menjelaskan hubungan antara konsep dengan kejadian nyata.": "Students practice reading data, using measuring tools, testing hypotheses through experiments, calculating results, and connecting concepts with real events.",
   "Fisika — arsip sekolah tahun 2019": "Physics — school archive, 2019",
+  "Pagination pengumuman": "Announcement pagination",
+  "Halaman {page} dari {total}": "Page {page} of {total}",
+  "Sebelumnya": "Previous",
+  "Berikutnya": "Next",
 };
