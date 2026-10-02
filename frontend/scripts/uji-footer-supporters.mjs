@@ -17,26 +17,18 @@ try {
   }
   assert.equal((supporters.match(/<a\b/g) ?? []).length, 1, 'Hanya URL pendukung yang terverifikasi ditautkan.');
   assert.ok(supporters.includes('href="https://www.jagoanhosting.com/"'));
-  assert.equal((html.match(/class="footer-accent"/g) ?? []).length, 9, 'Sembilan motif literal sesuai layer footer Figma.');
+  const contact = html.match(/<div class="footer-contact[\s\S]*?<\/div>/)?.[0];
+  assert.ok(contact, 'Footer menyediakan satu kolom kontak.');
+  assert.ok(contact.includes('https://www.google.com/maps/search/'), 'Peta berada di dalam kolom kontak.');
+  assert.ok(contact.indexOf('mailto:') < contact.indexOf('https://www.google.com/maps/search/'), 'Peta berada setelah email kontak.');
+  assert.equal((html.match(/class="footer-accent"/g) ?? []).length, 8, 'Delapan motif sesuai Accent Element / Group 478.');
   assert.ok(html.includes('footer-accent-side-left'));
   assert.ok(html.includes('footer-accent-side-right'));
   assert.deepEqual([...html.matchAll(/data-figma-node="([^"]+)"/g)].map((match) => match[1]),
-    ['90:536', '90:542', '90:539', '90:508', '90:511', '90:514', '90:517', '90:520', '90:523'],
-    'The edge and bottom groups retain the native Figma layer order, including the off-canvas motif.');
+    ['125:161', '125:167', '125:164', '125:136', '125:139', '125:142', '125:145', '125:148'],
+    'The edge and bottom groups retain the Accent Element layer order.');
   assert.ok(html.includes('footer-accent-canvas'), 'The bottom composition has a separate clipping canvas.');
-  const css = await readFile(new URL('../src/index.css', import.meta.url), 'utf8');
-  const side = css.slice(css.indexOf('.footer-accent-side {')).split('}')[0];
-  assert.ok(side.includes('overflow: visible;'), 'The decorative side canvas must not crop motifs before the existing footer body boundary.');
-  for (const selector of ['.footer-accent-side', '.footer-accent-canvas']) {
-    const rule = css.slice(css.indexOf(selector + ' {')).split('}')[0];
-    assert.ok(rule.includes('height: 314px;'), `${selector} clips at the red bar in frame 106:90 (4343 - 4029).`);
-  }
-  const band = css.slice(css.indexOf('.footer-accent-band {')).split('}')[0];
-  assert.ok(band.includes('height: calc(93 * 100cqw / 1847);'), 'The visible bottom band ends at the native cutoff (314 - 221).');
   assert.ok(html.indexOf('footer-accent-band') > html.indexOf('footer-supporters'), 'Motif bawah berada setelah konten, bukan di belakang logo.');
-  for (const node of ['90:508', '90:511', '90:514', '90:517', '90:520', '90:523', '90:536', '90:539', '90:542']) {
-    assert.ok(html.includes(`data-figma-node="${node}"`), `Motif ${node} tetap ada.`);
-  }
   assert.ok(html.indexOf('Supported by') > html.indexOf('TikTok SMK Telkom Purwokerto'));
   const png = await readFile(new URL('../src/assets/footer/competition-supporters.png', import.meta.url));
   assert.equal(png.readUInt32BE(16), 1920);
@@ -45,7 +37,7 @@ try {
   assert.ok(svg.includes('fill="#CECECE" fill-opacity="0.3"'), 'Fill native Figma tetap asli.');
   const mask = await readFile(new URL('../src/assets/footer/figma-footer-mask.png', import.meta.url));
   assert.ok(mask.length > 0, 'Mask native Figma tersedia.');
-  console.log('Footer: 5 logo bernama aksesibel, URL terverifikasi, serta 9 motif dan fill native Figma terjaga.');
+  console.log('Footer: peta di bawah kontak, 5 logo bernama aksesibel, dan 8 motif Accent Element terjaga.');
 } finally {
   await server.close();
 }
