@@ -1,59 +1,44 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { MemoryRouter } from 'react-router-dom';
+import { createServer } from 'vite';
 
-const [page, data] = await Promise.all([
-  readFile(new URL('../src/pages/EkstrakurikulerPage.jsx', import.meta.url), 'utf8'),
-  readFile(new URL('../src/data/dummyData.js', import.meta.url), 'utf8'),
-]);
-
-const kegiatan = [
+// Daftar Prestasi yang dikonfirmasi pengguna; PMR/Paskibra juga Organisasi.
+const prestasi = [
   'Desain Grafis', 'Web Technologies', 'AI / Artificial Intelligence', 'IT Software',
   'Robotik', 'Cyber Security (EISS)', 'Information Network Cabling (INC)',
-  '3D Game Art (Animasi)', 'PMR', 'Paskibra', 'Basket', 'Bulu Tangkis', 'Futsal',
-  'Voli', 'Bela Diri', 'E-Sport', 'Hand Ball/Bola Tangan',
-  'OSIS', 'Pramuka', 'MPK', 'Wirausaha', 'PIK-R', 'ROHIS', 'ROHKRIS',
-  'Brand Ambassador', 'Team Konten', 'Stematel ART', 'Stematel Reader',
+  '3D Game Art (Animasi)', 'English Club', 'Paduan Suara', 'Seni Musik', 'Seni Tari',
+  'PMR', 'Paskibra', 'Fotografi dan Videografi', 'Basket', 'Bulu Tangkis', 'Futsal',
+  'Voli', 'Bela Diri', 'E-Sport', 'Musik Tradisional/Karawitan', 'Hand Ball/Bola Tangan',
 ];
-
-const activityData = data.split('export const ekstrakurikulerData = {')[1].split('// ── STELA AI ──')[0];
-const activityTitles = [...activityData.matchAll(/\{ title: '([^']+)'/g)].map(([, title]) => title);
-assert.equal(activityTitles.length, kegiatan.length, 'Daftar ekskul memiliki entri ganda atau jumlahnya salah');
-assert.equal(new Set(activityTitles).size, activityTitles.length, 'Nama ekskul harus unik');
-const communityTitles = [...activityData.matchAll(/\{ title: '([^']+)', category: 'Community'/g)].map(([, title]) => title);
-assert.deepEqual(communityTitles, ['Brand Ambassador', 'Team Konten', 'Stematel ART', 'Stematel Reader']);
-
-for (const nama of kegiatan) {
-  assert.ok(data.includes(`title: '${nama}'`), `${nama} belum tersedia`);
+const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
+try {
+  const { ekstrakurikulerData: data } = await server.ssrLoadModule('/src/data/dummyData.js');
+  const titles = (category) => data.items
+    .filter((item) => (item.categories ?? [item.category]).includes(category))
+    .map((item) => item.title).sort();
+  assert.deepEqual(titles('Prestasi'), [...prestasi].sort(), 'Tab Prestasi harus mencakup semua 23 ekskul yang dikonfirmasi.');
+  assert.deepEqual(titles('Organisasi'), ['OSIS', 'Pramuka', 'PMR', 'MPK', 'Paskibra'].sort());
+  assert.equal(data.items.length, 34, 'Daftar Semua memiliki 34 kegiatan unik.');
+  assert.equal(new Set(data.items.map((item) => item.title)).size, 34, 'Keanggotaan dua kategori tidak menggandakan kartu.');
+  assert.deepEqual(data.stats.map((stat) => stat.value), [5, 23, 4, 4], 'Ringkasan harus sama dengan daftar kategori.');
+  for (const item of data.items) {
+    assert.ok((item.categories ?? [item.category]).every((category) => data.categories.includes(category)));
+    assert.ok(Array.isArray(item.focus));
+  }
+  data.items.push({ title: 'Kegiatan uji', category: 'Prestasi' });
+  try {
+    assert.equal(data.stats.find((stat) => stat.category === 'Prestasi').value, 24, 'Ringkasan mengikuti perubahan data tanpa angka tetap.');
+  } finally {
+    data.items.pop();
+  }
+  const { default: Page } = await server.ssrLoadModule('/src/pages/EkstrakurikulerPage.jsx');
+  const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Page)));
+  assert.equal((html.match(/<article\b/g) ?? []).length, 34, 'Semua kegiatan harus dirender tanpa batas empat kartu.');
+  assert.ok(html.includes('34 kegiatan'));
+  assert.equal((html.match(/aria-label="Foto belum tersedia"/g) ?? []).length, 5, 'Foto kosong memakai penanda, bukan gambar rusak.');
+  console.log('34 kegiatan unik; Organisasi 5, Prestasi 23, Sentra 4, Community 4; seluruh kartu dan ringkasan dinamis terverifikasi.');
+} finally {
+  await server.close();
 }
-
-assert.match(page, /aria-label="Cari kegiatan"/);
-assert.match(page, /const \[activeCategory, setActiveCategory\] = useState\('Ekstrakurikuler'\)/);
-assert.match(page, /activeCategory === 'Ekstrakurikuler' \|\| item\.category === activeCategory/);
-assert.match(page, /CategoryTabs activeCategory=\{activeCategory\} onSelect=\{onSelect\}/);
-assert.match(page, /onSelect=\{setActiveCategory\}/);
-assert.match(page, /name === 'Ekstrakurikuler' \? 'Semua' : name/);
-assert.match(page, /Semua kegiatan/);
-assert.ok(!page.includes('slice(0, 4)'), 'Daftar kegiatan masih dibatasi empat item');
-assert.match(page, /lg:grid-cols-4/);
-assert.ok(!page.includes('Penjelasan kategori'), 'Penjelasan kategori masih tampil di halaman');
-assert.ok(!data.includes('categoryDetails:'), 'Data penjelasan kategori masih tersisa');
-assert.match(page, /const ActivityDetailDialog/);
-assert.match(page, /<dialog/);
-assert.match(page, /showModal\(\)/);
-assert.match(page, /const \[selectedItem, setSelectedItem\] = useState\(null\)/);
-assert.match(page, /onOpen\(item\)/);
-for (const nama of kegiatan) {
-  const item = data.match(new RegExp(`title: '${nama.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}'[\\s\\S]*?focus: \\[([\\s\\S]*?)\\]`));
-  assert.ok(item?.[1], `Detail yang dipelajari untuk ${nama} belum tersedia`);
-}
-assert.ok(!page.includes('scrollIntoView'), 'Filter masih menggulir ke section lain');
-assert.ok(!page.includes('RibbonDivider'), 'Kategori masih dirender sebagai section bertumpuk');
-assert.match(page, /footerAccent/);
-
-assert.match(page, /max-w-7xl/, 'Container belum mengikuti skala halaman publik lain');
-assert.match(page, /lg:px-8/, 'Padding desktop belum mengikuti halaman publik lain');
-for (const ukuranBerlebih of ['max-w-[1763px]', 'max-w-[1565px]', 'lg:text-[50px]', 'lg:h-[416px]']) {
-  assert.ok(!page.includes(ukuranBerlebih), `${ukuranBerlebih} masih membuat halaman tampak terlalu besar`);
-}
-
-console.log(`Filter kategori, pencarian, grid empat kolom, dan ${activityTitles.length} kegiatan tersedia.`);

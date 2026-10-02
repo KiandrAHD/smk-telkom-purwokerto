@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import SectionAccents from '../components/SectionAccents';
+import ContentImage from '../components/ContentImage';
 import ribbon from '../assets/landing/figma-ribbon.png';
 import { ekstrakurikulerData } from '../data/dummyData';
 
@@ -39,7 +40,7 @@ const ActivityCard = ({ item, onOpen }) => {
   return (
   <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white transition-colors duration-200 hover:border-primary">
     <div className="aspect-[2/1] flex-none overflow-hidden">
-      <img
+      <ContentImage
         src={item.image}
         alt={t('Kegiatan {title}', { title: t(item.title) })}
         loading="lazy"
@@ -92,7 +93,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
       className="motion-dialog m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
       <div className="relative max-h-[90vh] overflow-y-auto">
-        <img src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className="aspect-[16/7] w-full object-cover" />
+        <ContentImage src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className="aspect-[16/7] w-full object-cover" />
         <button
           type="button"
           onClick={() => dialogRef.current?.close()}
@@ -103,12 +104,13 @@ const ActivityDetailDialog = ({ item, onClose }) => {
         </button>
         <div className="p-5 sm:p-7">
           <span className="inline-flex rounded-full bg-primary-50 px-3 py-1 text-[10px] font-bold text-primary">
-            {t(item.category)}
+            {(item.categories ?? [item.category]).map((category) => t(category)).join(' · ')}
           </span>
           <h2 id="judul-detail-kegiatan" className="mt-3 font-heading text-2xl font-extrabold text-dark-900 sm:text-3xl">
             {t(item.title)}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-dark-600">{t(item.description)}</p>
+          {item.focus.length > 0 && <>
           <h3 className="mt-6 font-heading text-sm font-bold text-dark-900">{t("Yang dipelajari dan dikembangkan")}</h3>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {item.focus.map((focus) => (
@@ -118,6 +120,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
               </li>
             ))}
           </ul>
+          </>}
         </div>
       </div>
     </dialog>
@@ -159,8 +162,8 @@ const EkstrakurikulerPage = () => {
   const keyword = search.trim().toLocaleLowerCase(locale);
 
   const filteredItems = useMemo(() => ekstrakurikulerData.items.filter((item) => (
-    (activeCategory === 'Ekstrakurikuler' || item.category === activeCategory)
-    && `${item.title} ${item.category} ${item.description} ${t(item.title)} ${t(item.category)} ${t(item.description)}`.toLocaleLowerCase(locale).includes(keyword)
+    (activeCategory === 'Ekstrakurikuler' || (item.categories ?? [item.category]).includes(activeCategory))
+    && `${item.title} ${item.description} ${(item.aliases ?? []).join(' ')} ${(item.categories ?? [item.category]).map((category) => `${category} ${t(category)}`).join(' ')} ${t(item.title)} ${t(item.description)}`.toLocaleLowerCase(locale).includes(keyword)
   )), [activeCategory, keyword, locale, t]);
 
   const sectionTitle = keyword
@@ -186,7 +189,10 @@ const EkstrakurikulerPage = () => {
                 <input
                   type="search"
                   value={search}
-                  onChange={(event) => setSearch(event.target.value)}
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    setActiveCategory('Ekstrakurikuler');
+                  }}
                   aria-label={t("Cari kegiatan")}
                   placeholder={t("Cari Kegiatan....")}
                   className="min-w-0 flex-1 bg-transparent text-xs text-dark-700 outline-none placeholder:text-dark-400 sm:text-sm"
@@ -233,7 +239,10 @@ const EkstrakurikulerPage = () => {
         activeCategory={activeCategory}
         title={sectionTitle}
         items={filteredItems}
-        onSelect={setActiveCategory}
+        onSelect={(category) => {
+          setActiveCategory(category);
+          setSearch('');
+        }}
         onOpen={setSelectedItem}
       />
       <ActivityDetailDialog item={selectedItem} onClose={() => setSelectedItem(null)} />
