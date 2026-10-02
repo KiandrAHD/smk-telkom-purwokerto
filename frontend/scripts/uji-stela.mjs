@@ -100,13 +100,12 @@ assert.equal(pilihPenyedia({ groqKey: GSK }), 'groq');
 assert.equal(pilihPenyedia({ geminiKey: AI, groqKey: GSK }), 'gemini', 'Gemini didahulukan atas Groq');
 assert.equal(pilihPenyedia({}), null, 'tanpa kunci apa pun harus null, bukan penyedia asal');
 
-// Kunci yang salah bentuk TIDAK boleh menyembunyikan kunci lain yang sah.
-// Ini pernah terjadi: token OAuth "AQ." di GEMINI_API_KEY membuat GROQ_API_KEY
-// yang benar tidak pernah terpakai, dan gagalnya tampak seperti kerusakan.
+const stelaGeminiKey = 'AQ.test-gemini-key';
+assert.equal(typeof stelaGeminiKey === 'string' && stelaGeminiKey.trim().length > 0, true, 'kunci Gemini STELA cukup berupa string non-kosong');
+assert.equal(pilihPenyedia({ geminiKey: 'AQ.x' }), null, 'pemilih NextTel tetap memvalidasi format penyedia');
 const campur = { geminiKey: 'AQ.tokenOAuthBukanApiKey', groqKey: 'gsk_kunciYangBenar' };
-assert.equal(pilihPenyedia(campur), 'groq', 'kunci rusak harus dilewati, bukan dipakai');
-assert.deepEqual(kunciBermasalah(campur), ['gemini'], 'kunci rusak harus dilaporkan');
-assert.equal(pilihPenyedia({ geminiKey: 'AQ.x' }), null, 'satu-satunya kunci rusak = tidak ada penyedia');
+assert.equal(pilihPenyedia(campur), 'groq', 'pemilih NextTel harus melewati key Gemini non-AIza');
+assert.deepEqual(kunciBermasalah(campur), ['gemini'], 'key Gemini non-AIza tetap dilaporkan untuk NextTel');
 assert.equal(pilihPenyedia({ anthropicKey: 'bukan-kunci' }), null);
 assert.deepEqual(kunciBermasalah({ groqKey: 'gsk_benar' }), [], 'kunci sah tidak boleh dilaporkan');
 

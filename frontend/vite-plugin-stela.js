@@ -60,7 +60,8 @@ export const stelaDevPlugin = () => ({
     };
         const nexttelProvider = pilihPenyedia(argKunci);
     const stelaGeminiModel = baca('STELA_GEMINI_MODEL') || 'gemini-3.6-flash';
-    const stelaGeminiCandidates = kunci.gemini ? [
+    const geminiAvailable = typeof kunci.gemini === 'string' && kunci.gemini.trim().length > 0;
+    const stelaGeminiCandidates = geminiAvailable ? [
       { penyedia: 'gemini', apiKey: kunci.gemini, model: stelaGeminiModel },
       { penyedia: 'gemini', apiKey: kunci.gemini, model: 'gemini-3.5-flash-lite' },
     ] : [];

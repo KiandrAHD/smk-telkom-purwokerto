@@ -10,7 +10,6 @@ import {
   BATAS,
   deteksiBahasa,
   keluaranAman,
-  kunciBermasalah,
   periksaPesan,
   tanyaAI,
 } from './inti.mjs';
@@ -24,7 +23,10 @@ const KUNCI: Record<string, string | undefined> = {
 };
 const STELA_GEMINI_MODEL = Deno.env.get('STELA_GEMINI_MODEL') || 'gemini-3.6-flash';
 const STELA_GEMINI_FALLBACK_MODEL = 'gemini-3.5-flash-lite';
-const STELA_CANDIDATES = KUNCI.gemini && !kunciBermasalah({ geminiKey: KUNCI.gemini }).includes('gemini')
+const geminiAvailable =
+  typeof KUNCI.gemini === 'string' &&
+  KUNCI.gemini.trim().length > 0;
+const STELA_CANDIDATES = geminiAvailable
   ? [
     { penyedia: 'gemini', apiKey: KUNCI.gemini, model: STELA_GEMINI_MODEL },
     { penyedia: 'gemini', apiKey: KUNCI.gemini, model: STELA_GEMINI_FALLBACK_MODEL },

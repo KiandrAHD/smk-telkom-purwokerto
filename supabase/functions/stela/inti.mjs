@@ -430,7 +430,6 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
         contents,
         generationConfig: {
           maxOutputTokens: BATAS.MAKS_TOKEN_JAWABAN,
-          temperature: 0.3,
         },
       }),
     },
