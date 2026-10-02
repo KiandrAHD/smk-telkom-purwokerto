@@ -12,6 +12,8 @@ export default {
   'Submenu Tentang': 'About submenu', 'Tutup menu': 'Close menu', 'Buka menu': 'Open menu',
   'Kebijakan Privasi': 'Privacy Policy', 'Akses Staf & Admin': 'Staff & Admin Access',
   'Pendukung lomba': 'Competition supporters', 'Kunjungi {name}': 'Visit {name}',
+  'Jeda animasi logo': 'Pause logo animation',
+  'Lanjutkan animasi logo': 'Resume logo animation',
   'Buka lokasi SMK Telkom Purwokerto di Google Maps': 'Open SMK Telkom Purwokerto in Google Maps',
   'Peta lokasi SMK Telkom Purwokerto': 'Map of SMK Telkom Purwokerto',
   'Mencetak generasi digital yang kompeten, berkarakter, dan siap bersaing di era teknologi': 'Educating a skilled digital generation with strong character, ready to thrive in the technology era',

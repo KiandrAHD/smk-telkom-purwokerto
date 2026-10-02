@@ -2,6 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useMemo, useRef, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLenis } from 'lenis/react';
 import PengumumanFilterBar from './PengumumanFilterBar';
 import PengumumanTimelineBar from './PengumumanTimelineBar';
 import PengumumanCard from './PengumumanCard';
@@ -14,6 +15,7 @@ const ITEMS_PER_PAGE = 5;
 
 const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => {
   const { t } = useLanguage();
+  const lenis = useLenis();
 
   const [chip, setChip] = useState('Semua');
   const [query, setQuery] = useState('');
@@ -46,7 +48,8 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
   const pageItems = shown.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
   const changePage = (nextPage) => {
     setPage(Math.max(1, Math.min(nextPage, totalPages)));
-    sectionRef.current?.scrollIntoView({ block: 'start' });
+    if (lenis && sectionRef.current) lenis.scrollTo(sectionRef.current);
+    else sectionRef.current?.scrollIntoView({ block: 'start' });
   };
 
   return (

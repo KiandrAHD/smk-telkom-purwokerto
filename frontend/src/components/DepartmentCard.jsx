@@ -14,7 +14,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
   const Icon = icons[icon];
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card">
       <div className="relative">
         <div className="overflow-hidden">
           <img
@@ -24,7 +24,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
             height={450}
             loading="lazy"
             decoding="async"
-            className="w-full aspect-[2/1] object-cover object-top transition-transform duration-500 group-hover:scale-110"
+            className="department-photo w-full aspect-[2/1] object-cover object-top motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
           />
         </div>
         <span className="absolute -bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-lg bg-primary shadow-md">

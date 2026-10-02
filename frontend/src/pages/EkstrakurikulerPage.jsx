@@ -1,5 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLenis } from 'lenis/react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import SectionAccents from '../components/SectionAccents';
@@ -73,17 +74,22 @@ const CardGrid = ({ items, onOpen }) => (
 
 const ActivityDetailDialog = ({ item, onClose }) => {
   const { t } = useLanguage();
+  const lenis = useLenis();
   const dialogRef = useRef(null);
 
   useEffect(() => {
-    if (item && !dialogRef.current?.open) dialogRef.current?.showModal();
-  }, [item]);
+    if (!item) return undefined;
+    if (!dialogRef.current?.open) dialogRef.current?.showModal();
+    lenis?.stop();
+    return () => lenis?.start();
+  }, [item, lenis]);
 
   if (!item) return null;
 
   return (
     <dialog
       ref={dialogRef}
+      data-lenis-prevent
       onClose={onClose}
       onCancel={(event) => {
         event.preventDefault();
@@ -92,7 +98,7 @@ const ActivityDetailDialog = ({ item, onClose }) => {
       aria-labelledby="judul-detail-kegiatan"
       className="motion-dialog m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
-      <div className="relative max-h-[90vh] overflow-y-auto">
+      <div data-lenis-prevent className="relative max-h-[90vh] overflow-y-auto overscroll-contain">
         <ContentImage src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className="aspect-[16/7] w-full object-cover" />
         <button
           type="button"

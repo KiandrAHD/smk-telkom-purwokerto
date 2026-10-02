@@ -46,7 +46,6 @@ const PrestasiDukunganSection = () => {
             poster={videoHighlight.video.poster}
             title={t(videoHighlight.videoTitle)}
             desc={t(videoHighlight.videoDesc)}
-            posterHasPlayIcon
           />
         </div>
       </div>

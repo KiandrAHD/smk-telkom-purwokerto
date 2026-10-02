@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Play } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import schoolPoster from '../assets/tentang/profil-hero.jpg';
 
 // Pemutar video dengan pola "facade": yang dimuat pertama cuma gambar sampul,
 // iframe YouTube baru disisipkan setelah tombol putar ditekan. Alasannya bukan
@@ -9,7 +10,7 @@ import { useLanguage } from '../context/LanguageContext';
 //
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
-const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', showCaption = true, posterHasPlayIcon = false }) => {
+const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', showCaption = true }) => {
   const { t } = useLanguage();
   const [diputar, setDiputar] = useState(false);
 
@@ -29,20 +30,23 @@ const VideoEmbed = ({ videoId, poster, title, desc, rasio = 'aspect-video', show
             type="button"
             onClick={() => setDiputar(true)}
             aria-label={t('Putar video: {title}', { title: t(title) })}
-            className="group absolute inset-0 h-full w-full"
+            className="group absolute inset-0 h-full w-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-primary"
           >
             <img
-              src={poster}
+              src={poster || schoolPoster}
+              onError={({ currentTarget }) => {
+                if (currentTarget.getAttribute('src') !== schoolPoster) currentTarget.src = schoolPoster;
+              }}
               alt=""
               aria-hidden="true"
-              className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
             />
-            {!posterHasPlayIcon && <span className="absolute inset-0 bg-dark-950/35 transition-colors group-hover:bg-dark-950/20" />}
-            {!posterHasPlayIcon && <span className="absolute inset-0 flex items-center justify-center">
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-card transition-transform duration-300 group-hover:scale-110 sm:h-16 sm:w-16">
+            <span aria-hidden="true" className="absolute inset-0 bg-dark-950/35 transition-colors group-hover:bg-dark-950/20" />
+            <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-card motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110 sm:h-16 sm:w-16">
                 <Play className="ml-1 h-6 w-6 text-white sm:h-7 sm:w-7" fill="currentColor" />
               </span>
-            </span>}
+            </span>
           </button>
         )}
       </div>

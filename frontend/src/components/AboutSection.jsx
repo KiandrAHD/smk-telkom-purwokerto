@@ -1,12 +1,16 @@
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import VideoEmbed from './VideoEmbed';
+import Reveal from './Reveal';
+import TextReveal from './TextReveal';
 import { landingAbout } from '../data/dummyData';
 import accreditation from '../assets/tentang/badge-akreditasi.png';
 import accreditationOverlay from '../assets/tentang/badge-akreditasi-overlay.png';
 import facilitiesIcon from '../assets/tentang/badge-fasilitas.svg';
 import teacherIcon from '../assets/tentang/badge-guru.svg';
 import curriculumIcon from '../assets/tentang/badge-kurikulum.svg';
+
+const badgeDelays = ['delay-0', 'delay-100', 'delay-200', 'delay-300'];
 
 const AboutSection = () => {
   const { t } = useLanguage();
@@ -16,30 +20,32 @@ const AboutSection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[42%_1fr] items-start gap-8 lg:gap-12">
         {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
             ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
-        <VideoEmbed
-          videoId={landingAbout.video.videoId}
-          poster={landingAbout.video.poster}
-          title={t(landingAbout.video.title)}
-          desc={t(landingAbout.video.desc)}
-          rasio="aspect-[646/488]"
-          showCaption={false}
-          posterHasPlayIcon
-        />
+        <Reveal>
+          <VideoEmbed
+            videoId={landingAbout.video.videoId}
+            poster={landingAbout.video.poster}
+            title={t(landingAbout.video.title)}
+            desc={t(landingAbout.video.desc)}
+            rasio="aspect-[646/488]"
+            showCaption={false}
+          />
+        </Reveal>
 
         {/* Teks + badge */}
         <div>
           <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-primary">
             {t(landingAbout.title)}
           </h2>
-          <p className="mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-dark-500">
-            {t(landingAbout.description)}
-          </p>
+          <TextReveal
+            text={t(landingAbout.description)}
+            className="mt-3 max-w-2xl text-sm leading-relaxed text-dark-900 sm:text-base"
+          />
 
           <div className="mt-6 grid auto-rows-fr grid-cols-2 gap-4">
             {landingAbout.badges.map((badge, index) => (
-              <div
+              <Reveal
                 key={badge.title}
-                className="flex min-w-0 flex-col items-center gap-3 rounded-2xl bg-primary px-4 py-5 text-center text-white sm:flex-row sm:text-left"
+                className={`${badgeDelays[index % badgeDelays.length]} flex min-w-0 flex-col items-center gap-3 rounded-2xl bg-primary px-4 py-5 text-center text-white sm:flex-row sm:text-left`}
               >
                 {index === 0 && <span aria-hidden="true" className="relative h-[100px] w-[100px] shrink-0">
                   <img src={accreditation} alt="" width="100" height="100" className="absolute inset-0" />
@@ -56,7 +62,7 @@ const AboutSection = () => {
                     {t(badge.desc)}
                   </p>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
 

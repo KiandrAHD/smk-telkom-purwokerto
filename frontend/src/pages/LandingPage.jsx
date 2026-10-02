@@ -15,13 +15,9 @@ import CTASection from '../components/CTASection';
 const LandingPage = () => (
   <MainLayout>
     <HeroSection />
-    <Reveal>
-      <AboutSection />
-    </Reveal>
+    <AboutSection />
     <RibbonDivider />
-    <Reveal>
-      <DepartmentsSection />
-    </Reveal>
+    <DepartmentsSection />
     <Reveal>
       <PartnersSection />
     </Reveal>
