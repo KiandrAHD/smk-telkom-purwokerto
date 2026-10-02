@@ -84,6 +84,10 @@ try {
   assert.match(buatInstruksi('', undefined, 'en'), /That information is not yet available/);
   const fast = await tanyaAI({pesan:[{role:'user',content:'Apa saja jurusan SMK Telkom?'}],language:'en'});
   assert.equal(fast.modelDipakai,'faq');
+  assert.match(fast.teks, /Software Engineering/);
+  for (const [content, language, expected] of [['halo','en',/Hello/], ['siapa kamu','en',/I am STELA/], ['terima kasih','en',/welcome/], ['hello','id',/Halo/], ['hi',undefined,/Hello/]]) {
+    assert.match((await tanyaAI({pesan:[{role:'user',content}],language})).teks, expected);
+  }
   const guard = buatPenjaga();
   const messages = [{role:'user',content:'school programs'}];
   guard.simpanCache(messages,'Indonesian reply','id');
@@ -108,6 +112,17 @@ try {
     };
     const generated = await tanyaAI({penyedia:'ninerouter',apiKey:'sk-test',model:'test-model',baseUrl:'https://example.com',pesan:[{role:'user',content:'School achievements'}],language:'en'});
     assert.equal(generated.teks,'English response');
+    let calls = 0;
+    globalThis.fetch = async (_url, options) => {
+      calls++;
+      const payload = JSON.parse(options.body);
+      assert.equal(payload.messages[0].content, 'Return only recommendation JSON.');
+      return calls === 1 ? new Response('Unavailable', {status:503}) : Response.json({choices:[{message:{content:'{"explanation":"English recommendation"}'}}],usage:{}});
+    };
+    const recommendation = await tanyaAI({pesan:[{role:'user',content:'jurusan RPL'}],language:'en',instruksiKustom:'Return only recommendation JSON.',daftarPenyedia:[{penyedia:'ninerouter',apiKey:'sk-test',model:'first-model',baseUrl:'https://example.com'},{penyedia:'groq',apiKey:'gsk_test',model:'second-model'}]});
+    assert.equal(calls,2,'NextTel custom instructions must bypass FAQ and retain provider failover');
+    assert.equal(recommendation.penyediaDipakai,'groq');
+    assert.equal(JSON.parse(recommendation.teks).explanation,'English recommendation');
   } finally { globalThis.fetch = originalFetch; }
   console.log(`English content: ${views} rendered views, ${Object.values(live).flat().length} content records, paragraph/URL preservation, FAQ language and cache separation pass.`);
 } finally { await server.close(); }

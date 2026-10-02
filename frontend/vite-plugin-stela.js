@@ -5,6 +5,7 @@ import {
   kunciBermasalah,
   periksaPesan,
   pilihPenyedia,
+  deteksiBahasa,
   tanyaAI,
 } from '../supabase/functions/stela/inti.mjs';
 import { buatPenjaga } from '../supabase/functions/stela/penjaga-biaya.mjs';
@@ -129,9 +130,9 @@ export const stelaDevPlugin = () => ({
       const { pesan, galat } = periksaPesan(badan?.messages);
       if (!pesan) return kirim({ error: galat }, 400);
       if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
-      const language = badan.language === 'en' ? 'en' : 'id';
 
-      const tersimpan = penjaga.ambilCache(pesan, language);
+      const bahasa = badan.language ?? deteksiBahasa(pesan[pesan.length - 1]?.content ?? '');
+      const tersimpan = penjaga.ambilCache(pesan, bahasa);
       if (tersimpan) {
         server.config.logger.info('  [stela] dijawab dari cache, tanpa panggilan API');
         return kirim({ reply: tersimpan }, 200);
@@ -145,7 +146,7 @@ export const stelaDevPlugin = () => ({
           apiKey,
           model,
           pesan,
-          language,
+          bahasa,
           // Tanpa Supabase di lokal, data dinamis memang tidak ada. STELA tetap
           // menjawab dari data sekolah statis yang sudah lengkap.
           contextPublik:
@@ -153,7 +154,7 @@ export const stelaDevPlugin = () => ({
         });
         if (!teks) return kirim({ error: 'STELA tidak memberi jawaban.' }, 502);
 
-        penjaga.simpanCache(pesan, teks, language);
+        penjaga.simpanCache(pesan, teks, bahasa);
         const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
         server.config.logger.info(
           `  [stela] ${terpakaiHariIni}/${maksPerHari} hari ini | model ${modelDipakai} | token masuk ${tokenMasuk}, keluar ${tokenKeluar}`,
@@ -196,7 +197,7 @@ export const stelaDevPlugin = () => ({
       try {
         const badan = JSON.parse(mentah);
         if (badan.language !== undefined && !['id', 'en'].includes(badan.language)) return kirim({ error: 'Unsupported language.' }, 400);
-        const language = badan.language === 'en' ? 'en' : 'id';
+        const language = badan.language ?? 'id';
         const result = hitungHasilNextTel(badan?.answers);
         if (!result) return kirim({ error: 'Jawaban NextTel tidak valid.' }, 400);
         penjaga.catatPanggilan();

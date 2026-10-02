@@ -4,7 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 import NextTelIntro from '../components/nexttel/NextTelIntro';
 import NextTelQuestionnaire from '../components/nexttel/NextTelQuestionnaire';
 import NextTelResult from '../components/nexttel/NextTelResult';
-import { jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
+import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
 import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
 
 const QUESTIONS = [
@@ -51,7 +51,10 @@ const NextTelPage = () => {
       }, { signal: controller.signal });
       setExplanation({ ...response, language });
     } catch (requestError) {
-      if (requestError?.name !== 'AbortError') setError(PESAN_NEXTTEL_GAGAL);
+      if (requestError?.name !== 'AbortError') {
+        setExplanation({ ...hasilFallbackNextTel(computed, language), language });
+        setError(PESAN_NEXTTEL_GAGAL);
+      }
     } finally {
       if (controllerRef.current === controller) { controllerRef.current = null; setLoading(false); }
     }

@@ -23,12 +23,15 @@ const SEHARI_MS = 24 * 60 * 60 * 1000;
 
 // Menyeragamkan pertanyaan supaya "Jurusan apa saja?", "jurusan apa saja",
 // dan "Jurusan  apa  saja !" dianggap satu pertanyaan yang sama.
-const kunciPertanyaan = (teks) =>
-  teks
+// Kunci cache diawali dengan prefiks bahasa (mis. id:jurusan apa saja, en:what majors are available)
+const kunciPertanyaan = (teks, bahasa = 'id') => {
+  const norm = teks
     .toLowerCase()
     .replace(/\s+/g, ' ')
     .replace(/[?!.,]+$/, '')
     .trim();
+  return `${bahasa}:${norm}`;
+};
 
 export const buatPenjaga = ({
   aktif = true,
@@ -93,9 +96,9 @@ export const buatPenjaga = ({
     // Cache hanya untuk pertanyaan pembuka satu pesan. Percakapan lanjutan
     // jawabannya bergantung konteks sebelumnya, jadi menyimpannya berisiko
     // memberi jawaban yang keliru ke orang lain.
-    ambilCache(pesan, language = 'id') {
+    ambilCache(pesan, bahasa = 'id') {
       if (pesan.length !== 1) return null;
-      const kunci = `${language}:${kunciPertanyaan(pesan[0].content)}`;
+      const kunci = kunciPertanyaan(pesan[0].content, bahasa);
       const isi = cache.get(kunci);
       if (!isi) return null;
       if (Date.now() > isi.kedaluwarsa) {
@@ -108,11 +111,11 @@ export const buatPenjaga = ({
       return isi.jawaban;
     },
 
-    simpanCache(pesan, jawaban, language = 'id') {
+    simpanCache(pesan, jawaban, bahasa = 'id') {
       if (pesan.length !== 1 || !jawaban) return;
       // Map mempertahankan urutan sisip, jadi entri terlama ada di depan.
       if (cache.size >= maksCache) cache.delete(cache.keys().next().value);
-      cache.set(`${language}:${kunciPertanyaan(pesan[0].content)}`, {
+      cache.set(kunciPertanyaan(pesan[0].content, bahasa), {
         jawaban,
         kedaluwarsa: Date.now() + ttlCacheMs,
       });
