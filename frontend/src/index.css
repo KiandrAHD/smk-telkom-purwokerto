@@ -85,32 +85,32 @@ body {
   width: calc(100% - 2 * var(--footer-accent-gutter));
 }
 
-/* Frame 106:90: accents start at y=4029; the red bar clips them at y=4343. */
+/* Accent Element 15:78: Group 478 spans y=1204..1600 on a 1781px canvas. */
 .footer-accent-side {
   position: absolute;
   left: 0;
   top: 0;
-  width: 1847px;
-  height: 314px;
+  width: 1781px;
+  height: 396px;
   /* Let the existing footer body clip the edges; this scaled canvas must not
      cut the second left motif in the middle of a taller footer. */
   overflow: visible;
   transform-origin: left top;
-  transform: scale(calc(100cqw / 1847px));
+  transform: scale(calc(100cqw / 1781px));
 }
 .footer-accent-band {
   position: relative;
-  height: calc(93 * 100cqw / 1847);
+  height: calc(198 * 100cqw / 1781);
   overflow: hidden;
 }
 .footer-accent-canvas {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 1847px;
-  height: 314px;
+  width: 1781px;
+  height: 396px;
   transform-origin: left bottom;
-  transform: scale(calc(100cqw / 1847px));
+  transform: scale(calc(100cqw / 1781px));
 }
 
 .footer-accent {
@@ -133,41 +133,38 @@ body {
   mask-repeat: no-repeat;
 }
 
-.footer-accent[data-figma-node='90:508'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 274, 222.99951171875);
+.footer-accent[data-figma-node='125:136'] {
+  transform: translate(254px, 186.99951171875px);
 }
-.footer-accent[data-figma-node='90:511'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1585, 226.99951171875);
+.footer-accent[data-figma-node='125:139'] {
+  transform: translate(1675px, 191px);
 }
-.footer-accent[data-figma-node='90:514'] {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 93, 453.9345703125);
+.footer-accent[data-figma-node='125:142'] {
+  transform: matrix(0, -1, 1, 0, 73, 417.9345703125);
 }
-.footer-accent[data-figma-node='90:517'] {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1404, 457.9345703125);
+.footer-accent[data-figma-node='125:145'] {
+  transform: matrix(0, -1, 1, 0, 1477, 417.9345703125);
 }
-.footer-accent[data-figma-node='90:520'] {
-  transform: matrix(-4.371139183945161e-8, -1, 1, -4.371139183945161e-8, 1203, 453.9345703125);
+.footer-accent[data-figma-node='125:148'] {
+  transform: matrix(0, -1, 1, 0, 1274, 413.9345703125);
 }
-.footer-accent[data-figma-node='90:523'] {
-  transform: matrix(-1, 8.742278367890322e-8, -8.742278367890322e-8, -1, 333.934326171875, 620.9345703125);
+.footer-accent[data-figma-node='125:161'] {
+  transform: translate(-157px, 0);
 }
-.footer-accent[data-figma-node='90:536'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -140, 0);
+.footer-accent[data-figma-node='125:164'] {
+  transform: translate(1675px, 3px);
 }
-.footer-accent[data-figma-node='90:539'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, 1695, 39);
-}
-.footer-accent[data-figma-node='90:542'] {
-  transform: matrix(1, -1.1058862159352145e-16, 1.1058862159352145e-16, 1, -130, 185);
+.footer-accent[data-figma-node='125:167'] {
+  transform: translate(-147px, 185px);
 }
 
 /* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.
    Setiap area menyertakan 2px tepi putih agar anti-alias logo tetap utuh. */
 .footer-supporters {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  gap: 1rem 0.75rem;
+  gap: 0.75rem;
 }
 
 .footer-supporter-logo {

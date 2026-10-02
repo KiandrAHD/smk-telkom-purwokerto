@@ -40,12 +40,12 @@ try {
   assert.ok(nav.includes('href="/pengumuman"'));
   assert.ok(nav.includes('Ganti ke Bahasa Indonesia'));
   const footer = render(createElement(Footer));
-  assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 9);
+  assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 8);
   assert.ok(footer.includes('Staff &amp; Admin Access'));
   const teachers = render(createElement(Teachers));
   assert.ok(teachers.includes('href="/profil-sekolah/guru"'));
   assert.match(teachers, /View All Teacher Profiles/i);
-  console.log('Bahasa: default/fallback, persistence reading, interpolation, routes, form values, teacher CTA, and nine footer motifs pass.');
+  console.log('Bahasa: default/fallback, persistence reading, interpolation, routes, form values, teacher CTA, and eight footer motifs pass.');
 } finally {
   delete globalThis.localStorage;
   await server.close();
