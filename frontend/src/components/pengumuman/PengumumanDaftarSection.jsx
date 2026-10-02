@@ -48,7 +48,7 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
         />
 
         <div className="mt-5">
-          <PengumumanTimelineBar />
+          <PengumumanTimelineBar items={items} />
         </div>
 
         {/* Figma: kartu 1065 px, jarak 72 px, sidebar 565 px. */}

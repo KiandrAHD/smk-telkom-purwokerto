@@ -20,6 +20,39 @@ export const splitContent = (value) =>
 
 export const normalizeImage = (value) => typeof value === 'string' ? value.trim() : '';
 
+// Konten impor menyimpan atribusi "Sumber: URL"; buka artikel aslinya, bukan endpoint API.
+export const getContentSource = (content) => {
+  const match = String(content || '').match(/\bSumber:\s*(https?:\/\/[^\s<>"']+)/i);
+  if (!match) return '';
+  try {
+    const url = new URL(match[1].replace(/[.,;]+$/, ''));
+    return url.pathname.includes('/wp-json/') ? '' : url.href;
+  } catch {
+    return '';
+  }
+};
+
+// Urutan kronologis tanpa mengubah urutan daftar utama; tanggal tidak valid ditaruh terakhir.
+export const sortPengumumanTimeline = (items) => {
+  const timestamp = (item) => Number.isFinite(Date.parse(item.iso)) ? Date.parse(item.iso) : Infinity;
+  return [...items].sort((a, b) => timestamp(a) - timestamp(b));
+};
+
+export const getPengumumanCounts = (items, now = new Date()) => {
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const afterTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - (today.getDay() + 6) % 7); // Minggu kalender dimulai Senin.
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 7);
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const dates = items.map((item) => new Date(item.iso));
+  return [[today, tomorrow], [tomorrow, afterTomorrow], [weekStart, weekEnd], [monthStart, monthEnd]]
+    .map(([start, end]) => dates.filter((date) => date >= start && date < end).length);
+};
+
 // Kategori dan galeri memakai item yang sama dengan daftar berita, termasuk hasil filter.
 export const getBeritaCategories = (items) => {
   const groups = new Map();
@@ -43,6 +76,7 @@ export const toBeritaItem = (row) => ({
   ...row,
   title: row.judul,
   desc: row.ringkasan || row.konten,
+  sourceUrl: getContentSource(row.konten),
   excerpt: row.ringkasan || row.konten,
   text: row.ringkasan || row.konten,
   image: normalizeImage(row.gambar_url),
@@ -60,6 +94,7 @@ export const toPengumumanItem = (row) => ({
   ...row,
   title: row.judul,
   desc: row.ringkasan || row.konten,
+  sourceUrl: getContentSource(row.konten),
   image: normalizeImage(row.gambar_url),
   kategori: row.kategori || 'Pengumuman',
   tags: [row.kategori || 'Pengumuman'],
@@ -75,6 +110,7 @@ export const toPrestasiItem = (row) => ({
   ...row,
   title: row.judul,
   desc: row.deskripsi,
+  sourceUrl: getContentSource(row.deskripsi),
   image: normalizeImage(row.gambar_url),
   level: row.tingkat || 'Prestasi',
   kategori: row.kategori || 'Prestasi',

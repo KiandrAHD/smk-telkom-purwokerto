@@ -1,6 +1,7 @@
 import { useLanguage } from '../context/LanguageContext';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import AchievementCard from './AchievementCard';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Lebar kartu disamakan persis dengan grid aslinya (gap-5 = 1.25rem):
 // 1 kolom di mobile, 2 di sm, 4 di lg.
@@ -72,7 +73,10 @@ const PrestasiCarousel = ({ items }) => {
   const goTo = (i) => {
     const el = trackRef.current;
     if (!el) return;
-    el.scrollTo({ left: i * stepRef.current, behavior: 'smooth' });
+    el.scrollTo({
+      left: Math.max(0, Math.min(i, groups - 1)) * stepRef.current,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    });
   };
 
   // Drag dengan mouse. Sentuh sengaja tidak ditangani di sini — swipe native
@@ -144,6 +148,13 @@ const PrestasiCarousel = ({ items }) => {
 
       {/* Indikator carousel */}
       <div className="mt-6 flex items-center justify-center gap-2">
+        {groups > 1 && <button
+          type="button"
+          onClick={() => goTo(active - 1)}
+          disabled={active === 0}
+          aria-label={t('Prestasi sebelumnya')}
+          className="mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        ><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>}
         {Array.from({ length: groups }).map((_, i) => (
           <button
             key={i}
@@ -156,6 +167,13 @@ const PrestasiCarousel = ({ items }) => {
             }`}
           />
         ))}
+        {groups > 1 && <button
+          type="button"
+          onClick={() => goTo(active + 1)}
+          disabled={active === groups - 1}
+          aria-label={t('Prestasi berikutnya')}
+          className="ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        ><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>}
       </div>
     </>
   );

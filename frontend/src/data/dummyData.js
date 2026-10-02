@@ -419,8 +419,9 @@ export const nilaiStematel = [
 // Snapshot konten resmi; jumlah artikel arsip tidak sama dengan jumlah gelar.
 export const officialContentAudit = {
   checkedAt: '1 Oktober 2026',
-  prestasiSourceUrl: 'https://smktelkom-pwt.sch.id/wp-json/wp/v2/posts?categories=5',
-  pengumumanSourceUrl: 'https://smktelkom-pwt.sch.id/wp-json/wp/v2/posts?categories=8',
+  // Sumber untuk pembaca memakai halaman arsip HTML, bukan respons JSON API.
+  prestasiSourceUrl: 'https://smktelkom-pwt.sch.id/category/prestasi-siswa/',
+  pengumumanSourceUrl: 'https://smktelkom-pwt.sch.id/category/pengumuman/',
   alumniSourceUrl: 'https://smktelkom-pwt.sch.id/',
 };
 
@@ -626,10 +627,41 @@ export const projectShowcase = {
   titleAccent: 'Showcase',
   titleTail: 'Siswa',
   items: [
-    { tag: 'RPL', tagClass: 'bg-primary', title: 'Sistem Informasi\nPerpustakaan', image: prestasiWeb },
-    { tag: 'PG', tagClass: 'bg-purple-600', title: 'Game 2D\nAdventure', image: prestasiGame },
-    { tag: 'TKJ', tagClass: 'bg-blue-600', title: 'Server Monitoring\nSystem', image: prestasiNetwork },
-    { tag: 'TJAT', tagClass: 'bg-orange-500', title: 'Jaringan Fiber Optic\nSimulation', image: prestasiIot },
+    // Karya dan pembuat diverifikasi dari artikel resmi; tanggal adalah tanggal publikasi.
+    {
+      tag: 'IoT', tagClass: 'bg-primary', title: 'Pengolahan Sampah Plastik Berbasis IoT',
+      description: 'Inovasi Hanif Rizki Ardianto untuk mengolah limbah plastik dengan teknologi IoT dan menghasilkan nilai ekonomi.',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/08/Hanif-Rizki-Ardianto.jpg',
+      imageAlt: 'Dokumentasi penghargaan Hanif Rizki Ardianto dari situs resmi sekolah',
+      imageNote: 'Dokumentasi penghargaan pembuat proyek, bukan tangkapan layar aplikasi.',
+      iso: '2026-08-06', author: 'Hanif Rizki Ardianto — XI PPLG 1',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/siswa-smk-telkom-purwokerto-raih-awardee-fully-funded-green-environment-leadership-berkat-inovasi-pengolahan-sampah-plastik-berbasis-iot/',
+      body: ['Proyek ini mengantarkan Hanif meraih Awardee Fully Funded Green Environment Leadership yang diselenggarakan GARDA EMAS bersama Peduli Lingkungan.'],
+    },
+    {
+      tag: 'RPL', tagClass: 'bg-blue-600', title: 'Proyek Aplikasi DINACOM 2023',
+      description: 'Karya tim Rafli, Nizar, dan Azhar yang meraih juara dua kompetisi aplikasi nasional di UDINUS.',
+      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2023/01/WhatsApp-Image-2023-01-20-at-08.26.53.jpeg',
+      imageAlt: 'Dokumentasi tim juara dua DINACOM 2023 dari situs resmi sekolah',
+      imageNote: 'Foto tim lomba; nama aplikasi dan tangkapan layarnya tidak dicantumkan dalam artikel resmi.',
+      iso: '2023-01-20', author: 'Muhamad Rafli Al Farizqi, Nizar Ali Rifai, Azhar Dwi Nugroho',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/berita/juara-2-nasional-dinus-application-competition/',
+      body: ['Tim siswa kelas XII RPL mengikuti DINACOM pada 18 Januari 2023 dengan bimbingan Indah Cahyani, S.Kom. Judul kartu merupakan label dokumentasi kompetisi, karena sumber tidak menyebut nama aplikasinya.'],
+    },
+    {
+      tag: 'IoT', tagClass: 'bg-green-700', title: 'ASISTANI',
+      description: 'Aplikasi mobile berbasis IoT karya Poundra, Djaka, dan Gilang untuk membantu meningkatkan hasil pertanian.',
+      image: '', iso: '2018-11-28', author: 'Poundra Verdian, Djaka Pradana, Nicholaus Gilang',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/juara-favorit-nasional-tbig-creation-2018/',
+      body: ['ASISTANI meraih Juara Favorit Nasional TBIG Creation 2018 dengan predikat Terbaik Pilihan Perusahaan. Artikel resmi membahas ide, sasaran pengguna, dan rencana penyempurnaan produk.'],
+    },
+    {
+      tag: 'RPL', tagClass: 'bg-purple-600', title: 'Senimart',
+      description: 'Aplikasi mobile untuk mempertemukan pengrajin Indonesia, karya Ardyan, Rizal, dan Lulu.',
+      image: '', iso: '2018-11-30', author: 'Ardyan Wahyu, Rizal Gradianto, Lulu Irman Permana',
+      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/juara-ii-nasional-hackathon/',
+      body: ['Tim siswa kelas XI RPL mengembangkan Senimart dan meraih Juara II Nasional dalam Hackathon ITTP pada 24–25 November 2018.'],
+    },
   ],
 };
 
@@ -1099,12 +1131,6 @@ export const pengumumanFilter = {
 
 export const pengumumanTimeline = {
   linkText: 'Lihat Time Line Lengkap',
-  items: [
-    { label: 'Hari Ini', count: '3 Pengumuman' },
-    { label: 'Besok', count: '4 Pengumuman' },
-    { label: 'Minggu Ini', count: '8 Pengumuman' },
-    { label: 'Bulan Ini', count: '15 Pengumuman' },
-  ],
 };
 
 // Warna thumbnail diambil dari Figma: merah, hijau, biru, dan biru muda pada 20% alpha.
@@ -3097,84 +3123,15 @@ export const roadmapDetail = [
 ];
 
 /* ── Project showcase: /jurusan/project/:slug ── */
-export const projectDetail = [
-  {
-    slug: 'sistem-informasi-perpustakaan',
-    kategori: 'RPL',
-    title: 'Sistem Informasi Perpustakaan',
-    subtitle: 'Karya siswa Rekayasa Perangkat Lunak',
-    date: 'Proyek kelas XI',
-    image: showcaseRpl,
-    lead: 'Aplikasi web untuk mencatat peminjaman dan pengembalian buku perpustakaan sekolah, menggantikan pencatatan manual di buku besar.',
-    body: [
-      'Masalah yang diselesaikan sederhana tetapi nyata: petugas kesulitan mengetahui buku mana yang sedang dipinjam dan siapa yang terlambat mengembalikan.',
-      'Sistem ini mencatat setiap transaksi, menghitung tenggat otomatis, dan menampilkan daftar keterlambatan pada halaman utama petugas. Pencarian buku memakai penelusuran judul dan pengarang sekaligus.',
-      'Aplikasinya kini dipakai di perpustakaan sekolah dan dirawat bergantian oleh siswa kelas XI sebagai bagian dari pembelajaran.',
-    ],
-    facts: [
-      { label: 'Jurusan', value: 'Rekayasa Perangkat Lunak' },
-      { label: 'Bentuk', value: 'Aplikasi web' },
-      { label: 'Status', value: 'Dipakai di perpustakaan sekolah' },
-    ],
-  },
-  {
-    slug: 'game-2d-adventure',
-    kategori: 'PG',
-    title: 'Game 2D Adventure',
-    subtitle: 'Karya siswa Pengembangan Game',
-    date: 'Proyek kelas XI',
-    image: showcasePg,
-    lead: 'Permainan petualangan dua dimensi dengan cerita, level bertingkat, dan aset visual yang seluruhnya digambar sendiri oleh tim siswa.',
-    body: [
-      'Permainan dibangun dalam satu semester dengan pembagian peran menyerupai studio kecil: ada yang menangani pemrograman mekanik, ada yang menggambar aset, ada yang menyusun level.',
-      'Tantangan terbesar bukan pada pemrogramannya, melainkan menjaga tingkat kesulitan tetap wajar. Beberapa level harus dirombak setelah pengujian menunjukkan pemain berhenti di tempat yang sama.',
-      'Versi akhirnya diuji ke siswa kelas lain sebelum dipamerkan pada Project Showcase sekolah.',
-    ],
-    facts: [
-      { label: 'Jurusan', value: 'Pengembangan Game' },
-      { label: 'Bentuk', value: 'Permainan 2D' },
-      { label: 'Aset', value: 'Digambar sendiri oleh tim' },
-    ],
-  },
-  {
-    slug: 'server-monitoring-system',
-    kategori: 'TKJ',
-    title: 'Server Monitoring System',
-    subtitle: 'Karya siswa Teknik Komputer dan Jaringan',
-    date: 'Proyek kelas XII',
-    image: showcaseTkj,
-    lead: 'Sistem pemantau kondisi server sekolah yang menampilkan penggunaan sumber daya dan mengirim peringatan saat ada yang melewati batas aman.',
-    body: [
-      'Sistem membaca beban prosesor, pemakaian memori, dan sisa ruang penyimpanan dari beberapa server sekaligus, lalu menampilkannya pada satu halaman ringkas.',
-      'Peringatan dikirim lewat pesan singkat ketika sebuah nilai melewati ambang yang ditetapkan, sehingga gangguan dapat ditangani sebelum layanan benar-benar terhenti.',
-      'Proyek ini muncul dari kebutuhan nyata: sebelumnya kondisi server hanya diketahui ketika ada yang mengeluh layanan tidak bisa diakses.',
-    ],
-    facts: [
-      { label: 'Jurusan', value: 'Teknik Komputer dan Jaringan' },
-      { label: 'Bentuk', value: 'Aplikasi pemantauan' },
-      { label: 'Status', value: 'Dipasang di jaringan sekolah' },
-    ],
-  },
-  {
-    slug: 'jaringan-fiber-optic-simulation',
-    kategori: 'TJAT',
-    title: 'Jaringan Fiber Optic Simulation',
-    subtitle: 'Karya siswa Teknik Jaringan Akses Telekomunikasi',
-    date: 'Proyek kelas XII',
-    image: showcaseTjat,
-    lead: 'Simulasi jaringan akses fiber optic dari sisi penyedia layanan sampai ke rumah pelanggan, lengkap dengan perhitungan redaman jalurnya.',
-    body: [
-      'Simulasi menampilkan jalur lengkap beserta perangkat di setiap titik, sehingga siswa dapat melihat bagaimana satu sambungan yang buruk memengaruhi kualitas sampai ke ujung.',
-      'Perhitungan redaman dilakukan mengikuti rumus yang dipakai di lapangan, lalu dibandingkan dengan hasil pengukuran nyata di laboratorium.',
-      'Model ini kini dipakai sebagai alat bantu mengajar untuk adik kelas sebelum mereka menyentuh perangkat sungguhan.',
-    ],
-    facts: [
-      { label: 'Jurusan', value: 'Teknik Jaringan Akses Telekomunikasi' },
-      { label: 'Bentuk', value: 'Simulasi jaringan' },
-      { label: 'Status', value: 'Dipakai sebagai alat bantu ajar' },
-    ],
-  },
-];
+// Daftar dan detail memakai satu sumber supaya judul, foto, dan bukti selalu sesuai.
+export const projectDetail = projectShowcase.items.map((item) => ({
+  ...item,
+  slug: slugify(item.title),
+  kategori: item.tag,
+  subtitle: item.author,
+  date: item.iso,
+  lead: item.description,
+}));
 
 /* ── Profil guru: /profil-sekolah/guru/:slug ── */
 const guruDetailKonten = {

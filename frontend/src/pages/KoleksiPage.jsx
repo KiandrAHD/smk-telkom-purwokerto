@@ -10,7 +10,7 @@ import CTASection from '../components/CTASection';
 
 import PengumumanPopulerCard from '../components/pengumuman/PengumumanPopulerCard';
 import PengumumanDaftarSection from '../components/pengumuman/PengumumanDaftarSection';
-import PengumumanTimelineBar from '../components/pengumuman/PengumumanTimelineBar';
+import PengumumanTimelineSection from '../components/pengumuman/PengumumanTimelineSection';
 import PengumumanPpdbSection from '../components/pengumuman/PengumumanPpdbSection';
 import BeritaSorotSection from '../components/berita/BeritaSorotSection';
 import BeritaAgendaSection from '../components/berita/BeritaAgendaSection';
@@ -59,8 +59,9 @@ const KOLEKSI = {
   'pengumuman-timeline': {
     eyebrow: 'Pengumuman',
     title: 'Timeline Pengumuman',
-    deskripsi: 'Rekap publikasi pengumuman pada arsip situs resmi, disertai tanggal pemeriksaan.',
-    Section: PengumumanTimelineBar,
+    deskripsi: 'Seluruh pengumuman yang sudah diterbitkan, disusun berdasarkan tanggal pengumuman.',
+    Section: PengumumanTimelineSection,
+    sumber: 'pengumuman',
     kembali: { to: '/pengumuman', label: 'Pengumuman' },
   },
   'pengumuman-informasi-penting': {

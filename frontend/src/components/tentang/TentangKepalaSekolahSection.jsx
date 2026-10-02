@@ -1,21 +1,28 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { useState } from 'react';
-import { ArrowRight, Quote } from 'lucide-react';
+import { useState, useSyncExternalStore } from 'react';
+import { ArrowRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
 import SectionAccents from '../SectionAccents';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
 import photoAccent from '../../assets/tentang/figma-guru-photo-accent.png';
 
-const PER_PAGE = 4;
+const subscribeViewport = (notify) => {
+  window.addEventListener('resize', notify);
+  return () => window.removeEventListener('resize', notify);
+};
+const getPageSize = () => window.innerWidth >= 1280 ? 4 : window.innerWidth >= 400 ? 2 : 1;
 
 const TentangKepalaSekolahSection = () => {
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
   const [page, setPage] = useState(0);
+  const perPage = useSyncExternalStore(subscribeViewport, getPageSize, () => 4);
 
-  const pages = Math.ceil(guruData.length / PER_PAGE);
-  const shown = guruData.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+  const pages = Math.ceil(guruData.length / perPage);
+  // Ketika viewport membesar, halaman terakhir tetap dibatasi ke rentang yang ada.
+  const currentPage = Math.min(page, pages - 1);
+  const shown = guruData.slice(currentPage * perPage, currentPage * perPage + perPage);
 
   return (
     <section id="guru" className="relative overflow-x-clip bg-white py-8 lg:py-12 min-[1660px]:py-14">
@@ -59,7 +66,7 @@ const TentangKepalaSekolahSection = () => {
           <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:ml-[51px] min-[1660px]:mt-[14px] min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500 min-[1660px]:sr-only">{t("Jabatan organisasi mengikuti SK Pengawakan 2026/2027; mata pelajaran tidak tercantum dalam SK.")} </p>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 min-[1660px]:ml-[45px] min-[1660px]:mt-[38px] min-[1660px]:grid-cols-[repeat(4,206px)] min-[1660px]:gap-5">
+          <div className="mt-4 grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 xl:grid-cols-4 min-[1660px]:ml-[45px] min-[1660px]:mt-[38px] min-[1660px]:grid-cols-[repeat(4,206px)] min-[1660px]:gap-5">
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
@@ -93,18 +100,32 @@ const TentangKepalaSekolahSection = () => {
           {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
           {pages > 1 && (
           <div className="mt-5 flex items-center justify-center gap-2 min-[1660px]:absolute min-[1660px]:bottom-5 min-[1660px]:left-1/2 min-[1660px]:mt-0 min-[1660px]:-translate-x-1/2">
+            <button
+              type="button"
+              onClick={() => setPage(Math.max(0, currentPage - 1))}
+              disabled={currentPage === 0}
+              aria-label={t('Guru sebelumnya')}
+              className="mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            ><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>
             {Array.from({ length: pages }).map((_, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => setPage(i)}
                 aria-label={t('Halaman guru {number}', { number: i + 1 })}
-                aria-current={i === page}
+                aria-current={i === currentPage}
                 className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${
-                  i === page ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'
+                  i === currentPage ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'
                 }`}
               />
             ))}
+            <button
+              type="button"
+              onClick={() => setPage(Math.min(pages - 1, currentPage + 1))}
+              disabled={currentPage === pages - 1}
+              aria-label={t('Guru berikutnya')}
+              className="ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            ><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>
           </div>
           )}
         </div>
