@@ -8,9 +8,12 @@ const server = await createServer({ appType: 'custom', logLevel: 'silent', serve
 try {
   const { translate, readLanguage } = await server.ssrLoadModule('/src/utils/language.js');
   assert.equal(readLanguage(), 'id', 'Storage unavailable uses Indonesian.');
-  globalThis.localStorage = { getItem: () => 'unexpected' };
-  assert.equal(readLanguage(), 'id', 'Unsupported language cannot enter state.');
   globalThis.localStorage = { getItem: () => 'en' };
+  globalThis.sessionStorage = { getItem: () => null };
+  assert.equal(readLanguage(), 'id', 'A new session defaults to Indonesian despite an old English preference.');
+  globalThis.sessionStorage = { getItem: () => 'unexpected' };
+  assert.equal(readLanguage(), 'id', 'Unsupported language cannot enter state.');
+  globalThis.sessionStorage = { getItem: () => 'en' };
   assert.equal(readLanguage(), 'en');
   assert.equal(translate('Beranda', 'en'), 'Home');
   assert.equal(translate('Beranda', 'id'), 'Beranda');
@@ -48,5 +51,6 @@ try {
   console.log('Bahasa: default/fallback, persistence reading, interpolation, routes, form values, teacher CTA, and eight footer motifs pass.');
 } finally {
   delete globalThis.localStorage;
+  delete globalThis.sessionStorage;
   await server.close();
 }
