@@ -168,12 +168,12 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </div>
 
-    {/* Normal flow reserves space below the supporter logos; motifs cannot overlap them. */}
-    <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
-      <div className="footer-accent-canvas">
-        {['125:136', '125:139', '125:142', '125:145', '125:148'].map((node) => <FooterAccent key={node} node={node} />)}
+      {/* Both accent canvases share the same bottom edge. */}
+      <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
+        <div className="footer-accent-canvas">
+          {['125:136', '125:139', '125:142', '125:145', '125:148'].map((node) => <FooterAccent key={node} node={node} />)}
+        </div>
       </div>
     </div>
     <div className="footer-bottom-bar relative bg-primary text-white">

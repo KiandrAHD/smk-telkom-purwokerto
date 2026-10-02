@@ -73,7 +73,7 @@ body {
   background-size: 21px 243px;
 }
 
-/* Native Figma motifs retain their positions and original boundary clipping. */
+/* Figma motifs at 60% size, with groups anchored to the footer edges. */
 .site-footer {
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
   position: relative;
@@ -89,18 +89,16 @@ body {
 .footer-accent-side {
   position: absolute;
   left: 0;
-  top: 0;
+  bottom: 0;
   width: 1781px;
-  height: 396px;
-  /* Let the existing footer body clip the edges; this scaled canvas must not
-     cut the second left motif in the middle of a taller footer. */
+  height: 237.6px;
   overflow: visible;
-  transform-origin: left top;
+  transform-origin: left bottom;
   transform: scale(calc(100cqw / 1781px));
 }
 .footer-accent-band {
   position: relative;
-  height: calc(198 * 100cqw / 1781);
+  height: calc(118.8 * 100cqw / 1781);
   overflow: hidden;
 }
 .footer-accent-canvas {
@@ -108,7 +106,7 @@ body {
   left: 0;
   bottom: 0;
   width: 1781px;
-  height: 396px;
+  height: 237.6px;
   transform-origin: left bottom;
   transform: scale(calc(100cqw / 1781px));
 }
@@ -134,28 +132,28 @@ body {
 }
 
 .footer-accent[data-figma-node='125:136'] {
-  transform: translate(254px, 186.99951171875px);
+  transform: translate(152.4px, 112.19970703125px) scale(0.6);
 }
 .footer-accent[data-figma-node='125:139'] {
-  transform: translate(1675px, 191px);
+  transform: translate(1717.4px, 114.6px) scale(0.6);
 }
 .footer-accent[data-figma-node='125:142'] {
-  transform: matrix(0, -1, 1, 0, 73, 417.9345703125);
+  transform: matrix(0, -1, 1, 0, 43.8, 250.7607421875) scale(0.6);
 }
 .footer-accent[data-figma-node='125:145'] {
-  transform: matrix(0, -1, 1, 0, 1477, 417.9345703125);
+  transform: matrix(0, -1, 1, 0, 1598.6, 250.7607421875) scale(0.6);
 }
 .footer-accent[data-figma-node='125:148'] {
-  transform: matrix(0, -1, 1, 0, 1274, 413.9345703125);
+  transform: matrix(0, -1, 1, 0, 1476.8, 248.3607421875) scale(0.6);
 }
 .footer-accent[data-figma-node='125:161'] {
-  transform: translate(-157px, 0);
+  transform: translate(-94.2px, 0) scale(0.6);
 }
 .footer-accent[data-figma-node='125:164'] {
-  transform: translate(1675px, 3px);
+  transform: translate(1717.4px, 1.8px) scale(0.6);
 }
 .footer-accent[data-figma-node='125:167'] {
-  transform: translate(-147px, 185px);
+  transform: translate(-88.2px, 111px) scale(0.6);
 }
 
 /* Sprite logo memakai unggahan asli 1920 × 1080, tanpa mengubah gambar sumber.
