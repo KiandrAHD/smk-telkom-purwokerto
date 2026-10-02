@@ -121,7 +121,7 @@ const PengumumanForm = ({ initialData, onSubmit, onCancel, submitting }) => {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <ImageUploadField value={form.gambar_url} file={imageFile} onUrlChange={(value) => updateField('gambar_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
+        <ImageUploadField coverAspect={155 / 161} value={form.gambar_url} file={imageFile} onUrlChange={(value) => updateField('gambar_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
         <div>
           <label htmlFor="pengumuman-tanggal" className={labelClass}>Tanggal Pengumuman</label>
           <input id="pengumuman-tanggal" type="datetime-local" value={form.tanggal} onChange={(event) => updateField('tanggal', event.target.value)} className={inputClass} />

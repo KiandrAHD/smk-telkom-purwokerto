@@ -109,7 +109,7 @@ const BkkForm = ({ initialData, onSubmit, onCancel, submitting }) => {
           <input id="bkk-link" type="url" value={form.link_pendaftaran} onChange={(event) => updateField('link_pendaftaran', event.target.value)} className={inputClass} placeholder="https://..." />
           {errors.link_pendaftaran && <p className="mt-1 text-xs text-primary-700">{errors.link_pendaftaran}</p>}
         </div>
-        <ImageUploadField label="Logo perusahaan" value={form.logo_url} file={imageFile} onUrlChange={(value) => updateField('logo_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
+        <ImageUploadField label="Logo perusahaan" coverAspect={1} value={form.logo_url} file={imageFile} onUrlChange={(value) => updateField('logo_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
       </div>
 
       {errors.submit && <p role="alert" className="text-xs text-primary-700">{errors.submit}</p>}
