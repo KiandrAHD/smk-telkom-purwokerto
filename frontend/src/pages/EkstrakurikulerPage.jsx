@@ -174,7 +174,7 @@ const EkstrakurikulerPage = () => {
     <MainLayout>
       <section className="bg-white pb-6 pt-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
+          <div className="overflow-hidden rounded-[2rem] bg-white p-3 sm:p-4">
             <div className="grid overflow-hidden rounded-[1.75rem] lg:min-h-[390px] lg:grid-cols-[38%_1fr]">
             <div className="flex flex-col justify-center px-4 py-7 sm:px-6 lg:px-7 lg:py-8">
               <span className="w-fit rounded-full border border-primary/35 px-2 py-0.5 text-[8px] font-bold tracking-wide text-primary">
@@ -227,7 +227,7 @@ const EkstrakurikulerPage = () => {
                 width="1600"
                 height="769"
                 fetchPriority="high"
-                className="absolute inset-0 h-full w-full object-cover object-center"
+                className="absolute inset-0 h-full w-full scale-[1.06] object-cover object-center"
               />
             </div>
           </div>
