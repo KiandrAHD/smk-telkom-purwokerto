@@ -6,6 +6,7 @@ import PengumumanTable from './PengumumanTable';
 import { createPengumuman, deletePengumuman, getPengumuman, updatePengumuman } from '../../../services/pengumumanService';
 
 const getErrorMessage = (error, fallback) => {
+  if (error?.code?.startsWith('CONTENT_IMAGE_')) return error.message;
   if (error?.code === '23505' || /slug/i.test(error?.message || '')) {
     return 'Slug tersebut sudah digunakan. Gunakan slug yang berbeda.';
   }
@@ -84,6 +85,7 @@ const PengumumanPage = () => {
       await loadPengumuman();
     } catch (saveError) {
       setFeedback({ type: 'error', message: getErrorMessage(saveError, 'Pengumuman gagal disimpan.') });
+      return getErrorMessage(saveError, 'Pengumuman gagal disimpan.');
     } finally {
       setSubmitting(false);
     }

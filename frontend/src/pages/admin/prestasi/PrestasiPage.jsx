@@ -6,6 +6,7 @@ import PrestasiTable from './PrestasiTable';
 import { createPrestasi, deletePrestasi, getPrestasi, updatePrestasi } from '../../../services/prestasiService';
 
 const getErrorMessage = (error, fallback) => {
+  if (error?.code?.startsWith('CONTENT_IMAGE_')) return error.message;
   if (error?.code === '23505' || /slug/i.test(error?.message || '')) return 'Slug tersebut sudah digunakan. Gunakan slug yang berbeda.';
   return error?.message || fallback;
 };
@@ -83,6 +84,7 @@ const PrestasiPage = () => {
       await loadPrestasi();
     } catch (saveError) {
       setFeedback({ type: 'error', message: getErrorMessage(saveError, 'Prestasi gagal disimpan.') });
+      return getErrorMessage(saveError, 'Prestasi gagal disimpan.');
     } finally {
       setSubmitting(false);
     }

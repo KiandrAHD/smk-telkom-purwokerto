@@ -1,4 +1,5 @@
 import { ensureSupabase } from './supabase';
+import { saveWithContentImage } from './contentImageService';
 
 const bkkColumns = 'id, perusahaan, posisi, deskripsi, lokasi, tipe_pekerjaan, deadline, status, link_pendaftaran, logo_url, created_at, updated_at';
 
@@ -32,12 +33,14 @@ export async function getActiveBkk() {
 
 export async function createBkk(data) {
   const supabase = ensureSupabase();
-  return throwIfError(await supabase.from('bkk').insert(data).select(bkkColumns).single());
+  return saveWithContentImage(supabase, data, 'bkk', 'logo_url', async (payload) =>
+    throwIfError(await supabase.from('bkk').insert(payload).select(bkkColumns).single()));
 }
 
 export async function updateBkk(id, data) {
   const supabase = ensureSupabase();
-  return throwIfError(await supabase.from('bkk').update(data).eq('id', id).select(bkkColumns).single());
+  return saveWithContentImage(supabase, data, 'bkk', 'logo_url', async (payload) =>
+    throwIfError(await supabase.from('bkk').update(payload).eq('id', id).select(bkkColumns).single()));
 }
 
 export async function deleteBkk(id) {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { slugify } from '../../../utils/slug';
+import ImageUploadField from '../../../components/dashboard/ImageUploadField';
 
 const emptyForm = {
   judul: '',
@@ -18,6 +19,8 @@ const BeritaForm = ({ initialData, onSubmit, onCancel, submitting }) => {
   const [form, setForm] = useState(() => ({ ...emptyForm, ...initialData }));
   const [slugEdited, setSlugEdited] = useState(Boolean(initialData));
   const [errors, setErrors] = useState({});
+  const [imageFile, setImageFile] = useState(null);
+  const [imageReady, setImageReady] = useState(true);
 
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -47,21 +50,25 @@ const BeritaForm = ({ initialData, onSubmit, onCancel, submitting }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (submitting || !imageReady) return;
     const nextErrors = validate();
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       return;
     }
 
-    await onSubmit({
+    setErrors({});
+    const submitError = await onSubmit({
       judul: form.judul.trim(),
       slug: form.slug.trim(),
       ringkasan: form.ringkasan.trim() || null,
       konten: form.konten.trim(),
-      gambar_url: form.gambar_url.trim() || null,
+      gambar_url: form.gambar_url?.trim() || null,
+      image_file: imageFile,
       penulis: form.penulis.trim() || null,
       status: form.status,
     });
+    if (submitError) setErrors({ submit: submitError });
   };
 
   return (
@@ -100,10 +107,7 @@ const BeritaForm = ({ initialData, onSubmit, onCancel, submitting }) => {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="berita-gambar" className={labelClass}>Gambar URL</label>
-          <input id="berita-gambar" type="url" value={form.gambar_url} onChange={(event) => updateField('gambar_url', event.target.value)} className={inputClass} placeholder="https://..." />
-        </div>
+        <ImageUploadField value={form.gambar_url} file={imageFile} onUrlChange={(value) => updateField('gambar_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
         <div>
           <label htmlFor="berita-penulis" className={labelClass}>Penulis</label>
           <input id="berita-penulis" value={form.penulis} onChange={(event) => updateField('penulis', event.target.value)} className={inputClass} />
@@ -119,9 +123,10 @@ const BeritaForm = ({ initialData, onSubmit, onCancel, submitting }) => {
         {errors.status && <p className="mt-1 text-xs text-primary-700">{errors.status}</p>}
       </div>
 
+      {errors.submit && <p role="alert" className="text-xs text-primary-700">{errors.submit}</p>}
       <div className="flex flex-col-reverse gap-2 border-t border-dark-100 pt-4 sm:flex-row sm:justify-end">
         <button type="button" onClick={onCancel} disabled={submitting} className="rounded-lg border border-dark-200 px-4 py-2.5 text-xs font-bold text-dark-600 transition-colors hover:border-dark-400 disabled:opacity-50">Batal</button>
-        <button type="submit" disabled={submitting} className="rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60">
+        <button type="submit" disabled={submitting || !imageReady} className="rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60">
           {submitting ? 'Menyimpan...' : 'Simpan Berita'}
         </button>
       </div>

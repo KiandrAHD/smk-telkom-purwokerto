@@ -1,4 +1,5 @@
 import { ensureSupabase } from './supabase';
+import { saveWithContentImage } from './contentImageService';
 
 const pengumumanColumns = 'id, judul, slug, ringkasan, konten, gambar_url, status, tanggal, created_at, updated_at';
 const STATUS_PENGUMUMAN = ['draft', 'published'];
@@ -49,19 +50,20 @@ export async function getPengumumanBySlug(slug) {
 
 export async function createPengumuman(data) {
   const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('pengumuman').insert(normalizePayload(data)).select(pengumumanColumns).single(),
-  );
+  return saveWithContentImage(supabase, normalizePayload(data), 'pengumuman', 'gambar_url', async (payload) =>
+    throwIfError(await supabase.from('pengumuman').insert(payload).select(pengumumanColumns).single()));
 }
 
 export async function updatePengumuman(id, data) {
   const supabase = ensureSupabase();
-  const result = await supabase.from('pengumuman').update(normalizePayload(data)).eq('id', id).select(pengumumanColumns).single();
-  const updated = throwIfError(result);
-  if (!updated || updated.id !== id || !STATUS_PENGUMUMAN.includes(updated.status)) {
-    throw new Error('Pengumuman tidak ditemukan atau status gagal diperbarui.');
-  }
-  return updated;
+  return saveWithContentImage(supabase, normalizePayload(data), 'pengumuman', 'gambar_url', async (payload) => {
+    const result = await supabase.from('pengumuman').update(payload).eq('id', id).select(pengumumanColumns).single();
+    const updated = throwIfError(result);
+    if (!updated || updated.id !== id || !STATUS_PENGUMUMAN.includes(updated.status)) {
+      throw new Error('Pengumuman tidak ditemukan atau status gagal diperbarui.');
+    }
+    return updated;
+  });
 }
 
 export async function deletePengumuman(id) {

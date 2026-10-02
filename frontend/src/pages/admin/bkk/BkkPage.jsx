@@ -80,6 +80,7 @@ const BkkPage = () => {
       await loadBkk();
     } catch (saveError) {
       setFeedback({ type: 'error', message: getErrorMessage(saveError, 'BKK gagal disimpan.') });
+      return getErrorMessage(saveError, 'BKK gagal disimpan.');
     } finally {
       setSubmitting(false);
     }

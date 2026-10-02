@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { slugify } from '../../../utils/slug';
+import ImageUploadField from '../../../components/dashboard/ImageUploadField';
 
 const emptyForm = {
   judul: '',
@@ -19,6 +20,8 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
   const [form, setForm] = useState(() => ({ ...emptyForm, ...initialData, tanggal: initialData?.tanggal || '' }));
   const [slugEdited, setSlugEdited] = useState(Boolean(initialData));
   const [errors, setErrors] = useState({});
+  const [imageFile, setImageFile] = useState(null);
+  const [imageReady, setImageReady] = useState(true);
 
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -41,21 +44,25 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (submitting || !imageReady) return;
     const nextErrors = validate();
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       return;
     }
 
-    await onSubmit({
+    setErrors({});
+    const submitError = await onSubmit({
       judul: form.judul.trim(),
       slug: form.slug.trim(),
       kategori: form.kategori.trim() || null,
       deskripsi: form.deskripsi.trim(),
-      gambar_url: form.gambar_url.trim() || null,
+      gambar_url: form.gambar_url?.trim() || null,
+      image_file: imageFile,
       tingkat: form.tingkat || null,
       tanggal: form.tanggal || null,
     });
+    if (submitError) setErrors({ submit: submitError });
   };
 
   return (
@@ -96,19 +103,17 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="prestasi-gambar" className={labelClass}>Gambar URL</label>
-          <input id="prestasi-gambar" type="url" value={form.gambar_url} onChange={(event) => updateField('gambar_url', event.target.value)} className={inputClass} placeholder="https://..." />
-        </div>
+        <ImageUploadField value={form.gambar_url} file={imageFile} onUrlChange={(value) => updateField('gambar_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
         <div>
           <label htmlFor="prestasi-tanggal" className={labelClass}>Tanggal</label>
           <input id="prestasi-tanggal" type="date" value={form.tanggal} onChange={(event) => updateField('tanggal', event.target.value)} className={inputClass} />
         </div>
       </div>
 
+      {errors.submit && <p role="alert" className="text-xs text-primary-700">{errors.submit}</p>}
       <div className="flex flex-col-reverse gap-2 border-t border-dark-100 pt-4 sm:flex-row sm:justify-end">
         <button type="button" onClick={onCancel} disabled={submitting} className="rounded-lg border border-dark-200 px-4 py-2.5 text-xs font-bold text-dark-600 transition-colors hover:border-dark-400 disabled:opacity-50">Batal</button>
-        <button type="submit" disabled={submitting} className="rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60">
+        <button type="submit" disabled={submitting || !imageReady} className="rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60">
           {submitting ? 'Menyimpan...' : 'Simpan Prestasi'}
         </button>
       </div>

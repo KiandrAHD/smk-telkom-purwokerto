@@ -7,6 +7,7 @@ import BeritaTable from './BeritaTable';
 import { createBerita, deleteBerita, getBerita, updateBerita } from '../../../services/beritaService';
 
 const getErrorMessage = (error, fallback) => {
+  if (error?.code?.startsWith('CONTENT_IMAGE_')) return error.message;
   if (error?.code === '23505' || /slug/i.test(error?.message || '')) {
     return 'Slug tersebut sudah digunakan. Gunakan slug yang berbeda.';
   }
@@ -86,6 +87,7 @@ const BeritaPage = () => {
       await loadBerita();
     } catch (saveError) {
       setFeedback({ type: 'error', message: getErrorMessage(saveError, 'Berita gagal disimpan.') });
+      return getErrorMessage(saveError, 'Berita gagal disimpan.');
     } finally {
       setSubmitting(false);
     }

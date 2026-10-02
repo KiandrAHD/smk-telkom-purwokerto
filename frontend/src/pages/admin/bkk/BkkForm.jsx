@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ImageUploadField from '../../../components/dashboard/ImageUploadField';
 
 const emptyForm = { perusahaan: '', posisi: '', deskripsi: '', lokasi: '', tipe_pekerjaan: '', deadline: '', status: 'aktif', link_pendaftaran: '', logo_url: '' };
 const inputClass = 'w-full rounded-lg border border-dark-200 px-3 py-2.5 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary';
@@ -7,6 +8,8 @@ const labelClass = 'mb-1.5 block text-xs font-semibold text-dark-700';
 const BkkForm = ({ initialData, onSubmit, onCancel, submitting }) => {
   const [form, setForm] = useState(() => ({ ...emptyForm, ...initialData, deadline: initialData?.deadline || '' }));
   const [errors, setErrors] = useState({});
+  const [imageFile, setImageFile] = useState(null);
+  const [imageReady, setImageReady] = useState(true);
 
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -31,13 +34,15 @@ const BkkForm = ({ initialData, onSubmit, onCancel, submitting }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (submitting || !imageReady) return;
     const nextErrors = validate();
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       return;
     }
 
-    await onSubmit({
+    setErrors({});
+    const submitError = await onSubmit({
       perusahaan: form.perusahaan.trim(),
       posisi: form.posisi.trim(),
       deskripsi: form.deskripsi.trim() || null,
@@ -46,8 +51,10 @@ const BkkForm = ({ initialData, onSubmit, onCancel, submitting }) => {
       deadline: form.deadline || null,
       status: form.status,
       link_pendaftaran: form.link_pendaftaran.trim() || null,
-      logo_url: form.logo_url.trim() || null,
+      logo_url: form.logo_url?.trim() || null,
+      image_file: imageFile,
     });
+    if (submitError) setErrors({ submit: submitError });
   };
 
   return (
@@ -102,15 +109,13 @@ const BkkForm = ({ initialData, onSubmit, onCancel, submitting }) => {
           <input id="bkk-link" type="url" value={form.link_pendaftaran} onChange={(event) => updateField('link_pendaftaran', event.target.value)} className={inputClass} placeholder="https://..." />
           {errors.link_pendaftaran && <p className="mt-1 text-xs text-primary-700">{errors.link_pendaftaran}</p>}
         </div>
-        <div>
-          <label htmlFor="bkk-logo" className={labelClass}>Logo URL</label>
-          <input id="bkk-logo" type="url" value={form.logo_url} onChange={(event) => updateField('logo_url', event.target.value)} className={inputClass} placeholder="https://..." />
-        </div>
+        <ImageUploadField label="Logo perusahaan" value={form.logo_url} file={imageFile} onUrlChange={(value) => updateField('logo_url', value)} onFileChange={setImageFile} onValidityChange={setImageReady} disabled={submitting} />
       </div>
 
+      {errors.submit && <p role="alert" className="text-xs text-primary-700">{errors.submit}</p>}
       <div className="flex flex-col-reverse gap-2 border-t border-dark-100 pt-4 sm:flex-row sm:justify-end">
         <button type="button" onClick={onCancel} disabled={submitting} className="rounded-lg border border-dark-200 px-4 py-2.5 text-xs font-bold text-dark-600 hover:border-dark-400 disabled:opacity-50">Batal</button>
-        <button type="submit" disabled={submitting} className="rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60">{submitting ? 'Menyimpan...' : 'Simpan BKK'}</button>
+        <button type="submit" disabled={submitting || !imageReady} className="rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60">{submitting ? 'Menyimpan...' : 'Simpan BKK'}</button>
       </div>
     </form>
   );
