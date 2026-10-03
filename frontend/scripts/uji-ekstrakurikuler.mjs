@@ -37,7 +37,7 @@ try {
   const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(Page)));
   assert.equal((html.match(/<article\b/g) ?? []).length, 34, 'Semua kegiatan harus dirender tanpa batas empat kartu.');
   assert.ok(html.includes('34 kegiatan'));
-  assert.equal((html.match(/aria-label="Foto belum tersedia"/g) ?? []).length, 5, 'Foto kosong memakai penanda, bukan gambar rusak.');
+  assert.equal((html.match(/aria-label="Foto belum tersedia"/g) ?? []).length, 0, 'Seluruh kegiatan sudah memiliki foto.');
   console.log('34 kegiatan unik; Organisasi 5, Prestasi 23, Sentra 4, Community 4; seluruh kartu dan ringkasan dinamis terverifikasi.');
 } finally {
   await server.close();
