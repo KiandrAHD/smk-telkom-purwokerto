@@ -1,4 +1,5 @@
 import { slugify } from '../utils/slug';
+import { guruDescriptions } from './guruDescriptions';
 import photo0 from '../assets/tentang/guru/bu-firda.png';
 import photo1 from '../assets/tentang/guru/pak-aic.png';
 import photo2 from '../assets/tentang/guru/pak-bayu.png';
@@ -12,11 +13,9 @@ import photo9 from '../assets/tentang/guru/sutri-aniroh.jpeg';
 import photo10 from '../assets/tentang/guru/desti-nurcahyani.jpeg';
 import photo11 from '../assets/tentang/guru/finka-ayu-fitriani.jpeg';
 import photo12 from '../assets/tentang/guru/reza-aditya-permana.jpeg';
-import photo13 from '../assets/tentang/guru/arif-muttakin.jpeg';
-import photo14 from '../assets/tentang/guru/krisma-dwi-brata.jpeg';
 
 // Nama dan jabatan: SK Pengawakan TP 2026/2027, halaman 2–3.
-// Mata pelajaran: informasi pengguna. Kesiswaan untuk Krisma: konfirmasi pengguna.
+// Mata pelajaran: informasi pengguna.
 // Deskripsi adalah ringkasan editorial, bukan kutipan biografi dalam SK.
 export const guruData = [
   {
@@ -265,44 +264,6 @@ export const guruData = [
       "sourceWidth": 1600,
       "sourceHeight": 894
     }
-  },
-  {
-    "nama": "Arif Muttakin, S.T.",
-    "mapel": "[perlu konfirmasi]",
-    "jabatan": "Kesiswaan",
-    "bidang": "Bertugas di bidang Kesiswaan dan tercatat sebagai Wakil Kepala Sekolah Bidang Kesiswaan & Karakter; mata pelajaran [perlu konfirmasi].",
-    "deskripsi": "Bertugas di bidang Kesiswaan dan tercatat sebagai Wakil Kepala Sekolah Bidang Kesiswaan & Karakter; mata pelajaran [perlu konfirmasi].",
-    "jabatanOrganisasi": "Waka Bid. Kesiswaan & Karakter",
-    "sourcePage": 2,
-    "image": photo13,
-    "photoCropClassName": "w-[363.6364%] left-[-113.6364%] top-[-61.8182%]",
-    "crop": {
-      "left": 500,
-      "top": 340,
-      "width": 440,
-      "height": 550,
-      "sourceWidth": 1600,
-      "sourceHeight": 900
-    }
-  },
-  {
-    "nama": "Krisma Dwi Brata, S.Kom.",
-    "mapel": "[perlu konfirmasi]",
-    "jabatan": "Kesiswaan",
-    "bidang": "Bertugas di bidang Kesiswaan sesuai informasi terbaru; mata pelajaran [perlu konfirmasi].",
-    "deskripsi": "Bertugas di bidang Kesiswaan sesuai informasi terbaru; mata pelajaran [perlu konfirmasi].",
-    "jabatanOrganisasi": "Waka Bid. Hubungan Industri & Komunikasi",
-    "sourcePage": 3,
-    "image": photo14,
-    "photoCropClassName": "w-[363.6364%] left-[-131.8182%] top-[-50%]",
-    "crop": {
-      "left": 580,
-      "top": 275,
-      "width": 440,
-      "height": 550,
-      "sourceWidth": 1600,
-      "sourceHeight": 900
-    }
   }
 ];
 
@@ -315,12 +276,9 @@ export const guruDetail = guruData.map((guru) => ({
   imageAlt: guru.nama,
   photoCropClassName: guru.photoCropClassName,
   lead: guru.deskripsi,
-  body: guru.nama === 'Krisma Dwi Brata, S.Kom.'
-    ? ['SK mencantumkan Hubungan Industri & Komunikasi. Jabatan Kesiswaan mengikuti informasi terbaru dan perlu diselaraskan dengan dokumen sekolah.']
-    : [],
+  body: guruDescriptions[guru.mapel] || guruDescriptions[guru.jabatan],
   facts: [
     { label: 'Mata Pelajaran', value: guru.mapel },
     { label: 'Jabatan dalam SK 2026/2027', value: guru.jabatanOrganisasi },
-    ...(guru.nama === 'Krisma Dwi Brata, S.Kom.' ? [{ label: 'Jabatan Terbaru', value: 'Kesiswaan' }] : []),
   ],
 }));

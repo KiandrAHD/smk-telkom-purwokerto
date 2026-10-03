@@ -1,4 +1,7 @@
+import { guruDescriptionTranslations } from './guruDescriptions';
+
 export default {
+  ...guruDescriptionTranslations,
   "Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.": "Teaching subjects follow the latest information; organisational roles refer to the 2026/2027 staffing decree.",
   "Kesiswaan": "Student Affairs",
   "Karakter": "Character Development",
@@ -14,7 +17,6 @@ export default {
   "Waka Bid. Hubungan Industri & Komunikasi": "Vice Principal for Industry Relations and Communications",
   "Kaur Bimbingan Konseling & Karakter": "Head of Counselling and Character Development",
   "Staf Penerimaan Siswa dan Komunikasi": "Admissions and Communications Staff",
-  "SK mencantumkan Hubungan Industri & Komunikasi. Jabatan Kesiswaan mengikuti informasi terbaru dan perlu diselaraskan dengan dokumen sekolah.": "The decree lists Industry Relations and Communications. The Student Affairs role follows the latest information and needs to be reconciled with school records.",
   "Guru Mapel Kejuruan 2": "Vocational Subject 2 Teacher",
   "Mengajar Mapel Kejuruan 2 dan tercatat sebagai Staf Sinergi, Unit Produksi & Alumni.": "Teaches Vocational Subject 2 and is listed as Synergy, Production Unit & Alumni Staff.",
   "Guru Mapel Kejuruan 3": "Vocational Subject 3 Teacher",
@@ -41,6 +43,4 @@ export default {
   "Mengajar Bahasa Inggris dan tercatat sebagai Staf Sinergi, Unit Produksi & Alumni.": "Teaches English and is listed as Synergy, Production Unit & Alumni Staff.",
   "Kreativitas, Inovasi, dan Kewirausahaan": "Creativity, Innovation and Entrepreneurship",
   "Mengajar Kreativitas, Inovasi, dan Kewirausahaan serta tercatat sebagai Pembina Sekbid IX.": "Teaches Creativity, Innovation and Entrepreneurship and is listed as Adviser for Section IX.",
-  "Bertugas di bidang Kesiswaan dan tercatat sebagai Wakil Kepala Sekolah Bidang Kesiswaan & Karakter; mata pelajaran [perlu konfirmasi].": "Works in Student Affairs and is listed as Vice Principal for Student Affairs and Character Development; teaching subject [confirmation needed].",
-  "Bertugas di bidang Kesiswaan sesuai informasi terbaru; mata pelajaran [perlu konfirmasi].": "Works in Student Affairs according to the latest information; teaching subject [confirmation needed]."
 };

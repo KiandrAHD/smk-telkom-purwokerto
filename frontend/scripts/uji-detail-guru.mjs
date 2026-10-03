@@ -7,9 +7,9 @@ const server = await createServer({ appType: 'custom', logLevel: 'silent', serve
 try {
   const { guruData, guruDetail } = await server.ssrLoadModule('/src/data/dummyData.js');
   const { translate } = await server.ssrLoadModule('/src/utils/language.js');
-  assert.equal(guruData.length, 15);
-  assert.equal(guruDetail.length, 15);
-  assert.equal(new Set(guruDetail.map(g => g.slug)).size, 15, 'Slug guru harus unik');
+  assert.equal(guruData.length, 13);
+  assert.equal(guruDetail.length, 13);
+  assert.equal(new Set(guruDetail.map(g => g.slug)).size, 13, 'Slug guru harus unik');
   const expected = new Map([
     ['Firda Ayu Nirmala, S.Kom.', 'Guru Mapel Kejuruan 2'],
     ['Agus Indra Cahaya, S.Kom.', 'Guru Mapel Kejuruan 3'],
@@ -35,15 +35,21 @@ try {
     assert.equal(crop.width / crop.height, 4 / 5);
     assert.equal(guruDetail[index].lead, guru.deskripsi);
     assert.equal(guruDetail[index].image, guru.image);
+    assert.equal(guruDetail[index].body.length, 3, `Tiga paragraf penjelasan ${guru.nama}`);
+    for (const paragraph of guruDetail[index].body) {
+      assert(paragraph.trim().length > 0, `Penjelasan kosong ${guru.nama}`);
+      assert.notEqual(translate(paragraph, 'en'), paragraph, `Terjemahan penjelasan ${guru.nama}`);
+    }
     assert.notEqual(translate(guru.deskripsi, 'en'), guru.deskripsi, `Terjemahan deskripsi ${guru.nama}`);
     assert.notEqual(translate(guru.mapel, 'en'), guru.mapel, `Terjemahan mapel ${guru.nama}`);
     assert.doesNotMatch(guruDetail[index].lead, /arsip|Fisika|TIK|Belum tercantum/);
   }
   for (const name of ['Arif Muttakin, S.T.', 'Krisma Dwi Brata, S.Kom.']) {
-    assert.equal(guruData.find(g => g.nama === name).jabatan, 'Kesiswaan');
+    assert(!guruData.some(g => g.nama === name), `${name} dihapus dari daftar guru`);
+    assert(!guruDetail.some(g => g.title === name), `${name} dihapus dari detail guru`);
   }
-  assert.match(guruDetail.find(g => g.title === 'Krisma Dwi Brata, S.Kom.').body.join(' '), /Hubungan Industri/);
-  console.log('15 profil guru: mapel, ketidakpastian, slug, terjemahan, dan batas crop valid.');
+  assert(guruData.some(g => g.nama === 'Arif Munandar, S.Si.'), 'Arif Munandar tetap ditampilkan');
+  console.log('13 profil guru: penjelasan tiga paragraf, penghapusan kesiswaan, mapel, slug, terjemahan, dan batas crop valid.');
 } finally {
   await server.close();
 }
