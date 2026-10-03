@@ -1,7 +1,8 @@
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import stelaCard from '../assets/landing/stela-card.jpg';
-import stelaCardEn from '../assets/landing/stela-card-en.png';
+import { stelaCardEn, stelaEnglishSrcSet, stelaFullSizes, restoreOriginalStelaArtwork } from '../utils/stelaArtwork';
 import { stelaData } from '../data/dummyData';
 
 const StelaAISection = () => {
@@ -10,9 +11,15 @@ const StelaAISection = () => {
   return (
     <section id="stela" className="bg-white py-6 lg:py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Link to="/stela" aria-label={t(stelaData.ctaText)} className="block overflow-hidden rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-          <img src={english ? stelaCardEn : stelaCard} width={english ? 2172 : 2200} height={english ? 724 : 693} alt="" aria-hidden="true" loading="lazy" className="block h-auto w-full" />
-        </Link>
+        <div className="relative overflow-hidden rounded-3xl bg-[#830b19]">
+          <img src={english ? stelaCardEn : stelaCard} srcSet={english ? stelaEnglishSrcSet : undefined} sizes={english ? stelaFullSizes : undefined} onError={english ? restoreOriginalStelaArtwork : undefined} width={english ? 2172 : 2200} height={english ? 724 : 693} alt="" aria-hidden="true" loading="lazy" className="block h-auto w-full" />
+          <div className="px-[5.7%] pb-4 sm:absolute sm:bottom-[10.7%] sm:left-[5.7%] sm:w-[24.2%] sm:p-0">
+            <Link to="/stela" className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-white px-4 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-h-8 sm:w-full sm:text-[clamp(0.75rem,1.4vw,1.125rem)] sm:px-3 sm:py-1.5 lg:min-h-11 lg:px-5 lg:py-2">
+              {t(stelaData.ctaText)}
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
         <div className="sr-only">
           <h2>{t(stelaData.title).replace('\n', ' ')}</h2>
           <p>{t(stelaData.description)}</p>
