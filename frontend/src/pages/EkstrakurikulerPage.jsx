@@ -2,6 +2,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import SearchResultStatus from '../components/SearchResultStatus';
+import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { useLenis } from 'lenis/react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
@@ -227,6 +228,7 @@ const EkstrakurikulerPage = () => {
           <div className="overflow-hidden rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
             <div className="grid overflow-hidden rounded-[1.75rem] lg:min-h-[390px] lg:grid-cols-[38%_1fr]">
             <div className="flex flex-col justify-center px-4 py-7 sm:px-6 lg:px-7 lg:py-8">
+              <HeroBreadcrumb current="Ekstrakurikuler" />
               <span className="w-fit rounded-full border border-primary/35 px-2 py-0.5 text-[8px] font-bold tracking-wide text-primary">
                 {t(ekstrakurikulerData.eyebrow)}
               </span>

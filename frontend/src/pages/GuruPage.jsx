@@ -8,6 +8,7 @@ import RibbonDivider from '../components/RibbonDivider';
 import StelaAISection from '../components/StelaAISection';
 import { guruData, kepalaSekolah, visiMisi } from '../data/dummyData';
 import MainLayout from '../layouts/MainLayout';
+import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
 import SectionAccents from '../components/SectionAccents';
@@ -121,11 +122,7 @@ function GuruPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="relative grid overflow-hidden rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4 lg:grid-cols-[38%_1fr] lg:gap-4">
             <div className="relative z-10 px-3 pb-6 pt-6 lg:pl-4">
-              <nav aria-label={t("Breadcrumb")} className="mb-4 flex items-center gap-2 text-xs text-dark-500">
-                <Link to="/" className="hover:text-primary">{t("Beranda")}</Link>
-                <ChevronRight size={13} aria-hidden="true" />
-                <span aria-current="page" className="font-semibold text-primary">{t("Profil Guru")}</span>
-              </nav>
+              <HeroBreadcrumb current="Profil Guru" />
               <h1 className="font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">{t("Profil Guru")}<br /><span className="text-primary">{t("SMK Telkom")}<br />{t("Purwokerto")}</span>
               </h1>
               <p className="mt-4 max-w-md text-xs leading-relaxed text-dark-500 sm:text-sm">{t("Tim pengajar kami memadukan kurikulum berbasis teknologi terbaru dengan metode pembelajaran interaktif. Kami siap membimbing siswa menguasai logika, pemrograman, hingga mampu menciptakan solusi digital masa depan.")} </p>
