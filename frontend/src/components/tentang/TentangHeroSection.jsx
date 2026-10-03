@@ -23,7 +23,7 @@ const TentangHeroSection = () => {
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1] hidden bg-linear-to-r from-white from-30% via-white/95 via-40% to-transparent to-62% lg:block" />
 
         <div className="relative order-1 z-10 px-6 pt-6 sm:px-8 lg:w-[44%] lg:px-8 lg:pt-7">
-            <HeroBreadcrumb current="Profil Sekolah" parent="Beranda" parentTo="/" />
+            <HeroBreadcrumb current="Profil Sekolah" />
 
             <h1 className="whitespace-pre-line font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
               {t(heroData.heading)}
