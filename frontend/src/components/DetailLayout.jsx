@@ -5,6 +5,7 @@ import Reveal from './Reveal';
 import VideoEmbed from './VideoEmbed';
 import ContentImage from './ContentImage';
 import { useLanguage } from '../context/LanguageContext';
+import { useEffect } from 'react';
 import { formatPublicDate } from '../utils/publicContent';
 
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
@@ -13,20 +14,23 @@ import { formatPublicDate } from '../utils/publicContent';
 // Penekanan yang berbeda tiap kategori dititipkan lewat `children`.
 const DetailLayout = ({ item, backTo, backLabel, children }) => {
   const { t, locale } = useLanguage();
+  useEffect(() => {
+    document.title = `${t(item.title)} | SMK Telkom Purwokerto`;
+  }, [item.title, t]);
   return (
   <MainLayout>
     <article className="bg-white py-8 lg:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-primary">
+        <nav aria-label={t('Jejak navigasi')} className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-primary">
           <Link to="/" className="hover:underline">
             {t('Beranda')}
           </Link>
-          <ChevronRight className="h-3 w-3" />
+          <ChevronRight className="h-3 w-3" aria-hidden="true" />
           <Link to={backTo} className="hover:underline">
             {t(backLabel)}
           </Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="text-dark-500">{t(item.title)}</span>
+          <ChevronRight className="h-3 w-3" aria-hidden="true" />
+          <span aria-current="page" className="text-dark-500">{t(item.title)}</span>
         </nav>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">

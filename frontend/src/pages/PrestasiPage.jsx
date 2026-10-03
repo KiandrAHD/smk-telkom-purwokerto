@@ -19,6 +19,7 @@ const PrestasiPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [requestVersion, setRequestVersion] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -27,13 +28,13 @@ const PrestasiPage = () => {
       .catch(() => active && setError('Prestasi belum dapat dimuat. Silakan coba lagi nanti.'))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, []);
+  }, [requestVersion]);
 
   return (
     <MainLayout>
       <PrestasiHeroSection />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />
+        <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />
       </div>
       <Reveal><PrestasiUnggulanSection items={items} /></Reveal>
       <RibbonDivider />

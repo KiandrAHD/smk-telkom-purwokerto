@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
 import { ctaMasukPpdb, navLinks } from '../data/dummyData';
+import { isSectionRoute } from '../utils/navigation';
 
 const prefetchByHref = {
   '/profil-sekolah': () => import('../pages/TentangPage'),
@@ -27,11 +28,45 @@ const Navbar = () => {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isTentangOpen, setIsTentangOpen] = useState(false);
+  const headerRef = useRef(null);
+  const desktopMenuRef = useRef(null);
+  const desktopTriggerRef = useRef(null);
+  const mobileTriggerRef = useRef(null);
+
+  useEffect(() => {
+    if (!isMobileOpen && !isTentangOpen) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      setIsMobileOpen(false);
+      setIsTentangOpen(false);
+      (isMobileOpen ? mobileTriggerRef : desktopTriggerRef).current?.focus();
+    };
+    const onPointerDown = (event) => {
+      const container = isMobileOpen ? headerRef.current : desktopMenuRef.current;
+      if (container?.contains(event.target)) return;
+      setIsMobileOpen(false);
+      setIsTentangOpen(false);
+    };
+    const onFocusIn = (event) => {
+      if (!isMobileOpen && !desktopMenuRef.current?.contains(event.target)) setIsTentangOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('focusin', onFocusIn);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('focusin', onFocusIn);
+    };
+  }, [isMobileOpen, isTentangOpen]);
 
   const isActive = (link) =>
     link.children
-      ? link.children.some((child) => location.pathname === child.href)
-      : location.pathname === link.href;
+      ? link.children.some((child) => isSectionRoute(location.pathname, child.href))
+      : isSectionRoute(location.pathname, link.href);
+
+  const currentPage = (href) => location.pathname === href ? 'page' : isSectionRoute(location.pathname, href) ? 'location' : undefined;
 
   const linkClass = (link) =>
     `relative py-1.5 text-sm font-medium transition-colors ${
@@ -44,11 +79,11 @@ const Navbar = () => {
     ) : null;
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header ref={headerRef} className="sticky top-0 z-[60] bg-white">
+      <nav aria-label={t('Navigasi utama')} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 lg:h-20 items-center justify-between gap-3">
           {/* Brand */}
-          <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0">
             <Logo className="w-9 h-9 lg:w-10 lg:h-10" />
             <span className="font-heading font-extrabold text-dark-900 leading-[1.1] text-[13px] lg:text-[15px]">
               SMK Telkom
@@ -62,7 +97,7 @@ const Navbar = () => {
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
-                  <Link key={link.label} to={link.href} className={linkClass(link)} onMouseEnter={() => prefetchRoute(link.href)}>
+                  <Link key={link.label} to={link.href} aria-current={currentPage(link.href)} className={linkClass(link)} onFocus={() => prefetchRoute(link.href)} onMouseEnter={() => prefetchRoute(link.href)}>
                     {t(link.label)}
                     {activeBar(link)}
                   </Link>
@@ -72,16 +107,17 @@ const Navbar = () => {
               return (
                 <div
                   key={link.label}
+                  ref={desktopMenuRef}
                   className="relative"
-                  onMouseEnter={() => setIsTentangOpen(true)}
-                  onMouseLeave={() => setIsTentangOpen(false)}
+                  onMouseEnter={() => link.children.forEach((child) => prefetchRoute(child.href))}
                 >
                   <button
                     type="button"
-                    onClick={() => setIsTentangOpen(true)}
+                    ref={desktopTriggerRef}
+                    onClick={() => setIsTentangOpen((open) => !open)}
                     className={`${linkClass(link)} inline-flex items-center gap-1`}
                     aria-expanded={isTentangOpen}
-                    aria-haspopup="menu"
+                    aria-controls="desktop-about-links"
                   >
                     {t(link.label)}
                     <ChevronDown
@@ -94,14 +130,15 @@ const Navbar = () => {
                   {isTentangOpen && (
                     <div
                       className="motion-menu-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
-                      role="menu"
+                      id="desktop-about-links"
                       aria-label={t('Submenu Tentang')}
                     >
                       {link.children.map((child) => (
                         <Link
                           key={child.label}
                           to={child.href}
-                          role="menuitem"
+                          aria-current={currentPage(child.href)}
+                          onFocus={() => prefetchRoute(child.href)}
                           onMouseEnter={() => prefetchRoute(child.href)}
                           onClick={() => setIsTentangOpen(false)}
                           className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
@@ -135,8 +172,11 @@ const Navbar = () => {
           {/* Mobile toggle */}
           <button
             type="button"
+            ref={mobileTriggerRef}
             onClick={() => setIsMobileOpen((open) => !open)}
-            className="xl:hidden flex h-10 w-10 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
+            className="xl:hidden flex h-11 w-11 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
+            aria-expanded={isMobileOpen}
+            aria-controls="mobile-nav"
             aria-label={t(isMobileOpen ? 'Tutup menu' : 'Buka menu')}
           >
             {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -145,7 +185,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMobileOpen && (
-          <div className="motion-menu-enter xl:hidden border-t border-dark-100 py-4">
+          <div id="mobile-nav" data-lenis-prevent className="motion-menu-enter max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain lg:max-h-[calc(100dvh-5rem)] xl:hidden border-t border-dark-100 py-4">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
                 if (!link.children) {
@@ -153,9 +193,11 @@ const Navbar = () => {
                     <Link
                       key={link.label}
                       to={link.href}
+                      aria-current={currentPage(link.href)}
+                      onFocus={() => prefetchRoute(link.href)}
                       onMouseEnter={() => prefetchRoute(link.href)}
                       onClick={() => setIsMobileOpen(false)}
-                      className="rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
+                      className={`min-h-11 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-dark-50 ${isActive(link) ? 'text-primary' : 'text-dark-700'}`}
                     >
                       {t(link.label)}
                     </Link>
@@ -169,6 +211,7 @@ const Navbar = () => {
                       onClick={() => setIsTentangOpen((open) => !open)}
                       className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
                       aria-expanded={isTentangOpen}
+                      aria-controls="mobile-about-links"
                     >
                       {t(link.label)}
                       <ChevronDown
@@ -177,17 +220,19 @@ const Navbar = () => {
                       />
                     </button>
                     {isTentangOpen && (
-                      <div className="motion-menu-enter ml-3 border-l border-dark-100 py-1 pl-2">
+                      <div id="mobile-about-links" className="motion-menu-enter ml-3 border-l border-dark-100 py-1 pl-2">
                         {link.children.map((child) => (
                           <Link
                             key={child.label}
                             to={child.href}
+                            aria-current={currentPage(child.href)}
+                            onFocus={() => prefetchRoute(child.href)}
                             onMouseEnter={() => prefetchRoute(child.href)}
                             onClick={() => {
                               setIsTentangOpen(false);
                               setIsMobileOpen(false);
                             }}
-                            className="block rounded-lg px-3 py-2 text-sm font-medium text-dark-600 hover:bg-dark-50 hover:text-primary"
+                            className="block min-h-11 rounded-lg px-3 py-3 text-sm font-medium text-dark-600 hover:bg-dark-50 hover:text-primary"
                           >
                             {t(child.label)}
                           </Link>

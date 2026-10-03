@@ -1,9 +1,10 @@
 import { useLanguage } from '../context/LanguageContext';
+import ContentSkeleton from './ContentSkeleton';
 
-const PublicDataState = ({ loading, error, empty, label }) => {
+const PublicDataState = ({ loading, error, empty, label, onRetry }) => {
   const { t } = useLanguage();
   if (loading) {
-    return <p key="loading" role="status" className="motion-feedback py-8 text-center text-xs text-dark-500">{t('Memuat {label}...', { label: t(label) })}</p>;
+    return <div aria-busy="true"><p role="status" className="pt-6 text-center text-sm text-dark-500">{t('Memuat {label}...', { label: t(label) })}</p><ContentSkeleton /></div>;
   }
 
   if (error) {
@@ -15,9 +16,10 @@ const PublicDataState = ({ loading, error, empty, label }) => {
       // Padding tidak bisa collapse, dan py-8 ini menyamakan iramanya dengan
       // keadaan "memuat" dan "kosong" di bawah.
       <div className="motion-feedback py-8">
-        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-xs text-red-700">
-          {t(error)}
-        </p>
+        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-700">
+          <p>{t(error)}</p>
+          {onRetry && <button type="button" onClick={onRetry} className="mt-3 min-h-11 rounded-full border border-red-700 px-5 py-2 font-semibold transition-colors hover:bg-red-100">{t('Coba lagi')}</button>}
+        </div>
       </div>
     );
   }

@@ -1,5 +1,7 @@
 import { useLanguage } from '../context/LanguageContext';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import SearchResultStatus from '../components/SearchResultStatus';
 import { useLenis } from 'lenis/react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
@@ -7,6 +9,7 @@ import SectionAccents from '../components/SectionAccents';
 import ContentImage from '../components/ContentImage';
 import ribbon from '../assets/landing/figma-ribbon.png';
 import { ekstrakurikulerData } from '../data/dummyData';
+import { slugify } from '../utils/slug';
 
 const STAT_ICONS = [BriefcaseBusiness, Trophy, UsersRound, Bookmark];
 
@@ -22,7 +25,7 @@ const CategoryTabs = ({ activeCategory, onSelect }) => {
           type="button"
           onClick={() => onSelect(name)}
           aria-pressed={active}
-          className={`h-10 rounded-full border px-4 font-heading text-xs font-bold transition-colors duration-200 sm:min-w-[7.5rem] sm:px-5 ${
+          className={`min-h-11 rounded-full border px-4 font-heading text-xs font-bold transition-colors duration-200 sm:min-w-[7.5rem] sm:px-5 ${
             active
               ? 'border-primary bg-primary text-white'
               : 'border-primary/45 bg-white text-primary hover:border-primary hover:bg-primary-50'
@@ -49,12 +52,12 @@ const ActivityCard = ({ item, onOpen }) => {
       />
     </div>
     <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 pt-4">
-      <h3 className="font-heading text-[13px] font-bold leading-snug text-primary">{t(item.title)}</h3>
-      <p className="mt-1.5 line-clamp-5 text-[10px] leading-relaxed text-dark-500">{t(item.description)}</p>
+      <h3 className="font-heading text-base font-bold leading-snug text-primary">{t(item.title)}</h3>
+      <p className="mt-1.5 line-clamp-5 text-sm leading-relaxed text-dark-600">{t(item.description)}</p>
       <button
         type="button"
-        onClick={() => onOpen(item)}
-        className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[10px] font-bold text-primary transition-colors hover:text-primary-800"
+        onClick={(event) => onOpen(item, event.currentTarget)}
+        className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-3 text-sm font-bold text-primary transition-colors hover:text-primary-800"
       >{t("Selengkapnya")} <ArrowRight className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-1" />
       </button>
     </div>
@@ -63,7 +66,7 @@ const ActivityCard = ({ item, onOpen }) => {
 };
 
 const CardGrid = ({ items, onOpen }) => (
-  <div className="motion-filter-results grid grid-cols-2 gap-4 lg:grid-cols-4">
+  <div className="motion-filter-results grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
     {items.map((item) => (
       <div key={item.title} className="h-full">
         <ActivityCard item={item} onOpen={onOpen} />
@@ -72,17 +75,27 @@ const CardGrid = ({ items, onOpen }) => (
   </div>
 );
 
-const ActivityDetailDialog = ({ item, onClose }) => {
+const ActivityDetailDialog = ({ item, onClose, returnFocusRef }) => {
   const { t } = useLanguage();
   const lenis = useLenis();
   const dialogRef = useRef(null);
+  const backdropPointerRef = useRef(false);
 
   useEffect(() => {
     if (!item) return undefined;
+    const trigger = returnFocusRef.current;
+    const dialog = dialogRef.current;
     if (!dialogRef.current?.open) dialogRef.current?.showModal();
     lenis?.stop();
-    return () => lenis?.start();
-  }, [item, lenis]);
+    return () => {
+      lenis?.start();
+      requestAnimationFrame(() => {
+        if (dialog?.isConnected && dialog.open) return;
+        const target = trigger?.isConnected ? trigger : document.getElementById('main-content');
+        target?.focus({ preventScroll: true });
+      });
+    };
+  }, [item, lenis, returnFocusRef]);
 
   if (!item) return null;
 
@@ -93,18 +106,28 @@ const ActivityDetailDialog = ({ item, onClose }) => {
       onClose={onClose}
       onCancel={(event) => {
         event.preventDefault();
-        onClose();
+        dialogRef.current?.close();
+      }}
+      onPointerDown={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        backdropPointerRef.current = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+      }}
+      onClick={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+        if (backdropPointerRef.current && outside) dialogRef.current?.close();
+        backdropPointerRef.current = false;
       }}
       aria-labelledby="judul-detail-kegiatan"
-      className="motion-dialog m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
+      className="motion-dialog m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
-      <div data-lenis-prevent className="relative max-h-[90vh] overflow-y-auto overscroll-contain">
+      <div data-lenis-prevent className="relative max-h-[90dvh] overflow-y-auto overscroll-contain">
         <ContentImage src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className="aspect-[16/7] w-full object-cover" />
         <button
           type="button"
           onClick={() => dialogRef.current?.close()}
           aria-label={t("Tutup penjelasan kegiatan")}
-          className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-dark-200 bg-white text-dark-800 transition-colors hover:border-primary hover:bg-primary hover:text-white"
+          className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-dark-200 bg-white text-dark-800 transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <X className="h-4 w-4" />
         </button>
@@ -162,9 +185,30 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
 
 const EkstrakurikulerPage = () => {
   const { t, locale } = useLanguage();
-  const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Ekstrakurikuler');
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [params, setParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const search = params.get('q') || '';
+  const category = params.get('kategori');
+  const activeCategory = ekstrakurikulerData.categories.includes(category) ? category : 'Ekstrakurikuler';
+  const selectedItem = ekstrakurikulerData.items.find((item) => slugify(item.title) === params.get('kegiatan')) || null;
+  const returnFocusRef = useRef(null);
+  const updateFilters = (query, category) => {
+    setParams((current) => {
+      const next = new URLSearchParams(current);
+      if (query) next.set('q', query); else next.delete('q');
+      if (category !== 'Ekstrakurikuler') next.set('kategori', category); else next.delete('kategori');
+      return next;
+    }, { replace: true });
+  };
+  const closeActivity = () => {
+    if (location.state?.activityModal) navigate(-1);
+    else setParams((current) => {
+      const next = new URLSearchParams(current);
+      next.delete('kegiatan');
+      return next;
+    }, { replace: true });
+  };
   const keyword = search.trim().toLocaleLowerCase(locale);
 
   const filteredItems = useMemo(() => ekstrakurikulerData.items.filter((item) => (
@@ -196,8 +240,7 @@ const EkstrakurikulerPage = () => {
                   type="search"
                   value={search}
                   onChange={(event) => {
-                    setSearch(event.target.value);
-                    setActiveCategory('Ekstrakurikuler');
+                    updateFilters(event.target.value, 'Ekstrakurikuler');
                   }}
                   aria-label={t("Cari kegiatan")}
                   placeholder={t("Cari Kegiatan....")}
@@ -241,17 +284,24 @@ const EkstrakurikulerPage = () => {
         </div>
       </section>
 
+      <SearchResultStatus message={t('{count} kegiatan ditemukan', { count: filteredItems.length })} />
       <CategorySection
         activeCategory={activeCategory}
         title={sectionTitle}
         items={filteredItems}
         onSelect={(category) => {
-          setActiveCategory(category);
-          setSearch('');
+          updateFilters('', category);
         }}
-        onOpen={setSelectedItem}
+        onOpen={(item, trigger) => {
+          returnFocusRef.current = trigger;
+          setParams((current) => {
+            const next = new URLSearchParams(current);
+            next.set('kegiatan', slugify(item.title));
+            return next;
+          }, { state: { activityModal: true } });
+        }}
       />
-      <ActivityDetailDialog item={selectedItem} onClose={() => setSelectedItem(null)} />
+      <ActivityDetailDialog item={selectedItem} onClose={closeActivity} returnFocusRef={returnFocusRef} />
     </MainLayout>
   );
 };

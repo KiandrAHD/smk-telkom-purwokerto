@@ -18,6 +18,7 @@ const BeritaPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [requestVersion, setRequestVersion] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -26,21 +27,21 @@ const BeritaPage = () => {
       .catch(() => active && setError('Berita belum dapat dimuat. Silakan coba lagi nanti.'))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, []);
+  }, [requestVersion]);
 
   return (
     <MainLayout>
       <BeritaHeroSection items={items} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("berita")} />
+        <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("berita")} />
       </div>
-      <Reveal><BeritaSorotSection items={items} /></Reveal>
+      {!loading && !error && <Reveal><BeritaSorotSection items={items} /></Reveal>}
       <RibbonDivider />
-      <Reveal>
+      {!loading && !error && <Reveal>
         <BeritaKategoriSection items={items}>
           {(shown) => <BeritaAgendaSection items={shown} />}
         </BeritaKategoriSection>
-      </Reveal>
+      </Reveal>}
       <Reveal><StelaAISection /></Reveal>
     </MainLayout>
   );

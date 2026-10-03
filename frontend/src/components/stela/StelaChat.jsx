@@ -58,7 +58,7 @@ const IsiPesan = ({ teks }) =>
     return COCOK_PATH.test(bagian) ? <TautanPath key={i} path={bagian} /> : bagian;
   });
 
-const StelaChat = ({ className = '', tampilkanSaran = true }) => {
+const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }) => {
   const { t, language } = useLanguage();
   const [riwayat, setRiwayat] = useState([{ role: 'assistant', content: stelaData.sapaan }]);
   const [masukan, setMasukan] = useState('');
@@ -66,8 +66,13 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
   const [galat, setGalat] = useState(null);
   const [pertanyaanGagal, setPertanyaanGagal] = useState('');
   const pesanRef = useRef(null);
+  const inputRef = useRef(null);
   const controllerRef = useRef(null);
   const aktifRef = useRef(true);
+
+  useEffect(() => {
+    if (focusInput) inputRef.current?.focus({ preventScroll: true });
+  }, [focusInput]);
 
   // Penanda "komponen masih terpasang", dipakai agar setState tidak dipanggil
   // setelah unmount. Nilainya WAJIB dikembalikan ke true di badan efek: di
@@ -140,7 +145,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
 
   return (
     <div className={`flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white ${className}`}>
-      <div ref={pesanRef} data-lenis-prevent className="flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite" aria-atomic="false">
+      <div ref={pesanRef} data-lenis-prevent className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite" aria-atomic="false">
         {riwayat.map((pesan, i) => (
           <div
             key={i}
@@ -206,10 +211,11 @@ const StelaChat = ({ className = '', tampilkanSaran = true }) => {
           e.preventDefault();
           kirim(masukan);
         }}
-        className="flex items-end gap-2 border-t border-dark-100 bg-white px-3 py-3"
+        className="flex shrink-0 items-end gap-2 border-t border-dark-100 bg-white px-3 py-3"
       >
         <label htmlFor="stela-masukan" className="sr-only">{t("Tulis pertanyaan untuk STELA")} </label>
         <textarea
+          ref={inputRef}
           id="stela-masukan"
           rows={1}
           value={masukan}

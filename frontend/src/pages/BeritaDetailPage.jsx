@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import DetailLayout from '../components/DetailLayout';
 import BeritaDetailKonten from '../components/berita/BeritaDetailKonten';
 import MainLayout from '../layouts/MainLayout';
+import PublicDataState from '../components/PublicDataState';
 import { getBeritaBySlug, getPublishedBerita } from '../services/beritaService';
 import { toBeritaItem } from '../utils/publicContent';
 
@@ -16,6 +17,11 @@ const BeritaDetail = ({ slug }) => {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [requestVersion, setRequestVersion] = useState(0);
+
+  useEffect(() => {
+    if (loading || error || !item) document.title = `${t(error || 'Berita')} | SMK Telkom Purwokerto`;
+  }, [loading, error, item, t]);
 
   useEffect(() => {
     let active = true;
@@ -31,13 +37,16 @@ const BeritaDetail = ({ slug }) => {
         : 'Berita belum dapat dimuat. Silakan coba lagi nanti.'))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, [slug]);
+  }, [slug, requestVersion]);
 
-  if (loading) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t("Memuat berita...")}</p></MainLayout>;
-  if (error || !item) return <MainLayout><p className="py-16 text-center text-sm text-dark-500">{t(error || 'Berita tidak ditemukan.')}</p></MainLayout>;
+  if (loading || error || !item) return (
+    <MainLayout><div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <PublicDataState loading={loading} error={error || (!loading && 'Berita tidak ditemukan.')} label="berita" onRetry={error === 'Berita tidak ditemukan.' ? undefined : () => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} />
+    </div></MainLayout>
+  );
 
   return (
-    <DetailLayout item={item} backTo={fromGallery ? '/galeri' : '/berita'} backLabel={t(fromGallery ? 'Galeri' : 'Berita')}>
+    <DetailLayout item={item} backTo={fromGallery ? '/galeri' : '/berita'} backLabel={fromGallery ? 'Galeri' : 'Berita'}>
       <BeritaDetailKonten item={item} relatedItems={related} />
     </DetailLayout>
   );
