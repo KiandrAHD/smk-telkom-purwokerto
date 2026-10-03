@@ -3,7 +3,7 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { footerData } from '../data/dummyData';
-import footerAccentFill from '../assets/footer/figma-footer-fill.svg';
+import footerAccentFill from '../assets/footer/footer-motif-fill.svg';
 import competitionSupporters from '../assets/footer/competition-supporters.png';
 import { useLanguage } from '../context/LanguageContext';
 

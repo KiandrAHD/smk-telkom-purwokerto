@@ -8,7 +8,7 @@ import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X 
 import MainLayout from '../layouts/MainLayout';
 import SectionAccents from '../components/SectionAccents';
 import ContentImage from '../components/ContentImage';
-import ribbon from '../assets/landing/figma-ribbon.png';
+import ribbon from '../assets/landing/ribbon-divider.png';
 import { ekstrakurikulerData } from '../data/dummyData';
 import { slugify } from '../utils/slug';
 

@@ -1,0 +1,33 @@
+{
+  "note": "URL asli dipertahankan untuk atribusi sumber; UI menggunakan berkas lokal dengan nama deskriptif.",
+  "images": [
+    {
+      "file": "frontend/src/assets/showcase/tim-dinacom-2023.jpeg",
+      "sourceUrl": "https://smktelkom-pwt.sch.id/wp-content/uploads/2023/01/WhatsApp-Image-2023-01-20-at-08.26.53.jpeg",
+      "sha256": "4fb314fa6114e37667e37034b495b44dbf8bfa0f59e56bbbebc92ae147f4f8f9",
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "frontend/src/assets/alumni/moh-khairudin.jpg",
+      "sourceUrl": "https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/aaass.jpg",
+      "sha256": "953025b9f2c3dc0cd92b37ad614139bf077ad6ca99771b45fe896c099c294398",
+      "width": 368,
+      "height": 330
+    },
+    {
+      "file": "frontend/src/assets/alumni/tenia-wahyuningrum.jpg",
+      "sourceUrl": "https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdaddd.jpg",
+      "sha256": "6092145806d5ea171aafb1af04d951d93a5965884c8211465f19fe6c93af1e10",
+      "width": 299,
+      "height": 315
+    },
+    {
+      "file": "frontend/src/assets/alumni/alfa-putra-kurnia.jpg",
+      "sourceUrl": "https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdasd.jpg",
+      "sha256": "8baa597ade86f25c5c28f1d6b6e999254182d3706fac723bb4c37df3fc5ecb02",
+      "width": 168,
+      "height": 168
+    }
+  ]
+}

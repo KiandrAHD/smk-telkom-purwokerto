@@ -231,6 +231,17 @@ test('Hidden loading indicators do not block the visible page', () => {
 });
 
 for (const smooth of [false, true]) {
+  test('A browser fragment navigation with the same key follows its new anchor with ' + (smooth ? 'Lenis' : 'native scroll'), () => {
+    const h = createHarness();
+    h.render({ key: 'default', pathname: '/' }, 'POP', smooth); h.flush(); h.scrollUser(749);
+    h.layout.targets = [target('prestasi', 3000)];
+    h.render({ key: 'default', pathname: '/', hash: '#prestasi' }, 'POP', smooth); h.flush();
+    assert.equal(h.scrolls().at(-1).top, 2904, 'A new fragment must beat the saved position under the reused browser key.');
+    assert.equal(h.calls.filter(({ kind }) => kind === 'focus').length, 0);
+    assertReleased(h);
+    h.unmount();
+  });
+
   test('Back and Forward restore entry positions with ' + (smooth ? 'Lenis' : 'native scroll'), () => {
     const h = createHarness();
     h.render(undefined, 'POP', smooth); h.flush(); h.scrollUser(420);

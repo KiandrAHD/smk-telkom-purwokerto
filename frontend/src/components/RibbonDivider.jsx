@@ -1,4 +1,4 @@
-import ribbon from '../assets/landing/figma-ribbon.png';
+import ribbon from '../assets/landing/ribbon-divider.png';
 
 const RibbonDivider = () => (
   // Slot existing dipertahankan; export Figma ini hanya berisi kedua pita.

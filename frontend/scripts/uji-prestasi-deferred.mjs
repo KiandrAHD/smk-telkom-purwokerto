@@ -73,9 +73,19 @@ try {
   await integration.goBack({ waitUntil: 'networkidle' });
   await integration.waitForFunction((top) => Math.abs(window.scrollY - top) < 80, savedTop);
   results.push({ scenario: 'full-app-anchor-history', passed: true });
+  const fragment = await browser.newPage({ viewport: { width: 412, height: 823 } });
+  await fragment.route('**/rest/v1/prestasi?*', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([row]) }));
+  await fragment.goto('http://127.0.0.1:5192/', { waitUntil: 'networkidle' });
+  await fragment.locator('#tentang').scrollIntoViewIfNeeded();
+  await fragment.goto('http://127.0.0.1:5192/#prestasi', { waitUntil: 'networkidle' });
+  await fragment.waitForFunction(() => {
+    const section = document.querySelector('#prestasi');
+    return section && section.getBoundingClientRect().top >= 0 && section.getBoundingClientRect().top < window.innerHeight && !section.querySelector('[aria-busy="true"]');
+  });
+  results.push({ scenario: 'full-app-native-fragment-same-key', passed: true });
   if (process.env.QA_OUTPUT_DIR) {
     fs.mkdirSync(process.env.QA_OUTPUT_DIR, { recursive: true });
     fs.writeFileSync(path.join(process.env.QA_OUTPUT_DIR, 'achievements-check.json'), JSON.stringify(results, null, 2));
   }
-  console.log('Achievements: seven real-component scenarios and full-app anchor/history pass.');
+  console.log('Achievements: seven real-component scenarios and full-app anchor/history/native-fragment pass.');
 } finally { await browser.close(); await server.close(); }

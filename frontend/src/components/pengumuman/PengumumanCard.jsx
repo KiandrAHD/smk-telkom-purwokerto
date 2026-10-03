@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { daftarPengumuman } from '../../data/dummyData';
 
 import ContentImage from '../ContentImage';
-import cardPattern from '../../assets/pengumuman/figma-card-pattern.png';
+import cardPattern from '../../assets/pengumuman/card-background-pattern.png';
 
 const Tag = ({ children }) => (
   <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-extrabold tracking-wide text-[#ce2a45] sm:text-[clamp(10px,1.5cqw,16px)]">

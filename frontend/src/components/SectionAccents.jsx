@@ -1,4 +1,4 @@
-import accent from '../assets/landing/figma-section-accent.png';
+import accent from '../assets/landing/section-motif.png';
 
 // Koordinat pusat dan matriks orientasi asli Figma; Y mengikuti section existing.
 // Ukuran dibatasi kedua sumbu supaya tinggi konten tidak memperbesar dekorasi.

@@ -60,17 +60,17 @@ body {
 }
 
 .guru-accent-horizontal {
-  background-image: url('./assets/tentang/figma-guru-horizontal.svg');
+  background-image: url('./assets/tentang/guru-border-horizontal.svg');
   background-size: 106px 20px;
 }
 
 .guru-accent-horizontal-top {
-  background-image: url('./assets/tentang/figma-guru-horizontal-top.svg');
+  background-image: url('./assets/tentang/guru-border-top.svg');
   background-size: 119px 20px;
 }
 
 .guru-accent-vertical {
-  background-image: url('./assets/tentang/figma-guru-vertical.svg');
+  background-image: url('./assets/tentang/guru-border-vertical.svg');
   background-size: 21px 243px;
 }
 
@@ -126,7 +126,7 @@ body {
   left: 28.31273078918457px;
   top: 13.199074745178223px;
   max-width: none;
-  mask-image: url('./assets/footer/figma-footer-mask.png');
+  mask-image: url('./assets/footer/footer-motif-mask.png');
   mask-size: 232.934326171875px 232.934326171875px;
   mask-position: -28.31273078918457px -13.199074745178223px;
   mask-repeat: no-repeat;
