@@ -44,7 +44,10 @@ const ScrollToTop = () => {
       positions.set(location.key, window.scrollY);
       return undefined;
     }
-    const returning = navigationType === 'POP' && positions.has(location.key);
+    // Native fragment navigation may reuse the current history key. Follow the
+    // new anchor; only an actual return or unchanged effect replay restores it.
+    const fragmentNavigation = replay && previous.pathname === location.pathname && previous.hash !== location.hash;
+    const returning = navigationType === 'POP' && positions.has(location.key) && !fragmentNavigation;
     const savedTop = returning ? positions.get(location.key) : 0;
     let stopped = false;
     let frame;
