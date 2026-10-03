@@ -1,10 +1,11 @@
+import teachers from './translationsGuru';
 import school from './translationsSchool';
 import publicPages from './translationsPublic';
 import portal from './translationsPortal';
 import audit from './translationsAudit';
 
 export default {
-  ...school, ...publicPages, ...portal, ...audit,
+  ...school, ...publicPages, ...portal, ...audit, ...teachers,
   'Tentang': 'About', 'Beranda': 'Home', 'Profil Sekolah': 'School Profile',
   'Profil Guru': 'Teacher Profiles', 'Ekstrakurikuler': 'Extracurricular Activities',
   'Jurusan': 'Programs', 'Prestasi': 'Achievements', 'Berita': 'News',

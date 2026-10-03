@@ -37,12 +37,6 @@ import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
 import profilHero from '../assets/tentang/profil-hero.jpg';
 import profilKepsek from '../assets/tentang/guru/pak-aris.png';
-import buFirda from '../assets/tentang/guru/bu-firda.png';
-import pakAic from '../assets/tentang/guru/pak-aic.png';
-import pakBayu from '../assets/tentang/guru/pak-bayu.png';
-import pakHerdi from '../assets/tentang/guru/pak-herdi.png';
-import pakNandar from '../assets/tentang/guru/pak-nandar.png';
-import pakRagil from '../assets/tentang/guru/pak-ragil.png';
 import { slugify } from '../utils/slug';
 import { getUniqueProjects } from '../utils/publicContent';
 import gedungSekolah from '../assets/drive/header-jurusan.webp';
@@ -153,7 +147,7 @@ export const quickLinks = [
   },
   {
     icon: 'sparkles',
-    title: 'NextTel AI',
+    title: 'NextTel',
     desc: 'Temukan jurusan yang sesuai dengan minat dan bakatmu',
     linkLabel: 'Cari Jurusanmu',
     href: '/nexttel',
@@ -487,17 +481,7 @@ export const kepalaSekolah = {
   ctaText: 'Sambutan Lengkap',
 };
 
-// ── Guru & Tenaga Pendidik ──
-// Nama dan jabatan mengikuti SK Pengawakan TP 2026/2027.
-// SK tidak memuat pembagian mata pelajaran, jadi mapel tidak ditebak.
-export const guruData = [
-  { nama: 'Firda Ayu Nirmala, S.Kom.', jabatan: 'Staf Sinergi, Unit Produksi & Alumni', bidang: 'Mata pelajaran belum tercantum dalam SK', image: buFirda },
-  { nama: 'Agus Indra Cahaya, S.Kom.', jabatan: 'Staf Teknologi Informasi', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakAic },
-  { nama: 'Bayu Aji Sukma, S.Si.', jabatan: 'Koord. Perencanaan KBM dan Perpustakaan', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakBayu },
-  { nama: 'Herdiyanto, S.Sos.I., M.Pd.', jabatan: 'Pembina Kerohanian', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakHerdi },
-  { nama: 'Arif Munandar, S.Si.', jabatan: 'Karakter', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakNandar },
-  { nama: 'Ragil Rudi Priyanto, S.Si.', jabatan: 'Kaur Pelaksanaan dan Evaluasi KBM', bidang: 'Mata pelajaran belum tercantum dalam SK', image: pakRagil },
-];
+export { guruData, guruDetail } from './guruData';
 
 export const footerData = {
   tagline:
@@ -520,7 +504,7 @@ export const footerData = {
     { label: 'Pengumuman', href: '/pengumuman' },
     { label: 'SPMB', href: '/spmb' },
     { label: 'STELA AI', href: '/stela' },
-    { label: 'NextTel AI', href: '/nexttel' },
+    { label: 'NextTel', href: '/nexttel' },
   ],
   kontak: {
     // Alamat lengkap resmi. Nilai ini juga dipakai Footer.jsx untuk menyusun
@@ -3123,116 +3107,6 @@ export const projectDetail = getUniqueProjects(projectShowcase.items).map((item)
   date: item.iso,
   lead: item.description,
 }));
-
-/* ── Profil guru: /profil-sekolah/guru/:slug ── */
-const guruDetailKonten = {
-  'Firda Ayu Nirmala, S.Kom.': {
-    lead:
-      'Arsip resmi sekolah tahun 2023 mencatat Firda Ayu Nirmala sebagai Guru Teknologi Informasi dan Komunikasi (TIK).',
-    body: [
-      'TIK mempelajari cara menggunakan teknologi digital untuk mencari, mengolah, menyimpan, dan menyampaikan informasi secara efektif serta bertanggung jawab.',
-      'Topik yang berkaitan dengan TIK mencakup perangkat komputer, internet dan jaringan dasar, aplikasi perkantoran, pengelolaan data, komunikasi digital, keamanan akun, privasi, serta etika di ruang digital.',
-      'Melalui bidang ini, siswa mengembangkan keterampilan memecahkan masalah, memeriksa kebenaran sumber, membuat dokumen dan presentasi, serta bekerja sama menggunakan perangkat digital.',
-    ],
-    facts: [
-      { label: 'Peran 2026/2027', value: 'Staf Sinergi, Unit Produksi & Alumni' },
-      { label: 'Riwayat mata pelajaran', value: 'TIK — arsip sekolah tahun 2023' },
-      { label: 'Status mapel saat ini', value: 'Belum tercantum dalam SK Pengawakan 2026/2027' },
-      { label: 'Sumber', value: 'SK Pengawakan 2026/2027 dan arsip resmi sekolah' },
-    ],
-  },
-  'Agus Indra Cahaya, S.Kom.': {
-    lead:
-      'SK Pengawakan 2026/2027 mencatat Agus Indra Cahaya sebagai Staf Teknologi Informasi.',
-    body: [
-      'Bidang teknologi informasi berkaitan dengan pengelolaan perangkat, perangkat lunak, akun, jaringan, dan layanan digital agar dapat digunakan dengan aman dan lancar.',
-      'Hal yang dipelajari dalam bidang ini antara lain dasar sistem komputer, instalasi dan konfigurasi perangkat lunak, pemecahan masalah teknis, jaringan dasar, pencadangan data, serta keamanan informasi.',
-      'Keterampilan utamanya mencakup berpikir sistematis, menganalisis sumber gangguan, mendokumentasikan solusi, dan menjaga layanan teknologi tetap tersedia bagi pengguna.',
-    ],
-    facts: [
-      { label: 'Peran 2026/2027', value: 'Staf Teknologi Informasi' },
-      { label: 'Bidang terkait', value: 'Sistem komputer, jaringan, dan layanan digital' },
-      { label: 'Status mapel saat ini', value: 'Belum tercantum dalam SK Pengawakan 2026/2027' },
-      { label: 'Sumber', value: 'SK Pengawakan 2026/2027' },
-    ],
-  },
-  'Bayu Aji Sukma, S.Si.': {
-    lead:
-      'SK Pengawakan 2026/2027 mencatat Bayu Aji Sukma sebagai Koordinator Perencanaan KBM dan Perpustakaan.',
-    body: [
-      'Perencanaan Kegiatan Belajar Mengajar (KBM) mengatur kesiapan jadwal, pembagian kegiatan, sumber belajar, dan pelaksanaan pembelajaran agar proses belajar berjalan terarah.',
-      'Bidang ini berkaitan dengan penyusunan program pembelajaran, pengelolaan jadwal, pemanfaatan koleksi perpustakaan, literasi informasi, serta evaluasi kebutuhan sumber belajar.',
-      'Keterampilan yang mendukungnya meliputi perencanaan, pengelolaan data, koordinasi, komunikasi, dan kemampuan memilih sumber informasi yang relevan serta dapat dipercaya.',
-    ],
-    facts: [
-      { label: 'Peran 2026/2027', value: 'Koord. Perencanaan KBM dan Perpustakaan' },
-      { label: 'Bidang terkait', value: 'Perencanaan pembelajaran dan literasi informasi' },
-      { label: 'Status mapel saat ini', value: 'Belum tercantum dalam SK Pengawakan 2026/2027' },
-      { label: 'Sumber', value: 'SK Pengawakan 2026/2027' },
-    ],
-  },
-  'Herdiyanto, S.Sos.I., M.Pd.': {
-    lead:
-      'SK Pengawakan 2026/2027 mencatat Herdiyanto sebagai Pembina Kerohanian. Arsip resmi sekolah juga pernah mencatat beliau mengajar Pendidikan Agama Islam (PAI).',
-    body: [
-      'PAI mempelajari nilai keimanan, akhlak, Al-Qur’an dan hadis, fikih, serta sejarah peradaban Islam sebagai dasar bersikap dalam kehidupan sehari-hari.',
-      'Pembelajaran tidak berhenti pada pengetahuan. Siswa berlatih menerapkan kejujuran, tanggung jawab, kepedulian, kedisiplinan beribadah, dan sikap saling menghormati di lingkungan yang beragam.',
-      'Bidang kerohanian mendukung pembentukan karakter melalui pembiasaan, pendampingan, refleksi, dan kegiatan keagamaan di sekolah.',
-    ],
-    facts: [
-      { label: 'Peran 2026/2027', value: 'Pembina Kerohanian' },
-      { label: 'Riwayat mata pelajaran', value: 'Pendidikan Agama Islam — arsip resmi sekolah' },
-      { label: 'Status mapel saat ini', value: 'Belum tercantum dalam SK Pengawakan 2026/2027' },
-      { label: 'Sumber', value: 'SK Pengawakan 2026/2027 dan arsip resmi sekolah' },
-    ],
-  },
-  'Arif Munandar, S.Si.': {
-    lead:
-      'SK Pengawakan 2026/2027 mencatat Arif Munandar pada bidang Karakter.',
-    body: [
-      'Pendidikan karakter membantu siswa membangun kebiasaan dan cara mengambil keputusan berdasarkan nilai yang baik dalam kegiatan belajar maupun kehidupan sehari-hari.',
-      'Topik yang berkaitan meliputi integritas, disiplin, tanggung jawab, empati, kerja sama, kepemimpinan, etika digital, serta penghargaan terhadap aturan dan orang lain.',
-      'Kegiatan karakter dapat diterapkan melalui pembiasaan sekolah, diskusi kasus, refleksi, kegiatan sosial, kerja kelompok, dan keteladanan dalam menyelesaikan masalah.',
-    ],
-    facts: [
-      { label: 'Peran 2026/2027', value: 'Karakter' },
-      { label: 'Bidang terkait', value: 'Karakter, etika, dan pengembangan diri' },
-      { label: 'Status mapel saat ini', value: 'Belum tercantum dalam SK Pengawakan 2026/2027' },
-      { label: 'Sumber', value: 'SK Pengawakan 2026/2027' },
-    ],
-  },
-  'Ragil Rudi Priyanto, S.Si.': {
-    lead:
-      'SK Pengawakan 2026/2027 mencatat Ragil Rudi Priyanto sebagai Kaur Pelaksanaan dan Evaluasi KBM. Arsip resmi sekolah tahun 2019 juga pernah mencatat beliau sebagai guru Fisika.',
-    body: [
-      'Fisika mempelajari gejala alam melalui pengamatan, pengukuran, pemodelan, dan perhitungan. Konsepnya membantu siswa memahami cara kerja teknologi secara logis.',
-      'Topik dasar Fisika meliputi besaran dan satuan, gerak, gaya, energi, gelombang, listrik, serta penerapannya pada perangkat dan pekerjaan teknik.',
-      'Siswa dilatih membaca data, menggunakan alat ukur, menguji dugaan melalui percobaan, menghitung hasil, dan menjelaskan hubungan antara konsep dengan kejadian nyata.',
-    ],
-    facts: [
-      { label: 'Peran 2026/2027', value: 'Kaur Pelaksanaan dan Evaluasi KBM' },
-      { label: 'Riwayat mata pelajaran', value: 'Fisika — arsip sekolah tahun 2019' },
-      { label: 'Status mapel saat ini', value: 'Belum tercantum dalam SK Pengawakan 2026/2027' },
-      { label: 'Sumber', value: 'SK Pengawakan 2026/2027 dan arsip resmi sekolah' },
-    ],
-  },
-};
-
-export const guruDetail = guruData.map((guru) => {
-  const detail = guruDetailKonten[guru.nama];
-
-  return {
-    slug: slugify(guru.nama),
-    kategori: 'Profil Guru & Tenaga Pendidik',
-    title: guru.nama,
-    subtitle: guru.jabatan,
-    image: guru.image,
-    imageAlt: `Foto ${guru.nama}`,
-    lead: detail.lead,
-    body: detail.body,
-    facts: detail.facts,
-  };
-});
 
 /* ── Halaman FAQ lengkap: /jurusan/faq ── */
 // Tiga butir pertama sengaja diambil ulang dari jurusanFaq supaya isi ringkasan
