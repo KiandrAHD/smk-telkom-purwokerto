@@ -121,7 +121,7 @@ export const navLinks = [
 // ditulis ulang di tiga tempat dan berisiko beda sendiri saat diubah.
 // Tujuannya halaman masuk portal, bukan laman info /ppdb — di sana sudah ada
 // tautan "Daftar Akun Baru" untuk pendaftar yang belum punya akun.
-export const ctaMasukPpdb = { label: 'Masuk PPDB', href: '/ppdb/masuk' };
+export const ctaMasukPpdb = { label: 'Masuk SPMB', href: '/ppdb/masuk' };
 
 export const landingHero = {
   hashtag: '#DigitalSmartSchool',
@@ -139,7 +139,7 @@ export const landingHero = {
 export const quickLinks = [
   {
     icon: 'userPlus',
-    title: 'PPDB',
+    title: 'SPMB',
     desc: 'Informasi pendaftaran siswa baru tahun ajaran 2026/2027',
     linkLabel: 'Daftar Sekarang',
     href: '/ppdb',
@@ -333,7 +333,7 @@ export const stelaData = {
 export const ctaBanner = {
   title: 'Sudah Menemukan Jurusan yang Tepat?',
   description: 'Daftarkan dirimu sekarang dan mulai langkah pertama menuju masa depanmu!',
-  ctaText: 'Daftar PPDB Sekarang',
+  ctaText: 'Daftar SPMB Sekarang',
   href: '/ppdb',
 };
 
@@ -518,7 +518,7 @@ export const footerData = {
   informasi: [
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
-    { label: 'PPDB', href: '/ppdb' },
+    { label: 'SPMB', href: '/ppdb' },
     { label: 'STELA AI', href: '/stela' },
     { label: 'NextTel AI', href: '/nexttel' },
   ],
@@ -2561,8 +2561,8 @@ export const adminPengaturanUmum = {
 
 export const ppdbMeta = {
   namaSekolah: 'SMK Telkom Purwokerto',
-  sistem: 'PPDB System 2027/2028',
-  portal: 'Portal PPDB 2027',
+  sistem: 'Sistem SPMB 2027/2028',
+  portal: 'Portal SPMB 2027/2028',
   tahun: '2027',
   hakCipta: '© 2027 SMK Telkom Purwokerto. All Rights Reserved.',
   waHelpdesk: 'https://wa.me/6285136971361',
@@ -2571,12 +2571,12 @@ export const ppdbMeta = {
 };
 
 const FLEXBOX_MESSAGES = {
-  umum: 'Halo Tim FlexBox, saya membutuhkan bantuan terkait website PPDB SMK Telkom Purwokerto.',
-  ppdb: 'Halo Tim FlexBox, saya membutuhkan bantuan terkait proses pendaftaran PPDB SMK Telkom Purwokerto.',
-  pendaftaran: 'Halo Tim FlexBox, saya mengalami kendala saat melengkapi pendaftaran PPDB.',
-  status: 'Halo Tim FlexBox, saya ingin menanyakan status pendaftaran PPDB saya.',
-  dokumen: 'Halo Tim FlexBox, saya mengalami kendala saat mengunggah dokumen PPDB.',
-  verifikasi: 'Halo Tim FlexBox, saya mengalami kendala saat verifikasi email PPDB.',
+  umum: 'Halo Tim FlexBox, saya membutuhkan bantuan terkait website SPMB SMK Telkom Purwokerto.',
+  ppdb: 'Halo Tim FlexBox, saya membutuhkan bantuan terkait proses pendaftaran SPMB SMK Telkom Purwokerto.',
+  pendaftaran: 'Halo Tim FlexBox, saya mengalami kendala saat melengkapi pendaftaran SPMB.',
+  status: 'Halo Tim FlexBox, saya ingin menanyakan status pendaftaran SPMB saya.',
+  dokumen: 'Halo Tim FlexBox, saya mengalami kendala saat mengunggah dokumen SPMB.',
+  verifikasi: 'Halo Tim FlexBox, saya mengalami kendala saat verifikasi email SPMB.',
 };
 
 const FLEXBOX_SENSITIVE_VALUE = /((?:password|kata\s*sandi|api[_ -]?key|access[_ -]?token|refresh[_ -]?token|token|secret))\s*[:=]\s*[^\s,;]+/gi;
@@ -2689,7 +2689,7 @@ export const ppdbLangkahPortal = [
 export const ppdbSukses = {
   judul: 'Pendaftaran Berhasil Disubmit!',
   pesan:
-    'Terima kasih telah melengkapi seluruh rangkaian data dan berkas. Data Anda saat ini berada di dalam antrean verifikasi oleh panitia PPDB SMK Telkom Purwokerto.',
+    'Terima kasih telah melengkapi seluruh rangkaian data dan berkas. Data Anda saat ini berada di dalam antrean verifikasi oleh panitia SPMB SMK Telkom Purwokerto.',
   kartu: [
     // nilai null diisi nomor registrasi hasil submit, bukan ditulis di sini
     { label: 'Nomor Registrasi', nilai: null, catatan: 'Aktif & Terdaftar', titikCatatan: 'hijau' },
@@ -2711,7 +2711,7 @@ export const ppdbSukses = {
   langkah: [
     {
       icon: 'cetak',
-      judul: 'Cetak Kartu Peserta PPDB',
+      judul: 'Cetak Kartu Peserta SPMB',
       deskripsi: 'Unduh bukti pendaftaran format PDF',
     },
     {
@@ -2721,7 +2721,7 @@ export const ppdbSukses = {
     },
   ],
   bantuanTeks: 'Butuh bantuan atau ada kesalahan input data?',
-  bantuanCta: 'Hubungi Panitia PPDB via WhatsApp',
+  bantuanCta: 'Hubungi Panitia SPMB via WhatsApp',
 };
 
 // Dipakai header portal setelah calon siswa masuk.
@@ -3335,11 +3335,11 @@ export const perbandinganLengkap = {
     'Tingkat kesulitan bukan ukuran mana yang lebih baik. Jurusan yang paling tepat adalah yang paling dekat dengan hal yang membuatmu betah belajar.',
 };
 
-/* ── Ketentuan PPDB: /ketentuan-ppdb ── */
+/* ── Ketentuan SPMB: /ketentuan-ppdb ── */
 export const ketentuanPpdb = {
   eyebrow: 'Dokumen Resmi',
-  title: 'Ketentuan PPDB SMK Telkom Purwokerto',
-  deskripsi: 'Ketentuan yang berlaku bagi seluruh calon peserta didik pada Penerimaan Peserta Didik Baru tahun ajaran 2027/2028.',
+  title: 'Ketentuan SPMB SMK Telkom Purwokerto',
+  deskripsi: 'Ketentuan yang berlaku bagi seluruh calon peserta didik pada Sistem Penerimaan Murid Baru (SPMB) tahun ajaran 2027/2028.',
   diperbarui: 'Diperbarui 20 Mei 2026',
   bagian: [
     {
@@ -3365,7 +3365,7 @@ export const ketentuanPpdb = {
       butir: [
         'Seluruh data yang diisikan harus benar dan dapat dipertanggungjawabkan.',
         'Data yang terbukti tidak benar dapat menggugurkan pendaftaran, termasuk setelah dinyatakan diterima.',
-        'Perubahan data setelah pendaftaran dikirim hanya dapat dilakukan lewat panitia PPDB.',
+        'Perubahan data setelah pendaftaran dikirim hanya dapat dilakukan lewat panitia SPMB.',
         'Satu calon peserta didik hanya diperbolehkan memiliki satu akun pendaftaran.',
       ],
     },
@@ -3373,21 +3373,21 @@ export const ketentuanPpdb = {
       judul: 'Perlindungan Data Pribadi',
       butir: [
         'Data yang dikumpulkan hanya digunakan untuk keperluan seleksi dan administrasi penerimaan.',
-        'Berkas pendaftaran tidak dibagikan ke pihak lain di luar kepentingan penyelenggaraan PPDB.',
+        'Berkas pendaftaran tidak dibagikan ke pihak lain di luar kepentingan penyelenggaraan SPMB.',
         'Pendaftar berhak meminta penghapusan data apabila membatalkan pendaftaran.',
       ],
     },
     {
       judul: 'Pengumuman Hasil',
       butir: [
-        'Hasil seleksi diumumkan melalui portal PPDB dan pemberitahuan WhatsApp.',
+        'Hasil seleksi diumumkan melalui portal SPMB dan pemberitahuan WhatsApp.',
         'Keputusan panitia bersifat final dan tidak dapat diganggu gugat.',
         'Peserta yang dinyatakan diterima wajib melakukan daftar ulang sesuai jadwal.',
       ],
     },
   ],
   kontakTeks: 'Ada bagian yang belum jelas?',
-  kontakCta: 'Hubungi Panitia PPDB',
+  kontakCta: 'Hubungi Panitia SPMB',
 };
 
 /* ── Lupa sandi: /lupa-sandi ── */
@@ -3403,20 +3403,20 @@ export const lupaSandi = {
   catatan: [
     'Pastikan alamat email yang dimasukkan sama dengan yang dipakai saat pendaftaran.',
     'Tautan pemulihan memiliki masa berlaku terbatas. Jika kedaluwarsa, minta tautan baru.',
-    'Bila email pendaftaran sudah tidak aktif, hubungi panitia PPDB untuk penggantian.',
+    'Bila email pendaftaran sudah tidak aktif, hubungi panitia SPMB untuk penggantian.',
   ],
 };
 
 /* ── Dokumen peserta: /ppdb/dokumen-peserta ── */
 export const dokumenPeserta = {
   eyebrow: 'Berkas Peserta',
-  title: 'Dokumen Peserta PPDB',
+  title: 'Dokumen Peserta SPMB',
   deskripsi:
     'Kartu peserta dan jadwal seleksi untuk dibawa saat mengikuti tahapan tes. Simpan atau cetak sebelum hari pelaksanaan.',
-  kartuJudul: 'Kartu Peserta PPDB',
+  kartuJudul: 'Kartu Peserta SPMB',
   kartuCatatan: 'Tunjukkan kartu ini saat registrasi ulang dan pelaksanaan tes.',
   berkas: [
-    { icon: 'cetak', judul: 'Kartu Peserta PPDB', deskripsi: 'Bukti pendaftaran resmi, format PDF' },
+    { icon: 'cetak', judul: 'Kartu Peserta SPMB', deskripsi: 'Bukti pendaftaran resmi, format PDF' },
     { icon: 'jadwal', judul: 'Jadwal Seleksi', deskripsi: 'Tanggal tes tertulis dan wawancara' },
     { icon: 'panduan', judul: 'Panduan Tes Seleksi', deskripsi: 'Materi yang diujikan dan tata tertib' },
   ],

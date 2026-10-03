@@ -7,7 +7,7 @@ import { ensureSupabase, supabaseSiap } from '../../services/supabase';
 
 const errorMessage = (code) => {
   if (code === 'otp_expired') return 'Tautan konfirmasi sudah kedaluwarsa. Silakan minta email konfirmasi baru.';
-  if (code === 'otp_disabled') return 'Konfirmasi email sedang tidak tersedia. Silakan hubungi panitia PPDB.';
+  if (code === 'otp_disabled') return 'Konfirmasi email sedang tidak tersedia. Silakan hubungi panitia SPMB.';
   return 'Tautan konfirmasi tidak valid atau sudah digunakan. Silakan minta email konfirmasi baru.';
 };
 
@@ -18,7 +18,7 @@ const ConfirmEmailPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [state, setState] = useState(supabaseSiap ? 'checking' : 'error');
-  const [message, setMessage] = useState(supabaseSiap ? 'Memuat tautan konfirmasi...' : 'Layanan verifikasi belum dikonfigurasi. Silakan hubungi panitia PPDB.');
+  const [message, setMessage] = useState(supabaseSiap ? 'Memuat tautan konfirmasi...' : 'Layanan verifikasi belum dikonfigurasi. Silakan hubungi panitia SPMB.');
   const [tokenHash, setTokenHash] = useState('');
   const [nextPath, setNextPath] = useState('/ppdb/verifikasi');
   const [confirming, setConfirming] = useState(false);
@@ -41,7 +41,7 @@ const ConfirmEmailPage = () => {
         if (!userError && data?.user?.email_confirmed_at) {
           if (!active) return;
           setState('success');
-          setMessage('Email Anda sudah dikonfirmasi. Anda dapat melanjutkan pendaftaran PPDB.');
+          setMessage('Email Anda sudah dikonfirmasi. Anda dapat melanjutkan pendaftaran SPMB.');
           navigate(redirectPath, { replace: true });
           return;
         }
@@ -89,7 +89,7 @@ const ConfirmEmailPage = () => {
       }
 
       setState('success');
-      setMessage('Email berhasil dikonfirmasi. Anda dapat melanjutkan pendaftaran PPDB.');
+      setMessage('Email berhasil dikonfirmasi. Anda dapat melanjutkan pendaftaran SPMB.');
       navigate(nextPath, { replace: true });
     } catch (verifyError) {
       setState('error');
@@ -112,7 +112,7 @@ const ConfirmEmailPage = () => {
         ) : isSuccess ? (
           <button type="button" onClick={() => navigate('/ppdb/formulir', { replace: true })} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Lanjutkan Pendaftaran')}</button>
         ) : state === 'error' ? (
-          <Link to="/ppdb/masuk" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Kembali ke Masuk PPDB')}</Link>
+          <Link to="/ppdb/masuk" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Kembali ke Masuk SPMB')}</Link>
         ) : null}
       </div>
     </PpdbAuthLayout>

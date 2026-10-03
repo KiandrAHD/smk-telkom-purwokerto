@@ -2,7 +2,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../Logo';
 import LanguageToggle from '../LanguageToggle';
-import ribbon from '../../assets/landing/ribbon.png';
 import { ppdbMeta } from '../../data/dummyData';
 
 // Kerangka halaman sebelum calon siswa masuk (Daftar, Masuk, Verifikasi).
@@ -15,15 +14,6 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
   return (
   <div className="flex min-h-screen flex-col bg-dark-50">
     <div className={`relative ${tinggiPita} max-sm:h-64 bg-gradient-to-r from-primary-700 via-primary to-primary-600`}>
-      {/* Revisi tim: pita bermotif logo dari beranda dipakai sebagai tekstur
-          header supaya tidak sekadar blok merah polos. */}
-      <img
-        src={ribbon}
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 w-full opacity-20 mix-blend-overlay"
-      />
-
       <header className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
         <Link to="/" className="flex items-center gap-3">
           {/* Revisi tim: inisial "T" diganti logo resmi sekolah. */}
