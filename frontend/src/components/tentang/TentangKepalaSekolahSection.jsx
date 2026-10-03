@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
 import SectionAccents from '../SectionAccents';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
-import photoAccent from '../../assets/tentang/figma-guru-photo-accent.png';
 
 const subscribeViewport = (notify) => {
   window.addEventListener('resize', notify);
@@ -82,7 +81,6 @@ const TentangKepalaSekolahSection = () => {
                       className="absolute inset-0 h-full w-full object-cover object-top"
                       loading={i < 4 ? 'eager' : 'lazy'}
                     />
-                    <img src={photoAccent} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full select-none mix-blend-multiply" />
                   </div>
                   <div className="px-1 pb-2 pt-2 [overflow-wrap:anywhere]">
                     <h3 className="font-heading text-xs font-bold leading-relaxed text-primary">
