@@ -81,6 +81,9 @@ import fotoTeamKonten from '../assets/ekstrakurikuler/kegiatan/team-konten.jpg';
 import fotoWirausaha from '../assets/ekstrakurikuler/kegiatan/wirausaha.jpg';
 import fotoVoli from '../assets/ekstrakurikuler/kegiatan/voli.jpeg';
 import fotoHandball from '../assets/ekstrakurikuler/kegiatan/handball.jpeg';
+import fotoPaduanSuara from '../assets/ekstrakurikuler/kegiatan/paduan-suara.jpeg';
+import fotoEnglishClub from '../assets/ekstrakurikuler/kegiatan/english-club.jpeg';
+import fotoWebTechnologies from '../assets/ekstrakurikuler/kegiatan/web-technologies.jpeg';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -270,7 +273,7 @@ export const ekstrakurikulerData = {
     { title: 'Robotik', category: 'Prestasi', description: 'Ekstrakurikuler Robotik SMK Telkom Purwokerto merupakan program kejuruan unggulan untuk mengasah keahlian masa depan di bidang otomasi dan teknologi digital.', focus: ['Elektronika dasar', 'Pemrograman', 'Otomasi', 'Pemecahan masalah'], image: fotoRobotik },
     { title: 'E-Sport', category: 'Prestasi', description: 'Ekstrakurikuler E-Sport SMK Telkom Purwokerto merupakan wadah resmi bagi siswa yang tertarik mengembangkan bakat di dunia gim kompetitif dan industri kreatif digital.', focus: ['Strategi permainan', 'Komunikasi tim', 'Pengambilan keputusan', 'Sportivitas digital'], image: fotoEsport },
     { title: 'Desain Grafis', category: 'Prestasi', description: 'Kegiatan ini mengembangkan kemampuan siswa membuat karya visual dengan prinsip desain dan perangkat digital. Siswa berlatih menyusun elemen visual untuk menyampaikan pesan secara menarik.', focus: ['Komposisi visual', 'Tipografi', 'Warna', 'Desain digital'], image: fotoDesainGrafis },
-    { title: 'Web Technologies', category: 'Prestasi', description: 'Ekskul ini mengenalkan teknologi pengembangan web, mulai dari struktur halaman hingga fitur interaktif sederhana. Kegiatannya melatih logika, kreativitas, dan kerja berbasis proyek.', focus: ['HTML dan CSS', 'Dasar JavaScript', 'Desain antarmuka', 'Proyek web'], image: kegiatanEkskul2 },
+    { title: 'Web Technologies', category: 'Prestasi', description: 'Ekskul ini mengenalkan teknologi pengembangan web, mulai dari struktur halaman hingga fitur interaktif sederhana. Kegiatannya melatih logika, kreativitas, dan kerja berbasis proyek.', focus: ['HTML dan CSS', 'Dasar JavaScript', 'Desain antarmuka', 'Proyek web'], image: fotoWebTechnologies },
     { title: 'AI / Artificial Intelligence', category: 'Prestasi', description: 'Siswa mengenal konsep dasar kecerdasan buatan dan mencoba penerapannya melalui proyek sederhana. Kegiatan juga membahas penggunaan AI secara kritis dan bertanggung jawab.', focus: ['Konsep AI', 'Data', 'Model sederhana', 'Etika AI'], image: fotoAI },
     { title: 'IT Software', category: 'Prestasi', description: 'Kegiatan ini mengajak siswa mempelajari proses pembuatan perangkat lunak, dari merancang solusi hingga menguji program. Siswa mengembangkan kemampuan pemecahan masalah melalui latihan dan proyek.', focus: ['Logika pemrograman', 'Perancangan aplikasi', 'Pengujian perangkat lunak', 'Pemecahan masalah'], image: kegiatanEkskul4 },
     { title: 'Cyber Security (EISS)', category: 'Prestasi', description: 'Ekskul ini mengenalkan keamanan digital dan cara melindungi perangkat serta informasi. Siswa berlatih mengenali risiko siber melalui kegiatan yang aman dan bertanggung jawab.', focus: ['Keamanan akun', 'Privasi digital', 'Pengenalan ancaman siber', 'Etika keamanan'], image: kegiatanEkskul1 },
@@ -280,8 +283,8 @@ export const ekstrakurikulerData = {
     { title: 'Voli', category: 'Prestasi', description: 'Siswa berlatih dasar permainan bola voli, strategi tim, dan komunikasi di lapangan. Kegiatan mendorong kebugaran serta sikap sportif.', focus: ['Passing', 'Servis', 'Kerja sama tim', 'Sportivitas'], image: fotoVoli },
     { title: 'Bela Diri', category: 'Prestasi', description: 'Ekskul ini melatih kebugaran dan keterampilan dasar bela diri dalam suasana disiplin dan saling menghormati. Siswa juga belajar mengendalikan diri serta menjaga keselamatan saat berlatih.', focus: ['Teknik dasar', 'Kebugaran', 'Disiplin', 'Pengendalian diri'], image: kegiatanEkskul2 },
     { title: 'Hand Ball/Bola Tangan', category: 'Prestasi', description: 'Siswa mengenal aturan dan teknik dasar permainan bola tangan serta berlatih menyusun strategi bersama tim. Kegiatan ini melatih koordinasi, kebugaran, dan kerja sama.', focus: ['Teknik melempar dan menangkap', 'Aturan permainan', 'Strategi tim', 'Kebugaran'], image: fotoHandball },
-    { title: 'English Club', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
-    { title: 'Paduan Suara', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
+    { title: 'English Club', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: fotoEnglishClub },
+    { title: 'Paduan Suara', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: fotoPaduanSuara },
     { title: 'Seni Musik', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
     { title: 'Seni Tari', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
     { title: 'Fotografi dan Videografi', aliases: ['Photografi dan Vidiografi'], category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
