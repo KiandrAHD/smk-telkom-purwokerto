@@ -31,7 +31,7 @@ for (const path of ['../src/pages/GuruPage.jsx']) {
   const page = await read(path);
   assert.ok(page.includes('guru-accent-horizontal-top'), path + ' belum memakai bingkai atas Figma.');
 }
-const top = await sharp(fileURLToPath(new URL('../src/assets/tentang/figma-guru-horizontal-top.png', import.meta.url))).metadata();
+const top = await sharp(fileURLToPath(new URL('../src/assets/tentang/guru-border-top.png', import.meta.url))).metadata();
 assert.equal(top.width, source.teacherTop.width);
 assert.equal(top.height, source.teacherTop.height);
 console.log('Lulus: 38 matriks section, orientasi footer, dan bingkai guru sesuai sumber Figma.');

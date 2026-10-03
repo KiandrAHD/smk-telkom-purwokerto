@@ -31,8 +31,8 @@ for (const driveAsset of [
   'jurusan-pg.webp',
   'jurusan-tkj.webp',
   'jurusan-tjat.webp',
-  'showcase-projek-a.png',
-  'showcase-mobil.png',
+  'pameran-proyek-iot.png',
+  'proyek-garasi-otomatis.png',
   'showcase-musik.png',
 ]) {
   assert(fs.existsSync(path.join(root, 'src/assets/drive', driveAsset)), `aset Drive tidak ditemukan: ${driveAsset}`);

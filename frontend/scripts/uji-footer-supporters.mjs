@@ -33,9 +33,9 @@ try {
   const png = await readFile(new URL('../src/assets/footer/competition-supporters.png', import.meta.url));
   assert.equal(png.readUInt32BE(16), 1920);
   assert.equal(png.readUInt32BE(20), 1080);
-  const svg = await readFile(new URL('../src/assets/footer/figma-footer-fill.svg', import.meta.url), 'utf8');
+  const svg = await readFile(new URL('../src/assets/footer/footer-motif-fill.svg', import.meta.url), 'utf8');
   assert.ok(svg.includes('fill="#CECECE" fill-opacity="0.3"'), 'Fill native Figma tetap asli.');
-  const mask = await readFile(new URL('../src/assets/footer/figma-footer-mask.png', import.meta.url));
+  const mask = await readFile(new URL('../src/assets/footer/footer-motif-mask.png', import.meta.url));
   assert.ok(mask.length > 0, 'Mask native Figma tersedia.');
   console.log('Footer: peta di bawah kontak, 5 logo bernama aksesibel, dan 8 motif Accent Element terjaga.');
 } finally {

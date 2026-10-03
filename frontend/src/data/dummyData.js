@@ -1,3 +1,7 @@
+import timDinacom2023 from '../assets/showcase/tim-dinacom-2023.jpeg';
+import alumniKhairudin from '../assets/alumni/moh-khairudin.jpg';
+import alumniTenia from '../assets/alumni/tenia-wahyuningrum.jpg';
+import alumniAlfa from '../assets/alumni/alfa-putra-kurnia.jpg';
 
 import heroPanel from '../assets/drive/header-jurusan.webp';
 import aboutVideo from '../assets/tentang/profil-hero.jpg';
@@ -9,17 +13,17 @@ import jurusanRplCard from '../assets/drive/jurusan-rpl-card.webp';
 import jurusanPgCard from '../assets/drive/jurusan-pg-card.webp';
 import jurusanTkjCard from '../assets/drive/jurusan-tkj-card.webp';
 import jurusanTjatCard from '../assets/drive/jurusan-tjat-card.webp';
-import showcaseIot from '../assets/drive/showcase-projek-a.png';
-import showcaseSmartHome from '../assets/drive/showcase-mobil.png';
+import showcaseIot from '../assets/drive/pameran-proyek-iot.png';
+import showcaseSmartHome from '../assets/drive/proyek-garasi-otomatis.png';
 import penampilanMusik from '../assets/drive/showcase-musik.png';
 import prestasiWeb from '../assets/jurusan/stock-hd/rpl-software-development.webp';
 import prestasiNetwork from '../assets/jurusan/stock-hd/server-monitoring.webp';
 import prestasiGame from '../assets/jurusan/stock-hd/game-development.webp';
 import prestasiIot from '../assets/jurusan/stock-hd/fiber-optic-network.webp';
-import mapImg from '../assets/landing/map.jpg';
+import mapImg from '../assets/landing/peta-lokasi-smk-telkom-purwokerto.jpg';
 
 import heroJurusan from '../assets/drive/header-jurusan.webp';
-import heroPrestasi from '../assets/drive/showcase-projek-a.png';
+import heroPrestasi from '../assets/drive/pameran-proyek-iot.png';
 import heroBkk from '../assets/drive/header-bkk.webp';
 import heroBerita from '../assets/drive/showcase-rumah.png';
 
@@ -36,7 +40,7 @@ import showcaseTjat from '../assets/drive/jurusan-tjat.webp';
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
 import stelaBot from '../assets/pengumuman/stela-bot.png';
 import profilHero from '../assets/tentang/profil-hero.jpg';
-import profilKepsek from '../assets/tentang/guru/pak-aris.png';
+import profilKepsek from '../assets/tentang/guru/aris-puji-santoso.png';
 import { slugify } from '../utils/slug';
 import { getUniqueProjects } from '../utils/publicContent';
 import gedungSekolah from '../assets/drive/header-jurusan.webp';
@@ -48,8 +52,8 @@ import laboratoriumTjkt from '../assets/tentang/fasilitas/laboratorium-tjkt.jpeg
 import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.webp';
-import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
-import kegiatanEkskul4 from '../assets/ekstrakurikuler/kegiatan-4.png';
+import belajarKelompokLaptop from '../assets/ekstrakurikuler/belajar-kelompok-laptop.png';
+import praktikPanjatMenara from '../assets/ekstrakurikuler/praktik-panjat-menara.png';
 import organisasiMpk from '../assets/ekstrakurikuler/organisasi/mpk.jpg';
 import organisasiOsis from '../assets/ekstrakurikuler/organisasi/osis.jpg';
 import organisasiPaskibra from '../assets/ekstrakurikuler/organisasi/paskibra.webp';
@@ -272,8 +276,8 @@ export const ekstrakurikulerData = {
     { title: 'Desain Grafis', category: 'Prestasi', description: 'Kegiatan ini mengembangkan kemampuan siswa membuat karya visual dengan prinsip desain dan perangkat digital. Siswa berlatih menyusun elemen visual untuk menyampaikan pesan secara menarik.', focus: ['Komposisi visual', 'Tipografi', 'Warna', 'Desain digital'], image: fotoDesainGrafis },
     { title: 'Web Technologies', category: 'Prestasi', description: 'Ekskul ini mengenalkan teknologi pengembangan web, mulai dari struktur halaman hingga fitur interaktif sederhana. Kegiatannya melatih logika, kreativitas, dan kerja berbasis proyek.', focus: ['HTML dan CSS', 'Dasar JavaScript', 'Desain antarmuka', 'Proyek web'], image: fotoWebTechnologies },
     { title: 'AI / Artificial Intelligence', category: 'Prestasi', description: 'Siswa mengenal konsep dasar kecerdasan buatan dan mencoba penerapannya melalui proyek sederhana. Kegiatan juga membahas penggunaan AI secara kritis dan bertanggung jawab.', focus: ['Konsep AI', 'Data', 'Model sederhana', 'Etika AI'], image: fotoAI },
-    { title: 'IT Software', category: 'Prestasi', description: 'Kegiatan ini mengajak siswa mempelajari proses pembuatan perangkat lunak, dari merancang solusi hingga menguji program. Siswa mengembangkan kemampuan pemecahan masalah melalui latihan dan proyek.', focus: ['Logika pemrograman', 'Perancangan aplikasi', 'Pengujian perangkat lunak', 'Pemecahan masalah'], image: kegiatanEkskul4 },
-    { title: 'Cyber Security (EISS)', category: 'Prestasi', description: 'Ekskul ini mengenalkan keamanan digital dan cara melindungi perangkat serta informasi. Siswa berlatih mengenali risiko siber melalui kegiatan yang aman dan bertanggung jawab.', focus: ['Keamanan akun', 'Privasi digital', 'Pengenalan ancaman siber', 'Etika keamanan'], image: kegiatanEkskul1 },
+    { title: 'IT Software', category: 'Prestasi', description: 'Kegiatan ini mengajak siswa mempelajari proses pembuatan perangkat lunak, dari merancang solusi hingga menguji program. Siswa mengembangkan kemampuan pemecahan masalah melalui latihan dan proyek.', focus: ['Logika pemrograman', 'Perancangan aplikasi', 'Pengujian perangkat lunak', 'Pemecahan masalah'], image: praktikPanjatMenara },
+    { title: 'Cyber Security (EISS)', category: 'Prestasi', description: 'Ekskul ini mengenalkan keamanan digital dan cara melindungi perangkat serta informasi. Siswa berlatih mengenali risiko siber melalui kegiatan yang aman dan bertanggung jawab.', focus: ['Keamanan akun', 'Privasi digital', 'Pengenalan ancaman siber', 'Etika keamanan'], image: belajarKelompokLaptop },
     { title: 'Information Network Cabling (INC)', category: 'Prestasi', description: 'Siswa mempelajari dasar penataan kabel dan koneksi jaringan komputer. Kegiatan praktik membantu memahami pemasangan, pengujian, dan perawatan jaringan secara aman.', focus: ['Jenis kabel jaringan', 'Konektor', 'Pemasangan kabel', 'Pengujian koneksi'], image: fotoInc },
     { title: '3D Game Art (Animasi)', category: 'Prestasi', description: 'Kegiatan ini mengembangkan keterampilan membuat aset visual tiga dimensi dan animasi untuk gim. Siswa berlatih mengolah ide menjadi karakter atau objek digital.', focus: ['Dasar pemodelan 3D', 'Desain karakter', 'Animasi', 'Aset gim'], image: fotoGameArt3d },
     { title: 'Bulu Tangkis', category: 'Prestasi', description: 'Ekskul ini menjadi tempat siswa berlatih teknik dan strategi permainan bulu tangkis. Latihan membantu meningkatkan kebugaran, koordinasi, dan sportivitas.', focus: ['Servis dan pukulan', 'Gerak kaki', 'Strategi permainan', 'Sportivitas'], image: fotoBuluTangkis },
@@ -632,7 +636,7 @@ export const projectShowcase = {
     {
       tag: 'RPL', tagClass: 'bg-blue-600', title: 'Proyek Aplikasi DINACOM 2023',
       description: 'Karya tim Rafli, Nizar, dan Azhar yang meraih juara dua kompetisi aplikasi nasional di UDINUS.',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2023/01/WhatsApp-Image-2023-01-20-at-08.26.53.jpeg',
+      image: timDinacom2023,
       imageAlt: 'Dokumentasi tim juara dua DINACOM 2023 dari situs resmi sekolah',
       imageNote: 'Foto tim lomba; nama aplikasi dan tangkapan layarnya tidak dicantumkan dalam artikel resmi.',
       iso: '2023-01-20', author: 'Muhamad Rafli Al Farizqi, Nizar Ali Rifai, Azhar Dwi Nugroho',
@@ -987,7 +991,7 @@ export const kisahAlumni = {
       name: 'Prof. Dr. Ir. Moh. Khairudin, M.T., Ph.D.',
       meta: 'Lulusan 1998',
       role: 'Guru Besar Universitas Negeri Yogyakarta',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/aaass.jpg',
+      image: alumniKhairudin,
       summary: 'Khairudin menilai pendidikan teknologi dan pembentukan karakter di sekolah menjadi bekal bagi perjalanan akademik dan kariernya.',
       sourceUrl: 'https://smktelkom-pwt.sch.id/',
     },
@@ -995,7 +999,7 @@ export const kisahAlumni = {
       name: 'Dr. Tenia Wahyuningrum, S.Kom., M.T.',
       meta: 'Lulusan 2001',
       role: 'Direktur Telkom University Purwokerto',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdaddd.jpg',
+      image: alumniTenia,
       summary: 'Tenia menyoroti kemampuan alumni untuk bersaing dan melanjutkan pendidikan tinggi di Telkom University.',
       sourceUrl: 'https://smktelkom-pwt.sch.id/',
     },
@@ -1003,7 +1007,7 @@ export const kisahAlumni = {
       name: 'Alfa Putra Kurnia',
       meta: 'Alumni TKJ',
       role: 'Co-founder & CEO Arkademy.com',
-      image: 'https://smktelkom-pwt.sch.id/wp-content/uploads/2026/04/asdasd.jpg',
+      image: alumniAlfa,
       summary: 'Alfa mengaitkan kesiapan menghadapi dunia bisnis dengan keterampilan, pengetahuan, dan sikap yang dipelajari di sekolah.',
       sourceUrl: 'https://smktelkom-pwt.sch.id/',
     },

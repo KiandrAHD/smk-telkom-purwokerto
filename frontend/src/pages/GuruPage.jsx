@@ -13,7 +13,7 @@ import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
 import SectionAccents from '../components/SectionAccents';
 import TeacherPhoto from '../components/TeacherPhoto';
-import headmasterAccent from '../assets/tentang/figma-guru-headmaster.svg';
+import headmasterAccent from '../assets/tentang/kepala-sekolah-motif.svg';
 
 const getPageSize = () => {
   if (typeof window === 'undefined') return 4;

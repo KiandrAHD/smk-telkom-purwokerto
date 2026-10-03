@@ -1,11 +1,11 @@
 import { slugify } from '../utils/slug';
 import { guruDescriptions } from './guruDescriptions';
-import photo0 from '../assets/tentang/guru/bu-firda.png';
-import photo1 from '../assets/tentang/guru/pak-aic.png';
-import photo2 from '../assets/tentang/guru/pak-bayu.png';
+import photo0 from '../assets/tentang/guru/firda-ayu-nirmala.png';
+import photo1 from '../assets/tentang/guru/agus-indra-cahaya.png';
+import photo2 from '../assets/tentang/guru/bayu-aji-sukma.png';
 import photo3 from '../assets/tentang/guru/herdiyanto.jpeg';
-import photo4 from '../assets/tentang/guru/pak-nandar.png';
-import photo5 from '../assets/tentang/guru/pak-ragil.png';
+import photo4 from '../assets/tentang/guru/arif-munandar.png';
+import photo5 from '../assets/tentang/guru/ragil-rudi-priyanto.png';
 import photo6 from '../assets/tentang/guru/andang-jaka-patrianta.jpeg';
 import photo7 from '../assets/tentang/guru/anggita-laras-pratama.jpeg';
 import photo8 from '../assets/tentang/guru/keksi-manik-setyawati.jpeg';

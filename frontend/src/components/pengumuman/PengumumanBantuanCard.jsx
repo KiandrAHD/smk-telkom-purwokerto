@@ -1,7 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { stelaData } from '../../data/dummyData';
-import stelaPanel from '../../assets/pengumuman/figma-stela-panel.png';
+import stelaPanel from '../../assets/pengumuman/stela-help-panel.png';
 import stelaCardEn from '../../assets/landing/stela-card-en.png';
 
 const PengumumanBantuanCard = () => {
