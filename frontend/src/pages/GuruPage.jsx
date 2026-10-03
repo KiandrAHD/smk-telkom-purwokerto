@@ -12,6 +12,7 @@ import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
 import SectionAccents from '../components/SectionAccents';
+import TeacherPhoto from '../components/TeacherPhoto';
 import headmasterAccent from '../assets/tentang/figma-guru-headmaster.svg';
 
 const getPageSize = () => {
@@ -69,17 +70,20 @@ function GuruCarousel() {
                       <Link
                         to={'/profil-sekolah/guru/' + slugify(guru.nama)}
                         aria-label={t('Lihat profil {name}', { name: guru.nama })}
-                        className="group relative block aspect-[322/426] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                        className="group relative block rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                       >
-                        <article className="relative h-full bg-white p-[10px] transition-transform duration-300 group-hover:-translate-y-1">
-                          <img src={guru.image} alt={t('Foto {name}', { name: guru.nama })} loading="lazy" className="h-full w-full rounded-[10px] object-cover object-top" />
-                          <div aria-hidden="true" className="guru-accent-horizontal-top pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
-                          <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
-                          <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
-                          <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
-                          <div className="absolute bottom-[12%] left-[6%] right-[6%] min-h-[70px] rounded-xl bg-white px-3 py-2 shadow-card sm:min-h-[78px]">
-                            <h3 className="font-heading text-sm font-bold leading-snug text-dark-900 sm:text-base">{t(guru.nama)}</h3>
-                            <p className="mt-1 text-[11px] leading-snug text-dark-500 sm:text-xs">{t(guru.jabatan)}</p>
+                        <article className="bg-white transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transform-none">
+                          <div className="relative p-[10px]">
+                            <TeacherPhoto teacher={guru} alt={guru.nama} />
+                            <div aria-hidden="true" className="guru-accent-horizontal-top pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
+                            <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
+                            <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
+                            <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
+                          </div>
+                          <div className="px-3 pb-3 pt-2 [overflow-wrap:anywhere]">
+                            <h3 className="font-heading text-sm font-bold leading-snug text-primary sm:text-base">{guru.nama}</h3>
+                            <p className="mt-1 text-xs font-semibold leading-relaxed text-dark-900">{t(guru.jabatan)}</p>
+                            <p className="mt-2 text-xs leading-relaxed text-dark-500">{t(guru.deskripsi)}</p>
                           </div>
                         </article>
                       </Link>
@@ -96,7 +100,7 @@ function GuruCarousel() {
               <button type="button" onClick={() => setPage((current) => Math.max(0, current - 1))} disabled={page === 0} aria-label={t("Guru sebelumnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
                 <ChevronLeft size={22} />
               </button>
-              <div className="flex items-center gap-1">
+              <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 sm:flex-none">
                 {Array.from({ length: pageCount }, (_, index) => (
                   <button key={index} type="button" onClick={() => setPage(index)} aria-label={t('Lihat halaman guru {number}', { number: index + 1 })} aria-current={page === index ? 'page' : undefined} className="grid h-8 w-8 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                     <span aria-hidden="true" className={page === index ? 'h-3 w-3 rounded-full bg-primary' : 'h-3 w-3 rounded-full bg-dark-200'} />

@@ -4,6 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 import Reveal from './Reveal';
 import VideoEmbed from './VideoEmbed';
 import ContentImage from './ContentImage';
+import TeacherPhoto from './TeacherPhoto';
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect } from 'react';
 import { formatPublicDate } from '../utils/publicContent';
@@ -52,11 +53,15 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
         )}
 
         <div className="mt-7 overflow-hidden rounded-2xl">
-          <ContentImage
-            src={item.image}
-            alt={t(item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi')}
-            className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
-          />
+          {item.photoCropClassName ? (
+            <TeacherPhoto teacher={item} alt={t(item.imageAlt)} className="mx-auto w-full max-w-sm" />
+          ) : (
+            <ContentImage
+              src={item.image}
+              alt={t(item.imageAlt || 'Foto ilustrasi; dokumentasi belum terverifikasi')}
+              className="w-full object-cover object-top aspect-[16/9] transition-transform duration-700 hover:scale-105"
+            />
+          )}
         </div>
 
         {item.imageNote && (
