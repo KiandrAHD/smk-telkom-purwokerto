@@ -11,7 +11,7 @@ const [hero, footer, layout, data, app] = await Promise.all([
 
 const quickLinks = data.match(/export const quickLinks = \[([\s\S]*?)\n\];/)?.[1] ?? '';
 const expectedLinks = [
-  ['PPDB', '/ppdb'],
+  ['SPMB', '/spmb'],
   ['STELA AI', '/stela'],
   ['NextTel AI', '/nexttel'],
 ];

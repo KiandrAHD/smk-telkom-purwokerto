@@ -2,6 +2,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight, Bot, UserPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
+import HeroBreadcrumb from './HeroBreadcrumb';
 
 const icons = {
   userPlus: UserPlus,
@@ -20,9 +21,10 @@ const HeroSection = () => {
           {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
               lihat catatan yang sama di PrestasiHeroSection. */}
           <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-2">
+            <HeroBreadcrumb current="Beranda" />
             {/* Chip yang sama dipakai enam hero lain; sebelumnya di sini cuma
                 teks merah polos, jadi hero Beranda terlihat lain sendiri. */}
-            <span className="mt-4 inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
+            <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
               {t(landingHero.hashtag)}
             </span>
 

@@ -63,7 +63,7 @@ const VerifyEmailPage = () => {
   const lanjut = async () => {
     const user = verifiedUser || currentUser;
     if (!user) {
-      navigate('/ppdb/masuk');
+      navigate('/spmb/masuk');
       return;
     }
     try {
@@ -73,7 +73,7 @@ const VerifyEmailPage = () => {
       if (refreshedUser?.email_confirmed_at) {
         setVerifiedUser(refreshedUser);
         setState('verified');
-        navigate('/ppdb/formulir');
+        navigate('/spmb/formulir');
         return;
       }
       setState('unverified');
@@ -100,7 +100,7 @@ const VerifyEmailPage = () => {
 
   const ubahEmail = () => {
     mulaiAkunBaru();
-    navigate('/ppdb/daftar');
+    navigate('/spmb/daftar');
   };
 
   if (authLoading || state === 'checking') {
@@ -124,10 +124,10 @@ const VerifyEmailPage = () => {
     );
   }
 
-  if (!email && !currentUser && !verifiedUser) return <Navigate to="/ppdb/masuk" replace />;
+  if (!email && !currentUser && !verifiedUser) return <Navigate to="/spmb/masuk" replace />;
 
   return (
-    <PpdbAuthLayout aksiLabel="Butuh Bantuan?" aksiTo="/ppdb/masuk" tinggiPita="h-52">
+    <PpdbAuthLayout aksiLabel="Butuh Bantuan?" aksiTo="/spmb/masuk" tinggiPita="h-52">
       <div className="mx-auto max-w-md rounded-3xl border border-dark-100 bg-white p-8 text-center shadow-card sm:p-10">
         <span className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50"><Mail className="h-7 w-7 text-primary" /><CheckCircle2 className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-white text-green-600" fill="white" /></span>
         <p className="mt-6 text-[11px] font-bold text-primary">{t(ppdbVerifikasi.badge)}</p>

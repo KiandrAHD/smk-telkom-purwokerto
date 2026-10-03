@@ -98,7 +98,7 @@ const DashboardHomePage = () => {
     { label: 'BKK Aktif', value: counts.bkkAktif ?? 0, nada: 'hijau', icon: 'lowongan' },
   ];
   const ppdbStatCards = [
-    { label: 'Total PPDB', value: counts.ppdbTotal ?? 0, nada: 'merah', icon: 'ppdb' },
+    { label: 'Total SPMB', value: counts.ppdbTotal ?? 0, nada: 'merah', icon: 'ppdb' },
     { label: 'Menunggu', value: counts.ppdbMenunggu ?? 0, nada: 'oranye', icon: 'tunggu' },
     { label: 'Diproses', value: counts.ppdbDiproses ?? 0, nada: 'biru', icon: 'diproses' },
     { label: 'Diterima', value: counts.ppdbDiterima ?? 0, nada: 'hijau', icon: 'diterima' },
@@ -115,10 +115,10 @@ const DashboardHomePage = () => {
           {loading ? 'Memuat ringkasan data terbaru...' : counts.ppdbMenunggu > 0 ? `Ada ${counts.ppdbMenunggu} pendaftar yang menunggu diproses.` : 'Tidak ada pendaftar yang menunggu diproses.'}
         </p>
         <Link
-          to="/dashboard/ppdb"
+          to="/dashboard/spmb"
           className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-primary transition-transform hover:-translate-y-0.5"
         >
-          Buka Manajemen PPDB
+          Buka Manajemen SPMB
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -136,7 +136,7 @@ const DashboardHomePage = () => {
         ))}
       </div>
 
-      <h2 className="mb-4 font-heading text-lg font-extrabold text-dark-900">Ringkasan PPDB</h2>
+      <h2 className="mb-4 font-heading text-lg font-extrabold text-dark-900">Ringkasan SPMB</h2>
       <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
         {ppdbStatCards.map((stat) => (
           <StatCard key={stat.label} {...stat} />
@@ -158,7 +158,7 @@ const DashboardHomePage = () => {
 
       <div className="mb-4 mt-8 flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-heading text-lg font-extrabold text-dark-900">Pendaftar Terbaru</h2>
-        <Link to="/dashboard/ppdb" className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline">
+        <Link to="/dashboard/spmb" className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline">
           Lihat semua <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>

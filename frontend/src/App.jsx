@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import ContentSkeleton from './components/ContentSkeleton';
+import { canonicalAdmissionsPath } from './utils/admissions';
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 import { useLanguage } from './context/LanguageContext';
@@ -62,7 +63,7 @@ const PAGE_META = {
   '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
   '/berita': ['Berita SMK Telkom Purwokerto', 'Berita terbaru dari SMK Telkom Purwokerto.'],
   '/pengumuman': ['Pengumuman SMK Telkom Purwokerto', 'Pengumuman resmi SMK Telkom Purwokerto.'],
-  '/ppdb': ['SPMB 2027/2028 | SMK Telkom Purwokerto', 'Portal pendaftaran SPMB Tahun Ajaran 2027/2028 SMK Telkom Purwokerto.'],
+  '/spmb': ['SPMB 2027/2028 | SMK Telkom Purwokerto', 'Portal pendaftaran SPMB Tahun Ajaran 2027/2028 SMK Telkom Purwokerto.'],
   '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
   '/nexttel': ['NextTel AI | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
   '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
@@ -74,7 +75,7 @@ const PageMetadata = () => {
   const { t } = useLanguage();
   const { pathname } = useLocation();
   useEffect(() => {
-    const key = Object.keys(PAGE_META).find((path) => pathname === path || (['/dashboard', '/ppdb'].includes(path) && pathname.startsWith(`${path}/`)));
+    const key = Object.keys(PAGE_META).find((path) => pathname === path || (['/dashboard', '/spmb'].includes(path) && pathname.startsWith(`${path}/`)));
     // DetailLayout sets the title when its asynchronously loaded item exists.
     const collectionPaths = ['/pengumuman/populer', '/pengumuman/semua', '/pengumuman/timeline', '/pengumuman/informasi-penting', '/berita/trending', '/berita/agenda', '/prestasi/galeri', '/jurusan/faq', '/jurusan/perbandingan'];
     if (!key && !collectionPaths.includes(pathname) && /^\/(berita|prestasi|jurusan|pengumuman)\/[^/]+$/.test(pathname)) return;
@@ -90,11 +91,17 @@ const LegacyProfileGuruRedirect = () => {
   return <Navigate to={`/profil-sekolah/guru/${slug}`} replace />;
 };
 
+const AdmissionsRedirect = () => {
+  const { pathname, search, hash } = useLocation();
+  const canonicalPath = canonicalAdmissionsPath(pathname);
+  return <Navigate to={{ pathname: canonicalPath === '/spmb' || canonicalPath === '/spmb/' ? '/spmb/masuk' : canonicalPath, search, hash }} replace />;
+};
+
 const RouteLoading = () => {
   const { t } = useLanguage();
   const { pathname } = useLocation();
   const loadingStatus = <div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>;
-  if (/^\/(ppdb|dashboard|login|auth)(\/|$)/.test(pathname)) {
+  if (/^\/(spmb|ppdb|dashboard|login|auth)(\/|$)/.test(pathname)) {
     return loadingStatus;
   }
   return <Suspense fallback={loadingStatus}><MainLayout busy><section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><p role="status" className="text-sm text-dark-600">{t('Memuat halaman...')}</p><ContentSkeleton /></section></MainLayout></Suspense>;
@@ -116,13 +123,11 @@ const App = () => {
         <Route path="/bkk" element={<BkkPage />} />
         <Route path="/berita" element={<BeritaPage />} />
         <Route path="/pengumuman" element={<PengumumanPage />} />
-        {/* Delapan tautan di seluruh situs (footer, CTA, hero Tentang/Jurusan/
-            Pengumuman) masih menunjuk ke /ppdb. Daripada menyunting satu per satu
-            dan berisiko ada yang terlewat, rutenya sendiri yang dialihkan ke
-            portal baru — jadi tautan lama maupun yang dibuat nanti sama-sama
-            mendarat di desain terbaru. `replace` dipakai supaya alamat lama tidak
-            tertinggal di riwayat dan menjebak tombol Back. */}
-        <Route path="/ppdb" element={<Navigate to="/ppdb/masuk" replace />} />
+        {/* Preserve old bookmarks and authentication callback parameters. */}
+        <Route path="/spmb" element={<AdmissionsRedirect />} />
+        <Route path="/ppdb/*" element={<AdmissionsRedirect />} />
+        <Route path="/ketentuan-ppdb" element={<AdmissionsRedirect />} />
+        <Route path="/dashboard/ppdb" element={<AdmissionsRedirect />} />
 
         {/* Halaman pelengkap. Slug-nya mengikuti hasil slugify() pada kartu
             asal, karena tautannya dirakit dari judul kartu. */}
@@ -138,7 +143,7 @@ const App = () => {
         <Route path="/jurusan/project/:slug" element={<DetailPelengkapPage jenis="project" />} />
         <Route path="/profil-sekolah/guru/:slug" element={<DetailPelengkapPage jenis="guru" />} />
         <Route path="/tentang/guru/:slug" element={<LegacyProfileGuruRedirect />} />
-        <Route path="/ketentuan-ppdb" element={<KetentuanPpdbPage />} />
+        <Route path="/ketentuan-spmb" element={<KetentuanPpdbPage />} />
         <Route path="/lupa-sandi" element={<LupaSandiPage />} />
 
         {/* Alur portal PPDB. PpdbProvider membungkus keenam langkah supaya isian
@@ -150,16 +155,16 @@ const App = () => {
             </PpdbProvider>
           }
         >
-          <Route path="/ppdb/daftar" element={<PpdbRegisterPage />} />
-          <Route path="/ppdb/atur-sandi" element={<AturSandiPage />} />
-          <Route path="/ppdb/masuk" element={<PpdbLoginPage />} />
-          <Route path="/ppdb/verifikasi" element={<VerifyEmailPage />} />
+          <Route path="/spmb/daftar" element={<PpdbRegisterPage />} />
+          <Route path="/spmb/atur-sandi" element={<AturSandiPage />} />
+          <Route path="/spmb/masuk" element={<PpdbLoginPage />} />
+          <Route path="/spmb/verifikasi" element={<VerifyEmailPage />} />
 <Route path="/auth/confirm" element={<ConfirmEmailPage />} />
-          <Route path="/ppdb/formulir" element={<RegistrationFormPage />} />
-          <Route path="/ppdb/berkas" element={<UploadDocumentsPage />} />
-          <Route path="/ppdb/selesai" element={<SubmitSuccessPage />} />
-          <Route path="/ppdb/status" element={<PpdbStatusPage />} />
-          <Route path="/ppdb/dokumen-peserta" element={<DokumenPesertaPage />} />
+          <Route path="/spmb/formulir" element={<RegistrationFormPage />} />
+          <Route path="/spmb/berkas" element={<UploadDocumentsPage />} />
+          <Route path="/spmb/selesai" element={<SubmitSuccessPage />} />
+          <Route path="/spmb/status" element={<PpdbStatusPage />} />
+          <Route path="/spmb/dokumen-peserta" element={<DokumenPesertaPage />} />
         </Route>
 
         {/* Halaman detail: isinya dicari dari slug, satu komponen per kategori. */}
@@ -201,7 +206,7 @@ const App = () => {
                   halamannya masing-masing, jadi tidak ada rute terpisah lagi. */}
               <Route path="berita" element={<AdminBeritaPage />} />
               <Route path="pengumuman" element={<AdminPengumumanPage />} />
-              <Route path="ppdb" element={<AdminPpdbPage />} />
+              <Route path="spmb" element={<AdminPpdbPage />} />
               <Route path="jurusan" element={<DashboardJurusanPage />} />
               <Route path="prestasi" element={<AdminPrestasiPage />} />
               <Route path="bkk" element={<AdminBkkPage />} />

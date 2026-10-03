@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, CircleAlert, Mail } from 'lucide-react';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { ensureSupabase, supabaseSiap } from '../../services/supabase';
+import { canonicalAdmissionsPath } from '../../utils/admissions';
 
 const errorMessage = (code) => {
   if (code === 'otp_expired') return 'Tautan konfirmasi sudah kedaluwarsa. Silakan minta email konfirmasi baru.';
@@ -11,7 +12,7 @@ const errorMessage = (code) => {
   return 'Tautan konfirmasi tidak valid atau sudah digunakan. Silakan minta email konfirmasi baru.';
 };
 
-const safeNextPath = (value) => (value?.startsWith('/') && !value.startsWith('//') ? value : '/ppdb/verifikasi');
+const safeNextPath = (value) => (value?.startsWith('/') && !value.startsWith('//') ? canonicalAdmissionsPath(value) : '/spmb/verifikasi');
 
 const ConfirmEmailPage = () => {
   const { t } = useLanguage();
@@ -20,7 +21,7 @@ const ConfirmEmailPage = () => {
   const [state, setState] = useState(supabaseSiap ? 'checking' : 'error');
   const [message, setMessage] = useState(supabaseSiap ? 'Memuat tautan konfirmasi...' : 'Layanan verifikasi belum dikonfigurasi. Silakan hubungi panitia SPMB.');
   const [tokenHash, setTokenHash] = useState('');
-  const [nextPath, setNextPath] = useState('/ppdb/verifikasi');
+  const [nextPath, setNextPath] = useState('/spmb/verifikasi');
   const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
@@ -110,9 +111,9 @@ const ConfirmEmailPage = () => {
         {state === 'ready' ? (
           <button type="button" disabled={confirming} onClick={confirmEmail} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60">{t(confirming ? 'Mengonfirmasi...' : 'Konfirmasi Email')}</button>
         ) : isSuccess ? (
-          <button type="button" onClick={() => navigate('/ppdb/formulir', { replace: true })} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Lanjutkan Pendaftaran')}</button>
+          <button type="button" onClick={() => navigate('/spmb/formulir', { replace: true })} className="mt-6 w-full rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Lanjutkan Pendaftaran')}</button>
         ) : state === 'error' ? (
-          <Link to="/ppdb/masuk" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Kembali ke Masuk SPMB')}</Link>
+          <Link to="/spmb/masuk" className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card hover:-translate-y-0.5">{t('Kembali ke Masuk SPMB')}</Link>
         ) : null}
       </div>
     </PpdbAuthLayout>

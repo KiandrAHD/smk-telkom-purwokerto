@@ -91,7 +91,7 @@ const LupaSandiPage = () => {
         </div>
 
         <p className="mt-6 text-center text-[11px] text-dark-500">{t("Sudah ingat sandinya?")}{' '}
-          <Link to="/ppdb/masuk" className="font-heading font-bold text-primary hover:underline">{t("Masuk ke Portal SPMB")} </Link>
+          <Link to="/spmb/masuk" className="font-heading font-bold text-primary hover:underline">{t("Masuk ke Portal SPMB")} </Link>
         </p>
       </div>
     </PpdbAuthLayout>

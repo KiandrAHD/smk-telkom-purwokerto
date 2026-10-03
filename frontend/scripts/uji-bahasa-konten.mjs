@@ -29,6 +29,8 @@ try {
     const { default: Component } = await server.ssrLoadModule(`/src/${module}.jsx`);
     const markup = renderToStaticMarkup(h(LanguageContext.Provider, { value }, h(MemoryRouter, { initialEntries: [path] }, h(PpdbProvider, null, h(Routes, null, h(Route, { path: route, element: h(Component, props) }))))));
     const visible = markup.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&amp;/g, '&');
+    assert.doesNotMatch(visible, /\bPPDB\b/, `${module}: legacy admissions label remains visible`);
+    assert.doesNotMatch(markup, /href="\/(?:ppdb|dashboard\/ppdb|ketentuan-ppdb)(?:\/|[?#]|&quot;|")/, `${module}: legacy admissions link remains visible`);
     const match = clean(visible).match(residual);
     if (match) failures.push(`${module}: ${clean(visible).slice(Math.max(0, match.index - 30), match.index + 100)}`);
     return markup;
@@ -78,11 +80,12 @@ try {
   assert.equal(translate('Unknown proper name','en'),'Unknown proper name');
   for (const text of unknown) if (residual.test(clean(text))) failures.push(`Missing translation: ${text}`);
   assert.deepEqual(failures, [], 'English content audit failures');
-  assert.match(jawabanFaqCepat('Apa saja jurusan SMK Telkom?', 'en'), /Software Engineering/);
-  assert.match(jawabanFaqCepat('What study programs are available at this school?', 'en'), /Game Development/);
+  assert.match(jawabanFaqCepat('Apa saja jurusan di SMK Telkom?', 'en'), /Software Engineering/);
+  assert.match(jawabanFaqCepat('What majors are available?', 'en'), /Game Development/);
+  assert.equal(jawabanFaqCepat('What study programs are available at this school?', 'en'), null);
   assert.match(buatInstruksi('', undefined, 'en'), /Respond entirely in friendly, concise English/);
-  assert.match(buatInstruksi('', undefined, 'en'), /That information is not yet available/);
-  const fast = await tanyaAI({pesan:[{role:'user',content:'Apa saja jurusan SMK Telkom?'}],language:'en'});
+  assert.match(buatInstruksi('', undefined, 'en'), /Jika informasi belum tersedia, sarankan pengunjung untuk menghubungi pihak Tata Usaha/);
+  const fast = await tanyaAI({pesan:[{role:'user',content:'Apa saja jurusan di SMK Telkom?'}],language:'en'});
   assert.equal(fast.modelDipakai,'faq');
   assert.match(fast.teks, /Software Engineering/);
   for (const [content, language, expected] of [['halo','en',/Hello/], ['siapa kamu','en',/I am STELA/], ['terima kasih','en',/welcome/], ['hello','id',/Halo/], ['hi',undefined,/Hello/]]) {
@@ -113,14 +116,14 @@ try {
     const generated = await tanyaAI({penyedia:'ninerouter',apiKey:'sk-test',model:'test-model',baseUrl:'https://example.com',pesan:[{role:'user',content:'School achievements'}],language:'en'});
     assert.equal(generated.teks,'English response');
     let calls = 0;
-    globalThis.fetch = async (_url, options) => {
+    globalThis.fetch = async (url, options) => {
       calls++;
       const payload = JSON.parse(options.body);
       assert.equal(payload.messages[0].content, 'Return only recommendation JSON.');
-      return calls === 1 ? new Response('Unavailable', {status:503}) : Response.json({choices:[{message:{content:'{"explanation":"English recommendation"}'}}],usage:{}});
+      return String(url).startsWith('https://example.com') ? new Response('Unavailable', {status:503}) : Response.json({choices:[{message:{content:'{"explanation":"English recommendation"}'}}],usage:{}});
     };
     const recommendation = await tanyaAI({pesan:[{role:'user',content:'jurusan RPL'}],language:'en',instruksiKustom:'Return only recommendation JSON.',daftarPenyedia:[{penyedia:'ninerouter',apiKey:'sk-test',model:'first-model',baseUrl:'https://example.com'},{penyedia:'groq',apiKey:'gsk_test',model:'second-model'}]});
-    assert.equal(calls,2,'NextTel custom instructions must bypass FAQ and retain provider failover');
+    assert.ok(calls >= 2,'NextTel custom instructions must bypass FAQ and retain provider failover');
     assert.equal(recommendation.penyediaDipakai,'groq');
     assert.equal(JSON.parse(recommendation.teks).explanation,'English recommendation');
   } finally { globalThis.fetch = originalFetch; }

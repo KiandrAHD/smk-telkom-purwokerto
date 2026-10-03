@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AlertCircle, Send } from 'lucide-react';
 import { PESAN_STELA_GAGAL, tanyaStela } from '../../services/stela';
 import { stelaData } from '../../data/dummyData';
+import { canonicalAdmissionsPath, formatAdmissionsText } from '../../utils/admissions';
 
 // STELA menyebut alamat halaman, dan menulis **tebal** serta `kode` karena
 // model bahasa memang terbiasa memakai Markdown. Tanpa penanganan di sini,
@@ -15,7 +16,7 @@ import { stelaData } from '../../data/dummyData';
 // Pola pemisah dan pola pencocok dipisah karena regex global menyimpan
 // lastIndex, sehingga .test() yang dipanggil berulang pada regex yang sama
 // akan meleset selang-seling.
-const BAGIAN_PATH = '/(?:jurusan|prestasi|berita|pengumuman|bkk|tentang|galeri|ppdb)(?:/[a-z0-9-]+)*';
+const BAGIAN_PATH = '/(?:jurusan|prestasi|berita|pengumuman|bkk|tentang|galeri|ppdb|spmb|ketentuan-spmb|ketentuan-ppdb)(?:/[a-z0-9-]+)*';
 // Urutan alternasi penting: **tebal** harus diuji sebelum *miring*, kalau
 // tidak pola satu-bintang akan memakan bintang pertama dari pasangan ganda.
 const PEMISAH = new RegExp(
@@ -25,13 +26,13 @@ const PEMISAH = new RegExp(
 const COCOK_PATH = new RegExp(`^${BAGIAN_PATH}$`);
 
 const TautanPath = ({ path }) => (
-  <Link to={path} className="font-semibold text-primary underline">
-    {path}
+  <Link to={canonicalAdmissionsPath(path)} className="font-semibold text-primary underline">
+    {canonicalAdmissionsPath(path)}
   </Link>
 );
 
 const IsiPesan = ({ teks }) =>
-  teks.split(PEMISAH).map((bagian, i) => {
+  formatAdmissionsText(teks).split(PEMISAH).map((bagian, i) => {
     if (!bagian) return null;
 
     if (bagian.startsWith('**') && bagian.endsWith('**')) {

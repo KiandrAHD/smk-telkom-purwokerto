@@ -22,7 +22,7 @@ try {
   );
 
   // Translated option labels must keep the backend's original values.
-  const registration = render(createElement(PpdbProvider, null, createElement(RegisterPage)), '/ppdb/daftar');
+  const registration = render(createElement(PpdbProvider, null, createElement(RegisterPage)), '/spmb/daftar');
   assert.ok(registration.includes('Create a New Account'));
   assert.ok(registration.includes('Preferred Study Program'));
   assert.ok(registration.includes('Back to Home'));

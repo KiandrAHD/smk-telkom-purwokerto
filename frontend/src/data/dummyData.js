@@ -121,7 +121,7 @@ export const navLinks = [
 // ditulis ulang di tiga tempat dan berisiko beda sendiri saat diubah.
 // Tujuannya halaman masuk portal, bukan laman info /ppdb — di sana sudah ada
 // tautan "Daftar Akun Baru" untuk pendaftar yang belum punya akun.
-export const ctaMasukPpdb = { label: 'Masuk SPMB', href: '/ppdb/masuk' };
+export const ctaMasukPpdb = { label: 'Masuk SPMB', href: '/spmb/masuk' };
 
 export const landingHero = {
   hashtag: '#DigitalSmartSchool',
@@ -142,7 +142,7 @@ export const quickLinks = [
     title: 'SPMB',
     desc: 'Informasi pendaftaran siswa baru tahun ajaran 2026/2027',
     linkLabel: 'Daftar Sekarang',
-    href: '/ppdb',
+    href: '/spmb',
   },
   {
     icon: 'bot',
@@ -334,7 +334,7 @@ export const ctaBanner = {
   title: 'Sudah Menemukan Jurusan yang Tepat?',
   description: 'Daftarkan dirimu sekarang dan mulai langkah pertama menuju masa depanmu!',
   ctaText: 'Daftar SPMB Sekarang',
-  href: '/ppdb',
+  href: '/spmb',
 };
 
 /* =========================================================
@@ -518,7 +518,7 @@ export const footerData = {
   informasi: [
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
-    { label: 'SPMB', href: '/ppdb' },
+    { label: 'SPMB', href: '/spmb' },
     { label: 'STELA AI', href: '/stela' },
     { label: 'NextTel AI', href: '/nexttel' },
   ],
@@ -1067,7 +1067,7 @@ export const ppdbBanner = {
   description:
     'Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 telah resmi dibuka, Segera daftar dan bergabung bersama kami',
   ctaText: '20 Mei 2026',
-  href: '/ppdb',
+  href: '/spmb',
 };
 
 export const infoPenting = {
@@ -1910,7 +1910,7 @@ export const pengumumanDetail = [
     ],
     berkas: ['Rapor semester terakhir', 'Kartu keluarga', 'Akta kelahiran', 'Pas foto terbaru'],
     kontak: { nama: 'Panitia PPDB', detail: 'Ruang Tata Usaha, Senin-Jumat pukul 08.00-15.00' },
-    aksi: { label: 'Buka Laman PPDB', href: '/ppdb' },
+    aksi: { label: 'Buka Laman PPDB', href: '/spmb' },
   },
   {
     slug: 'ppdb-gelombang-1-dibuka',
@@ -1940,7 +1940,7 @@ export const pengumumanDetail = [
     ],
     berkas: ['Rapor semester 1-5', 'Kartu keluarga', 'Surat keterangan siswa', 'Pas foto terbaru'],
     kontak: { nama: 'Panitia PPDB', detail: 'Ruang Tata Usaha, Senin-Jumat pukul 08.00-15.00' },
-    aksi: { label: 'Buka Laman PPDB', href: '/ppdb' },
+    aksi: { label: 'Buka Laman PPDB', href: '/spmb' },
   },
   {
     slug: 'jadwal-ujian-tengah-semester',
@@ -2319,7 +2319,7 @@ export const adminSekolah = {
 // tetap bebas dari impor komponen.
 export const adminMenu = [
   { label: 'Dashboard', to: '/dashboard', icon: 'dashboard', end: true },
-  { label: 'Manajemen PPDB', to: '/dashboard/ppdb', icon: 'ppdb' },
+  { label: 'Manajemen SPMB', to: '/dashboard/spmb', icon: 'ppdb' },
   { label: 'Jurusan', to: '/dashboard/jurusan', icon: 'jurusan' },
   { label: 'Prestasi', to: '/dashboard/prestasi', icon: 'prestasi' },
   { label: 'BKK', to: '/dashboard/bkk', icon: 'bkk' },
@@ -2681,9 +2681,9 @@ export const ppdbDokumen = [
 // sendiri untuk tahap akun ("Langkah 1 dari 2"), jadi indikator ini khusus
 // tahap portal dan tidak menabrak badge di halaman Daftar/Verifikasi.
 export const ppdbLangkahPortal = [
-  { id: 'formulir', label: 'Biodata & Nilai', to: '/ppdb/formulir' },
-  { id: 'berkas', label: 'Unggah Berkas', to: '/ppdb/berkas' },
-  { id: 'selesai', label: 'Selesai', to: '/ppdb/selesai' },
+  { id: 'formulir', label: 'Biodata & Nilai', to: '/spmb/formulir' },
+  { id: 'berkas', label: 'Unggah Berkas', to: '/spmb/berkas' },
+  { id: 'selesai', label: 'Selesai', to: '/spmb/selesai' },
 ];
 
 export const ppdbSukses = {
@@ -3335,7 +3335,7 @@ export const perbandinganLengkap = {
     'Tingkat kesulitan bukan ukuran mana yang lebih baik. Jurusan yang paling tepat adalah yang paling dekat dengan hal yang membuatmu betah belajar.',
 };
 
-/* ── Ketentuan SPMB: /ketentuan-ppdb ── */
+/* ── Ketentuan SPMB: /ketentuan-spmb ── */
 export const ketentuanPpdb = {
   eyebrow: 'Dokumen Resmi',
   title: 'Ketentuan SPMB SMK Telkom Purwokerto',
@@ -3407,7 +3407,7 @@ export const lupaSandi = {
   ],
 };
 
-/* ── Dokumen peserta: /ppdb/dokumen-peserta ── */
+/* ── Dokumen peserta: /spmb/dokumen-peserta ── */
 export const dokumenPeserta = {
   eyebrow: 'Berkas Peserta',
   title: 'Dokumen Peserta SPMB',

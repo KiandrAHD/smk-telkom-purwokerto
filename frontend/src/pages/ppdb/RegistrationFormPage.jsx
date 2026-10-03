@@ -32,7 +32,7 @@ const RegistrationFormPage = () => {
   // kolom kosong pertama sebelum fungsi ini jalan.
   const kirim = (e) => {
     e.preventDefault();
-    navigate('/ppdb/berkas');
+    navigate('/spmb/berkas');
   };
 
   const simpan = async () => {
@@ -226,7 +226,7 @@ const RegistrationFormPage = () => {
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-dark-100 pt-6">
           <Link
-            to="/ppdb/masuk"
+            to="/spmb/masuk"
             className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary"
           >{t("← Batal & Kembali")} </Link>
 

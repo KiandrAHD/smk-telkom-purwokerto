@@ -63,7 +63,7 @@ const PengaturanPage = () => {
             {tab === adminTabPengaturan[2] && (
               <div className="mt-6 space-y-5">
                 <FormInput label="Tahun Ajaran" value={pengaturanUmum.tahunAjaran} disabled readOnly />
-                <FormInput label="Status PPDB" value={pengaturanUmum.statusPpdb} disabled readOnly />
+                <FormInput label="Status SPMB" value={pengaturanUmum.statusPpdb} disabled readOnly />
                 <FormInput label="Berita per Halaman" value={pengaturanUmum.beritaPerHalaman} disabled readOnly />
               </div>
             )}

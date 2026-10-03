@@ -123,7 +123,7 @@ const DokumenPesertaPage = () => {
           </Reveal>
 
           <Link
-            to="/ppdb/selesai"
+            to="/spmb/selesai"
             className="inline-flex items-center gap-2 text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary"
           >
             <ArrowLeft className="h-3.5 w-3.5" />{t("Kembali ke Status Pendaftaran")} </Link>
