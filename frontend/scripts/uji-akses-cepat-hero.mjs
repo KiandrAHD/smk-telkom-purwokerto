@@ -13,7 +13,7 @@ const quickLinks = data.match(/export const quickLinks = \[([\s\S]*?)\n\];/)?.[1
 const expectedLinks = [
   ['SPMB', '/spmb'],
   ['STELA AI', '/stela'],
-  ['NextTel AI', '/nexttel'],
+  ['NextTel', '/nexttel'],
 ];
 
 for (const [title, href] of expectedLinks) {

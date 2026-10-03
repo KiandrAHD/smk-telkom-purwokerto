@@ -147,7 +147,7 @@ export const quickLinks = [
   },
   {
     icon: 'sparkles',
-    title: 'NextTel AI',
+    title: 'NextTel',
     desc: 'Temukan jurusan yang sesuai dengan minat dan bakatmu',
     linkLabel: 'Cari Jurusanmu',
     href: '/nexttel',
@@ -504,7 +504,7 @@ export const footerData = {
     { label: 'Pengumuman', href: '/pengumuman' },
     { label: 'SPMB', href: '/spmb' },
     { label: 'STELA AI', href: '/stela' },
-    { label: 'NextTel AI', href: '/nexttel' },
+    { label: 'NextTel', href: '/nexttel' },
   ],
   kontak: {
     // Alamat lengkap resmi. Nilai ini juga dipakai Footer.jsx untuk menyusun
