@@ -53,9 +53,9 @@ const AboutSection = () => {
                 key={badge.title}
                 className={`${badgeDelays[index % badgeDelays.length]} flex min-w-0 items-center gap-3 rounded-2xl border border-dark-100 bg-white p-4 text-left`}
               >
-                {index === 0 && <span aria-hidden="true" className="relative h-16 w-16 shrink-0">
-                  <img src={accreditation} alt="" width="100" height="100" className="absolute inset-0 h-full w-full" />
-                  <img src={accreditationOverlay} alt="" width="91" height="91" className="absolute left-[5%] top-[4%] h-[91%] w-[91%]" />
+                {index === 0 && <span aria-hidden="true" className="relative h-16 w-16 shrink-0 rounded-xl bg-primary">
+                  <img src={accreditation} alt="" width="100" height="100" className="absolute left-[12%] top-[12%] h-[76%] w-[76%] object-contain" />
+                  <img src={accreditationOverlay} alt="" width="91" height="91" className="absolute left-[15.8%] top-[15.04%] h-[69.16%] w-[69.16%] object-contain" />
                 </span>}
                 {index > 0 && <span aria-hidden="true" className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary p-3">
                   <img src={[facilitiesIcon, teacherIcon, curriculumIcon][index - 1]} alt="" width="40" height="40" className="h-10 w-10 object-contain" />
