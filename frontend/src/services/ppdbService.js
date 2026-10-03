@@ -7,7 +7,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const COMBINED_DOCUMENT_TYPES = ['application/pdf'];
 const EMAIL_CONFIRM_REDIRECT = () => `${window.location.origin}/auth/confirm?next=/ppdb/verifikasi`;
-export const DUPLICATE_SUBMISSION_MESSAGE = 'Anda sudah memiliki pendaftaran PPDB. Silakan melihat status pendaftaran Anda.';
+export const DUPLICATE_SUBMISSION_MESSAGE = 'Anda sudah memiliki pendaftaran SPMB. Silakan melihat status pendaftaran Anda.';
 
 const throwIfError = ({ data, error }) => {
   if (error) throw error;
@@ -25,7 +25,7 @@ export async function submitPpdb(data) {
   const { data: userData, error: userError } = await client.auth.getUser();
   if (userError) throw userError;
   const user = userData?.user;
-  if (!user) throw new Error('Sesi PPDB tidak ditemukan. Silakan login kembali.');
+  if (!user) throw new Error('Sesi SPMB tidak ditemukan. Silakan login kembali.');
 
   const { data: existingSubmissions, error: existingError } = await client
     .from('ppdb')
@@ -99,7 +99,7 @@ export async function getMyPpdb() {
   const client = ensureSupabase();
   const { data: userData, error: userError } = await client.auth.getUser();
   if (userError) throw userError;
-  if (!userData?.user) throw new Error('Sesi PPDB tidak ditemukan. Silakan login kembali.');
+  if (!userData?.user) throw new Error('Sesi SPMB tidak ditemukan. Silakan login kembali.');
   return throwIfError(await client.from('ppdb').select(ppdbColumns).eq('auth_user_id', userData.user.id).order('created_at', { ascending: false }));
 }
 
@@ -122,7 +122,7 @@ export async function signUpPpdb(email, password, biodata) {
 
 export async function getMyPpdbDraft(userId) {
   const client = ensureSupabase();
-  if (!userId) throw new Error('Sesi PPDB tidak ditemukan.');
+  if (!userId) throw new Error('Sesi SPMB tidak ditemukan.');
   return throwIfError(await client.from('ppdb_drafts')
     .select('biodata,nilai')
     .eq('auth_user_id', userId)
@@ -133,7 +133,7 @@ export async function savePpdbDraft(biodata, nilai) {
   const client = ensureSupabase();
   const { data: { user }, error } = await client.auth.getUser();
   if (error) throw error;
-  if (!user) throw new Error('Sesi PPDB tidak ditemukan.');
+  if (!user) throw new Error('Sesi SPMB tidak ditemukan.');
   return throwIfError(await client.from('ppdb_drafts')
     .upsert({ auth_user_id: user.id, biodata, nilai, updated_at: new Date().toISOString() })
     .select('updated_at')

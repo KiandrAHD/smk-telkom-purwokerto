@@ -87,7 +87,7 @@ const SubmitSuccessPage = () => {
 
   const info = statusInfo[submission.status];
   if (!info) {
-    return <PpdbPortalLayout><div className="rounded-2xl border border-primary-200 bg-primary-50 p-8 text-center"><AlertCircle className="mx-auto h-8 w-8 text-primary" /><p role="alert" className="mt-3 text-sm font-semibold text-primary-800">{t("Status pendaftaran tidak dikenali. Silakan hubungi panitia PPDB.")}</p><button type="button" onClick={() => void fetchSubmission(true)} className="mt-4 rounded-full bg-primary px-4 py-2 text-xs font-bold text-white">{t("Coba Lagi")}</button></div></PpdbPortalLayout>;
+    return <PpdbPortalLayout><div className="rounded-2xl border border-primary-200 bg-primary-50 p-8 text-center"><AlertCircle className="mx-auto h-8 w-8 text-primary" /><p role="alert" className="mt-3 text-sm font-semibold text-primary-800">{t("Status pendaftaran tidak dikenali. Silakan hubungi panitia SPMB.")}</p><button type="button" onClick={() => void fetchSubmission(true)} className="mt-4 rounded-full bg-primary px-4 py-2 text-xs font-bold text-white">{t("Coba Lagi")}</button></div></PpdbPortalLayout>;
   }
   const StatusIcon = info.Icon;
   const nomor = submission.id || nomorRegistrasi || '-';
