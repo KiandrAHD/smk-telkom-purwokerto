@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
-import MainLayout from './layouts/MainLayout';
 import ContentSkeleton from './components/ContentSkeleton';
+const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 import { useLanguage } from './context/LanguageContext';
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
@@ -93,10 +93,11 @@ const LegacyProfileGuruRedirect = () => {
 const RouteLoading = () => {
   const { t } = useLanguage();
   const { pathname } = useLocation();
+  const loadingStatus = <div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>;
   if (/^\/(ppdb|dashboard|login|auth)(\/|$)/.test(pathname)) {
-    return <div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>;
+    return loadingStatus;
   }
-  return <MainLayout busy><section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><p role="status" className="text-sm text-dark-600">{t('Memuat halaman...')}</p><ContentSkeleton /></section></MainLayout>;
+  return <Suspense fallback={loadingStatus}><MainLayout busy><section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><p role="status" className="text-sm text-dark-600">{t('Memuat halaman...')}</p><ContentSkeleton /></section></MainLayout></Suspense>;
 };
 
 const App = () => {
