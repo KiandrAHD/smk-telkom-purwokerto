@@ -1,18 +1,22 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { formatPublicDate } from '../../utils/publicContent';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { kategoriBerita } from '../../data/dummyData';
 import ContentImage from '../ContentImage';
+import SearchResultStatus from '../SearchResultStatus';
 
 const BeritaKategoriSection = ({ items = [], children }) => {
   const { t, locale } = useLanguage();
 
-  const [chip, setChip] = useState('Semua');
-  const [query, setQuery] = useState('');
-  const [sort, setSort] = useState('terbaru');
-  const [shownCount, setShownCount] = useState(kategoriBerita.perPage);
+  const [params, setParams] = useSearchParams();
+  const chip = params.get('kategori') || 'Semua';
+  const query = params.get('q') || '';
+  const sort = params.get('sort') === 'terlama' ? 'terlama' : 'terbaru';
+  const count = Number(params.get('jumlah'));
+  const shownCount = Number.isSafeInteger(count) && count > 0
+    ? Math.max(kategoriBerita.perPage, Math.min(count, 10000)) : kategoriBerita.perPage;
   const sourceItems = items;
 
   // Chip dulu diambil dari daftar tetap sepuluh kategori (Prestasi, Sekolah,
@@ -46,9 +50,22 @@ const BeritaKategoriSection = ({ items = [], children }) => {
 
   // Setiap perubahan filter mengembalikan jumlah kartu ke halaman pertama,
   // supaya "Muat Lebih Banyak" tidak membawa sisa hitungan filter sebelumnya.
-  const applyFilter = (fn) => (value) => {
-    fn(value);
-    setShownCount(kategoriBerita.perPage);
+  const applyFilter = (key, value, defaultValue = '') => {
+    setParams((current) => {
+      const next = new URLSearchParams(current);
+      if (value === defaultValue) next.delete(key);
+      else next.set(key, value);
+      next.delete('jumlah');
+      return next;
+    }, { replace: true });
+  };
+  const setShownCount = (value) => {
+    setParams((current) => {
+      const next = new URLSearchParams(current);
+      if (value === kategoriBerita.perPage) next.delete('jumlah');
+      else next.set('jumlah', String(value));
+      return next;
+    }, { replace: true });
   };
 
   return (
@@ -65,7 +82,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
             <button
               key={c}
               type="button"
-              onClick={() => applyFilter(setChip)(c)}
+              onClick={() => applyFilter('kategori', c, 'Semua')}
               aria-pressed={chip === c}
               className={`rounded-full border px-3.5 py-1.5 text-[10px] font-semibold transition-colors ${
                 chip === c
@@ -83,7 +100,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
             <input
               type="search"
               value={query}
-              onChange={(e) => applyFilter(setQuery)(e.target.value)}
+              onChange={(e) => applyFilter('q', e.target.value)}
               placeholder={t(kategoriBerita.searchPlaceholder)}
               className="w-40 rounded-full border border-dark-200 py-1.5 pl-8 pr-3 text-[10px] text-dark-700 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
             />
@@ -93,7 +110,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
             <span className="sr-only">{t("Urutkan berita")}</span>
             <select
               value={sort}
-              onChange={(e) => applyFilter(setSort)(e.target.value)}
+              onChange={(e) => applyFilter('sort', e.target.value, 'terbaru')}
               className="rounded-full border border-dark-200 px-3 py-1.5 text-[10px] text-dark-600 outline-none transition-colors focus:border-primary"
             >
               {kategoriBerita.sortOptions.map((o) => (
@@ -129,7 +146,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
                   <h3 className="font-heading text-[11px] font-bold leading-snug text-dark-900">
                     {t(n.title)}
                   </h3>
-                  <p className="mt-1.5 text-[9px] text-dark-400">
+                  <p className="mt-1.5 text-xs text-dark-500">
                     {formatPublicDate(n.iso, {}, locale)} &nbsp;·&nbsp; {t(n.author)}
                   </p>
                   <p className="mt-1.5 text-[9px] leading-relaxed text-dark-500">{t(n.excerpt)}</p>
@@ -159,7 +176,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
 
           <button
             type="button"
-            onClick={() => setShownCount((c) => c + kategoriBerita.perPage)}
+            onClick={() => setShownCount(shownCount + kategoriBerita.perPage)}
             disabled={!hasMore}
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-primary"
           >
@@ -168,7 +185,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
 
           <button
             type="button"
-            onClick={() => setShownCount((c) => c + kategoriBerita.perPage)}
+            onClick={() => setShownCount(shownCount + kategoriBerita.perPage)}
             disabled={!hasMore}
             aria-label={t("Berita berikutnya")}
             className="relative text-primary transition-opacity before:absolute before:-inset-2 before:content-[''] disabled:opacity-30"
@@ -177,9 +194,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
           </button>
         </div>
 
-        <p className="mt-3 text-center text-[9px] text-dark-400">
-          {t('Menampilkan {shown} dari {total} berita', { shown: shown.length, total: matched.length })}
-        </p>
+        <SearchResultStatus className="mt-3 text-center text-xs text-dark-500" message={t('Menampilkan {shown} dari {total} berita', { shown: shown.length, total: matched.length })} />
       </div>
     </section>
     {/* Teruskan hasil yang terlihat tanpa menyimpan salinan state di halaman induk. */}

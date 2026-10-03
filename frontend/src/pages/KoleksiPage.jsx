@@ -107,6 +107,7 @@ const KoleksiPage = ({ jenis }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(Boolean(ambil));
   const [error, setError] = useState('');
+  const [requestVersion, setRequestVersion] = useState(0);
 
   useEffect(() => {
     if (!ambil) return undefined;
@@ -121,7 +122,7 @@ const KoleksiPage = ({ jenis }) => {
     };
     // ambil berasal dari registry statis dan tidak pernah berubah selama
     // komponen terpasang; jenis-lah yang menentukannya.
-  }, [ambil]);
+  }, [ambil, requestVersion]);
 
   if (!koleksi) return null;
 
@@ -150,6 +151,7 @@ const KoleksiPage = ({ jenis }) => {
             loading={loading}
             error={error}
             empty={!loading && !error && items.length === 0}
+            onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }}
             label={ambil.label}
           />
         </div>

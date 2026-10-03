@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
+import ContentSkeleton from './components/ContentSkeleton';
+const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 import { useLanguage } from './context/LanguageContext';
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
@@ -73,6 +75,9 @@ const PageMetadata = () => {
   const { pathname } = useLocation();
   useEffect(() => {
     const key = Object.keys(PAGE_META).find((path) => pathname === path || (['/dashboard', '/ppdb'].includes(path) && pathname.startsWith(`${path}/`)));
+    // DetailLayout sets the title when its asynchronously loaded item exists.
+    const collectionPaths = ['/pengumuman/populer', '/pengumuman/semua', '/pengumuman/timeline', '/pengumuman/informasi-penting', '/berita/trending', '/berita/agenda', '/prestasi/galeri', '/jurusan/faq', '/jurusan/perbandingan'];
+    if (!key && !collectionPaths.includes(pathname) && /^\/(berita|prestasi|jurusan|pengumuman)\/[^/]+$/.test(pathname)) return;
     const [title, description] = PAGE_META[key] || ['SMK Telkom Purwokerto', 'Website resmi SMK Telkom Purwokerto.'];
     document.title = t(title);
     document.querySelector('meta[name="description"]')?.setAttribute('content', t(description));
@@ -85,13 +90,22 @@ const LegacyProfileGuruRedirect = () => {
   return <Navigate to={`/profil-sekolah/guru/${slug}`} replace />;
 };
 
-const App = () => {
+const RouteLoading = () => {
   const { t } = useLanguage();
+  const { pathname } = useLocation();
+  const loadingStatus = <div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>;
+  if (/^\/(ppdb|dashboard|login|auth)(\/|$)/.test(pathname)) {
+    return loadingStatus;
+  }
+  return <Suspense fallback={loadingStatus}><MainLayout busy><section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><p role="status" className="text-sm text-dark-600">{t('Memuat halaman...')}</p><ContentSkeleton /></section></MainLayout></Suspense>;
+};
+
+const App = () => {
   return (
     <>
       <ScrollToTop />
       <PageMetadata />
-      <Suspense fallback={<div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>}>
+      <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/profil-sekolah" element={<ProfileSekolahPage />} />

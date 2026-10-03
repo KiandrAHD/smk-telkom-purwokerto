@@ -47,6 +47,10 @@ const LoginPage = () => {
           >
             <FormInput
               label={t("Alamat Email")}
+              type="email"
+              name="email"
+              inputMode="email"
+              autoComplete="username"
               wajib
               value={form.akun}
               onChange={ubah('akun')}
@@ -62,6 +66,8 @@ const LoginPage = () => {
               </div>
               <input
                 type="password"
+                name="password"
+                autoComplete="current-password"
                 value={form.sandi}
                 onChange={ubah('sandi')}
                 placeholder={t("Masukkan Kata Sandi")}

@@ -19,6 +19,7 @@ const GaleriPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [requestVersion, setRequestVersion] = useState(0);
   useEffect(() => {
     let active = true;
     getPublishedBerita()
@@ -26,7 +27,7 @@ const GaleriPage = () => {
       .catch(() => active && setError('Berita belum dapat dimuat. Silakan coba lagi nanti.'))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, []);
+  }, [requestVersion]);
   return (
   <MainLayout>
     <HalamanHeader
@@ -42,7 +43,7 @@ const GaleriPage = () => {
 
     <section className="bg-white px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <PublicDataState loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t('foto berita')} />
+        <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t('foto berita')} />
       </div>
       <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((foto, i) => (
