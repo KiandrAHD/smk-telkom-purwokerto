@@ -55,7 +55,6 @@ import ruangKelasDua from '../assets/tentang/fasilitas/ruang-kelas-2.jpeg';
 import ruangKelasSatu from '../assets/tentang/fasilitas/ruang-kelas-1.jpg';
 import heroEkstrakurikuler from '../assets/ekstrakurikuler/hero-ekstrakurikuler.webp';
 import kegiatanEkskul1 from '../assets/ekstrakurikuler/kegiatan-1.png';
-import kegiatanEkskul2 from '../assets/ekstrakurikuler/kegiatan-2.png';
 import kegiatanEkskul4 from '../assets/ekstrakurikuler/kegiatan-4.png';
 import organisasiMpk from '../assets/ekstrakurikuler/organisasi/mpk.jpg';
 import organisasiOsis from '../assets/ekstrakurikuler/organisasi/osis.jpg';
@@ -84,6 +83,7 @@ import fotoHandball from '../assets/ekstrakurikuler/kegiatan/handball.jpeg';
 import fotoPaduanSuara from '../assets/ekstrakurikuler/kegiatan/paduan-suara.jpeg';
 import fotoEnglishClub from '../assets/ekstrakurikuler/kegiatan/english-club.jpeg';
 import fotoWebTechnologies from '../assets/ekstrakurikuler/kegiatan/web-technologies.jpeg';
+import fotoBelaDiri from '../assets/ekstrakurikuler/kegiatan/bela-diri.jpeg';
 
 import logoTelkom from '../assets/landing/logo-telkom.png';
 import logoHuawei from '../assets/landing/logo-huawei.png';
@@ -281,14 +281,14 @@ export const ekstrakurikulerData = {
     { title: '3D Game Art (Animasi)', category: 'Prestasi', description: 'Kegiatan ini mengembangkan keterampilan membuat aset visual tiga dimensi dan animasi untuk gim. Siswa berlatih mengolah ide menjadi karakter atau objek digital.', focus: ['Dasar pemodelan 3D', 'Desain karakter', 'Animasi', 'Aset gim'], image: fotoGameArt3d },
     { title: 'Bulu Tangkis', category: 'Prestasi', description: 'Ekskul ini menjadi tempat siswa berlatih teknik dan strategi permainan bulu tangkis. Latihan membantu meningkatkan kebugaran, koordinasi, dan sportivitas.', focus: ['Servis dan pukulan', 'Gerak kaki', 'Strategi permainan', 'Sportivitas'], image: fotoBuluTangkis },
     { title: 'Voli', category: 'Prestasi', description: 'Siswa berlatih dasar permainan bola voli, strategi tim, dan komunikasi di lapangan. Kegiatan mendorong kebugaran serta sikap sportif.', focus: ['Passing', 'Servis', 'Kerja sama tim', 'Sportivitas'], image: fotoVoli },
-    { title: 'Bela Diri', category: 'Prestasi', description: 'Ekskul ini melatih kebugaran dan keterampilan dasar bela diri dalam suasana disiplin dan saling menghormati. Siswa juga belajar mengendalikan diri serta menjaga keselamatan saat berlatih.', focus: ['Teknik dasar', 'Kebugaran', 'Disiplin', 'Pengendalian diri'], image: kegiatanEkskul2 },
+    { title: 'Bela Diri', category: 'Prestasi', description: 'Ekskul ini melatih kebugaran dan keterampilan dasar bela diri dalam suasana disiplin dan saling menghormati. Siswa juga belajar mengendalikan diri serta menjaga keselamatan saat berlatih.', focus: ['Teknik dasar', 'Kebugaran', 'Disiplin', 'Pengendalian diri'], image: fotoBelaDiri },
     { title: 'Hand Ball/Bola Tangan', category: 'Prestasi', description: 'Siswa mengenal aturan dan teknik dasar permainan bola tangan serta berlatih menyusun strategi bersama tim. Kegiatan ini melatih koordinasi, kebugaran, dan kerja sama.', focus: ['Teknik melempar dan menangkap', 'Aturan permainan', 'Strategi tim', 'Kebugaran'], image: fotoHandball },
-    { title: 'English Club', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: fotoEnglishClub },
-    { title: 'Paduan Suara', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: fotoPaduanSuara },
-    { title: 'Seni Musik', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
-    { title: 'Seni Tari', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
-    { title: 'Fotografi dan Videografi', aliases: ['Photografi dan Vidiografi'], category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: '' },
-    { title: 'Musik Tradisional/Karawitan', category: 'Prestasi', description: 'Informasi kegiatan akan dilengkapi.', focus: [], image: penampilanMusik },
+    { title: 'English Club', category: 'Prestasi', description: 'Ekskul ini menjadi ruang bagi siswa untuk mengembangkan kemampuan bahasa Inggris melalui percakapan, diskusi, dan presentasi. Kegiatannya membangun kepercayaan diri untuk berkomunikasi dalam berbagai situasi.', focus: ['Percakapan bahasa Inggris', 'Pelafalan dan kosakata', 'Presentasi', 'Kepercayaan diri'], image: fotoEnglishClub },
+    { title: 'Paduan Suara', category: 'Prestasi', description: 'Siswa mengembangkan kemampuan bernyanyi bersama dengan memperhatikan teknik vokal, harmoni, dan kekompakan. Latihan membantu membangun kepekaan musikal, disiplin, dan kerja sama dalam kelompok.', focus: ['Teknik vokal', 'Harmoni suara', 'Interpretasi lagu', 'Kerja sama tim'], image: fotoPaduanSuara },
+    { title: 'Seni Musik', category: 'Prestasi', description: 'Ekskul ini menjadi wadah bagi siswa untuk mengeksplorasi musik dan mengembangkan keterampilan memainkan alat musik. Siswa belajar memahami ritme, melodi, dan ekspresi musikal melalui latihan bersama.', focus: ['Permainan alat musik', 'Ritme dan melodi', 'Ekspresi musikal', 'Kerja sama tim'], image: '' },
+    { title: 'Seni Tari', category: 'Prestasi', description: 'Siswa mengembangkan kemampuan menari melalui latihan gerak, irama, dan ekspresi. Kegiatan ini melatih koordinasi tubuh, kreativitas, serta kekompakan dalam menyusun dan menampilkan tarian.', focus: ['Teknik gerak tari', 'Irama dan ekspresi', 'Koreografi', 'Kerja sama tim'], image: '' },
+    { title: 'Fotografi dan Videografi', aliases: ['Photografi dan Vidiografi'], category: 'Prestasi', description: 'Ekskul ini mengenalkan cara menyampaikan cerita melalui foto dan video. Siswa mengembangkan keterampilan pengambilan gambar, komposisi, pencahayaan, dan penyuntingan untuk menghasilkan karya visual.', focus: ['Komposisi gambar', 'Pencahayaan', 'Pengambilan foto dan video', 'Penyuntingan visual'], image: '' },
+    { title: 'Musik Tradisional/Karawitan', category: 'Prestasi', description: 'Siswa mengenal seni musik tradisional dan mengembangkan kepekaan terhadap irama serta keselarasan permainan kelompok. Kegiatan ini menjadi ruang untuk menghargai budaya dan melatih keterampilan bermusik bersama.', focus: ['Pengenalan musik tradisional', 'Pola irama', 'Keselarasan permainan', 'Apresiasi budaya'], image: penampilanMusik },
     { title: 'Wirausaha', category: 'Sentra', description: 'Ekstrakurikuler Wirausaha di SMK Telkom Purwokerto secara resmi diwadahi melalui Sentra Kewirausahaan serta program inkubasi bisnis sekolah.', focus: ['Ide bisnis', 'Perencanaan usaha', 'Pemasaran', 'Pengelolaan keuangan dasar'], image: fotoWirausaha },
     { title: 'PIK-R', category: 'Sentra', description: 'PIK-R Satria adalah wadah resmi bagi siswa untuk saling berbagi, berkonsultasi, dan mendapatkan edukasi mengenai kehidupan remaja.', focus: ['Konseling sebaya', 'Komunikasi sehat', 'Perencanaan masa depan', 'Edukasi remaja'], image: organisasiPikRSatria },
     { title: 'ROHIS', category: 'Sentra', description: 'ROHIS SMK Telkom Purwokerto adalah organisasi keagamaan sekolah yang berfungsi sebagai pusat syiar Islam, pembinaan akhlak, serta pengembangan karakter religius siswa.', focus: ['Pembinaan akhlak', 'Kegiatan keagamaan', 'Kepemimpinan', 'Kepedulian sosial'], image: fotoRohis },
