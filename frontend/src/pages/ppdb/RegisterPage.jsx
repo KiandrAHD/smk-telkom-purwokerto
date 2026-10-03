@@ -35,7 +35,7 @@ const RegisterPage = () => {
     setMengirim(true);
     try {
       await signUpPpdb(biodata.email.trim(), sandi.kata, biodata);
-      navigate('/ppdb/verifikasi');
+      navigate('/spmb/verifikasi');
     } catch (error) {
       setGalat(error?.message?.includes('already registered')
         ? 'Email tersebut sudah terdaftar. Silakan masuk ke portal SPMB.'
@@ -136,7 +136,7 @@ const RegisterPage = () => {
                 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 accent-[color:var(--color-primary)]"
               />
               <span>{t("Saya menyatakan data di atas benar dan menyetujui")}{' '}
-                <Link to="/ketentuan-ppdb" className="font-semibold text-primary hover:underline">{t("Ketentuan SPMB SMK Telkom Purwokerto")} </Link>
+                <Link to="/ketentuan-spmb" className="font-semibold text-primary hover:underline">{t("Ketentuan SPMB SMK Telkom Purwokerto")} </Link>
               </span>
             </label>
 
@@ -156,7 +156,7 @@ const RegisterPage = () => {
             </button>
 
             <p className="text-center text-[11px] text-dark-500">{t("Sudah pernah mendaftar?")}{' '}
-              <Link to="/ppdb/masuk" className="font-heading font-bold text-primary hover:underline">{t("Masuk ke Portal SPMB")} </Link>
+              <Link to="/spmb/masuk" className="font-heading font-bold text-primary hover:underline">{t("Masuk ke Portal SPMB")} </Link>
             </p>
           </form>
         </div>

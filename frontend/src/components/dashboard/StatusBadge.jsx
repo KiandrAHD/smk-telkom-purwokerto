@@ -1,3 +1,5 @@
+import { formatAdmissionsText } from '../../utils/admissions';
+
 // Warna badge diturunkan dari isinya, bukan ditentukan satu per satu di tiap
 // halaman. Dengan begitu "Published" selalu hijau dan "Draft" selalu oranye di
 // mana pun ia muncul, dan halaman pemanggil cukup menulis <StatusBadge nilai={...} />.
@@ -22,6 +24,7 @@ const PETA = {
   Prestasi: 'merah',
   Kegiatan: 'biru',
   PPDB: 'oranye',
+  SPMB: 'oranye',
   BKK: 'ungu',
   // tingkat prestasi
   Nasional: 'merah',
@@ -40,7 +43,7 @@ const StatusBadge = ({ nilai, nada }) => (
       NADA[nada ?? PETA[nilai] ?? 'abu']
     }`}
   >
-    {nilai}
+    {formatAdmissionsText(nilai)}
   </span>
 );
 

@@ -23,3 +23,4 @@ jobs:
       - run: npm run performa:uji
       - run: node scripts/uji-bundle.mjs
       - run: npm run ppdb:uji
+      - run: node scripts/uji-spmb.mjs

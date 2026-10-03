@@ -43,7 +43,7 @@ const AturSandiPage = () => {
       <div className="mx-auto max-w-md rounded-3xl border border-dark-100 bg-white p-8 shadow-card sm:p-10">
         <h1 className="font-heading text-2xl font-extrabold text-dark-900">{t("Atur Kata Sandi Baru")}</h1>
         {success ? (
-          <div className="mt-6 space-y-2 text-sm"><p role="status" className="text-green-700">{t("Kata sandi diperbarui.")} <Link to="/ppdb/masuk" className="font-bold underline">{t("Masuk kembali")}</Link> {t("dengan kata sandi baru.")}</p>{error && <p role="alert" className="text-primary">{t(error)}</p>}</div>
+          <div className="mt-6 space-y-2 text-sm"><p role="status" className="text-green-700">{t("Kata sandi diperbarui.")} <Link to="/spmb/masuk" className="font-bold underline">{t("Masuk kembali")}</Link> {t("dengan kata sandi baru.")}</p>{error && <p role="alert" className="text-primary">{t(error)}</p>}</div>
         ) : authLoading ? (
           <p className="mt-6 text-sm text-dark-500">{t("Memeriksa tautan pemulihan...")}</p>
         ) : !currentUser ? (

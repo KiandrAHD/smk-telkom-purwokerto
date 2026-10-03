@@ -6,6 +6,7 @@ const STORAGE_BUCKET = 'ppdb-documents';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 const COMBINED_DOCUMENT_TYPES = ['application/pdf'];
+// Retain existing provider callback URLs; the app redirects them to SPMB.
 const EMAIL_CONFIRM_REDIRECT = () => `${window.location.origin}/auth/confirm?next=/ppdb/verifikasi`;
 export const DUPLICATE_SUBMISSION_MESSAGE = 'Anda sudah memiliki pendaftaran SPMB. Silakan melihat status pendaftaran Anda.';
 
@@ -198,7 +199,7 @@ export async function updatePpdbStatus(id, status, catatanAdmin) {
       message: error.message || 'No message',
     };
     console.error('PPDB update status failed:', details);
-    const diagnostic = new Error(`PPDB status update gagal. HTTP: ${details.httpStatus || 'unknown'}. Kode: ${details.code}. Pesan: ${details.message}.`);
+    const diagnostic = new Error(`SPMB status update gagal. HTTP: ${details.httpStatus || 'unknown'}. Kode: ${details.code}. Pesan: ${details.message}.`);
     diagnostic.code = error.code;
     throw diagnostic;
   }

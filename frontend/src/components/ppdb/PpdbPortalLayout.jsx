@@ -26,7 +26,7 @@ const PpdbPortalLayout = ({ children }) => {
     return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">{t(authLoading ? 'Memeriksa sesi SPMB...' : 'Memuat draft pendaftaran...')}</div>;
   }
 
-  if (!currentUser) return <Navigate to="/ppdb/masuk" replace />;
+  if (!currentUser) return <Navigate to="/spmb/masuk" replace />;
 
   return (
     <div className="flex min-h-screen flex-col bg-dark-50">

@@ -354,8 +354,8 @@ assert.ok(jawabanFaqCepat('what majors are available', 'en')?.includes('RPL'), '
 assert.ok(jawabanFaqCepat('jurusan apa saja', 'en')?.includes('Software Engineering'), 'FAQ Jurusan English');
 assert.ok(jawabanFaqCepat('apa itu bkk', 'id')?.includes('Bursa Kerja Khusus'), 'FAQ BKK Indonesian');
 assert.ok(jawabanFaqCepat('what is bkk', 'en')?.includes('Special Job Center'), 'FAQ BKK English');
-assert.ok(jawabanFaqCepat('cara daftar ppdb', 'id')?.includes('/ppdb'), 'FAQ PPDB Indonesian');
-assert.ok(jawabanFaqCepat('how to apply ppdb', 'en')?.includes('/ppdb'), 'FAQ PPDB English');
+assert.ok(jawabanFaqCepat('cara daftar ppdb', 'id')?.includes('/spmb'), 'FAQ PPDB Indonesian');
+assert.ok(jawabanFaqCepat('how to apply ppdb', 'en')?.includes('/spmb'), 'FAQ PPDB English');
 
 // Security: prompt injection tetap ditolak
 assert.ok(topikDiizinkan([{ content: 'Jurusan apa saja?' }]) === true);

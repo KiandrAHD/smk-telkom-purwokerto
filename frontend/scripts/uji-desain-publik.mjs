@@ -35,7 +35,7 @@ try {
       assert.ok(markup.includes(escaped), `${language}: complete example message must be readable.`);
     }
     const cta = render(createElement(CTA));
-    assert.match(cta, /href="\/ppdb"/);
+    assert.match(cta, /href="\/spmb"/);
     const department = render(createElement(Department, { icon: 'code', name: 'Rekayasa Perangkat Lunak', desc: 'Program keahlian', image: '/test.webp', slug: 'rpl' }));
     assert.match(department, /href="\/jurusan\/rpl"/);
   }

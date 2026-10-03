@@ -66,7 +66,7 @@ const UploadDocumentsPage = () => {
     try {
       const hasil = await submitPpdb({ biodata, nilai, dokumen: berkas });
       kirimPendaftaran(hasil.id);
-      navigate('/ppdb/selesai');
+      navigate('/spmb/selesai');
     } catch (error) {
       if (error?.code === 'PPDB_DUPLICATE_SUBMISSION' || error?.message === DUPLICATE_SUBMISSION_MESSAGE) {
         setDuplikat(true);
@@ -87,9 +87,9 @@ const UploadDocumentsPage = () => {
       <p className="mt-1.5 text-xs text-dark-500">{t("Gabungkan dokumen persyaratan menjadi satu file PDF sebelum diunggah. Ukuran maksimal 10MB.")}</p>
       <div className="mt-6 rounded-2xl border border-dark-100 bg-white p-5 shadow-card sm:p-6">
         <BarisDokumen berkas={dokumen.utama} onPilih={pilihBerkas} />
-         {galat && <div className="motion-feedback mt-5 rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800"><p role="alert">{t(galat)}</p>{duplikat && <Link to="/ppdb/status" className="mt-2 inline-block font-bold underline hover:text-primary-900">{t("Lihat Status Pendaftaran")}</Link>}</div>}
+         {galat && <div className="motion-feedback mt-5 rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800"><p role="alert">{t(galat)}</p>{duplikat && <Link to="/spmb/status" className="mt-2 inline-block font-bold underline hover:text-primary-900">{t("Lihat Status Pendaftaran")}</Link>}</div>}
         <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-dark-100 pt-6">
-          <Link to="/ppdb/formulir" className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary">{t("← Kembali ke Data Akademik")}</Link>
+          <Link to="/spmb/formulir" className="text-[11px] font-semibold text-dark-500 transition-colors hover:text-primary">{t("← Kembali ke Data Akademik")}</Link>
           <button type="button" onClick={kirim} disabled={mengirim} className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
             {t(mengirim ? 'Mengirim...' : 'Finalisasi & Kirim Pendaftaran')}
             <ArrowRight className="h-4 w-4" />

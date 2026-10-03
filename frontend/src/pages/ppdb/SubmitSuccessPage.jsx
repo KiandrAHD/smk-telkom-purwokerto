@@ -82,7 +82,7 @@ const SubmitSuccessPage = () => {
   }
 
   if (!submission) {
-    return <PpdbPortalLayout><div className="rounded-2xl border border-dashed border-dark-300 bg-white p-10 text-center shadow-card"><AlertCircle className="mx-auto h-10 w-10 text-dark-300" /><h1 className="mt-4 font-heading text-base font-bold text-dark-900">{t("Pendaftaran belum ditemukan.")}</h1><p className="mt-2 text-xs text-dark-500">{t("Silakan lengkapi formulir sebelum melihat halaman ini.")}</p><Link to="/ppdb/formulir" className="mt-5 inline-flex rounded-full bg-primary px-5 py-3 text-xs font-bold text-white">{t("Mulai Pendaftaran")}</Link></div></PpdbPortalLayout>;
+    return <PpdbPortalLayout><div className="rounded-2xl border border-dashed border-dark-300 bg-white p-10 text-center shadow-card"><AlertCircle className="mx-auto h-10 w-10 text-dark-300" /><h1 className="mt-4 font-heading text-base font-bold text-dark-900">{t("Pendaftaran belum ditemukan.")}</h1><p className="mt-2 text-xs text-dark-500">{t("Silakan lengkapi formulir sebelum melihat halaman ini.")}</p><Link to="/spmb/formulir" className="mt-5 inline-flex rounded-full bg-primary px-5 py-3 text-xs font-bold text-white">{t("Mulai Pendaftaran")}</Link></div></PpdbPortalLayout>;
   }
 
   const info = statusInfo[submission.status];
@@ -91,7 +91,7 @@ const SubmitSuccessPage = () => {
   }
   const StatusIcon = info.Icon;
   const nomor = submission.id || nomorRegistrasi || '-';
-  const whatsapp = buatLinkFlexBox('status', { nama: submission.nama_lengkap, email: currentUser?.email || submission.email, nomorPendaftaran: nomor, halaman: '/ppdb/selesai' });
+  const whatsapp = buatLinkFlexBox('status', { nama: submission.nama_lengkap, email: currentUser?.email || submission.email, nomorPendaftaran: nomor, halaman: '/spmb/selesai' });
   const statusColor = info.className.includes('green') ? 'text-green-600' : info.className.includes('red') ? 'text-red-600' : info.className.includes('blue') ? 'text-blue-600' : 'text-orange-600';
 
   return (
@@ -109,7 +109,7 @@ const SubmitSuccessPage = () => {
 
       <div className="mt-6 rounded-2xl border border-dark-100 bg-white p-6 shadow-card">
         <h2 className="font-heading text-sm font-extrabold text-dark-900">{t(ppdbSukses.langkahJudul)}</h2>
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">{ppdbSukses.langkah.map((langkah) => { const Ikon = ikonLangkah[langkah.icon] ?? Printer; return <Link key={langkah.judul} to="/ppdb/dokumen-peserta" className="group flex items-center gap-4 rounded-xl border border-dark-100 px-5 py-4 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-card"><span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary"><Ikon className="h-4 w-4" /></span><span className="min-w-0"><span className="block font-heading text-xs font-bold text-dark-900">{t(langkah.judul)}</span><span className="mt-0.5 block text-[11px] text-dark-500">{t(langkah.deskripsi)}</span></span><ArrowRight className="ml-auto h-4 w-4 flex-shrink-0 text-dark-300 transition-colors group-hover:text-primary" /></Link>; })}</div>
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">{ppdbSukses.langkah.map((langkah) => { const Ikon = ikonLangkah[langkah.icon] ?? Printer; return <Link key={langkah.judul} to="/spmb/dokumen-peserta" className="group flex items-center gap-4 rounded-xl border border-dark-100 px-5 py-4 transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-card"><span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary"><Ikon className="h-4 w-4" /></span><span className="min-w-0"><span className="block font-heading text-xs font-bold text-dark-900">{t(langkah.judul)}</span><span className="mt-0.5 block text-[11px] text-dark-500">{t(langkah.deskripsi)}</span></span><ArrowRight className="ml-auto h-4 w-4 flex-shrink-0 text-dark-300 transition-colors group-hover:text-primary" /></Link>; })}</div>
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-dark-100 pt-5"><p className="flex items-center gap-3 text-[11px] text-dark-500"><img src={maskot} alt="" aria-hidden="true" className="h-9 w-9 flex-shrink-0 object-contain" />{t(ppdbSukses.bantuanTeks)}</p><a href={whatsapp} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 font-heading text-[11px] font-bold text-primary hover:underline">{t(ppdbSukses.bantuanCta)}<ArrowRight className="h-3.5 w-3.5" /></a></div>
       </div>
     </PpdbPortalLayout>

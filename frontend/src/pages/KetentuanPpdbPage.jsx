@@ -43,7 +43,7 @@ const KetentuanPpdbPage = () => {
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-primary px-6 py-5 text-white">
           <p className="text-xs">{t(ketentuanPpdb.kontakTeks)}</p>
           <a
-            href={buatLinkFlexBox('ppdb', { halaman: '/ketentuan-ppdb' })}
+            href={buatLinkFlexBox('ppdb', { halaman: '/ketentuan-spmb' })}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-[11px] font-bold text-primary transition-transform hover:-translate-y-0.5"

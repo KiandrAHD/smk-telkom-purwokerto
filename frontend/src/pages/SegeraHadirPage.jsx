@@ -11,7 +11,7 @@ import MainLayout from '../layouts/MainLayout';
 // Singkatan yang muncul di URL ditulis kapital penuh, supaya judulnya terbaca
 // "RPL" dan "Kembali ke BKK", bukan "Rpl" dan "Kembali ke Bkk".
 const AKRONIM = new Set([
-  'rpl', 'pg', 'tkj', 'tjat', 'bkk', 'ppdb', 'pkl', 'faq', 'lks',
+  'rpl', 'pg', 'tkj', 'tjat', 'bkk', 'spmb', 'ppdb', 'pkl', 'faq', 'lks',
   'iot', 'ict', 'ai', 'ui', 'ux', 'cv', 'it', 'mou', 'kri',
 ]);
 

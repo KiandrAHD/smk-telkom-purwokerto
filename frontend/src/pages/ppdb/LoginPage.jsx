@@ -24,7 +24,7 @@ const LoginPage = () => {
     try {
       await signInPpdb(form.akun.trim(), form.sandi);
       const submissions = await getMyPpdb();
-      navigate(submissions.length ? '/ppdb/status' : '/ppdb/formulir');
+      navigate(submissions.length ? '/spmb/status' : '/spmb/formulir');
     } catch {
       setGalat('Email atau kata sandi tidak valid.');
     } finally {
@@ -89,7 +89,7 @@ const LoginPage = () => {
             </button>
 
             <p className="text-center text-[11px] text-dark-500">{t("Belum memiliki akun SPMB?")}{' '}
-              <Link to="/ppdb/daftar" className="font-heading font-bold text-primary hover:underline">{t("Daftar Akun Baru")} </Link>
+              <Link to="/spmb/daftar" className="font-heading font-bold text-primary hover:underline">{t("Daftar Akun Baru")} </Link>
             </p>
           </form>
         </div>

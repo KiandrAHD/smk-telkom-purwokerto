@@ -31,7 +31,7 @@ const JurusanHeroSection = () => {
             </p>
 
             <Link
-              to="/ppdb"
+              to="/spmb"
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
             >
               {t(jurusanHero.ctaText)}

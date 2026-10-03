@@ -99,7 +99,7 @@ const JurusanDetailKonten = ({ item }) => {
       <div className="mt-9 flex flex-col items-start gap-4 rounded-2xl bg-primary px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-heading text-sm font-extrabold text-white">{t('Tertarik masuk {program}?', { program: t(item.title) })}</p>
         <Link
-          to="/ppdb"
+          to="/spmb"
           className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold text-primary transition-colors hover:bg-primary-50"
         >{t("Daftar SPMB")} <ArrowRight className="h-3.5 w-3.5" />
         </Link>
