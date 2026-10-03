@@ -49,7 +49,7 @@ const ActivityCard = ({ item, onOpen }) => {
         src={item.image}
         alt={t('Kegiatan {title}', { title: t(item.title) })}
         loading="lazy"
-        className="h-full w-full object-cover"
+        className={`h-full w-full object-cover ${item.imageClassName ?? ''}`}
       />
     </div>
     <div className="flex min-h-0 flex-1 flex-col px-4 pb-4 pt-4">
@@ -123,7 +123,7 @@ const ActivityDetailDialog = ({ item, onClose, returnFocusRef }) => {
       className="motion-dialog m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-3xl border border-dark-200 bg-white p-0 backdrop:bg-dark-900/70"
     >
       <div data-lenis-prevent className="relative max-h-[90dvh] overflow-y-auto overscroll-contain">
-        <ContentImage src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className="aspect-[16/7] w-full object-cover" />
+        <ContentImage src={item.image} alt={t('Kegiatan {title}', { title: t(item.title) })} className={`aspect-[16/7] w-full object-cover ${item.imageClassName ?? ''}`} />
         <button
           type="button"
           onClick={() => dialogRef.current?.close()}
