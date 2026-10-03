@@ -1,0 +1,977 @@
+{
+  "baselineHead": "3b3a4e4420e495449ba4c83c413d7f68c4b27ff5",
+  "implementationHead": "b6117cc8bc1e669cf8c56b7c224de24984b5297c",
+  "branch": "feat/telkom-public-design",
+  "scope": "E1-E4 ID local production; E5/E6 conditional and not implemented",
+  "baseline": {
+    "mobile": {
+      "score": 68,
+      "metrics": {
+        "first-contentful-paint": 2590.2875000000004,
+        "largest-contentful-paint": 7414.247999999999,
+        "speed-index": 3450.6394739799384,
+        "total-blocking-time": 218.99999999999955,
+        "cumulative-layout-shift": 0
+      },
+      "scoreRange": [
+        59,
+        70
+      ],
+      "lcpRange": [
+        7299.635999999997,
+        8156.542289999997
+      ]
+    },
+    "desktop": {
+      "score": 91,
+      "metrics": {
+        "first-contentful-paint": 666.584,
+        "largest-contentful-paint": 1805.9537050000008,
+        "speed-index": 1299.4154478729115,
+        "total-blocking-time": 5.5,
+        "cumulative-layout-shift": 0
+      },
+      "scoreRange": [
+        90,
+        93
+      ],
+      "lcpRange": [
+        1562.6805500000005,
+        1880.724409999999
+      ]
+    }
+  },
+  "experiments": [
+    {
+      "name": "e1-hero",
+      "medians": {
+        "mobile": {
+          "score": 68,
+          "metrics": {
+            "first-contentful-paint": 2644.22855,
+            "largest-contentful-paint": 7045.22725,
+            "speed-index": 3347.541509545978,
+            "total-blocking-time": 231.0000000000009,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            60,
+            68
+          ],
+          "lcpRange": [
+            7044.1218499999995,
+            8133.074095
+          ]
+        },
+        "desktop": {
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 678.5976250000001,
+            "largest-contentful-paint": 1497.0631999999998,
+            "speed-index": 1269.9481605790377,
+            "total-blocking-time": 3.5,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            91,
+            94
+          ],
+          "lcpRange": [
+            1469.4273749999998,
+            1711.7311000000004
+          ]
+        }
+      },
+      "runs": [
+        {
+          "mode": "mobile",
+          "n": 1,
+          "score": 68,
+          "metrics": {
+            "first-contentful-paint": 2578.721625,
+            "largest-contentful-paint": 7045.22725,
+            "speed-index": 3347.541509545978,
+            "total-blocking-time": 235,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 2,
+          "score": 60,
+          "metrics": {
+            "first-contentful-paint": 4254.5175,
+            "largest-contentful-paint": 8133.074095,
+            "speed-index": 5875.356935678659,
+            "total-blocking-time": 180.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 3,
+          "score": 68,
+          "metrics": {
+            "first-contentful-paint": 2644.22855,
+            "largest-contentful-paint": 7044.1218499999995,
+            "speed-index": 3331.681632015131,
+            "total-blocking-time": 231.0000000000009,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 1,
+          "score": 91,
+          "metrics": {
+            "first-contentful-paint": 792.4070499999998,
+            "largest-contentful-paint": 1711.7311000000004,
+            "speed-index": 1429.690422837287,
+            "total-blocking-time": 0,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 2,
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 669.1533499999999,
+            "largest-contentful-paint": 1497.0631999999998,
+            "speed-index": 1206.9064085197715,
+            "total-blocking-time": 3.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 3,
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 678.5976250000001,
+            "largest-contentful-paint": 1469.4273749999998,
+            "speed-index": 1269.9481605790377,
+            "total-blocking-time": 5.000000000000114,
+            "cumulative-layout-shift": 0.0002325090482274576
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        }
+      ],
+      "transfer": {
+        "mobile": {
+          "total": 1445693,
+          "image": 1010772,
+          "script": 335698
+        },
+        "desktop": {
+          "total": 2655997,
+          "image": 2221007,
+          "script": 335698
+        }
+      }
+    },
+    {
+      "name": "e1-poster",
+      "medians": {
+        "mobile": {
+          "score": 66,
+          "metrics": {
+            "first-contentful-paint": 2601.0238999999997,
+            "largest-contentful-paint": 6880.345399999998,
+            "speed-index": 3660.993552036454,
+            "total-blocking-time": 291.5,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            65,
+            67
+          ],
+          "lcpRange": [
+            6869.497075000001,
+            6881.497500000001
+          ]
+        },
+        "desktop": {
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 668.7189999999999,
+            "largest-contentful-paint": 1468.3532500000001,
+            "speed-index": 1248.3902529903935,
+            "total-blocking-time": 8.000000000000114,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            91,
+            94
+          ],
+          "lcpRange": [
+            1459.2665000000006,
+            1881.0761499999996
+          ]
+        }
+      },
+      "runs": [
+        {
+          "mode": "mobile",
+          "n": 1,
+          "score": 66,
+          "metrics": {
+            "first-contentful-paint": 2542.30835,
+            "largest-contentful-paint": 6880.345399999998,
+            "speed-index": 3517.3667403578484,
+            "total-blocking-time": 294.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 2,
+          "score": 67,
+          "metrics": {
+            "first-contentful-paint": 2601.0238999999997,
+            "largest-contentful-paint": 6869.497075000001,
+            "speed-index": 3660.993552036454,
+            "total-blocking-time": 238.50000000000045,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 3,
+          "score": 65,
+          "metrics": {
+            "first-contentful-paint": 2615.17875,
+            "largest-contentful-paint": 6881.497500000001,
+            "speed-index": 3667.252032976471,
+            "total-blocking-time": 291.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 1,
+          "score": 91,
+          "metrics": {
+            "first-contentful-paint": 647.62915,
+            "largest-contentful-paint": 1881.0761499999996,
+            "speed-index": 1248.3902529903935,
+            "total-blocking-time": 2.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 2,
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 699.7546250000003,
+            "largest-contentful-paint": 1468.3532500000001,
+            "speed-index": 1175.5786931604077,
+            "total-blocking-time": 8.000000000000114,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 3,
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 668.7189999999999,
+            "largest-contentful-paint": 1459.2665000000006,
+            "speed-index": 1256.1794826162395,
+            "total-blocking-time": 11.000000000000114,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "Siswa SMK Telkom Purwokerto"
+        }
+      ],
+      "transfer": {
+        "mobile": {
+          "total": 1367935,
+          "image": 932785,
+          "script": 335910
+        },
+        "desktop": {
+          "total": 2597501,
+          "image": 2162351,
+          "script": 335910
+        }
+      }
+    },
+    {
+      "name": "e2-font",
+      "medians": {
+        "mobile": {
+          "score": 73,
+          "metrics": {
+            "first-contentful-paint": 2240.70125,
+            "largest-contentful-paint": 6189.7380749999975,
+            "speed-index": 3159.45597196225,
+            "total-blocking-time": 118.50000000000045,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            73,
+            75
+          ],
+          "lcpRange": [
+            6176.051024999996,
+            6310.846500000001
+          ]
+        },
+        "desktop": {
+          "score": 93,
+          "metrics": {
+            "first-contentful-paint": 635.75285,
+            "largest-contentful-paint": 1701.8981600000006,
+            "speed-index": 1155.6458188659226,
+            "total-blocking-time": 6.5,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            92,
+            94
+          ],
+          "lcpRange": [
+            1578.1166749999998,
+            1733.2633450000008
+          ]
+        }
+      },
+      "runs": [
+        {
+          "mode": "mobile",
+          "n": 1,
+          "score": 73,
+          "metrics": {
+            "first-contentful-paint": 2376.99735,
+            "largest-contentful-paint": 6189.7380749999975,
+            "speed-index": 3154.0936995506354,
+            "total-blocking-time": 118.50000000000045,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 2,
+          "score": 73,
+          "metrics": {
+            "first-contentful-paint": 2240.70125,
+            "largest-contentful-paint": 6310.846500000001,
+            "speed-index": 3345.122005181429,
+            "total-blocking-time": 125,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 3,
+          "score": 75,
+          "metrics": {
+            "first-contentful-paint": 1981.1224499999998,
+            "largest-contentful-paint": 6176.051024999996,
+            "speed-index": 3159.45597196225,
+            "total-blocking-time": 111.49999999999955,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 1,
+          "score": 92,
+          "metrics": {
+            "first-contentful-paint": 635.75285,
+            "largest-contentful-paint": 1733.2633450000008,
+            "speed-index": 1168.4031387934774,
+            "total-blocking-time": 7.500000000000114,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 2,
+          "score": 93,
+          "metrics": {
+            "first-contentful-paint": 637.0382499999998,
+            "largest-contentful-paint": 1701.8981600000006,
+            "speed-index": 1155.4398653095811,
+            "total-blocking-time": 6.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 3,
+          "score": 94,
+          "metrics": {
+            "first-contentful-paint": 605.672375,
+            "largest-contentful-paint": 1578.1166749999998,
+            "speed-index": 1155.6458188659226,
+            "total-blocking-time": 3.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        }
+      ],
+      "transfer": {
+        "mobile": {
+          "total": 1368438,
+          "image": 932785,
+          "script": 335925
+        },
+        "desktop": {
+          "total": 2597998,
+          "image": 2162346,
+          "script": 335925
+        }
+      }
+    },
+    {
+      "name": "e3-partners",
+      "medians": {
+        "mobile": {
+          "score": 73,
+          "metrics": {
+            "first-contentful-paint": 2252.90875,
+            "largest-contentful-paint": 6065.779500000002,
+            "speed-index": 3268.3063048429303,
+            "total-blocking-time": 142.50000000000045,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            73,
+            75
+          ],
+          "lcpRange": [
+            5963.810725000001,
+            6084.8985
+          ]
+        },
+        "desktop": {
+          "score": 92,
+          "metrics": {
+            "first-contentful-paint": 572.62175,
+            "largest-contentful-paint": 1728.2164000000002,
+            "speed-index": 1174.4306807707953,
+            "total-blocking-time": 6.5,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            92,
+            92
+          ],
+          "lcpRange": [
+            1710.9186600000003,
+            1784.0213399999998
+          ]
+        }
+      },
+      "runs": [
+        {
+          "mode": "mobile",
+          "n": 1,
+          "score": 73,
+          "metrics": {
+            "first-contentful-paint": 2293.915375,
+            "largest-contentful-paint": 5963.810725000001,
+            "speed-index": 3319.2464430704476,
+            "total-blocking-time": 142.50000000000045,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 2,
+          "score": 73,
+          "metrics": {
+            "first-contentful-paint": 2252.90875,
+            "largest-contentful-paint": 6084.8985,
+            "speed-index": 3080.1770214836015,
+            "total-blocking-time": 146,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 3,
+          "score": 75,
+          "metrics": {
+            "first-contentful-paint": 1943.3035,
+            "largest-contentful-paint": 6065.779500000002,
+            "speed-index": 3268.3063048429303,
+            "total-blocking-time": 131,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 1,
+          "score": 92,
+          "metrics": {
+            "first-contentful-paint": 592.39255,
+            "largest-contentful-paint": 1728.2164000000002,
+            "speed-index": 1174.4306807707953,
+            "total-blocking-time": 3.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 2,
+          "score": 92,
+          "metrics": {
+            "first-contentful-paint": 569.558,
+            "largest-contentful-paint": 1784.0213399999998,
+            "speed-index": 1190.6711657323353,
+            "total-blocking-time": 8,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 3,
+          "score": 92,
+          "metrics": {
+            "first-contentful-paint": 572.62175,
+            "largest-contentful-paint": 1710.9186600000003,
+            "speed-index": 1172.540128034481,
+            "total-blocking-time": 6.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        }
+      ],
+      "transfer": {
+        "mobile": {
+          "total": 1053938,
+          "image": 618570,
+          "script": 335640
+        },
+        "desktop": {
+          "total": 2440218,
+          "image": 2004848,
+          "script": 335640
+        }
+      }
+    },
+    {
+      "name": "e4-data",
+      "medians": {
+        "mobile": {
+          "score": 78,
+          "metrics": {
+            "first-contentful-paint": 2220.059625,
+            "largest-contentful-paint": 4929.731900000001,
+            "speed-index": 3178.9578135615875,
+            "total-blocking-time": 36.5,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            77,
+            79
+          ],
+          "lcpRange": [
+            4875.120249999996,
+            5384.843100000002
+          ]
+        },
+        "desktop": {
+          "score": 97,
+          "metrics": {
+            "first-contentful-paint": 566.22955,
+            "largest-contentful-paint": 1235.1756499999997,
+            "speed-index": 1046.0691616383199,
+            "total-blocking-time": 0,
+            "cumulative-layout-shift": 0
+          },
+          "scoreRange": [
+            96,
+            97
+          ],
+          "lcpRange": [
+            1205.5696000000003,
+            1237.483725
+          ]
+        }
+      },
+      "runs": [
+        {
+          "mode": "mobile",
+          "n": 1,
+          "score": 79,
+          "metrics": {
+            "first-contentful-paint": 2009.4721499999996,
+            "largest-contentful-paint": 4875.120249999996,
+            "speed-index": 2996.996539860855,
+            "total-blocking-time": 148,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 2,
+          "score": 77,
+          "metrics": {
+            "first-contentful-paint": 2220.059625,
+            "largest-contentful-paint": 5384.843100000002,
+            "speed-index": 3178.9578135615875,
+            "total-blocking-time": 36.5,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "mobile",
+          "n": 3,
+          "score": 78,
+          "metrics": {
+            "first-contentful-paint": 2592.61595,
+            "largest-contentful-paint": 4929.731900000001,
+            "speed-index": 3202.873034359143,
+            "total-blocking-time": 34,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "SMK Telkom\nPurwokerto"
+        },
+        {
+          "mode": "desktop",
+          "n": 1,
+          "score": 97,
+          "metrics": {
+            "first-contentful-paint": 601.05855,
+            "largest-contentful-paint": 1235.1756499999997,
+            "speed-index": 1046.0691616383199,
+            "total-blocking-time": 1.9999999999998863,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 2,
+          "score": 97,
+          "metrics": {
+            "first-contentful-paint": 537.154,
+            "largest-contentful-paint": 1205.5696000000003,
+            "speed-index": 1040.6386458044476,
+            "total-blocking-time": 0,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        },
+        {
+          "mode": "desktop",
+          "n": 3,
+          "score": 96,
+          "metrics": {
+            "first-contentful-paint": 566.22955,
+            "largest-contentful-paint": 1237.483725,
+            "speed-index": 1086.7814176469446,
+            "total-blocking-time": 0,
+            "cumulative-layout-shift": 0
+          },
+          "warnings": [],
+          "error": null,
+          "lcp": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+        }
+      ],
+      "transfer": {
+        "mobile": {
+          "total": 994824,
+          "image": 618570,
+          "script": 279718
+        },
+        "desktop": {
+          "total": 1436388,
+          "image": 1060134,
+          "script": 279718
+        }
+      }
+    }
+  ],
+  "transferBaseline": {
+    "mobile": {
+      "total": 1499006,
+      "image": 1064216,
+      "script": 335565
+    },
+    "desktop": {
+      "total": 2694326,
+      "image": 2259451,
+      "script": 335565
+    }
+  },
+  "mobileTransferReductionPercent": 33.63442174347534,
+  "sourceIntegrity": {
+    "trackedTotal": 464,
+    "trackedChanges": [
+      "frontend/index.html",
+      "frontend/scripts/uji-performa.mjs",
+      "frontend/src/components/AboutSection.jsx",
+      "frontend/src/components/AchievementsSection.jsx",
+      "frontend/src/components/ContentSkeleton.jsx",
+      "frontend/src/components/HeroSection.jsx",
+      "frontend/src/components/PartnersSection.jsx",
+      "frontend/src/components/PublicDataState.jsx",
+      "frontend/src/components/VideoEmbed.jsx",
+      "frontend/src/index.css",
+      "frontend/vite.config.js"
+    ],
+    "unexpectedChanges": [],
+    "originalsPreserved": true
+  },
+  "browserChecks": {
+    "checks": [
+      {
+        "w": 390,
+        "dpr": 2,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-960-CnoVJd3p.webp",
+            "width": 332,
+            "height": 155.96875
+          },
+          "width": 390,
+          "documentWidth": 390
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 412,
+        "dpr": 1.75,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-640-C7qhLE3P.webp",
+            "width": 354,
+            "height": 166.296875
+          },
+          "width": 412,
+          "documentWidth": 412
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 768,
+        "dpr": 2,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-1440-AX_2OYWo.webp",
+            "width": 686,
+            "height": 322.265625
+          },
+          "width": 768,
+          "documentWidth": 768
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 1024,
+        "dpr": 1,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-640-C7qhLE3P.webp",
+            "width": 539.609375,
+            "height": 253.5
+          },
+          "width": 1024,
+          "documentWidth": 1024
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 1280,
+        "dpr": 1.5,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-1440-AX_2OYWo.webp",
+            "width": 764.125,
+            "height": 358.96875
+          },
+          "width": 1280,
+          "documentWidth": 1280
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 1440,
+        "dpr": 2,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+            "width": 764.125,
+            "height": 358.96875
+          },
+          "width": 1440,
+          "documentWidth": 1440
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 1536,
+        "dpr": 1.25,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-960-CnoVJd3p.webp",
+            "width": 764.125,
+            "height": 358.96875
+          },
+          "width": 1536,
+          "documentWidth": 1536
+        },
+        "startupScripts": 36,
+        "errors": []
+      },
+      {
+        "w": 1920,
+        "dpr": 1,
+        "geometry": {
+          "hero": {
+            "src": "http://127.0.0.1:5191/assets/hero-960-CnoVJd3p.webp",
+            "width": 764.125,
+            "height": 358.96875
+          },
+          "width": 1920,
+          "documentWidth": 1920
+        },
+        "startupScripts": 36,
+        "errors": []
+      }
+    ],
+    "anchorHistory": true,
+    "otherRoutes": 4,
+    "actualOsZoom": false
+  },
+  "achievementsChecks": [
+    {
+      "scenario": "success",
+      "calls": 1,
+      "passed": true
+    },
+    {
+      "scenario": "empty",
+      "calls": 1,
+      "passed": true
+    },
+    {
+      "scenario": "error",
+      "calls": 1,
+      "passed": true
+    },
+    {
+      "scenario": "slow",
+      "calls": 1,
+      "passed": true
+    },
+    {
+      "scenario": "no-observer",
+      "calls": 1,
+      "passed": true
+    },
+    {
+      "scenario": "import-error",
+      "calls": 0,
+      "passed": true
+    },
+    {
+      "scenario": "unmount",
+      "calls": 0,
+      "passed": true
+    },
+    {
+      "scenario": "full-app-anchor-history",
+      "passed": true
+    }
+  ],
+  "rawArtifacts": "D:/LombaTelkom/qa-output/performance-step5-2026-10-03",
+  "limitations": [
+    "Local laboratory simulated throttling; not deployment or field INP",
+    "Only ID Lighthouse series, not EN score",
+    "No actual Windows scaling change or physical TV test",
+    "LCP text render path remains; mobile target90 not reached"
+  ]
+}

@@ -1,0 +1,1571 @@
+{
+  "schemaVersion": 1,
+  "stage": 3,
+  "status": "completed-local-baseline",
+  "generatedAt": "2026-10-03T09:53:16.531Z",
+  "timezone": "Asia/Jakarta",
+  "target": {
+    "url": "http://127.0.0.1:5191/",
+    "page": "Beranda",
+    "language": "id",
+    "build": "Vite production build, served by vite preview",
+    "branch": "feat/telkom-public-design",
+    "head": "3b3a4e4420e495449ba4c83c413d7f68c4b27ff5",
+    "includesUncommittedChanges": true,
+    "entry": "index-DYhK2gRc.js",
+    "entryRawBytes": 460048,
+    "entrySha256": "83df579916b2ab1b977a36d61d731743783e8faaa3c9c34ce4649a032a053703",
+    "trackedPatchSha256": "8f3d2d2e91b500b8e5958219f52ddaf93bac01db1a9f16a947b7937798a24fee",
+    "preexistingModifiedFiles": [
+      "frontend/scripts/uji-arah-aksen.mjs",
+      "frontend/src/components/AboutSection.jsx",
+      "frontend/src/components/AchievementsSection.jsx",
+      "frontend/src/components/CTASection.jsx",
+      "frontend/src/components/DepartmentCard.jsx",
+      "frontend/src/components/DepartmentsSection.jsx",
+      "frontend/src/components/tentang/TentangAboutSection.jsx",
+      "frontend/src/components/tentang/TentangVisiMisiSection.jsx"
+    ]
+  },
+  "method": {
+    "tool": "Lighthouse",
+    "version": "13.5.0",
+    "chrome": "154.0.8037.97",
+    "host": "Windows / Intel Core i5-13420H",
+    "runsPerMode": 3,
+    "order": [
+      "mobile-1",
+      "desktop-1",
+      "mobile-2",
+      "desktop-2",
+      "mobile-3",
+      "desktop-3"
+    ],
+    "onlyCategory": "performance",
+    "coldBrowserStorage": true,
+    "newChromeProcessPerRun": true,
+    "throttlingMethod": "simulate",
+    "chromeFlags": "--headless --disable-gpu --no-first-run --no-default-browser-check",
+    "aggregation": "Independent median of each metric; all valid runs included."
+  },
+  "medians": {
+    "mobile": {
+      "score": 68,
+      "metrics": {
+        "first-contentful-paint": 2590.2875000000004,
+        "largest-contentful-paint": 7414.247999999999,
+        "speed-index": 3450.6394739799384,
+        "total-blocking-time": 218.99999999999955,
+        "cumulative-layout-shift": 0
+      },
+      "scoreRange": [
+        59,
+        70
+      ],
+      "lcpRange": [
+        7299.635999999997,
+        8156.542289999997
+      ]
+    },
+    "desktop": {
+      "score": 91,
+      "metrics": {
+        "first-contentful-paint": 666.584,
+        "largest-contentful-paint": 1805.9537050000008,
+        "speed-index": 1299.4154478729115,
+        "total-blocking-time": 5.5,
+        "cumulative-layout-shift": 0
+      },
+      "scoreRange": [
+        90,
+        93
+      ],
+      "lcpRange": [
+        1562.6805500000005,
+        1880.724409999999
+      ]
+    }
+  },
+  "sourceIntegrity": {
+    "time": "2026-10-03T09:48:10.378Z",
+    "checkedTrackedFiles": 461,
+    "changedTrackedFiles": [],
+    "headUnchanged": true,
+    "branchUnchanged": true,
+    "patchUnchanged": true,
+    "indexUnchanged": true,
+    "statusUnchanged": true,
+    "entrySha256": "83df579916b2ab1b977a36d61d731743783e8faaa3c9c34ce4649a032a053703",
+    "entryUnchanged": true
+  },
+  "deploymentObservation": {
+    "time": "2026-10-03T09:48:11.073Z",
+    "url": "https://smk-telkom-purwokerto.vercel.app/",
+    "status": 200,
+    "etag": "W/\"c6d88b0828941dd9c5ffd5756b18a1fc\"",
+    "cache": "HIT",
+    "entry": "index-j9KO-VtP.js",
+    "htmlSha256": "6edc6b8f2efc84b4a3ca480314ca3024f3c3ba170c64d20ac8a37f719f90ba5e",
+    "note": "Only HTML observed; deployment commit unknown, no online performance score measured."
+  },
+  "runs": [
+    {
+      "mode": "mobile",
+      "run": 1,
+      "fetchTime": "2026-10-03T09:40:03.394Z",
+      "score": 70,
+      "metrics": {
+        "first-contentful-paint": 2280.351125,
+        "largest-contentful-paint": 7299.635999999997,
+        "speed-index": 3450.6394739799384,
+        "total-blocking-time": 196.50000000000045,
+        "cumulative-layout-shift": 0
+      },
+      "settings": {
+        "formFactor": "mobile",
+        "screen": {
+          "mobile": true,
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 1.75,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 150,
+          "throughputKbps": 1638.4,
+          "requestLatencyMs": 562.5,
+          "downloadThroughputKbps": 1474.5600000000002,
+          "uploadThroughputKbps": 675,
+          "cpuSlowdownMultiplier": 4
+        },
+        "disableStorageReset": false
+      },
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "benchmarkIndex": 1935,
+        "credits": {}
+      },
+      "warnings": [],
+      "runtimeError": null,
+      "auditErrors": [],
+      "httpErrors": [],
+      "resources": [
+        {
+          "resourceType": "total",
+          "label": "Total",
+          "requestCount": 66,
+          "transferSize": 1499006
+        },
+        {
+          "resourceType": "image",
+          "label": "Image",
+          "requestCount": 19,
+          "transferSize": 1064216
+        },
+        {
+          "resourceType": "script",
+          "label": "Script",
+          "requestCount": 37,
+          "transferSize": 335565
+        },
+        {
+          "resourceType": "font",
+          "label": "Font",
+          "requestCount": 3,
+          "transferSize": 64182
+        },
+        {
+          "resourceType": "stylesheet",
+          "label": "Stylesheet",
+          "requestCount": 3,
+          "transferSize": 21327
+        },
+        {
+          "resourceType": "other",
+          "label": "Other",
+          "requestCount": 3,
+          "transferSize": 12823
+        },
+        {
+          "resourceType": "document",
+          "label": "Document",
+          "requestCount": 1,
+          "transferSize": 893
+        },
+        {
+          "resourceType": "media",
+          "label": "Media",
+          "requestCount": 0,
+          "transferSize": 0
+        },
+        {
+          "resourceType": "third-party",
+          "label": "Third-party",
+          "requestCount": 6,
+          "transferSize": 69261
+        }
+      ],
+      "lcpElement": {
+        "type": "node",
+        "lhId": "page-2-IMG",
+        "path": "1,HTML,1,BODY,0,DIV,0,DIV,2,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,IMG",
+        "selector": "div.max-w-7xl > div.relative > div.grid > img.w-full",
+        "boundingRect": {
+          "top": 536,
+          "bottom": 702,
+          "left": 29,
+          "right": 383,
+          "width": 354,
+          "height": 166
+        },
+        "snippet": "<img alt=\"Siswa SMK Telkom Purwokerto\" width=\"1920\" height=\"902\" fetchpriority=\"high\" class=\"w-full rounded-[1.75rem] object-contain\" src=\"/assets/header-jurusan-dDargCZq.webp\">",
+        "nodeLabel": "Siswa SMK Telkom Purwokerto"
+      },
+      "observedMetrics": {
+        "fcpMs": 231,
+        "lcpMs": 678
+      },
+      "observedLcpBreakdown": [
+        {
+          "subpart": "timeToFirstByte",
+          "label": "Time to first byte",
+          "duration": 22.37
+        },
+        {
+          "subpart": "resourceLoadDelay",
+          "label": "Resource load delay",
+          "duration": 304.329
+        },
+        {
+          "subpart": "resourceLoadDuration",
+          "label": "Resource load duration",
+          "duration": 3.666
+        },
+        {
+          "subpart": "elementRenderDelay",
+          "label": "Element render delay",
+          "duration": 347.814
+        }
+      ],
+      "lcpDiscovery": {
+        "priorityHinted": {
+          "label": "fetchpriority=high applied",
+          "value": true
+        },
+        "requestDiscoverable": {
+          "label": "Request is discoverable in initial document",
+          "value": false
+        },
+        "eagerlyLoaded": {
+          "label": "LCP resources should not use loading=lazy",
+          "value": true
+        }
+      },
+      "auditEstimates": {
+        "renderBlockingSavings": {
+          "FCP": 450,
+          "LCP": 0
+        },
+        "imageByteSavings": 689467,
+        "unusedJsBytes": 103235
+      },
+      "artifacts": [
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-1.report.json",
+          "sha256": "194e8c581a63d439cb1930ec07318e9edd5438f59621b0fa141f7ba15f941f02"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-1.report.html",
+          "sha256": "1d41a861397c4224e63df605149c5b0a6b60e75abfa2dde7e067ede951e20f21"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-1-0.trace.json",
+          "sha256": "570b285a050711f9bf3aff1aceab942caee3a2d31a674c9bef1f9fd6a9e5c7da"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-1-0.devtoolslog.json",
+          "sha256": "3441820e970d1780e1de4d95ac67f78ab7f30fcc7820a2ef398c68819b03d9f9"
+        }
+      ]
+    },
+    {
+      "mode": "mobile",
+      "run": 2,
+      "fetchTime": "2026-10-03T09:41:26.453Z",
+      "score": 59,
+      "metrics": {
+        "first-contentful-paint": 4171.1055,
+        "largest-contentful-paint": 8156.542289999997,
+        "speed-index": 4574.260457247792,
+        "total-blocking-time": 267,
+        "cumulative-layout-shift": 0
+      },
+      "settings": {
+        "formFactor": "mobile",
+        "screen": {
+          "mobile": true,
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 1.75,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 150,
+          "throughputKbps": 1638.4,
+          "requestLatencyMs": 562.5,
+          "downloadThroughputKbps": 1474.5600000000002,
+          "uploadThroughputKbps": 675,
+          "cpuSlowdownMultiplier": 4
+        },
+        "disableStorageReset": false
+      },
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "benchmarkIndex": 1913.5,
+        "credits": {}
+      },
+      "warnings": [],
+      "runtimeError": null,
+      "auditErrors": [],
+      "httpErrors": [],
+      "resources": [
+        {
+          "resourceType": "total",
+          "label": "Total",
+          "requestCount": 66,
+          "transferSize": 1499005
+        },
+        {
+          "resourceType": "image",
+          "label": "Image",
+          "requestCount": 19,
+          "transferSize": 1064216
+        },
+        {
+          "resourceType": "script",
+          "label": "Script",
+          "requestCount": 37,
+          "transferSize": 335565
+        },
+        {
+          "resourceType": "font",
+          "label": "Font",
+          "requestCount": 3,
+          "transferSize": 64182
+        },
+        {
+          "resourceType": "stylesheet",
+          "label": "Stylesheet",
+          "requestCount": 3,
+          "transferSize": 21327
+        },
+        {
+          "resourceType": "other",
+          "label": "Other",
+          "requestCount": 3,
+          "transferSize": 12822
+        },
+        {
+          "resourceType": "document",
+          "label": "Document",
+          "requestCount": 1,
+          "transferSize": 893
+        },
+        {
+          "resourceType": "media",
+          "label": "Media",
+          "requestCount": 0,
+          "transferSize": 0
+        },
+        {
+          "resourceType": "third-party",
+          "label": "Third-party",
+          "requestCount": 6,
+          "transferSize": 69260
+        }
+      ],
+      "lcpElement": {
+        "type": "node",
+        "lhId": "page-14-SPAN",
+        "path": "1,HTML,1,BODY,0,DIV,0,DIV,1,HEADER,0,NAV,0,DIV,0,A,1,SPAN",
+        "selector": "nav.max-w-7xl > div.flex > a.flex > span.font-heading",
+        "boundingRect": {
+          "top": 18,
+          "bottom": 46,
+          "left": 62,
+          "right": 145,
+          "width": 83,
+          "height": 29
+        },
+        "snippet": "<span class=\"font-heading font-extrabold text-dark-900 leading-[1.1] text-[13px] lg:tex…\">",
+        "nodeLabel": "SMK Telkom\nPurwokerto"
+      },
+      "observedMetrics": {
+        "fcpMs": 1224,
+        "lcpMs": 1224
+      },
+      "observedLcpBreakdown": [
+        {
+          "subpart": "timeToFirstByte",
+          "label": "Time to first byte",
+          "duration": 6.263
+        },
+        {
+          "subpart": "elementRenderDelay",
+          "label": "Element render delay",
+          "duration": 1217.946
+        }
+      ],
+      "lcpDiscovery": null,
+      "auditEstimates": {
+        "renderBlockingSavings": {
+          "FCP": 1350,
+          "LCP": 1350
+        },
+        "imageByteSavings": 689467,
+        "unusedJsBytes": 103253
+      },
+      "artifacts": [
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-2.report.json",
+          "sha256": "8863c8d9e0cbe0bdc77c2f42bd8f1e55fa3e6ff7c3c332a4620ff9081cedde66"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-2.report.html",
+          "sha256": "8904e02d436a985d5a5bfd6304f5e43a247c635472bef6ed17d0a1a176f6eb38"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-2-0.trace.json",
+          "sha256": "ed9f984f61351b8d86bff8c84243591ab34a0ddae8bed78dcc2b5c2fce91c9af"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-2-0.devtoolslog.json",
+          "sha256": "7b1cc8164de5a2f18d20cbd5d781d29ba9b7bcfa3fb231fb8015511c7e376716"
+        }
+      ]
+    },
+    {
+      "mode": "mobile",
+      "run": 3,
+      "fetchTime": "2026-10-03T09:42:14.044Z",
+      "score": 68,
+      "metrics": {
+        "first-contentful-paint": 2590.2875000000004,
+        "largest-contentful-paint": 7414.247999999999,
+        "speed-index": 3434.006490501093,
+        "total-blocking-time": 218.99999999999955,
+        "cumulative-layout-shift": 0
+      },
+      "settings": {
+        "formFactor": "mobile",
+        "screen": {
+          "mobile": true,
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 1.75,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 150,
+          "throughputKbps": 1638.4,
+          "requestLatencyMs": 562.5,
+          "downloadThroughputKbps": 1474.5600000000002,
+          "uploadThroughputKbps": 675,
+          "cpuSlowdownMultiplier": 4
+        },
+        "disableStorageReset": false
+      },
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "benchmarkIndex": 2111.5,
+        "credits": {}
+      },
+      "warnings": [],
+      "runtimeError": null,
+      "auditErrors": [],
+      "httpErrors": [],
+      "resources": [
+        {
+          "resourceType": "total",
+          "label": "Total",
+          "requestCount": 66,
+          "transferSize": 1499079
+        },
+        {
+          "resourceType": "image",
+          "label": "Image",
+          "requestCount": 19,
+          "transferSize": 1064216
+        },
+        {
+          "resourceType": "script",
+          "label": "Script",
+          "requestCount": 37,
+          "transferSize": 335565
+        },
+        {
+          "resourceType": "font",
+          "label": "Font",
+          "requestCount": 3,
+          "transferSize": 64181
+        },
+        {
+          "resourceType": "stylesheet",
+          "label": "Stylesheet",
+          "requestCount": 3,
+          "transferSize": 21318
+        },
+        {
+          "resourceType": "other",
+          "label": "Other",
+          "requestCount": 3,
+          "transferSize": 12906
+        },
+        {
+          "resourceType": "document",
+          "label": "Document",
+          "requestCount": 1,
+          "transferSize": 893
+        },
+        {
+          "resourceType": "media",
+          "label": "Media",
+          "requestCount": 0,
+          "transferSize": 0
+        },
+        {
+          "resourceType": "third-party",
+          "label": "Third-party",
+          "requestCount": 6,
+          "transferSize": 69334
+        }
+      ],
+      "lcpElement": {
+        "type": "node",
+        "lhId": "page-2-IMG",
+        "path": "1,HTML,1,BODY,0,DIV,0,DIV,2,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,IMG",
+        "selector": "div.max-w-7xl > div.relative > div.grid > img.w-full",
+        "boundingRect": {
+          "top": 536,
+          "bottom": 702,
+          "left": 29,
+          "right": 383,
+          "width": 354,
+          "height": 166
+        },
+        "snippet": "<img alt=\"Siswa SMK Telkom Purwokerto\" width=\"1920\" height=\"902\" fetchpriority=\"high\" class=\"w-full rounded-[1.75rem] object-contain\" src=\"/assets/header-jurusan-dDargCZq.webp\">",
+        "nodeLabel": "Siswa SMK Telkom Purwokerto"
+      },
+      "observedMetrics": {
+        "fcpMs": 226,
+        "lcpMs": 664
+      },
+      "observedLcpBreakdown": [
+        {
+          "subpart": "timeToFirstByte",
+          "label": "Time to first byte",
+          "duration": 4.048
+        },
+        {
+          "subpart": "resourceLoadDelay",
+          "label": "Resource load delay",
+          "duration": 300.538
+        },
+        {
+          "subpart": "resourceLoadDuration",
+          "label": "Resource load duration",
+          "duration": 3.564
+        },
+        {
+          "subpart": "elementRenderDelay",
+          "label": "Element render delay",
+          "duration": 355.977
+        }
+      ],
+      "lcpDiscovery": {
+        "priorityHinted": {
+          "label": "fetchpriority=high applied",
+          "value": true
+        },
+        "requestDiscoverable": {
+          "label": "Request is discoverable in initial document",
+          "value": false
+        },
+        "eagerlyLoaded": {
+          "label": "LCP resources should not use loading=lazy",
+          "value": true
+        }
+      },
+      "auditEstimates": {
+        "renderBlockingSavings": {
+          "FCP": 450,
+          "LCP": 0
+        },
+        "imageByteSavings": 689467,
+        "unusedJsBytes": 103235
+      },
+      "artifacts": [
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-3.report.json",
+          "sha256": "7eef542ad53d8760f7317d2e54e225e1e1f0b6ffba648e34af4d7e4dab9dc9bc"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-3.report.html",
+          "sha256": "49ccc25bd66815d95dfc53a7939907b8e7fbb65d1c2f2d0c7cc50403bd955890"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-3-0.trace.json",
+          "sha256": "fc3bd3a56018c3a7ae52151d4618180f5829478c455f5f44aa1a79a78f59abfb"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-mobile-3-0.devtoolslog.json",
+          "sha256": "b01305973bfba1019c4235ac29de84813150be3d286d61cd63cd6239753175f5"
+        }
+      ]
+    },
+    {
+      "mode": "desktop",
+      "run": 1,
+      "fetchTime": "2026-10-03T09:41:03.102Z",
+      "score": 91,
+      "metrics": {
+        "first-contentful-paint": 666.584,
+        "largest-contentful-paint": 1880.724409999999,
+        "speed-index": 1224.305925973673,
+        "total-blocking-time": 2,
+        "cumulative-layout-shift": 0
+      },
+      "settings": {
+        "formFactor": "desktop",
+        "screen": {
+          "mobile": false,
+          "width": 1350,
+          "height": 940,
+          "deviceScaleFactor": 1,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 0,
+          "uploadThroughputKbps": 0,
+          "cpuSlowdownMultiplier": 1
+        },
+        "disableStorageReset": false
+      },
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "benchmarkIndex": 1969,
+        "credits": {}
+      },
+      "warnings": [],
+      "runtimeError": null,
+      "auditErrors": [],
+      "httpErrors": [],
+      "resources": [
+        {
+          "resourceType": "total",
+          "label": "Total",
+          "requestCount": 76,
+          "transferSize": 2692647
+        },
+        {
+          "resourceType": "image",
+          "label": "Image",
+          "requestCount": 29,
+          "transferSize": 2257857
+        },
+        {
+          "resourceType": "script",
+          "label": "Script",
+          "requestCount": 37,
+          "transferSize": 335565
+        },
+        {
+          "resourceType": "font",
+          "label": "Font",
+          "requestCount": 3,
+          "transferSize": 64182
+        },
+        {
+          "resourceType": "stylesheet",
+          "label": "Stylesheet",
+          "requestCount": 3,
+          "transferSize": 21327
+        },
+        {
+          "resourceType": "other",
+          "label": "Other",
+          "requestCount": 3,
+          "transferSize": 12823
+        },
+        {
+          "resourceType": "document",
+          "label": "Document",
+          "requestCount": 1,
+          "transferSize": 893
+        },
+        {
+          "resourceType": "media",
+          "label": "Media",
+          "requestCount": 0,
+          "transferSize": 0
+        },
+        {
+          "resourceType": "third-party",
+          "label": "Third-party",
+          "requestCount": 14,
+          "transferSize": 1012379
+        }
+      ],
+      "lcpElement": {
+        "type": "node",
+        "lhId": "page-1-IMG",
+        "path": "1,HTML,1,BODY,0,DIV,0,DIV,2,MAIN,1,SECTION,0,DIV,0,DIV,0,DIV,0,FIGURE,0,DIV,0,BUTTON,0,IMG",
+        "selector": "figure.overflow-hidden > div.relative > button.group > img.h-full",
+        "boundingRect": {
+          "top": 732,
+          "bottom": 999,
+          "left": 105,
+          "right": 579,
+          "width": 474,
+          "height": 267
+        },
+        "snippet": "<img alt=\"\" aria-hidden=\"true\" class=\"h-full w-full object-cover object-center motion-safe:transition-transform …\" src=\"/assets/profil-hero-DijYay8I.jpg\">",
+        "nodeLabel": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+      },
+      "observedMetrics": {
+        "fcpMs": 236,
+        "lcpMs": 1313
+      },
+      "observedLcpBreakdown": [
+        {
+          "subpart": "timeToFirstByte",
+          "label": "Time to first byte",
+          "duration": 6.469
+        },
+        {
+          "subpart": "resourceLoadDelay",
+          "label": "Resource load delay",
+          "duration": 301.864
+        },
+        {
+          "subpart": "resourceLoadDuration",
+          "label": "Resource load duration",
+          "duration": 17.06
+        },
+        {
+          "subpart": "elementRenderDelay",
+          "label": "Element render delay",
+          "duration": 987.559
+        }
+      ],
+      "lcpDiscovery": {
+        "priorityHinted": {
+          "label": "fetchpriority=high should be applied",
+          "value": false
+        },
+        "requestDiscoverable": {
+          "label": "Request is discoverable in initial document",
+          "value": false
+        },
+        "eagerlyLoaded": {
+          "label": "LCP resources should not use loading=lazy",
+          "value": true
+        }
+      },
+      "auditEstimates": {
+        "renderBlockingSavings": {
+          "FCP": 150,
+          "LCP": 0
+        },
+        "imageByteSavings": 1845021,
+        "unusedJsBytes": 103245
+      },
+      "artifacts": [
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-1.report.json",
+          "sha256": "398296cb994f60c46a6d9a8b8afba5363293ff6fbf50775c205852fba2c8dbaf"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-1.report.html",
+          "sha256": "ef28cd6e6a656b85b300858d6b2a0f485b4a3eac70242e174f4265acb063e8a1"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-1-0.trace.json",
+          "sha256": "8c5fa58391044599f0e7e8c67e300df6fc65c508732082b05637eebf7163ac58"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-1-0.devtoolslog.json",
+          "sha256": "9209bbb846ccc2bdff0b126440ca84f832379cf9c4ca61c2f75c21026cd5e8a1"
+        }
+      ]
+    },
+    {
+      "mode": "desktop",
+      "run": 2,
+      "fetchTime": "2026-10-03T09:41:49.440Z",
+      "score": 90,
+      "metrics": {
+        "first-contentful-paint": 660.216625,
+        "largest-contentful-paint": 1805.9537050000008,
+        "speed-index": 1763.699392971125,
+        "total-blocking-time": 5.5,
+        "cumulative-layout-shift": 0
+      },
+      "settings": {
+        "formFactor": "desktop",
+        "screen": {
+          "mobile": false,
+          "width": 1350,
+          "height": 940,
+          "deviceScaleFactor": 1,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 0,
+          "uploadThroughputKbps": 0,
+          "cpuSlowdownMultiplier": 1
+        },
+        "disableStorageReset": false
+      },
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "benchmarkIndex": 2190.5,
+        "credits": {}
+      },
+      "warnings": [],
+      "runtimeError": null,
+      "auditErrors": [],
+      "httpErrors": [],
+      "resources": [
+        {
+          "resourceType": "total",
+          "label": "Total",
+          "requestCount": 77,
+          "transferSize": 2743035
+        },
+        {
+          "resourceType": "image",
+          "label": "Image",
+          "requestCount": 30,
+          "transferSize": 2308245
+        },
+        {
+          "resourceType": "script",
+          "label": "Script",
+          "requestCount": 37,
+          "transferSize": 335565
+        },
+        {
+          "resourceType": "font",
+          "label": "Font",
+          "requestCount": 3,
+          "transferSize": 64182
+        },
+        {
+          "resourceType": "stylesheet",
+          "label": "Stylesheet",
+          "requestCount": 3,
+          "transferSize": 21327
+        },
+        {
+          "resourceType": "other",
+          "label": "Other",
+          "requestCount": 3,
+          "transferSize": 12823
+        },
+        {
+          "resourceType": "document",
+          "label": "Document",
+          "requestCount": 1,
+          "transferSize": 893
+        },
+        {
+          "resourceType": "media",
+          "label": "Media",
+          "requestCount": 0,
+          "transferSize": 0
+        },
+        {
+          "resourceType": "third-party",
+          "label": "Third-party",
+          "requestCount": 14,
+          "transferSize": 1014008
+        }
+      ],
+      "lcpElement": {
+        "type": "node",
+        "lhId": "page-1-IMG",
+        "path": "1,HTML,1,BODY,0,DIV,0,DIV,2,MAIN,1,SECTION,0,DIV,0,DIV,0,DIV,0,FIGURE,0,DIV,0,BUTTON,0,IMG",
+        "selector": "figure.overflow-hidden > div.relative > button.group > img.h-full",
+        "boundingRect": {
+          "top": 732,
+          "bottom": 999,
+          "left": 105,
+          "right": 579,
+          "width": 474,
+          "height": 267
+        },
+        "snippet": "<img alt=\"\" aria-hidden=\"true\" class=\"h-full w-full object-cover object-center motion-safe:transition-transform …\" src=\"/assets/profil-hero-DijYay8I.jpg\">",
+        "nodeLabel": "figure.overflow-hidden > div.relative > button.group > img.h-full"
+      },
+      "observedMetrics": {
+        "fcpMs": 1130,
+        "lcpMs": 2184
+      },
+      "observedLcpBreakdown": [
+        {
+          "subpart": "timeToFirstByte",
+          "label": "Time to first byte",
+          "duration": 4.561999999761581
+        },
+        {
+          "subpart": "resourceLoadDelay",
+          "label": "Resource load delay",
+          "duration": 1207.0490000002385
+        },
+        {
+          "subpart": "resourceLoadDuration",
+          "label": "Resource load duration",
+          "duration": 8.388
+        },
+        {
+          "subpart": "elementRenderDelay",
+          "label": "Element render delay",
+          "duration": 964.182
+        }
+      ],
+      "lcpDiscovery": {
+        "priorityHinted": {
+          "label": "fetchpriority=high should be applied",
+          "value": false
+        },
+        "requestDiscoverable": {
+          "label": "Request is discoverable in initial document",
+          "value": false
+        },
+        "eagerlyLoaded": {
+          "label": "LCP resources should not use loading=lazy",
+          "value": true
+        }
+      },
+      "auditEstimates": {
+        "renderBlockingSavings": {
+          "FCP": 150,
+          "LCP": 0
+        },
+        "imageByteSavings": 1886074,
+        "unusedJsBytes": 103268
+      },
+      "artifacts": [
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-2.report.json",
+          "sha256": "3644923956f0d7b49f98401c2cbfa7f929831d6b06327edbe187376b74322bd4"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-2.report.html",
+          "sha256": "b8e170d3e8b1c80e519b18adc43445af54701d0a602b390baac400ca60e5d24b"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-2-0.trace.json",
+          "sha256": "387765856dbdd13a2b7656e7eec81a017f9fd92d84aa0263060b4b38e1b93b60"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-2-0.devtoolslog.json",
+          "sha256": "990453dacb438d94861ceec69a24c5eaa22b7ca588ba30644b452684c1fd3fc9"
+        }
+      ]
+    },
+    {
+      "mode": "desktop",
+      "run": 3,
+      "fetchTime": "2026-10-03T09:42:36.814Z",
+      "score": 93,
+      "metrics": {
+        "first-contentful-paint": 678.141325,
+        "largest-contentful-paint": 1562.6805500000005,
+        "speed-index": 1299.4154478729115,
+        "total-blocking-time": 30.5,
+        "cumulative-layout-shift": 0
+      },
+      "settings": {
+        "formFactor": "desktop",
+        "screen": {
+          "mobile": false,
+          "width": 1350,
+          "height": 940,
+          "deviceScaleFactor": 1,
+          "disabled": false
+        },
+        "throttlingMethod": "simulate",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 0,
+          "uploadThroughputKbps": 0,
+          "cpuSlowdownMultiplier": 1
+        },
+        "disableStorageReset": false
+      },
+      "environment": {
+        "networkUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "hostUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+        "benchmarkIndex": 1838,
+        "credits": {}
+      },
+      "warnings": [],
+      "runtimeError": null,
+      "auditErrors": [],
+      "httpErrors": [],
+      "resources": [
+        {
+          "resourceType": "total",
+          "label": "Total",
+          "requestCount": 76,
+          "transferSize": 2694326
+        },
+        {
+          "resourceType": "image",
+          "label": "Image",
+          "requestCount": 29,
+          "transferSize": 2259451
+        },
+        {
+          "resourceType": "script",
+          "label": "Script",
+          "requestCount": 37,
+          "transferSize": 335565
+        },
+        {
+          "resourceType": "font",
+          "label": "Font",
+          "requestCount": 3,
+          "transferSize": 64182
+        },
+        {
+          "resourceType": "stylesheet",
+          "label": "Stylesheet",
+          "requestCount": 3,
+          "transferSize": 21327
+        },
+        {
+          "resourceType": "other",
+          "label": "Other",
+          "requestCount": 3,
+          "transferSize": 12908
+        },
+        {
+          "resourceType": "document",
+          "label": "Document",
+          "requestCount": 1,
+          "transferSize": 893
+        },
+        {
+          "resourceType": "media",
+          "label": "Media",
+          "requestCount": 0,
+          "transferSize": 0
+        },
+        {
+          "resourceType": "third-party",
+          "label": "Third-party",
+          "requestCount": 14,
+          "transferSize": 1014058
+        }
+      ],
+      "lcpElement": {
+        "type": "node",
+        "lhId": "page-14-IMG",
+        "path": "1,HTML,1,BODY,0,DIV,0,DIV,2,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,IMG",
+        "selector": "div.max-w-7xl > div.relative > div.grid > img.w-full",
+        "boundingRect": {
+          "top": 113,
+          "bottom": 472,
+          "left": 498,
+          "right": 1262,
+          "width": 764,
+          "height": 359
+        },
+        "snippet": "<img alt=\"Siswa SMK Telkom Purwokerto\" width=\"1920\" height=\"902\" fetchpriority=\"high\" class=\"w-full rounded-[1.75rem] object-contain\" src=\"/assets/header-jurusan-dDargCZq.webp\">",
+        "nodeLabel": "Siswa SMK Telkom Purwokerto"
+      },
+      "observedMetrics": {
+        "fcpMs": 304,
+        "lcpMs": 816
+      },
+      "observedLcpBreakdown": [
+        {
+          "subpart": "timeToFirstByte",
+          "label": "Time to first byte",
+          "duration": 8.04499999976158
+        },
+        {
+          "subpart": "resourceLoadDelay",
+          "label": "Resource load delay",
+          "duration": 361.4620000002384
+        },
+        {
+          "subpart": "resourceLoadDuration",
+          "label": "Resource load duration",
+          "duration": 3.972
+        },
+        {
+          "subpart": "elementRenderDelay",
+          "label": "Element render delay",
+          "duration": 442.751
+        }
+      ],
+      "lcpDiscovery": {
+        "priorityHinted": {
+          "label": "fetchpriority=high applied",
+          "value": true
+        },
+        "requestDiscoverable": {
+          "label": "Request is discoverable in initial document",
+          "value": false
+        },
+        "eagerlyLoaded": {
+          "label": "LCP resources should not use loading=lazy",
+          "value": true
+        }
+      },
+      "auditEstimates": {
+        "renderBlockingSavings": {
+          "FCP": 150,
+          "LCP": 0
+        },
+        "imageByteSavings": 1845021,
+        "unusedJsBytes": 103245
+      },
+      "artifacts": [
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-3.report.json",
+          "sha256": "3df92bca99a3fec7aa8d7a0938d45d2fb3a02a5dcfb992cf4fb1af8090bd6218"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-3.report.html",
+          "sha256": "9745a7dcb781a6ba077a1e9b0f9c0fa23df80bc4675161a2fe052f07a884d1a1"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-3-0.trace.json",
+          "sha256": "0cb4b5f9644a70f247bb03c4d8a72fa4b0b7560cae30218f7896571a17592c4e"
+        },
+        {
+          "path": "D:/LombaTelkom/qa-output/performance-2026-10-03/local-desktop-3-0.devtoolslog.json",
+          "sha256": "776930319abde73c391d67fee0a698616799158510ba67f59a358c12e6214aea"
+        }
+      ]
+    }
+  ],
+  "mobileAuditCandidates": [
+    {
+      "file": "partners-bg-DLEM2wnK.png",
+      "sourceBytes": 284699,
+      "estimatedSavedBytes": 250628
+    },
+    {
+      "file": "profil-hero-DijYay8I.jpg",
+      "sourceBytes": 145309,
+      "estimatedSavedBytes": 111589
+    },
+    {
+      "file": "header-jurusan-dDargCZq.webp",
+      "sourceBytes": 74220,
+      "estimatedSavedBytes": 66494
+    },
+    {
+      "file": "jurusan-tkj-card-DMkpUCpX.webp",
+      "sourceBytes": 108818,
+      "estimatedSavedBytes": 60198
+    },
+    {
+      "file": "figma-ribbon-CZ5IWTeh.png",
+      "sourceBytes": 61236,
+      "estimatedSavedBytes": 52325
+    },
+    {
+      "file": "badge-akreditasi-BtmduR-j.png",
+      "sourceBytes": 48409,
+      "estimatedSavedBytes": 46318
+    },
+    {
+      "file": "badge-akreditasi-overlay-DiL8tkhU.png",
+      "sourceBytes": 30675,
+      "estimatedSavedBytes": 28944
+    },
+    {
+      "file": "jurusan-tjat-card-qe0DFaSD.webp",
+      "sourceBytes": 33876,
+      "estimatedSavedBytes": 15575
+    },
+    {
+      "file": "jurusan-pg-card-EAi51G8E.webp",
+      "sourceBytes": 27866,
+      "estimatedSavedBytes": 12812
+    },
+    {
+      "file": "partners-deco-right-DYqZpY4K.png",
+      "sourceBytes": 16304,
+      "estimatedSavedBytes": 11009
+    },
+    {
+      "file": "figma-footer-mask-n0ZhvBYc.png",
+      "sourceBytes": 46834,
+      "estimatedSavedBytes": 10641
+    },
+    {
+      "file": "partners-deco-left-DfSg795e.png",
+      "sourceBytes": 12409,
+      "estimatedSavedBytes": 8430
+    },
+    {
+      "file": "logo-DajAOp2f.png",
+      "sourceBytes": 9407,
+      "estimatedSavedBytes": 8419
+    },
+    {
+      "file": "logo-telkom-CAM_VHu9.png",
+      "sourceBytes": 6852,
+      "estimatedSavedBytes": 6085
+    }
+  ],
+  "unusedJsInMobileRun1": [
+    {
+      "file": "supabase-CZ0r5-ou.js",
+      "transferBytesExcludingHeaders": 53292,
+      "unusedBytes": 43094
+    },
+    {
+      "file": "index-DYhK2gRc.js",
+      "transferBytesExcludingHeaders": 146636,
+      "unusedBytes": 35096
+    },
+    {
+      "file": "MainLayout-CkIP84g9.js",
+      "transferBytesExcludingHeaders": 52720,
+      "unusedBytes": 25045
+    }
+  ],
+  "responsiveSmoke": {
+    "scope": "Unthrottled first-fold Beranda check only; not a complete functional regression.",
+    "results": [
+      {
+        "width": 412,
+        "height": 823,
+        "dpr": 1.75,
+        "lang": "id",
+        "language": "id",
+        "viewportWidth": 412,
+        "documentWidth": 412,
+        "h1": {
+          "text": "Bangun Masa DepanmuBersama Teknologi",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "800",
+          "x": 41,
+          "y": 199,
+          "width": 330,
+          "height": 108
+        },
+        "logoText": {
+          "text": "SMK TelkomPurwokerto",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "800",
+          "x": 62,
+          "y": 17.703125,
+          "width": 82.5625,
+          "height": 28.59375
+        },
+        "visibleBrokenImages": [],
+        "errors": [],
+        "failed": [],
+        "httpErrors": [],
+        "screenshot": "home-id-412.png",
+        "heroImage": {
+          "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+          "alt": "Siswa SMK Telkom Purwokerto",
+          "complete": true,
+          "naturalWidth": 1920,
+          "naturalHeight": 902,
+          "displayWidth": 354,
+          "displayHeight": 166.296875,
+          "top": 535.5,
+          "loading": "auto"
+        }
+      },
+      {
+        "width": 768,
+        "height": 1024,
+        "dpr": 1,
+        "lang": "id",
+        "language": "id",
+        "viewportWidth": 768,
+        "documentWidth": 768,
+        "h1": {
+          "text": "Bangun Masa DepanmuBersama Teknologi",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "36px",
+          "fontWeight": "800",
+          "x": 53,
+          "y": 203,
+          "width": 662,
+          "height": 86.375
+        },
+        "logoText": {
+          "text": "SMK TelkomPurwokerto",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "800",
+          "x": 70,
+          "y": 17.703125,
+          "width": 82.5625,
+          "height": 28.59375
+        },
+        "visibleBrokenImages": [],
+        "errors": [],
+        "failed": [],
+        "httpErrors": [],
+        "screenshot": "home-id-768.png",
+        "heroImage": {
+          "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+          "alt": "Siswa SMK Telkom Purwokerto",
+          "complete": true,
+          "naturalWidth": 1920,
+          "naturalHeight": 902,
+          "displayWidth": 686,
+          "displayHeight": 322.265625,
+          "top": 471.625,
+          "loading": "auto"
+        }
+      },
+      {
+        "width": 1350,
+        "height": 940,
+        "dpr": 1,
+        "lang": "id",
+        "language": "id",
+        "viewportWidth": 1350,
+        "documentWidth": 1350,
+        "h1": {
+          "text": "Bangun Masa DepanmuBersama Teknologi",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "800",
+          "x": 100,
+          "y": 203,
+          "width": 373.875,
+          "height": 72
+        },
+        "logoText": {
+          "text": "SMK TelkomPurwokerto",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "15px",
+          "fontWeight": "800",
+          "x": 117,
+          "y": 23.5,
+          "width": 95.25,
+          "height": 33
+        },
+        "visibleBrokenImages": [],
+        "errors": [],
+        "failed": [],
+        "httpErrors": [],
+        "screenshot": "home-id-1350.png",
+        "heroImage": {
+          "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+          "alt": "Siswa SMK Telkom Purwokerto",
+          "complete": true,
+          "naturalWidth": 1920,
+          "naturalHeight": 902,
+          "displayWidth": 764.125,
+          "displayHeight": 358.96875,
+          "top": 113,
+          "loading": "auto"
+        }
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "lang": "id",
+        "language": "id",
+        "viewportWidth": 1920,
+        "documentWidth": 1920,
+        "h1": {
+          "text": "Bangun Masa DepanmuBersama Teknologi",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "800",
+          "x": 385,
+          "y": 203,
+          "width": 373.875,
+          "height": 72
+        },
+        "logoText": {
+          "text": "SMK TelkomPurwokerto",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "15px",
+          "fontWeight": "800",
+          "x": 402,
+          "y": 23.5,
+          "width": 95.25,
+          "height": 33
+        },
+        "visibleBrokenImages": [],
+        "errors": [],
+        "failed": [],
+        "httpErrors": [],
+        "screenshot": "home-id-1920.png",
+        "heroImage": {
+          "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+          "alt": "Siswa SMK Telkom Purwokerto",
+          "complete": true,
+          "naturalWidth": 1920,
+          "naturalHeight": 902,
+          "displayWidth": 764.125,
+          "displayHeight": 358.96875,
+          "top": 113,
+          "loading": "auto"
+        }
+      },
+      {
+        "width": 412,
+        "height": 823,
+        "dpr": 1.75,
+        "lang": "en",
+        "language": "en",
+        "viewportWidth": 412,
+        "documentWidth": 412,
+        "h1": {
+          "text": "Build Your FutureWith Technology",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "800",
+          "x": 41,
+          "y": 199,
+          "width": 330,
+          "height": 72
+        },
+        "logoText": {
+          "text": "SMK TelkomPurwokerto",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "800",
+          "x": 62,
+          "y": 17.703125,
+          "width": 82.5625,
+          "height": 28.59375
+        },
+        "visibleBrokenImages": [],
+        "errors": [],
+        "failed": [],
+        "httpErrors": [],
+        "screenshot": "home-en-412.png",
+        "heroImage": {
+          "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+          "alt": "Students at SMK Telkom Purwokerto",
+          "complete": true,
+          "naturalWidth": 1920,
+          "naturalHeight": 902,
+          "displayWidth": 354,
+          "displayHeight": 166.296875,
+          "top": 499.5,
+          "loading": "auto"
+        }
+      },
+      {
+        "width": 1350,
+        "height": 940,
+        "dpr": 1,
+        "lang": "en",
+        "language": "en",
+        "viewportWidth": 1350,
+        "documentWidth": 1350,
+        "h1": {
+          "text": "Build Your FutureWith Technology",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "800",
+          "x": 100,
+          "y": 203,
+          "width": 373.875,
+          "height": 72
+        },
+        "logoText": {
+          "text": "SMK TelkomPurwokerto",
+          "fontFamily": "Poppins, Inter, system-ui, sans-serif",
+          "fontSize": "15px",
+          "fontWeight": "800",
+          "x": 117,
+          "y": 23.5,
+          "width": 95.25,
+          "height": 33
+        },
+        "visibleBrokenImages": [],
+        "errors": [],
+        "failed": [],
+        "httpErrors": [],
+        "screenshot": "home-en-1350.png",
+        "heroImage": {
+          "src": "http://127.0.0.1:5191/assets/header-jurusan-dDargCZq.webp",
+          "alt": "Students at SMK Telkom Purwokerto",
+          "complete": true,
+          "naturalWidth": 1920,
+          "naturalHeight": 902,
+          "displayWidth": 764.125,
+          "displayHeight": 358.96875,
+          "top": 113,
+          "loading": "auto"
+        }
+      }
+    ],
+    "artifactPath": "D:/LombaTelkom/qa-output/performance-2026-10-03/responsive-check.json"
+  },
+  "checks": [
+    {
+      "command": "npm.cmd run build --prefix frontend",
+      "exitCode": 0
+    },
+    {
+      "command": "npm.cmd run animasi:uji --prefix frontend",
+      "exitCode": 0,
+      "scenarios": 20
+    }
+  ],
+  "limits": [
+    "Not the live-deployment score; its entry file differs from this local build.",
+    "Not a physical phone/TV measurement, field INP, load/concurrency test, full-site image audit, or full functional regression.",
+    "External Google Fonts and Supabase responses remain variable; OS/DNS/TLS caches are not isolated.",
+    "Observed trace breakdown is unthrottled; do not sum it against simulated score metrics.",
+    "Audit savings are estimates, not achieved improvements.",
+    "Performance runs use Indonesian; English was covered only by a separate visual smoke check."
+  ],
+  "references": [
+    {
+      "title": "Lighthouse throttling",
+      "url": "https://github.com/GoogleChrome/lighthouse/blob/main/docs/throttling.md"
+    },
+    {
+      "title": "Lighthouse performance scoring",
+      "url": "https://developer.chrome.com/docs/lighthouse/performance/performance-scoring"
+    }
+  ],
+  "rawArtifactsDirectory": "D:/LombaTelkom/qa-output/performance-2026-10-03"
+}

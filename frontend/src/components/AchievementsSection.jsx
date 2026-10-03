@@ -1,33 +1,60 @@
 import { useLanguage } from '../context/LanguageContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PrestasiCarousel from './PrestasiCarousel';
 import PublicDataState from './PublicDataState';
 import SectionAccents from './SectionAccents';
 import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
-import { getPrestasi } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
 
 const AchievementsSection = () => {
   const { t } = useLanguage();
+  const sectionRef = useRef(null);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [requestStarted, setRequestStarted] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     let active = true;
-    getPrestasi()
-      .then((rows) => active && setItems(rows.map(toPrestasiItem)))
-      .catch(() => active && setError('Prestasi belum dapat dimuat. Silakan coba lagi nanti.'))
-      .finally(() => active && setLoading(false));
-    return () => { active = false; };
+    let started = false;
+    let observer;
+    const load = async () => {
+      if (!active || started) return;
+      started = true;
+      setRequestStarted(true);
+      observer?.disconnect();
+      try {
+        const { getPrestasi } = await import('../services/prestasiService');
+        // StrictMode cleanup or route navigation may happen during import.
+        if (!active) return;
+        const rows = await getPrestasi();
+        if (active) setItems(rows.map(toPrestasiItem));
+      } catch {
+        if (active) setError('Prestasi belum dapat dimuat. Silakan coba lagi nanti.');
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    if (typeof IntersectionObserver !== 'function') {
+      load();
+    } else {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) load();
+      }, { rootMargin: '600px 0px', threshold: 0 });
+      if (sectionRef.current) observer.observe(sectionRef.current);
+    }
+    return () => {
+      active = false;
+      observer?.disconnect();
+    };
   }, []);
 
   return (
-  <section id="prestasi" className="relative overflow-hidden bg-white py-8 lg:py-12 2xl:min-h-[635px]">
+  <section ref={sectionRef} id="prestasi" className="relative overflow-hidden bg-white py-12 sm:py-16 lg:py-20">
     <SectionAccents variant="achievements" />
 
-    <div className="relative mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       {/* Judul diapit dua cabang laurel (sisi kanan = cabang yang sama, dicerminkan) */}
       <div className="flex items-center justify-center gap-3 sm:gap-6">
         <img
@@ -37,10 +64,10 @@ const AchievementsSection = () => {
           className="hidden h-24 w-auto shrink-0 select-none sm:block lg:h-28"
         />
         <div className="text-center">
-          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-primary">
+          <h2 className="font-heading text-[1.75rem] font-extrabold leading-tight tracking-tight text-dark-900 sm:text-[2rem] xl:text-[2.5rem]">
             {t(prestasiData.title)}
           </h2>
-          <p className="mt-2 whitespace-pre-line text-xs leading-relaxed text-dark-500">
+          <p className="mx-auto mt-4 max-w-2xl whitespace-pre-line text-base leading-relaxed text-dark-600 sm:text-lg">
             {t(prestasiData.subtitle)}
           </p>
         </div>
@@ -53,7 +80,7 @@ const AchievementsSection = () => {
       </div>
 
       {/* Kartu prestasi — carousel horizontal, dot ada di dalamnya */}
-      <PublicDataState loading={loading} error={t(error)} empty={!loading && !error && !items.length} label="prestasi" />
+      <PublicDataState loading={loading} error={t(error)} empty={!loading && !error && !items.length} label="prestasi" carousel deferred={!requestStarted} />
       {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} />}
 
     </div>
