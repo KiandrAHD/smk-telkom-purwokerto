@@ -30,4 +30,31 @@ for (const image of images) {
   assert(bytes < 350 * 1024, `Gambar terlalu besar: ${image} (${Math.round(bytes / 1024)} KB)`);
 }
 
-console.log(`uji-performa: JavaScript awal ${Math.round(entryBytes / 1024)} KB; ${images.length} gambar utama di bawah 350 KB.`);
+const responsive = [
+  ['hero', [640, 960, 1440], 74220],
+  ['poster', [640, 960, 1440], 145309],
+  ['partners', [960, 1440, 1847], 284699],
+];
+for (const [name, widths, originalBytes] of responsive) {
+  for (const width of widths) {
+    const file = path.join(root, `src/assets/responsive/${name}-${width}.webp`);
+    const meta = await sharp(file).metadata();
+    assert.equal(meta.width, width, `Wrong width descriptor: ${name}-${width}`);
+    assert.equal(meta.format, 'webp');
+    assert((await stat(file)).size < originalBytes, `Derivative exceeds original transfer size: ${name}-${width}`);
+  }
+}
+// WebP may rewrite RGB under fully transparent pixels. Compare visible pixels
+// on both dark and light backgrounds, plus the alpha channel independently.
+const originalFile = path.join(root, 'src/assets/landing/partners-bg.png');
+const losslessFile = path.join(root, 'src/assets/responsive/partners-1847.webp');
+for (const background of ['#000000', '#ffffff']) {
+  const original = await sharp(originalFile).flatten({ background }).raw().toBuffer();
+  const lossless = await sharp(losslessFile).flatten({ background }).raw().toBuffer();
+  assert.ok(original.equals(lossless), 'Lossless partner background changed visible pixels');
+}
+const originalAlpha = await sharp(originalFile).ensureAlpha().extractChannel('alpha').raw().toBuffer();
+const losslessAlpha = await sharp(losslessFile).ensureAlpha().extractChannel('alpha').raw().toBuffer();
+assert.ok(originalAlpha.equals(losslessAlpha), 'Lossless partner background changed alpha');
+
+console.log(`uji-performa: JavaScript awal ${Math.round(entryBytes / 1024)} KB; ${images.length} gambar utama di bawah 350 KB; 9 varian responsif lebih kecil dari sumber, background lossless identik.`);

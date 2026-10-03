@@ -9,56 +9,62 @@ import accreditationOverlay from '../assets/tentang/badge-akreditasi-overlay.png
 import facilitiesIcon from '../assets/tentang/badge-fasilitas.svg';
 import teacherIcon from '../assets/tentang/badge-guru.svg';
 import curriculumIcon from '../assets/tentang/badge-kurikulum.svg';
+import poster640 from '../assets/responsive/poster-640.webp';
+import poster960 from '../assets/responsive/poster-960.webp';
+import poster1440 from '../assets/responsive/poster-1440.webp';
 
 const badgeDelays = ['delay-0', 'delay-100', 'delay-200', 'delay-300'];
 
 const AboutSection = () => {
   const { t } = useLanguage();
   return (
-  <section id="tentang" className="bg-white py-4 lg:py-6">
+  <section id="tentang" className="bg-white py-12 sm:py-16 lg:py-20">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-[42%_1fr] items-start gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 items-start gap-8 rounded-3xl border border-dark-100 bg-dark-50 p-5 sm:p-8 lg:grid-cols-[42%_1fr] lg:gap-10 lg:p-10">
         {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
             ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
         <Reveal>
           <VideoEmbed
             videoId={landingAbout.video.videoId}
             poster={landingAbout.video.poster}
+            posterSrcSet={`${poster640} 640w, ${poster960} 960w, ${poster1440} 1440w, ${landingAbout.video.poster} 1600w`}
+            // Account for object-cover: the wide source fills a 16:9 box.
+            posterSizes="(min-width: 80rem) 35.523rem, (min-width: 64rem) calc(50.3329vw - 4.7427rem), (min-width: 40rem) calc(119.8402vw - 8.6884rem), calc(119.8402vw - 5.6924rem)"
             title={t(landingAbout.video.title)}
             desc={t(landingAbout.video.desc)}
-            rasio="aspect-[646/488]"
+            rasio="aspect-video"
             showCaption={false}
           />
         </Reveal>
 
         {/* Teks + badge */}
         <div>
-          <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-primary">
+          <h2 className="font-heading text-[1.75rem] font-extrabold leading-tight tracking-tight text-dark-900 sm:text-[2rem] xl:text-[2.5rem]">
             {t(landingAbout.title)}
           </h2>
           <TextReveal
             text={t(landingAbout.description)}
-            className="mt-3 max-w-2xl text-sm leading-relaxed text-dark-900 sm:text-base"
+            className="mt-5 max-w-2xl text-base leading-relaxed text-dark-900 sm:text-lg"
           />
 
-          <div className="mt-6 grid auto-rows-fr grid-cols-2 gap-4">
+          <div className="mt-7 grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2">
             {landingAbout.badges.map((badge, index) => (
               <Reveal
                 key={badge.title}
-                className={`${badgeDelays[index % badgeDelays.length]} flex min-w-0 flex-col items-center gap-3 rounded-2xl bg-primary px-4 py-5 text-center text-white sm:flex-row sm:text-left`}
+                className={`${badgeDelays[index % badgeDelays.length]} flex min-w-0 items-center gap-3 rounded-2xl border border-dark-100 bg-white p-4 text-left`}
               >
-                {index === 0 && <span aria-hidden="true" className="relative h-[100px] w-[100px] shrink-0">
-                  <img src={accreditation} alt="" width="100" height="100" className="absolute inset-0" />
-                  <img src={accreditationOverlay} alt="" width="91" height="91" className="absolute left-[5px] top-1" />
+                {index === 0 && <span aria-hidden="true" className="relative h-16 w-16 shrink-0">
+                  <img src={accreditation} alt="" width="100" height="100" className="absolute inset-0 h-full w-full" />
+                  <img src={accreditationOverlay} alt="" width="91" height="91" className="absolute left-[5%] top-[4%] h-[91%] w-[91%]" />
                 </span>}
-                {index === 1 && <img src={facilitiesIcon} alt="" aria-hidden="true" className="shrink-0" />}
-                {index === 2 && <img src={teacherIcon} alt="" aria-hidden="true" className="shrink-0" />}
-                {index === 3 && <img src={curriculumIcon} alt="" aria-hidden="true" width="68" height="68" className="shrink-0" />}
+                {index > 0 && <span aria-hidden="true" className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary p-3">
+                  <img src={[facilitiesIcon, teacherIcon, curriculumIcon][index - 1]} alt="" width="40" height="40" className="h-10 w-10 object-contain" />
+                </span>}
                 <div className="min-w-0">
-                  <p className="font-heading text-sm font-bold leading-tight sm:text-base">
+                  <p className="font-heading text-base font-bold leading-tight text-dark-900">
                     {t(badge.title)}
                   </p>
-                  <p className="mt-2 text-xs leading-relaxed text-white/85">
+                  <p className="mt-1 text-sm leading-relaxed text-dark-600">
                     {t(badge.desc)}
                   </p>
                 </div>
@@ -68,7 +74,7 @@ const AboutSection = () => {
 
           <Link
             to="/profil-sekolah"
-            className="mt-5 inline-flex items-center rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
+            className="mt-7 inline-flex min-h-11 items-center rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-900 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           >
             {t(landingAbout.ctaText)}
           </Link>
