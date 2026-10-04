@@ -17,7 +17,7 @@ const BarisDokumen = ({ berkas, onPilih }) => {
           {berkas ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <FileText className="h-4 w-4" />}
         </span>
         <div className="min-w-0">
-          <p className="text-[10px] font-bold text-primary">{t("WAJIB")}</p>
+          <p className="text-xs font-bold text-primary">{t("WAJIB")}</p>
           <p className="mt-0.5 font-heading text-xs font-bold leading-snug text-dark-900">{t("Dokumen Persyaratan (PDF Gabungan)")}</p>
           <p className="mt-1 text-[11px] text-dark-500">{t("Format: PDF. Maksimal 10MB. Gabungkan seluruh dokumen persyaratan menjadi satu PDF.")}</p>
         </div>
@@ -74,7 +74,7 @@ const UploadDocumentsPage = () => {
       } else if (error?.code === 'PPDB_VALIDATION' || error?.code === 'PPDB_UPLOAD_CLEANUP_FAILED') {
         setGalat(error.message);
       } else {
-        setGalat('Pendaftaran gagal dikirim. Silakan coba lagi.');
+        setGalat('Pendaftaran gagal dikirim. Periksa koneksi internet Anda dan pastikan dokumen telah diunggah dengan benar, lalu coba lagi.');
       }
     } finally {
       setMengirim(false);

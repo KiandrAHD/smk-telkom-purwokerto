@@ -26,12 +26,75 @@ const RegistrationFormPage = () => {
   const { biodata, nilai, isiBiodata, isiNilai, draftTersimpan, simpanDraft } = usePpdb();
   const [savingDraft, setSavingDraft] = useState(false);
   const [draftError, setDraftError] = useState('');
+  const [validationError, setValidationError] = useState('');
   const ubah = (kunci) => (e) => isiBiodata({ [kunci]: e.target.value });
 
-  // Semua kolom bertanda `required`, jadi browser menahan submit dan menyorot
-  // kolom kosong pertama sebelum fungsi ini jalan.
+  // Validasi semua field wajib sebelum melanjutkan
+  const validateForm = () => {
+    // Validasi biodata
+    const requiredBiodata = ['nisn', 'namaLengkap', 'whatsapp', 'jurusan', 'nik', 'agama', 'asalSekolah', 'tahunLulus', 'tempatLahir', 'tanggalLahir', 'jenisKelamin', 'alamat'];
+    
+    for (const field of requiredBiodata) {
+      if (!biodata[field] || biodata[field].trim() === '') {
+        return `Field "${t(fieldLabels[field] || field)}" wajib diisi.`;
+      }
+    }
+
+    // Validasi nilai rapor - semua semester harus diisi
+    const ppdbMataPelajaran = [
+      { nama: 'Matematika' },
+      { nama: 'Bahasa Indonesia' },
+      { nama: 'Bahasa Inggris' },
+      { nama: 'IPA' }
+    ];
+    const ppdbSemester = ['Semester 1', 'Semester 2', 'Semester 3', 'Semester 4', 'Semester 5'];
+
+    for (const mapel of ppdbMataPelajaran) {
+      for (const semester of ppdbSemester) {
+        const key = `${mapel.nama}|${semester}`;
+        const nilaiValue = nilai[key];
+        
+        if (!nilaiValue || nilaiValue === '' || isNaN(nilaiValue)) {
+          return `Nilai ${t(mapel.nama)} ${t(semester)} wajib diisi dengan angka yang valid.`;
+        }
+        
+        const numValue = parseFloat(nilaiValue);
+        if (numValue < 0 || numValue > 100) {
+          return `Nilai ${t(mapel.nama)} ${t(semester)} harus antara 0-100.`;
+        }
+      }
+    }
+
+    return null;
+  };
+
+  const fieldLabels = {
+    nisn: 'NISN Siswa',
+    namaLengkap: 'Nama Lengkap',
+    whatsapp: 'Nomor WhatsApp',
+    jurusan: 'Peminatan Jurusan',
+    nik: 'NIK (Nomor Induk Kependudukan)',
+    agama: 'Agama',
+    asalSekolah: 'Asal Sekolah (SMP/MTs)',
+    tahunLulus: 'Tahun Kelulusan',
+    tempatLahir: 'Tempat Lahir',
+    tanggalLahir: 'Tanggal Lahir',
+    jenisKelamin: 'Jenis Kelamin',
+    alamat: 'Alamat Lengkap'
+  };
+
   const kirim = (e) => {
     e.preventDefault();
+    setValidationError('');
+    
+    const error = validateForm();
+    if (error) {
+      setValidationError(error);
+      // Scroll ke atas untuk menampilkan pesan error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    
     navigate('/spmb/berkas');
   };
 
@@ -51,6 +114,13 @@ const RegistrationFormPage = () => {
     <PpdbPortalLayout>
       <h1 className="font-heading text-xl font-extrabold text-dark-900 sm:text-2xl">{t("Formulir Pendaftaran Utama")} </h1>
       <p className="mt-1.5 text-xs text-dark-500">{t("Lengkapi biodata diri dan riwayat akademik Anda di bawah ini dengan sebenar-benarnya.")} </p>
+
+      {validationError && (
+        <div className="motion-feedback mt-4 rounded-xl bg-red-50 border border-red-200 px-5 py-4">
+          <p role="alert" className="text-sm font-semibold text-red-800">{t(validationError)}</p>
+          <p className="mt-1 text-xs text-red-600">{t("Pastikan semua field wajib telah diisi dengan benar sebelum melanjutkan.")}</p>
+        </div>
+      )}
 
       <form onSubmit={kirim} className="mt-6 rounded-2xl border border-dark-100 bg-white p-6 shadow-card sm:p-8">
         {/* 1. Biodata */}

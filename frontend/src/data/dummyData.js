@@ -2554,7 +2554,7 @@ export const ppdbMeta = {
   sistem: 'Sistem SPMB 2027/2028',
   portal: 'Portal SPMB 2027/2028',
   tahun: '2027',
-  hakCipta: '© 2027 SMK Telkom Purwokerto. All Rights Reserved.',
+  hakCipta: '© 2026 SMK Telkom Purwokerto. All Rights Reserved.',
   waHelpdesk: 'https://wa.me/6285136971361',
   waHelpdeskTampil: '0851-3697-1361',
   namaKontak: 'Tim FlexBox',
