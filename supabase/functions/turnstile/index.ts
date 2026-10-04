@@ -5,34 +5,43 @@ if (!CF_TURNSTILE_SECRET) {
   throw new Error("Missing Cloudflare Turnstile secret key.");
 }
 
+const DEFAULT_ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'https://smk-telkom-purwokerto.vercel.app',
+  'https://flexbox.smktelkom-pwt.sch.id',
+];
 const ALLOWED_ORIGINS_RAW = Deno.env.get('TURNSTILE_ALLOWED_ORIGINS') || '';
 const ALLOWED_ORIGINS = ALLOWED_ORIGINS_RAW
-  ? ALLOWED_ORIGINS_RAW.split(',').map((o) => o.trim()).filter(Boolean)
-  : [];
+  ? ALLOWED_ORIGINS_RAW.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : DEFAULT_ALLOWED_ORIGINS;
 
 function isOriginAllowed(origin) {
-  if (!ALLOWED_ORIGINS.length) return true;
-  return ALLOWED_ORIGINS.some((allowed) => origin === allowed);
+  return ALLOWED_ORIGINS.includes(origin);
 }
 
 function corsHeaders(origin) {
-  const effectiveOrigin = origin && isOriginAllowed(origin) ? origin : (ALLOWED_ORIGINS[0] || '*');
   return {
-    "Access-Control-Allow-Origin": effectiveOrigin,
+    "Access-Control-Allow-Origin": origin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers": "Content-Type, apikey",
   };
 }
 
 function jsonResponse(body, status, origin) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
-  });
+  const headers = { "Content-Type": "application/json" };
+  if (isOriginAllowed(origin)) Object.assign(headers, corsHeaders(origin));
+  return new Response(JSON.stringify(body), { status, headers });
 }
 
 serve(async (req) => {
   const origin = req.headers.get("origin") || "";
+
+  if (!origin || !isOriginAllowed(origin)) {
+    return new Response(JSON.stringify({ error: "Origin not allowed." }), {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
   if (req.method === "OPTIONS") {
     return new Response("", { headers: corsHeaders(origin) });
@@ -40,10 +49,6 @@ serve(async (req) => {
 
   if (req.method !== "POST") {
     return jsonResponse({ error: "Only POST method is allowed." }, 405, origin);
-  }
-
-  if (origin && !isOriginAllowed(origin)) {
-    return jsonResponse({ error: "Origin not allowed." }, 403, origin);
   }
 
   try {

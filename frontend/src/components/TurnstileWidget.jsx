@@ -12,7 +12,6 @@ export async function verifyTurnstileToken(token) {
     headers: {
       'Content-Type': 'application/json',
       apikey: anonKey,
-      Authorization: `Bearer ${anonKey}`,
     },
     body: JSON.stringify({ token }),
   });
