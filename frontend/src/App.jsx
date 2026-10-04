@@ -54,6 +54,7 @@ const AdminPpdbPage = lazy(() => import('./pages/admin/ppdb/PPDBPage'));
 const ProtectedRoute = lazy(() => import('./router/ProtectedRoute'));
 const NextTelPage = lazy(() => import('./pages/NextTelPage'));
 const EkstrakurikulerPage = lazy(() => import('./pages/EkstrakurikulerPage'));
+const KebijakanPrivasiPage = lazy(() => import('./pages/KebijakanPrivasiPage'));
 
 const PAGE_META = {
   '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
@@ -70,6 +71,7 @@ const PAGE_META = {
   '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
   '/login': ['Login Admin | SMK Telkom Purwokerto', 'Halaman login administrator website sekolah.'],
   '/dashboard': ['Dashboard Admin | SMK Telkom Purwokerto', 'Kelola konten dan data website sekolah.'],
+  '/kebijakan-privasi': ['Kebijakan Privasi | SMK Telkom Purwokerto', 'Kebijakan privasi dan perlindungan data website SMK Telkom Purwokerto.'],
 };
 
 const PageMetadata = () => {
@@ -188,6 +190,7 @@ const App = () => {
         <Route path="/stela" element={<StelaPage />} />
         <Route path="/nexttel" element={<NextTelPage />} />
         <Route path="/ekstrakurikuler" element={<EkstrakurikulerPage />} />
+        <Route path="/kebijakan-privasi" element={<KebijakanPrivasiPage />} />
 
         <Route element={<AuthProvider><Outlet /></AuthProvider>}>
           <Route path="/login" element={<Login />} />

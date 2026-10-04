@@ -22,6 +22,7 @@ Platform digital sekolah yang mencakup website publik, dashboard administrator, 
 | `/stela` | Halaman chatbot STELA |
 | `/nexttel` | Kuesioner rekomendasi jurusan |
 | `/galeri` | Galeri foto |
+| `/kebijakan-privasi` | Kebijakan Privasi (bilingual) |
 
 Detail dinamis menggunakan route berbasis slug, misalnya `/jurusan/:slug`, `/prestasi/:slug`, `/berita/:slug`, dan `/pengumuman/:slug`.
 
@@ -222,6 +223,7 @@ Edge Function NextTel menggunakan provider AI server-side (9Router, Anthropic, G
 | `VITE_SUPABASE_URL` | Supabase client, Auth, database, Storage, STELA, NextTel | Fitur Supabase | Tidak |
 | `VITE_SUPABASE_ANON_KEY` | Supabase client dan Authorization header | Fitur Supabase | Tidak |
 | `VITE_ADMIN_BYPASS` | Preview admin saat development | Opsional | Tidak |
+| `VITE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key untuk login admin | Opsional | Tidak |
 | `ANTHROPIC_API_KEY` | STELA local | Opsional | Ya |
 | `GEMINI_API_KEY` | STELA local | Opsional | Ya |
 | `GROQ_API_KEY` | STELA local | Opsional | Ya |
@@ -258,6 +260,8 @@ Edge Function NextTel menggunakan provider AI server-side (9Router, Anthropic, G
 | `NEXTTEL_NINEROUTER_MODEL` | Model 9Router khusus NextTel | Tidak |
 | `NEXTTEL_MODEL` | Model NextTel | Tidak |
 | `NEXTTEL_ALLOWED_ORIGINS` | Origin NextTel | Tidak |
+| `CF_TURNSTILE_SECRET` | Cloudflare Turnstile secret key | Ya |
+| `TURNSTILE_ALLOWED_ORIGINS` | Origin Turnstile, dipisahkan koma | Tidak |
 
 Jangan commit `.env`, jangan menaruh service-role key di frontend, dan jangan menaruh API key AI pada variable `VITE_*`. Secret production harus disimpan menggunakan Supabase Secrets.
 
@@ -366,6 +370,9 @@ URL yang dirujuk oleh data aplikasi adalah `https://smk-telkom-purwokerto.vercel
 | Supabase | Migration, Auth, RLS, Storage, dan Edge Functions tersedia di repository |
 | Deployment | Prosedur Vercel tersedia; deployment aktual tidak diverifikasi |
 | Automated Test Suite | Tidak ditemukan test runner khusus |
+| Cloudflare Turnstile | Tersedia pada login admin; memerlukan site key dan Edge Function secret |
+| Visitor Counter | Tersedia; memerlukan migration `009_visitor_counter.sql` |
+| Kebijakan Privasi | Tersedia pada `/kebijakan-privasi` (bilingual) |
 
 ## Catatan
 
@@ -402,6 +409,7 @@ This platform is a school digital application consisting of a public website, ad
 | `/stela` | STELA chatbot page |
 | `/nexttel` | Major recommendation questionnaire |
 | `/galeri` | Photo gallery |
+| `/kebijakan-privasi` | Privacy Policy (bilingual) |
 
 Dynamic detail routes include `/jurusan/:slug`, `/prestasi/:slug`, `/berita/:slug`, and `/pengumuman/:slug`.
 
@@ -746,6 +754,9 @@ Application data references `https://smk-telkom-purwokerto.vercel.app`. The repo
 | Supabase | Migrations, Auth, RLS, Storage, and Edge Functions are present in the repository |
 | Deployment | Vercel procedure is documented; actual deployment is not verified |
 | Automated Test Suite | No dedicated test runner found |
+| Cloudflare Turnstile | Available on admin login; requires site key and Edge Function secret |
+| Visitor Counter | Available; requires migration `009_visitor_counter.sql` |
+| Privacy Policy | Available at `/kebijakan-privasi` (bilingual) |
 
 ## Notes
 
