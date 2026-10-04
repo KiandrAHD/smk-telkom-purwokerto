@@ -118,12 +118,14 @@ const Footer = () => {
               </ul>
             </div>
 
-            <div className="mt-5">
+          </div>
+
+          <div className="min-w-0">
+            <LinkColumn title="Menu" links={footerData.menu} />
+            <div className="mt-6">
               <VisitorCounter />
             </div>
           </div>
-
-          <LinkColumn title="Menu" links={footerData.menu} />
           <LinkColumn title="Informasi" links={footerData.informasi} />
 
           {/* Kontak */}

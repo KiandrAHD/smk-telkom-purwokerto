@@ -511,6 +511,7 @@ export const footerData = {
     { label: 'SPMB', href: '/spmb' },
     { label: 'STELA AI', href: '/stela' },
     { label: 'NextTel', href: '/nexttel' },
+    { label: 'Kebijakan Privasi', href: '/kebijakan-privasi' },
   ],
   kontak: {
     // Alamat lengkap resmi. Nilai ini juga dipakai Footer.jsx untuk menyusun

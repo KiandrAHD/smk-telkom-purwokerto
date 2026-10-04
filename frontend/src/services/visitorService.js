@@ -40,12 +40,20 @@ function markRecorded() {
 }
 
 export async function recordVisit() {
-  if (!supabaseSiap || isRecordedToday()) return;
+  if (!supabaseSiap || isRecordedToday()) return { ok: false, reason: 'not-configured-or-recorded' };
   try {
     const hash = getVisitorHash();
-    await supabase.rpc('record_visit', { p_visitor_hash: hash });
+    const { error } = await supabase.rpc('record_visit', { p_visitor_hash: hash });
+    if (error) {
+      console.warn('Visitor counter record RPC failed. Apply migration 009 and verify Supabase RPC permissions.');
+      return { ok: false, reason: 'rpc-failed' };
+    }
     markRecorded();
-  } catch { /* noop */ }
+    return { ok: true };
+  } catch {
+    console.warn('Visitor counter record request failed.');
+    return { ok: false, reason: 'request-failed' };
+  }
 }
 
 function getCachedStats() {
@@ -71,9 +79,19 @@ export async function getVisitorStats() {
   try {
     const { data, error } = await supabase.rpc('get_visitor_stats');
     if (error) throw error;
-    setCachedStats(data);
-    return data;
+    if (!data || !['daily', 'monthly', 'yearly'].every((key) => Number.isFinite(Number(data[key])))) {
+      console.warn('Visitor counter stats RPC returned an invalid response shape.');
+      return null;
+    }
+    const stats = {
+      daily: Number(data.daily),
+      monthly: Number(data.monthly),
+      yearly: Number(data.yearly),
+    };
+    setCachedStats(stats);
+    return stats;
   } catch {
+    console.warn('Visitor counter stats RPC failed. Apply migration 009 and verify Supabase RPC permissions.');
     return null;
   }
 }
