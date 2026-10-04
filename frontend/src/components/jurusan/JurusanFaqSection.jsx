@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import stelaCard from '../../assets/landing/stela-card.jpg';
-import stelaCardEn from '../../assets/landing/stela-card-en.png';
+import { stelaCardEn, stelaEnglishSrcSet, stelaFullSizes, restoreOriginalStelaArtwork } from '../../utils/stelaArtwork';
 import { jurusanFaq, stelaData } from '../../data/dummyData';
 
 const JurusanFaqSection = () => {
@@ -71,6 +71,9 @@ const JurusanFaqSection = () => {
         <Link to="/stela" aria-label={t(stelaData.ctaText)} className="block overflow-hidden rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
           <img
             src={language === 'en' ? stelaCardEn : stelaCard}
+            srcSet={language === 'en' ? stelaEnglishSrcSet : undefined}
+            sizes={language === 'en' ? stelaFullSizes : undefined}
+            onError={language === 'en' ? restoreOriginalStelaArtwork : undefined}
             alt=""
             aria-hidden="true"
             width={language === 'en' ? 2172 : 2200}

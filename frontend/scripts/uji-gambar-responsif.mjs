@@ -49,6 +49,32 @@ try {
     assert.match(partners, /aria-controls="mitra-logo-track"/);
     console.log('Partners: responsive background, lazy stable decorations and marquee control pass.');
   }
+  if (process.argv.includes('--stela')) {
+    const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
+    const cases = [
+      ['/src/components/StelaAISection.jsx', /stela-card\.jpg/, true],
+      ['/src/components/jurusan/JurusanFaqSection.jsx', /stela-card\.jpg/, true],
+      ['/src/components/pengumuman/PengumumanBantuanCard.jsx', /stela-help-panel\.png/, false],
+    ];
+    for (const [componentPath, originalId, lazy] of cases) {
+      const { default: Component } = await server.ssrLoadModule(componentPath);
+      const render = (language) => renderToStaticMarkup(createElement(MemoryRouter, null,
+        createElement(LanguageContext.Provider, { value: { language, t: (text) => text } }, createElement(Component))));
+      const english = render('en');
+      const banner = english.match(/<img\b[^>]*src="[^"]*stela-card-en[^>]*>/)?.[0];
+      assert.ok(banner, `${componentPath}: English artwork must remain an image`);
+      assert.match(banner, /srcSet="[^"]+"/i, `${componentPath}: English banner still downloads the full PNG at every viewport`);
+      assert.match(banner, /sizes="[^"]+"/);
+      assert.match(banner, /src="[^"]*stela-card-en\.png"/, 'Original PNG must remain the fallback');
+      assert.equal(/loading="lazy"/.test(banner), lazy, 'Preserve each caller\'s loading priority');
+      assert.match(banner, /alt="" aria-hidden="true"/);
+      assert.match(english, /href="\/stela"/);
+      const indonesian = render('id');
+      assert.match(indonesian, originalId, 'Indonesian artwork must remain unchanged');
+      assert.doesNotMatch(indonesian, /stela-card-en/, 'ID must not download EN image candidates');
+    }
+    console.log('STELA: three English callers have selectable sizes, original fallback, unchanged loading/CTA and Indonesian sources.');
+  }
 } finally {
   await server.close();
 }
