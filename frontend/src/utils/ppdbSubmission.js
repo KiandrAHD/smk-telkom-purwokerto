@@ -1,22 +1,44 @@
 import { ppdbAgama, ppdbJurusanPilihan, ppdbMataPelajaran, ppdbSemester, ppdbTahunLulus } from '../data/ppdbFormOptions.js';
 
-const required = ['namaLengkap', 'nisn', 'whatsapp', 'jurusan', 'nik', 'agama', 'tempatLahir', 'tanggalLahir', 'jenisKelamin', 'alamat', 'namaSmp', 'tahunLulus'];
+export const ppdbFieldLabels = { namaLengkap: 'Nama Lengkap', nisn: 'NISN Siswa', whatsapp: 'Nomor WhatsApp', jurusan: 'Peminatan Jurusan', nik: 'NIK (Nomor Induk Kependudukan)', agama: 'Agama', tempatLahir: 'Tempat Lahir', tanggalLahir: 'Tanggal Lahir', jenisKelamin: 'Jenis Kelamin', alamat: 'Alamat Lengkap', namaSmp: 'Nama SMP / MTs', tahunLulus: 'Tahun Lulus' };
 
-const invalid = (message) => {
-  const error = new Error(message);
-  error.code = 'PPDB_VALIDATION';
-  throw error;
+export const validatePpdbForm = (biodata, nilai) => {
+  const errors = [];
+  for (const [field, label] of Object.entries(ppdbFieldLabels)) {
+    if (typeof biodata?.[field] !== 'string' || !biodata[field].trim()) {
+      errors.push({ field, message: '{field} wajib diisi.', variables: { field: label } });
+    }
+  }
+  for (const [field, digits] of [['nisn', 10], ['nik', 16]]) {
+    if (biodata?.[field]?.trim() && !new RegExp(`^\\d{${digits}}$`).test(biodata[field].trim())) {
+      errors.push({ field, message: '{field} harus terdiri dari {digits} digit.', variables: { field: ppdbFieldLabels[field], digits } });
+    }
+  }
+  for (const [field, options] of [['jurusan', ppdbJurusanPilihan], ['agama', ppdbAgama], ['tahunLulus', ppdbTahunLulus], ['jenisKelamin', ['Laki-laki', 'Perempuan']]]) {
+    if (biodata?.[field]?.trim() && !options.includes(biodata[field])) {
+      errors.push({ field, message: 'Pilih {field} yang tersedia.', variables: { field: ppdbFieldLabels[field] } });
+    }
+  }
+  for (const subject of ppdbMataPelajaran) {
+    for (const semester of ppdbSemester) {
+      const field = `${subject.nama}|${semester}`;
+      const raw = nilai?.[field];
+      const score = Number(raw);
+      if (raw === undefined || raw === null || String(raw).trim() === '' || !Number.isFinite(score) || score < 0 || score > 100) {
+        errors.push({ field, message: 'Nilai {subject} {semester} harus berupa angka 0–100.', variables: { subject: subject.nama, semester } });
+      }
+    }
+  }
+  return errors;
 };
 
 export const preparePpdbSubmission = (biodata, nilai) => {
-  if (!biodata || required.some((key) => typeof biodata[key] !== 'string' || !biodata[key].trim())) {
-    invalid('Lengkapi seluruh biodata pada halaman formulir sebelum mengirim berkas.');
-  }
-  if (!/^\d{10}$/.test(biodata.nisn.trim()) || !/^\d{16}$/.test(biodata.nik.trim())) {
-    invalid('NISN harus 10 digit dan NIK harus 16 digit.');
-  }
-  if (!ppdbJurusanPilihan.includes(biodata.jurusan) || !ppdbAgama.includes(biodata.agama) || !ppdbTahunLulus.includes(biodata.tahunLulus) || !['Laki-laki', 'Perempuan'].includes(biodata.jenisKelamin)) {
-    invalid('Periksa kembali pilihan jurusan, agama, tahun lulus, dan jenis kelamin.');
+  const issue = validatePpdbForm(biodata, nilai)[0];
+  if (issue) {
+    const error = new Error(issue.message.replace(/\{(\w+)\}/g, (_, key) => issue.variables[key]));
+    error.code = 'PPDB_VALIDATION';
+    error.field = issue.field;
+    throw error;
   }
   const grades = {};
   for (const subject of ppdbMataPelajaran) {
@@ -24,9 +46,6 @@ export const preparePpdbSubmission = (biodata, nilai) => {
       const key = `${subject.nama}|${semester}`;
       const raw = nilai?.[key];
       const score = Number(raw);
-      if (raw === undefined || raw === null || String(raw).trim() === '' || !Number.isFinite(score) || score < 0 || score > 100) {
-        invalid('Lengkapi seluruh nilai rapor dengan angka antara 0 dan 100.');
-      }
       grades[key] = score;
     }
   }

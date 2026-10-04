@@ -23,10 +23,12 @@ const buatErrorDuplicateSubmission = () => {
 
 export async function submitPpdb(data) {
   const client = ensureSupabase();
+  const { dokumen, biodata, nilai, expectedUserId, ...legacyFields } = data;
   const { data: userData, error: userError } = await client.auth.getUser();
   if (userError) throw userError;
   const user = userData?.user;
   if (!user) throw new Error('Sesi SPMB tidak ditemukan. Silakan login kembali.');
+  if (expectedUserId && user.id !== expectedUserId) throw new Error('Sesi SPMB telah berubah. Masuk kembali sebelum mengirim.');
 
   const { data: existingSubmissions, error: existingError } = await client
     .from('ppdb')
@@ -36,7 +38,6 @@ export async function submitPpdb(data) {
   if (existingError) throw existingError;
   if (existingSubmissions?.length) throw buatErrorDuplicateSubmission();
 
-  const { dokumen, biodata, nilai, ...legacyFields } = data;
   const fields = biodata ? preparePpdbSubmission(biodata, nilai) : legacyFields;
   let documentPath = null;
   const ppdbId = globalThis.crypto?.randomUUID?.();
@@ -104,7 +105,7 @@ export async function getMyPpdb() {
   return throwIfError(await client.from('ppdb').select(ppdbColumns).eq('auth_user_id', userData.user.id).order('created_at', { ascending: false }));
 }
 
-export async function signUpPpdb(email, password, biodata) {
+export async function signUpPpdb(email, password, biodata = { nisn: '', namaLengkap: '', whatsapp: '', jurusan: '' }) {
   const client = ensureSupabase();
   return throwIfError(await client.auth.signUp({
     email,
@@ -125,16 +126,17 @@ export async function getMyPpdbDraft(userId) {
   const client = ensureSupabase();
   if (!userId) throw new Error('Sesi SPMB tidak ditemukan.');
   return throwIfError(await client.from('ppdb_drafts')
-    .select('biodata,nilai')
+    .select('biodata,nilai,updated_at')
     .eq('auth_user_id', userId)
     .maybeSingle());
 }
 
-export async function savePpdbDraft(biodata, nilai) {
+export async function savePpdbDraft(biodata, nilai, expectedUserId) {
   const client = ensureSupabase();
   const { data: { user }, error } = await client.auth.getUser();
   if (error) throw error;
   if (!user) throw new Error('Sesi SPMB tidak ditemukan.');
+  if (expectedUserId && user.id !== expectedUserId) throw new Error('Sesi SPMB telah berubah. Masuk kembali sebelum menyimpan.');
   return throwIfError(await client.from('ppdb_drafts')
     .upsert({ auth_user_id: user.id, biodata, nilai, updated_at: new Date().toISOString() })
     .select('updated_at')

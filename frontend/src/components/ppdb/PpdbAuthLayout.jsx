@@ -13,7 +13,7 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
 
   return (
   <div className="flex min-h-screen flex-col bg-dark-50">
-    <div className={`relative ${tinggiPita} max-sm:h-64 bg-gradient-to-r from-primary-700 via-primary to-primary-600`}>
+    <div className={`relative ${tinggiPita} max-sm:h-60 bg-gradient-to-r from-primary-700 via-primary to-primary-600`}>
       <header className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
         <Link to="/" className="flex items-center gap-3">
           {/* Revisi tim: inisial "T" diganti logo resmi sekolah. */}

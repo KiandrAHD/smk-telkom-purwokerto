@@ -11,6 +11,7 @@ try {
   const { translate } = await server.ssrLoadModule('/src/utils/language.js');
   const { PpdbProvider } = await server.ssrLoadModule('/src/context/PpdbContext.jsx');
   const { default: RegisterPage } = await server.ssrLoadModule('/src/pages/ppdb/RegisterPage.jsx');
+  const { default: FormInput } = await server.ssrLoadModule('/src/components/dashboard/FormInput.jsx');
   const { default: NextTelQuestionnaire } = await server.ssrLoadModule('/src/components/nexttel/NextTelQuestionnaire.jsx');
   const { default: NextTelResult } = await server.ssrLoadModule('/src/components/nexttel/NextTelResult.jsx');
   const { default: StelaChat } = await server.ssrLoadModule('/src/components/stela/StelaChat.jsx');
@@ -24,11 +25,14 @@ try {
   // Translated option labels must keep the backend's original values.
   const registration = render(createElement(PpdbProvider, null, createElement(RegisterPage)), '/spmb/daftar');
   assert.ok(registration.includes('Create a New Account'));
-  assert.ok(registration.includes('Preferred Study Program'));
+  assert.ok(registration.includes('Create an account with an active email and password.'));
+  assert.ok(registration.includes('Show password: Password'));
   assert.ok(registration.includes('Back to Home'));
+  assert.ok(!registration.includes('name="nisn"'), 'Account signup defers personal information to the application form.');
+  const programOptions = render(createElement(FormInput, { label: value.t('Peminatan Jurusan'), as: 'select', options: ppdbJurusanPilihan.map((program) => ({ value: program, label: value.t(program) })) }));
   for (const program of ppdbJurusanPilihan) {
-    assert.ok(registration.includes(`value="${program}"`), `Nilai jurusan ${program} tidak berubah.`);
-    assert.ok(registration.includes(`>${value.t(program)}</option>`), `Label jurusan ${program} diterjemahkan.`);
+    assert.ok(programOptions.includes(`value="${program}"`), `Nilai jurusan ${program} tidak berubah.`);
+    assert.ok(programOptions.includes(`>${value.t(program)}</option>`), `Label jurusan ${program} diterjemahkan.`);
   }
 
   const questions = [{ id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }] }];

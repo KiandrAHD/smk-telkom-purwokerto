@@ -7,7 +7,8 @@ import PanelMerah from '../../components/ppdb/PanelMerah';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { usePpdb } from '../../context/PpdbContext';
 import { ppdbPanelDaftar } from '../../data/dummyData';
-import { ppdbJurusanPilihan } from '../../data/ppdbFormOptions';
+import PasswordInput from '../../components/ppdb/PasswordInput';
+import PreparationChecklist from '../../components/ppdb/PreparationChecklist';
 import { signUpPpdb } from '../../services/ppdbService';
 
 const RegisterPage = () => {
@@ -34,7 +35,7 @@ const RegisterPage = () => {
     setGalat('');
     setMengirim(true);
     try {
-      await signUpPpdb(biodata.email.trim(), sandi.kata, biodata);
+      await signUpPpdb(biodata.email.trim(), sandi.kata);
       navigate('/spmb/verifikasi');
     } catch (error) {
       setGalat(error?.message?.includes('already registered')
@@ -48,66 +49,21 @@ const RegisterPage = () => {
   return (
     <PpdbAuthLayout aksiLabel="Kembali ke Beranda">
       <div className="grid rounded-3xl border border-dark-100 bg-white p-4 shadow-card sm:p-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-        <PanelMerah {...ppdbPanelDaftar} className="rounded-2xl" />
+        <PanelMerah {...ppdbPanelDaftar} className="order-2 rounded-2xl lg:order-1" />
 
-        <div className="p-8 sm:p-10">
+        <div className="order-1 min-w-0 p-3 sm:p-8 lg:order-2 lg:p-10">
           <h1 className="font-heading text-2xl font-extrabold text-dark-900">{t("Daftar Akun Baru")}</h1>
-          <p className="mt-1.5 text-xs text-dark-500">{t("Lengkapi formulir di bawah ini menggunakan data calon siswa.")} </p>
+          <p className="mt-1.5 text-xs text-dark-500">{t("Buat akun dengan email aktif dan kata sandi. Biodata dan nilai dilengkapi setelah verifikasi email.")} </p>
 
+          <PreparationChecklist />
           <form onSubmit={kirim} className="mt-7 space-y-5">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FormInput
-                label={t("NISN Siswa")}
-                wajib
-                value={biodata.nisn}
-                onChange={ubah('nisn')}
-                placeholder={t("10 digit NISN")}
-                inputMode="numeric"
-                maxLength={10}
-                required
-              />
-              <FormInput
-                label={t("Nama Lengkap")}
-                wajib
-                value={biodata.namaLengkap}
-                onChange={ubah('namaLengkap')}
-                placeholder={t("Sesuai Ijazah SMP/MTs")}
-                required
-              />
-            </div>
+            <FormInput label={t("Email Aktif")} wajib type="email" name="email" autoComplete="email" value={biodata.email} onChange={ubah('email')} placeholder="contoh@gmail.com" required />
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FormInput
-                label={t("Email Aktif")}
-                wajib
-                type="email"
-                value={biodata.email}
-                onChange={ubah('email')}
-                placeholder="contoh@gmail.com"
-                required
-              />
-              <FormInput
-                label={t("Nomor WhatsApp")}
-                wajib
-                type="tel"
-                value={biodata.whatsapp}
-                onChange={ubah('whatsapp')}
-                placeholder="08xxxxxxxxxx"
-                required
-              />
-            </div>
-
-            <FormInput
-              label={t("Peminatan Jurusan Utama")}
-              as="select"
-              value={biodata.jurusan}
-              onChange={ubah('jurusan')}
-              required
-              options={[{ value: '', label: t('-- Pilih Peminatan Jurusan --') }, ...ppdbJurusanPilihan.map((value) => ({ value, label: t(value) }))]}
-            />
-
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <FormInput
+              <PasswordInput
+                name="password"
+                autoComplete="new-password"
+                minLength={8}
                 label={t("Kata Sandi")}
                 wajib
                 type="password"
@@ -116,7 +72,10 @@ const RegisterPage = () => {
                 placeholder={t("Minimal 8 Karakter")}
                 required
               />
-              <FormInput
+              <PasswordInput
+                name="confirmPassword"
+                autoComplete="new-password"
+                minLength={8}
                 label={t("Konfirmasi Sandi")}
                 wajib
                 type="password"
@@ -136,7 +95,7 @@ const RegisterPage = () => {
                 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 accent-[color:var(--color-primary)]"
               />
               <span>{t("Saya menyatakan data di atas benar dan menyetujui")}{' '}
-                <Link to="/ketentuan-spmb" className="font-semibold text-primary hover:underline">{t("Ketentuan SPMB SMK Telkom Purwokerto")} </Link>
+                <Link to="/ketentuan-spmb" target="_blank" rel="noreferrer" className="font-semibold text-primary hover:underline">{t("Ketentuan SPMB SMK Telkom Purwokerto")} </Link>
               </span>
             </label>
 

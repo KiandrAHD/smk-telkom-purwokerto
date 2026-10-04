@@ -11,12 +11,13 @@ const FormInput = ({
   wajib = false,
   className = '',
   wrapperClassName = '',
+  error = '',
   ...props
 }) => {
   const { t } = useLanguage();
   const id = useId();
-  const gaya =
-    'w-full rounded-lg border border-dark-200 bg-white px-3 py-2.5 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary';
+  const gaya = `w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary ${error ? 'border-red-500' : 'border-dark-200'}`;
+  const accessibility = error ? { 'aria-invalid': true, 'aria-describedby': `${id}-error` } : {};
 
   return (
     <div className={wrapperClassName}>
@@ -28,7 +29,7 @@ const FormInput = ({
       )}
 
       {as === 'select' ? (
-        <select id={id} className={`${gaya} ${className}`} {...props}>
+        <select id={id} className={`${gaya} ${className}`} {...accessibility} {...props}>
           {options?.map((opsi) =>
             typeof opsi === 'string' ? (
               <option key={opsi} value={opsi}>
@@ -42,10 +43,11 @@ const FormInput = ({
           )}
         </select>
       ) : as === 'textarea' ? (
-        <textarea id={id} className={`${gaya} resize-y ${className}`} {...props} />
+        <textarea id={id} className={`${gaya} resize-y ${className}`} {...accessibility} {...props} />
       ) : (
-        <input id={id} className={`${gaya} ${className}`} {...props} />
+        <input id={id} className={`${gaya} ${className}`} {...accessibility} {...props} />
       )}
+      {error && <p id={`${id}-error`} className="mt-1.5 text-xs text-red-700">{error}</p>}
     </div>
   );
 };

@@ -2702,12 +2702,12 @@ export const ppdbSukses = {
     {
       icon: 'cetak',
       judul: 'Cetak Kartu Peserta SPMB',
-      deskripsi: 'Unduh bukti pendaftaran format PDF',
+      deskripsi: 'Cetak kartu atau simpan sebagai PDF melalui browser',
     },
     {
       icon: 'jadwal',
       judul: 'Jadwal & Tahapan Seleksi',
-      deskripsi: 'Cek tanggal tes dan pengumuman',
+      deskripsi: 'Jadwal resmi 2027/2028 belum tersedia',
     },
   ],
   bantuanTeks: 'Butuh bantuan atau ada kesalahan input data?',
@@ -3296,14 +3296,10 @@ export const dokumenPeserta = {
   kartuJudul: 'Kartu Peserta SPMB',
   kartuCatatan: 'Tunjukkan kartu ini saat registrasi ulang dan pelaksanaan tes.',
   berkas: [
-    { icon: 'cetak', judul: 'Kartu Peserta SPMB', deskripsi: 'Bukti pendaftaran resmi, format PDF' },
+    { icon: 'cetak', judul: 'Kartu Peserta SPMB', deskripsi: 'Cetak kartu atau simpan sebagai PDF melalui browser' },
     { icon: 'jadwal', judul: 'Jadwal Seleksi', deskripsi: 'Tanggal tes tertulis dan wawancara' },
     { icon: 'panduan', judul: 'Panduan Tes Seleksi', deskripsi: 'Materi yang diujikan dan tata tertib' },
   ],
-  tahapan: [
-    { tanggal: '02 Juli 2026', nama: 'Verifikasi Berkas', ket: 'Panitia memeriksa kelengkapan dokumen' },
-    { tanggal: '08 Juli 2026', nama: 'Tes Tertulis', ket: 'Kemampuan dasar dan logika' },
-    { tanggal: '12 Juli 2026', nama: 'Wawancara', ket: 'Minat dan kesiapan belajar' },
-    { tanggal: '18 Juli 2026', nama: 'Pengumuman Hasil', ket: 'Diumumkan lewat portal dan WhatsApp' },
-  ],
+  // Jadwal resmi 2027/2028 belum tersedia dari panitia.
+  tahapan: [],
 };

@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ensureSupabase, supabaseSiap } from '../services/supabase';
-import { getMyPpdb, getMyPpdbDraft, savePpdbDraft, signOutPpdb } from '../services/ppdbService';
+import { getMyPpdb, getMyPpdbDraft, savePpdbDraft, signOutPpdb, submitPpdb } from '../services/ppdbService';
 import { restoreSignupBiodata } from '../utils/ppdbIdentity';
+import { useLocation } from 'react-router-dom';
 
 // Alur PPDB melewati beberapa halaman: daftar akun, isi formulir, unggah berkas,
 // lalu bukti submit. Kalau tiap halaman menyimpan state-nya sendiri, data hilang
@@ -28,6 +29,8 @@ const BIODATA_KOSONG = {
 };
 
 export const PpdbProvider = ({ children }) => {
+  const { pathname } = useLocation();
+  const editing = ['/spmb/formulir', '/spmb/berkas'].includes(pathname);
   const [biodata, setBiodata] = useState(BIODATA_KOSONG);
   const [nilai, setNilai] = useState({});
   const [dokumen, setDokumen] = useState({});
@@ -37,6 +40,16 @@ export const PpdbProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(supabaseSiap);
   const [draftLoading, setDraftLoading] = useState(false);
   const userIdRef = useRef(null);
+  const [draftStatus, setDraftStatus] = useState('idle');
+  const [draftTime, setDraftTime] = useState(null);
+  const [draftLoadError, setDraftLoadError] = useState('');
+  const saveQueue = useRef(Promise.resolve());
+  const latestSnapshot = useRef('');
+  const savedSnapshot = useRef('');
+  const finalizing = useRef(false);
+  const snapshot = JSON.stringify({ biodata, nilai });
+
+  useEffect(() => { latestSnapshot.current = snapshot; }, [snapshot]);
 
   const resetWizard = useCallback(() => {
     setBiodata(BIODATA_KOSONG);
@@ -44,6 +57,10 @@ export const PpdbProvider = ({ children }) => {
     setDokumen({});
     setNomorRegistrasi(null);
     setDraftTersimpan(false);
+    setDraftStatus('idle');
+    setDraftTime(null);
+    setDraftLoadError('');
+    savedSnapshot.current = '';
   }, []);
 
   useEffect(() => {
@@ -86,31 +103,36 @@ export const PpdbProvider = ({ children }) => {
   useEffect(() => {
     if (!currentUser?.id) return undefined;
     let active = true;
-    void getMyPpdb()
-      .then((submissions) => {
-        if (!active || !submissions?.[0]) return;
-        setNomorRegistrasi(submissions[0].id);
-      })
-      .catch((error) => console.warn('Pendaftaran PPDB tidak dapat dimuat:', error));
-    void getMyPpdbDraft(currentUser.id)
-      .then((draft) => {
-        if (!active || !draft) return;
-        setBiodata((current) => ({ ...current, ...draft.biodata, email: currentUser.email }));
-        setNilai(draft.nilai);
-        setDraftTersimpan(true);
-      })
-      .catch((error) => console.warn('Draft PPDB tidak dapat dimuat:', error))
+    const submissionRequest = getMyPpdb().then((submissions) => {
+      if (active && submissions?.[0]) setNomorRegistrasi(submissions[0].id);
+    });
+    const draftRequest = getMyPpdbDraft(currentUser.id).then((draft) => {
+      if (!active || !draft) return;
+      setBiodata((current) => {
+        const restored = { ...current, ...draft.biodata, email: currentUser.email };
+        savedSnapshot.current = JSON.stringify({ biodata: restored, nilai: draft.nilai || {} });
+        return restored;
+      });
+      setNilai(draft.nilai || {});
+      setDraftTersimpan(true);
+      setDraftTime(draft.updated_at || null);
+      setDraftStatus('saved');
+    });
+    void Promise.all([submissionRequest, draftRequest])
+      .catch(() => active && setDraftLoadError('Data tersimpan gagal dimuat. Muat ulang halaman sebelum melanjutkan.'))
       .finally(() => active && setDraftLoading(false));
     return () => { active = false; };
   }, [currentUser?.id, currentUser?.email]);
 
   const isiBiodata = useCallback((sebagian) => {
     setDraftTersimpan(false);
+    setDraftStatus('idle');
     setBiodata((lama) => ({ ...lama, ...sebagian }));
   }, []);
 
   const isiNilai = useCallback((mapel, semester, angka) => {
     setDraftTersimpan(false);
+    setDraftStatus('idle');
     setNilai((lama) => ({ ...lama, [`${mapel}|${semester}`]: angka }));
   }, []);
 
@@ -118,15 +140,61 @@ export const PpdbProvider = ({ children }) => {
     setDokumen((lama) => ({ ...lama, [id]: berkas }));
   }, []);
 
-  const simpanDraft = useCallback(async () => {
-    await savePpdbDraft(biodata, nilai);
-    setDraftTersimpan(true);
-  }, [biodata, nilai]);
+  const simpanDraft = useCallback(() => {
+    const owner = currentUser?.id;
+    const captured = JSON.stringify({ biodata, nilai });
+    const run = saveQueue.current.catch(() => {}).then(async () => {
+      if (!owner || userIdRef.current !== owner) throw new Error('Sesi SPMB telah berubah.');
+      if (savedSnapshot.current === captured) return;
+      setDraftStatus('saving');
+      try {
+        const result = await savePpdbDraft(biodata, nilai, owner);
+        if (userIdRef.current !== owner) throw new Error('Sesi SPMB telah berubah.');
+        savedSnapshot.current = captured;
+        if (latestSnapshot.current === captured) {
+          setDraftTersimpan(true);
+          setDraftStatus('saved');
+          setDraftTime(result?.updated_at || new Date().toISOString());
+        }
+      } catch (error) {
+        if (userIdRef.current === owner) setDraftStatus('error');
+        throw error;
+      }
+    });
+    saveQueue.current = run;
+    return run;
+  }, [biodata, nilai, currentUser?.id]);
 
-  const kirimPendaftaran = useCallback((nomor) => {
-    setNomorRegistrasi(nomor);
-    return nomor;
-  }, []);
+  useEffect(() => {
+    if (!editing || !currentUser || draftLoading || draftLoadError || nomorRegistrasi || finalizing.current || draftTersimpan) return undefined;
+    const timer = window.setTimeout(() => {
+      if (!finalizing.current) void simpanDraft().catch(() => {});
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [editing, currentUser, draftLoading, draftLoadError, nomorRegistrasi, draftTersimpan, simpanDraft]);
+
+  const finalisasiPendaftaran = useCallback(async () => {
+    if (finalizing.current) return null;
+    finalizing.current = true;
+    try {
+      await simpanDraft();
+      const hasil = await submitPpdb({ biodata, nilai, dokumen: dokumen.utama, expectedUserId: currentUser?.id });
+      setNomorRegistrasi(hasil.id);
+      setDokumen({});
+      return hasil;
+    } finally { finalizing.current = false; }
+  }, [biodata, nilai, dokumen, simpanDraft, currentUser?.id]);
+
+  useEffect(() => {
+    const protect = (event) => {
+      if (!nomorRegistrasi && currentUser && ((!draftTersimpan && editing) || dokumen.utama)) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', protect);
+    return () => window.removeEventListener('beforeunload', protect);
+  }, [editing, currentUser, nomorRegistrasi, draftTersimpan, dokumen.utama]);
 
   const mulaiAkunBaru = useCallback(() => {
     resetWizard();
@@ -152,11 +220,14 @@ export const PpdbProvider = ({ children }) => {
       isiNilai,
       isiDokumen,
       simpanDraft,
-      kirimPendaftaran,
+      finalisasiPendaftaran,
+      draftStatus,
+      draftTime,
+      draftLoadError,
       logout,
       mulaiAkunBaru,
     }),
-    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, draftLoading, isiBiodata, isiNilai, isiDokumen, simpanDraft, kirimPendaftaran, logout, mulaiAkunBaru]
+    [biodata, nilai, dokumen, nomorRegistrasi, draftTersimpan, currentUser, authLoading, draftLoading, isiBiodata, isiNilai, isiDokumen, simpanDraft, finalisasiPendaftaran, draftStatus, draftTime, draftLoadError, logout, mulaiAkunBaru]
   );
 
   return <PpdbContext.Provider value={nilaiContext}>{children}</PpdbContext.Provider>;

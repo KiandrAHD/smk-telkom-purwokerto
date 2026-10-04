@@ -20,17 +20,20 @@ const inisial = (nama) =>
 const PpdbPortalLayout = ({ children }) => {
   const { t } = useLanguage();
   const { pathname } = useLocation();
-  const { currentUser, authLoading, draftLoading, logout } = usePpdb();
+  const { currentUser, authLoading, draftLoading, logout, dokumen, draftTersimpan, nomorRegistrasi } = usePpdb();
 
   if (authLoading || draftLoading) {
     return <div className="flex min-h-screen items-center justify-center bg-dark-50 text-sm text-dark-500">{t(authLoading ? 'Memeriksa sesi SPMB...' : 'Memuat draft pendaftaran...')}</div>;
   }
 
   if (!currentUser) return <Navigate to="/spmb/masuk" replace />;
+  if (nomorRegistrasi && ['/spmb/formulir', '/spmb/berkas'].includes(pathname)) {
+    return <Navigate to="/spmb/status" replace />;
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-dark-50">
-      <header className="sticky top-0 z-30 border-b border-dark-100 bg-white">
+      <header className="print:hidden sticky top-0 z-30 border-b border-dark-100 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
           <Link to="/" className="flex items-center gap-3">
             <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary-50 p-1.5 transition-transform hover:scale-105">
@@ -45,7 +48,10 @@ const PpdbPortalLayout = ({ children }) => {
               <p className="max-w-48 truncate font-heading text-xs font-bold leading-tight text-dark-900 sm:max-w-none">
                 {currentUser.email}
               </p>
-              <button type="button" onClick={() => void logout()} className="text-[10px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">{t("Keluar")}</button>
+              <button type="button" onClick={() => {
+                if (!nomorRegistrasi && (!draftTersimpan || dokumen.utama) && !window.confirm(t('Keluar sekarang? Perubahan yang belum tersimpan dan file PDF yang dipilih akan hilang.'))) return;
+                void logout();
+              }} className="text-[10px] font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">{t("Keluar")}</button>
             </div>
             <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary font-heading text-xs font-bold text-white">
               {inisial(currentUser.email || 'SPMB')}
@@ -54,18 +60,18 @@ const PpdbPortalLayout = ({ children }) => {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 print:p-0">
         <PpdbProgress />
 
         {/* key={pathname} memaksa isi dipasang ulang tiap pindah langkah supaya
             animasi masuknya benar-benar jalan — pola yang sama dipakai
             MainLayout dan DashboardLayout. */}
-        <div key={pathname} className="animate-masuk-halaman">
+        <div key={pathname} className="animate-masuk-halaman print:animate-none">
           {children}
         </div>
       </main>
 
-      <footer className="py-6 text-center text-[11px] text-dark-400">{ppdbMeta.hakCipta}</footer>
+      <footer className="print:hidden py-6 text-center text-[11px] text-dark-400">{ppdbMeta.hakCipta}</footer>
     </div>
   );
 };

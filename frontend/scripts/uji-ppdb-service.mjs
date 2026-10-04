@@ -69,7 +69,7 @@ const server = await createServer({
 });
 
 try {
-  const { submitPpdb } = await server.ssrLoadModule('/src/services/ppdbService.js');
+  const { submitPpdb, savePpdbDraft, signUpPpdb } = await server.ssrLoadModule('/src/services/ppdbService.js');
   const submission = { nama_lengkap: 'Siswa', dokumen: document };
 
   const duplicate = buatClient({ existing: [{ id: 'sudah-ada' }] });
@@ -93,6 +93,30 @@ try {
   await assert.rejects(submitPpdb(submission), { code: 'PPDB_DUPLICATE_SUBMISSION' });
   assert.deepEqual(raced.removals, [path]);
   assert.equal(raced.stored.size, 0);
+
+  // An old queued autosave must never write one account's data to another account.
+  let draftWrites = 0;
+  globalThis.__ppdbTestClient = {
+    auth: { getUser: async () => ({ data: { user: { id: 'different-account' } } }) },
+    from() { draftWrites += 1; throw new Error('Should not reach a write'); },
+  };
+  await assert.rejects(savePpdbDraft({ namaLengkap: 'Old draft' }, {}, user.id), /Sesi SPMB telah berubah/);
+  assert.equal(draftWrites, 0);
+  await assert.rejects(submitPpdb({ expectedUserId: user.id }), /Sesi SPMB telah berubah/);
+  assert.equal(draftWrites, 0);
+
+  const previousWindow = globalThis.window;
+  let signup;
+  globalThis.window = { location: { origin: 'http://localhost:5173' } };
+  globalThis.__ppdbTestClient = { auth: { signUp: async (payload) => { signup = payload; return { data: {}, error: null }; } } };
+  try {
+    await signUpPpdb('qa@example.invalid', 'qa-password-only');
+    assert.equal(signup.email, 'qa@example.invalid');
+    assert.deepEqual(signup.options.data.ppdb, { nisn: '', namaLengkap: '', whatsapp: '', jurusan: '' }, 'Simple signup must not carry hidden identity from another draft');
+  } finally {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  }
 
   console.log('Layanan pendaftaran PPDB: lulus');
 } finally {
