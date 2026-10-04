@@ -145,15 +145,16 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
   const belumBertanya = riwayat.length === 1;
 
   return (
-    <div className={`flex flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white ${className}`}>
-      <div ref={pesanRef} data-lenis-prevent className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite" aria-atomic="false">
+    <div className={`flex min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white ${className}`}>
+      <div ref={pesanRef} data-lenis-prevent className="min-h-0 min-w-0 flex-1 space-y-3 overflow-x-hidden overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite" aria-atomic="false">
         {riwayat.map((pesan, i) => (
           <div
             key={i}
-            className={`flex ${pesan.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex min-w-0 ${pesan.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
+            {/* Allow flex shrinking and wrap URLs/code without spaces, preserving paragraphs. */}
             <p
-              className={`max-w-[85%] whitespace-pre-line rounded-2xl px-4 py-2.5 text-xs leading-relaxed ${
+              className={`min-w-0 max-w-[85%] whitespace-pre-line [overflow-wrap:anywhere] rounded-2xl px-4 py-2.5 text-xs leading-relaxed ${
                 pesan.role === 'user'
                   ? 'rounded-br-sm bg-primary text-white'
                   : 'rounded-bl-sm bg-dark-50 text-dark-700'
@@ -180,7 +181,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
         {galat && (
           <div role="alert" className="flex items-start gap-2 rounded-xl bg-primary-50 px-4 py-3 text-[11px] leading-relaxed text-primary-900">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
-            <span className="flex-1">{t(galat)}</span>
+            <span className="min-w-0 flex-1 [overflow-wrap:anywhere]">{t(galat)}</span>
             <button
               type="button"
               onClick={() => kirim(pertanyaanGagal, true)}
@@ -197,7 +198,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
                 key={saran}
                 type="button"
                 onClick={() => kirim(saran)}
-                className="rounded-full border border-dark-200 px-3 py-1.5 text-left text-[10px] font-medium text-dark-600 transition-colors hover:border-primary hover:text-primary"
+                className="min-w-0 max-w-full [overflow-wrap:anywhere] rounded-full border border-dark-200 px-3 py-1.5 text-left text-[10px] font-medium text-dark-600 transition-colors hover:border-primary hover:text-primary"
               >
                 {t(saran)}
               </button>
@@ -212,13 +213,14 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
           e.preventDefault();
           kirim(masukan);
         }}
-        className="flex shrink-0 items-end gap-2 border-t border-dark-100 bg-white px-3 py-3"
+        className="flex min-w-0 shrink-0 items-end gap-2 border-t border-dark-100 bg-white px-3 py-3"
       >
         <label htmlFor="stela-masukan" className="sr-only">{t("Tulis pertanyaan untuk STELA")} </label>
         <textarea
           ref={inputRef}
           id="stela-masukan"
           rows={1}
+          wrap="soft"
           value={masukan}
           onChange={(e) => setMasukan(e.target.value)}
           onKeyDown={(e) => {
@@ -231,7 +233,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
           }}
           maxLength={1000}
           placeholder={t(stelaData.placeholder)}
-          className="max-h-28 min-h-[2.5rem] flex-1 resize-none rounded-xl border border-dark-200 px-3.5 py-2.5 text-xs text-dark-700 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
+          className="max-h-28 min-h-[2.5rem] min-w-0 flex-1 resize-none [overflow-wrap:anywhere] rounded-xl border border-dark-200 px-3.5 py-2.5 text-xs text-dark-700 outline-none transition-colors placeholder:text-dark-400 focus:border-primary"
         />
         <button
           type="submit"
