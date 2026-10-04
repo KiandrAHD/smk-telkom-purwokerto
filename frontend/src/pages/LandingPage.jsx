@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
 import RibbonDivider from '../components/RibbonDivider';
 import DepartmentsSection from '../components/DepartmentsSection';
+import FacilitiesSection from '../components/FacilitiesSection';
 import PartnersSection from '../components/PartnersSection';
 import AchievementsSection from '../components/AchievementsSection';
 import StelaAISection from '../components/StelaAISection';
@@ -18,6 +19,7 @@ const LandingPage = () => (
     <AboutSection />
     <RibbonDivider />
     <DepartmentsSection />
+    <FacilitiesSection />
     <Reveal>
       <PartnersSection />
     </Reveal>
