@@ -12,6 +12,7 @@ const jobs = {
   hero: { input: 'src/assets/drive/header-jurusan.webp', widths: [640, 960, 1440] },
   poster: { input: 'src/assets/tentang/profil-hero.jpg', widths: [640, 960, 1440] },
   partners: { input: 'src/assets/landing/partners-bg.png', widths: [960, 1440, 1847], lossless: true },
+  stela: { input: 'src/assets/landing/stela-card-en.png', widths: [720, 960, 1440, 1920, 2172], lossless: true, outputName: 'stela-card-en' },
 };
 const requested = process.argv.slice(2);
 assert.ok(requested.length, 'Choose an asset: node scripts/buat-gambar-responsif.mjs hero');
@@ -23,7 +24,7 @@ for (const name of requested) {
   const original = await readFile(input);
   const hash = createHash('sha256').update(original).digest('hex');
   for (const width of job.widths) {
-    const output = resolve(root, `src/assets/responsive/${name}-${width}.webp`);
+    const output = resolve(root, `src/assets/responsive/${job.outputName ?? name}-${width}.webp`);
     await sharp(original).resize({ width, withoutEnlargement: true }).webp({ quality: 90, effort: 6, lossless: job.lossless ?? false }).toFile(output);
     const meta = await sharp(output).metadata();
     console.log(`${name}: ${meta.width}x${meta.height}, ${(await stat(output)).size} bytes`);

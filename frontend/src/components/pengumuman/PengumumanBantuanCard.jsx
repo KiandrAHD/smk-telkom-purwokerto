@@ -2,7 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { stelaData } from '../../data/dummyData';
 import stelaPanel from '../../assets/pengumuman/stela-help-panel.png';
-import stelaCardEn from '../../assets/landing/stela-card-en.png';
+import { stelaCardEn, stelaEnglishSrcSet, stelaHelpSizes, restoreOriginalStelaArtwork } from '../../utils/stelaArtwork';
 
 const PengumumanBantuanCard = () => {
   const { t, language } = useLanguage();
@@ -12,6 +12,9 @@ const PengumumanBantuanCard = () => {
     <div className="relative aspect-[565/265] overflow-hidden rounded-xl bg-[#830b19]">
       <img
         src={language === 'en' ? stelaCardEn : stelaPanel}
+        srcSet={language === 'en' ? stelaEnglishSrcSet : undefined}
+        sizes={language === 'en' ? stelaHelpSizes : undefined}
+        onError={language === 'en' ? restoreOriginalStelaArtwork : undefined}
         alt=""
         aria-hidden="true"
         className={language === 'en' ? 'absolute -left-[56%] h-full w-[156%] max-w-none' : 'h-full w-full object-cover'}

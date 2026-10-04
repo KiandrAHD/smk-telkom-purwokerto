@@ -34,6 +34,7 @@ const responsive = [
   ['hero', [640, 960, 1440], 74220],
   ['poster', [640, 960, 1440], 145309],
   ['partners', [960, 1440, 1847], 284699],
+  ['stela-card-en', [720, 960, 1440, 1920, 2172], 1536011],
 ];
 for (const [name, widths, originalBytes] of responsive) {
   for (const width of widths) {
@@ -41,6 +42,7 @@ for (const [name, widths, originalBytes] of responsive) {
     const meta = await sharp(file).metadata();
     assert.equal(meta.width, width, `Wrong width descriptor: ${name}-${width}`);
     assert.equal(meta.format, 'webp');
+    if (name === 'stela-card-en') assert.equal(meta.height * 3, meta.width, 'STELA candidates must retain the exact 3:1 source ratio');
     assert((await stat(file)).size < originalBytes, `Derivative exceeds original transfer size: ${name}-${width}`);
   }
 }
@@ -57,4 +59,8 @@ const originalAlpha = await sharp(originalFile).ensureAlpha().extractChannel('al
 const losslessAlpha = await sharp(losslessFile).ensureAlpha().extractChannel('alpha').raw().toBuffer();
 assert.ok(originalAlpha.equals(losslessAlpha), 'Lossless partner background changed alpha');
 
-console.log(`uji-performa: JavaScript awal ${Math.round(entryBytes / 1024)} KB; ${images.length} gambar utama di bawah 350 KB; 9 varian responsif lebih kecil dari sumber, background lossless identik.`);
+const englishSource = path.join(root, 'src/assets/landing/stela-card-en.png');
+const englishFull = path.join(root, 'src/assets/responsive/stela-card-en-2172.webp');
+assert.ok((await sharp(englishSource).raw().toBuffer()).equals(await sharp(englishFull).raw().toBuffer()), 'Full-size English STELA must preserve every decoded pixel');
+
+console.log(`uji-performa: JavaScript awal ${Math.round(entryBytes / 1024)} KB; ${images.length} gambar utama di bawah 350 KB; 14 varian responsif lebih kecil dari sumber, background dan STELA ukuran penuh lossless identik.`);
