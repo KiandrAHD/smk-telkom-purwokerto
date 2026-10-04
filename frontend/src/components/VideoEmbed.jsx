@@ -10,12 +10,12 @@ import schoolPoster from '../assets/tentang/profil-hero.jpg';
 //
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
-const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked' }) => {
+const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', className = '' }) => {
   const { t } = useLanguage();
   const [diputar, setDiputar] = useState(false);
 
   return (
-    <figure className={layout === 'horizontal' ? 'grid overflow-hidden rounded-[20px] bg-white shadow-[0_0_16px_rgba(0,0,0,0.25)] sm:grid-cols-[57.62%_1fr] lg:rounded-[1.0846vw]' : 'overflow-hidden rounded-2xl border border-dark-100 bg-dark-900 shadow-card'}>
+    <figure className={`${layout === 'horizontal' ? 'grid overflow-hidden rounded-[20px] bg-white shadow-[0_0_16px_rgba(0,0,0,0.25)] sm:grid-cols-[57.62%_1fr] lg:rounded-[1.0846vw]' : 'overflow-hidden rounded-2xl border border-dark-100 bg-dark-900 shadow-card'} ${className}`}>
       <div className={`relative w-full overflow-hidden ${rasio} ${layout === 'horizontal' ? 'rounded-[20px] lg:rounded-[1.0846vw]' : ''}`}>
         {diputar ? (
           <iframe

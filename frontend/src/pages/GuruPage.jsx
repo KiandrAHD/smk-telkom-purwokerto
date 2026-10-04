@@ -28,6 +28,8 @@ function GuruCarousel() {
   const [pageSize, setPageSize] = useState(getPageSize);
   const [page, setPage] = useState(0);
   const pageCount = Math.ceil(guruData.length / pageSize);
+  const indicatorCount = Math.min(4, pageCount);
+  const indicatorStart = Math.floor(page / indicatorCount) * indicatorCount;
 
   useEffect(() => {
     const small = window.matchMedia('(min-width: 640px)');
@@ -104,17 +106,17 @@ function GuruCarousel() {
 
           {pageCount > 1 && (
             <nav aria-label={t("Navigasi profil guru")} className="mt-6 flex items-center justify-center gap-3 sm:mt-8">
-              <button type="button" onClick={() => setPage((current) => Math.max(0, current - 1))} disabled={page === 0} aria-label={t("Guru sebelumnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
+              <button type="button" onClick={() => setPage((current) => (current - 1 + pageCount) % pageCount)} aria-label={t("Guru sebelumnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
                 <ChevronLeft size={22} />
               </button>
               <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 sm:flex-none">
-                {Array.from({ length: pageCount }, (_, index) => (
+                {Array.from({ length: indicatorCount }, (_, offset) => (indicatorStart + offset) % pageCount).map((index) => (
                   <button key={index} type="button" onClick={() => setPage(index)} aria-label={t('Lihat halaman guru {number}', { number: index + 1 })} aria-current={page === index ? 'page' : undefined} className="grid h-8 w-8 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-                    <span aria-hidden="true" className={page === index ? 'h-3 w-3 rounded-full bg-primary' : 'h-3 w-3 rounded-full bg-dark-200'} />
+                    <span aria-hidden="true" className={page === index ? 'h-3 w-6 rounded-full bg-primary' : 'h-3 w-3 rounded-full bg-primary/40'} />
                   </button>
                 ))}
               </div>
-              <button type="button" onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))} disabled={page === pageCount - 1} aria-label={t("Guru berikutnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
+              <button type="button" onClick={() => setPage((current) => (current + 1) % pageCount)} aria-label={t("Guru berikutnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
                 <ChevronRight size={22} />
               </button>
             </nav>

@@ -1,11 +1,19 @@
 import { useLanguage } from '../context/LanguageContext';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import AchievementCard from './AchievementCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Lebar kartu disamakan persis dengan grid aslinya (gap-5 = 1.25rem):
 // 1 kolom di mobile, 2 di sm, 4 di lg.
 const CARD_WIDTH = 'w-full sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-3.75rem)/4)]';
+
+const subscribeDesktop = (notify) => {
+  const query = window.matchMedia('(min-width: 1024px)');
+  query.addEventListener('change', notify);
+  return () => query.removeEventListener('change', notify);
+};
+const getDesktopSnapshot = () => window.matchMedia('(min-width: 1024px)').matches;
+const getServerSnapshot = () => false;
 
 const getCarouselMetrics = (width, cardWidth, gap, count) => {
   const perPage = Math.max(1, Math.round((width + gap) / (cardWidth + gap)));
@@ -21,8 +29,10 @@ const getCarouselIndex = (scrollLeft, maxScroll, step, groups) => {
     ? previous : next;
 };
 
-const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = true }) => {
+const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = true, twoRows = false }) => {
   const { t } = useLanguage();
+  const desktop = useSyncExternalStore(subscribeDesktop, getDesktopSnapshot, getServerSnapshot);
+  const grouped = twoRows && desktop;
   const trackRef = useRef(null);
   const stepRef = useRef(1);
   const drag = useRef({ down: false, moved: false, startX: 0, startLeft: 0 });
@@ -36,11 +46,11 @@ const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = tru
     const el = trackRef.current;
     if (!el?.clientWidth || !el.firstElementChild) return;
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-    const metrics = getCarouselMetrics(el.clientWidth, el.firstElementChild.getBoundingClientRect().width, gap, items.length);
+    const metrics = getCarouselMetrics(el.clientWidth, el.firstElementChild.getBoundingClientRect().width, gap, grouped ? Math.ceil(items.length / 8) : items.length);
     stepRef.current = metrics.step;
     setGroups(metrics.groups);
     setActive(getCarouselIndex(el.scrollLeft, Math.max(0, el.scrollWidth - el.clientWidth), metrics.step, metrics.groups));
-  }, [items.length]);
+  }, [items.length, grouped]);
 
   useEffect(() => {
     measure();
@@ -140,7 +150,15 @@ const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = tru
             : 'cursor-grab snap-x snap-mandatory scroll-smooth'
         }`}
       >
-        {items.map((item, i) => (
+        {grouped ? Array.from({ length: Math.ceil(items.length / 8) }, (_, pageIndex) => (
+          <div key={pageIndex} className="grid w-full shrink-0 snap-start grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {items.slice(pageIndex * 8, (pageIndex + 1) * 8).map((item, index) => (
+              <div key={item.id || item.slug}>
+                {renderCard ? renderCard(item) : <AchievementCard {...item} category={item.kategori} highlight={pageIndex === 0 && index === 0} />}
+              </div>
+            ))}
+          </div>
+        )) : items.map((item, i) => (
           <div key={item.id || item.slug} className={`shrink-0 snap-start ${CARD_WIDTH}`}>
             {renderCard ? renderCard(item) : <AchievementCard {...item} category={item.kategori} highlight={i === 0} />}
           </div>

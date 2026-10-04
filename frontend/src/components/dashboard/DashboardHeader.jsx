@@ -3,6 +3,7 @@ import { Bell, LogOut, Menu, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { adminProfil } from '../../data/dummyData';
+import telkomLogo from '../../assets/landing/logo-smk-telkom-purwokerto.png';
 
 const DashboardHeader = ({ onBukaMenu }) => {
   const [cari, setCari] = useState('');
@@ -63,7 +64,7 @@ const DashboardHeader = ({ onBukaMenu }) => {
         </button>
 
         <div className="flex flex-shrink-0 items-center gap-3">
-          <span className="h-10 w-10 rounded-full bg-dark-200" aria-hidden="true" />
+          <img src={telkomLogo} alt="Logo SMK Telkom Purwokerto" width="40" height="40" className="h-10 w-10 rounded-full bg-dark-200 p-1.5 object-contain" />
           <div className="hidden sm:block">
             <p className="font-heading text-xs font-bold leading-tight text-dark-900">
               {adminProfil.nama}

@@ -20,10 +20,10 @@ const AboutSection = () => {
   return (
   <section id="tentang" className="bg-white py-12 sm:py-16 lg:py-20">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 items-start gap-8 rounded-3xl border border-dark-100 bg-dark-50 p-5 sm:p-8 lg:grid-cols-[42%_1fr] lg:gap-10 lg:p-10">
+      <div className="grid grid-cols-1 items-start gap-8 rounded-3xl border border-dark-100 bg-dark-50 p-5 sm:p-8 lg:grid-cols-[42%_1fr] lg:gap-x-10 lg:gap-y-7 lg:p-10">
         {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
             ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
-        <Reveal>
+        <Reveal className="lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:h-full">
           <VideoEmbed
             videoId={landingAbout.video.videoId}
             poster={landingAbout.video.poster}
@@ -32,22 +32,25 @@ const AboutSection = () => {
             posterSizes="(min-width: 80rem) 35.523rem, (min-width: 64rem) calc(50.3329vw - 4.7427rem), (min-width: 40rem) calc(119.8402vw - 8.6884rem), calc(119.8402vw - 5.6924rem)"
             title={t(landingAbout.video.title)}
             desc={t(landingAbout.video.desc)}
-            rasio="aspect-video"
+            rasio="aspect-video lg:aspect-auto lg:h-full"
+            className="lg:h-full"
             showCaption={false}
           />
         </Reveal>
 
         {/* Teks + badge */}
-        <div>
-          <h2 className="font-heading text-[1.75rem] font-extrabold leading-tight tracking-tight text-dark-900 sm:text-[2rem] xl:text-[2.5rem]">
-            {t(landingAbout.title)}
-          </h2>
-          <TextReveal
-            text={t(landingAbout.description)}
-            className="mt-5 max-w-2xl text-base leading-relaxed text-dark-900 sm:text-lg"
-          />
+        <div className="lg:contents">
+          <div className="lg:col-start-2 lg:row-start-1">
+            <h2 className="font-heading text-[1.75rem] font-extrabold leading-tight tracking-tight text-dark-900 sm:text-[2rem] xl:text-[2.5rem]">
+              {t(landingAbout.title)}
+            </h2>
+            <TextReveal
+              text={t(landingAbout.description)}
+              className="mt-5 max-w-2xl text-base leading-relaxed text-dark-900 sm:text-lg"
+            />
+          </div>
 
-          <div className="mt-7 grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="mt-7 grid auto-rows-fr grid-cols-1 gap-3 sm:grid-cols-2 lg:col-start-2 lg:row-start-2 lg:mt-0">
             {landingAbout.badges.map((badge, index) => (
               <Reveal
                 key={badge.title}
@@ -74,7 +77,7 @@ const AboutSection = () => {
 
           <Link
             to="/profil-sekolah"
-            className="mt-7 inline-flex min-h-11 items-center rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-900 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            className="mt-7 inline-flex min-h-11 items-center rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-900 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:col-start-2 lg:row-start-3 lg:mt-0 lg:justify-self-start"
           >
             {t(landingAbout.ctaText)}
           </Link>

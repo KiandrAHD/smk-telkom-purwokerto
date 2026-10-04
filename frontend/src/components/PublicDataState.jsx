@@ -1,11 +1,11 @@
 import { useLanguage } from '../context/LanguageContext';
 import ContentSkeleton from './ContentSkeleton';
 
-const PublicDataState = ({ loading, error, empty, label, onRetry, carousel = false, deferred = false }) => {
+const PublicDataState = ({ loading, error, empty, label, onRetry, carousel = false, deferred = false, twoRows = false }) => {
   const { t } = useLanguage();
   if (loading) {
     // Scroll restoration must not wait for a request that requires scrolling.
-    return <div aria-busy={!deferred}><p role="status" className="pt-6 text-center text-sm text-dark-500">{t('Memuat {label}...', { label: t(label) })}</p><ContentSkeleton carousel={carousel} /></div>;
+    return <div aria-busy={!deferred}><p role="status" className="pt-6 text-center text-sm text-dark-500">{t('Memuat {label}...', { label: t(label) })}</p><ContentSkeleton carousel={carousel} twoRows={twoRows} /></div>;
   }
 
   if (error) {

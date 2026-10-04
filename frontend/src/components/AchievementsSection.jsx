@@ -79,9 +79,9 @@ const AchievementsSection = () => {
         />
       </div>
 
-      {/* Kartu prestasi — carousel horizontal, dot ada di dalamnya */}
-      <PublicDataState loading={loading} error={t(error)} empty={!loading && !error && !items.length} label="prestasi" carousel deferred={!requestStarted} />
-      {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} />}
+      {/* Delapan kartu per halaman, empat kolom pada desktop */}
+      <PublicDataState loading={loading} error={t(error)} empty={!loading && !error && !items.length} label="prestasi" carousel twoRows deferred={!requestStarted} />
+      {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} twoRows />}
 
     </div>
   </section>

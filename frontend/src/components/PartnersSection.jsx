@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { useLanguage } from '../context/LanguageContext';
 import bg from '../assets/responsive/partners-1847.webp';
 import bg960 from '../assets/responsive/partners-960.webp';
 import bg1440 from '../assets/responsive/partners-1440.webp';
@@ -8,12 +6,10 @@ import decoRight from '../assets/landing/partners-deco-right.png';
 import { mitraIndustri } from '../data/dummyData';
 
 const PartnersSection = () => {
-  const { t } = useLanguage();
-  const [paused, setPaused] = useState(false);
 
   return (
     <>
-      <section id="mitra" data-paused={paused} className="relative w-full overflow-hidden">
+      <section id="mitra" className="relative w-full overflow-hidden">
         <img
           src={bg}
           srcSet={`${bg960} 960w, ${bg1440} 1440w, ${bg} 1847w`}
@@ -68,16 +64,6 @@ const PartnersSection = () => {
           </div>
         </div>
       </section>
-      <button
-        type="button"
-        aria-controls="mitra-logo-track"
-        aria-label={t('Jeda animasi logo')}
-        aria-pressed={paused}
-        onClick={() => setPaused((value) => !value)}
-        className="mx-auto mb-4 mt-3 block rounded-full border border-dark-200 bg-white px-4 py-2 text-xs font-medium text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:hidden"
-      >
-        {t(paused ? 'Lanjutkan animasi logo' : 'Jeda animasi logo')}
-      </button>
     </>
   );
 };
