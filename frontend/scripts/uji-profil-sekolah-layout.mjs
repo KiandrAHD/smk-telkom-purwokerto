@@ -6,11 +6,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { createServer } from 'vite';
 
 const source = await readFile(new URL('../src/components/tentang/TentangKepalaSekolahSection.jsx', import.meta.url), 'utf8');
-assert.match(source, /grid-cols-1 items-stretch/, 'Kedua kontainer mengikuti tinggi baris grid.');
-assert.match(source, /flex min-w-0 flex-col/, 'Kartu kepala sekolah memakai flex column untuk distribusi vertikal.');
-assert.match(source, /flex-1 grid/, 'Content area mengambil sisa tinggi kartu.');
-assert.match(source, /items-center/, 'Desktop: profile dan quote terpusat vertikal.');
-assert.match(source, /grid-cols-\[minmax\(0,110px\)/, 'Foto desktop dibatasi proporsi moderat, bukan terlalu besar.');
 assert.match(source, /aspect-\[3\/4\] w-full/, 'Foto menjaga rasio saat lebar kontainer berubah.');
 assert.doesNotMatch(source, /aspect-\[257\/321\]/, 'Foto tidak lagi memakai rasio sangat tinggi yang hanya cocok untuk ukuran besar.');
 assert.match(source, /mt-4 flex min-w-0 justify-center/, 'Tautan guru berada di footer dengan spacing dan lebar yang dibatasi.');
@@ -28,6 +23,7 @@ try {
       createElement(LanguageContext.Provider, { value }, createElement(Section))));
     assert.doesNotMatch(html, /Sambutan Lengkap|Read Full Welcome Address|Tutup Ringkasan/);
     assert.ok(html.includes(translate(kepalaSekolah.quoteFull, language)), 'Sambutan lengkap tetap dapat dibaca tanpa tombol.');
+    assert.ok(html.includes('<blockquote'), 'Sambutan memiliki markup kutipan yang semantik.');
     assert.equal((html.match(/href="\/profil-sekolah\/guru"/g) ?? []).length, 1, 'Tautan semua profil guru hanya muncul sekali.');
     const heading = html.indexOf(translate('Guru & Tenaga Pendidik', language).replace('&', '&amp;'));
     const link = html.indexOf('href="/profil-sekolah/guru"');
@@ -42,7 +38,7 @@ try {
     assert.ok(html.includes(translate('Lihat semua profil guru', language)));
     assert.ok(html.includes(translate('Guru berikutnya', language)), 'Navigasi carousel tetap tersedia.');
   }
-  console.log('Profil sekolah: kartu sejajar, foto dan identitas proporsional, serta tautan guru di bawah indikator carousel dalam kedua bahasa.');
+  console.log('Profil sekolah: foto, identitas, dan sambutan lengkap dipertahankan; tautan serta navigasi guru tersedia dalam kedua bahasa. Geometri diperiksa di browser.');
 } finally {
   await server.close();
 }

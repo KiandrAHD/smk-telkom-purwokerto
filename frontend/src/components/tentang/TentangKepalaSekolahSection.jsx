@@ -29,26 +29,28 @@ const TentangKepalaSekolahSection = () => {
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8 min-[1660px]:max-w-[1621px] min-[1660px]:grid-cols-[610px_964px] min-[1660px]:gap-[47px] min-[1660px]:px-0">
         {/* Kepala Sekolah */}
-        <div className="flex min-w-0 flex-col rounded-2xl border border-dark-100 bg-white p-5 shadow-card min-[1660px]:min-h-[438px] min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd] min-[1660px]:px-0">
-          <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:ml-[42px] min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Kepala Sekolah")} </h2>
-          <div className="mt-4 flex-1 grid grid-cols-1 items-start gap-4 min-[400px]:grid-cols-[minmax(0,110px)_minmax(0,1fr)] lg:grid-cols-[minmax(0,120px)_minmax(0,1fr)] lg:items-center min-[1660px]:mt-[18px] min-[1660px]:grid-cols-[minmax(0,130px)_minmax(0,1fr)] min-[1660px]:gap-[13px] min-[1660px]:px-[34px]">
-            <figure className="min-w-0 w-full max-w-24 min-[400px]:max-w-none">
+        <div className="flex min-w-0 flex-col rounded-2xl border border-dark-100 bg-white p-5 shadow-card sm:p-6 min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd]">
+          <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Kepala Sekolah")} </h2>
+          <div className="mt-5 flex flex-1 flex-col justify-center gap-6">
+            <figure className="mx-auto grid w-full min-w-0 max-w-44 items-center gap-4 min-[400px]:max-w-none min-[400px]:grid-cols-[128px_minmax(0,1fr)] lg:grid-cols-[144px_minmax(0,1fr)] min-[1660px]:grid-cols-[176px_minmax(0,1fr)]">
               <img
                 src={kepalaSekolah.image}
                 alt={t(kepalaSekolah.name)}
-                className="aspect-[3/4] w-full rounded-xl bg-dark-50 object-contain p-1 min-[1660px]:p-0"
+                loading="lazy"
+                decoding="async"
+                className="aspect-[3/4] w-full rounded-xl bg-dark-50 object-contain p-1"
               />
-              <figcaption className="mt-2 [overflow-wrap:anywhere]">
-                <p className="text-[10px] font-bold text-primary min-[1660px]:text-xs">{t(kepalaSekolah.name)}</p>
-                <p className="text-[9px] text-dark-500 min-[1660px]:text-[11px]">{t(kepalaSekolah.title)}</p>
+              <figcaption className="[overflow-wrap:anywhere]">
+                <p className="font-heading text-base font-bold leading-snug text-primary min-[1660px]:text-lg">{t(kepalaSekolah.name)}</p>
+                <p className="mt-1 text-xs leading-relaxed text-dark-500">{t(kepalaSekolah.title)}</p>
               </figcaption>
             </figure>
-            <div className="min-w-0">
-              <Quote className="h-4 w-4 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" />
-              <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600 min-[1660px]:text-[18px] min-[1660px]:leading-[1.55]">
+            <blockquote className="min-w-0 rounded-xl bg-dark-50 p-4 sm:p-5">
+              <Quote className="h-5 w-5 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" aria-hidden="true" />
+              <p className="mt-2 text-sm leading-relaxed text-dark-600 min-[1660px]:text-base">
                 {t(kepalaSekolah.quoteFull)}
               </p>
-            </div>
+            </blockquote>
           </div>
         </div>
 
