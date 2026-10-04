@@ -14,10 +14,14 @@ const VisitorCounter = () => {
 
   useEffect(() => {
     let cancelled = false;
-    recordVisit();
     getVisitorStats().then((data) => {
       if (!cancelled && data) setStats(data);
     });
+    const schedule = globalThis.requestIdleCallback || ((callback) => setTimeout(callback, 100));
+    schedule(() => {
+      if (!cancelled) recordVisit();
+    });
+    
     return () => { cancelled = true; };
   }, []);
 
