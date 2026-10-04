@@ -8,6 +8,7 @@ const LandingPage = lazy(() => import('./pages/LandingPage'));
 import { useLanguage } from './context/LanguageContext';
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
 const GuruPage = lazy(() => import('./pages/GuruPage'));
+const GuruDetailPage = lazy(() => import('./pages/GuruDetailPage'));
 const JurusanPage = lazy(() => import('./pages/JurusanPage'));
 const PrestasiPage = lazy(() => import('./pages/PrestasiPage'));
 const BkkPage = lazy(() => import('./pages/BkkPage'));
@@ -141,7 +142,7 @@ const App = () => {
         <Route path="/jurusan/faq" element={<JurusanFaqPage />} />
         <Route path="/jurusan/perbandingan" element={<JurusanPerbandinganPage />} />
         <Route path="/jurusan/project/:slug" element={<DetailPelengkapPage jenis="project" />} />
-        <Route path="/profil-sekolah/guru/:slug" element={<DetailPelengkapPage jenis="guru" />} />
+        <Route path="/profil-sekolah/guru/:slug" element={<GuruDetailPage />} />
         <Route path="/tentang/guru/:slug" element={<LegacyProfileGuruRedirect />} />
         <Route path="/ketentuan-spmb" element={<KetentuanPpdbPage />} />
         <Route path="/lupa-sandi" element={<LupaSandiPage />} />

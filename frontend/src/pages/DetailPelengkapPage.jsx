@@ -31,12 +31,13 @@ const KOLEKSI = {
   guru: { data: guruDetail, backTo: '/profil-sekolah/guru', backLabel: 'Profil Guru' },
 };
 
-const DetailPelengkapPage = ({ jenis }) => {
-  const { t } = useLanguage();
+const DetailPelengkapPage = ({ jenis, data, translations }) => {
+  const { t: translate, language } = useLanguage();
+  const t = (text, variables) => translate(language === 'en' ? translations?.[text] ?? text : text, variables);
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
   const koleksi = KOLEKSI[jenis];
-  const item = koleksi?.data.find((entri) => entri.slug === slug);
+  const item = (data || koleksi?.data)?.find((entri) => entri.slug === slug);
 
   if (!item) return <SegeraHadirPage />;
 

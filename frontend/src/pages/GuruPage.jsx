@@ -6,7 +6,8 @@ import CTASection from '../components/CTASection';
 import Reveal from '../components/Reveal';
 import RibbonDivider from '../components/RibbonDivider';
 import StelaAISection from '../components/StelaAISection';
-import { guruData, kepalaSekolah, visiMisi } from '../data/dummyData';
+import { kepalaSekolah, visiMisi } from '../data/dummyData';
+import { profilGuruData as guruData, profilGuruTranslations } from '../data/profilGuruData';
 import MainLayout from '../layouts/MainLayout';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { slugify } from '../utils/slug';
@@ -22,7 +23,8 @@ const getPageSize = () => {
 };
 
 function GuruCarousel() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const teacherText = (text) => t(language === 'en' ? profilGuruTranslations[text] ?? text : text);
   const [pageSize, setPageSize] = useState(getPageSize);
   const [page, setPage] = useState(0);
   const pageCount = Math.ceil(guruData.length / pageSize);
@@ -74,7 +76,11 @@ function GuruCarousel() {
                       >
                         <article className="bg-white transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transform-none">
                           <div className="relative p-[10px]">
-                            <TeacherPhoto teacher={guru} alt={guru.nama} />
+                            {Math.abs(pageIndex - page) <= 1 ? (
+                              <TeacherPhoto teacher={guru} alt={t('Foto {name}', { name: guru.nama })} />
+                            ) : (
+                              <div aria-hidden="true" className="aspect-[4/5] rounded-xl bg-dark-50" />
+                            )}
                             <div aria-hidden="true" className="guru-accent-horizontal-top pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
                             <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
                             <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
@@ -82,8 +88,9 @@ function GuruCarousel() {
                           </div>
                           <div className="px-3 pb-3 pt-2 [overflow-wrap:anywhere]">
                             <h3 className="font-heading text-sm font-bold leading-snug text-primary sm:text-base">{guru.nama}</h3>
-                            <p className="mt-1 text-xs font-semibold leading-relaxed text-dark-900">{t(guru.jabatan)}</p>
-                            <p className="mt-2 text-xs leading-relaxed text-dark-500">{t(guru.deskripsi)}</p>
+                            <p className="mt-1 text-xs font-semibold leading-relaxed text-dark-900">{teacherText(guru.jabatan)}</p>
+                            {guru.sourceFile && guru.mapel && <p className="mt-1 text-xs leading-relaxed text-dark-600">{t('Mata Pelajaran')}: {teacherText(guru.mapel)}</p>}
+                            <p className="mt-2 text-xs leading-relaxed text-dark-500">{teacherText(guru.deskripsi)}</p>
                           </div>
                         </article>
                       </Link>
