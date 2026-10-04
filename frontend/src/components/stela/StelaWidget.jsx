@@ -2,7 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
-import maskot from '../../assets/pengumuman/stela-bot.png';
+import maskot from '../../assets/landing/stela-ai-chatbot.png';
 
 const StelaChat = lazy(() => import('./StelaChat'));
 
