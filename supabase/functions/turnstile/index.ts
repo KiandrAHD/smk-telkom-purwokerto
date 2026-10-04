@@ -1,5 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
+/**
+ * Cloudflare Turnstile Verification Edge Function
+ *
+ * NOTE: Turnstile is temporarily disabled on frontend for deadline release;
+ * server verification remains available for future reactivation.
+ */
+
 const CF_TURNSTILE_SECRET = Deno.env.get('CF_TURNSTILE_SECRET');
 if (!CF_TURNSTILE_SECRET) {
   throw new Error("Missing Cloudflare Turnstile secret key.");
