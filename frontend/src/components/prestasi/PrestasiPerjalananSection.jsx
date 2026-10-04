@@ -56,7 +56,7 @@ const PrestasiPerjalananSection = ({ items = hallOfFame.items }) => {
               <article key={person.name} className="flex min-h-84 w-full min-w-0 flex-col items-center rounded-[20px] bg-white px-3 pb-6 pt-4 text-center shadow-[0_0_24px_rgba(130,130,130,0.25)] sm:w-[calc((100%-1.25rem)/2)] lg:min-h-[20.12cqw] lg:w-[15.3471cqw] lg:shrink-0 lg:rounded-[1.0846cqw] lg:px-[1.0846cqw] lg:pb-[2.061cqw] lg:pt-[0.8134cqw]">
                 <ContentImage src={person.image} alt={t(person.imageAlt || person.name)} loading="lazy" className="size-24 shrink-0 rounded-full object-cover object-top lg:size-[6.5629cqw]" />
                 <h3 className="mt-3 text-sm font-bold leading-tight text-black lg:mt-[0.5423cqw] lg:text-[clamp(0.75rem,1.0846cqw,1.25rem)]">
-                  {person.sourceUrl ? <a href={person.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`${t('Lihat profil alumni')}: ${person.name}`} className="rounded-sm underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{person.name}</a> : person.name}
+                  {person.name}
                 </h3>
                 <p className="mt-1 text-xs leading-snug text-black/70 lg:text-[clamp(0.6875rem,0.8677cqw,1rem)]">{t(person.achievement)}</p>
                 <div className="mt-auto flex flex-col items-center pt-5 lg:pt-[0.7592cqw]">

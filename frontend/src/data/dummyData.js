@@ -1,4 +1,6 @@
 import timDinacom2023 from '../assets/showcase/tim-dinacom-2023.jpeg';
+import worldOfAdventure from '../assets/showcase/world-of-adventure.jpeg';
+import rupantara from '../assets/showcase/rupantara.jpeg';
 import alumniKhairudin from '../assets/alumni/moh-khairudin.jpg';
 import alumniTenia from '../assets/alumni/tenia-wahyuningrum.jpg';
 import alumniAlfa from '../assets/alumni/alfa-putra-kurnia.jpg';
@@ -644,18 +646,32 @@ export const projectShowcase = {
       body: ['Tim siswa kelas XII RPL mengikuti DINACOM pada 18 Januari 2023 dengan bimbingan Indah Cahyani, S.Kom. Judul kartu merupakan label dokumentasi kompetisi, karena sumber tidak menyebut nama aplikasinya.'],
     },
     {
-      tag: 'IoT', tagClass: 'bg-green-700', title: 'ASISTANI',
-      description: 'Aplikasi mobile berbasis IoT karya Poundra, Djaka, dan Gilang untuk membantu meningkatkan hasil pertanian.',
-      image: '', iso: '2018-11-28', author: 'Poundra Verdian, Djaka Pradana, Nicholaus Gilang',
-      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/juara-favorit-nasional-tbig-creation-2018/',
-      body: ['ASISTANI meraih Juara Favorit Nasional TBIG Creation 2018 dengan predikat Terbaik Pilihan Perusahaan. Artikel resmi membahas ide, sasaran pengguna, dan rencana penyempurnaan produk.'],
+      tag: 'PG', tagClass: 'bg-green-700', title: 'World Of Adventure',
+      description: 'Game World of Adventure buatan Anda adalah game platformer 2D bergaya pixel art dengan suasana hutan.',
+      image: worldOfAdventure,
+      imageAlt: 'Cover game World Of Adventure dengan karakter bertopi merah di hutan pixel art',
+      body: [
+        'Gameplay',
+        'Pemain mengendalikan karakter bertopi merah dengan tas di punggung, yang menjelajahi hutan dengan berlari, melompat antar platform, dan memanjat tangga kayu.',
+        'Tujuannya mengumpulkan koin sambil menghindari bahaya. Skor saat ini adalah 10 (tampil di kiri atas).',
+        'Ada bar nyawa/health berwarna merah di pojok kiri atas.',
+        'Elemen dalam game',
+        'Koin emas yang tersebar sebagai item yang dikumpulkan.',
+        'Platform rumput di berbagai ketinggian, serta peti kayu yang bisa dijadikan pijakan.',
+        'Tangga untuk naik ke area yang lebih tinggi.',
+        'Musuh: makhluk ungu bermata satu yang berpatroli.',
+        'Rintangan: duri merah di tanah dan benda berbentuk kubah logam yang tampaknya berbahaya.',
+        'Visual',
+        'Latar belakang hutan berlapis (parallax) dengan pepohonan besar memberi kesan kedalaman dan suasana petualangan yang kuat.',
+        'Secara keseluruhan, game ini sudah punya fondasi platformer yang solid: ada skor, health, musuh, jebakan, dan eksplorasi vertikal. Jika ingin dikembangkan, Anda bisa menambahkan level berikutnya, boss, atau power-up.',
+      ],
     },
     {
-      tag: 'RPL', tagClass: 'bg-purple-600', title: 'Senimart',
-      description: 'Aplikasi mobile untuk mempertemukan pengrajin Indonesia, karya Ardyan, Rizal, dan Lulu.',
-      image: '', iso: '2018-11-30', author: 'Ardyan Wahyu, Rizal Gradianto, Lulu Irman Permana',
-      sourceUrl: 'https://smktelkom-pwt.sch.id/prestasi-siswa/juara-ii-nasional-hackathon/',
-      body: ['Tim siswa kelas XI RPL mengembangkan Senimart dan meraih Juara II Nasional dalam Hackathon ITTP pada 24–25 November 2018.'],
+      tag: 'IoT', tagClass: 'bg-purple-600', title: 'RUPANTARA',
+      description: 'Produk yang kami rancang adalah kartu pintar berbasis NFC (Near Field Communication) yang terhubung langsung ke website edukasi interaktif Cinta, Bangga, dan Paham Rupiah.',
+      image: rupantara,
+      imageAlt: 'Learning kit RUPANTARA dengan kartu NFC dan panduan Cinta, Bangga, dan Paham Rupiah',
+      body: ['Pengguna cukup menempelkan kartu ke smartphone untuk mengakses berbagai fitur, seperti scanner uang Rupiah yang mampu mengenali jenis pecahan sekaligus memberikan informasi mengenai ciri keaslian uang, cara membedakan uang asli dan palsu, cara merawat serta menggunakan Rupiah dengan benar, hingga kuis interaktif untuk menguji pemahaman pengguna. Solusi ini menggabungkan teknologi digital dengan edukasi yang praktis, menarik, dan mudah diakses kapan saja.'],
     },
   ],
 };
