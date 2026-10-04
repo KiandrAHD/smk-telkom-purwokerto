@@ -31,35 +31,30 @@ const TentangKepalaSekolahSection = () => {
         {/* Kepala Sekolah */}
         <div className="min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card min-[1660px]:min-h-[438px] min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd] min-[1660px]:px-0">
           <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:ml-[42px] min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Kepala Sekolah")} </h2>
-          <div className="mt-4 flex flex-col gap-4 min-[400px]:flex-row min-[1660px]:mt-[18px] min-[1660px]:gap-[13px] min-[1660px]:px-[34px]">
-            <img
-              src={kepalaSekolah.image}
-              alt={t(kepalaSekolah.name)}
-              className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-contain p-1 min-[1660px]:h-[321px] min-[1660px]:w-[257px] min-[1660px]:p-0"
-            />
+          <div className="mt-4 grid grid-cols-1 items-start gap-4 min-[400px]:grid-cols-[minmax(0,96px)_minmax(0,1fr)] min-[1660px]:mt-[18px] min-[1660px]:grid-cols-[257px_minmax(0,1fr)] min-[1660px]:gap-[13px] min-[1660px]:px-[34px]">
+            <figure className="min-w-0 w-full max-w-24 min-[400px]:max-w-none">
+              <img
+                src={kepalaSekolah.image}
+                alt={t(kepalaSekolah.name)}
+                className="aspect-[3/4] w-full rounded-xl bg-dark-50 object-contain p-1 min-[1660px]:aspect-[257/321] min-[1660px]:p-0"
+              />
+              <figcaption className="mt-2 [overflow-wrap:anywhere]">
+                <p className="text-[10px] font-bold text-primary min-[1660px]:text-xs">{t(kepalaSekolah.name)}</p>
+                <p className="text-[9px] text-dark-500 min-[1660px]:text-[11px]">{t(kepalaSekolah.title)}</p>
+              </figcaption>
+            </figure>
             <div className="min-w-0">
               <Quote className="h-4 w-4 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" />
               <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600 min-[1660px]:text-[18px] min-[1660px]:leading-[1.45]">
                 {t(kepalaSekolah.quoteFull)}
               </p>
-              <p className="mt-2 text-[10px] font-bold text-primary min-[1660px]:text-xs">{t(kepalaSekolah.name)}</p>
-              <p className="text-[9px] text-dark-500 min-[1660px]:text-[11px]">{t(kepalaSekolah.title)}</p>
             </div>
           </div>
         </div>
 
         {/* Guru & Tenaga Pendidik */}
         <div className="relative min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd] min-[1660px]:pb-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <h2 className="min-w-0 font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
-            <Link
-              to="/profil-sekolah/guru"
-              className="inline-flex max-w-full items-center gap-2 rounded-full border border-dark-200 bg-white px-4 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-            >
-              {t("Lihat semua profil guru")}
-              <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-            </Link>
-          </div>
+          <h2 className="min-w-0 font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500">{t("Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.")} </p>
 
           {/* Key memulai ulang animasi masuk ketika halaman guru berubah. */}
@@ -120,6 +115,15 @@ const TentangKepalaSekolahSection = () => {
             ><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>
           </div>
           )}
+          <div className="mt-4 flex min-w-0 justify-center">
+            <Link
+              to="/profil-sekolah/guru"
+              className="inline-flex max-w-full items-center gap-2 rounded-full border border-dark-200 bg-white px-4 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            >
+              {t("Lihat semua profil guru")}
+              <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -8,7 +8,9 @@ import { createServer } from 'vite';
 const source = await readFile(new URL('../src/components/tentang/TentangKepalaSekolahSection.jsx', import.meta.url), 'utf8');
 assert.match(source, /grid-cols-1 items-stretch/, 'Kedua kontainer mengikuti tinggi baris grid.');
 assert.doesNotMatch(source, /self-start|setExpanded|kepalaSekolah\.ctaText/, 'Kartu kepala sekolah tidak lagi memiliki tombol sambutan atau alignment terpisah.');
-assert.match(source, /flex flex-wrap items-start justify-between/, 'Header guru dapat turun baris pada layar kecil.');
+assert.match(source, /grid-cols-1 items-start/, 'Foto dan sambutan tidak meregang mengikuti tinggi satu sama lain.');
+assert.match(source, /aspect-\[3\/4\] w-full/, 'Foto menjaga rasio saat lebar kontainer berubah.');
+assert.match(source, /mt-4 flex min-w-0 justify-center/, 'Tautan guru berada di footer dengan spacing dan lebar yang dibatasi.');
 
 const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
 try {
@@ -27,11 +29,17 @@ try {
     const heading = html.indexOf(translate('Guru & Tenaga Pendidik', language).replace('&', '&amp;'));
     const link = html.indexOf('href="/profil-sekolah/guru"');
     const description = html.indexOf(translate('Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.', language));
-    assert.ok(heading < link && link < description, 'Tombol berada dalam header kontainer guru, sebelum deskripsi dan carousel.');
+    const lastCarouselControl = html.lastIndexOf('aria-label="' + translate('Guru berikutnya', language) + '"');
+    assert.ok(heading < description && description < lastCarouselControl && lastCarouselControl < link, 'Tombol berada setelah carousel dan indikator pill, bukan di header.');
+    const profile = html.match(/<figure\b[^>]*>([\s\S]*?)<\/figure>/)?.[1];
+    assert.ok(profile, 'Foto dan identitas kepala sekolah memiliki satu blok profil.');
+    assert.ok(profile.includes('<img') && profile.includes('<figcaption'), 'Foto dan caption berada di blok yang sama.');
+    assert.ok(profile.includes(translate(kepalaSekolah.name, language)));
+    assert.ok(profile.includes(translate(kepalaSekolah.title, language)));
     assert.ok(html.includes(translate('Lihat semua profil guru', language)));
     assert.ok(html.includes(translate('Guru berikutnya', language)), 'Navigasi carousel tetap tersedia.');
   }
-  console.log('Profil sekolah: kartu sejajar, tombol sambutan dihapus, dan tautan guru berada di header dalam kedua bahasa.');
+  console.log('Profil sekolah: kartu sejajar, foto dan identitas proporsional, serta tautan guru di bawah indikator carousel dalam kedua bahasa.');
 } finally {
   await server.close();
 }
