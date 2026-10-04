@@ -1,56 +1,30 @@
 import { useLanguage } from '../../context/LanguageContext';
 import VideoEmbed from '../VideoEmbed';
-import bg from '../../assets/landing/partners-bg.png';
-import { mitraIndustri, videoHighlight } from '../../data/dummyData';
+import partnersCard from '../../assets/prestasi-remake/partnersCard.png';
+import { videoHighlight } from '../../data/dummyData';
 
 const PrestasiDukunganSection = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   return (
-  <section className="bg-white py-8 lg:py-12">
-    <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
-      {/* Didukung & Diakui Oleh */}
-      <div>
-        <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {t(videoHighlight.sectionTitle)}
-        </h2>
-        {/* Latar diletakkan absolut agar tinggi pita mengikuti barisan logo —
-            di layar sempit logonya membungkus ke baris kedua, tidak terpotong. */}
-        <div className="relative mt-6 overflow-hidden rounded-xl">
-          <img
-            src={bg}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-3 px-4 py-5 sm:justify-between">
-            {mitraIndustri.map((mitra) => (
-              <img
-                key={mitra.name}
-                src={mitra.logo}
-                alt={mitra.name}
-                className="h-3.5 w-auto object-contain sm:h-4"
-              />
-            ))}
+    <section aria-labelledby="prestasi-video-title" className="bg-white pb-6 pt-8 font-['Plus_Jakarta_Sans'] lg:pb-[1.5184vw] lg:pt-[2.2777vw]">
+      <div className="mx-auto grid w-[calc(100%-2rem)] max-w-[1769px] grid-cols-1 items-end gap-6 sm:w-[calc(100%-3rem)] lg:w-[91.76%] lg:grid-cols-[41.017%_1fr] lg:gap-[3.1726%]">
+        <figure className="overflow-hidden rounded-[20px] lg:rounded-[1.0846vw]">
+          <img src={partnersCard} alt={t('Didukung & Diakui Oleh. Bersama Mitra Terbaik. Didukung oleh berbagai institusi dan perusahaan ternama untuk membuka lebih banyak peluang bagi masa depan siswa. Huawei, Astra, Microsoft, Cisco, AWS, Dicoding, dan Telkom Indonesia.')} width="786" height="506" loading="lazy" className="aspect-[694/456] w-full object-cover" />
+        </figure>
+        <div className="min-w-0">
+          <p className="flex items-center gap-3 text-sm font-semibold leading-tight text-[#cd091d] lg:gap-[0.65vw] lg:text-[clamp(0.875rem,1.0846vw,1.25rem)]">
+            <span aria-hidden="true" className="h-px w-8 bg-[#cd091d] lg:w-[2.618vw]" />
+            {t(videoHighlight.title)}
+          </p>
+          <h2 id="prestasi-video-title" className="mt-1 text-[clamp(1.25rem,2.1692vw,2.5rem)] font-bold leading-tight text-black">
+            {language === 'en' ? 'Our' : 'Moment'} <span className="text-[#cd091d]">{language === 'en' ? 'Best' : 'Terbaik'}</span> {language === 'en' ? 'Moments' : 'Kami'}
+          </h2>
+          <div className="mt-5 lg:mt-[1.6811vw]">
+            <VideoEmbed videoId={videoHighlight.video.videoId} poster={videoHighlight.video.poster} title={t(videoHighlight.videoTitle)} desc={t(videoHighlight.videoDesc)} rasio="aspect-[535/404]" layout="horizontal" />
           </div>
         </div>
       </div>
-
-      {/* Video Highlight */}
-      <div>
-        <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-          {t(videoHighlight.title)}
-        </h2>
-        <div className="mt-6">
-          <VideoEmbed
-            videoId={videoHighlight.video.videoId}
-            poster={videoHighlight.video.poster}
-            title={t(videoHighlight.videoTitle)}
-            desc={t(videoHighlight.videoDesc)}
-          />
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
   );
 };
 

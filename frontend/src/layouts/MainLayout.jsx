@@ -6,7 +6,7 @@ import StelaWidget from '../components/stela/StelaWidget';
 import SmoothScroll from '../components/SmoothScroll';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function MainLayout({ children, busy = false }) {
+export default function MainLayout({ children, busy = false, footerVariant = 'default' }) {
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
@@ -29,7 +29,7 @@ export default function MainLayout({ children, busy = false }) {
       <main ref={mainRef} id="main-content" tabIndex={-1} aria-busy={busy || undefined} key={pathname} className="animate-masuk-halaman scroll-mt-24">
         {children}
       </main>
-      <Footer />
+      <Footer variant={footerVariant} />
       {!busy && <StelaWidget />}
     </div>
   );

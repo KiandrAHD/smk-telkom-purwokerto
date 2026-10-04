@@ -1,129 +1,83 @@
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight, User } from 'lucide-react';
-import { hallOfFame, perjalananPrestasi } from '../../data/dummyData';
+import { hallOfFame } from '../../data/dummyData';
 import ContentImage from '../ContentImage';
+import PrestasiHallDecoration from './PrestasiHallDecoration';
+import star from '../../assets/prestasi-remake/AntDesignStarFilled.svg';
+import profileIcon from '../../assets/prestasi-remake/Vector2.svg';
+import previousIcon from '../../assets/prestasi-remake/Group65.svg';
 
-const PER_PAGE = 4;
-
-const PrestasiPerjalananSection = () => {
+const PrestasiPerjalananSection = ({ items = hallOfFame.items }) => {
   const { t } = useLanguage();
-
-  const [year, setYear] = useState(perjalananPrestasi.defaultYear);
   const [start, setStart] = useState(0);
+  const [perPage, setPerPage] = useState(4);
 
-  const move = (step) =>
-    setStart((s) => (s + step + hallOfFame.items.length) % hallOfFame.items.length);
-  const shown = Array.from(
-    { length: Math.min(PER_PAGE, hallOfFame.items.length) },
-    (_, i) => hallOfFame.items[(start + i) % hallOfFame.items.length]
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const tablet = window.matchMedia('(min-width: 640px)');
+    const update = () => setPerPage(desktop.matches ? 4 : tablet.matches ? 2 : 1);
+    update();
+    desktop.addEventListener('change', update);
+    tablet.addEventListener('change', update);
+    return () => {
+      desktop.removeEventListener('change', update);
+      tablet.removeEventListener('change', update);
+    };
+  }, []);
+
+  const canMove = items.length > perPage;
+  const move = (step) => {
+    if (canMove) setStart((current) => (current + step + items.length) % items.length);
+  };
+  const shown = Array.from({ length: Math.min(perPage, items.length) }, (_, index) =>
+    items[((canMove ? start : 0) + index) % items.length]
   );
 
   return (
-    <section className="bg-white py-8 lg:py-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-[38%_1fr] lg:gap-10 lg:px-8">
-        {/* Perjalanan Prestasi */}
-        <div>
-          <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-            {t(perjalananPrestasi.title)}
-          </h2>
+    <section id="hall-of-fame" aria-labelledby="hall-of-fame-title" className="relative isolate overflow-hidden bg-[#cd091d] py-6 font-['Plus_Jakarta_Sans'] [container-type:inline-size] lg:pb-[1.6811cqw] lg:pt-[1.3015cqw]">
+      <PrestasiHallDecoration />
+      <h2 id="hall-of-fame-title" className="relative flex items-center justify-center gap-2 text-2xl font-extrabold leading-tight text-white lg:gap-[0.4338cqw] lg:text-[2.603cqw]">
+        {t(hallOfFame.title)}
+        <span className="relative block size-6 lg:size-[2.17cqw]">
+          <img src={star} alt="" aria-hidden="true" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-[0.6] lg:scale-[calc(100cqw/1844px)]" />
+        </span>
+      </h2>
 
-          <div className="mt-6 flex items-end gap-2">
-            {perjalananPrestasi.years.map((y) => {
-              const on = y.year === year;
-              return (
-                <button
-                  key={y.year}
-                  type="button"
-                  onClick={() => setYear(y.year)}
-                  aria-pressed={on}
-                  className="flex flex-1 flex-col items-center gap-1.5"
-                >
-                  <span
-                    className={`text-[10px] font-semibold transition-colors ${
-                      on ? 'text-primary' : 'text-dark-400'
-                    }`}
-                  >
-                    {y.year}
-                  </span>
-                  <span
-                    className={`flex w-full flex-col items-center rounded-xl border py-3 transition-all ${
-                      on
-                        ? 'scale-105 border-primary bg-white shadow-card'
-                        : 'border-dark-100 bg-white hover:border-primary/40'
-                    }`}
-                  >
-                    <span
-                      className={`font-heading text-lg font-extrabold ${
-                        on ? 'text-primary' : 'text-dark-900'
-                      }`}
-                    >
-                      {y.count}
-                    </span>
-                    <span
-                      className={`text-[8px] ${on ? 'text-primary' : 'text-dark-400'}`}
-                    >
-                      {t(y.label)}
-                    </span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Bukti prestasi dan foto dari publikasi resmi sekolah. */}
-        <div className="relative">
-          <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
-            {t(hallOfFame.title)}
-          </h2>
-
-          {hallOfFame.items.length > PER_PAGE && (
-            <>
-              <button
-                type="button"
-                onClick={() => move(-1)}
-                aria-label={t("Bukti prestasi sebelumnya")}
-                className="absolute -left-3 top-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-500 shadow-md transition-colors hover:text-primary"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => move(1)}
-                aria-label={t("Bukti prestasi berikutnya")}
-                className="absolute -right-3 top-1/2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-dark-100 bg-white text-dark-500 shadow-md transition-colors hover:text-primary"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </>
-          )}
-
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {items.length ? (
+        <div className="relative mx-auto mt-6 w-[92%] max-w-[1512px] lg:mt-[1.3557cqw] lg:w-[82%]">
+          <div id="hall-of-fame-cards" role="group" aria-roledescription={t('Karusel')} aria-label={t(hallOfFame.title)} tabIndex={canMove ? 0 : undefined} onKeyDown={(event) => {
+            if (event.target !== event.currentTarget) return;
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              event.preventDefault();
+              move(event.key === 'ArrowLeft' ? -1 : 1);
+            }
+          }} className="mx-auto flex w-[75%] items-stretch justify-center gap-5 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:w-[80%] lg:w-full lg:gap-[3.1453cqw]">
             {shown.map((person) => (
-              <article
-                key={person.name}
-                className="rounded-xl border border-dark-100 bg-white p-3 text-center shadow-card"
-              >
-                <ContentImage src={person.image} alt={t(person.imageAlt)} loading="lazy" className="aspect-[4/5] w-full rounded-lg object-contain" />
-                <h3 className="mt-2.5 font-heading text-[10px] font-bold text-dark-900">
-                  {person.name}
+              <article key={person.name} className="flex min-h-84 w-full min-w-0 flex-col items-center rounded-[20px] bg-white px-3 pb-6 pt-4 text-center shadow-[0_0_24px_rgba(130,130,130,0.25)] sm:w-[calc((100%-1.25rem)/2)] lg:min-h-[20.12cqw] lg:w-[15.3471cqw] lg:shrink-0 lg:rounded-[1.0846cqw] lg:px-[1.0846cqw] lg:pb-[2.061cqw] lg:pt-[0.8134cqw]">
+                <ContentImage src={person.image} alt={t(person.imageAlt || person.name)} loading="lazy" className="size-24 shrink-0 rounded-full object-cover object-top lg:size-[6.5629cqw]" />
+                <h3 className="mt-3 text-sm font-bold leading-tight text-black lg:mt-[0.5423cqw] lg:text-[clamp(0.75rem,1.0846cqw,1.25rem)]">
+                  {person.sourceUrl ? <a href={person.sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`${t('Lihat profil alumni')}: ${person.name}`} className="rounded-sm underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{person.name}</a> : person.name}
                 </h3>
-                <p className="mt-1 text-[8px] leading-snug text-dark-500">{t(person.achievement)}</p>
-                <div className="mt-2.5 flex items-center gap-1.5 border-t border-dark-100 pt-2 text-left">
-                  <span className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-primary">
-                    <User className="h-2.5 w-2.5 text-white" />
+                <p className="mt-1 text-xs leading-snug text-black/70 lg:text-[clamp(0.6875rem,0.8677cqw,1rem)]">{t(person.achievement)}</p>
+                <div className="mt-auto flex flex-col items-center pt-5 lg:pt-[0.7592cqw]">
+                  <span className="relative block size-9 overflow-hidden lg:h-[2.4403cqw] lg:w-[2.603cqw]">
+                    <img src={profileIcon} alt="" aria-hidden="true" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-75 lg:scale-[calc(100cqw/1844px)]" />
                   </span>
-                  <span className="min-w-0 text-[8px] leading-tight text-dark-600">
-                    {t(person.role)}
-                    {person.company && <><br />{person.company}</>}
-                  </span>
+                  <p className="mt-2 text-xs leading-snug text-black/70 lg:text-[clamp(0.6875rem,0.8677cqw,1rem)]">{t(person.role)}{person.company && <><br />{person.company}</>}</p>
                 </div>
               </article>
             ))}
           </div>
+          {[-1, 1].map((step) => (
+            <button key={step} type="button" onClick={() => move(step)} disabled={!canMove} aria-controls="hall-of-fame-cards" aria-label={t(step < 0 ? 'Alumni sebelumnya' : 'Alumni berikutnya')} className={`absolute top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white disabled:cursor-default disabled:opacity-60 lg:size-[3.9046cqw] ${step < 0 ? 'left-0 lg:-left-[0.1627cqw]' : 'right-0 lg:-right-[0.1627cqw]'}`}>
+              <span className={`relative block size-full ${step > 0 ? 'rotate-180' : ''}`}>
+                <img src={previousIcon} alt="" aria-hidden="true" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-[0.55] lg:scale-[calc(100cqw/1844px)]" />
+              </span>
+            </button>
+          ))}
+          <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{shown.map((person) => person.name).join(', ')}</p>
         </div>
-      </div>
+      ) : <p className="relative py-8 text-center text-sm text-white">{t('Profil alumni belum tersedia.')}</p>}
     </section>
   );
 };

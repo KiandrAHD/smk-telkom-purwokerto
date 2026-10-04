@@ -9,6 +9,7 @@ import PrestasiGaleriSection from '../components/prestasi/PrestasiGaleriSection'
 import PrestasiPerjalananSection from '../components/prestasi/PrestasiPerjalananSection';
 import PrestasiDukunganSection from '../components/prestasi/PrestasiDukunganSection';
 import CTASection from '../components/CTASection';
+import StelaAISection from '../components/StelaAISection';
 import PublicDataState from '../components/PublicDataState';
 import { getPrestasi } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
@@ -31,7 +32,7 @@ const PrestasiPage = () => {
   }, [requestVersion]);
 
   return (
-    <MainLayout>
+    <MainLayout footerVariant="prestasi">
       <PrestasiHeroSection />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />
@@ -41,7 +42,8 @@ const PrestasiPage = () => {
       <Reveal><PrestasiGaleriSection items={items} /></Reveal>
       <Reveal><PrestasiPerjalananSection /></Reveal>
       <Reveal><PrestasiDukunganSection /></Reveal>
-      <Reveal><CTASection /></Reveal>
+      <Reveal><StelaAISection variant="prestasi" /></Reveal>
+      <Reveal><CTASection variant="prestasi" /></Reveal>
     </MainLayout>
   );
 };
