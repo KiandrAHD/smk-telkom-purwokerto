@@ -69,4 +69,10 @@ export default {
   'Asisten informasi umum SMK Telkom Purwokerto.': 'General information assistant for SMK Telkom Purwokerto.',
   'Cari jurusan yang sesuai dengan minatmu.': 'Find a program that matches your interests.',
   'Kegiatan pengembangan minat, bakat, dan karakter siswa.': 'Activities that develop students’ interests, talents, and character.',
+  'Kebijakan Privasi | SMK Telkom Purwokerto': 'Privacy Policy | SMK Telkom Purwokerto',
+  'Kebijakan privasi dan perlindungan data website SMK Telkom Purwokerto.': 'Privacy policy and data protection for the SMK Telkom Purwokerto website.',
+  'Pengunjung Website': 'Website Visitors',
+  'Pengunjung Hari ini': 'Visitors Today',
+  'Pengunjung Bulan ini': 'Visitors This Month',
+  'Pengunjung Tahun ini': 'Visitors This Year',
 };

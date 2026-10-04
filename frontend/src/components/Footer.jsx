@@ -2,6 +2,7 @@ import { LockKeyhole, Mail, MapPin, Phone } from 'lucide-react';
 import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
+import VisitorCounter from './VisitorCounter';
 import { footerData } from '../data/dummyData';
 import footerAccentFill from '../assets/footer/footer-motif-fill.svg';
 import competitionSupporters from '../assets/footer/competition-supporters.png';
@@ -116,6 +117,10 @@ const Footer = () => {
                 })}
               </ul>
             </div>
+
+            <div className="mt-5">
+              <VisitorCounter />
+            </div>
           </div>
 
           <LinkColumn title="Menu" links={footerData.menu} />
@@ -180,7 +185,12 @@ const Footer = () => {
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 pl-4 pr-24 py-2 text-[10px] sm:flex-row sm:pl-6 lg:pl-8 2xl:pr-8">
         <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
         <div className="flex items-center gap-3">
-          <span className="underline underline-offset-2">{t('Kebijakan Privasi')}</span>
+          <Link
+            to="/kebijakan-privasi"
+            className="underline underline-offset-2 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            {t('Kebijakan Privasi')}
+          </Link>
           <span aria-hidden="true" className="h-3 border-l border-white/60" />
           <Link
             to="/login"
