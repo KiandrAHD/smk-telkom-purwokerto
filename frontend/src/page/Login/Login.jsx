@@ -1,11 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeft, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo';
 import { useAuth } from '../../context/AuthContext';
-
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+import { useTurnstile, verifyTurnstileToken } from '../../components/TurnstileWidget';
 
 const TURNSTILE_STATUS = { idle: 'idle', loading: 'loading', success: 'success', error: 'error', expired: 'expired' };
 
@@ -19,70 +17,15 @@ const Login = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const turnstileRef = useRef(null);
-  const widgetIdRef = useRef(null);
-  const [turnstileToken, setTurnstileToken] = useState('');
-  const [turnstileStatus, setTurnstileStatus] = useState(TURNSTILE_STATUS.idle);
-
-  const turnstileEnabled = Boolean(TURNSTILE_SITE_KEY);
+  const { containerRef, token, status, reset, enabled } = useTurnstile();
+  const turnstileEnabled = enabled;
+  const turnstileToken = token;
+  const turnstileStatus = status;
+  const resetTurnstile = reset;
 
   useEffect(() => {
     if (!loading && user && isAdmin) navigate('/dashboard', { replace: true });
   }, [loading, user, isAdmin, navigate]);
-
-  const renderWidget = useCallback(() => {
-    if (!turnstileEnabled || !turnstileRef.current || !window.turnstile) return;
-    if (widgetIdRef.current != null) {
-      window.turnstile.remove(widgetIdRef.current);
-      widgetIdRef.current = null;
-    }
-    setTurnstileStatus(TURNSTILE_STATUS.loading);
-    setTurnstileToken('');
-    widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-      sitekey: TURNSTILE_SITE_KEY,
-      theme: 'light',
-      callback: (token) => { setTurnstileToken(token); setTurnstileStatus(TURNSTILE_STATUS.success); },
-      'error-callback': () => { setTurnstileToken(''); setTurnstileStatus(TURNSTILE_STATUS.error); },
-      'expired-callback': () => { setTurnstileToken(''); setTurnstileStatus(TURNSTILE_STATUS.expired); },
-    });
-  }, [turnstileEnabled]);
-
-  useEffect(() => {
-    if (!turnstileEnabled) return undefined;
-    if (window.turnstile) { renderWidget(); return undefined; }
-    const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-    script.async = true;
-    script.onload = () => renderWidget();
-    script.onerror = () => setTurnstileStatus(TURNSTILE_STATUS.error);
-    document.head.appendChild(script);
-    return () => {
-      if (widgetIdRef.current != null && window.turnstile) {
-        window.turnstile.remove(widgetIdRef.current);
-        widgetIdRef.current = null;
-      }
-    };
-  }, [turnstileEnabled, renderWidget]);
-
-  const resetTurnstile = useCallback(() => {
-    if (widgetIdRef.current != null && window.turnstile) {
-      window.turnstile.reset(widgetIdRef.current);
-      setTurnstileToken('');
-      setTurnstileStatus(TURNSTILE_STATUS.loading);
-    }
-  }, []);
-
-  const verifyTurnstile = async (token) => {
-    if (!SUPABASE_URL) throw new Error('Konfigurasi server belum lengkap.');
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/turnstile`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token }),
-    });
-    const result = await response.json();
-    if (!response.ok || !result.success) throw new Error('Verifikasi keamanan gagal. Silakan coba lagi.');
-    return true;
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -96,7 +39,7 @@ const Login = () => {
     setSubmitting(true);
 
     try {
-      if (turnstileEnabled) await verifyTurnstile(turnstileToken);
+      if (turnstileEnabled) await verifyTurnstileToken(turnstileToken);
       await signIn(email.trim(), password);
       const destination = location.state?.from?.startsWith('/dashboard') ? location.state.from : '/dashboard';
       navigate(destination, { replace: true });
@@ -174,7 +117,7 @@ const Login = () => {
 
           {turnstileEnabled && (
             <div className="space-y-2">
-              <div ref={turnstileRef} className="flex min-h-[65px] items-center justify-center" />
+              <div ref={containerRef} className="flex min-h-[65px] items-center justify-center" />
               {turnstileStatus === TURNSTILE_STATUS.loading && (
                 <p className="flex items-center gap-1.5 text-xs text-dark-400">
                   <Loader2 className="h-3 w-3 animate-spin" />

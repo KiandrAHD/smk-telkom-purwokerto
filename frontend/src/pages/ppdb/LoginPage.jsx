@@ -2,7 +2,8 @@ import PasswordInput from '../../components/ppdb/PasswordInput';
 import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { AlertCircle, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
+import { useTurnstile, verifyTurnstileToken } from '../../components/TurnstileWidget';
 import FormInput from '../../components/dashboard/FormInput';
 import PanelMerah from '../../components/ppdb/PanelMerah';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
@@ -15,19 +16,26 @@ const LoginPage = () => {
   const [form, setForm] = useState({ akun: '', sandi: '' });
   const [galat, setGalat] = useState('');
   const [mengirim, setMengirim] = useState(false);
+  const { containerRef, token, status, reset, enabled } = useTurnstile();
 
   const ubah = (kunci) => (e) => setForm((f) => ({ ...f, [kunci]: e.target.value }));
 
   const kirim = async (e) => {
     e.preventDefault();
     setGalat('');
+    if (enabled && !token) {
+      setGalat(t('Selesaikan verifikasi keamanan terlebih dahulu.'));
+      return;
+    }
     setMengirim(true);
     try {
+      if (enabled) await verifyTurnstileToken(token);
       await signInPpdb(form.akun.trim(), form.sandi);
       const submissions = await getMyPpdb();
       navigate(submissions.length ? '/spmb/status' : '/spmb/formulir');
     } catch {
       setGalat('Email atau kata sandi tidak valid.');
+      reset();
     } finally {
       setMengirim(false);
     }
@@ -62,11 +70,20 @@ const LoginPage = () => {
             <PasswordInput label={t("Kata Sandi")} name="password" autoComplete="current-password" value={form.sandi} onChange={ubah('sandi')} placeholder={t("Masukkan Kata Sandi")} wajib required />
             <Link to="/lupa-sandi" className="inline-flex min-h-11 items-center text-xs font-semibold text-primary hover:underline">{t("Lupa Sandi?")}</Link>
 
-            {galat && <p role="alert" className="rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{t(galat)}</p>}
+             {enabled && (
+               <div className="space-y-2">
+                 <div ref={containerRef} className="flex min-h-[65px] items-center justify-center" />
+                 {status === 'loading' && <p className="flex items-center gap-1.5 text-[11px] text-dark-400"><Loader2 className="h-3 w-3 animate-spin" />{t('Memuat verifikasi keamanan...')}</p>}
+                 {status === 'success' && <p className="flex items-center gap-1.5 text-[11px] text-green-600"><ShieldCheck className="h-3 w-3" />{t('Verifikasi berhasil')}</p>}
+                 {(status === 'error' || status === 'expired') && <p className="flex items-center gap-1.5 text-[11px] text-primary-700"><AlertCircle className="h-3 w-3" />{t(status === 'expired' ? 'Verifikasi kedaluwarsa.' : 'Verifikasi gagal.')}</p>}
+               </div>
+             )}
 
-            <button
-              type="submit"
-              disabled={mengirim}
+             {galat && <p role="alert" className="rounded-xl bg-primary-50 px-4 py-3 text-[11px] font-medium text-primary-800">{t(galat)}</p>}
+
+             <button
+               type="submit"
+               disabled={mengirim || (enabled && status !== 'success')}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-xs font-bold uppercase tracking-wide text-white shadow-card transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {t(mengirim ? 'Memeriksa...' : 'Masuk Sekarang')}

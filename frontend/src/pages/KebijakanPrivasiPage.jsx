@@ -42,7 +42,7 @@ const privacySections = {
     {
       title: '4. Layanan Pihak Ketiga',
       paragraphs: [
-        'Portal web kami menggunakan layanan pihak ketiga untuk operasional, termasuk Supabase sebagai penyedia database dan autentikasi, serta Cloudflare Turnstile sebagai layanan verifikasi keamanan anti-bot pada halaman login administrator.',
+        'Portal web kami menggunakan layanan pihak ketiga untuk operasional, termasuk Supabase sebagai penyedia database dan autentikasi, serta Cloudflare Turnstile sebagai layanan verifikasi keamanan anti-bot pada halaman login administrator dan portal SPMB.',
         'Website kami juga dapat menggunakan cookies untuk menyimpan preferensi sesi pengguna dan mengoptimalkan pengalaman navigasi web. Pengguna memiliki opsi untuk mematikan cookies melalui pengaturan peramban masing-masing.',
       ],
     },
@@ -96,7 +96,7 @@ const privacySections = {
     {
       title: '4. Third-Party Services',
       paragraphs: [
-        'Our web portal uses third-party services for operations, including Supabase as a database and authentication provider, and Cloudflare Turnstile as a security verification service for the administrator login page.',
+        'Our web portal uses third-party services for operations, including Supabase as a database and authentication provider, and Cloudflare Turnstile as a security verification service for the administrator login page and SPMB portal.',
         'Our website may also use cookies to store user session preferences and optimize the web navigation experience. Users have the option to disable cookies through their respective browser settings.',
       ],
     },
