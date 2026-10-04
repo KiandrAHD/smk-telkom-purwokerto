@@ -15,7 +15,6 @@ const getPageSize = () => window.innerWidth >= 1280 ? 4 : window.innerWidth >= 4
 
 const TentangKepalaSekolahSection = () => {
   const { t } = useLanguage();
-  const [expanded, setExpanded] = useState(false);
   const [page, setPage] = useState(0);
   const perPage = useSyncExternalStore(subscribeViewport, getPageSize, () => 4);
 
@@ -28,10 +27,10 @@ const TentangKepalaSekolahSection = () => {
     <section id="guru" className="relative overflow-x-clip bg-white py-8 lg:py-12 min-[1660px]:py-14">
       <SectionAccents variant="schoolTeachers" />
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8 min-[1660px]:max-w-[1621px] min-[1660px]:grid-cols-[610px_964px] min-[1660px]:gap-[47px] min-[1660px]:px-0">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8 min-[1660px]:max-w-[1621px] min-[1660px]:grid-cols-[610px_964px] min-[1660px]:gap-[47px] min-[1660px]:px-0">
         {/* Kepala Sekolah */}
-        <div className="self-start rounded-2xl border border-dark-100 bg-white p-5 shadow-card min-[1660px]:min-h-[438px] min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd] min-[1660px]:p-0">
-          <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:ml-[42px] min-[1660px]:mt-[14px] min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Kepala Sekolah")} </h2>
+        <div className="min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card min-[1660px]:min-h-[438px] min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd] min-[1660px]:px-0">
+          <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:ml-[42px] min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Kepala Sekolah")} </h2>
           <div className="mt-4 flex flex-col gap-4 min-[400px]:flex-row min-[1660px]:mt-[18px] min-[1660px]:gap-[13px] min-[1660px]:px-[34px]">
             <img
               src={kepalaSekolah.image}
@@ -39,31 +38,28 @@ const TentangKepalaSekolahSection = () => {
               className="h-32 w-24 flex-shrink-0 rounded-xl bg-dark-50 object-contain p-1 min-[1660px]:h-[321px] min-[1660px]:w-[257px] min-[1660px]:p-0"
             />
             <div className="min-w-0">
-              {!expanded && <Quote className="h-4 w-4 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" />}
+              <Quote className="h-4 w-4 text-primary min-[1660px]:h-6 min-[1660px]:w-6" fill="currentColor" />
               <p className="mt-1.5 text-[10px] leading-relaxed text-dark-600 min-[1660px]:text-[18px] min-[1660px]:leading-[1.45]">
-                {t(expanded ? kepalaSekolah.quoteFull : kepalaSekolah.quote)}
+                {t(kepalaSekolah.quoteFull)}
               </p>
               <p className="mt-2 text-[10px] font-bold text-primary min-[1660px]:text-xs">{t(kepalaSekolah.name)}</p>
               <p className="text-[9px] text-dark-500 min-[1660px]:text-[11px]">{t(kepalaSekolah.title)}</p>
-
-              <button
-                type="button"
-                onClick={() => setExpanded((v) => !v)}
-                aria-expanded={expanded}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-dark-200 px-3 py-1.5 text-[10px] font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
-              >
-                {t(expanded ? 'Tutup Ringkasan' : kepalaSekolah.ctaText)}
-                <ArrowRight
-                  className={`h-3 w-3 transition-transform ${expanded ? 'rotate-90' : ''}`}
-                />
-              </button>
             </div>
           </div>
         </div>
 
         {/* Guru & Tenaga Pendidik */}
         <div className="relative min-w-0 rounded-2xl border border-dark-100 bg-white p-5 shadow-card min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd] min-[1660px]:pb-5">
-          <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h2 className="min-w-0 font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
+            <Link
+              to="/profil-sekolah/guru"
+              className="inline-flex max-w-full items-center gap-2 rounded-full border border-dark-200 bg-white px-4 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            >
+              {t("Lihat semua profil guru")}
+              <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            </Link>
+          </div>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500">{t("Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.")} </p>
 
           {/* Key memulai ulang animasi masuk ketika halaman guru berubah. */}
@@ -125,13 +121,6 @@ const TentangKepalaSekolahSection = () => {
           </div>
           )}
         </div>
-      </div>
-      <div className="relative mt-6 flex justify-center px-4">
-        <Link
-          to="/profil-sekolah/guru"
-          className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-        >{t("Lihat semua profil guru")} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-        </Link>
       </div>
     </section>
   );
