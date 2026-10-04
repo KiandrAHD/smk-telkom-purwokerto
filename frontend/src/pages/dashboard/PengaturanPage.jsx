@@ -3,10 +3,38 @@ import FormInput from '../../components/dashboard/FormInput';
 import Logo from '../../components/Logo';
 import PageHeader from '../../components/dashboard/PageHeader';
 import { useAdminData } from '../../context/AdminDataContext';
-import { adminTabPengaturan } from '../../data/dummyData';
+import { useAuth } from '../../context/AuthContext';
+import { adminTabPengaturan, adminPengaturanUmum, ppdbMeta } from '../../data/dummyData';
+
+export const AkunAdmin = () => {
+  const { user, isAdmin } = useAuth();
+  const rawName = user?.user_metadata?.full_name ?? user?.user_metadata?.name;
+  const nama = typeof rawName === 'string' && rawName.trim() ? rawName.trim() : 'Belum tersedia';
+  return (
+    <div className="mt-6 space-y-5">
+      <FormInput label="Nama Lengkap" value={nama} disabled readOnly />
+      <FormInput label="Email" type="email" value={user?.email ?? ''} disabled readOnly />
+      <FormInput label="Peran" value={isAdmin ? 'Administrator' : 'Belum terverifikasi sebagai admin'} disabled readOnly />
+      <p className="text-[11px] leading-relaxed text-dark-400">
+        Identitas berasal dari sesi Supabase Auth saat ini. Akses admin diverifikasi melalui daftar admin.
+      </p>
+    </div>
+  );
+};
+
+export const PengaturanUmum = () => (
+  <div className="mt-6 space-y-5">
+    <FormInput label="Tahun Ajaran Portal" value={`${ppdbMeta.tahun}/${Number(ppdbMeta.tahun) + 1}`} disabled readOnly />
+    <FormInput label="Status SPMB" value="Belum tersedia dari server" disabled readOnly />
+    <FormInput label="Berita per Halaman (Pratinjau)" value={adminPengaturanUmum.beritaPerHalaman} disabled readOnly />
+    <p className="text-[11px] leading-relaxed text-dark-400">
+      Pratinjau konfigurasi aplikasi. Tahun mengikuti metadata portal SPMB; status operasional dan pengaturan server belum terhubung.
+    </p>
+  </div>
+);
 
 const PengaturanPage = () => {
-  const { profilSekolah, akun, pengaturanUmum } = useAdminData();
+  const { profilSekolah } = useAdminData();
   const [tab, setTab] = useState(adminTabPengaturan[0]);
 
   return (
@@ -40,6 +68,7 @@ const PengaturanPage = () => {
 
             {tab === adminTabPengaturan[0] && (
               <div className="mt-6 space-y-5">
+                <p className="text-[11px] leading-relaxed text-dark-400">Pratinjau profil sekolah dari konfigurasi aplikasi; belum terhubung ke pengaturan server.</p>
                 <FormInput label="Nama Sekolah" value={profilSekolah.namaSekolah} disabled readOnly />
                 <FormInput label="NPSN" value={profilSekolah.npsn} disabled readOnly />
                 <FormInput label="Alamat" value={profilSekolah.alamat} disabled readOnly />
@@ -49,24 +78,9 @@ const PengaturanPage = () => {
               </div>
             )}
 
-            {tab === adminTabPengaturan[1] && (
-              <div className="mt-6 space-y-5">
-                <FormInput label="Nama Lengkap" value={akun.namaLengkap} disabled readOnly />
-                <FormInput label="Email" type="email" value={akun.email} disabled readOnly />
-                <FormInput label="Peran" value={akun.peran} disabled readOnly />
-                <p className="text-[11px] leading-relaxed text-dark-400">
-                  Data akun administrator terpusat di sistem Supabase Auth.
-                </p>
-              </div>
-            )}
+            {tab === adminTabPengaturan[1] && <AkunAdmin />}
 
-            {tab === adminTabPengaturan[2] && (
-              <div className="mt-6 space-y-5">
-                <FormInput label="Tahun Ajaran" value={pengaturanUmum.tahunAjaran} disabled readOnly />
-                <FormInput label="Status SPMB" value={pengaturanUmum.statusPpdb} disabled readOnly />
-                <FormInput label="Berita per Halaman" value={pengaturanUmum.beritaPerHalaman} disabled readOnly />
-              </div>
-            )}
+            {tab === adminTabPengaturan[2] && <PengaturanUmum />}
           </div>
 
           <aside className="flex flex-col">
@@ -79,7 +93,7 @@ const PengaturanPage = () => {
             </div>
 
             <p className="mt-4 text-center text-xs text-dark-400">
-              Identitas dan konfigurasi sistem dikelola secara terpusat oleh administrator.
+              Logo dan profil sekolah memakai aset serta konfigurasi aplikasi.
             </p>
           </aside>
         </div>

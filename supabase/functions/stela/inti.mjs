@@ -14,6 +14,7 @@ export const BATAS = {
   MAKS_TOTAL_PANJANG: 8000,
   MAKS_TOKEN_JAWABAN: 2000,
   TIMEOUT_PROVIDER_MS: 12000,
+  MAKS_PERCOBAAN_PROVIDER: 3,
 };
 
 // Model bawaan per penyedia
@@ -202,6 +203,10 @@ export const keluaranAman = (teks) =>
   teks.length <= BATAS.MAKS_PANJANG_ASISTEN &&
   !POLA_SECRET.test(teks) &&
   !/(?:system prompt|stack trace|process\.env|Deno\.env|<data-)/i.test(teks);
+
+export const amankanJawaban = (teks, bahasa = 'id') => keluaranAman(teks) ? teks : bahasa === 'en'
+  ? 'Sorry, I cannot display that answer. Please ask a shorter question about the school.'
+  : 'Maaf, jawaban belum dapat ditampilkan. Silakan ajukan pertanyaan yang lebih singkat tentang sekolah.';
 
 // Awalan kunci tiap penyedia
 export const POLA_KUNCI = {
@@ -510,6 +515,23 @@ const PENYEDIA = {
   groq: tanyaOpenAICompatible,
 };
 
+export const buatBatasPanggilan = ({ maksPercobaan = BATAS.MAKS_PERCOBAAN_PROVIDER, timeoutMs = BATAS.TIMEOUT_PROVIDER_MS } = {}) => ({
+  maksPercobaan: Math.max(1, Math.min(BATAS.MAKS_PERCOBAAN_PROVIDER, Math.floor(maksPercobaan) || BATAS.MAKS_PERCOBAAN_PROVIDER)),
+  tenggat: Date.now() + Math.max(1, Math.min(BATAS.TIMEOUT_PROVIDER_MS, Number(timeoutMs) || BATAS.TIMEOUT_PROVIDER_MS)),
+  percobaan: 0,
+});
+
+const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status, true), { batasPanggilan: true });
+
+/**
+ * @typedef {{penyedia: string, apiKey?: string, model?: string, baseUrl?: string}} KandidatPenyedia
+ * @param {{pesan: Array<{role: string, content: string}>, penyedia?: string, apiKey?: string,
+ * model?: string, contextPublik?: string, instruksiKustom?: string, signal?: AbortSignal,
+ * baseUrl?: string, language?: string, bahasa?: string, daftarPenyedia?: KandidatPenyedia[],
+ * sebelumPanggilan?: (options: {signal: AbortSignal}) => void | Promise<void>,
+ * batasPanggilan?: ReturnType<typeof buatBatasPanggilan>, timeoutMs?: number,
+ * maksPercobaan?: number, cobaModelCadangan?: boolean}} options
+ */
 export const tanyaAI = async ({
   penyedia,
   apiKey,
@@ -522,16 +544,22 @@ export const tanyaAI = async ({
   language,
   bahasa,
   daftarPenyedia,
+  sebelumPanggilan,
+  batasPanggilan,
+  timeoutMs,
+  maksPercobaan,
+  cobaModelCadangan = true,
 }) => {
+  const anggaran = batasPanggilan ?? buatBatasPanggilan({ timeoutMs, maksPercobaan });
   const pertanyaanAwal = pesan[pesan.length - 1]?.content ?? '';
   const bahasaPesan = language ?? bahasa ?? deteksiBahasa(pertanyaanAwal);
 
   // Fast paths only for a single opening message without custom instructions.
   if (!instruksiKustom && pesan.length === 1) {
     const sapaan = jawabanSapaanCepat(pertanyaanAwal, bahasaPesan);
-    if (sapaan) return { teks: sapaan, tokenMasuk: 0, tokenKeluar: 0, modelDipakai: 'fast-sapaan' };
+    if (sapaan) return { teks: amankanJawaban(sapaan, bahasaPesan), tokenMasuk: 0, tokenKeluar: 0, modelDipakai: 'fast-sapaan' };
     const fast = jawabanFaqCepat(pertanyaanAwal, bahasaPesan);
-    if (fast) return { teks: fast, tokenMasuk: 0, tokenKeluar: 0, modelDipakai: 'faq' };
+    if (fast) return { teks: amankanJawaban(fast, bahasaPesan), tokenMasuk: 0, tokenKeluar: 0, modelDipakai: 'faq' };
   }
 
   // Jika daftarPenyedia diberikan, coba failover antar penyedia
@@ -560,13 +588,18 @@ export const tanyaAI = async ({
     } else {
       daftarModel = MODEL_CADANGAN[targetPenyedia] ?? [MODEL_BAWAAN[targetPenyedia]];
     }
+    if (!cobaModelCadangan) daftarModel = daftarModel.slice(0, 1);
 
     const belumHabis = daftarModel.filter((m) => !sedangHabis(m));
     const urutan = belumHabis.length ? belumHabis : daftarModel.slice(0, 1);
 
     for (const kandidat of urutan) {
+      if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+      if (anggaran.percobaan >= anggaran.maksPercobaan) throw galatBatas('Batas percobaan AI tercapai. Silakan coba lagi.', 502);
+      const sisaWaktu = anggaran.tenggat - Date.now();
+      if (sisaWaktu <= 0) throw galatBatas(PESAN_TIMEOUT, 504);
       const pengendali = new AbortController();
-      const timeout = setTimeout(() => pengendali.abort(), BATAS.TIMEOUT_PROVIDER_MS);
+      const timeout = setTimeout(() => pengendali.abort(), sisaWaktu);
       const batalkan = () => pengendali.abort();
       if (signal) {
         if (signal.aborted) pengendali.abort();
@@ -574,6 +607,17 @@ export const tanyaAI = async ({
       }
 
       try {
+        if (sebelumPanggilan) {
+          try {
+            await sebelumPanggilan({ signal: pengendali.signal });
+          } catch (error) {
+            // Store/quota failures must not trigger another reservation or failover.
+            error.batasPanggilan = true;
+            throw error;
+          }
+        }
+        if (pengendali.signal.aborted) throw new DOMException('Aborted', 'AbortError');
+        anggaran.percobaan += 1;
         const hasil = await panggil({
           penyedia: targetPenyedia,
           apiKey: targetApiKey,
@@ -584,14 +628,16 @@ export const tanyaAI = async ({
           baseUrl: targetBaseUrl,
         });
         if (bahasaPesan === 'en' && hasil.teks === PESAN_DITOLAK.teks) return { ...hasil, teks: 'I cannot answer that question. Please ask about SMK Telkom Purwokerto.', modelDipakai: kandidat, penyediaDipakai: targetPenyedia };
-        return { ...hasil, modelDipakai: kandidat, penyediaDipakai: targetPenyedia };
+        const teks = instruksiKustom ? hasil.teks : amankanJawaban(hasil.teks, bahasaPesan);
+        return { ...hasil, teks, modelDipakai: kandidat, penyediaDipakai: targetPenyedia };
       } catch (error) {
         galatTerakhirSemua = error;
         const dibatalkan = pengendali.signal.aborted;
         if (signal?.aborted) throw error;
         if (dibatalkan) {
-          galatTerakhirSemua = galatPenyedia(PESAN_TIMEOUT, 504);
+          throw galatBatas(PESAN_TIMEOUT, 504);
         }
+        if (error?.batasPanggilan) throw error;
         const status = galatTerakhirSemua?.status;
         // 400 (incompatible model), 404, 429, timeout, 5xx dialihkan ke kandidat berikutnya
         if (!dibatalkan && status !== 400 && status !== 404 && status !== 429 && !(status >= 500 && status <= 599)) {

@@ -176,7 +176,9 @@ Lalu deploy ulang fungsinya. Jangan mengedit `konten-sekolah.mjs` dengan tangan 
 | `GEMINI_API_KEY` | — | alternatif Anthropic |
 | `GROQ_API_KEY` | — | alternatif lain; berbentuk `gsk_` + 52 karakter |
 | `STELA_AKTIF` | `true` | isi `false` untuk mematikan STELA seketika |
-| `STELA_MAKS_PER_HARI` | `500` | plafon panggilan berbayar per hari |
+| `STELA_MAKS_PER_HARI` | `500` | attempt provider STELA per hari UTC |
+| `NEXTTEL_MAKS_PER_HARI` | `500` | attempt provider NextTel per hari UTC |
+| `SUPABASE_SERVICE_ROLE_KEY` | disediakan Supabase | server-only, reservasi kuota RPC; jangan gunakan awalan VITE_ |
 | `STELA_MAKS_PER_IP` | `20` | plafon per alamat IP tiap 5 menit |
 | `STELA_MODEL` | `claude-opus-5` / `gemini-3.6-flash` | opsional; ikut penyedia yang aktif |
 | `STELA_ALLOWED_ORIGINS` | — | daftar origin frontend yang dipisahkan koma; wajib diisi untuk request browser |
@@ -206,9 +208,17 @@ jawaban milik orang lain.
 
 ### Yang TIDAK dijamin lapisan ini
 
-Semua hitungan di atas ada **di memori proses**. Di Supabase Edge tiap isolate
-punya salinan sendiri, dan hitungannya kembali nol saat isolate diistirahatkan —
-jadi plafon efektifnya bisa berlipat sebanyak isolate yang aktif.
+Kuota produksi memakai tabel `ai_daily_attempts` dan RPC `reserve_ai_attempt`
+dari migration `007_ai_attempt_quota.sql`. Reservasi atomik dilakukan sebelum
+setiap attempt provider; attempt yang gagal tetap dihitung. Semua isolate
+berbagi kuota per fitur per hari UTC. Cache/FAQ tidak memakai kuota.
+Terapkan migration 007 sebelum merilis Edge Functions. Bila konfigurasi atau
+RPC tidak tersedia, STELA menolak panggilan AI; NextTel memakai fallback deterministik.
+RPC hanya dapat dipanggil role server `service_role`, bukan browser.
+
+Maksimum tiga attempt dan tenggat total 12 detik berlaku per request AI,
+termasuk failover dan reservasi. Angka attempt tidak mengukur tagihan/token
+secara presisi. Pembatas IP, cache, dan hitungan server dev tetap lokal di memori.
 
 **Plafon yang benar-benar mengikat hanya batas belanja di konsol penyedia.**
 Pasang di sana lebih dulu, sebelum mengandalkan apa pun di kode ini:
@@ -216,8 +226,8 @@ Pasang di sana lebih dulu, sebelum mengandalkan apa pun di kode ini:
 - Gemini: [Google Cloud Console → Billing → Budgets & alerts](https://console.cloud.google.com/billing). Kuota gratis AI Studio sudah punya batas sendiri; selama belum ditautkan ke akun billing, ia berhenti melayani, bukan menagih.
 - Anthropic: [console.anthropic.com](https://console.anthropic.com) → **Settings → Limits**.
 
-Kalau situs mulai ramai, pindahkan hitungan harian ke tabel Postgres dengan
-indeks `(ip, waktu)` supaya berlaku lintas isolate.
+Uji race SQL dengan command database integration pada dokumentasi security
+regression; simulasi handler saja tidak membuktikan locking PostgreSQL.
 
 ## Soal biaya
 

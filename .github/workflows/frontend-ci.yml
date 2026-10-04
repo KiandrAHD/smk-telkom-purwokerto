@@ -20,7 +20,47 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+      - run: node scripts/uji-kredensial.mjs --build
+      - run: npm run security:uji
       - run: npm run performa:uji
       - run: node scripts/uji-bundle.mjs
       - run: npm run ppdb:uji
       - run: node scripts/uji-spmb.mjs
+
+  edge-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno check supabase/functions/stela/index.ts supabase/functions/nexttel/index.ts
+
+  database-security:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: security_regression
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local-fixture-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d security_regression"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Postgres client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Apply migrations and test SQL, RLS and concurrent quota reservations
+        working-directory: frontend
+        env:
+          SECURITY_DATABASE_URL: postgresql://postgres:local-fixture-only@127.0.0.1:5432/security_regression
+        run: npm run database:uji

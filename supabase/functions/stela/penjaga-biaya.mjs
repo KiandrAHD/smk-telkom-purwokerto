@@ -12,12 +12,10 @@
 // menanyakan hal yang itu-itu juga ("jurusan apa saja", "kapan PPDB"), dan
 // satu jawaban tersimpan bisa melayani puluhan orang tanpa biaya tambahan.
 //
-// PENTING: semua hitungan di sini ada di memori proses. Di Supabase Edge,
-// tiap isolate punya salinan sendiri dan hitungannya kembali nol saat isolate
-// diistirahatkan, jadi plafon efektifnya bisa berlipat. Ini menekan pemborosan,
-// BUKAN jaminan mutlak. Plafon yang benar-benar mengikat hanya batas belanja
-// di konsol penyedia. Kalau situs mulai ramai, pindahkan hitungan harian ke
-// tabel Postgres.
+// Hitungan ini hanya membatasi server dev. Edge memakai reserve_ai_attempt
+// di Postgres untuk kuota bersama; pembatas IP/cache tetap lokal per isolate.
+
+import { keluaranAman } from './inti.mjs';
 
 const SEHARI_MS = 24 * 60 * 60 * 1000;
 
@@ -101,7 +99,7 @@ export const buatPenjaga = ({
       const kunci = kunciPertanyaan(pesan[0].content, bahasa);
       const isi = cache.get(kunci);
       if (!isi) return null;
-      if (Date.now() > isi.kedaluwarsa) {
+      if (Date.now() > isi.kedaluwarsa || !keluaranAman(isi.jawaban)) {
         cache.delete(kunci);
         return null;
       }
@@ -112,7 +110,7 @@ export const buatPenjaga = ({
     },
 
     simpanCache(pesan, jawaban, bahasa = 'id') {
-      if (pesan.length !== 1 || !jawaban) return;
+      if (pesan.length !== 1 || !keluaranAman(jawaban)) return;
       // Map mempertahankan urutan sisip, jadi entri terlama ada di depan.
       if (cache.size >= maksCache) cache.delete(cache.keys().next().value);
       cache.set(kunciPertanyaan(pesan[0].content, bahasa), {
@@ -125,6 +123,11 @@ export const buatPenjaga = ({
     // cache tidak boleh memakan jatah harian -- justru itu gunanya.
     catatPanggilan() {
       putarHari();
+      if (terpakaiHariIni >= maksPerHari) {
+        throw Object.assign(new Error('Batas percobaan AI hari ini tercapai. Silakan coba lagi besok.'), {
+          status: 429, untukPengguna: true, batasPanggilan: true,
+        });
+      }
       terpakaiHariIni += 1;
     },
 

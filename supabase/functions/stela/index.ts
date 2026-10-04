@@ -8,12 +8,14 @@
 
 import {
   BATAS,
+  buatBatasPanggilan,
+  amankanJawaban,
   deteksiBahasa,
-  keluaranAman,
   periksaPesan,
   tanyaAI,
 } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
+import { buatReservasiKuota } from '../ai-quota.mjs';
 
 const KUNCI: Record<string, string | undefined> = {
   ninerouter: Deno.env.get('NINEROUTER_KEY'),
@@ -35,6 +37,10 @@ const STELA_CANDIDATES = geminiAvailable
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
+const reservasiKuota = buatReservasiKuota({
+  url: SUPABASE_URL, serviceKey: Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'), fitur: 'stela',
+  maksPerHari: Number(Deno.env.get('STELA_MAKS_PER_HARI')) || 500,
+});
 const ALLOWED_ORIGINS = (Deno.env.get('STELA_ALLOWED_ORIGINS') ?? '')
   .split(',')
   .map((origin) => origin.trim())
@@ -80,6 +86,7 @@ const ambilTabelPublik = async (table: string, columns: string, filter: string) 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return [];
   const url = `${SUPABASE_URL}/rest/v1/${table}?select=${encodeURIComponent(columns)}&${filter}&limit=${MAKS_ROW_PER_TABEL}`;
   const response = await fetch(url, {
+    signal: AbortSignal.timeout(2000),
     headers: {
       apikey: SUPABASE_ANON_KEY,
       Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
@@ -157,6 +164,7 @@ Deno.serve(async (req) => {
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 
   try {
+    const batasPanggilan = buatBatasPanggilan();
     let contextPublik = 'Data dinamis publik belum tersedia. Gunakan data sekolah statis jika relevan.';
     try {
       contextPublik = await ambilContextPublik();
@@ -164,21 +172,22 @@ Deno.serve(async (req) => {
       console.error('Context Supabase gagal dimuat', error instanceof Error ? error.message : 'unknown');
     }
 
-    // Dihitung sebelum panggilan, bukan sesudah: kalau dihitung setelah sukses,
-    // permintaan yang gagal di tengah lolos dari hitungan padahal tetap dibayar.
-    penjaga.catatPanggilan();
-    const { teks, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
+    const { teks: teksProvider, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
       daftarPenyedia: STELA_CANDIDATES,
       pesan: hasilValidasi.pesan,
       contextPublik,
       bahasa,
+      sebelumPanggilan: reservasiKuota,
+      batasPanggilan,
+      signal: req.signal,
+      cobaModelCadangan: false,
     });
 
-    if (!teks) return balas({ error: 'STELA sedang tidak tersedia.' }, 502, origin);
+    if (!teksProvider) return balas({ error: 'STELA sedang tidak tersedia.' }, 502, origin);
+    const teks = amankanJawaban(teksProvider, bahasa);
 
     penjaga.simpanCache(hasilValidasi.pesan, teks, bahasa);
-    const { terpakaiHariIni, maksPerHari } = penjaga.statistik();
-    console.log(`stela provider=gemini model=${modelDipakai} ${terpakaiHariIni}/${maksPerHari} | token ${tokenMasuk}/${tokenKeluar}`);
+    console.log(`stela provider=gemini model=${modelDipakai} | token ${tokenMasuk}/${tokenKeluar}`);
     return balas({ reply: teks }, 200, origin);
   } catch (error) {
     console.error('Kesalahan STELA', error instanceof Error ? error.message : 'unknown');

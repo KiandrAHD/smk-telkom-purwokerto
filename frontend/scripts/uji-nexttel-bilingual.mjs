@@ -1,18 +1,7 @@
 import assert from 'node:assert/strict';
 import { hitungHasilNextTel } from '../../supabase/functions/nexttel/scoring.mjs';
-const LABELS = {
-  RPL: { id: 'Rekayasa Perangkat Lunak (RPL)', en: 'Software Engineering (RPL)' },
-  PG: { id: 'Pengembangan Game (PG)', en: 'Game Development (PG)' },
-  TKJ: { id: 'Teknik Komputer dan Jaringan (TKJ)', en: 'Computer and Network Engineering (TKJ)' },
-  TJAT: { id: 'Teknik Jaringan Akses Telekomunikasi (TJAT)', en: 'Telecommunication Access Network Engineering (TJAT)' },
-};
-const hasilFallbackNextTel = (result, language = 'id') => {
-  const lang = language === 'en' ? 'en' : 'id';
-  const label = LABELS[result?.topRecommendation]?.[lang] ?? LABELS.RPL[lang];
-  return lang === 'en'
-    ? { explanation: `Based on your answers, your highest score is ${label}.`, strengths: [`You showed the strongest match to ${label}.`], learningSuggestions: [`Explore beginner projects related to ${label}.`] }
-    : { explanation: `Berdasarkan jawabanmu, jurusan yang paling cocok untukmu adalah ${label}.`, strengths: [`Kamu menunjukkan kecocokan terbesar dengan ${label}.`], learningSuggestions: [`Coba eksplor proyek pemula yang berkaitan dengan ${label}.`] };
-};
+import { deterministicFallback } from '../../supabase/functions/nexttel/inti.mjs';
+const hasilFallbackNextTel = (result, language) => deterministicFallback(result?.topRecommendation, language);
 
 console.log('Memulai Pengujian Bilingual NextTel & Fallback...\\n');
 
