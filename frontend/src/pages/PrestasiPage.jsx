@@ -32,7 +32,7 @@ const PrestasiPage = () => {
   }, [requestVersion]);
 
   return (
-    <MainLayout footerVariant="prestasi">
+    <MainLayout>
       <PrestasiHeroSection />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />

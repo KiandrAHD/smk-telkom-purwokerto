@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 // Memakai elemen <dialog> bawaan browser, sama seperti GaleriFoto di sisi
 // publik: tombol Esc, penguncian fokus, dan lapisan latar sudah ditangani
 // browser, jadi tidak perlu ditulis ulang.
-const Modal = ({ terbuka, onTutup, judul, deskripsi, children, footer, lebar = 'max-w-lg' }) => {
+const Modal = ({ terbuka, onTutup, judul, deskripsi, children, footer, lebar = 'max-w-lg', labelTutup = 'Tutup' }) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Modal = ({ terbuka, onTutup, judul, deskripsi, children, footer, lebar = '
             <button
               type="button"
               onClick={onTutup}
-              aria-label="Tutup"
+              aria-label={labelTutup}
               className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-dark-500 transition-colors hover:bg-dark-100 hover:text-dark-800"
             >
               <X className="h-4 w-4" />
