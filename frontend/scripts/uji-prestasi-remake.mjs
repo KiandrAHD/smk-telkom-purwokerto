@@ -44,7 +44,7 @@ try {
       assert.ok(render(Stela, { variant }, language).includes('href="/stela"'));
       assert.ok(render(CTA, { variant }, language).includes('href="/spmb"'));
       const footer = render(Footer, { variant }, language);
-      assert.equal(footer.includes('competition-supporters'), variant === 'default', 'Only the default footer keeps the competition supporter block.');
+      assert.ok(footer.includes('competition-supporters'), 'Every page uses the shared footer with the competition supporter block.');
       assert.ok(footer.includes('google.com/maps/search/'));
       assert.ok(footer.includes('href="/kebijakan-privasi"'));
       assert.ok(footer.includes('href="/login"'));

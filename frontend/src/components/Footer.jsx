@@ -28,17 +28,17 @@ const FooterAccent = ({ node }) => (
   </div>
 );
 
-const LinkColumn = ({ title, links, remake = false }) => {
+const LinkColumn = ({ title, links }) => {
   const { t } = useLanguage();
   return (
   <div className="min-w-0">
-    <h3 className={remake ? "text-sm font-bold text-dark-900 lg:text-[clamp(0.875rem,1.0846vw,1.25rem)]" : 'font-heading text-xs font-bold text-dark-900'}>{t(title)}</h3>
+    <h3 className="font-heading text-xs font-bold text-dark-900">{t(title)}</h3>
     <ul className="mt-3 space-y-2 text-[11px] leading-relaxed">
       {links.map((link) => (
         <li key={link.label}>
           <Link
             to={link.href}
-            className={`${remake ? 'text-xs lg:text-[clamp(0.75rem,0.8677vw,1rem)]' : 'text-[11px]'} text-dark-500 transition-colors hover:text-primary`}
+            className="text-[11px] text-dark-500 transition-colors hover:text-primary"
           >
             {t(link.label)}
           </Link>
@@ -49,17 +49,16 @@ const LinkColumn = ({ title, links, remake = false }) => {
   );
 };
 
-const Footer = ({ variant = 'default' }) => {
+const Footer = () => {
   const { t } = useLanguage();
-  const remake = variant === 'prestasi';
   const schoolMap = (
-    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(footerData.kontak.mapsQuery ?? footerData.kontak.address)}`} target="_blank" rel="noopener noreferrer" aria-label={t('Buka lokasi SMK Telkom Purwokerto di Google Maps')} className={`${remake ? 'col-span-2 mt-3 lg:col-span-1 lg:mt-0 lg:rounded-[1.6269vw]' : 'mt-3'} block self-start overflow-hidden rounded-xl transition-transform hover:scale-[1.01] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary`}>
+    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(footerData.kontak.mapsQuery ?? footerData.kontak.address)}`} target="_blank" rel="noopener noreferrer" aria-label={t('Buka lokasi SMK Telkom Purwokerto di Google Maps')} className="mt-3 block self-start overflow-hidden rounded-xl transition-transform hover:scale-[1.01] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
       <img src={footerData.map} alt={t('Peta lokasi SMK Telkom Purwokerto')} loading="lazy" className="h-auto w-full border border-dark-100" />
     </a>
   );
   return (
-  <footer className={`site-footer bg-white ${remake ? "font-['Plus_Jakarta_Sans']" : ''}`}>
-    <div className={`relative overflow-hidden pt-6 lg:pt-8 ${remake ? 'pb-6 lg:min-h-[16.2148vw] lg:pb-8' : ''}`}>
+  <footer className="site-footer bg-white">
+    <div className="relative overflow-hidden pt-6 lg:pt-8">
       {/* Accent Element / Group 478: original masks, positions and rotations. */}
       <div aria-hidden="true" className="footer-accent-side footer-accent-side-left pointer-events-none select-none">
         {['125:161', '125:167'].map((node) => <FooterAccent key={node} node={node} />)}
@@ -68,19 +67,19 @@ const Footer = ({ variant = 'default' }) => {
         <FooterAccent node="125:164" />
       </div>
 
-      <div className={`footer-content relative z-10 mx-auto px-4 pb-2 sm:px-6 lg:pb-3 ${remake ? 'max-w-[1769px] lg:w-[91.76%] lg:px-0' : 'max-w-7xl lg:px-8'}`}>
-        <div className={`grid grid-cols-2 gap-x-6 gap-y-6 lg:gap-x-8 ${remake ? 'lg:grid-cols-[1.3fr_0.5fr_0.6fr_0.85fr_1.03fr]' : 'lg:grid-cols-[1.3fr_0.8fr_0.8fr_1.3fr]'}`}>
+      <div className="footer-content relative z-10 mx-auto px-4 pb-2 sm:px-6 lg:pb-3 max-w-7xl lg:px-8">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-6 lg:gap-x-8 lg:grid-cols-[1.3fr_0.8fr_0.8fr_1.3fr]">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3">
-              <Logo className={remake ? 'h-11 w-11 shrink-0 lg:h-[7.05vw] lg:w-[7.05vw]' : 'h-11 w-11'} />
-              <span className={remake ? 'text-base font-extrabold leading-[1.15] text-dark-900 lg:text-[clamp(1rem,1.9523vw,2.25rem)]' : 'font-heading text-base font-extrabold leading-[1.15] text-dark-900'}>
+              <Logo className="h-11 w-11" />
+              <span className="font-heading text-base font-extrabold leading-[1.15] text-dark-900">
                 SMK Telkom
                 <br />
                 Purwokerto
               </span>
             </div>
-            <p className={`mt-3 leading-relaxed text-dark-500 ${remake ? 'max-w-[469px] text-xs lg:text-[clamp(0.75rem,0.8677vw,1rem)]' : 'max-w-xs text-[11px]'}`}>
+            <p className="mt-3 leading-relaxed text-dark-500 max-w-xs text-[11px]">
               {t(footerData.tagline)}
             </p>
             <div className="mt-4 flex items-center gap-3">
@@ -95,14 +94,14 @@ const Footer = ({ variant = 'default' }) => {
                     aria-label={`${social.name} SMK Telkom Purwokerto`}
                     className="relative text-dark-500 transition-colors hover:text-primary before:absolute before:-inset-2 before:content-['']"
                   >
-                  <Icon className={remake ? 'size-5 lg:size-[1.7896vw]' : 'h-4 w-4'} />
+                  <Icon className="h-4 w-4" />
                   </a>
                 );
               })}
             </div>
 
             {/* Lima logo memakai bitmap asli; CSS hanya membatasi area putih tiap logo. */}
-            {!remake && <div className="mt-4 max-w-[280px]">
+            <div className="mt-4 max-w-[280px]">
               <h3 className="font-heading text-xs font-bold text-dark-900">Supported by</h3>
               <ul className="footer-supporters mt-3" aria-label={t('Pendukung lomba')}>
                 {supporterLogos.map(({ id, name, href }) => {
@@ -122,22 +121,22 @@ const Footer = ({ variant = 'default' }) => {
                   );
                 })}
               </ul>
-            </div>}
+            </div>
 
           </div>
 
           <div className="min-w-0">
-            <LinkColumn title="Menu" links={footerData.menu} remake={remake} />
-            {!remake && <div className="mt-6">
+            <LinkColumn title="Menu" links={footerData.menu} />
+            <div className="mt-6">
               <VisitorCounter />
-            </div>}
+            </div>
           </div>
-          <LinkColumn title="Informasi" links={footerData.informasi} remake={remake} />
+          <LinkColumn title="Informasi" links={footerData.informasi} />
 
           {/* Kontak */}
           <div className="footer-contact col-span-2 min-w-0 [overflow-wrap:anywhere] lg:col-span-1">
-            <h3 className={remake ? 'text-sm font-bold text-dark-900 lg:text-[clamp(0.875rem,1.0846vw,1.25rem)]' : 'font-heading text-xs font-bold text-dark-900'}>{t('Kontak')}</h3>
-            <ul className={`mt-3 space-y-2 text-dark-500 ${remake ? 'text-xs lg:text-[clamp(0.75rem,0.8677vw,1rem)]' : 'text-[11px]'}`}>
+            <h3 className="font-heading text-xs font-bold text-dark-900">{t('Kontak')}</h3>
+            <ul className="mt-3 space-y-2 text-dark-500 text-[11px]">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
                 {t(footerData.kontak.address)}
@@ -161,14 +160,13 @@ const Footer = ({ variant = 'default' }) => {
                 </a>
               </li>
             </ul>
-            {!remake && schoolMap}
+            {schoolMap}
           </div>
-          {remake && schoolMap}
         </div>
       </div>
 
       {/* Both accent canvases share the same bottom edge. */}
-      <div aria-hidden="true" className={`footer-accent-band pointer-events-none select-none ${remake ? 'absolute! inset-x-0 bottom-0' : ''}`}>
+      <div aria-hidden="true" className="footer-accent-band pointer-events-none select-none">
         <div className="footer-accent-canvas">
           {['125:136', '125:139', '125:142', '125:145', '125:148'].map((node) => <FooterAccent key={node} node={node} />)}
         </div>

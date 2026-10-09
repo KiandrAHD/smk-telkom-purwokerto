@@ -5,6 +5,7 @@ import { Flip } from 'gsap/Flip';
 import { useLenis } from 'lenis/react';
 import { ArrowDown, ArrowRight, BookOpen, Bot, Building2, Monitor, Network, School } from 'lucide-react';
 import { fasilitasData } from '../data/fasilitasData';
+import { useLanguage } from '../context/LanguageContext';
 import Modal from './dashboard/Modal';
 import motifLeft from '../assets/fasilitas/motif-left.svg';
 import motifTop from '../assets/fasilitas/motif-top.svg';
@@ -27,6 +28,9 @@ const slides = [
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function FacilitiesSection() {
+  const { t } = useLanguage();
+  // Both supported translations have two words; keep the existing accent on the last word.
+  const [titleStart, titleEnd] = t('Fasilitas Sekolah').split(' ');
   const root = useRef(null);
   const carousel = useRef(null);
   const detail = useRef(null);
@@ -122,7 +126,7 @@ export default function FacilitiesSection() {
 
   const visibleCount = fasilitasData.filter(item => filter === 'Semua' || item.category === filter).length;
   return (
-    <section ref={root} id="fasilitas" aria-label="Fasilitas sekolah" className="overflow-hidden bg-white [font-family:'Plus_Jakarta_Sans',sans-serif]">
+    <section ref={root} id="fasilitas" aria-label={t('Fasilitas Sekolah')} className="overflow-hidden bg-white [font-family:'Plus_Jakarta_Sans',sans-serif]">
       <div ref={carousel} className="relative isolate bg-[#484848] py-10 sm:py-12 lg:py-14 [container-type:inline-size]">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <img src={backgroundLeft} alt="" className="absolute left-0 top-0 h-full w-1/2 object-cover opacity-10" />
@@ -131,29 +135,29 @@ export default function FacilitiesSection() {
           <div className="absolute left-[-5.57%] top-0 h-[493.607px] w-[179px] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifLeft} alt="" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 rotate-90" /></div>
         </div>
         <div className="mx-auto max-w-[1546px] px-6 sm:px-12 lg:px-20">
-          <p className="text-sm tracking-[0.12em] text-white/80">Fasilitas Kelas —</p>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-[0.08em] text-white sm:text-4xl lg:text-5xl">Fasilitas <span className="text-[#f01932]">Sekolah</span></h2>
-          <p className="mt-4 max-w-lg text-xs leading-relaxed tracking-wide text-white/85 sm:text-sm">Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.</p>
+          <p className="text-sm tracking-[0.12em] text-white/80">{t('Fasilitas Kelas')} —</p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-[0.08em] text-white sm:text-4xl lg:text-5xl">{titleStart} <span className="text-[#f01932]">{titleEnd}</span></h2>
+          <p className="mt-4 max-w-lg text-xs leading-relaxed tracking-wide text-white/85 sm:text-sm">{t('Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.')}</p>
         </div>
-        <div className="relative mx-auto mt-9 max-w-[1546px] px-12 sm:px-16 lg:px-20" aria-roledescription="carousel" aria-label="Pilihan fasilitas">
+        <div className="relative mx-auto mt-9 max-w-[1546px] px-12 sm:px-16 lg:px-20" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
           <div className="flex items-center justify-center gap-0 pb-6 sm:pb-8">
             {[-1, 0, 1].map(offset => {
               const index = active === 0 && offset === -1 ? 4 : (active + offset + slides.length) % slides.length;
               const slide = slides[index];
               return (
                 <button key={`${offset}-${index}`} type="button" data-slide disabled={handoff} onClick={() => offset === 0 ? showDetails(slide.category) : setActive(index)}
-                  aria-label={offset === 0 ? `Lihat detail ${slide.name}` : `Tampilkan ${slide.name}`}
+                  aria-label={offset === 0 ? t('Lihat detail {name}', { name: t(slide.name) }) : t('Tampilkan {name}', { name: t(slide.name) })}
                   className={`relative shrink-0 rounded-xl border-[3px] border-white bg-white shadow-card transition-transform focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-primary ${offset === 0 ? 'z-10 w-full sm:w-[38%]' : `hidden sm:block sm:w-[33%] ${offset < 0 ? '-mr-4 -rotate-2' : '-ml-4 rotate-2'}`}`}>
-                  <img src={slide.image} alt={slide.name} width="611" height="354" loading="lazy" className="aspect-[611/354] w-full rounded-lg object-cover" />
-                  {offset === 0 ? <span className="absolute -bottom-5 left-[7%] flex min-h-16 w-[86%] items-center justify-center rounded-xl bg-white/90 px-3 py-4 text-sm font-semibold text-dark-900 shadow-card sm:text-base lg:text-xl">{slide.title ?? slide.name}</span>
-                    : <span className="absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left text-base font-semibold text-white lg:text-xl">{slide.name}</span>}
+                  <img src={slide.image} alt={t(slide.name)} width="611" height="354" loading="lazy" className="aspect-[611/354] w-full rounded-lg object-cover" />
+                  {offset === 0 ? <span className="absolute -bottom-5 left-[7%] flex min-h-16 w-[86%] items-center justify-center rounded-xl bg-white/90 px-3 py-4 text-sm font-semibold text-dark-900 shadow-card sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span>
+                    : <span className="absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left text-base font-semibold text-white lg:text-xl">{t(slide.name)}</span>}
                 </button>
               );
             })}
           </div>
-          <button type="button" aria-label="Fasilitas sebelumnya" disabled={active === 0 || handoff} onClick={() => setActive(index => index - 1)} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full disabled:opacity-40 sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
-          <button type="button" aria-label={active === 5 ? 'NEXT: lihat semua fasilitas sekolah' : 'Fasilitas berikutnya'} disabled={handoff} onClick={() => active === 5 ? showDetails() : setActive(index => index + 1)} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full disabled:opacity-60 sm:right-4">{handoff ? <ArrowDown className="size-8 rounded-full bg-primary p-1 text-white" /> : <img src={arrowNext} alt="" className="max-w-none rotate-180" />}</button>
-          <p aria-live="polite" className="sr-only">{String(active + 1).padStart(2, '0')} — {slides[active].name}</p>
+          <button type="button" aria-label={t('Fasilitas sebelumnya')} disabled={active === 0 || handoff} onClick={() => setActive(index => index - 1)} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full disabled:opacity-40 sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
+          <button type="button" aria-label={t(active === 5 ? 'NEXT: lihat semua fasilitas sekolah' : 'Fasilitas berikutnya')} disabled={handoff} onClick={() => active === 5 ? showDetails() : setActive(index => index + 1)} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full disabled:opacity-60 sm:right-4">{handoff ? <ArrowDown className="size-8 rounded-full bg-primary p-1 text-white" /> : <img src={arrowNext} alt="" className="max-w-none rotate-180" />}</button>
+          <p aria-live="polite" className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
         </div>
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
@@ -161,34 +165,34 @@ export default function FacilitiesSection() {
           {slides.map(({ name, Icon }, index) => <li key={name} className="relative flex-1 text-center">
             <button type="button" disabled={handoff} aria-pressed={active === index} onClick={() => setActive(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
               <span data-progress-active={active === index ? '' : undefined} className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 ${active === index ? 'border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
-              <span className="mt-3 block">{name}</span><span className="mt-1 block text-[10px] text-dark-500">{String(index + 1).padStart(2, '0')}</span>
+              <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(index + 1).padStart(2, '0')}</span>
             </button>
           </li>)}
         </ol>
       </div>
       <section ref={detail} id="fasilitas-sekolah" aria-labelledby="fasilitas-title" className="scroll-mt-28 px-4 pb-14 pt-7 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1386px]">
-          <h2 ref={heading} id="fasilitas-title" tabIndex={-1} data-facility-reveal className="text-center text-2xl font-extrabold text-dark-900 outline-none sm:text-3xl">Fasilitas <span className="text-primary">Sekolah</span></h2>
-          <div className="mt-6 flex gap-2 overflow-x-auto pb-2 sm:justify-center" aria-label="Filter fasilitas" data-lenis-prevent-horizontal>
-            {filters.map(category => <button key={category} type="button" data-facility-reveal aria-pressed={filter === category} aria-controls="fasilitas-grid" disabled={busy} onClick={() => changeFilter(category)} className={`shrink-0 rounded-full border px-5 py-2.5 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm ${filter === category ? 'border-primary bg-primary text-white' : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'}`}>{category}</button>)}
+          <h2 ref={heading} id="fasilitas-title" tabIndex={-1} data-facility-reveal className="text-center text-2xl font-extrabold text-dark-900 outline-none sm:text-3xl">{titleStart} <span className="text-primary">{titleEnd}</span></h2>
+          <div className="mt-6 flex gap-2 overflow-x-auto pb-2 sm:justify-center" aria-label={t('Filter fasilitas')} data-lenis-prevent-horizontal>
+            {filters.map(category => <button key={category} type="button" data-facility-reveal aria-pressed={filter === category} aria-controls="fasilitas-grid" disabled={busy} onClick={() => changeFilter(category)} className={`shrink-0 rounded-full border px-5 py-2.5 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm ${filter === category ? 'border-primary bg-primary text-white' : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'}`}>{t(category)}</button>)}
           </div>
-          <p className="sr-only" role="status">{visibleCount} fasilitas dalam kategori {filter}</p>
+          <p className="sr-only" role="status">{t('{count} fasilitas dalam kategori {category}', { count: visibleCount, category: t(filter) })}</p>
           <div ref={grid} id="fasilitas-grid" className="mt-7 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {fasilitasData.map(item => <article key={item.id} data-facility-card data-category={item.category} className={`overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-soft ${filter !== 'Semua' && item.category !== filter ? 'hidden' : ''}`}>
               <div data-facility-reveal className="flex h-full flex-col">
-                <img src={item.image} alt={item.name} width="600" height="400" loading="lazy" className="aspect-[3/2] w-full object-cover" />
+                <img src={item.image} alt={t(item.name)} width="600" height="400" loading="lazy" className="aspect-[3/2] w-full object-cover" />
                 <div className="flex flex-1 flex-col p-5">
-                  <h3 className="text-base font-bold text-primary">{item.name}</h3>
-                  <p className="mb-5 mt-3 text-xs leading-6 text-dark-500">{item.preview}</p>
-                  <button type="button" onClick={() => setSelected(item)} aria-label={`Selengkapnya tentang ${item.name}`} className="mt-auto flex items-center gap-2 self-start text-xs font-semibold text-primary hover:underline">Selengkapnya <ArrowRight className="size-4" /></button>
+                  <h3 className="text-base font-bold text-primary">{t(item.name)}</h3>
+                  <p className="mb-5 mt-3 text-xs leading-6 text-dark-500">{t(item.preview)}</p>
+                  <button type="button" onClick={() => setSelected(item)} aria-label={t('Selengkapnya tentang {name}', { name: t(item.name) })} className="mt-auto flex items-center gap-2 self-start text-xs font-semibold text-primary hover:underline">{t('Selengkapnya')} <ArrowRight className="size-4" /></button>
                 </div>
               </div>
             </article>)}
           </div>
         </div>
       </section>
-      <Modal terbuka={selected !== null} onTutup={() => setSelected(null)} judul={selected?.name} lebar="max-w-2xl">
-        {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><img src={selected.image} alt={selected.name} width="900" height="600" className="aspect-[3/2] w-full rounded-xl object-cover" /><p className="mt-5 text-sm leading-7 text-dark-600">{selected.description}</p></div>}
+      <Modal terbuka={selected !== null} onTutup={() => setSelected(null)} judul={t(selected?.name)} labelTutup={t('Tutup')} lebar="max-w-2xl">
+        {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><img src={selected.image} alt={t(selected.name)} width="900" height="600" className="aspect-[3/2] w-full rounded-xl object-cover" /><p className="mt-5 text-sm leading-7 text-dark-600">{t(selected.description)}</p></div>}
       </Modal>
     </section>
   );
