@@ -12,6 +12,8 @@ import {
   amankanJawaban,
   deteksiBahasa,
   periksaPesan,
+  topikDiizinkan,
+  buatPesanPenolakan,
   tanyaAI,
 } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
@@ -160,6 +162,13 @@ Deno.serve(async (req) => {
   // puluhan pengunjung yang menanyakan hal serupa.
   const latestUserMessage = [...hasilValidasi.pesan].reverse().find((message) => message.role === 'user');
   const bahasa = requestedLanguage ?? deteksiBahasa(latestUserMessage?.content ?? '');
+
+  // Server-side scope enforcement: tolak pertanyaan di luar scope sebelum pemanggilan provider AI
+  // dan sebelum penggunaan kuota provider.
+  if (!topikDiizinkan(hasilValidasi.pesan)) {
+    return balas({ reply: buatPesanPenolakan(bahasa), scope_rejected: true }, 200, origin);
+  }
+
   const tersimpan = penjaga.ambilCache(hasilValidasi.pesan, bahasa);
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 

@@ -22,7 +22,7 @@ try {
     return result;
   };
   const value = { language: 'en', locale: 'en-US', t, setLanguage: () => {} };
-  const protectedNames = [data.footerData.kontak.alamat, 'Peduli Lingkungan', 'Pekan Pelajar Banyumas', 'Yayasan Pendidikan Telkom', 'Lintas Jaringan Indonesia (Demo)', 'Ruang Gim Studio (Demo)'].filter(Boolean);
+  const protectedNames = [data.footerData.kontak.alamat, 'Peduli Lingkungan', 'Pekan Pelajar Banyumas', 'Yayasan Pendidikan Telkom', 'Lintas Jaringan Indonesia (Demo)', 'Ruang Gim Studio (Demo)', 'Cinta, Bangga, dan Paham Rupiah'].filter(Boolean);
   const residual = /\b(dan|yang|untuk|dengan|tidak|belum|siswa|tahun|jurusan|prestasi|pilih|silakan|sudah|tersedia|pelajari|memiliki|daftar|temukan|kami|kamu|kegiatan|berita|pengumuman|pendaftaran|menjadi|mengembangkan|membantu|melalui|segera|keahlian|terbaru|lainnya|kembali|lanjutkan|berkas|terima|kasih|lulusan|jaringan|perangkat|seluruh|menggunakan|masukkan|periksa|tenggat|diproses|diterima|ditolak|menunggu|pendidik|kompetensi|layanan|ketentuan|berbasis|mengenal|pembelajaran|ruang|laboratorium|terletak|dipakai|dilakukan|oleh|pengajar|olahraga|harapan|membuka|diperlukan|dicari|selamat)\b/i;
   const clean = text => protectedNames.reduce((s, name) => s.replaceAll(name, ''), text).replaceAll('SMK Telkom Purwokerto', '').replace(/https?:\/\/[^\s<>]+/g, '');
   const render = async (module, props = {}, path = '/', route = '*') => {

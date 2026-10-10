@@ -22,6 +22,51 @@ export const PESAN_STELA_GAGAL = 'STELA sedang mengalami kendala. Silakan coba l
 export const PESAN_STELA_BELUM_SIAP =
   'STELA belum dikonfigurasi. Isi GEMINI_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
 
+export const KATEGORI_GALAT = {
+  SCOPE: 'scope',        // Pertanyaan di luar scope (rejection oleh model)
+  SECURITY: 'security',  // Prompt injection detected
+  RATE_LIMIT: 'rate-limit', // Rate limit/quota exceeded
+  TRANSIENT: 'transient',    // Backpressure, timeout, network issues
+  CONFIG: 'config',      // Configuration issues
+  UNKNOWN: 'unknown',    // Generic failure
+};
+
+// Detect error category from backend message for better UX
+export const kategorikanGalat = (pesan) => {
+  if (!pesan) return KATEGORI_GALAT.UNKNOWN;
+  const p = pesan.toLowerCase();
+
+  // Scope/rejection messages from backend
+  if (
+    p.includes('fokus membantu') ||
+    p.includes('tidak bisa saya jawab') ||
+    p.includes('cannot answer') ||
+    p.includes('maaf, saya stela') ||
+    p.includes('pertanyaan itu tidak bisa saya jawab')
+  ) return KATEGORI_GALAT.SCOPE;
+
+  // Rate limiting/backpressure from backend
+  if (
+    p.includes('batas') ||
+    p.includes('limit') ||
+    p.includes('kuota') ||
+    p.includes('ramai') ||
+    p.includes('tunggu') ||
+    p.includes('sampai batas')
+  ) return KATEGORI_GALAT.RATE_LIMIT;
+
+  // Security/validation errors from backend
+  if (
+    p.includes('format') ||
+    p.includes('panjang') ||
+    p.includes('valid') ||
+    p.includes('scope') ||
+    p.includes('safety')
+  ) return KATEGORI_GALAT.SECURITY;
+
+  return KATEGORI_GALAT.TRANSIENT;
+};
+
 export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
   if (!stelaSiap) throw new Error(PESAN_STELA_BELUM_SIAP);
 
@@ -48,12 +93,22 @@ export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
       // saat yang kurang cuma satu baris di .env.
       throw new Error(typeof data.error === 'string' && data.error ? data.error : PESAN_STELA_GAGAL);
     }
+
+    // Server mengirim scope_rejected=true saat pertanyaan di luar scope
+    if (data.scope_rejected === true && typeof data.reply === 'string') {
+      const scopeError = new Error(data.reply);
+      scopeError.category = KATEGORI_GALAT.SCOPE;
+      throw scopeError;
+    }
+
     if (typeof data.reply !== 'string' || !data.reply.trim()) {
       throw new Error(PESAN_STELA_GAGAL);
     }
     return data.reply.trim();
   } catch (error) {
     if (error?.name === 'AbortError') throw error;
+    // Preserve category if already set
+    if (error?.category) throw error;
     throw new Error(error?.message || PESAN_STELA_GAGAL, { cause: error });
   }
 };

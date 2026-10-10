@@ -174,13 +174,45 @@ export const jawabanFaqCepat = (teks, bahasa = deteksiBahasa(teks)) => {
   return bahasa === 'en' ? (faq.jawabanEn ?? faq.jawaban) : faq.jawaban;
 };
 
-// Filter keamanan: menolak percobaan prompt extraction, secret leakage, malicious exploits
-const POLA_DI_LUAR_SCOPE = /(?:ignore\s+(?:previous|all|the\s+above)|system\s*prompt|developer\s*mode|reveal\s+(?:all|system|hidden|prompt)|show\s+(?:hidden|system|all\s+rules)|api[_ -]?key|service[_ -]?role|bearer\s+[a-z0-9]|(?:master|root|admin)\s+password|bypass\s+(?:security|rules|guard)|environment\s+variable|data\s+private|(?:spmb|ppdb)\s+(?:orang|peserta|private|rahasia)|hacking|malware|ransomware|exploit|write\s+a\s+virus)/i;
+// Scope allowlist untuk STELA (hanya melayani topik SMK Telkom Purwokerto dan pendidikan vokasi terkait)
+// Blocklist untuk topik yang pasti ditolak
+const POLA_BLOCKLIST = /(?:bom\s+molotov|molotov|senjata|bahan\s+peledak|narkoba|judi|pornografi|porno|hacking|malware|ransomware|exploit|virus|ddos|sql\s+injection|xss|csrf|bypass|phishing|kartu\s+kredit|pembobolan|curi\s+data|buatkan\s+(?:saya\s+)?(?:website|aplikasi|skrip|script|program|kode|code)(?:\s+(?:simpel|sederhana|lengkap|komplit))?(?:\s+pakai|\s+menggunakan|\s+dengan)?(?:\s+(?:html|css|js|javascript|react|python|php|java|cpp|c\+\+))?|codingan|bikin\s+web|buat\s+web|jasa\s+pembuatan\s+web|resep\s+masak|ramalan|zodiak|politik\s+praktis|pemilu|partai|presiden|menteri|gubernur|bupati|walikota)/i;
+
+// Pola prompt injection & ekstraksi instruksi sistem
+const POLA_INJECTION = /(?:ignore\s+(?:previous|all|the\s+above)|system\s*prompt|developer\s*mode|reveal\s+(?:all|system|hidden|prompt)|show\s+(?:hidden|system|all\s+rules)|api[_ -]?key|service[_ -]?role|bearer\s+[a-z0-9]|(?:master|root|admin)\s+password|bypass\s+(?:security|rules|guard)|environment\s+variable|data\s+private|(?:spmb|ppdb)\s+(?:orang|peserta|private|rahasia)|write\s+a\s+virus|tampilkan\s+(?:instruksi|system\s+prompt|prompt\s+asli)|kamu\s+adalah\s+(?:dan|dan\s+bukan)|lupakan\s+semua\s+instruksi|abaikan\s+(?:aturan|instruksi))/i;
+
+// Topik yang diizinkan (allowlist)
+const POLA_ALLOWLIST = /(?:smk|telkom|purwokerto|stematel|rpl|rekayasa\s+perangkat\s+lunak|pg|pengembangan\s+game|tkj|teknik\s+komputer(?:\s+dan)?\s+jaringan|tjat|teknik\s+jaringan\s+akses(?:\s+telekomunikasi)?|jurusan|program\s+keahlian|spmb|ppdb|pendaftaran|daftar|syarat|biaya|gelombang|kuota|bkk|bursa\s+kerja|lowongan|magang|pkl|prestasi|lomba|juara|lks|fasilitas|lab|laboratorium|gedung|kelas|perpustakaan|kegiatan|ekskul|ekstrakurikuler|organisasi|osis|pramuka|guru|pengajar|tenaga\s+pendidik|kepala\s+sekolah|kurikulum|akreditasi|beasiswa|seragam|jadwal|lokasi|alamat|kontak|telepon|email|yayasan\s+pendidikan\s+telkom|ypt|telkom\s+schools|pendidikan\s+vokasi|kejuruan|profil\s+sekolah|sejarah\s+sekolah|visi\s+misi)/i;
 
 export const topikDiizinkan = (pesan) => {
   if (!Array.isArray(pesan) || pesan.length === 0) return false;
-  const teks = pesan[pesan.length - 1]?.content ?? '';
-  return !POLA_DI_LUAR_SCOPE.test(teks);
+
+  // Periksa semua pesan user (bukan hanya pesan terakhir)
+  const pesanUser = pesan.filter((p) => p.role === 'user');
+  if (pesanUser.length === 0) return false;
+
+  for (const p of pesanUser) {
+    const teks = p.content ?? '';
+    // 1. Tolak jika mengandung pola injection/ekstraksi
+    if (POLA_INJECTION.test(teks)) return false;
+    // 2. Tolak jika mengandung topik terlarang (bom molotov, coding website umum, dsb.)
+    if (POLA_BLOCKLIST.test(teks)) return false;
+  }
+
+  // Pesan terakhir harus relevan dengan sekolah ATAU merupakan sapaan/kesopanan
+  const pesanTerakhir = pesanUser[pesanUser.length - 1]?.content ?? '';
+
+  // Sapaan dan pertanyaan identitas selalu diizinkan
+  if (jawabanSapaanCepat(pesanTerakhir)) return true;
+
+  // Pertanyaan harus cocok dengan topik sekolah yang diizinkan
+  return POLA_ALLOWLIST.test(pesanTerakhir);
+};
+
+export const buatPesanPenolakan = (bahasa = 'id') => {
+  return bahasa === 'en'
+    ? 'I apologize, but as STELA, I can only assist with information regarding SMK Telkom Purwokerto, its vocational programs, facilities, admissions (SPMB), and related educational activities. For questions outside this scope, please refer to other appropriate sources.'
+    : 'Maaf, saya STELA dan hanya dapat membantu menjawab pertanyaan seputar SMK Telkom Purwokerto, jurusan, fasilitas, pendaftaran (SPMB), kegiatan sekolah, dan topik pendidikan terkait. Untuk pertanyaan di luar lingkup ini, silakan gunakan sumber informasi lain yang sesuai.';
 };
 
 export const kategoriPertanyaan = (teks) => {
@@ -246,12 +278,13 @@ export const buatInstruksi = (
 ${instruksiBahasa}
 
 KARAKTER & KEMAMPUAN:
-- Kamu adalah asisten AI modern yang cerdas, sopan, dan ramah.
-- Kamu dapat melakukan obrolan santai, menyapa, menjawab pertanyaan tentang dirimu, menjawab pertanyaan umum (misalnya penjelasan konsep pemrograman seperti Python, JavaScript, teknologi, sains, tips belajar), serta menjawab pertanyaan seputar SMK Telkom Purwokerto.
+- Kamu adalah asisten AI modern yang cerdas, sopan, dan ramah untuk SMK Telkom Purwokerto.
+- Kamu HANYA melayani: informasi seputar SMK Telkom Purwokerto, jurusan (RPL, PG, TKJ, TJAT), fasilitas, prestasi, SPMB/PPDB, kegiatan ekstrakurikuler, BKK/karier lulusan, dan pendidikan vokasi terkait.
+- Kamu dapat melakukan sapaan singkat dan percakapan ramah, tetapi HARUS MENOLAK pertanyaan di luar lingkup sekolah (seperti permintaan membuat website/coding umum tanpa konteks sekolah, resep masakan, topik politik, berita umum, dan topik berbahaya).
 - Pertahankan kesinambungan percakapan bertahap (multi-turn follow-up) dengan memahami konteks pesan sebelumnya secara natural.
 
 PANDUAN JAWABAN:
-1. PERTANYAAN UMUM / TEKNOLOGI / CODING: Jawab secara jelas dan akurat menggunakan pengetahuan umum. Jangan mengaku topik umum tersebut sebagai data internal sekolah kecuali memang relevan.
+1. PERTANYAAN DI LUAR LINGKUP: Tolak dengan sopan dan jelaskan bahwa kamu hanya melayani informasi seputar SMK Telkom Purwokerto. Jangan menjawab pertanyaan coding umum, membuat website, atau topik non-sekolah lainnya.
 2. PERTANYAAN SPESIFIK SEKOLAH: Gunakan fakta dari <data-sekolah> dan <data-dinamis-publik>. Jawab secara tepat. Jangan pernah mengarang data sekolah (seperti tanggal, nama pejabat/guru di luar data resmi, biaya, kuota, atau syarat yang tidak ada). Jika informasi belum tersedia, sarankan pengunjung untuk menghubungi pihak Tata Usaha atau mengakses halaman resmi terkait.
 3. GAYA BAHASA: Padat, jelas, ramah, dan mudah dipahami. Gunakan maksimal 3-5 kalimat untuk pertanyaan singkat, atau uraikan secukupnya jika pengguna meminta penjelasan rinci.
 4. Jika menyebutkan halaman pada website sekolah, gunakan path yang valid (seperti /jurusan, /spmb, /bkk, /profil-sekolah, /berita, /pengumuman, /prestasi, /ekstrakurikuler).
@@ -364,6 +397,12 @@ export const PESAN_KUOTA_HARIAN =
   'STELA sudah mencapai batas percakapan hari ini. Silakan coba lagi besok, atau hubungi Tata Usaha untuk pertanyaan yang mendesak.';
 export const PESAN_SEDANG_RAMAI = 'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.';
 export const PESAN_TIMEOUT = 'STELA sedang mengalami kendala koneksi. Silakan coba lagi.';
+
+const PESAN_DITOLAK = {
+  teks: 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto atau topik edukatif lainnya.',
+  tokenMasuk: 0,
+  tokenKeluar: 0,
+};
 
 const tanyaAnthropic = async ({ apiKey, model, pesan, instruksi, signal }) => {
   const tanggapan = await fetch('https://api.anthropic.com/v1/messages', {
@@ -500,12 +539,6 @@ const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi
     tokenMasuk: hasil.usage?.prompt_tokens ?? 0,
     tokenKeluar: hasil.usage?.completion_tokens ?? 0,
   };
-};
-
-const PESAN_DITOLAK = {
-  teks: 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto atau topik edukatif lainnya.',
-  tokenMasuk: 0,
-  tokenKeluar: 0,
 };
 
 const PENYEDIA = {
