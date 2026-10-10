@@ -151,15 +151,15 @@ const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = tru
         }`}
       >
         {grouped ? Array.from({ length: Math.ceil(items.length / 8) }, (_, pageIndex) => (
-          <div key={pageIndex} className="grid w-full shrink-0 snap-start grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div key={pageIndex} className="grid w-full shrink-0 snap-start grid-cols-1 grid-rows-2 auto-rows-fr items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {items.slice(pageIndex * 8, (pageIndex + 1) * 8).map((item) => (
-              <div key={item.id || item.slug}>
+              <div key={item.id || item.slug} className={renderCard ? undefined : 'flex min-w-0'}>
                 {renderCard ? renderCard(item) : <AchievementCard {...item} category={item.kategori} />}
               </div>
             ))}
           </div>
         )) : items.map((item) => (
-          <div key={item.id || item.slug} className={`shrink-0 snap-start ${CARD_WIDTH}`}>
+          <div key={item.id || item.slug} className={`shrink-0 snap-start ${CARD_WIDTH} ${renderCard ? '' : 'flex min-w-0'}`}>
             {renderCard ? renderCard(item) : <AchievementCard {...item} category={item.kategori} />}
           </div>
         ))}

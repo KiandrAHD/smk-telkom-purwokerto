@@ -8,24 +8,24 @@ const AchievementCard = ({ title, category, image, imageAlt, slug, highlight = f
   <Link
     to={`/prestasi/${slug}`}
     aria-label={t('Lihat detail prestasi: {title}', { title: t(title) })}
-    className={`group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
+    className={`group flex h-full min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
       highlight ? 'border-primary' : 'border-dark-100 hover:border-primary'
     }`}
   >
-    <article className="flex flex-col">
-      <div className="shrink-0 overflow-hidden">
+    <article className="flex min-w-0 flex-1 flex-col">
+      <div className="aspect-[16/9] shrink-0 overflow-hidden">
         <ContentImage
           src={image}
           alt={t(imageAlt || title)}
           loading="lazy"
-          className="w-full aspect-[16/9] object-cover object-top transition-transform duration-500 group-hover:scale-110"
+          className="block h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
         />
       </div>
-      <div className="flex flex-col px-4 py-2.5">
-        <h3 className="whitespace-pre-line font-heading text-sm font-bold leading-snug text-dark-900">
+      <div className="flex min-w-0 flex-1 flex-col px-4 py-2.5">
+        <h3 className="min-h-[2lh] whitespace-pre-line font-heading text-sm font-bold leading-snug text-dark-900 [overflow-wrap:anywhere]">
           {t(title)}
         </h3>
-        <p className="pt-1 text-[10px] text-dark-500">{t(category)}</p>
+        <p className="mt-auto pt-1 text-[10px] text-dark-500 [overflow-wrap:anywhere]">{t(category)}</p>
       </div>
     </article>
   </Link>
