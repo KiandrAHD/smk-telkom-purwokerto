@@ -222,7 +222,6 @@ Edge Function NextTel menggunakan provider AI server-side (9Router, Anthropic, G
 |---|---|---:|---:|
 | `VITE_SUPABASE_URL` | Supabase client, Auth, database, Storage, STELA, NextTel | Fitur Supabase | Tidak |
 | `VITE_SUPABASE_ANON_KEY` | Supabase client dan Authorization header | Fitur Supabase | Tidak |
-| `VITE_ADMIN_BYPASS` | Preview admin saat development | Opsional | Tidak |
 | `VITE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key untuk login admin | Opsional | Tidak |
 | `ANTHROPIC_API_KEY` | STELA local | Opsional | Ya |
 | `GEMINI_API_KEY` | STELA local | Opsional | Ya |
@@ -609,7 +608,6 @@ The NextTel Edge Function uses server-side AI providers (9Router, Anthropic, Gem
 |---|---|---:|---:|
 | `VITE_SUPABASE_URL` | Supabase client, Auth, database, Storage, STELA, NextTel | Supabase features | No |
 | `VITE_SUPABASE_ANON_KEY` | Supabase client and Authorization header | Supabase features | No |
-| `VITE_ADMIN_BYPASS` | Development admin preview | Optional | No |
 | `ANTHROPIC_API_KEY` | Local STELA | Optional | Yes |
 | `GEMINI_API_KEY` | Local STELA | Optional | Yes |
 | `GROQ_API_KEY` | Local STELA | Optional | Yes |
