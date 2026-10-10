@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { useLenis } from 'lenis/react';
-import { ArrowDown, ArrowRight, BookOpen, Bot, Building2, Monitor, Network, School } from 'lucide-react';
+import { ArrowRight, BookOpen, Bot, Building2, Monitor, Network, School } from 'lucide-react';
 import { fasilitasData } from '../data/fasilitasData';
 import { useLanguage } from '../context/LanguageContext';
 import Modal from './dashboard/Modal';
@@ -37,20 +37,28 @@ export default function FacilitiesSection() {
   const heading = useRef(null);
   const grid = useRef(null);
   const animation = useRef(null);
+  const slideAnimation = useRef(null);
+  const slideState = useRef(null);
+  const turning = useRef(false);
+  const direction = useRef(1);
   const mounted = useRef(true);
   const [active, setActive] = useState(0);
   const [filter, setFilter] = useState('Semua');
   const [busy, setBusy] = useState(false);
-  const [handoff, setHandoff] = useState(false);
   const [selected, setSelected] = useState(null);
   const lenis = useLenis();
 
   useEffect(() => {
     const node = root.current;
     mounted.current = true;
+    const finishSlide = () => slideAnimation.current?.progress(1);
+    window.addEventListener('resize', finishSlide);
     return () => {
+      window.removeEventListener('resize', finishSlide);
       mounted.current = false;
       animation.current?.kill();
+      slideAnimation.current?.kill();
+      turning.current = false;
       gsap.killTweensOf(node?.querySelectorAll('*') ?? []);
     };
   }, []);
@@ -67,14 +75,34 @@ export default function FacilitiesSection() {
     return () => media.revert();
   }, []);
 
+  const navigate = (next) => {
+    if (turning.current || next === active) return;
+    direction.current = (next - active + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
+    if (!reducedMotion()) {
+      slideState.current = Flip.getState(carousel.current.querySelectorAll('[data-slide]'));
+      turning.current = true;
+    }
+    setActive((next + slides.length) % slides.length);
+  };
+
   useLayoutEffect(() => {
-    if (reducedMotion()) return undefined;
-    const context = gsap.context(() => {
-      gsap.fromTo('[data-slide]', { opacity: 0.7, y: 10, scale: 0.98 }, {
-        opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out', stagger: 0.035,
-      });
-    }, carousel);
-    return () => context.revert();
+    if (!slideState.current) return;
+    const state = slideState.current;
+    slideState.current = null;
+    slideAnimation.current = Flip.from(state, {
+      targets: carousel.current.querySelectorAll('[data-slide]'),
+      absoluteOnLeave: true, duration: 0.45, ease: 'power3.inOut',
+      onEnter: elements => {
+        gsap.set(elements, { clearProps: 'transform,translate,rotate,scale' });
+        return gsap.fromTo(elements, { x: direction.current * 32, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'power3.out' });
+      },
+      onLeave: elements => gsap.to(elements, { opacity: 0, duration: 0.25, ease: 'power2.out' }),
+      onComplete: () => {
+        gsap.set(carousel.current.querySelectorAll('[data-slide]'), { clearProps: 'all' });
+        turning.current = false;
+      },
+      onInterrupt: () => { turning.current = false; },
+    });
   }, [active]);
 
   const changeFilter = (next) => {
@@ -101,27 +129,12 @@ export default function FacilitiesSection() {
   };
 
   const showDetails = (category = 'Semua') => {
-    if (handoff || busy) return;
-    setFilter(category);
-    const finish = () => {
-      if (!mounted.current) return;
-      heading.current.focus({ preventScroll: true });
-      gsap.to(carousel.current, { y: 0, scale: 1, opacity: 1, duration: reducedMotion() ? 0 : 0.35 });
-      setHandoff(false);
-    };
-    const scroll = () => {
-      if (!mounted.current) return;
-      lenis?.resize();
-      if (lenis) lenis.scrollTo(detail.current, { offset: -110, duration: 1, immediate: reducedMotion(), onComplete: finish });
-      else { detail.current.scrollIntoView({ behavior: reducedMotion() ? 'instant' : 'smooth', block: 'start' }); finish(); }
-      if (!reducedMotion()) gsap.fromTo(detail.current.querySelector('[aria-pressed="true"]'), { scale: 0.96, boxShadow: '0 0 0 7px rgba(200,16,46,0.16)' }, { scale: 1, boxShadow: '0 0 0 0px rgba(200,16,46,0)', duration: 0.6, delay: 0.6 });
-    };
-    setHandoff(true);
-    if (reducedMotion()) { scroll(); return; }
-    animation.current = gsap.timeline()
-      .to(root.current.querySelector('[data-progress-active]'), { scale: 1.08, duration: 0.12, repeat: 1, yoyo: true })
-      .to(carousel.current, { y: -12, scale: 0.985, opacity: 0.9, duration: 0.3, ease: 'power3.out' }, 0.12)
-      .call(scroll);
+    if (busy) return;
+    flushSync(() => setFilter(category));
+    heading.current.focus({ preventScroll: true });
+    lenis?.resize();
+    if (lenis) lenis.scrollTo(detail.current, { offset: -110, duration: 1, immediate: reducedMotion() });
+    else detail.current.scrollIntoView({ behavior: reducedMotion() ? 'instant' : 'smooth', block: 'start' });
   };
 
   const visibleCount = fasilitasData.filter(item => filter === 'Semua' || item.category === filter).length;
@@ -134,44 +147,47 @@ export default function FacilitiesSection() {
           <div className="absolute left-[-0.54%] top-[-1.62%] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifTop} alt="" className="max-w-none rotate-180" /></div>
           <div className="absolute left-[-5.57%] top-0 h-[493.607px] w-[179px] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifLeft} alt="" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 rotate-90" /></div>
         </div>
-        <div className="mx-auto max-w-[1546px] px-6 sm:px-12 lg:px-20">
+        <div className="mx-auto max-w-[1800px] px-6 sm:px-12 lg:px-20">
           <p className="text-sm tracking-[0.12em] text-white/80">{t('Fasilitas Kelas')} —</p>
           <h2 className="mt-3 text-3xl font-extrabold tracking-[0.08em] text-white sm:text-4xl lg:text-5xl">{titleStart} <span className="text-[#f01932]">{titleEnd}</span></h2>
           <p className="mt-4 max-w-lg text-xs leading-relaxed tracking-wide text-white/85 sm:text-sm">{t('Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.')}</p>
         </div>
-        <div className="relative mx-auto mt-9 max-w-[1546px] px-12 sm:px-16 lg:px-20" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
-          <div className="flex items-center justify-center gap-0 pb-6 sm:pb-8">
-            {[-1, 0, 1].map(offset => {
-              const index = active === 0 && offset === -1 ? 4 : (active + offset + slides.length) % slides.length;
+        <div className="relative mx-auto mt-9 max-w-[1800px] px-12 sm:px-16 lg:px-16" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
+          <div className="relative mb-6 flex aspect-[611/354] items-center justify-center gap-0 sm:mb-8 sm:aspect-[611/134.52]">
+            {[-2, -1, 0, 1, 2, 3].map(offset => {
+              const index = (active + offset + slides.length) % slides.length;
               const slide = slides[index];
               return (
-                <button key={`${offset}-${index}`} type="button" data-slide disabled={handoff} onClick={() => offset === 0 ? showDetails(slide.category) : setActive(index)}
+                <button key={index} type="button" data-slide data-flip-id={`facility-${index}`} aria-hidden={Math.abs(offset) > 1 || undefined} disabled={Math.abs(offset) > 1} onClick={() => offset === 0 ? showDetails(slide.category) : navigate(index)}
                   aria-label={offset === 0 ? t('Lihat detail {name}', { name: t(slide.name) }) : t('Tampilkan {name}', { name: t(slide.name) })}
-                  className={`relative shrink-0 rounded-xl border-[3px] border-white bg-white shadow-card transition-transform focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-primary ${offset === 0 ? 'z-10 w-full sm:w-[38%]' : `hidden sm:block sm:w-[33%] ${offset < 0 ? '-mr-4 -rotate-2' : '-ml-4 rotate-2'}`}`}>
-                  <img src={slide.image} alt={t(slide.name)} width="611" height="354" loading="lazy" className="aspect-[611/354] w-full rounded-lg object-cover" />
+                  className={`relative aspect-[611/354] shrink-0 rounded-xl border-[3px] border-white bg-white shadow-card focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-primary ${Math.abs(offset) > 1 ? 'hidden' : offset === 0 ? 'z-10 w-full sm:w-[38%]' : `hidden sm:block sm:w-[33%] ${offset < 0 ? '-mr-4 -rotate-2' : '-ml-4 rotate-2'}`}`}>
+                  <img src={slide.image} alt={t(slide.name)} width="611" height="354" loading="lazy" className="h-full w-full rounded-lg object-cover" />
                   {offset === 0 ? <span className="absolute -bottom-5 left-[7%] flex min-h-16 w-[86%] items-center justify-center rounded-xl bg-white/90 px-3 py-4 text-sm font-semibold text-dark-900 shadow-card sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span>
                     : <span className="absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left text-base font-semibold text-white lg:text-xl">{t(slide.name)}</span>}
                 </button>
               );
             })}
           </div>
-          <button type="button" aria-label={t('Fasilitas sebelumnya')} disabled={active === 0 || handoff} onClick={() => setActive(index => index - 1)} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full disabled:opacity-40 sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
-          <button type="button" aria-label={t(active === 5 ? 'NEXT: lihat semua fasilitas sekolah' : 'Fasilitas berikutnya')} disabled={handoff} onClick={() => active === 5 ? showDetails() : setActive(index => index + 1)} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full disabled:opacity-60 sm:right-4">{handoff ? <ArrowDown className="size-8 rounded-full bg-primary p-1 text-white" /> : <img src={arrowNext} alt="" className="max-w-none rotate-180" />}</button>
+          <button type="button" aria-label={t('Fasilitas sebelumnya')} onClick={() => navigate((active - 1 + slides.length) % slides.length)} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
+          <button type="button" aria-label={t('Fasilitas berikutnya')} onClick={() => navigate((active + 1) % slides.length)} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:right-4"><img src={arrowNext} alt="" className="max-w-none rotate-180" /></button>
           <p aria-live="polite" className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
+        </div>
+        <div className="mt-4 flex justify-center text-xs font-semibold text-white">
+          <button type="button" onClick={() => showDetails()} className="min-h-11 rounded-lg px-3 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-white">{t('Lihat semua fasilitas')}</button>
         </div>
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
         <ol className="relative flex min-w-[620px] justify-between gap-3 before:absolute before:left-12 before:right-12 before:top-6 before:h-px before:bg-dark-300">
           {slides.map(({ name, Icon }, index) => <li key={name} className="relative flex-1 text-center">
-            <button type="button" disabled={handoff} aria-pressed={active === index} onClick={() => setActive(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
-              <span data-progress-active={active === index ? '' : undefined} className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 ${active === index ? 'border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
+            <button type="button" aria-pressed={active === index} onClick={() => navigate(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
+              <span className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 ${active === index ? 'border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
               <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(index + 1).padStart(2, '0')}</span>
             </button>
           </li>)}
         </ol>
       </div>
       <section ref={detail} id="fasilitas-sekolah" aria-labelledby="fasilitas-title" className="scroll-mt-28 px-4 pb-14 pt-7 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-[1386px]">
+        <div className="mx-auto max-w-[1736px]">
           <h2 ref={heading} id="fasilitas-title" tabIndex={-1} data-facility-reveal className="text-center text-2xl font-extrabold text-dark-900 outline-none sm:text-3xl">{titleStart} <span className="text-primary">{titleEnd}</span></h2>
           <div className="mt-6 flex gap-2 overflow-x-auto pb-2 sm:justify-center" aria-label={t('Filter fasilitas')} data-lenis-prevent-horizontal>
             {filters.map(category => <button key={category} type="button" data-facility-reveal aria-pressed={filter === category} aria-controls="fasilitas-grid" disabled={busy} onClick={() => changeFilter(category)} className={`shrink-0 rounded-full border px-5 py-2.5 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm ${filter === category ? 'border-primary bg-primary text-white' : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'}`}>{t(category)}</button>)}

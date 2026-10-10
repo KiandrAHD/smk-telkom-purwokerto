@@ -81,7 +81,7 @@ const Navbar = () => {
 
   return (
     <header ref={headerRef} className="sticky top-0 z-[60] bg-white">
-      <nav aria-label={t('Navigasi utama')} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav aria-label={t('Navigasi utama')} className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 lg:h-20 items-center justify-between gap-3">
           {/* Brand */}
           <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0">

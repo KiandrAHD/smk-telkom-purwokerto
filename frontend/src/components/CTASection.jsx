@@ -25,7 +25,7 @@ const CTASection = ({ variant = 'default' }) => {
   );
   return (
   <section id="ppdb" className="bg-white pb-8 lg:pb-12">
-    <div className="mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center gap-5 rounded-2xl bg-primary px-6 py-6 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left">
         <div className="flex items-center gap-4">
           <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-white/20">
