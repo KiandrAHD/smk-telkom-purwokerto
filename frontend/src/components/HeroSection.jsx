@@ -63,11 +63,13 @@ const HeroSection = () => {
           <img
             src={landingHero.image}
             srcSet={`${hero640} 640w, ${hero960} 960w, ${hero1440} 1440w, ${landingHero.image} 1920w`}
-            sizes="(min-width: 112.5rem) 69.2075rem, (min-width: 80rem) calc(66vw - 5.0425rem), (min-width: 64rem) calc(60vw - 4.675rem), (min-width: 40rem) calc(100vw - 5.125rem), calc(100vw - 3.625rem)"
+            sizes="(min-width: 1024px) 66vw, 100vw"
             alt={t("Siswa SMK Telkom Purwokerto")}
             width={1920}
             height={902}
+            loading="eager"
             fetchPriority="high"
+            decoding="async"
             className="aspect-[1920/902] w-full rounded-[1.75rem] object-contain"
           />
         </div>
