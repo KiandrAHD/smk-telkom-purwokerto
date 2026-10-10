@@ -20,12 +20,12 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
 
   return (
     <section className="bg-white py-8 lg:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
           {t(prestasiUnggulan.title)}
         </h2>
 
-        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_38%]">
+        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,38%)]">
           {/* Prestasi terpilih */}
           <div className="lg:pr-8">
             <span className="inline-block rounded bg-primary-50 px-2.5 py-1 text-[9px] font-bold text-primary">
@@ -47,13 +47,13 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
           </div>
 
           {/* Daftar prestasi lain — klik untuk menukar yang tampil di kiri */}
-          <div className="space-y-3">
+          <div className="grid auto-rows-fr gap-3">
             {others.map(({ item, i }) => (
               <button
                 key={item.title}
                 type="button"
                 onClick={() => setActive(i)}
-                className="block w-full rounded-xl border border-dark-100 bg-white px-4 py-3 text-left shadow-card transition-all hover:-translate-y-0.5 hover:border-primary"
+                className="flex h-full min-w-0 w-full flex-col items-start rounded-xl border border-dark-100 bg-white px-4 py-3 text-left shadow-card transition-[transform,border-color] hover:-translate-y-0.5 hover:border-primary"
               >
                 <span className="inline-block rounded bg-primary-50 px-2 py-0.5 text-[8px] font-bold text-primary">
                   {t(item.level)}

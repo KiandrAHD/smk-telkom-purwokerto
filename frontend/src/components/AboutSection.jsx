@@ -19,7 +19,7 @@ const AboutSection = () => {
   const { t } = useLanguage();
   return (
   <section id="tentang" className="bg-white py-12 sm:py-16 lg:py-20">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 items-start gap-8 rounded-3xl border border-dark-100 bg-dark-50 p-5 sm:p-8 lg:grid-cols-[42%_1fr] lg:gap-x-10 lg:gap-y-7 lg:p-10">
         {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
             ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
@@ -29,7 +29,7 @@ const AboutSection = () => {
             poster={landingAbout.video.poster}
             posterSrcSet={`${poster640} 640w, ${poster960} 960w, ${poster1440} 1440w, ${landingAbout.video.poster} 1600w`}
             // Account for object-cover: the wide source fills a 16:9 box.
-            posterSizes="(min-width: 80rem) 35.523rem, (min-width: 64rem) calc(50.3329vw - 4.7427rem), (min-width: 40rem) calc(119.8402vw - 8.6884rem), calc(119.8402vw - 5.6924rem)"
+            posterSizes="(min-width: 112.5rem) 51.8813rem, (min-width: 64rem) calc(50.3329vw - 4.7427rem), (min-width: 40rem) calc(119.8402vw - 8.6884rem), calc(119.8402vw - 5.6924rem)"
             title={t(landingAbout.video.title)}
             desc={t(landingAbout.video.desc)}
             rasio="aspect-video lg:aspect-auto lg:h-full"

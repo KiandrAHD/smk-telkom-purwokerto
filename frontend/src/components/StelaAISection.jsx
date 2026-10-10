@@ -11,7 +11,7 @@ const StelaAISection = ({ variant = 'default' }) => {
   const english = language === 'en';
   return (
     <section id="stela" className={variant === 'prestasi' ? 'bg-white pb-6 lg:pb-[2.5499vw]' : 'bg-white py-6 lg:py-8'}>
-      <div className={variant === 'prestasi' ? 'mx-auto w-[calc(100%-2rem)] max-w-[1683px] sm:w-[calc(100%-3rem)] lg:w-[91.27%]' : 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'}>
+      <div className={variant === 'prestasi' ? 'mx-auto w-[calc(100%-2rem)] max-w-[1683px] sm:w-[calc(100%-3rem)] lg:w-[91.27%]' : 'mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-8'}>
         <div className={`relative overflow-hidden bg-[#830b19] ${variant === 'prestasi' ? 'rounded-[20px] lg:rounded-[1.0846vw]' : 'rounded-3xl'}`}>
           <img src={english ? stelaCardEn : stelaCard} srcSet={english ? stelaEnglishSrcSet : undefined} sizes={english ? stelaFullSizes : undefined} onError={english ? restoreOriginalStelaArtwork : undefined} width={english ? 2172 : 2200} height={english ? 724 : 693} alt="" aria-hidden="true" loading="lazy" className="block h-auto w-full" />
           {variant === 'prestasi' && (

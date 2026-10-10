@@ -6,6 +6,7 @@ import portal from './translationsPortal';
 import audit from './translationsAudit';
 
 export default {
+  'Lihat semua fasilitas': 'View all facilities',
   ...school, ...publicPages, ...portal, ...audit, ...teachers, ...spmb,
   'Tentang': 'About', 'Beranda': 'Home', 'Profil Sekolah': 'School Profile',
   'Profil Guru': 'Teacher Profiles', 'Ekstrakurikuler': 'Extracurricular Activities',
