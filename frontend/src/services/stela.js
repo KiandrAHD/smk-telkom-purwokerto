@@ -42,23 +42,33 @@ export const kategorikanGalat = (pesan) => {
     p.includes('tidak bisa saya jawab') ||
     p.includes('cannot answer') ||
     p.includes('maaf, saya stela') ||
-    p.includes('pertanyaan itu tidak bisa saya jawab')
+    p.includes('pertanyaan itu tidak bisa saya jawab') ||
+    p.includes('lingkup ini') ||
+    p.includes('outside this scope')
   ) return KATEGORI_GALAT.SCOPE;
 
-  // Rate limiting/backpressure from backend
+  // Rate limiting/backpressure from backend (checked BEFORE length validation)
   if (
-    p.includes('batas') ||
+    p.includes('batas percakapan') ||
+    p.includes('batas') && (p.includes('hari ini') || p.includes('besok')) ||
     p.includes('limit') ||
     p.includes('kuota') ||
     p.includes('ramai') ||
-    p.includes('tunggu') ||
-    p.includes('sampai batas')
+    p.includes('tunggu')
   ) return KATEGORI_GALAT.RATE_LIMIT;
 
-  // Security/validation errors from backend
+  // Length/format validation errors (NOT scope rejection)
   if (
-    p.includes('format') ||
-    p.includes('panjang') ||
+    p.includes('terlalu panjang') ||
+    p.includes('terlalu besar') ||
+    p.includes('too long') ||
+    p.includes('too large') ||
+    p.includes('format') && p.includes('tidak valid') ||
+    p.includes('invalid format')
+  ) return KATEGORI_GALAT.SECURITY;
+
+  // Generic security/validation errors
+  if (
     p.includes('valid') ||
     p.includes('scope') ||
     p.includes('safety')

@@ -105,11 +105,16 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
     // hapus pertanyaan gagal yang menggantung dari basis dan riwayat UI agar tidak terjadi penumpukan giliran user.
     if (!ulang && pertanyaanGagal) {
       const pesanTerakhir = basis[basis.length - 1];
-      if (pesanTerakhir?.role === 'user' && pesanTerakhir.content === pertanyaanGagal) {
+      // Hapus failed question dari basis jika masih ada (regardless of content match)
+      if (pesanTerakhir?.role === 'user') {
         basis = basis.slice(0, -1);
         setRiwayat((lama) => {
-          const s = lama.slice(0, -1);
-          return [...s, { role: 'user', content: pertanyaan }];
+          // Remove last user message if it was the failed one
+          const lastMsg = lama[lama.length - 1];
+          if (lastMsg?.role === 'user') {
+            return [...lama.slice(0, -1), { role: 'user', content: pertanyaan }];
+          }
+          return [...lama, { role: 'user', content: pertanyaan }];
         });
       } else {
         setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);

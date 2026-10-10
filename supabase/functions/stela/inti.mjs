@@ -175,11 +175,11 @@ export const jawabanFaqCepat = (teks, bahasa = deteksiBahasa(teks)) => {
 };
 
 // Scope allowlist untuk STELA (hanya melayani topik SMK Telkom Purwokerto dan pendidikan vokasi terkait)
-// Blocklist untuk topik yang pasti ditolak
-const POLA_BLOCKLIST = /(?:bom\s+molotov|molotov|senjata|bahan\s+peledak|narkoba|judi|pornografi|porno|hacking|malware|ransomware|exploit|virus|ddos|sql\s+injection|xss|csrf|bypass|phishing|kartu\s+kredit|pembobolan|curi\s+data|buatkan\s+(?:saya\s+)?(?:website|aplikasi|skrip|script|program|kode|code)(?:\s+(?:simpel|sederhana|lengkap|komplit))?(?:\s+pakai|\s+menggunakan|\s+dengan)?(?:\s+(?:html|css|js|javascript|react|python|php|java|cpp|c\+\+))?|codingan|bikin\s+web|buat\s+web|jasa\s+pembuatan\s+web|resep\s+masak|ramalan|zodiak|politik\s+praktis|pemilu|partai|presiden|menteri|gubernur|bupati|walikota)/i;
+// Blocklist untuk topik yang pasti ditolak - expanded untuk mencakup semua variasi coding request
+const POLA_BLOCKLIST = /(?:bom\s+(?:molotov|c2)|molotov|senjata|bahan\s+peledak|narkoba|judi|pornografi|porno|hacking|malware|ransomware|exploit|virus|ddos|sql\s+injection|xss|csrf|bypass|phishing|kartu\s+kredit|pembobolan|curi\s+data|buatkan\s+(?:saya\s+)?(?:website|aplikasi|skrip|script|program|kode|code)|(?:bikin|buat|bikinkan|buatin)\s+(?:saya\s+)?(?:web|website|aplikasi|app|skrip|script|program|kode|code)|(?:make|create|build|write|develop|code|generate)\s+(?:me\s+)?(?:a\s+)?(?:website|web\s+?site|app|application|script|program|code)|(?:tulis|tuliskan|kerjakan|susun)\s+(?:kode|code|script|program)|codingan|jasa\s+pembuatan|resep\s+masak|ramalan|zodiak|politik\s+praktis|pemilu|partai|presiden|menteri|gubernur|bupati|walikota|hack|crack|brute\s*force|dDoS|sql\s*injection|cross\s*site|xss|phish|scam|fraud|fake|botnet|ransom|encrypt|decrypt|keygen|serial)/i;
 
 // Pola prompt injection & ekstraksi instruksi sistem
-const POLA_INJECTION = /(?:ignore\s+(?:previous|all|the\s+above)|system\s*prompt|developer\s*mode|reveal\s+(?:all|system|hidden|prompt)|show\s+(?:hidden|system|all\s+rules)|api[_ -]?key|service[_ -]?role|bearer\s+[a-z0-9]|(?:master|root|admin)\s+password|bypass\s+(?:security|rules|guard)|environment\s+variable|data\s+private|(?:spmb|ppdb)\s+(?:orang|peserta|private|rahasia)|write\s+a\s+virus|tampilkan\s+(?:instruksi|system\s+prompt|prompt\s+asli)|kamu\s+adalah\s+(?:dan|dan\s+bukan)|lupakan\s+semua\s+instruksi|abaikan\s+(?:aturan|instruksi))/i;
+const POLA_INJECTION = /(?:ignore\s+(?:previous|all|the\s+above)|system\s*prompt|developer\s*mode|reveal\s+(?:all|system|hidden|prompt)|show\s+(?:hidden|system|all\s+rules)|api[_ -]?key|service[_ -]?role|bearer\s+[a-z0-9]|(?:master|root|admin)\s+password|bypass\s+(?:security|rules|guard)|environment\s+variable|data\s+private|(?:spmb|ppdb)\s+(?:orang|peserta|private|rahasia)|write\s+a\s+virus|tampilkan\s+(?:instruksi|system\s+prompt|prompt\s+asli)|kamu\s+adalah\s+(?:dan|dan\s+bukan)|lupakan\s+semua\s+instruksi|abaikan\s+(?:aturan|instruksi)|you\s+are\s+(?:now|a|an)|disregard\s+(?:previous|all|prior))/i;
 
 // Topik yang diizinkan (allowlist)
 const POLA_ALLOWLIST = /(?:smk|telkom|purwokerto|stematel|rpl|rekayasa\s+perangkat\s+lunak|pg|pengembangan\s+game|tkj|teknik\s+komputer(?:\s+dan)?\s+jaringan|tjat|teknik\s+jaringan\s+akses(?:\s+telekomunikasi)?|jurusan|program\s+keahlian|spmb|ppdb|pendaftaran|daftar|syarat|biaya|gelombang|kuota|bkk|bursa\s+kerja|lowongan|magang|pkl|prestasi|lomba|juara|lks|fasilitas|lab|laboratorium|gedung|kelas|perpustakaan|kegiatan|ekskul|ekstrakurikuler|organisasi|osis|pramuka|guru|pengajar|tenaga\s+pendidik|kepala\s+sekolah|kurikulum|akreditasi|beasiswa|seragam|jadwal|lokasi|alamat|kontak|telepon|email|yayasan\s+pendidikan\s+telkom|ypt|telkom\s+schools|pendidikan\s+vokasi|kejuruan|profil\s+sekolah|sejarah\s+sekolah|visi\s+misi)/i;
@@ -191,28 +191,30 @@ export const topikDiizinkan = (pesan) => {
   const pesanUser = pesan.filter((p) => p.role === 'user');
   if (pesanUser.length === 0) return false;
 
+  // 1. Tolak jika ADA SATU SAJA pesan mengandung pola injection/ekstraksi atau topik terlarang
   for (const p of pesanUser) {
     const teks = p.content ?? '';
-    // 1. Tolak jika mengandung pola injection/ekstraksi
     if (POLA_INJECTION.test(teks)) return false;
-    // 2. Tolak jika mengandung topik terlarang (bom molotov, coding website umum, dsb.)
     if (POLA_BLOCKLIST.test(teks)) return false;
   }
 
-  // Pesan terakhir harus relevan dengan sekolah ATAU merupakan sapaan/kesopanan
+  // 2. Periksa pesan terakhir untuk memastikan relevansi dengan sekolah
   const pesanTerakhir = pesanUser[pesanUser.length - 1]?.content ?? '';
 
   // Sapaan dan pertanyaan identitas selalu diizinkan
   if (jawabanSapaanCepat(pesanTerakhir)) return true;
 
   // Pertanyaan harus cocok dengan topik sekolah yang diizinkan
+  // PENTING: Allowlist hanya memvalidasi bahwa pertanyaan TERKAIT sekolah,
+  // bukan bahwa seluruh pesan boleh dijawab. Blocklist di atas sudah memastikan
+  // tidak ada permintaan coding/berbahaya.
   return POLA_ALLOWLIST.test(pesanTerakhir);
 };
 
 export const buatPesanPenolakan = (bahasa = 'id') => {
   return bahasa === 'en'
-    ? 'I apologize, but as STELA, I can only assist with information regarding SMK Telkom Purwokerto, its vocational programs, facilities, admissions (SPMB), and related educational activities. For questions outside this scope, please refer to other appropriate sources.'
-    : 'Maaf, saya STELA dan hanya dapat membantu menjawab pertanyaan seputar SMK Telkom Purwokerto, jurusan, fasilitas, pendaftaran (SPMB), kegiatan sekolah, dan topik pendidikan terkait. Untuk pertanyaan di luar lingkup ini, silakan gunakan sumber informasi lain yang sesuai.';
+    ? 'Sorry, I am STELA, the assistant for SMK Telkom Purwokerto. I can help with school information and relevant educational topics. What would you like to know about the school?'
+    : 'Maaf, saya STELA, asisten SMK Telkom Purwokerto. Saya membantu pertanyaan seputar sekolah dan pendidikan yang relevan. Ada informasi sekolah yang ingin kamu ketahui?';
 };
 
 export const kategoriPertanyaan = (teks) => {
@@ -416,7 +418,6 @@ const tanyaAnthropic = async ({ apiKey, model, pesan, instruksi, signal }) => {
     body: JSON.stringify({
       model,
       max_tokens: BATAS.MAKS_TOKEN_JAWABAN,
-      output_config: { effort: EFFORT_BAWAAN },
       system: [
         {
           type: 'text',
