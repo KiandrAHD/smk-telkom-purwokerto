@@ -9,8 +9,8 @@ import { useLanguage } from '../context/LanguageContext';
 import Modal from './dashboard/Modal';
 import motifLeft from '../assets/fasilitas/motif-left.svg';
 import motifTop from '../assets/fasilitas/motif-top.svg';
-import backgroundLeft from '../assets/fasilitas/background-left.png';
-import backgroundRight from '../assets/fasilitas/background-right.png';
+import backgroundLeft from '../assets/fasilitas/background-left.webp';
+import backgroundRight from '../assets/fasilitas/background-right.webp';
 import arrowPrev from '../assets/fasilitas/arrow-prev.svg';
 import arrowNext from '../assets/fasilitas/arrow-next.svg';
 

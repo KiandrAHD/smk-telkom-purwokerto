@@ -6,7 +6,7 @@ import { stelaDevPlugin } from './vite-plugin-stela.js'
 export default defineConfig({
   plugins: [react(), tailwindcss(), stelaDevPlugin()],
   build: {
-    assetsInlineLimit: (file) => file.endsWith('.woff2') ? false : undefined,
+    assetsInlineLimit: (file) => /\.(woff2|webp|avif)$/.test(file) ? false : undefined,
     rollupOptions: {
       output: {
         manualChunks(id) {
