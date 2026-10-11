@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import Logo from './Logo';
+import navbarLogo from '../assets/landing/beranda-navbar-logo.png';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
 import { ctaMasukPpdb, navLinks } from '../data/dummyData';
@@ -85,12 +85,7 @@ const Navbar = () => {
         <div className="flex h-16 lg:h-20 items-center justify-between gap-3">
           {/* Brand */}
           <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0">
-            <Logo className="w-9 h-9 lg:w-10 lg:h-10" />
-            <span className="font-heading font-extrabold text-dark-900 leading-[1.1] text-[13px] lg:text-[15px]">
-              SMK Telkom
-              <br />
-              Purwokerto
-            </span>
+            <img src={navbarLogo} alt="SMK Telkom Purwokerto" width={257} height={74} className="h-auto w-40 object-contain lg:w-[11.25rem]" />
           </Link>
 
           {/* Desktop menu */}

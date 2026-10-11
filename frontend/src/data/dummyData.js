@@ -155,7 +155,7 @@ export const quickLinks = [
   },
   {
     icon: 'sparkles',
-    title: 'NextTel',
+    title: 'NextTel AI',
     desc: 'Temukan jurusan yang sesuai dengan minat dan bakatmu',
     linkLabel: 'Cari Jurusanmu',
     href: '/nexttel',

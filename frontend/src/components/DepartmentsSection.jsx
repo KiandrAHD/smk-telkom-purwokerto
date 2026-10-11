@@ -14,11 +14,11 @@ const DepartmentsSection = () => {
   <section id="jurusan" className="relative overflow-hidden bg-white py-8 lg:py-12">
     <SectionAccents variant="departments" />
 
-    <div className="relative mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
-      <p className="text-center text-xs font-bold text-primary">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p className="text-center font-heading text-sm font-semibold leading-normal tracking-normal text-primary sm:text-base lg:text-lg">
         {t(jurusanData.eyebrow)}
       </p>
-      <h2 className="mt-2 text-center font-heading text-2xl sm:text-3xl font-extrabold text-dark-900">
+      <h2 className="mt-2 text-center font-heading text-2xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-3xl lg:text-4xl">
         {t(jurusanData.title)}
       </h2>
 

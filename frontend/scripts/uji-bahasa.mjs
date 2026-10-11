@@ -17,6 +17,10 @@ try {
   assert.equal(readLanguage(), 'en');
   assert.equal(translate('Beranda', 'en'), 'Home');
   assert.equal(translate('Beranda', 'id'), 'Beranda');
+  assert.equal(translate('Pilihan Jurusan', 'en'), 'Study Programs', 'Portal dictionary must not replace the landing section label.');
+  assert.equal(translate('Empat Jurusan, Banyak Peluang', 'en'), 'Four Programs, Endless Opportunities');
+  assert.equal(translate('Kurikulum Industri', 'en'), 'Industry-Aligned Curriculum');
+  assert.equal(translate('NextTel AI', 'en'), 'NextTel AI', 'Brand names remain unchanged.');
   assert.equal(translate('Kembali ke {label}', 'en', { label: 'News' }), 'Back to News');
   assert.equal(translate('Nama dari dashboard', 'en'), 'Nama dari dashboard');
   assert.equal(translate('constructor', 'en'), 'constructor');

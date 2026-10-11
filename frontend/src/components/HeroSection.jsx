@@ -1,22 +1,26 @@
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowRight, MessageCircle, UserPlus, Compass } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 import HeroBreadcrumb from './HeroBreadcrumb';
 import hero640 from '../assets/landing/beranda-hero-640.webp';
 import hero960 from '../assets/landing/beranda-hero-960.webp';
 import heroPanel from '../assets/landing/beranda-hero.webp';
+import accountIcon from '../assets/landing/quick-access-account.svg';
+import robotIcon from '../assets/landing/quick-access-robot.svg';
+import sparkIcon from '../assets/landing/quick-access-spark.svg';
+import sparkDot from '../assets/landing/quick-access-dot.svg';
 
 const icons = {
-  userPlus: UserPlus,
-  bot: MessageCircle,
-  sparkles: Compass,
+  userPlus: accountIcon,
+  bot: robotIcon,
+  sparkles: sparkIcon,
 };
 
 const HeroSection = () => {
   const { t } = useLanguage();
   return (
-  <section className="bg-white pb-6 pt-4 lg:pb-24">
+  <section className="bg-white pb-6 pt-4 lg:pb-36">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
         <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] xl:grid-cols-[34%_1fr] gap-6 lg:gap-4 items-start">
@@ -75,25 +79,25 @@ const HeroSection = () => {
         </div>
 
         {/* Panel tiga akses utama menimpa batas bawah hero seperti di Figma. */}
-        <div className="relative z-10 mx-1 -mt-6 overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card lg:absolute lg:bottom-0 lg:left-1/2 lg:mx-0 lg:mt-0 lg:w-[calc(100%-4rem)] lg:max-w-[52rem] lg:-translate-x-1/2 lg:translate-y-1/2">
+        <div className="relative z-10 mx-1 -mt-6 overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card [container-type:inline-size] lg:absolute lg:bottom-0 lg:left-1/2 lg:mx-0 lg:mt-0 lg:w-[70.53%] lg:-translate-x-1/2 lg:translate-y-1/2">
           <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
             {quickLinks.map((item) => {
-              const Icon = icons[item.icon];
               return (
-                <div key={item.title} className="flex gap-3 px-5 py-4">
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary">
-                    <Icon className="h-5 w-5 text-white" />
+                <div key={item.title} className="flex min-w-0 gap-4 px-5 py-5 sm:gap-3 sm:px-4 lg:gap-[2.6cqw] lg:px-[3.2cqw]">
+                  <span aria-hidden="true" className="relative flex aspect-[97/105] w-14 shrink-0 items-center justify-center self-start rounded-lg bg-primary lg:w-[clamp(3rem,7.86cqw,4.25rem)]">
+                    <img src={icons[item.icon]} alt="" className={`h-auto ${item.icon === 'userPlus' ? 'w-[59%]' : item.icon === 'bot' ? 'w-[69%]' : 'w-[58%]'}`} />
+                    {item.icon === 'sparkles' && <><span className="absolute right-[18%] top-[20%] text-[10px] font-extrabold leading-none text-white">+</span><img src={sparkDot} alt="" className="absolute bottom-[24%] left-[16%] h-auto w-[10%]" /></>}
                   </span>
-                  <div className="min-w-0">
-                    <p className="font-heading text-sm font-bold text-dark-900">
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <p className="font-heading text-lg font-bold leading-tight text-dark-900 sm:text-base lg:text-[clamp(1rem,2.35cqw,1.25rem)]">
                       {t(item.title)}
                     </p>
-                    <p className="mt-1 text-[10px] leading-snug text-dark-500">
+                    <p className="mt-2 flex-1 text-xs leading-snug text-dark-500 sm:text-[11px] lg:text-[clamp(0.6875rem,1.45cqw,0.75rem)]">
                       {t(item.desc)}
                     </p>
                     <Link
                       to={item.href}
-                      className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-primary hover:underline"
+                      className="mt-3 inline-flex min-h-8 items-center gap-1 text-xs font-semibold text-primary hover:underline sm:text-[11px] lg:text-xs"
                     >
                       {t(item.linkLabel)}
                       {/* flex-shrink-0 supaya panahnya tidak gepeng saat kolom
