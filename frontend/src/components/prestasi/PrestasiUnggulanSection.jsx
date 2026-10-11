@@ -20,7 +20,7 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
 
   return (
     <section className="bg-white py-8 lg:py-12">
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
           {t(prestasiUnggulan.title)}
         </h2>
