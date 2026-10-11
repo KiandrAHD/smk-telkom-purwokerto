@@ -147,12 +147,12 @@ export default function FacilitiesSection() {
           <div className="absolute left-[-0.54%] top-[-1.62%] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifTop} alt="" className="max-w-none rotate-180" /></div>
           <div className="absolute left-[-5.57%] top-0 h-[493.607px] w-[179px] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifLeft} alt="" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 rotate-90" /></div>
         </div>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1546px] px-6 sm:px-12 lg:px-20">
           <p className="text-sm text-white/80">{t('Fasilitas Kelas')} —</p>
           <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">{titleStart} <span className="text-[#f01932]">{titleEnd}</span></h2>
           <p className="mt-4 max-w-lg text-xs leading-relaxed text-white/85 sm:text-sm">{t('Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.')}</p>
         </div>
-        <div className="relative mx-auto mt-9 max-w-7xl px-12 sm:px-16 lg:px-20" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
+        <div className="relative mx-auto mt-9 max-w-[1546px] px-12 sm:px-16 lg:px-20" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
           <div className="relative mb-6 flex aspect-[611/354] items-center justify-center gap-0 sm:mb-8 sm:aspect-[611/134.52]">
             {[-2, -1, 0, 1, 2, 3].map(offset => {
               const index = (active + offset + slides.length) % slides.length;
@@ -187,7 +187,7 @@ export default function FacilitiesSection() {
         </ol>
       </div>
       <section ref={detail} id="fasilitas-sekolah" aria-labelledby="fasilitas-title" className="scroll-mt-28 px-4 pb-14 pt-7 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-[1216px]">
+        <div className="mx-auto max-w-[1386px]">
           <h2 ref={heading} id="fasilitas-title" tabIndex={-1} data-facility-reveal className="text-center font-heading text-2xl font-extrabold leading-tight tracking-tight text-dark-900 outline-none sm:text-3xl">{titleStart} <span className="text-primary">{titleEnd}</span></h2>
           <div className="mt-6 flex gap-2 overflow-x-auto pb-2 sm:justify-center" aria-label={t('Filter fasilitas')} data-lenis-prevent-horizontal>
             {filters.map(category => <button key={category} type="button" data-facility-reveal aria-pressed={filter === category} aria-controls="fasilitas-grid" disabled={busy} onClick={() => changeFilter(category)} className={`shrink-0 rounded-full border px-5 py-2.5 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm ${filter === category ? 'border-primary bg-primary text-white' : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'}`}>{t(category)}</button>)}

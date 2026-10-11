@@ -25,7 +25,13 @@ try {
   assert.equal(translate('Nama dari dashboard', 'en'), 'Nama dari dashboard');
   assert.equal(translate('constructor', 'en'), 'constructor');
   const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
-  const { aboutStats, visiMisi, timelineData, kepalaSekolah, ctaMasukPpdb } = await server.ssrLoadModule('/src/data/dummyData.js');
+  const { aboutStats, visiMisi, timelineData, kepalaSekolah, ctaMasukPpdb, navLinks } = await server.ssrLoadModule('/src/data/dummyData.js');
+  assert.deepEqual(navLinks.map(({ label }) => label), ['Beranda', 'Tentang', 'Jurusan', 'Prestasi', 'BKK', 'Informasi']);
+  assert.deepEqual(navLinks[1].children.map(({ label, href }) => [label, href]), [
+    ['Profil Sekolah', '/profil-sekolah'], ['Guru', '/profil-sekolah/guru'], ['Ekstrakurikuler', '/ekstrakurikuler'],
+  ]);
+  assert.deepEqual(navLinks[5].children.map(({ label, href }) => [label, href]), [['Berita', '/berita'], ['Pengumuman', '/pengumuman']]);
+  for (const [id, en] of [['Beranda', 'Home'], ['Tentang', 'About'], ['Profil Sekolah', 'School Profile'], ['Guru', 'Teachers'], ['Ekstrakurikuler', 'Extracurricular Activities'], ['Navigasi jurusan', 'Study Programs'], ['Prestasi', 'Achievements'], ['BKK', 'BKK'], ['Informasi', 'Information'], ['Berita', 'News'], ['Pengumuman', 'Announcements']]) assert.equal(translate(id, 'en'), en);
   const profileTexts = [...aboutStats.map((item) => item.label), ...Object.values(visiMisi), ...timelineData.flatMap((item) => [item.title, item.desc]), kepalaSekolah.quote, kepalaSekolah.quoteFull, kepalaSekolah.ctaText, ctaMasukPpdb.label];
   for (const text of profileTexts) {
     if (['Digital Smart School', 'AI & Future Ready'].includes(text)) continue;
@@ -34,6 +40,7 @@ try {
   }
   const { default: FormInput } = await server.ssrLoadModule('/src/components/dashboard/FormInput.jsx');
   const { default: Navbar } = await server.ssrLoadModule('/src/components/Navbar.jsx');
+  const { default: RibbonDivider } = await server.ssrLoadModule('/src/components/RibbonDivider.jsx');
   const { default: Footer } = await server.ssrLoadModule('/src/components/Footer.jsx');
   const { default: Teachers } = await server.ssrLoadModule('/src/components/tentang/TentangKepalaSekolahSection.jsx');
   const value = { language: 'en', locale: 'en-US', t: (text, vars) => translate(text, 'en', vars), setLanguage: () => {} };
@@ -43,9 +50,16 @@ try {
   assert.ok(form.includes('value="Laki-laki"'));
   assert.ok(form.includes('>Male</option>'), 'Visible option translates but submitted value is unchanged.');
   const nav = render(createElement(Navbar));
-  assert.ok(nav.includes('Announcements'));
-  assert.ok(nav.includes('href="/pengumuman"'));
+  assert.ok(nav.includes('>Home<'));
+  assert.ok(nav.includes('>Study Programs<'));
+  assert.ok(nav.includes('aria-controls="desktop-tentang-links"'));
+  assert.ok(nav.includes('aria-controls="desktop-informasi-links"'));
   assert.ok(nav.includes('Switch to Indonesian'));
+  const staticRibbon = render(createElement(RibbonDivider));
+  assert.ok(staticRibbon.includes('ribbon-divider.png'));
+  assert.ok(!staticRibbon.includes('beranda-ribbon-track'), 'Shared ribbon stays static by default.');
+  const animatedRibbon = render(createElement(RibbonDivider, { animated: true }));
+  assert.equal((animatedRibbon.match(/class="beranda-ribbon-group /g) ?? []).length, 2, 'Only the explicit Beranda variant repeats for a seamless loop.');
   const footer = render(createElement(Footer));
   assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 8);
   assert.ok(footer.includes('Staff &amp; Admin Access'));

@@ -10,6 +10,7 @@ import { isSectionRoute } from '../utils/navigation';
 const prefetchByHref = {
   '/profil-sekolah': () => import('../pages/TentangPage'),
   '/profil-sekolah/guru': () => import('../pages/GuruPage'),
+  '/ekstrakurikuler': () => import('../pages/EkstrakurikulerPage'),
   '/jurusan': () => import('../pages/JurusanPage'),
   '/prestasi': () => import('../pages/PrestasiPage'),
   '/bkk': () => import('../pages/BkkPage'),
@@ -25,32 +26,32 @@ const prefetchRoute = (href) => {
 };
 
 const Navbar = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isTentangOpen, setIsTentangOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const headerRef = useRef(null);
   const desktopMenuRef = useRef(null);
   const desktopTriggerRef = useRef(null);
   const mobileTriggerRef = useRef(null);
 
   useEffect(() => {
-    if (!isMobileOpen && !isTentangOpen) return undefined;
+    if (!isMobileOpen && !openDropdown) return undefined;
     const onKeyDown = (event) => {
       if (event.key !== 'Escape') return;
       event.preventDefault();
       setIsMobileOpen(false);
-      setIsTentangOpen(false);
+      setOpenDropdown(null);
       (isMobileOpen ? mobileTriggerRef : desktopTriggerRef).current?.focus();
     };
     const onPointerDown = (event) => {
       const container = isMobileOpen ? headerRef.current : desktopMenuRef.current;
       if (container?.contains(event.target)) return;
       setIsMobileOpen(false);
-      setIsTentangOpen(false);
+      setOpenDropdown(null);
     };
     const onFocusIn = (event) => {
-      if (!isMobileOpen && !desktopMenuRef.current?.contains(event.target)) setIsTentangOpen(false);
+      if (!isMobileOpen && !desktopMenuRef.current?.contains(event.target)) setOpenDropdown(null);
     };
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('pointerdown', onPointerDown);
@@ -60,7 +61,9 @@ const Navbar = () => {
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('focusin', onFocusIn);
     };
-  }, [isMobileOpen, isTentangOpen]);
+  }, [isMobileOpen, openDropdown]);
+
+  const navLabel = (link) => t(language === 'en' && link.label === 'Jurusan' ? 'Navigasi jurusan' : link.label);
 
   const isActive = (link) =>
     link.children
@@ -93,8 +96,8 @@ const Navbar = () => {
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
-                  <Link key={link.label} to={link.href} aria-current={currentPage(link.href)} className={linkClass(link)} onFocus={() => prefetchRoute(link.href)} onMouseEnter={() => prefetchRoute(link.href)}>
-                    {t(link.label)}
+                  <Link key={link.label} to={link.href} aria-current={currentPage(link.href)} className={linkClass(link)} onClick={() => setOpenDropdown(null)} onFocus={() => prefetchRoute(link.href)} onMouseEnter={() => prefetchRoute(link.href)}>
+                    {navLabel(link)}
                     {activeBar(link)}
                   </Link>
                 );
@@ -103,31 +106,31 @@ const Navbar = () => {
               return (
                 <div
                   key={link.label}
-                  ref={desktopMenuRef}
+                  ref={openDropdown === link.label ? desktopMenuRef : undefined}
                   className="relative"
                   onMouseEnter={() => link.children.forEach((child) => prefetchRoute(child.href))}
                 >
                   <button
                     type="button"
-                    ref={desktopTriggerRef}
-                    onClick={() => setIsTentangOpen((open) => !open)}
+                    ref={openDropdown === link.label ? desktopTriggerRef : undefined}
+                    onClick={() => setOpenDropdown((open) => open === link.label ? null : link.label)}
                     className={`${linkClass(link)} inline-flex items-center gap-1`}
-                    aria-expanded={isTentangOpen}
-                    aria-controls="desktop-about-links"
+                    aria-expanded={openDropdown === link.label}
+                    aria-controls={`desktop-${link.label.toLowerCase()}-links`}
                   >
-                    {t(link.label)}
+                    {navLabel(link)}
                     <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform ${isTentangOpen ? 'rotate-180' : ''}`}
+                      className={`h-3.5 w-3.5 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}
                       aria-hidden="true"
                     />
                     {activeBar(link)}
                   </button>
 
-                  {isTentangOpen && (
+                  {openDropdown === link.label && (
                     <div
                       className="motion-menu-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
-                      id="desktop-about-links"
-                      aria-label={t('Submenu Tentang')}
+                      id={`desktop-${link.label.toLowerCase()}-links`}
+                      aria-label={t(`Submenu ${link.label}`)}
                     >
                       {link.children.map((child) => (
                         <Link
@@ -136,7 +139,7 @@ const Navbar = () => {
                           aria-current={currentPage(child.href)}
                           onFocus={() => prefetchRoute(child.href)}
                           onMouseEnter={() => prefetchRoute(child.href)}
-                          onClick={() => setIsTentangOpen(false)}
+                          onClick={() => setOpenDropdown(null)}
                           className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                             location.pathname === child.href
                               ? 'bg-primary-50 text-primary'
@@ -169,7 +172,7 @@ const Navbar = () => {
           <button
             type="button"
             ref={mobileTriggerRef}
-            onClick={() => setIsMobileOpen((open) => !open)}
+            onClick={() => { setIsMobileOpen((open) => !open); setOpenDropdown(null); }}
             className="xl:hidden flex h-11 w-11 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
@@ -192,10 +195,10 @@ const Navbar = () => {
                       aria-current={currentPage(link.href)}
                       onFocus={() => prefetchRoute(link.href)}
                       onMouseEnter={() => prefetchRoute(link.href)}
-                      onClick={() => setIsMobileOpen(false)}
+                      onClick={() => { setIsMobileOpen(false); setOpenDropdown(null); }}
                       className={`min-h-11 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-dark-50 ${isActive(link) ? 'text-primary' : 'text-dark-700'}`}
                     >
-                      {t(link.label)}
+                      {navLabel(link)}
                     </Link>
                   );
                 }
@@ -204,19 +207,19 @@ const Navbar = () => {
                   <div key={link.label}>
                     <button
                       type="button"
-                      onClick={() => setIsTentangOpen((open) => !open)}
-                      className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-dark-700 hover:bg-dark-50"
-                      aria-expanded={isTentangOpen}
-                      aria-controls="mobile-about-links"
+                      onClick={() => setOpenDropdown((open) => open === link.label ? null : link.label)}
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-dark-50 ${isActive(link) ? 'text-primary' : 'text-dark-700'}`}
+                      aria-expanded={openDropdown === link.label}
+                      aria-controls={`mobile-${link.label.toLowerCase()}-links`}
                     >
-                      {t(link.label)}
+                      {navLabel(link)}
                       <ChevronDown
-                        className={`h-4 w-4 transition-transform ${isTentangOpen ? 'rotate-180' : ''}`}
+                        className={`h-4 w-4 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}
                         aria-hidden="true"
                       />
                     </button>
-                    {isTentangOpen && (
-                      <div id="mobile-about-links" className="motion-menu-enter ml-3 border-l border-dark-100 py-1 pl-2">
+                    {openDropdown === link.label && (
+                      <div id={`mobile-${link.label.toLowerCase()}-links`} className="motion-menu-enter ml-3 border-l border-dark-100 py-1 pl-2">
                         {link.children.map((child) => (
                           <Link
                             key={child.label}
@@ -225,7 +228,7 @@ const Navbar = () => {
                             onFocus={() => prefetchRoute(child.href)}
                             onMouseEnter={() => prefetchRoute(child.href)}
                             onClick={() => {
-                              setIsTentangOpen(false);
+                              setOpenDropdown(null);
                               setIsMobileOpen(false);
                             }}
                             className="block min-h-11 rounded-lg px-3 py-3 text-sm font-medium text-dark-600 hover:bg-dark-50 hover:text-primary"
