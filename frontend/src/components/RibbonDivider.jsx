@@ -1,14 +1,45 @@
-import ribbon from '../assets/landing/ribbon-divider.png';
+import { useLanguage } from '../context/LanguageContext';
+import petalTopLeft from '../assets/landing/beranda-150-568.png';
+import petalTopRight from '../assets/landing/beranda-150-570.png';
+import petalBottomLeft from '../assets/landing/beranda-150-581.png';
+import petalBottomRight from '../assets/landing/beranda-150-583.png';
+import './RibbonDivider.css';
 
-const RibbonDivider = () => (
-  // Slot existing dipertahankan; export Figma ini hanya berisi kedua pita.
-  <div aria-hidden="true" className="pointer-events-none relative aspect-[1847/146] overflow-hidden">
-    <img
-      src={ribbon}
-      alt=""
-      className="absolute inset-x-0 top-0 w-full select-none"
-    />
-  </div>
-);
+const badges = [
+  { label: 'NEXT GENERATION', filled: true },
+  { label: 'SMK PUSAT UNGGULAN', filled: false },
+  { label: 'AKREDITASI A', filled: true },
+  { label: 'GLOBAL TECHNOPRENUER', filled: false },
+];
+
+const RibbonDivider = () => {
+  const { t } = useLanguage();
+  return (
+    <div className="beranda-ribbon relative min-h-16 w-full overflow-hidden bg-white">
+      <ul className="sr-only">
+        {badges.map(({ label }) => <li key={label}>{t(label)}</li>)}
+      </ul>
+      <div aria-hidden="true" className="beranda-ribbon-track flex w-max select-none">
+        {[0, 1].map((copy) => (
+          <div key={copy} className="beranda-ribbon-group flex shrink-0 items-center">
+            {/* Two cycles per group keep a wide viewport filled at the seam. */}
+            {[0, 1].map((cycle) => badges.map(({ label, filled }) => (
+              <div key={`${cycle}-${label}`} className="flex shrink-0 items-center gap-2 pr-2">
+                <span className={`beranda-ribbon-badge flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border-2 border-[#cd0b20] px-[0.75em] text-[length:var(--ribbon-font-size)] font-extrabold leading-none ${filled ? 'bg-[#cd0b20] text-white' : 'bg-white text-[#cd0b20]'}`}>
+                  {t(label)}
+                </span>
+                <span className="beranda-ribbon-flower grid shrink-0 grid-cols-2 items-center">
+                  {[petalTopLeft, petalTopRight, petalBottomLeft, petalBottomRight].map((src) => (
+                    <img key={src} src={src} alt="" className="w-full" />
+                  ))}
+                </span>
+              </div>
+            )))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default RibbonDivider;

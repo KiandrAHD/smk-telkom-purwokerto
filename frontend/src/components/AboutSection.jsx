@@ -1,6 +1,8 @@
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import VideoEmbed from './VideoEmbed';
+import AboutPhotoAccents from './AboutPhotoAccents';
+import berandaPoster from '../assets/landing/beranda-poster.webp';
 import Reveal from './Reveal';
 import TextReveal from './TextReveal';
 import { landingAbout } from '../data/dummyData';
@@ -9,9 +11,6 @@ import accreditationOverlay from '../assets/tentang/badge-akreditasi-overlay.png
 import facilitiesIcon from '../assets/tentang/badge-fasilitas.svg';
 import teacherIcon from '../assets/tentang/badge-guru.svg';
 import curriculumIcon from '../assets/tentang/badge-kurikulum.svg';
-import poster640 from '../assets/responsive/poster-640.webp';
-import poster960 from '../assets/responsive/poster-960.webp';
-import poster1440 from '../assets/responsive/poster-1440.webp';
 
 const badgeDelays = ['delay-0', 'delay-100', 'delay-200', 'delay-300'];
 
@@ -23,19 +22,18 @@ const AboutSection = () => {
       <div className="grid grid-cols-1 items-start gap-8 rounded-3xl border border-dark-100 bg-dark-50 p-5 sm:p-8 lg:grid-cols-[42%_1fr] lg:gap-x-10 lg:gap-y-7 lg:p-10">
         {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
             ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
-        <Reveal className="lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:h-full">
+        <Reveal className="relative isolate [container-type:inline-size] lg:col-start-1 lg:row-span-2 lg:row-start-1">
+          <span aria-hidden="true" className="pointer-events-none absolute -left-[2.517%] -top-[3.357cqw] bottom-0 right-0 rounded-2xl bg-[#cd091d]" />
           <VideoEmbed
             videoId={landingAbout.video.videoId}
-            poster={landingAbout.video.poster}
-            posterSrcSet={`${poster640} 640w, ${poster960} 960w, ${poster1440} 1440w, ${landingAbout.video.poster} 1600w`}
-            // Account for object-cover: the wide source fills a 16:9 box.
-            posterSizes="(min-width: 80rem) 35.523rem, (min-width: 64rem) calc(50.3329vw - 4.7427rem), (min-width: 40rem) calc(119.8402vw - 8.6884rem), calc(119.8402vw - 5.6924rem)"
+            poster={berandaPoster}
             title={t(landingAbout.video.title)}
             desc={t(landingAbout.video.desc)}
-            rasio="aspect-video lg:aspect-auto lg:h-full"
-            className="lg:h-full"
+            rasio="aspect-[715/474]"
+            className="relative"
             showCaption={false}
           />
+          <AboutPhotoAccents />
         </Reveal>
 
         {/* Teks + badge */}
