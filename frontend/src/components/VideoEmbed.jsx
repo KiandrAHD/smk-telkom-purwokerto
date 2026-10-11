@@ -10,12 +10,13 @@ import schoolPoster from '../assets/tentang/profil-hero.jpg';
 //
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
-const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', className = '' }) => {
+const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', appearance = 'default', playIcon, className = '' }) => {
   const { t } = useLanguage();
   const [diputar, setDiputar] = useState(false);
+  const isAbout = appearance === 'about';
 
   return (
-    <figure className={`${layout === 'horizontal' ? 'grid overflow-hidden rounded-[20px] bg-white shadow-[0_0_16px_rgba(0,0,0,0.25)] sm:grid-cols-[57.62%_1fr] lg:rounded-[1.0846vw]' : 'overflow-hidden rounded-2xl border border-dark-100 bg-dark-900 shadow-card'} ${className}`}>
+    <figure className={`${isAbout ? 'overflow-hidden rounded-[clamp(0.5rem,2.797cqw,1.25rem)] bg-white' : layout === 'horizontal' ? 'grid overflow-hidden rounded-[20px] bg-white shadow-[0_0_16px_rgba(0,0,0,0.25)] sm:grid-cols-[57.62%_1fr] lg:rounded-[1.0846vw]' : 'overflow-hidden rounded-2xl border border-dark-100 bg-dark-900 shadow-card'} ${className}`}>
       <div className={`relative w-full overflow-hidden ${rasio} ${layout === 'horizontal' ? 'rounded-[20px] lg:rounded-[1.0846vw]' : ''}`}>
         {diputar ? (
           <iframe
@@ -44,12 +45,12 @@ const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, title, desc, r
               }}
               alt=""
               aria-hidden="true"
-              className="h-full w-full object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
+              className={`h-full w-full object-cover object-center ${isAbout ? '' : 'motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105'}`}
             />
-            <span aria-hidden="true" className={`absolute inset-0 transition-colors ${layout === 'horizontal' ? 'group-hover:bg-dark-950/10' : 'bg-dark-950/35 group-hover:bg-dark-950/20'}`} />
+            <span aria-hidden="true" className={`absolute inset-0 transition-colors ${isAbout ? 'group-hover:bg-dark-950/5' : layout === 'horizontal' ? 'group-hover:bg-dark-950/10' : 'bg-dark-950/35 group-hover:bg-dark-950/20'}`} />
             <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
-              <span className={`flex items-center justify-center rounded-full bg-primary shadow-card motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110 ${layout === 'horizontal' ? 'size-[clamp(3.5rem,4.88vw,5.625rem)]' : 'h-14 w-14 sm:h-16 sm:w-16'}`}>
-                <Play className="ml-1 h-6 w-6 text-white sm:h-7 sm:w-7" fill="currentColor" />
+              <span className={`flex items-center justify-center rounded-full ${isAbout ? 'absolute left-[49.86%] top-[47.363%] aspect-square w-[16.364%] -translate-x-1/2 -translate-y-1/2 bg-white' : `bg-primary shadow-card motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-110 ${layout === 'horizontal' ? 'size-[clamp(3.5rem,4.88vw,5.625rem)]' : 'h-14 w-14 sm:h-16 sm:w-16'}`}`}>
+                {isAbout && playIcon ? <img src={playIcon} alt="" className="ml-[14.3%] h-auto w-[54.774%] rotate-90" /> : <Play className="ml-1 h-6 w-6 text-white sm:h-7 sm:w-7" fill="currentColor" />}
               </span>
             </span>
           </button>
