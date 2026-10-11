@@ -2,7 +2,6 @@ import petalTopLeft from '../assets/landing/beranda-petal-14.svg';
 import petalTopRight from '../assets/landing/beranda-petal-15.svg';
 import petalBottomRight from '../assets/landing/beranda-petal-16.svg';
 import petalBottomLeft from '../assets/landing/beranda-petal-17.svg';
-import diamond from '../assets/landing/beranda-150-709.png';
 import logoMask from '../assets/landing/beranda-logo-mask.png';
 
 // Figma 150:703–723, positioned relative to the 715px photo rather than the viewport.
@@ -23,10 +22,14 @@ const AboutPhotoAccents = () => (
       </span>
       <span className="absolute left-0 top-[67.279%] h-[32.353%] w-[49.45%] bg-white" />
       <div className="absolute left-[0.571%] top-[67.268%] grid w-[97.475%] grid-cols-2">
-        {[0, 1, 2, 3].map((item) => <img key={item} src={diamond} alt="" className="w-full" />)}
+        {[0, 1, 2, 3].map((item) => (
+          <span key={item} className="flex aspect-[44.351/44.696] items-center justify-center">
+            <span className="aspect-square w-[70.988%] rotate-[-134.78deg] skew-x-[0.44deg] bg-[#cd091d]" />
+          </span>
+        ))}
       </div>
     </div>
-    <span className="absolute -top-[3.357cqw] right-0 aspect-[101/97] w-[14.126%] bg-[#cd091d]">
+    <span className="absolute -top-[3.357cqw] right-[0.14%] aspect-[101/97] w-[14.126%] bg-[#cd091d]">
       <img src={logoMask} alt="" className="absolute left-[3.038%] top-[2.066%] w-[92.264%] brightness-0 invert" />
     </span>
   </div>
