@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import './assets/fonts/font-faces.css';
+@import './assets/fonts/font-faces-optimized.css';
 
 @theme {
   --font-sans: 'Inter', 'Poppins', system-ui, sans-serif;

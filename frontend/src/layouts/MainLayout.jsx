@@ -1,19 +1,26 @@
 import { useLocation } from 'react-router-dom';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import StelaWidget from '../components/stela/StelaWidget';
-import SmoothScroll from '../components/SmoothScroll';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function MainLayout({ children, busy = false }) {
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
+  const [SmoothScroll, setSmoothScroll] = useState(null);
+
+  useEffect(() => {
+    if (SmoothScroll) return;
+    const load = () => import('../components/SmoothScroll').then(m => setSmoothScroll(() => m.default));
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2000 });
+    else setTimeout(load, 1500);
+  }, [SmoothScroll]);
 
   return (
     <div className="min-h-screen bg-white">
-      <SmoothScroll />
+      {SmoothScroll && <SmoothScroll />}
       <a href="#main-content" className="sr-only z-[100] rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4" onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();

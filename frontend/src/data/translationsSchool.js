@@ -373,6 +373,7 @@ export default {
   'Navigasi utama': 'Main navigation',
   'Jejak navigasi': 'Breadcrumb',
   'Coba lagi': 'Try again',
+  'STELA berfokus menjawab seputar jurusan, fasilitas, SPMB, prestasi, dan informasi sekolah.': 'STELA focuses on answering questions about programs, facilities, admissions, achievements, and school information.',
   '{count} kegiatan ditemukan': '{count} activities found',
   'Ekstrakurikuler': 'Extracurricular Activities',
   'Eksplorasi Minat & Bakat': 'Explore Your Interests & Talents',

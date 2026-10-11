@@ -1,8 +1,8 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle, Send } from 'lucide-react';
-import { PESAN_STELA_GAGAL, tanyaStela } from '../../services/stela';
+import { AlertCircle, HelpCircle, Send } from 'lucide-react';
+import { PESAN_STELA_GAGAL, tanyaStela, kategorikanGalat, KATEGORI_GALAT } from '../../services/stela';
 import { stelaData } from '../../data/dummyData';
 import { canonicalAdmissionsPath, formatAdmissionsText } from '../../utils/admissions';
 
@@ -65,6 +65,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
   const [masukan, setMasukan] = useState('');
   const [memuat, setMemuat] = useState(false);
   const [galat, setGalat] = useState(null);
+  const [jenisGalat, setJenisGalat] = useState(KATEGORI_GALAT.UNKNOWN);
   const [pertanyaanGagal, setPertanyaanGagal] = useState('');
   const pesanRef = useRef(null);
   const inputRef = useRef(null);
@@ -104,11 +105,16 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
     // hapus pertanyaan gagal yang menggantung dari basis dan riwayat UI agar tidak terjadi penumpukan giliran user.
     if (!ulang && pertanyaanGagal) {
       const pesanTerakhir = basis[basis.length - 1];
-      if (pesanTerakhir?.role === 'user' && pesanTerakhir.content === pertanyaanGagal) {
+      // Hapus failed question dari basis jika masih ada (regardless of content match)
+      if (pesanTerakhir?.role === 'user') {
         basis = basis.slice(0, -1);
         setRiwayat((lama) => {
-          const s = lama.slice(0, -1);
-          return [...s, { role: 'user', content: pertanyaan }];
+          // Remove last user message if it was the failed one
+          const lastMsg = lama[lama.length - 1];
+          if (lastMsg?.role === 'user') {
+            return [...lama.slice(0, -1), { role: 'user', content: pertanyaan }];
+          }
+          return [...lama, { role: 'user', content: pertanyaan }];
         });
       } else {
         setRiwayat((lama) => [...lama, { role: 'user', content: pertanyaan }]);
@@ -123,6 +129,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
 
     setMasukan('');
     setGalat(null);
+    setJenisGalat(KATEGORI_GALAT.UNKNOWN);
     setMemuat(true);
     const controller = new AbortController();
     controllerRef.current = controller;
@@ -134,7 +141,10 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
       setPertanyaanGagal('');
     } catch (error) {
       if (!aktifRef.current || error?.name === 'AbortError') return;
-      setGalat(error?.message || PESAN_STELA_GAGAL);
+      const pesanGalat = error?.message || PESAN_STELA_GAGAL;
+      setGalat(pesanGalat);
+      // Use error category if already set (e.g., from scope rejection)
+      setJenisGalat(error?.category || kategorikanGalat(pesanGalat));
       setPertanyaanGagal(pertanyaan);
     } finally {
       if (aktifRef.current) setMemuat(false);
@@ -179,15 +189,41 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
         )}
 
         {galat && (
-          <div role="alert" className="flex items-start gap-2 rounded-xl bg-primary-50 px-4 py-3 text-[11px] leading-relaxed text-primary-900">
-            <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
-            <span className="min-w-0 flex-1 [overflow-wrap:anywhere]">{t(galat)}</span>
-            <button
-              type="button"
-              onClick={() => kirim(pertanyaanGagal, true)}
-              disabled={memuat || !pertanyaanGagal}
-              className="flex-shrink-0 font-semibold text-primary underline disabled:opacity-50"
-            >{t("Coba lagi")} </button>
+          <div
+            role="alert"
+            className={`flex items-start gap-2.5 rounded-xl px-4 py-3 text-[11px] leading-relaxed ${
+              jenisGalat === KATEGORI_GALAT.SCOPE || jenisGalat === KATEGORI_GALAT.SECURITY
+                ? 'bg-amber-50 text-amber-900 border border-amber-200'
+                : 'bg-primary-50 text-primary-900 border border-primary-100'
+            }`}
+          >
+            {jenisGalat === KATEGORI_GALAT.SCOPE || jenisGalat === KATEGORI_GALAT.SECURITY ? (
+              <HelpCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
+            ) : (
+              <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+            )}
+
+            <div className="min-w-0 flex-1">
+              <p className="[overflow-wrap:anywhere] font-medium">{t(galat)}</p>
+
+              {(jenisGalat === KATEGORI_GALAT.SCOPE || jenisGalat === KATEGORI_GALAT.SECURITY) && (
+                <p className="mt-1 text-[10px] opacity-80">
+                  {t("STELA berfokus menjawab seputar jurusan, fasilitas, SPMB, prestasi, dan informasi sekolah.")}
+                </p>
+              )}
+            </div>
+
+            {/* Tombol 'Coba lagi' hanya muncul untuk error transient/koneksi, bukan untuk ditolak/scope */}
+            {(jenisGalat === KATEGORI_GALAT.TRANSIENT || jenisGalat === KATEGORI_GALAT.UNKNOWN || jenisGalat === KATEGORI_GALAT.RATE_LIMIT) && (
+              <button
+                type="button"
+                onClick={() => kirim(pertanyaanGagal, true)}
+                disabled={memuat || !pertanyaanGagal}
+                className="flex-shrink-0 font-semibold text-primary underline disabled:opacity-50"
+              >
+                {t("Coba lagi")}
+              </button>
+            )}
           </div>
         )}
 

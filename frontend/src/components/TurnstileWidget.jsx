@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+const TURNSTILE_ENABLED = import.meta.env.VITE_TURNSTILE_ENABLED === 'true';
 const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
+
 
 export async function verifyTurnstileToken(token) {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-  if (!supabaseUrl) throw new Error('Konfigurasi server belum lengkap.');
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+  if (!supabaseUrl || !anonKey) throw new Error('Konfigurasi server belum lengkap.');
+
   const response = await fetch(`${supabaseUrl}/functions/v1/turnstile`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: anonKey,
+    },
     body: JSON.stringify({ token }),
   });
   const result = await response.json();
@@ -18,7 +25,7 @@ export function useTurnstile() {
   const containerRef = useRef(null);
   const widgetIdRef = useRef(null);
   const [token, setToken] = useState('');
-  const [status, setStatus] = useState(SITE_KEY ? 'loading' : 'disabled');
+  const [status, setStatus] = useState((TURNSTILE_ENABLED && SITE_KEY) ? 'loading' : 'disabled');
 
   const reset = useCallback(() => {
     if (widgetIdRef.current != null && window.turnstile) {
@@ -29,7 +36,7 @@ export function useTurnstile() {
   }, []);
 
   const renderWidget = useCallback(() => {
-    if (!SITE_KEY || !containerRef.current || !window.turnstile) return;
+    if (!TURNSTILE_ENABLED || !SITE_KEY || !containerRef.current || !window.turnstile) return;
     if (widgetIdRef.current != null) window.turnstile.remove(widgetIdRef.current);
     setToken('');
     setStatus('loading');
@@ -43,7 +50,7 @@ export function useTurnstile() {
   }, []);
 
   useEffect(() => {
-    if (!SITE_KEY) return undefined;
+    if (!TURNSTILE_ENABLED || !SITE_KEY) return undefined;
     if (window.turnstile) {
       renderWidget();
       return undefined;
@@ -59,5 +66,5 @@ export function useTurnstile() {
     };
   }, [renderWidget]);
 
-  return { containerRef, token, status, reset, enabled: Boolean(SITE_KEY) };
+  return { containerRef, token, status, reset, enabled: Boolean(TURNSTILE_ENABLED && SITE_KEY) };
 }

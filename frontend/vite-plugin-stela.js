@@ -5,6 +5,8 @@ import {
   periksaPesan,
   pilihPenyedia,
   deteksiBahasa,
+  topikDiizinkan,
+  buatPesanPenolakan,
   POLA_KUNCI,
   tanyaAI,
 } from '../supabase/functions/stela/inti.mjs';
@@ -129,6 +131,12 @@ export const stelaDevPlugin = () => ({
 
       const latestUserMessage = [...pesan].reverse().find((message) => message.role === 'user');
       const bahasa = badan.language ?? deteksiBahasa(latestUserMessage?.content ?? '');
+
+      // Server-side scope enforcement: tolak pertanyaan di luar scope sebelum pemanggilan provider AI
+      if (!topikDiizinkan(pesan)) {
+        return kirim({ reply: buatPesanPenolakan(bahasa), scope_rejected: true }, 200);
+      }
+
       const tersimpan = penjaga.ambilCache(pesan, bahasa);
       if (tersimpan) {
         server.config.logger.info('  [stela] dijawab dari cache, tanpa panggilan API');

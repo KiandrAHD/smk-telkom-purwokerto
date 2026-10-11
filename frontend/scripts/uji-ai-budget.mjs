@@ -7,7 +7,7 @@ import { buatReservasiKuota } from '../../supabase/functions/ai-quota.mjs';
 import { geminiReply, loadEdgeHandler, request } from './helpers/edge-handler.mjs';
 
 const provider = { penyedia: 'gemini', apiKey: 'offline-fixture' };
-const pesan = [{ role: 'user', content: 'Jelaskan latihan jaringan komputer dengan rinci.' }];
+const pesan = [{ role: 'user', content: 'Jelaskan jurusan TKJ di SMK Telkom Purwokerto dengan rinci.' }];
 const realFetch = globalThis.fetch;
 
 await test('one request has a bounded number of provider attempts', async () => {
@@ -49,14 +49,24 @@ await test('local concurrent reservations cannot use the same final unit', async
 
 await test('two Edge instances use the same shared quota reservation', async () => {
   let reserved = 0, attempts = 0;
+  // Simulate atomic database reservation with a mutex
+  const mutex = { locked: false };
   globalThis.fetch = async (url, options) => {
     const u = String(url);
     if (u === 'https://quota.test.invalid/rest/v1/rpc/reserve_ai_attempt') {
       const body = JSON.parse(options.body);
       assert.equal(body.p_limit, 1);
-      const allowed = reserved < 1;
-      if (allowed) reserved++;
-      return Response.json(allowed);
+
+      // Atomic check-and-increment
+      while (mutex.locked) await new Promise(resolve => setTimeout(resolve, 0));
+      mutex.locked = true;
+      try {
+        const allowed = reserved < 1;
+        if (allowed) reserved++;
+        return Response.json(allowed);
+      } finally {
+        mutex.locked = false;
+      }
     }
     if (u.startsWith('https://quota.test.invalid/rest/v1/')) return Response.json([]);
     assert.ok(u.startsWith('https://generativelanguage.googleapis.com/'), 'Unmocked network request');
@@ -65,7 +75,7 @@ await test('two Edge instances use the same shared quota reservation', async () 
   try {
     const env = { GEMINI_API_KEY: 'offline-fixture', STELA_ALLOWED_ORIGINS: 'https://test.invalid', STELA_MAKS_PER_HARI: '1', SUPABASE_URL: 'https://quota.test.invalid', SUPABASE_ANON_KEY: 'public-fixture', SUPABASE_SERVICE_ROLE_KEY: 'server-fixture' };
     const first = await loadEdgeHandler('stela', env), second = await loadEdgeHandler('stela', env);
-    const responses = await Promise.all([first(request('stela', { messages: pesan })), second(request('stela', { messages: [{ role: 'user', content: 'Jelaskan praktik konfigurasi jaringan lainnya.' }] }))]);
+    const responses = await Promise.all([first(request('stela', { messages: pesan })), second(request('stela', { messages: [{ role: 'user', content: 'Jelaskan jurusan RPL di SMK Telkom Purwokerto.' }] }))]);
     assert.deepEqual(responses.map(r => r.status).sort(), [200, 429]);
     assert.equal(attempts, 1);
     assert.equal(reserved, 1);

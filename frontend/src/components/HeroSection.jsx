@@ -67,7 +67,9 @@ const HeroSection = () => {
             alt={t("Siswa SMK Telkom Purwokerto")}
             width={1920}
             height={902}
+            loading="eager"
             fetchPriority="high"
+            decoding="async"
             className="aspect-[1920/902] w-full rounded-[1.75rem] object-contain"
           />
         </div>
