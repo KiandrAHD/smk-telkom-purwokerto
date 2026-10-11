@@ -3,9 +3,9 @@ import { ArrowRight, MessageCircle, UserPlus, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
 import HeroBreadcrumb from './HeroBreadcrumb';
-import hero640 from '../assets/responsive/hero-640.webp';
-import hero960 from '../assets/responsive/hero-960.webp';
-import hero1440 from '../assets/responsive/hero-1440.webp';
+import hero640 from '../assets/landing/beranda-hero-640.webp';
+import hero960 from '../assets/landing/beranda-hero-960.webp';
+import heroPanel from '../assets/landing/beranda-hero.webp';
 
 const icons = {
   userPlus: UserPlus,
@@ -61,16 +61,16 @@ const HeroSection = () => {
 
           {/* Panel merah + foto + watermark TELKOM (satu aset dari Figma) */}
           <img
-            src={landingHero.image}
-            srcSet={`${hero640} 640w, ${hero960} 960w, ${hero1440} 1440w, ${landingHero.image} 1920w`}
+            src={heroPanel}
+            srcSet={`${hero640} 640w, ${hero960} 960w, ${heroPanel} 1208w`}
             sizes="(min-width: 80rem) 47.7575rem, (min-width: 64rem) calc(60vw - 4.675rem), (min-width: 40rem) calc(100vw - 5.125rem), calc(100vw - 3.625rem)"
             alt={t("Siswa SMK Telkom Purwokerto")}
-            width={1920}
-            height={902}
+            width={1208}
+            height={679}
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            className="aspect-[1920/902] w-full rounded-[1.75rem] object-contain"
+            className="aspect-[1208/679] w-full rounded-[1.75rem] object-contain"
           />
         </div>
 

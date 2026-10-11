@@ -1,0 +1,26 @@
+.beranda-ribbon {
+  --ribbon-height: clamp(2.25rem, 4.4938vw, 5.1875rem);
+  --ribbon-font-size: clamp(0.875rem, 1.7325vw, 2rem);
+  aspect-ratio: 1847 / 146;
+}
+
+.beranda-ribbon-badge,
+.beranda-ribbon-flower {
+  height: var(--ribbon-height);
+}
+
+.beranda-ribbon-flower { width: var(--ribbon-height); }
+
+.beranda-ribbon-track {
+  animation: beranda-ribbon-loop 80s linear infinite;
+  will-change: transform;
+}
+
+/* No track gap: all spacing belongs to each repeated group. */
+@keyframes beranda-ribbon-loop {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beranda-ribbon-track { animation: none; will-change: auto; }
+}
