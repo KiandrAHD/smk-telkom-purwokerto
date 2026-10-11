@@ -17,7 +17,7 @@ const HeroSection = () => {
   const { t } = useLanguage();
   return (
   <section className="bg-white pb-6 pt-4 lg:pb-24">
-    <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
         <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] xl:grid-cols-[34%_1fr] gap-6 lg:gap-4 items-start">
           {/* Kolom teks */}
@@ -63,7 +63,7 @@ const HeroSection = () => {
           <img
             src={landingHero.image}
             srcSet={`${hero640} 640w, ${hero960} 960w, ${hero1440} 1440w, ${landingHero.image} 1920w`}
-            sizes="(min-width: 1024px) 66vw, 100vw"
+            sizes="(min-width: 80rem) 47.7575rem, (min-width: 64rem) calc(60vw - 4.675rem), (min-width: 40rem) calc(100vw - 5.125rem), calc(100vw - 3.625rem)"
             alt={t("Siswa SMK Telkom Purwokerto")}
             width={1920}
             height={902}
