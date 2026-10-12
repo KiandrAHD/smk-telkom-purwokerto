@@ -74,7 +74,7 @@ const Navbar = () => {
   const currentPage = (href) => location.pathname === href ? 'page' : isSectionRoute(location.pathname, href) ? 'location' : undefined;
 
   const linkClass = (link) =>
-    `relative whitespace-nowrap py-1.5 text-sm font-semibold tracking-[0.12em] transition-colors ${
+    `relative inline-flex items-center whitespace-nowrap py-1.5 text-sm font-semibold tracking-[0.12em] transition-colors ${
       isActive(link) ? 'text-primary' : 'text-dark-600 hover:text-primary'
     }`;
 
@@ -86,14 +86,14 @@ const Navbar = () => {
   return (
     <header ref={headerRef} className="sticky top-0 z-[60] w-full bg-white font-sans">
       <nav aria-label={t('Navigasi utama')} className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-[2.625rem]">
-        <div className="flex h-16 lg:h-20 items-center justify-between gap-3 xl:grid xl:grid-cols-[auto_1fr_auto]">
+        <div className="flex h-16 lg:h-20 items-center justify-between gap-3 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           {/* Brand */}
-          <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0">
+          <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0 xl:justify-self-start">
             <img src={navbarLogo} alt="SMK Telkom Purwokerto" width={257} height={74} className="h-auto w-40 object-contain lg:w-[11.25rem]" />
           </Link>
 
           {/* Desktop menu */}
-          <div className="hidden xl:ml-16 xl:flex items-center gap-6">
+          <div className="hidden xl:flex xl:justify-self-center items-center gap-6">
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
@@ -158,11 +158,11 @@ const Navbar = () => {
           </div>
 
           {/* Desktop CTA */}
-          <div className="ml-auto flex items-center gap-2 xl:ml-0">
+          <div className="ml-auto flex shrink-0 items-center gap-2 xl:ml-0 xl:justify-self-end">
             <LanguageToggle />
             <Link
               to={ctaMasukPpdb.href}
-              className="hidden xl:inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="hidden xl:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {t(ctaMasukPpdb.label)}
               <ArrowRight className="w-4 h-4" />
