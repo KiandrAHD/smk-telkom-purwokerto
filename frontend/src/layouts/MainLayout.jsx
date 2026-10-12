@@ -3,6 +3,8 @@ import { useRef, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import StelaWidget from '../components/stela/StelaWidget';
+import StelaAISection from '../components/StelaAISection';
+import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function MainLayout({ children, busy = false, className = '' }) {
@@ -35,6 +37,8 @@ export default function MainLayout({ children, busy = false, className = '' }) {
           memakai komponen yang sama (mis. /berita/a -> /berita/b). */}
       <main ref={mainRef} id="main-content" tabIndex={-1} aria-busy={busy || undefined} key={pathname} className="animate-masuk-halaman scroll-mt-24">
         {children}
+        <StelaAISection variant="prestasi" className="bg-white py-6 lg:py-8" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
+        <CTASection variant="fasilitas" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
       </main>
       <Footer />
       {!busy && <StelaWidget />}

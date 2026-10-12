@@ -53,7 +53,6 @@ try {
     const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
     const cases = [
       ['/src/components/StelaAISection.jsx', /stela-card\.jpg/, true],
-      ['/src/components/jurusan/JurusanFaqSection.jsx', /stela-card\.jpg/, true],
       ['/src/components/pengumuman/PengumumanBantuanCard.jsx', /stela-help-panel\.png/, false],
     ];
     for (const [componentPath, originalId, lazy] of cases) {
@@ -73,7 +72,7 @@ try {
       assert.match(indonesian, originalId, 'Indonesian artwork must remain unchanged');
       assert.doesNotMatch(indonesian, /stela-card-en/, 'ID must not download EN image candidates');
     }
-    console.log('STELA: three English callers have selectable sizes, original fallback, unchanged loading/CTA and Indonesian sources.');
+    console.log('STELA: shared banner and help card have selectable sizes, original fallback, unchanged loading/CTA and Indonesian sources.');
   }
 } finally {
   await server.close();

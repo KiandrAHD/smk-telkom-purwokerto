@@ -6,17 +6,17 @@ import { stelaCardEn, stelaEnglishSrcSet, stelaFullSizes, restoreOriginalStelaAr
 import { stelaData } from '../data/dummyData';
 import prestasiArrow from '../assets/prestasi-remake/Arrow2.svg';
 
-const StelaAISection = ({ variant = 'default' }) => {
+const StelaAISection = ({ variant = 'default', className, containerClassName }) => {
   const { t, language } = useLanguage();
   const english = language === 'en';
   return (
-    <section id="stela" className={variant === 'prestasi' ? 'bg-white pb-6 lg:pb-[2.5499vw]' : 'bg-white py-6 lg:py-8'}>
-      <div className={variant === 'prestasi' ? 'mx-auto w-[calc(100%-2rem)] max-w-[1683px] sm:w-[calc(100%-3rem)] lg:w-[91.27%]' : 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'}>
+    <section id="stela" className={className ?? (variant === 'prestasi' ? 'bg-white pb-6 lg:pb-[2.5499vw]' : 'bg-white py-6 lg:py-8')}>
+      <div className={containerClassName ?? (variant === 'prestasi' ? 'mx-auto w-[calc(100%-2rem)] max-w-[1683px] sm:w-[calc(100%-3rem)] lg:w-[91.27%]' : 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8')}>
         <div className={`relative overflow-hidden bg-[#830b19] ${variant === 'prestasi' ? 'rounded-[20px] lg:rounded-[1.0846vw]' : 'rounded-3xl'}`}>
           <img src={english ? stelaCardEn : stelaCard} srcSet={english ? stelaEnglishSrcSet : undefined} sizes={english ? stelaFullSizes : undefined} onError={english ? restoreOriginalStelaArtwork : undefined} width={english ? 2172 : 2200} height={english ? 724 : 693} alt="" aria-hidden="true" loading="lazy" className="block h-auto w-full" />
           {variant === 'prestasi' && (
             <div className="px-[5.7%] pb-4 pt-5 text-white sm:hidden">
-              <h2 className="font-heading text-xl font-bold">{t(stelaData.title).replace('\n', ' ')}</h2>
+              <h2 className="font-sans text-xl font-bold! leading-tight! tracking-[-0.025em]!">{t(stelaData.title).replace('\n', ' ')}</h2>
               <p className="mt-2 text-sm leading-relaxed text-white/85">{t(stelaData.description)}</p>
               {english && <Link to="/stela" className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-white px-4 py-2 text-xs font-bold text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">{t(stelaData.ctaText)}<ArrowRight aria-hidden="true" className="size-4" /></Link>}
             </div>

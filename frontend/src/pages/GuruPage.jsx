@@ -2,10 +2,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import CTASection from '../components/CTASection';
 import Reveal from '../components/Reveal';
 import RibbonDivider from '../components/RibbonDivider';
-import StelaAISection from '../components/StelaAISection';
 import { kepalaSekolah, visiMisi } from '../data/dummyData';
 import { profilGuruData as guruData, profilGuruTranslations } from '../data/profilGuruData';
 import MainLayout from '../layouts/MainLayout';
@@ -179,8 +177,6 @@ function GuruPage() {
 
       <GuruCarousel />
       <Reveal><RibbonDivider /></Reveal>
-      <Reveal><StelaAISection /></Reveal>
-      <Reveal><CTASection /></Reveal>
     </MainLayout>
   );
 }

@@ -6,7 +6,6 @@ import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
 import HalamanHeader from '../components/HalamanHeader';
 import PublicDataState from '../components/PublicDataState';
-import CTASection from '../components/CTASection';
 
 import PengumumanPopulerCard from '../components/pengumuman/PengumumanPopulerCard';
 import PengumumanDaftarSection from '../components/pengumuman/PengumumanDaftarSection';
@@ -166,9 +165,6 @@ const KoleksiPage = ({ jenis }) => {
         ) : (
           <Section tampilkanLihatSemua={false} />
         )}
-      </Reveal>
-      <Reveal>
-        <CTASection />
       </Reveal>
     </MainLayout>
   );

@@ -2,12 +2,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import stelaCard from '../../assets/landing/stela-card.jpg';
-import { stelaCardEn, stelaEnglishSrcSet, stelaFullSizes, restoreOriginalStelaArtwork } from '../../utils/stelaArtwork';
-import { jurusanFaq, stelaData } from '../../data/dummyData';
+import { jurusanFaq } from '../../data/dummyData';
 
 const JurusanFaqSection = () => {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [open, setOpen] = useState(null);
 
   return (
@@ -67,29 +65,6 @@ const JurusanFaqSection = () => {
           </Link>
         </div>
 
-        {/* Artwork lengkap diberi lebar penuh agar teks kedua bahasa terbaca. */}
-        <Link to="/stela" aria-label={t(stelaData.ctaText)} className="relative block overflow-hidden rounded-2xl bg-[#830b19] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-          <img
-            src={language === 'en' ? stelaCardEn : stelaCard}
-            srcSet={language === 'en' ? stelaEnglishSrcSet : undefined}
-            sizes={language === 'en' ? stelaFullSizes : undefined}
-            onError={language === 'en' ? restoreOriginalStelaArtwork : undefined}
-            alt=""
-            aria-hidden="true"
-            width={language === 'en' ? 2172 : 2200}
-            height={language === 'en' ? 724 : 693}
-            loading="lazy"
-            className="block h-auto w-full"
-          />
-          {language !== 'en' && <span className="block px-[5.7%] pb-4 sm:absolute sm:bottom-[10.7%] sm:left-[5.7%] sm:w-[24.2%] sm:p-0">
-            <span className="inline-flex min-h-11 items-center justify-center gap-1 rounded-lg bg-white px-4 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary-50 sm:min-h-8 sm:w-full sm:px-3 sm:py-1.5 sm:text-[clamp(0.75rem,1.4vw,1.125rem)] lg:min-h-11 lg:px-5 lg:py-2">
-              {t(stelaData.ctaText)}<ArrowRight aria-hidden="true" className="h-4 w-4" />
-            </span>
-          </span>}
-          <span className="sr-only">
-            {t(stelaData.title).replace('\n', ' ')}. {t(stelaData.description)}
-          </span>
-        </Link>
       </div>
     </section>
   );
