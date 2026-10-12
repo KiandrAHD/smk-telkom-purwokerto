@@ -83,8 +83,8 @@ const Navbar = () => {
     ) : null;
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-[60] mx-auto w-full max-w-7xl bg-white">
-      <nav aria-label={t('Navigasi utama')} className="mx-auto px-6 sm:px-8 lg:px-[2.625rem]">
+    <header ref={headerRef} className="sticky top-0 z-[60] w-full bg-white">
+      <nav aria-label={t('Navigasi utama')} className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-[2.625rem]">
         <div className="flex h-16 lg:h-20 items-center justify-between gap-3 xl:grid xl:grid-cols-[auto_1fr_auto]">
           {/* Brand */}
           <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0">
