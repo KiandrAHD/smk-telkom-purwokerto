@@ -2,7 +2,6 @@ import { useLanguage } from '../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { landingHero, quickLinks } from '../data/dummyData';
-import HeroBreadcrumb from './HeroBreadcrumb';
 import hero640 from '../assets/landing/beranda-hero-640.webp';
 import hero960 from '../assets/landing/beranda-hero-960.webp';
 import heroPanel from '../assets/landing/beranda-hero.webp';
@@ -28,7 +27,6 @@ const HeroSection = () => {
           {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
               lihat catatan yang sama di PrestasiHeroSection. */}
           <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-2">
-            <HeroBreadcrumb current="Beranda" />
             {/* Chip yang sama dipakai enam hero lain; sebelumnya di sini cuma
                 teks merah polos, jadi hero Beranda terlihat lain sendiri. */}
             <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">

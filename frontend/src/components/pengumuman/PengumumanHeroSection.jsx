@@ -2,6 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
+import HeroBreadcrumb from '../HeroBreadcrumb';
 import { officialContentAudit, pengumumanHero, pengumumanStats } from '../../data/dummyData';
 
 // Hero ini dulu terasa datar dibanding halaman lain karena tiga hal yang
@@ -18,9 +19,7 @@ const PengumumanHeroSection = () => {
           {/* pb-16 menyisakan ruang untuk kartu statistik yang menimpa dari bawah —
               lihat catatan yang sama di PrestasiHeroSection. */}
           <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-4">
-            {/* Breadcrumb dihapus: satu-satunya tautannya menuju Beranda,
-                yang sudah tersedia di navbar. Halaman detail tetap memakai
-                breadcrumb sendiri lewat DetailLayout karena letaknya lebih dalam. */}
+            <HeroBreadcrumb parent="Informasi" parentTo={null} current="Pengumuman" />
             <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
               {t(pengumumanHero.badge)}
             </span>
