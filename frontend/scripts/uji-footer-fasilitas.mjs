@@ -14,6 +14,7 @@ try {
   const { default: Landing } = await server.ssrLoadModule('/src/pages/LandingPage.jsx');
   const { default: Prestasi } = await server.ssrLoadModule('/src/pages/PrestasiPage.jsx');
   const { default: Facilities } = await server.ssrLoadModule('/src/components/FacilitiesSection.jsx');
+  const { default: FacilitiesPage } = await server.ssrLoadModule('/src/pages/FasilitasPage.jsx');
   const render = (Component, language, missing = new Set()) => renderToStaticMarkup(
     h(MemoryRouter, null, h(LanguageContext.Provider, { value: {
       language, locale: language === 'en' ? 'en-US' : 'id-ID', setLanguage: () => {},
@@ -31,11 +32,14 @@ try {
       assert.ok(home);
       assert.equal(prestasi, home, `Footer Prestasi harus identik dengan Beranda (${language}).`);
       console.log(`Footer ${language}: markup Prestasi dan Beranda identik.`);
-    } catch (error) { failures.push(error.message.split('\n')[0]); }
+    } catch (error) { failures.push(error.message); }
 
     try {
       const missing = new Set();
-      const html = render(Facilities, language, missing);
+      const carousel = render(Facilities, language, missing);
+      assert.equal((carousel.match(/data-facility-card/g) ?? []).length, 0);
+      assert.ok(carousel.includes('href="/fasilitas"'));
+      const html = render(FacilitiesPage, language, missing);
       assert.equal((html.match(/data-facility-card/g) ?? []).length, 8);
       for (const item of fasilitasData) {
         for (const field of ['name', 'category', 'preview', 'description']) {
@@ -49,18 +53,19 @@ try {
         assert.ok(html.includes(translate(item.preview, language)), `Preview kartu ${item.id} harus mengikuti locale.`);
       }
       if (language === 'en') {
-        assert.deepEqual([...missing], [], 'Seluruh key yang dirender fasilitas tersedia.');
-        assert.ok(html.includes('School <span'));
-        assert.ok(html.includes('Networking Laboratory'));
+        const sharedNames = new Set(['BKK', 'Jagoan Hosting', 'Garuda Spark Innovation Hub', 'NGALUP.CO', 'Jagoan Hosting Innovation Competition 2026', 'Menu', 'SPMB', 'STELA AI', 'NextTel']);
+        assert.deepEqual([...missing].filter(text => !sharedNames.has(text)), [], 'Seluruh key yang dirender fasilitas tersedia.');
+        assert.ok(html.includes('School</span> Facilities'));
+        assert.ok(carousel.includes(translate('Laboratorium Jaringan', language)));
         assert.ok(html.includes('Robotics Lab'));
-        const content = html.replace(/data-category="[^"]*"/g, '');
+        const content = html.replace(/aria-label="[^"]*"/g, '').replace(/<header[\s\S]*?<\/header>|<footer[\s\S]*?<\/footer>/g, '');
         assert.doesNotMatch(content, /Fasilitas|Laboratorium|Ruang Kelas|Selengkapnya|Perpustakaan|fasilitas dalam kategori/);
       } else {
-        assert.ok(html.includes('Fasilitas <span'));
-        assert.ok(html.includes('Laboratorium Jaringan'));
+        assert.ok(html.includes('Fasilitas</span> Sekolah'));
+        assert.ok(carousel.includes('Laboratorium Jaringan'));
       }
       console.log(`Fasilitas ${language}: 8 kartu, preview, kategori, description, carousel dan key terverifikasi.`);
-    } catch (error) { failures.push(error.message.split('\n')[0]); }
+    } catch (error) { failures.push(error.message); }
   }
   assert.deepEqual(failures, [], failures.join('\n'));
 } finally { await server.close(); }

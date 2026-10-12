@@ -8,6 +8,7 @@ import { ctaMasukPpdb, navLinks } from '../data/dummyData';
 import { isSectionRoute } from '../utils/navigation';
 
 const prefetchByHref = {
+  '/fasilitas': () => import('../pages/FasilitasPage'),
   '/profil-sekolah': () => import('../pages/TentangPage'),
   '/profil-sekolah/guru': () => import('../pages/GuruPage'),
   '/ekstrakurikuler': () => import('../pages/EkstrakurikulerPage'),
