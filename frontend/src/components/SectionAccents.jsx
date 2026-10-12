@@ -14,6 +14,10 @@ const positions = {
     ['24:387', 'left-[82.55285%] top-[85.11129%] size-[min(12.6115cqw,28.91331cqh)] [transform:matrix(0.01108593214303255,-0.9999385476112366,0.9999385476112366,0.01108593214303255,0,0)]'],
   ],
   achievements: [
+    // Native left motif group from the saved Figma export; keep rotated edges inside the section.
+    ['24:883', 'left-[13.90042%] top-[80.04703%] size-[min(12.6115cqw,32.78147cqh)] [transform:matrix(-0.9999645352363586,-0.008419422432780266,0.008419422432780266,-0.9999645352363586,0,0)]', 'left'],
+    ['24:886', 'left-[6.6115%] top-[56.89901%] size-[min(12.6115cqw,32.78147cqh)] [transform:matrix(-0.9999645352363586,-0.008419422432780266,0.008419422432780266,-0.9999645352363586,0,0)]', 'left'],
+    ['24:889', 'left-[6.6115%] top-[83.3%] size-[min(12.6115cqw,32.78147cqh)] [transform:matrix(0.009013758040964603,-0.9999593496322632,0.9999593496322632,0.009013758040964603,0,0)]', 'left'],
     // Match the four right-side schoolTeachers accents without changing section content.
     ['24:404', 'left-[88.33441%] top-[20.32155%] size-[min(12.6115cqw,32.78147cqh)] [transform:matrix(1,-1.1058862159352145e-16,1.1058862159352145e-16,1,0,0)]'],
     ['24:407', 'left-[98.3469%] top-[43.25126%] size-[min(12.6115cqw,32.78147cqh)] [transform:matrix(1,-1.1058862159352145e-16,1.1058862159352145e-16,1,0,0)]'],
@@ -70,9 +74,9 @@ export default function SectionAccents({ variant }) {
     );
   }
   return (
-    <div aria-hidden="true" data-accent-section={variant} className={`pointer-events-none absolute inset-0 hidden overflow-hidden [container-type:size] min-[1440px]:block ${variant === 'schoolTeachers' ? 'min-[1660px]:hidden min-[1800px]:block' : ''}`}>
-      {positions[variant].map(([id, position]) => (
-        <img key={id} data-figma-node={id} src={accent} alt="" className={`absolute max-w-none -translate-x-1/2 -translate-y-1/2 select-none ${position}`} />
+    <div aria-hidden="true" data-accent-section={variant} className={`pointer-events-none absolute inset-0 overflow-hidden [container-type:size] ${variant === 'achievements' ? '' : 'hidden min-[1440px]:block'} ${variant === 'schoolTeachers' ? 'min-[1660px]:hidden min-[1800px]:block' : ''}`}>
+      {positions[variant].map(([id, position, side]) => (
+        <img key={id} data-figma-node={id} data-accent-side={side} src={accent} alt="" className={`absolute max-w-none -translate-x-1/2 -translate-y-1/2 select-none ${variant === 'achievements' && side !== 'left' ? 'hidden min-[1440px]:block' : ''} ${position}`} />
       ))}
     </div>
   );
