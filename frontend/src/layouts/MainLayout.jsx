@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import StelaWidget from '../components/stela/StelaWidget';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function MainLayout({ children, busy = false }) {
+export default function MainLayout({ children, busy = false, className = '' }) {
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
@@ -19,7 +19,7 @@ export default function MainLayout({ children, busy = false }) {
   }, [SmoothScroll]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className={`min-h-screen bg-white ${className}`}>
       {SmoothScroll && <SmoothScroll />}
       <a href="#main-content" className="sr-only z-[100] rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4" onClick={(event) => {
         event.preventDefault();

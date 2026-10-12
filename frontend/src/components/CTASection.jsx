@@ -27,14 +27,14 @@ const CTASection = ({ variant = 'default' }) => {
   return (
   <section id="ppdb" className="bg-white pb-8 lg:pb-12">
     <div className="mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
-      <div className={`flex flex-col items-center gap-5 rounded-2xl px-6 py-6 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left ${variant === 'fasilitas' ? 'bg-[#bf0d1b] lg:min-h-[8.5vw] lg:rounded-[30px] lg:px-[2.3vw]' : 'bg-primary'}`}>
+      <div className={`flex flex-col items-center gap-5 rounded-2xl px-6 py-6 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left ${variant === 'fasilitas' ? 'bg-[#bf0d1b] lg:min-h-32 lg:rounded-[30px] lg:px-8' : 'bg-primary'}`}>
         <div className="flex items-center gap-4">
           {variant === 'fasilitas' ? <span aria-hidden="true" className="relative block size-12 shrink-0 lg:size-[5.5vw]"><img src={facilitiesBadge} alt="" loading="lazy" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-[0.4673] lg:scale-[calc(100vw/1847px)]" /></span> : <span className="flex size-11 flex-shrink-0 items-center justify-center rounded-full bg-white/20"><GraduationCap className="size-5 text-white" /></span>}
           <div>
-            <h2 className={`font-heading font-extrabold text-white ${variant === 'fasilitas' ? 'text-lg sm:text-xl lg:text-[clamp(1.25rem,1.95vw,2.25rem)]' : 'text-lg sm:text-xl'}`}>
+            <h2 className={`font-heading font-extrabold text-white ${variant === 'fasilitas' ? 'text-lg sm:text-xl lg:text-2xl' : 'text-lg sm:text-xl'}`}>
               {t(ctaBanner.title)}
             </h2>
-            <p className={`mt-1 leading-relaxed text-white/85 ${variant === 'fasilitas' ? 'max-w-[739px] text-xs lg:text-[clamp(0.75rem,1.08vw,1.25rem)]' : 'max-w-md text-[11px]'}`}>
+            <p className={`mt-1 leading-relaxed text-white/85 ${variant === 'fasilitas' ? 'max-w-[739px] text-sm' : 'max-w-md text-[11px]'}`}>
               {t(ctaBanner.description)}
             </p>
           </div>
@@ -42,7 +42,7 @@ const CTASection = ({ variant = 'default' }) => {
 
         <Link
           to={ctaBanner.href}
-          className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-primary transition-colors hover:bg-primary-50 ${variant === 'fasilitas' ? 'min-h-11 text-sm lg:min-h-[3.56vw] lg:text-[clamp(0.875rem,1.3vw,1.5rem)]' : 'text-xs'}`}
+          className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-primary transition-colors hover:bg-primary-50 ${variant === 'fasilitas' ? 'min-h-11 text-sm' : 'text-xs'}`}
         >
           {t(ctaBanner.ctaText)}
           <ArrowRight className="h-4 w-4" />

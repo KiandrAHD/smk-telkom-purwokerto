@@ -27,6 +27,13 @@ try {
   assert.equal(await page.evaluate(() => window.scrollY), 0);
   await page.reload();
   await page.locator('[data-facility-card]').first().waitFor();
+  await page.evaluate(() => document.fonts.ready);
+  const typography = await page.evaluate(() => {
+    const selectors = ['header nav', '#fasilitas-hero-title', '#fasilitas-title', '[data-facility-card] h4', '[data-facility-card] p', 'footer h3'];
+    return selectors.map(selector => getComputedStyle(document.querySelector(selector)).fontFamily);
+  });
+  assert.equal(new Set(typography).size, 1, 'Navbar, heading, paragraf, dan footer fasilitas harus memakai keluarga font yang sama.');
+  assert.equal(await page.locator('meta[name="viewport"]').getAttribute('content'), 'width=device-width, initial-scale=1.0');
   assert.equal(await page.locator('[data-facility-card]').count(), 8);
   assert.equal(new Set(await page.locator('[data-facility-card]').evaluateAll(nodes => nodes.map(n => n.dataset.facilityCard))).size, 8);
   for (const [category, count] of [['Laboratorium', 3], ['Kelas', 4], ['Perpustakaan', 1], ['Semua', 8]]) {
@@ -65,6 +72,8 @@ try {
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(500);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0, `${width} ${language}: overflow`);
+      assert.ok(await page.locator('[aria-labelledby="fasilitas-hero-title"] > div').evaluate(el => el.getBoundingClientRect().width <= 1280), 'Hero mengikuti lebar konten situs.');
+      assert.equal(await page.locator('.facilities-layout').evaluate(el => getComputedStyle(el).zoom), '1');
       assert.equal(await page.locator('main img').evaluateAll(images => images.every(img => img.naturalWidth > 0)), true);
       const expectedCols = width >= 1024 ? 4 : width >= 640 ? 2 : 1;
       assert.equal(await page.locator('[data-facility-grid]').first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), expectedCols);
