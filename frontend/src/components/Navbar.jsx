@@ -74,7 +74,7 @@ const Navbar = () => {
   const currentPage = (href) => location.pathname === href ? 'page' : isSectionRoute(location.pathname, href) ? 'location' : undefined;
 
   const linkClass = (link) =>
-    `relative inline-flex items-center whitespace-nowrap py-1.5 text-sm font-semibold tracking-[0.12em] transition-colors ${
+    `relative inline-flex items-center whitespace-nowrap py-1.5 text-sm font-medium tracking-normal transition-colors ${
       isActive(link) ? 'text-primary' : 'text-dark-600 hover:text-primary'
     }`;
 

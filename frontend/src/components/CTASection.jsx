@@ -9,7 +9,7 @@ import facilitiesBadge from '../assets/fasilitas/cta-badge.svg';
 const CTASection = ({ variant = 'default', containerClassName }) => {
   const { t } = useLanguage();
   if (variant === 'prestasi') return (
-    <section id="ppdb" className="bg-white pb-8 font-['Plus_Jakarta_Sans'] lg:pb-[5.0434vw]">
+    <section id="ppdb" className="bg-white pb-8 font-[family-name:'Plus_Jakarta_Sans',var(--font-sans)] lg:pb-[5.0434vw]">
       <div className="mx-auto flex w-[calc(100%-2rem)] max-w-[1703px] flex-col items-center justify-between gap-5 rounded-[20px] bg-[#bf0d1b] px-6 py-6 text-center sm:w-[calc(100%-3rem)] sm:flex-row sm:text-left lg:min-h-[9.3818vw] lg:w-[92.35%] lg:gap-[2vw] lg:rounded-[1.6269vw] lg:py-[1.5vw] lg:pl-[2.0065vw] lg:pr-[6.345vw]">
         <div className="flex min-w-0 items-center gap-4 lg:gap-[1.6811vw]">
           <img src={nextTel} alt="NextTel" width="1024" height="1024" loading="lazy" className="size-12 shrink-0 rounded-full border border-white/35 bg-white object-contain sm:size-16 lg:size-[6.0195vw]" />
