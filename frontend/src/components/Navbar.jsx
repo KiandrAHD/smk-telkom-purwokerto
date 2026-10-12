@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronRight, Menu, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import navbarLogo from '../assets/landing/beranda-navbar-logo.png';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
 import { ctaMasukPpdb, navLinks } from '../data/dummyData';
 import { isSectionRoute } from '../utils/navigation';
+import './Navbar.css';
 
 const prefetchByHref = {
   '/fasilitas': () => import('../pages/FasilitasPage'),
@@ -41,9 +42,9 @@ const Navbar = () => {
     const onKeyDown = (event) => {
       if (event.key !== 'Escape') return;
       event.preventDefault();
+      (isMobileOpen ? mobileTriggerRef : desktopTriggerRef).current?.focus();
       setIsMobileOpen(false);
       setOpenDropdown(null);
-      (isMobileOpen ? mobileTriggerRef : desktopTriggerRef).current?.focus();
     };
     const onPointerDown = (event) => {
       const container = isMobileOpen ? headerRef.current : desktopMenuRef.current;
@@ -52,7 +53,7 @@ const Navbar = () => {
       setOpenDropdown(null);
     };
     const onFocusIn = (event) => {
-      if (!isMobileOpen && !desktopMenuRef.current?.contains(event.target)) setOpenDropdown(null);
+      if (!isMobileOpen && !headerRef.current?.contains(event.target)) setOpenDropdown(null);
     };
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('pointerdown', onPointerDown);
@@ -109,19 +110,42 @@ const Navbar = () => {
                   key={link.label}
                   ref={openDropdown === link.label ? desktopMenuRef : undefined}
                   className="relative"
-                  onMouseEnter={() => link.children.forEach((child) => prefetchRoute(child.href))}
+                  onMouseEnter={() => {
+                    link.children.forEach((child) => prefetchRoute(child.href));
+                    if (!isMobileOpen && window.matchMedia('(hover: hover) and (pointer: fine)').matches) setOpenDropdown(link.label);
+                  }}
+                  onMouseLeave={(event) => {
+                    if (isMobileOpen) return;
+                    if (!event.currentTarget.contains(document.activeElement) || !document.activeElement.matches(':focus-visible')) setOpenDropdown(open => open === link.label ? null : open);
+                  }}
+                  onFocus={(event) => {
+                    if (!isMobileOpen && event.target.matches(':focus-visible') && !event.currentTarget.contains(event.relatedTarget)) setOpenDropdown(link.label);
+                  }}
+                  onBlur={(event) => {
+                    if (!isMobileOpen && !event.currentTarget.contains(event.relatedTarget)) setOpenDropdown(open => open === link.label ? null : open);
+                  }}
                 >
                   <button
                     type="button"
                     ref={openDropdown === link.label ? desktopTriggerRef : undefined}
                     onClick={() => setOpenDropdown((open) => open === link.label ? null : link.label)}
+                    onKeyDown={(event) => {
+                      if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
+                      event.preventDefault();
+                      const container = event.currentTarget.parentElement;
+                      setOpenDropdown(link.label);
+                      requestAnimationFrame(() => {
+                        const children = container.querySelectorAll('a');
+                        (event.key === 'ArrowDown' ? children[0] : children[children.length - 1])?.focus();
+                      });
+                    }}
                     className={`${linkClass(link)} inline-flex items-center gap-1`}
                     aria-expanded={openDropdown === link.label}
                     aria-controls={`desktop-${link.label.toLowerCase()}-links`}
                   >
                     {navLabel(link)}
-                    <ChevronRight
-                      className={`h-3.5 w-3.5 transition-transform ${openDropdown === link.label ? 'rotate-90' : ''}`}
+                    <ChevronDown
+                      className="h-3.5 w-3.5"
                       aria-hidden="true"
                     />
                     {activeBar(link)}
@@ -129,7 +153,7 @@ const Navbar = () => {
 
                   {openDropdown === link.label && (
                     <div
-                      className="motion-menu-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
+                      className="navbar-dropdown-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
                       id={`desktop-${link.label.toLowerCase()}-links`}
                       aria-label={t(`Submenu ${link.label}`)}
                     >
@@ -214,8 +238,8 @@ const Navbar = () => {
                       aria-controls={`mobile-${link.label.toLowerCase()}-links`}
                     >
                       {navLabel(link)}
-                      <ChevronRight
-                        className={`h-4 w-4 transition-transform ${openDropdown === link.label ? 'rotate-90' : ''}`}
+                      <ChevronDown
+                        className="h-4 w-4"
                         aria-hidden="true"
                       />
                     </button>
