@@ -50,9 +50,8 @@ const JurusanHeroSection = () => {
           />
         </div>
 
-        {/* Kartu statistik menimpa bagian bawah hero */}
-        <HeroStatsBar items={jurusanStats} />
       </div>
+      <HeroStatsBar items={jurusanStats} />
     </div>
   </section>
   );

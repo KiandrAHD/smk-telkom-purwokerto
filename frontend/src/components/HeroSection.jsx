@@ -81,7 +81,7 @@ const HeroSection = () => {
       </div>
 
         {/* Keep QAC in flow outside the hero border so its height reserves space below. */}
-        <div data-quick-access className="relative z-10 left-1/2 -translate-x-1/2 -mt-8 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card sm:w-[92%] lg:w-[70.53%]">
+        <div data-quick-access className="relative z-10 mx-auto -mt-10 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card sm:w-[92%] lg:w-[70.53%]">
           <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
             {quickLinks.map((item) => {
               return (

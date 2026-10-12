@@ -46,8 +46,8 @@ const BkkHeroSection = () => {
           />
         </div>
 
-        <HeroStatsBar items={bkkStats} />
       </div>
+      <HeroStatsBar items={bkkStats} />
     </div>
   </section>
   );
