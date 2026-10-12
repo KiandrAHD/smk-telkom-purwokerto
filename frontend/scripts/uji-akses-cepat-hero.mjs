@@ -13,7 +13,7 @@ const quickLinks = data.match(/export const quickLinks = \[([\s\S]*?)\n\];/)?.[1
 const expectedLinks = [
   ['SPMB', '/spmb'],
   ['STELA AI', '/stela'],
-  ['NextTel', '/nexttel'],
+  ['NextTel AI', '/nexttel'],
 ];
 
 for (const [title, href] of expectedLinks) {
@@ -27,8 +27,6 @@ for (const obsolete of ['Jurusan', 'BKK']) {
 }
 
 assert.match(hero, /lg:grid-cols-3/);
-assert.match(hero, /lg:absolute/);
-assert.match(hero, /lg:translate-y-1\/2/);
 assert.doesNotMatch(hero, /to="\/login"[\s\S]*Login Admin/);
 assert.match(footer, /to="\/login"[\s\S]*Akses Staf & Admin/);
 assert.match(footer, /Kebijakan Privasi/);

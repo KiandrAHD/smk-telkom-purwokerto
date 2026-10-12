@@ -27,11 +27,13 @@ const HeroSection = () => {
           {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
               lihat catatan yang sama di PrestasiHeroSection. */}
           <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-2">
-            {/* Chip yang sama dipakai enam hero lain; sebelumnya di sini cuma
-                teks merah polos, jadi hero Beranda terlihat lain sendiri. */}
-            <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-              {t(landingHero.hashtag)}
-            </span>
+            <div className="flex flex-wrap items-center gap-1">
+              {landingHero.hashtags.map(tag => (
+                <span key={tag} className="inline-block whitespace-nowrap rounded-full border border-primary/25 bg-white px-2 py-1 text-[10px] font-bold tracking-wide text-primary">
+                  {t(tag)}
+                </span>
+              ))}
+            </div>
 
             <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {t(landingHero.title)}
@@ -79,8 +81,8 @@ const HeroSection = () => {
       </div>
 
         {/* Keep QAC in flow outside the hero border so its height reserves space below. */}
-        <div data-quick-access className="relative z-10 mx-auto -mt-8 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card sm:w-[92%] lg:w-[70.53%]">
-          <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
+        <div data-quick-access className="relative z-10 left-1/2 -translate-x-1/2 -mt-8 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card sm:w-[92%] lg:w-[70.53%]">
+          <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
             {quickLinks.map((item) => {
               return (
                 <div key={item.title} className="flex min-w-0 gap-3 px-4 py-3">

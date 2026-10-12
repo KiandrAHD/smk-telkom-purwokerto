@@ -9,3 +9,19 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+.facilities-indicators::after {
+  /* The fill starts/ends at circle centres; the existing grey track stays in place. */
+  --circle-inset: calc((100% - var(--spacing) * 3 * (var(--facility-count) - 1)) / (2 * var(--facility-count)));
+  content: '';
+  position: absolute;
+  left: var(--circle-inset);
+  right: var(--circle-inset);
+  top: calc(var(--spacing) * 6);
+  height: 1px;
+  background: var(--color-primary);
+  pointer-events: none;
+  transform-origin: left center;
+  transform: scaleX(var(--facility-progress, 0));
+  opacity: var(--facility-line-opacity, 1);
+}

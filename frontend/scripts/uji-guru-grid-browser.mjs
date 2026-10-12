@@ -26,19 +26,20 @@ const server = await createServer({ logLevel: 'silent', server: { host: '127.0.0
   },
 }] });
 await server.listen();
-const { profilGuruData } = await server.ssrLoadModule('/src/data/profilGuruData.js');
+const { profilGuruData, kesiswaanData, tenagaPendidikData } = await server.ssrLoadModule('/src/data/profilGuruData.js');
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage({ reducedMotion: 'reduce' });
 const errors = [], results = [];
 page.on('pageerror', error => errors.push(error.message));
 await page.route('**/rest/v1/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
-const grid = () => page.locator('[data-teacher-grid]');
-const nav = () => page.locator('[data-teacher-pagination]');
+let category = 'guru';
+const grid = () => page.locator(`#${category}-grid`);
+const nav = () => page.locator(`section[aria-labelledby="${category}-list-title"] [data-teacher-pagination]`);
 const names = () => grid().locator('h3').allTextContents();
 const sizeAt = width => width >= 1200 ? 8 : width >= 768 ? 4 : 2;
 const assertPage = async (index, size, data = profilGuruData) => {
   const expected = data.slice(index * size, (index + 1) * size).map(teacher => teacher.nama);
-  await page.waitForFunction(expected => JSON.stringify([...document.querySelectorAll('[data-teacher-card] h3')].map(el => el.textContent)) === JSON.stringify(expected), expected);
+  await page.waitForFunction(({ expected, category }) => JSON.stringify([...document.querySelectorAll(`#${category}-grid [data-teacher-card] h3`)].map(el => el.textContent)) === JSON.stringify(expected), { expected, category });
   assert.deepEqual(await names(), expected);
   if (Math.ceil(data.length / size) > 1) {
     const controls = nav().locator(':scope > button');
@@ -57,32 +58,39 @@ try {
     await page.setViewportSize({ width, height: 1000 }); await page.goto(base + '/profil-sekolah/guru'); await grid().waitFor();
     if (await page.locator('html').getAttribute('lang') !== language) await page.locator('header').getByRole('button', { name: /^Switch to / }).click();
     await page.evaluate(() => document.fonts.ready);
+    for (const [id, teachers] of [['kesiswaan', kesiswaanData], ['guru', tenagaPendidikData]]) {
+    category = id;
+    const otherId = id === 'guru' ? 'kesiswaan' : 'guru';
+    const otherNames = await page.locator(`#${otherId}-grid h3`).allTextContents();
     const size = sizeAt(width), visited = [], heights = [];
-    for (let index = 0; index < Math.ceil(profilGuruData.length / size); index++) {
-      await assertPage(index, size); visited.push(...await names());
+    for (let index = 0; index < Math.ceil(teachers.length / size); index++) {
+      await assertPage(index, size, teachers); visited.push(...await names());
+      assert.deepEqual(await page.locator(`#${otherId}-grid h3`).allTextContents(), otherNames, 'Category pagination must be independent.');
       const geometry = await grid().evaluate(el => {
         const boxes = [...el.children].map(card => card.getBoundingClientRect());
         return { height: el.getBoundingClientRect().height, columns: getComputedStyle(el).gridTemplateColumns.split(' ').length, rows: new Set(boxes.map(box => Math.round(box.y))).size, overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth, maxHeight: Math.max(...boxes.map(box => box.height)), minHeight: Math.min(...boxes.map(box => box.height)) };
       });
-      assert.equal(geometry.columns, size / 2); assert.equal(geometry.rows, 2); assert.equal(geometry.overflow, false);
+      assert.equal(geometry.columns, size / 2); assert.equal(geometry.rows, Math.ceil(Math.min(size, teachers.length - index * size) / (size / 2))); assert.equal(geometry.overflow, false);
       assert.ok(geometry.maxHeight - geometry.minHeight < 1); heights.push(geometry.height);
       await grid().locator('img').evaluateAll(images => Promise.all(images.map(img => { img.loading = 'eager'; return img.decode(); })));
       if (index === 0) {
-        await grid().screenshot({ path: join(output, `grid-${width}-${language}.png`), animations: 'disabled', style: 'header { visibility: hidden; }' });
+        await grid().screenshot({ path: join(output, `${category}-grid-${width}-${language}.png`), animations: 'disabled', style: 'header { visibility: hidden; }' });
         if ((width === 1440 && language === 'id') || (width === 768 && language === 'id') || (width === 375 && language === 'en')) {
-          const section = page.locator('section[aria-labelledby="guru-list-title"]'); await section.scrollIntoViewIfNeeded();
-          await section.screenshot({ path: join(output, `section-${width}-${language}.png`), animations: 'disabled', style: 'header { visibility: hidden; }' });
+          const section = page.locator(`section[aria-labelledby="${category}-list-title"]`); await section.scrollIntoViewIfNeeded();
+          await section.screenshot({ path: join(output, `${category}-section-${width}-${language}.png`), animations: 'disabled', style: 'header { visibility: hidden; }' });
         }
       }
-      if (index < Math.ceil(profilGuruData.length / size) - 1) await nav().locator(':scope > button').last().click();
+      if (index < Math.ceil(teachers.length / size) - 1) await nav().locator(':scope > button').last().click();
     }
-    assert.deepEqual(visited, profilGuruData.map(teacher => teacher.nama)); assert.equal(new Set(visited).size, profilGuruData.length);
+    assert.deepEqual(visited, teachers.map(teacher => teacher.nama)); assert.equal(new Set(visited).size, teachers.length);
     assert.ok(Math.max(...heights) - Math.min(...heights) < 1, 'Grid height must remain stable across teacher pages.');
-    results.push({ width, language, size, pages: heights.length, heightRange: Math.max(...heights) - Math.min(...heights) });
-    console.log('PASS all teachers and finite pagination', width, language, 'height range', Math.max(...heights) - Math.min(...heights));
-    await nav().locator(':scope > button').first().focus(); await page.keyboard.press('Enter'); await assertPage(Math.ceil(profilGuruData.length / size) - 2, size);
+    results.push({ category, width, language, size, pages: heights.length, heightRange: Math.max(...heights) - Math.min(...heights) });
+    console.log('PASS all teachers and independent finite pagination', category, width, language, 'height range', Math.max(...heights) - Math.min(...heights));
+    await nav().locator(':scope > button').first().focus(); await page.keyboard.press('Enter'); await assertPage(Math.ceil(teachers.length / size) - 2, size, teachers);
     const dot = nav().locator('button[aria-current="page"]'); await dot.focus(); await page.keyboard.press('Space');
+    }
   }
+  category = 'guru';
   await page.setViewportSize({ width: 1440, height: 1000 });
   for (const count of [0, 1, 7, 8, 9, 15]) {
     await page.goto(`http://127.0.0.1:5186/__guru_fixture?count=${count}`);
@@ -99,19 +107,19 @@ try {
   }
   await page.goto(base + '/profil-sekolah/guru'); await grid().waitFor();
   if (await page.locator('html').getAttribute('lang') !== 'en') await page.locator('header').getByRole('button', { name: /^Switch to / }).click();
-  await nav().getByRole('button', { name: 'View teacher page 3', exact: true }).click();
-  await assertPage(2, 8); const firstTeacher = (await names())[0];
-  for (const width of [375, 768, 1200]) { await page.setViewportSize({ width, height: 1000 }); await page.waitForFunction(name => document.querySelector('[data-teacher-card] h3')?.textContent === name, firstTeacher); await assertPage(16 / sizeAt(width), sizeAt(width)); }
+  await nav().locator(':scope > div > button').nth(2).click();
+  await assertPage(2, 8, tenagaPendidikData); const firstTeacher = (await names())[0];
+  for (const width of [375, 768, 1200]) { await page.setViewportSize({ width, height: 1000 }); await page.waitForFunction(name => document.querySelector('#guru-grid [data-teacher-card] h3')?.textContent === name, firstTeacher); await assertPage(16 / sizeAt(width), sizeAt(width), tenagaPendidikData); }
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.reload(); await grid().waitFor(); await page.emulateMedia({ reducedMotion: 'no-preference' }); await nav().scrollIntoViewIfNeeded();
-  await page.evaluate(() => { window.teacherPill = document.querySelector('[data-teacher-pill]'); });
-  await nav().getByRole('button', { name: 'View teacher page 2', exact: true }).click();
-  const samples = await page.locator('[data-teacher-pill]').evaluate(el => new Promise(resolve => {
+  await nav().locator('[data-teacher-pill]').evaluate(el => { window.teacherPill = el; });
+  await nav().locator(':scope > div > button').nth(1).click();
+  const samples = await nav().locator('[data-teacher-pill]').evaluate(el => new Promise(resolve => {
     const positions = [], start = performance.now(); const sample = now => { positions.push(new window.DOMMatrixReadOnly(getComputedStyle(el).transform).m41); if (now - start < 380) requestAnimationFrame(sample); else resolve(positions); }; requestAnimationFrame(sample);
   }));
   assert.ok(samples.some(x => x > 0 && x < 32)); assert.ok(Math.abs(samples.at(-1) - 32) < 0.1); assert.ok(samples.every((x, index) => index === 0 || x >= samples[index - 1] - 0.1));
-  assert.equal(await page.evaluate(() => window.teacherPill === document.querySelector('[data-teacher-pill]')), true);
-  assert.equal(await page.locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionDuration), '0.3s');
-  await page.emulateMedia({ reducedMotion: 'reduce' }); assert.ok(parseFloat(await page.locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionDuration)) <= 0.001);
+  assert.equal(await nav().locator('[data-teacher-pill]').evaluate(el => window.teacherPill === el), true);
+  assert.equal(await nav().locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionDuration), '0.3s');
+  await page.emulateMedia({ reducedMotion: 'reduce' }); assert.ok(parseFloat(await nav().locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionDuration)) <= 0.001);
   results.push({ resize: 'passed', keyboard: 'passed', motion: 'passed', transformSamples: samples, reducedMotion: 'passed', runtimeErrors: errors });
   assert.deepEqual(errors, []); console.log('PASS resize, shared pill interpolation, 300ms easing, reduced motion, no runtime errors');
 } catch (error) { console.error('Runtime errors:', errors, 'Body:', (await page.locator('body').innerText()).slice(0, 500)); throw error; }
