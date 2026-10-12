@@ -36,6 +36,7 @@ export default function FacilitiesSection() {
   const [titleStart, titleEnd] = t('Fasilitas Sekolah').split(' ');
   const root = useRef(null);
   const carousel = useRef(null);
+  const indicators = useRef(null);
   const slideAnimation = useRef(null);
   const slideState = useRef(null);
   const turning = useRef(false);
@@ -45,7 +46,9 @@ export default function FacilitiesSection() {
 
   useEffect(() => {
     const node = root.current;
-    const finishSlide = () => slideAnimation.current?.progress(1);
+    const finishSlide = () => { if (turning.current) slideAnimation.current?.progress(1); };
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finishReducedMotion = () => { if (media.matches) finishSlide(); };
     // Decode the six carousel images before they enter, without loading the detail gallery early.
     const preload = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
@@ -57,9 +60,11 @@ export default function FacilitiesSection() {
     }, { rootMargin: '300px' });
     preload.observe(carousel.current);
     window.addEventListener('resize', finishSlide);
+    media.addEventListener('change', finishReducedMotion);
     return () => {
       preload.disconnect();
       window.removeEventListener('resize', finishSlide);
+      media.removeEventListener('change', finishReducedMotion);
       slideAnimation.current?.kill();
       turning.current = false;
       gsap.killTweensOf(node?.querySelectorAll('*') ?? []);
@@ -118,7 +123,11 @@ export default function FacilitiesSection() {
   }, [active, navigate]);
 
   useLayoutEffect(() => {
-    if (!slideState.current) return;
+    const progress = active / (slides.length - 1);
+    if (!slideState.current) {
+      gsap.set(indicators.current, { '--facility-progress': progress, '--facility-line-opacity': 1 });
+      return;
+    }
     const state = slideState.current;
     slideState.current = null;
     const cards = [...carousel.current.querySelectorAll('[data-slide]')];
@@ -175,6 +184,15 @@ export default function FacilitiesSection() {
       .to(leaving, { opacity: 0, duration: 0.22, ease: 'power1.in' }, 0.22)
       .fromTo(panels, { opacity: index => wasActive(index) ? 1 : 0 }, { opacity: index => isActive(index) ? 1 : 0, duration: index => isActive(index) ? 0.3 : 0.12, delay: index => isActive(index) ? 0.12 : 0, ease: 'power2.inOut' }, 0)
       .fromTo(previews, { opacity: index => wasActive(index) ? 0 : 1 }, { opacity: index => isActive(index) ? 0 : 1, duration: index => isActive(index) ? 0.12 : 0.3, delay: index => isActive(index) ? 0 : 0.12, ease: 'power2.inOut' }, 0);
+    if (Math.abs(active - state.active) === slides.length - 1) {
+      // Hide the endpoint reset instead of sweeping the whole line backwards at the seam.
+      slideAnimation.current
+        .to(indicators.current, { '--facility-line-opacity': 0, duration: 0.25, ease: 'power2.inOut' }, 0)
+        .set(indicators.current, { '--facility-progress': progress }, 0.25)
+        .to(indicators.current, { '--facility-line-opacity': 1, duration: 0.25, ease: 'power2.inOut' }, 0.25);
+    } else {
+      slideAnimation.current.to(indicators.current, { '--facility-progress': progress, duration: 0.5, ease: 'power3.out' }, 0);
+    }
   }, [active]);
 
   const showDetails = (category = 'Semua') => {
@@ -220,10 +238,10 @@ export default function FacilitiesSection() {
         </div>
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
-        <ol className="relative flex min-w-[620px] justify-between gap-3 before:absolute before:left-12 before:right-12 before:top-6 before:h-px before:bg-dark-300">
-          {slides.map(({ name, Icon }, index) => <li key={name} className="relative flex-1 text-center">
+        <ol ref={indicators} style={{ '--facility-count': slides.length }} className="facilities-indicators relative flex min-w-[620px] justify-between gap-3 before:absolute before:left-12 before:right-12 before:top-6 before:h-px before:bg-dark-300">
+          {slides.map(({ name, Icon }, index) => <li key={name} className="relative z-10 flex-1 text-center">
             <button type="button" aria-pressed={active === index} onClick={() => navigate(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
-              <span className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 ${active === index ? 'border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
+              <span className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 transition-[background-color,border-color,color,scale] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none motion-reduce:scale-100 ${active === index ? 'scale-[1.04] border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
               <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(index + 1).padStart(2, '0')}</span>
             </button>
           </li>)}
