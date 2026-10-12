@@ -23,10 +23,16 @@ const slides = [
   { name: 'Lab Robotik', image: fasilitasData[6].image, preview: fasilitasData[6].preview, category: 'Laboratorium', Icon: Bot },
   { name: 'Fasilitas Lainnya', image: fasilitasData[0].image, preview: fasilitasData[0].preview, category: 'Semua', Icon: Building2 },
 ];
-// Figma places Robotics immediately before Network; the timeline keeps its 01–06 order.
-const carouselOrder = [0, 1, 2, 3, 5, 4];
-const adjacentSlide = (active, offset) => carouselOrder[(carouselOrder.indexOf(active) + offset + slides.length) % slides.length];
+const adjacentSlide = (active, offset) => (active + offset + slides.length) % slides.length;
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const measureCard = card => {
+  const bounds = card.getBoundingClientRect();
+  const style = getComputedStyle(card);
+  return {
+    x: bounds.left + bounds.width / 2, y: bounds.top + bounds.height / 2,
+    width: parseFloat(style.width), height: parseFloat(style.height), rotation: parseFloat(style.rotate) || 0,
+  };
+};
 
 export default function FacilitiesSection() {
   const { t } = useLanguage();
@@ -53,8 +59,19 @@ export default function FacilitiesSection() {
     const node = root.current;
     mounted.current = true;
     const finishSlide = () => slideAnimation.current?.progress(1);
+    // Decode the six carousel images before they enter, without loading the detail gallery early.
+    const preload = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      carousel.current.querySelectorAll('[data-slide] img').forEach(image => {
+        image.loading = 'eager';
+        image.decode().catch(() => {});
+      });
+      preload.disconnect();
+    }, { rootMargin: '300px' });
+    preload.observe(carousel.current);
     window.addEventListener('resize', finishSlide);
     return () => {
+      preload.disconnect();
       window.removeEventListener('resize', finishSlide);
       mounted.current = false;
       animation.current?.kill();
@@ -78,9 +95,10 @@ export default function FacilitiesSection() {
 
   const navigate = useCallback((next) => {
     if (turning.current || next === active) return;
-    direction.current = (carouselOrder.indexOf(next) - carouselOrder.indexOf(active) + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
+    direction.current = (next - active + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
     if (!reducedMotion()) {
-      slideState.current = Flip.getState(carousel.current.querySelectorAll('[data-slide]'));
+      const visible = [...carousel.current.querySelectorAll('[data-slide]')].filter(card => card.offsetWidth);
+      slideState.current = { poses: new Map(visible.map(card => [card, measureCard(card)])), active };
       turning.current = true;
     }
     setActive((next + slides.length) % slides.length);
@@ -130,20 +148,60 @@ export default function FacilitiesSection() {
     if (!slideState.current) return;
     const state = slideState.current;
     slideState.current = null;
-    slideAnimation.current = Flip.from(state, {
-      targets: carousel.current.querySelectorAll('[data-slide]'),
-      absoluteOnLeave: true, scale: true, duration: 0.45, ease: 'power2.inOut',
-      onEnter: elements => {
-        gsap.set(elements, { clearProps: 'transform,translate,rotate,scale' });
-        return gsap.fromTo(elements, { x: direction.current * 32, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'power2.inOut' });
-      },
-      onLeave: elements => gsap.to(elements, { opacity: 0, duration: 0.35, ease: 'power2.inOut' }),
+    const cards = [...carousel.current.querySelectorAll('[data-slide]')];
+    const center = cards.find(card => card.classList.contains('z-10'));
+    const captions = cards.filter(card => card === center || Number(card.dataset.flipId.split('-')[1]) === state.active);
+    const panels = captions.map(card => card.querySelector('[data-slide-panel]'));
+    const previews = captions.map(card => card.querySelector('[data-slide-preview]'));
+    const targets = cards.filter(card => card.offsetWidth || state.poses.has(card));
+    const destinations = new Map(targets.filter(card => card.offsetWidth).map(card => [card, measureCard(card)]));
+    const parent = center.parentElement.getBoundingClientRect();
+    const distance = window.innerWidth >= 640
+      ? (destinations.get(center).width + [...destinations.values()].find(pose => pose !== destinations.get(center)).width) / 2 - 16
+      : destinations.get(center).width + 16;
+    const entering = targets.filter(card => !state.poses.has(card));
+    const leaving = targets.filter(card => !destinations.has(card));
+    // Read geometry in batches; animate only transforms instead of fitting global matrices.
+    targets.forEach(card => {
+      // Hand CSS individual transforms to GSAP after measuring, then restore them on completion.
+      card.style.translate = 'none';
+      card.style.rotate = 'none';
+      card.style.scale = 'none';
+    });
+    leaving.forEach(card => {
+      const pose = state.poses.get(card);
+      gsap.set(card, { display: 'block', position: 'absolute', left: pose.x - parent.left - pose.width / 2, top: pose.y - parent.top - pose.height / 2, width: pose.width, height: pose.height });
+    });
+    const starts = targets.map(card => {
+      const from = state.poses.get(card);
+      const to = destinations.get(card);
+      return from && to
+        ? { x: from.x - to.x, y: from.y - to.y, scaleX: from.width / to.width, scaleY: from.height / to.height, rotation: from.rotation }
+        : { x: to ? direction.current * distance : 0, y: 0, scaleX: 1, scaleY: 1, rotation: (to || from).rotation };
+    });
+    const ends = targets.map(card => ({ x: destinations.has(card) ? 0 : -direction.current * distance, y: 0, scaleX: 1, scaleY: 1, rotation: (destinations.get(card) || state.poses.get(card)).rotation }));
+    gsap.set(targets, { willChange: 'transform,opacity', opacity: 1 });
+    const wasActive = index => Number(captions[index].dataset.flipId.split('-')[1]) === state.active;
+    const isActive = index => captions[index] === center;
+    slideAnimation.current = gsap.timeline({
       onComplete: () => {
-        gsap.set(carousel.current.querySelectorAll('[data-slide]'), { clearProps: 'all' });
+        gsap.set([...cards, ...panels, ...previews], { clearProps: 'all' });
         turning.current = false;
       },
       onInterrupt: () => { turning.current = false; },
     });
+    const from = {};
+    const to = { duration: 0.5, ease: 'power3.out', force3D: true };
+    for (const property of ['x', 'y', 'scaleX', 'scaleY', 'rotation']) {
+      from[property] = index => starts[index][property];
+      to[property] = index => ends[index][property];
+    }
+    slideAnimation.current
+      .fromTo(targets, from, to, 0)
+      .fromTo(entering, { opacity: 0 }, { opacity: 1, duration: 0.22, ease: 'power1.out' }, 0)
+      .to(leaving, { opacity: 0, duration: 0.22, ease: 'power1.in' }, 0.22)
+      .fromTo(panels, { opacity: index => wasActive(index) ? 1 : 0 }, { opacity: index => isActive(index) ? 1 : 0, duration: index => isActive(index) ? 0.3 : 0.12, delay: index => isActive(index) ? 0.12 : 0, ease: 'power2.inOut' }, 0)
+      .fromTo(previews, { opacity: index => wasActive(index) ? 0 : 1 }, { opacity: index => isActive(index) ? 0 : 1, duration: index => isActive(index) ? 0.12 : 0.3, delay: index => isActive(index) ? 0 : 0.12, ease: 'power2.inOut' }, 0);
   }, [active]);
 
   const changeFilter = (next) => {
@@ -202,8 +260,8 @@ export default function FacilitiesSection() {
                   aria-label={offset === 0 ? t('Lihat detail {name}', { name: t(slide.name) }) : t('Tampilkan {name}', { name: t(slide.name) })}
                   className={`relative aspect-[611/354] shrink-0 rounded-xl border-[3px] border-white bg-white shadow-card focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-primary ${Math.abs(offset) > 1 ? 'hidden' : offset === 0 ? 'z-10 w-full sm:w-[38%]' : `hidden sm:block sm:w-[33%] ${offset < 0 ? '-mr-4 -rotate-2' : '-ml-4 rotate-2'}`}`}>
                   <img src={slide.image} alt={t(slide.name)} width="611" height="354" loading="lazy" className="h-full w-full rounded-lg object-cover" />
-                  {offset === 0 ? <span className="absolute -bottom-16 left-[7%] flex min-h-28 w-[86%] flex-col justify-center rounded-xl border-[3px] border-white bg-[#e72033] px-4 py-4 text-left text-white shadow-card lg:min-h-32 lg:px-6"><span className="font-heading text-sm font-bold leading-snug sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span><span className="mt-1 text-xs leading-snug">{t(slide.preview ?? 'Ruang praktik untuk belajar mengatur, memasang, dan mengamankan jaringan komputer.')}</span></span>
-                    : <span className="absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left font-heading text-base font-bold leading-snug text-white lg:text-xl">{t(slide.name)}</span>}
+                  <span data-slide-panel aria-hidden={offset !== 0} className={`pointer-events-none absolute -bottom-16 left-[7%] flex min-h-28 w-[86%] flex-col justify-center rounded-xl border-[3px] border-white bg-[#e72033] px-4 py-4 text-left text-white shadow-card lg:min-h-32 lg:px-6 ${offset === 0 ? 'opacity-100' : 'opacity-0'}`}><span className="font-heading text-sm font-bold leading-snug sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span><span className="mt-1 text-xs leading-snug">{t(slide.preview ?? 'Ruang praktik untuk belajar mengatur, memasang, dan mengamankan jaringan komputer.')}</span></span>
+                  <span data-slide-preview aria-hidden={offset === 0} className={`pointer-events-none absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left font-heading text-base font-bold leading-snug text-white lg:text-xl ${offset === 0 ? 'opacity-0' : 'opacity-100'}`}>{t(slide.name)}</span>
                 </button>
               );
             })}

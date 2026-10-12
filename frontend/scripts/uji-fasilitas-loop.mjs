@@ -4,32 +4,46 @@ import { createRequire } from 'node:module';
 
 const { chromium } = createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const page = await browser.newPage({ viewport: { width: Number(process.env.QA_WIDTH || 1440), height: 900 } });
 const errors = [];
 page.on('pageerror', error => errors.push(error.message));
 page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
 const active = () => page.locator('#fasilitas ol button[aria-pressed="true"]').innerText();
+const activeIndex = () => page.locator('#fasilitas ol button').evaluateAll(buttons => buttons.findIndex(button => button.getAttribute('aria-pressed') === 'true'));
+const assertSlide = async index => {
+  assert.equal(await activeIndex(), index, 'Timeline harus mengikuti urutan 01–06.');
+  assert.equal(await page.locator('#fasilitas [data-slide].z-10').getAttribute('data-flip-id'), `facility-${index}`, 'Slide tengah harus sesuai dengan timeline.');
+};
 const next = page.getByRole('button', { name: 'Fasilitas berikutnya', exact: true });
 const previous = page.getByRole('button', { name: 'Fasilitas sebelumnya', exact: true });
 const all = page.getByRole('button', { name: 'Lihat semua fasilitas', exact: true });
 const step = async button => {
-  const before = await active();
+  const before = await activeIndex();
   await button.click();
   await page.waitForTimeout(550);
-  assert.notEqual(await active(), before, 'Navigasi harus mengubah slide.');
+  await assertSlide((before + (button === previous ? 5 : 1)) % 6);
 };
 try {
   await page.goto(process.env.QA_URL || 'http://127.0.0.1:5173/');
   await next.scrollIntoViewIfNeeded();
   await page.mouse.move(0, 0);
-  const initial = await active();
-  await page.waitForTimeout(6600);
-  assert.notEqual(await active(), initial, 'Autoplay harus berpindah tanpa input pengguna.');
+  await assertSlide(0);
+  // Real autoplay timing: three complete cycles, without advancing the browser clock.
+  for (let transition = 1; transition <= 18; transition++) {
+    const before = await activeIndex();
+    await page.waitForFunction(index => {
+      const buttons = [...document.querySelectorAll('#fasilitas ol button')];
+      return buttons.findIndex(button => button.getAttribute('aria-pressed') === 'true') !== index;
+    }, before, { timeout: 9000 });
+    await page.waitForTimeout(550);
+    await assertSlide(transition % 6);
+    console.log(`Autoplay ${transition}/18: ${(transition % 6) + 1}`);
+  }
   await step(next);
-  const manual = await active();
+  const manual = await activeIndex();
   await page.mouse.move(0, 0);
   await page.waitForTimeout(6600);
-  assert.notEqual(await active(), manual, 'Navigasi manual tidak boleh mematikan autoplay.');
+  await assertSlide((manual + 1) % 6);
   assert.equal(await page.getByRole('button', { name: /Jeda carousel|Lanjutkan carousel|Pause carousel|Resume carousel/ }).count(), 0);
   await next.hover();
   const first = await active();
