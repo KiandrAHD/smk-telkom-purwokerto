@@ -16,7 +16,7 @@ const assertSlide = async index => {
 };
 const next = page.getByRole('button', { name: 'Fasilitas berikutnya', exact: true });
 const previous = page.getByRole('button', { name: 'Fasilitas sebelumnya', exact: true });
-const all = page.getByRole('button', { name: 'Lihat semua fasilitas', exact: true });
+const all = page.getByRole('link', { name: 'Lihat semua fasilitas', exact: true });
 const step = async button => {
   const before = await activeIndex();
   await button.click();
@@ -82,29 +82,22 @@ try {
     const positions = await page.evaluate(() => window.facilityNavigationScroll);
     assert.ok(positions.length > 20);
     assert.ok(Math.max(...positions) - Math.min(...positions) <= 1, 'Navigasi harus membatalkan momentum scroll tanpa menggeser viewport.');
-    await all.scrollIntoViewIfNeeded();
     await all.click();
-    assert.equal(await next.isEnabled(), true, 'Next harus tersedia saat scroll detail berjalan.');
-    assert.equal(await previous.isEnabled(), true);
-    // Wheel interrupts Lenis scrolling: controls must not depend on its onComplete.
-    await page.mouse.wheel(0, -600);
-    await step(next);
-    await step(previous);
-    await all.click();
-    await page.waitForTimeout(1300);
-    await all.click();
-    await page.waitForTimeout(1300);
+    await page.waitForURL('**/fasilitas');
+    await page.locator('[data-facility-card]').first().waitFor();
+    assert.equal(await page.locator('[data-facility-card]').count(), 8);
+    await page.goBack();
+    await next.scrollIntoViewIfNeeded();
     await step(next);
     await step(previous);
     assert.equal(await page.locator('#fasilitas [data-slide].z-10').evaluate(el => getComputedStyle(el).transform), 'none');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
-    assert.equal(await page.locator('#fasilitas-grid [data-facility-card]:visible').count(), 8);
+    assert.equal(await page.locator('[data-facility-card]').count(), 0);
   }
   await next.evaluate(el => { for (let i = 0; i < 15; i++) el.click(); });
   await page.waitForTimeout(600);
   await step(previous);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await all.click();
   await step(next);
   await step(previous);
   const idle = await active();
@@ -113,7 +106,7 @@ try {
   await page.goto((process.env.QA_URL || 'http://127.0.0.1:5173/') + 'profil-sekolah');
   await page.waitForTimeout(1000);
   assert.deepEqual(errors, []);
-  console.log('PASS: autoplay dan pemulihan setelah navigasi manual, pause saat hover, tanpa UI jeda/lanjut, momentum scroll dibatalkan, hit area panah, loop next/previous, navigasi saat/setelah scroll detail dan interupsi, detail berulang, 1440/768/390/375px, overflow, klik cepat, reduced motion, unmount, console.');
+  console.log('PASS: autoplay dan pemulihan setelah navigasi manual, pause saat hover, tanpa UI jeda/lanjut, momentum scroll dibatalkan, hit area panah, loop next/previous, navigasi /fasilitas dan kembali ke carousel, 1440/768/390/375px, overflow, klik cepat, reduced motion, unmount, console.');
 } finally {
   await browser.close();
 }

@@ -106,6 +106,7 @@ export const navLinks = [
     label: 'Tentang',
     children: [
       { label: 'Profil Sekolah', href: '/profil-sekolah' },
+      { label: 'Fasilitas Sekolah', href: '/fasilitas' },
       { label: 'Guru', href: '/profil-sekolah/guru' },
       { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
     ],

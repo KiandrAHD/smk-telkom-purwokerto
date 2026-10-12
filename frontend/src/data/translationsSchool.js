@@ -1,4 +1,10 @@
 export default {
+  'Fasilitas Sekolah | SMK Telkom Purwokerto': 'School Facilities | SMK Telkom Purwokerto',
+  'Jelajahi ruang kelas, laboratorium, dan perpustakaan SMK Telkom Purwokerto.': 'Explore the classrooms, laboratories, and library at SMK Telkom Purwokerto.',
+  'Ruang Kelas Modern,': 'Modern Classrooms,',
+  'Tempat Inspirasi dan Inovasi Dimulai': 'Where Inspiration and Innovation Begin',
+  'Kami menghadirkan lingkungan belajar yang bersih, representatif, dan berbasis teknologi untuk memicu kreativitas serta produktivitas siswa dalam menguasai keahlian masa depan.': 'We provide a clean, well-equipped, technology-driven learning environment that inspires creativity and productivity as students develop the skills of the future.',
+  'Lihat Fasilitas': 'Explore Facilities',
   'Fasilitas Kelas': 'Learning Facilities',
   'Ruang praktik untuk belajar mengatur, memasang, dan mengamankan jaringan komputer.': 'A practical space to learn how to configure, install, and secure computer networks.',
   'Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.': 'Our school facilities support teaching and learning, helping students learn comfortably, safely, and effectively.',

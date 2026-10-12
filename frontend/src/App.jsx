@@ -5,6 +5,7 @@ import ContentSkeleton from './components/ContentSkeleton';
 import { canonicalAdmissionsPath } from './utils/admissions';
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
+const FasilitasPage = lazy(() => import('./pages/FasilitasPage'));
 import { useLanguage } from './context/LanguageContext';
 const ProfileSekolahPage = lazy(() => import('./pages/TentangPage'));
 const GuruPage = lazy(() => import('./pages/GuruPage'));
@@ -58,6 +59,7 @@ const KebijakanPrivasiPage = lazy(() => import('./pages/KebijakanPrivasiPage'));
 
 const PAGE_META = {
   '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
+  '/fasilitas': ['Fasilitas Sekolah | SMK Telkom Purwokerto', 'Jelajahi ruang kelas, laboratorium, dan perpustakaan SMK Telkom Purwokerto.'],
   '/profil-sekolah': ['Profil Sekolah | SMK Telkom Purwokerto', 'Kenali profil, visi misi, dan fasilitas SMK Telkom Purwokerto.'],
   '/profil-sekolah/guru': ['Profil Guru | SMK Telkom Purwokerto', 'Kenali kepala sekolah, guru, dan tenaga pendidik SMK Telkom Purwokerto.'],
   '/jurusan': ['Jurusan SMK Telkom Purwokerto', 'Pilih program keahlian teknologi sesuai minat dan bakatmu.'],
@@ -118,6 +120,7 @@ const App = () => {
       <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/fasilitas" element={<FasilitasPage />} />
         <Route path="/profil-sekolah" element={<ProfileSekolahPage />} />
         <Route path="/profil-sekolah/guru" element={<GuruPage />} />
         <Route path="/tentang" element={<Navigate to="/profil-sekolah" replace />} />
