@@ -19,7 +19,7 @@ const icons = {
 const HeroSection = () => {
   const { t } = useLanguage();
   return (
-  <section className="bg-white pb-6 pt-4 lg:pb-36">
+  <section className="bg-white pb-6 pt-4">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
         <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] xl:grid-cols-[34%_1fr] gap-6 lg:gap-4 items-start">
@@ -76,26 +76,28 @@ const HeroSection = () => {
           />
         </div>
 
-        {/* Panel tiga akses utama menimpa batas bawah hero seperti di Figma. */}
-        <div className="relative z-10 mx-1 -mt-6 overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card [container-type:inline-size] lg:absolute lg:bottom-0 lg:left-1/2 lg:mx-0 lg:mt-0 lg:w-[70.53%] lg:-translate-x-1/2 lg:translate-y-1/2">
+      </div>
+
+        {/* Keep QAC in flow outside the hero border so its height reserves space below. */}
+        <div data-quick-access className="relative z-10 mx-auto -mt-8 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card sm:w-[92%] lg:w-[70.53%]">
           <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
             {quickLinks.map((item) => {
               return (
-                <div key={item.title} className="flex min-w-0 gap-4 px-5 py-5 sm:gap-3 sm:px-4 lg:gap-[2.6cqw] lg:px-[3.2cqw]">
-                  <span aria-hidden="true" className="relative flex aspect-[97/105] w-14 shrink-0 items-center justify-center self-start rounded-lg bg-primary lg:w-[clamp(3rem,7.86cqw,4.25rem)]">
+                <div key={item.title} className="flex min-w-0 gap-3 px-4 py-3">
+                  <span aria-hidden="true" className="relative flex aspect-[97/105] w-12 shrink-0 items-center justify-center self-start rounded-lg bg-primary sm:w-10 lg:w-12">
                     <img src={icons[item.icon]} alt="" className={`h-auto ${item.icon === 'userPlus' ? 'w-[59%]' : item.icon === 'bot' ? 'w-[69%]' : 'w-[58%]'}`} />
                     {item.icon === 'sparkles' && <><span className="absolute right-[18%] top-[20%] text-[10px] font-extrabold leading-none text-white">+</span><img src={sparkDot} alt="" className="absolute bottom-[24%] left-[16%] h-auto w-[10%]" /></>}
                   </span>
                   <div className="flex min-w-0 flex-1 flex-col">
-                    <p className="font-heading text-lg font-bold leading-tight text-dark-900 sm:text-base lg:text-[clamp(1rem,2.35cqw,1.25rem)]">
+                    <p className="font-heading text-base font-bold leading-tight text-dark-900">
                       {t(item.title)}
                     </p>
-                    <p className="mt-2 flex-1 text-xs leading-snug text-dark-500 sm:text-[11px] lg:text-[clamp(0.6875rem,1.45cqw,0.75rem)]">
+                    <p className="mt-1 flex-1 text-xs leading-snug text-dark-500 sm:text-[11px] lg:text-xs">
                       {t(item.desc)}
                     </p>
                     <Link
                       to={item.href}
-                      className="mt-3 inline-flex min-h-8 items-center gap-1 text-xs font-semibold text-primary hover:underline sm:text-[11px] lg:text-xs"
+                      className="mt-1 inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-primary hover:underline sm:text-[11px] lg:text-xs"
                     >
                       {t(item.linkLabel)}
                       {/* flex-shrink-0 supaya panahnya tidak gepeng saat kolom
@@ -108,7 +110,6 @@ const HeroSection = () => {
             })}
           </div>
         </div>
-      </div>
     </div>
   </section>
   );
