@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext';
+import ribbon from '../assets/landing/ribbon-divider.png';
 import petalTopLeft from '../assets/landing/beranda-150-568.png';
 import petalTopRight from '../assets/landing/beranda-150-570.png';
 import petalBottomLeft from '../assets/landing/beranda-150-581.png';
@@ -12,8 +13,13 @@ const badges = [
   { label: 'GLOBAL TECHNOPRENUER', filled: false },
 ];
 
-const RibbonDivider = () => {
+const RibbonDivider = ({ animated = false }) => {
   const { t } = useLanguage();
+  if (!animated) return (
+    <div aria-hidden="true" className="pointer-events-none relative aspect-[1847/146] overflow-hidden">
+      <img src={ribbon} alt="" className="absolute inset-x-0 top-0 w-full select-none" />
+    </div>
+  );
   return (
     <div className="beranda-ribbon relative min-h-16 w-full overflow-hidden bg-white">
       <ul className="sr-only">

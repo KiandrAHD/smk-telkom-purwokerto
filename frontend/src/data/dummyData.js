@@ -101,20 +101,25 @@ import logoDicoding from '../assets/landing/logo-dicoding.png';
 
 // ── Navigasi ──
 export const navLinks = [
+  { label: 'Beranda', href: '/' },
   {
     label: 'Tentang',
     children: [
-      { label: 'Beranda', href: '/' },
       { label: 'Profil Sekolah', href: '/profil-sekolah' },
-      { label: 'Profil Guru', href: '/profil-sekolah/guru' },
+      { label: 'Guru', href: '/profil-sekolah/guru' },
       { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
     ],
   },
   { label: 'Jurusan', href: '/jurusan' },
   { label: 'Prestasi', href: '/prestasi' },
   { label: 'BKK', href: '/bkk' },
-  { label: 'Berita', href: '/berita' },
-  { label: 'Pengumuman', href: '/pengumuman' },
+  {
+    label: 'Informasi',
+    children: [
+      { label: 'Berita', href: '/berita' },
+      { label: 'Pengumuman', href: '/pengumuman' },
+    ],
+  },
 ];
 
 // ── Hero Beranda ──
@@ -155,7 +160,7 @@ export const quickLinks = [
   },
   {
     icon: 'sparkles',
-    title: 'NextTel',
+    title: 'NextTel AI',
     desc: 'Temukan jurusan yang sesuai dengan minat dan bakatmu',
     linkLabel: 'Cari Jurusanmu',
     href: '/nexttel',

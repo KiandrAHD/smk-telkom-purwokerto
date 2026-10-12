@@ -21,7 +21,7 @@ const LandingPage = () => (
   <MainLayout>
     <HeroSection />
     <AboutSection />
-    <RibbonDivider />
+    <RibbonDivider animated />
     <DepartmentsSection />
     <Suspense fallback={<SectionFallback />}>
       <FacilitiesSection />

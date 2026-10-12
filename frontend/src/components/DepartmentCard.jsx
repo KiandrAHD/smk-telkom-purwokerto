@@ -33,13 +33,13 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
       </div>
 
       <div className="flex flex-1 flex-col px-4 pb-3 pt-7">
-        <h3 className="font-heading text-[13px] font-bold leading-snug text-dark-900">
+        <h3 className="font-heading text-base font-bold leading-snug text-dark-900">
           {t(name)}
         </h3>
-        <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{t(desc)}</p>
+        <p className="mt-1.5 text-xs leading-relaxed text-dark-500">{t(desc)}</p>
         <Link
           to={`/jurusan/${slug}`}
-          className="mt-auto inline-flex items-center justify-between gap-2 pt-3 text-[10px] font-bold text-primary hover:underline"
+          className="mt-auto inline-flex items-center justify-between gap-2 pt-3 text-xs font-semibold text-primary hover:underline"
         >{t("Selengkapnya")} <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
