@@ -23,9 +23,7 @@ const slides = [
   { name: 'Lab Robotik', image: fasilitasData[6].image, preview: fasilitasData[6].preview, category: 'Laboratorium', Icon: Bot },
   { name: 'Fasilitas Lainnya', image: fasilitasData[0].image, preview: fasilitasData[0].preview, category: 'Semua', Icon: Building2 },
 ];
-// Figma places Robotics immediately before Network; the timeline keeps its 01–06 order.
-const carouselOrder = [0, 1, 2, 3, 5, 4];
-const adjacentSlide = (active, offset) => carouselOrder[(carouselOrder.indexOf(active) + offset + slides.length) % slides.length];
+const adjacentSlide = (active, offset) => (active + offset + slides.length) % slides.length;
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function FacilitiesSection() {
@@ -78,7 +76,7 @@ export default function FacilitiesSection() {
 
   const navigate = useCallback((next) => {
     if (turning.current || next === active) return;
-    direction.current = (carouselOrder.indexOf(next) - carouselOrder.indexOf(active) + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
+    direction.current = (next - active + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
     if (!reducedMotion()) {
       slideState.current = Flip.getState(carousel.current.querySelectorAll('[data-slide]'));
       turning.current = true;
