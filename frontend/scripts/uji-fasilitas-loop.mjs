@@ -1,4 +1,4 @@
-/* global document, getComputedStyle */
+/* global document, getComputedStyle, window, requestAnimationFrame */
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
@@ -30,16 +30,44 @@ try {
   await page.mouse.move(0, 0);
   await page.waitForTimeout(6600);
   assert.notEqual(await active(), manual, 'Navigasi manual tidak boleh mematikan autoplay.');
-  await page.getByRole('button', { name: 'Jeda carousel', exact: true }).click();
+  assert.equal(await page.getByRole('button', { name: /Jeda carousel|Lanjutkan carousel|Pause carousel|Resume carousel/ }).count(), 0);
+  await next.hover();
   const first = await active();
   await page.waitForTimeout(5200);
-  assert.equal(await active(), first, 'Slide harus tetap diam saat autoplay dijeda.');
+  assert.equal(await active(), first, 'Autoplay harus berhenti selama hover pada carousel.');
   for (const button of [next, previous]) {
     for (let i = 0; i < 6; i++) await step(button);
     assert.equal(await active(), first, 'Loop enam slide harus kembali ke posisi awal.');
   }
   for (const width of [1440, 768, 390, 375]) {
     await page.setViewportSize({ width, height: 900 });
+    await next.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
+    for (const button of [next, previous]) {
+      assert.ok(await button.evaluate(el => {
+        const r = el.getBoundingClientRect();
+        return [2, 22, 42].every(x => document.elementFromPoint(r.x + x, r.y + 22)?.closest('button') === el);
+      }), 'Seluruh area panah harus berada di atas card, termasuk tepinya.');
+    }
+    await page.mouse.wheel(0, 220);
+    await page.waitForTimeout(70);
+    await page.evaluate(() => {
+      window.facilityNavigationScroll = [];
+      document.addEventListener('pointerdown', () => {
+        let frames = 0;
+        const sample = () => {
+          window.facilityNavigationScroll.push(window.scrollY);
+          if (frames++ < 32) requestAnimationFrame(sample);
+        };
+        sample();
+      }, { once: true, capture: true });
+    });
+    const arrowBox = await next.boundingBox();
+    await page.mouse.click(arrowBox.x + 22, arrowBox.y + 22);
+    await page.waitForTimeout(650);
+    const positions = await page.evaluate(() => window.facilityNavigationScroll);
+    assert.ok(positions.length > 20);
+    assert.ok(Math.max(...positions) - Math.min(...positions) <= 1, 'Navigasi harus membatalkan momentum scroll tanpa menggeser viewport.');
     await all.scrollIntoViewIfNeeded();
     await all.click();
     assert.equal(await next.isEnabled(), true, 'Next harus tersedia saat scroll detail berjalan.');
@@ -71,7 +99,7 @@ try {
   await page.goto((process.env.QA_URL || 'http://127.0.0.1:5173/') + 'profil-sekolah');
   await page.waitForTimeout(1000);
   assert.deepEqual(errors, []);
-  console.log('PASS: autoplay dan pemulihan setelah navigasi manual, jeda autoplay, loop next/previous, navigasi saat/setelah scroll detail dan interupsi, detail berulang, 1440/768/390/375px, overflow, klik cepat, reduced motion, unmount, console.');
+  console.log('PASS: autoplay dan pemulihan setelah navigasi manual, pause saat hover, tanpa UI jeda/lanjut, momentum scroll dibatalkan, hit area panah, loop next/previous, navigasi saat/setelah scroll detail dan interupsi, detail berulang, 1440/768/390/375px, overflow, klik cepat, reduced motion, unmount, console.');
 } finally {
   await browser.close();
 }
