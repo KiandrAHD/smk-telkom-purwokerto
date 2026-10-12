@@ -373,7 +373,7 @@ export default {
   "Siswa jurusan jaringan berlatih memasang dan mengonfigurasi perangkat menggunakan alat yang sama dengan yang dipakai di industri.": "Networking students practice installing and configuring devices using the same equipment used in industry.",
   "Praktik dilakukan langsung pada router dan switch fisik, bukan hanya simulator, supaya siswa terbiasa dengan penanganan perangkat sungguhan.": "Students practice on physical routers and switches, as well as simulators, to become familiar with handling real devices.",
   "Setiap kelompok diberi skenario gangguan berbeda dan diminta menemukan penyebabnya lewat pembacaan log.": "Each group receives a different fault scenario and is asked to find the cause by reading logs.",
-  "Laboratorium Jaringan": "Networking Laboratory",
+  "Laboratorium Jaringan": "Network Laboratory",
   "Perangkat": "Equipment",
   "Router dan switch industri": "Industry routers and switches",
   "Siswa Mengerjakan Proyek": "Students Working on Projects",

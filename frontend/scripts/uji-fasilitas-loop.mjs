@@ -21,10 +21,19 @@ const step = async button => {
 try {
   await page.goto(process.env.QA_URL || 'http://127.0.0.1:5173/');
   await next.scrollIntoViewIfNeeded();
-  assert.equal(await page.getByRole('button', { name: /^(Jeda|Lanjutkan)$/ }).count(), 0, 'Kontrol autoplay harus dihapus.');
+  await page.mouse.move(0, 0);
+  const initial = await active();
+  await page.waitForTimeout(6600);
+  assert.notEqual(await active(), initial, 'Autoplay harus berpindah tanpa input pengguna.');
+  await step(next);
+  const manual = await active();
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(6600);
+  assert.notEqual(await active(), manual, 'Navigasi manual tidak boleh mematikan autoplay.');
+  await page.getByRole('button', { name: 'Jeda carousel', exact: true }).click();
   const first = await active();
   await page.waitForTimeout(5200);
-  assert.equal(await active(), first, 'Slide harus tetap diam tanpa input pengguna.');
+  assert.equal(await active(), first, 'Slide harus tetap diam saat autoplay dijeda.');
   for (const button of [next, previous]) {
     for (let i = 0; i < 6; i++) await step(button);
     assert.equal(await active(), first, 'Loop enam slide harus kembali ke posisi awal.');
@@ -62,7 +71,7 @@ try {
   await page.goto((process.env.QA_URL || 'http://127.0.0.1:5173/') + 'profil-sekolah');
   await page.waitForTimeout(1000);
   assert.deepEqual(errors, []);
-  console.log('PASS: tanpa autoplay, loop next/previous, navigasi saat/setelah scroll detail dan interupsi, detail berulang, 1440/768/390/375px, overflow, klik cepat, reduced motion, unmount, console.');
+  console.log('PASS: autoplay dan pemulihan setelah navigasi manual, jeda autoplay, loop next/previous, navigasi saat/setelah scroll detail dan interupsi, detail berulang, 1440/768/390/375px, overflow, klik cepat, reduced motion, unmount, console.');
 } finally {
   await browser.close();
 }

@@ -1,5 +1,8 @@
 export default {
-  'Fasilitas Kelas': 'School Facilities',
+  'Fasilitas Kelas': 'Learning Facilities',
+  'Jeda carousel': 'Pause carousel',
+  'Lanjutkan carousel': 'Resume carousel',
+  'Ruang praktik untuk belajar mengatur, memasang, dan mengamankan jaringan komputer.': 'A practical space to learn how to configure, install, and secure computer networks.',
   'Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.': 'Our school facilities support teaching and learning, helping students learn comfortably, safely, and effectively.',
   'Lab Jaringan': 'Network Lab',
   'Ruang Kelas': 'Classroom',
