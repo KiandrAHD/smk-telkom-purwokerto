@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { PESAN_SUPABASE_BELUM_SIAP, supabase, supabaseSiap } from '../services/supabase';
 
 const AuthContext = createContext(null);
@@ -10,6 +10,9 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(supabaseSiap);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [accessError, setAccessError] = useState('');
+  const accessUserRef = useRef(null);
+  const accessRequestRef = useRef(0);
 
   const checkAdmin = useCallback(async (userId) => {
     const { data, error } = await supabase
@@ -24,21 +27,38 @@ export function AuthProvider({ children }) {
 
   const applySession = useCallback(
     async (nextSession) => {
+      const request = ++accessRequestRef.current;
+      const nextUserId = nextSession?.user?.id ?? null;
+      const changedUser = accessUserRef.current !== nextUserId;
+      accessUserRef.current = nextUserId;
+      setAccessError('');
       if (!nextSession?.user) {
         setSession(null);
         setUser(null);
         setIsAdmin(false);
+        setLoading(false);
         return;
+      }
+
+      if (changedUser) {
+        setIsAdmin(false);
+        setLoading(true);
       }
 
       setSession(nextSession);
       setUser(nextSession.user);
 
       try {
-        setIsAdmin(await checkAdmin(nextSession.user.id));
+        const admin = await checkAdmin(nextSession.user.id);
+        if (request === accessRequestRef.current) setIsAdmin(admin);
       } catch (error) {
         console.error('Gagal memeriksa akses admin:', error);
-        setIsAdmin(false);
+        if (request === accessRequestRef.current) {
+          setIsAdmin(false);
+          setAccessError('Akses admin belum dapat diperiksa. Silakan muat ulang untuk mencoba lagi.');
+        }
+      } finally {
+        if (request === accessRequestRef.current) setLoading(false);
       }
     },
     [checkAdmin],
@@ -60,7 +80,6 @@ export function AuthProvider({ children }) {
 
       if (mounted) {
         await applySession(data?.session ?? null);
-        if (mounted) setLoading(false);
       }
     };
 
@@ -121,8 +140,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, session, loading, isAdmin, signIn, signOut }),
-    [user, session, loading, isAdmin, signIn, signOut],
+    () => ({ user, session, loading, isAdmin, accessError, signIn, signOut }),
+    [user, session, loading, isAdmin, accessError, signIn, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

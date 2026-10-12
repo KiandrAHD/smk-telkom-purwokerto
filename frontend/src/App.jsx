@@ -2,8 +2,10 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Outlet, Navigate, useParams } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import ContentSkeleton from './components/ContentSkeleton';
+import RouteErrorBoundary from './components/RouteErrorBoundary';
+import ErrorPage from './pages/ErrorPage';
+import MainLayout from './layouts/MainLayout';
 import { canonicalAdmissionsPath } from './utils/admissions';
-const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const FasilitasPage = lazy(() => import('./pages/FasilitasPage'));
 import { useLanguage } from './context/LanguageContext';
@@ -30,7 +32,6 @@ const KetentuanPpdbPage = lazy(() => import('./pages/KetentuanPpdbPage'));
 const LupaSandiPage = lazy(() => import('./pages/ppdb/LupaSandiPage'));
 const AturSandiPage = lazy(() => import('./pages/ppdb/AturSandiPage'));
 const DokumenPesertaPage = lazy(() => import('./pages/ppdb/DokumenPesertaPage'));
-const SegeraHadirPage = lazy(() => import('./pages/SegeraHadirPage'));
 const Login = lazy(() => import('./page/Login/Login'));
 const AuthProvider = lazy(() => import('./context/AuthContext').then(({ AuthProvider: Provider }) => ({ default: Provider })));
 const PpdbProvider = lazy(() => import('./context/PpdbContext').then(({ PpdbProvider: Provider }) => ({ default: Provider })));
@@ -117,6 +118,7 @@ const App = () => {
     <>
       <ScrollToTop />
       <PageMetadata />
+      <RouteErrorBoundary>
       <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -222,10 +224,11 @@ const App = () => {
           </Route>
         </Route>
 
-        {/* Tujuan yang belum memiliki route khusus mendarat di halaman ini. */}
-        <Route path="*" element={<SegeraHadirPage />} />
+        {/* Coming Soon must only be registered on an explicitly planned route. */}
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
       </Suspense>
+      </RouteErrorBoundary>
     </>
   );
 };

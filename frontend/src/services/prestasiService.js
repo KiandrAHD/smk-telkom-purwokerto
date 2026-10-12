@@ -22,7 +22,7 @@ export async function getPrestasi() {
 export async function getPrestasiBySlug(slug) {
   const supabase = ensureSupabase();
   return throwIfError(
-    await supabase.from('prestasi').select(prestasiColumns).eq('slug', slug).single(),
+    await supabase.from('prestasi').select(prestasiColumns).eq('slug', slug).maybeSingle(),
   );
 }
 

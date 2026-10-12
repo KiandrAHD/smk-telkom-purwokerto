@@ -5,6 +5,7 @@ import DetailLayout from '../components/DetailLayout';
 import BeritaDetailKonten from '../components/berita/BeritaDetailKonten';
 import MainLayout from '../layouts/MainLayout';
 import PublicDataState from '../components/PublicDataState';
+import ErrorPage from './ErrorPage';
 import { getBeritaBySlug, getPublishedBerita } from '../services/beritaService';
 import { toBeritaItem } from '../utils/publicContent';
 
@@ -20,7 +21,7 @@ const BeritaDetail = ({ slug }) => {
   const [requestVersion, setRequestVersion] = useState(0);
 
   useEffect(() => {
-    if (loading || error || !item) document.title = `${t(error || 'Berita')} | SMK Telkom Purwokerto`;
+    if (loading || error) document.title = `${t(error || 'Berita')} | SMK Telkom Purwokerto`;
   }, [loading, error, item, t]);
 
   useEffect(() => {
@@ -28,20 +29,20 @@ const BeritaDetail = ({ slug }) => {
     Promise.all([getBeritaBySlug(slug), getPublishedBerita().catch(() => [])])
       .then(([row, rows]) => {
         if (!active) return;
-        const current = toBeritaItem(row);
+        const current = row ? toBeritaItem(row) : null;
         setItem(current);
         setRelated(rows.map(toBeritaItem).filter((entry) => entry.slug !== slug).slice(0, 3));
       })
-      .catch((requestError) => active && setError(requestError?.code === 'PGRST116'
-        ? 'Berita tidak ditemukan.'
-        : 'Berita belum dapat dimuat. Silakan coba lagi nanti.'))
+      .catch(() => active && setError('Berita belum dapat dimuat. Silakan coba lagi nanti.'))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
   }, [slug, requestVersion]);
 
-  if (loading || error || !item) return (
+  if (!loading && !error && !item) return <ErrorPage />;
+
+  if (loading || error) return (
     <MainLayout><div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <PublicDataState loading={loading} error={error || (!loading && 'Berita tidak ditemukan.')} label="berita" onRetry={error === 'Berita tidak ditemukan.' ? undefined : () => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} />
+      <PublicDataState loading={loading} error={error} label="berita" onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} />
     </div></MainLayout>
   );
 

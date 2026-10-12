@@ -44,7 +44,7 @@ export async function getPengumumanBySlug(slug) {
       .select(pengumumanColumns)
       .eq('slug', slug)
       .eq('status', 'published')
-      .single(),
+      .maybeSingle(),
   );
 }
 

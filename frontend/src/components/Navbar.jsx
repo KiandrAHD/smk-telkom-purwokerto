@@ -23,7 +23,7 @@ const prefetchByHref = {
 };
 
 const prefetchRoute = (href) => {
-  prefetchByHref[href]?.();
+  prefetchByHref[href]?.()?.catch(() => {}); // RouteErrorBoundary handles failures when navigating.
 };
 
 const Navbar = () => {

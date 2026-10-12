@@ -13,7 +13,7 @@ export default function MainLayout({ children, busy = false, className = '' }) {
 
   useEffect(() => {
     if (SmoothScroll) return;
-    const load = () => import('../components/SmoothScroll').then(m => setSmoothScroll(() => m.default));
+    const load = () => import('../components/SmoothScroll').then(m => setSmoothScroll(() => m.default)).catch(() => {}); // Native scrolling remains available if this optional chunk fails.
     if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2000 });
     else setTimeout(load, 1500);
   }, [SmoothScroll]);

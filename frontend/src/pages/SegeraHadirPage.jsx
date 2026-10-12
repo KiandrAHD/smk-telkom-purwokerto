@@ -3,11 +3,8 @@ import { ArrowLeft, Hammer } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 
-// Satu halaman singgah untuk semua tujuan yang tautannya sudah ada tapi halamannya
-// belum dibangun. Judul dan jalur kembali diambil dari URL, jadi menambah tautan
-// baru tidak perlu menambah komponen baru. Begitu halaman aslinya jadi, daftarkan
-// route-nya di App.jsx di atas route "*" dan tautan yang sudah tersebar otomatis
-// mengarah ke halaman asli itu.
+// Hanya boleh dipasang pada route resmi yang secara eksplisit direncanakan.
+// Jangan gunakan untuk wildcard atau slug/data yang tidak ditemukan.
 // Singkatan yang muncul di URL ditulis kapital penuh, supaya judulnya terbaca
 // "RPL" dan "Kembali ke BKK", bukan "Rpl" dan "Kembali ke Bkk".
 const AKRONIM = new Set([
