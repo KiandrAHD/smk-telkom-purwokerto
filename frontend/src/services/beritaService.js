@@ -43,7 +43,7 @@ export async function getBeritaBySlug(slug) {
       .select(beritaColumns)
       .eq('slug', slug)
       .eq('status', 'published')
-      .single(),
+      .maybeSingle(),
   );
 }
 

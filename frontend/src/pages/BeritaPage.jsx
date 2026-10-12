@@ -7,7 +7,6 @@ import BeritaSorotSection from '../components/berita/BeritaSorotSection';
 import RibbonDivider from '../components/RibbonDivider';
 import BeritaKategoriSection from '../components/berita/BeritaKategoriSection';
 import BeritaAgendaSection from '../components/berita/BeritaAgendaSection';
-import StelaAISection from '../components/StelaAISection';
 import PublicDataState from '../components/PublicDataState';
 import { getPublishedBerita } from '../services/beritaService';
 import { toBeritaItem } from '../utils/publicContent';
@@ -42,7 +41,6 @@ const BeritaPage = () => {
           {(shown) => <BeritaAgendaSection items={shown} />}
         </BeritaKategoriSection>
       </Reveal>}
-      <Reveal><StelaAISection /></Reveal>
     </MainLayout>
   );
 };

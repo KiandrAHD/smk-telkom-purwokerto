@@ -8,7 +8,7 @@ const server = await createServer({ appType: 'custom', logLevel: 'silent', serve
 try {
   const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
   const { translate } = await server.ssrLoadModule('/src/utils/language.js');
-  const paths = ['/src/components/StelaAISection.jsx', '/src/components/jurusan/JurusanFaqSection.jsx', '/src/components/pengumuman/PengumumanBantuanCard.jsx', '/src/components/tentang/TentangHeroSection.jsx'];
+  const paths = ['/src/components/StelaAISection.jsx', '/src/components/pengumuman/PengumumanBantuanCard.jsx', '/src/components/tentang/TentangHeroSection.jsx'];
   for (const language of ['id', 'en']) {
     const value = { language, locale: language === 'en' ? 'en-US' : 'id-ID', t: (text, vars) => translate(text, language, vars) };
     for (const path of paths) {

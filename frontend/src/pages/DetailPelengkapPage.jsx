@@ -1,7 +1,7 @@
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import DetailLayout from '../components/DetailLayout';
-import SegeraHadirPage from './SegeraHadirPage';
+import ErrorPage from './ErrorPage';
 import {
   agendaDetail,
   galeriDetail,
@@ -39,7 +39,7 @@ const DetailPelengkapPage = ({ jenis, data, translations }) => {
   const koleksi = KOLEKSI[jenis];
   const item = (data || koleksi?.data)?.find((entri) => entri.slug === slug);
 
-  if (!item) return <SegeraHadirPage />;
+  if (!item) return <ErrorPage />;
 
   const displayItem = {
     ...item,

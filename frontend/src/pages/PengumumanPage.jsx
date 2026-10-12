@@ -5,7 +5,6 @@ import Reveal from '../components/Reveal';
 import PengumumanHeroSection from '../components/pengumuman/PengumumanHeroSection';
 import PengumumanPpdbSection from '../components/pengumuman/PengumumanPpdbSection';
 import PengumumanDaftarSection from '../components/pengumuman/PengumumanDaftarSection';
-import CTASection from '../components/CTASection';
 import PublicDataState from '../components/PublicDataState';
 import { getPublishedPengumuman } from '../services/pengumumanService';
 import { toPengumumanItem } from '../utils/publicContent';
@@ -35,7 +34,6 @@ const PengumumanPage = () => {
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("pengumuman")} />
       </div>
       <Reveal><PengumumanDaftarSection items={items} /></Reveal>
-      <Reveal><CTASection /></Reveal>
     </MainLayout>
   );
 };

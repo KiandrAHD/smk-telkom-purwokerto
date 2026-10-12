@@ -7,8 +7,6 @@ import TentangVisiMisiSection from '../components/tentang/TentangVisiMisiSection
 import TentangTimelineSection from '../components/tentang/TentangTimelineSection';
 import RibbonDivider from '../components/RibbonDivider';
 import TentangKepalaSekolahSection from '../components/tentang/TentangKepalaSekolahSection';
-import StelaAISection from '../components/StelaAISection';
-import CTASection from '../components/CTASection';
 
 const ProfileSekolahPage = () => (
   <MainLayout>
@@ -28,12 +26,6 @@ const ProfileSekolahPage = () => (
     <RibbonDivider />
     <Reveal>
       <TentangKepalaSekolahSection />
-    </Reveal>
-    <Reveal>
-      <StelaAISection />
-    </Reveal>
-    <Reveal>
-      <CTASection />
     </Reveal>
   </MainLayout>
 );

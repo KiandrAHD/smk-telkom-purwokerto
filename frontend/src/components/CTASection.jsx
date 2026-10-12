@@ -6,7 +6,7 @@ import prestasiArrow from '../assets/prestasi-remake/MaterialSymbolsLightArrowFo
 import nextTel from '../assets/landing/nexttel-cta.jpeg';
 import facilitiesBadge from '../assets/fasilitas/cta-badge.svg';
 
-const CTASection = ({ variant = 'default' }) => {
+const CTASection = ({ variant = 'default', containerClassName }) => {
   const { t } = useLanguage();
   if (variant === 'prestasi') return (
     <section id="ppdb" className="bg-white pb-8 font-['Plus_Jakarta_Sans'] lg:pb-[5.0434vw]">
@@ -26,12 +26,12 @@ const CTASection = ({ variant = 'default' }) => {
   );
   return (
   <section id="ppdb" className="bg-white pb-8 lg:pb-12">
-    <div className="mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
+    <div className={containerClassName ?? 'mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8'}>
       <div className={`flex flex-col items-center gap-5 rounded-2xl px-6 py-6 text-center sm:flex-row sm:justify-between sm:px-10 sm:text-left ${variant === 'fasilitas' ? 'bg-[#bf0d1b] lg:min-h-32 lg:rounded-[30px] lg:px-8' : 'bg-primary'}`}>
         <div className="flex items-center gap-4">
           {variant === 'fasilitas' ? <span aria-hidden="true" className="relative block size-12 shrink-0 lg:size-[5.5vw]"><img src={facilitiesBadge} alt="" loading="lazy" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-[0.4673] lg:scale-[calc(100vw/1847px)]" /></span> : <span className="flex size-11 flex-shrink-0 items-center justify-center rounded-full bg-white/20"><GraduationCap className="size-5 text-white" /></span>}
           <div>
-            <h2 className={`font-heading font-extrabold text-white ${variant === 'fasilitas' ? 'text-lg sm:text-xl lg:text-2xl' : 'text-lg sm:text-xl'}`}>
+            <h2 className={`text-white ${variant === 'fasilitas' ? 'font-sans font-bold! leading-tight! tracking-[-0.025em]! text-lg sm:text-xl lg:text-2xl' : 'font-heading font-extrabold text-lg sm:text-xl'}`}>
               {t(ctaBanner.title)}
             </h2>
             <p className={`mt-1 leading-relaxed text-white/85 ${variant === 'fasilitas' ? 'max-w-[739px] text-sm' : 'max-w-md text-[11px]'}`}>

@@ -4,8 +4,6 @@ import { useLenis } from 'lenis/react';
 import { ArrowRight } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import Modal from '../components/dashboard/Modal';
-import StelaAISection from '../components/StelaAISection';
-import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
 import { fasilitasData } from '../data/fasilitasData';
 import { ctaMasukPpdb } from '../data/dummyData';
@@ -89,8 +87,6 @@ export default function FasilitasPage() {
             </div>
           </div>
         </section>
-        <StelaAISection variant="prestasi" />
-        <CTASection variant="fasilitas" />
       </div>
       <Modal terbuka={selected !== null} onTutup={() => setSelected(null)} judul={selected ? t(selected.name) : ''} labelTutup={t('Tutup')} lebar="max-w-2xl">
         {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><img src={selected.image} alt={t(selected.name)} width="900" height="600" className="aspect-[3/2] w-full rounded-xl object-cover" /><p className="mt-5 text-sm leading-7 text-dark-600">{t(selected.description)}</p></div>}

@@ -8,8 +8,6 @@ import RibbonDivider from '../components/RibbonDivider';
 import PrestasiGaleriSection from '../components/prestasi/PrestasiGaleriSection';
 import PrestasiPerjalananSection from '../components/prestasi/PrestasiPerjalananSection';
 import PrestasiDukunganSection from '../components/prestasi/PrestasiDukunganSection';
-import CTASection from '../components/CTASection';
-import StelaAISection from '../components/StelaAISection';
 import PublicDataState from '../components/PublicDataState';
 import { getPrestasi } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
@@ -42,8 +40,6 @@ const PrestasiPage = () => {
       <Reveal><PrestasiGaleriSection items={items} /></Reveal>
       <Reveal><PrestasiPerjalananSection /></Reveal>
       <Reveal><PrestasiDukunganSection /></Reveal>
-      <Reveal><StelaAISection variant="prestasi" /></Reveal>
-      <Reveal><CTASection variant="prestasi" /></Reveal>
     </MainLayout>
   );
 };

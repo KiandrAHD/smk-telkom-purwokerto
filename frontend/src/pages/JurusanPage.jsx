@@ -8,7 +8,6 @@ import PartnersSection from '../components/PartnersSection';
 import JurusanCompareSection from '../components/jurusan/JurusanCompareSection';
 import JurusanShowcaseSection from '../components/jurusan/JurusanShowcaseSection';
 import JurusanFaqSection from '../components/jurusan/JurusanFaqSection';
-import CTASection from '../components/CTASection';
 
 const JurusanPage = () => (
   <MainLayout>
@@ -31,9 +30,6 @@ const JurusanPage = () => (
     </Reveal>
     <Reveal>
       <JurusanFaqSection />
-    </Reveal>
-    <Reveal>
-      <CTASection />
     </Reveal>
   </MainLayout>
 );
