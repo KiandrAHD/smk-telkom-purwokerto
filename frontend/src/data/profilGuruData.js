@@ -4,6 +4,7 @@
 // Tiga paragraf merupakan penjelasan editorial umum bidang, bukan biografi pribadi.
 import { guruData, guruDetail } from './guruData';
 import { slugify } from '../utils/slug';
+import { pengawakanGuruData } from './pengawakanGuruData';
 import photo0 from '../assets/tentang/guru/baru/thoriq-abdul-azis-m.webp?no-inline';
 import thumb0 from '../assets/tentang/guru/baru/thoriq-abdul-azis-m-240.webp?no-inline';
 import photo1 from '../assets/tentang/guru/baru/susi-listyarini.webp?no-inline';
@@ -908,12 +909,36 @@ const cleanSubjectNote = text => text
   .replace('; mata pelajaran yang diampu [perlu konfirmasi].', '.')
   .replace(' Mata pelajaran yang diampu masih [perlu konfirmasi].', '');
 
-export const profilGuruData = [...guruData.map(guru => ({
+const existingProfiles = [...guruData.map(guru => ({
   ...guru,
   mapel: guru.mapel === '[perlu konfirmasi]' ? null : guru.mapel,
   deskripsi: cleanSubjectNote(guru.deskripsi),
 })), ...guruBaruData];
-export const profilGuruDetail = [...guruDetail.map(guru => ({
+
+const assignments = new Map(pengawakanGuruData.map(guru => [guru.nama, guru]));
+const newProfiles = pengawakanGuruData.filter(guru => !existingProfiles.some(existing => existing.nama === guru.nama));
+export const profilGuruData = [...existingProfiles, ...newProfiles].map(guru => {
+  const assignment = assignments.get(guru.nama);
+  const photo = assignment.image ? {
+    image: assignment.image, thumbnail: assignment.thumbnail,
+    imageWidth: assignment.imageWidth, imageHeight: assignment.imageHeight,
+    imageSrcSet: `${assignment.thumbnail} 240w, ${assignment.image} 480w`,
+    photoCropClassName: 'w-full left-0 top-0',
+  } : {};
+  return {
+    ...guru, ...assignment, ...photo,
+    jabatan: assignment.jabatanOrganisasi,
+    deskripsi: guru.deskripsi || 'Tercantum dalam SK Pengawakan TP 2026/2027.',
+  };
+});
+
+// Empat profil pembuka mengikuti urutan referensi; anggota lain tetap satu kali.
+const studentLeads = ['Arif Muttakin, S.T.', 'Reza Aditya Permana, S.Kom.', 'Prasetyo Adi Wibowo, S.Pd., M.Pd.', 'Andang Jaka Patrianta, S.Pd.'];
+const studentRank = guru => studentLeads.includes(guru.nama) ? studentLeads.indexOf(guru.nama) : studentLeads.length;
+export const kesiswaanData = profilGuruData.filter(guru => guru.kategori === 'kesiswaan').sort((a, b) => studentRank(a) - studentRank(b));
+export const tenagaPendidikData = profilGuruData.filter(guru => guru.kategori === 'guru');
+
+const existingDetails = [...guruDetail.map(guru => ({
   ...guru,
   lead: cleanSubjectNote(guru.lead),
   body: guru.body.map(cleanSubjectNote),
@@ -937,12 +962,43 @@ export const profilGuruDetail = [...guruDetail.map(guru => ({
     { label: 'Jabatan Organisasi', value: guru.jabatanOrganisasi },
   ],
 }))];
+export const profilGuruDetail = profilGuruData.map(guru => {
+  const previous = existingDetails.find(item => item.title === guru.nama);
+  return {
+    ...previous,
+    slug: slugify(guru.nama), title: guru.nama,
+    kategori: guru.kategori === 'kesiswaan' ? 'Bidang Kesiswaan & Karakter' : 'Profil Guru & Tenaga Pendidik',
+    subtitle: guru.jabatanOrganisasi,
+    image: guru.image, imageAlt: guru.nama, imageSrcSet: guru.imageSrcSet,
+    imageWidth: guru.imageWidth, imageHeight: guru.imageHeight,
+    imageSizes: '(min-width: 640px) 384px, 90vw', photoCropClassName: guru.photoCropClassName,
+    lead: guru.deskripsi, body: previous?.body || [`Jabatan pada SK TP 2026/2027: ${guru.jabatanOrganisasi}.`],
+    facts: [
+      ...(guru.mapel ? [{ label: 'Mata Pelajaran', value: guru.mapel }] : []),
+      { label: 'Jabatan Organisasi', value: guru.jabatanOrganisasi },
+      ...(guru.jabatanTambahan ? [{ label: 'Jabatan Tambahan', value: guru.jabatanTambahan }] : []),
+      { label: 'Sumber Jabatan', value: `SK Pengawakan TP 2026/2027, halaman ${guru.sourcePage}` },
+    ],
+  };
+});
 
 // Terjemahan lokal pada chunk rute guru agar JavaScript awal tidak bertambah.
 export const profilGuruTranslations = Object.fromEntries([
   ['Sejarah', 'History'],
+  ['Tercantum dalam SK Pengawakan TP 2026/2027.', 'Listed in the 2026/2027 school staffing decree.'],
   ['Tercatat pada bidang Karakter.', 'Listed in Character Development.'],
   ['Informasi yang tersedia mencatat peran pada bidang Karakter.', 'Available information records a role in Character Development.'],
   ...Object.values(descriptions).flat(),
   ...records.flatMap(guru => [[guru.jabatan, guru.jabatanEn], [guru.deskripsi, guru.deskripsiEn]]),
+  ...pengawakanGuruData.flatMap(guru => [
+    [guru.jabatanOrganisasi, guru.jabatanEn],
+    [`Jabatan pada SK TP 2026/2027: ${guru.jabatanOrganisasi}.`, `Assignment in the 2026/2027 staffing decree: ${guru.jabatanEn}.`],
+  ]),
+  ['PIC IT, Lab & Sarana Prasarana', 'Person in Charge of IT, Laboratories and Facilities'],
+  ['PIC Hubungan Industri & Komunikasi', 'Person in Charge of Industry Relations and Communications'],
+  ['PIC Kurikulum', 'Person in Charge of Curriculum'],
+  ['PIC Kesiswaan', 'Person in Charge of Student Affairs'],
+  ['PIC Administrasi', 'Person in Charge of Administration'],
+  ['SK Pengawakan TP 2026/2027, halaman 2', '2026/2027 staffing decree, page 2'],
+  ['SK Pengawakan TP 2026/2027, halaman 3', '2026/2027 staffing decree, page 3'],
 ]);

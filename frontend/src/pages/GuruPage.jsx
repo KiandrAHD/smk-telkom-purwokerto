@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
 import RibbonDivider from '../components/RibbonDivider';
 import { kepalaSekolah, visiMisi } from '../data/dummyData';
-import { profilGuruData as guruData, profilGuruTranslations } from '../data/profilGuruData';
+import { kesiswaanData, tenagaPendidikData, profilGuruTranslations } from '../data/profilGuruData';
 import MainLayout from '../layouts/MainLayout';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { slugify } from '../utils/slug';
@@ -20,7 +20,7 @@ const getPageSize = () => {
   return window.matchMedia('(min-width: 48rem)').matches ? 4 : 2;
 };
 
-export function GuruGrid({ teachers = guruData }) {
+export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = 'Guru & Tenaga Pendidik' }) {
   const { t, language } = useLanguage();
   const teacherText = (text) => t(language === 'en' ? profilGuruTranslations[text] ?? text : text);
   const [pagination, setPagination] = useState(() => ({ size: getPageSize(), page: 0 }));
@@ -54,16 +54,16 @@ export function GuruGrid({ teachers = guruData }) {
   }, [teachers.length]);
 
   return (
-    <section aria-labelledby="guru-list-title" className="relative overflow-hidden bg-white py-8 lg:py-12">
+    <section aria-labelledby={`${id}-list-title`} className="relative overflow-hidden bg-white py-8 lg:py-12">
       <SectionAccents variant="teachers" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="mb-8 text-center">
-          <h2 id="guru-list-title" className="font-heading text-2xl font-extrabold leading-tight text-dark-900 sm:text-3xl">{t("Guru & Tenaga Pendidik")} </h2>
+          <h2 id={`${id}-list-title`} className="font-heading text-2xl font-extrabold leading-tight text-dark-900 sm:text-3xl">{t(title)} </h2>
           <p className="mt-1 text-sm font-semibold text-primary sm:text-base">{t("SMK Telkom Purwokerto")}</p>
         </Reveal>
 
         <div className="relative">
-          {shown.length ? <div id="guru-grid" data-teacher-grid className={`grid auto-rows-fr grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-x-8 min-[75rem]:grid-cols-4 min-[75rem]:gap-x-14 ${pageCount > 1 || shown.length > pageSize / 2 ? 'grid-rows-2' : ''}`}>
+          {shown.length ? <div id={`${id}-grid`} data-teacher-grid className={`grid auto-rows-fr grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-x-8 min-[75rem]:grid-cols-4 min-[75rem]:gap-x-14 ${pageCount > 1 || shown.length > pageSize / 2 ? 'grid-rows-2' : ''}`}>
             {shown.map(guru => (
               <div key={guru.nama} data-teacher-card={slugify(guru.nama)}>
                 <Link
@@ -93,19 +93,19 @@ export function GuruGrid({ teachers = guruData }) {
           <span className="sr-only" aria-live="polite">{t('Halaman {page} dari {total}', { page: page + 1, total: pageCount })}</span>
 
           {pageCount > 1 && (
-            <nav data-teacher-pagination aria-label={t("Navigasi profil guru")} className="mt-6 flex items-center justify-center gap-3 sm:mt-8">
-              <button type="button" disabled={page === 0} onClick={() => goToPage(page - 1)} aria-controls="guru-grid" aria-label={t("Guru sebelumnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
+            <nav data-teacher-pagination aria-label={t('Navigasi {category}', { category: t(title) })} className="mt-6 flex items-center justify-center gap-3 sm:mt-8">
+              <button type="button" disabled={page === 0} onClick={() => goToPage(page - 1)} aria-controls={`${id}-grid`} aria-label={t('Halaman {category} sebelumnya', { category: t(title) })} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
                 <ChevronLeft size={22} />
               </button>
               <div className="relative flex shrink-0 items-center">
                 <span data-teacher-pill aria-hidden="true" className="pointer-events-none absolute left-1 top-1/2 z-10 h-3 w-6 rounded-full bg-primary transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" style={{ transform: `translate3d(${(page - indicatorStart) * 32}px, -50%, 0)` }} />
                 {Array.from({ length: indicatorCount }, (_, offset) => indicatorStart + offset).map((index) => (
-                  <button key={index} type="button" onClick={() => goToPage(index)} aria-controls="guru-grid" aria-label={t('Lihat halaman guru {number}', { number: index + 1 })} aria-current={page === index ? 'page' : undefined} className="grid h-8 w-8 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                  <button key={index} type="button" onClick={() => goToPage(index)} aria-controls={`${id}-grid`} aria-label={t('Lihat halaman {category} {number}', { category: t(title), number: index + 1 })} aria-current={page === index ? 'page' : undefined} className="grid h-8 w-8 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                     <span aria-hidden="true" className="h-3 w-3 rounded-full bg-primary/40" />
                   </button>
                 ))}
               </div>
-              <button type="button" disabled={page === pageCount - 1} onClick={() => goToPage(page + 1)} aria-controls="guru-grid" aria-label={t("Guru berikutnya")} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
+              <button type="button" disabled={page === pageCount - 1} onClick={() => goToPage(page + 1)} aria-controls={`${id}-grid`} aria-label={t('Halaman {category} berikutnya', { category: t(title) })} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
                 <ChevronRight size={22} />
               </button>
             </nav>
@@ -166,6 +166,8 @@ function GuruPage() {
         </div>
       </section>
 
+      <GuruGrid teachers={kesiswaanData} id="kesiswaan" title="Bidang Kesiswaan & Karakter" />
+      <Reveal><RibbonDivider /></Reveal>
       <GuruGrid />
       <Reveal><RibbonDivider /></Reveal>
     </MainLayout>

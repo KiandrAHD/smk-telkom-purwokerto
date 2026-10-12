@@ -15,7 +15,7 @@ try {
       h(Component, teachers ? { teachers } : {}))));
   // Server baseline is desktop: one current page, rather than every hidden slide.
   const initial = render(module.default);
-  assert.equal((initial.match(/aria-label="Lihat profil /g) || []).length, 8, 'Desktop harus merender delapan profil, bukan seluruh carousel.');
+  assert.equal((initial.match(/aria-label="Lihat profil /g) || []).length, 16, 'Desktop harus merender delapan profil per kategori.');
   assert.equal(typeof module.GuruGrid, 'function');
   for (const language of ['id', 'en']) for (const count of [0, 1, 7, 8, 9]) {
     const html = render(module.GuruGrid, profilGuruData.slice(0, count), language);
