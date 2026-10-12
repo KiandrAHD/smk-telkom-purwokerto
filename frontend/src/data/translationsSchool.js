@@ -1,4 +1,5 @@
 export default {
+  'Belum ada profil guru.': 'No teacher profiles are available yet.',
   'Halaman Tidak Ditemukan': 'Page Not Found',
   'Halaman yang Anda cari tidak tersedia. Periksa kembali alamat URL atau kembali ke beranda.': 'The page you are looking for is unavailable. Check the URL or return to the home page.',
   'Kembali ke Beranda': 'Back to Home',
