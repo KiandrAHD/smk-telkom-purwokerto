@@ -81,7 +81,7 @@ const AchievementsSection = () => {
 
       {/* Delapan kartu per halaman, empat kolom pada desktop */}
       <PublicDataState loading={loading} error={t(error)} empty={!loading && !error && !items.length} label="prestasi" carousel twoRows deferred={!requestStarted} />
-      {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} twoRows />}
+      {!loading && !error && items.length > 0 && <PrestasiCarousel items={items} twoRows animated />}
 
     </div>
   </section>

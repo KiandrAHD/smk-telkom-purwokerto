@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
 import SectionAccents from '../SectionAccents';
 import TeacherPhoto from '../TeacherPhoto';
+import useSlidingPage from '../../hooks/useSlidingPage';
 import { guruData, kepalaSekolah } from '../../data/dummyData';
 
 const subscribeViewport = (notify) => {
@@ -22,6 +23,8 @@ const TentangKepalaSekolahSection = () => {
   // Ketika viewport membesar, halaman terakhir tetap dibatasi ke rentang yang ada.
   const currentPage = Math.min(page, pages - 1);
   const shown = guruData.slice(currentPage * perPage, currentPage * perPage + perPage);
+  const { viewport: viewportRef, goTo: slideTo } = useSlidingPage(`${currentPage}-${perPage}`);
+  const goToPage = next => slideTo(Math.max(0, Math.min(next, pages - 1)), currentPage, setPage);
 
   return (
     <section id="guru" className="relative overflow-x-clip bg-white py-8 lg:py-12 min-[1660px]:py-14">
@@ -59,8 +62,8 @@ const TentangKepalaSekolahSection = () => {
           <h2 className="min-w-0 font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500">{t("Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.")} </p>
 
-          {/* Key memulai ulang animasi masuk ketika halaman guru berubah. */}
-          <div key={`${currentPage}-${perPage}`} className="mt-4 grid animate-masuk-halaman grid-cols-1 gap-4 motion-reduce:animate-none min-[400px]:grid-cols-2 xl:grid-cols-4 min-[1660px]:gap-5">
+          <div ref={viewportRef} data-sliding-page className="relative mt-4 overflow-x-clip">
+          <div className="grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 xl:grid-cols-4 min-[1660px]:gap-5">
             {shown.map((guru, i) => (
               <Link
                 key={guru.nama}
@@ -82,6 +85,7 @@ const TentangKepalaSekolahSection = () => {
               </Link>
             ))}
           </div>
+          </div>
           <span className="sr-only" aria-live="polite">{t('Halaman {page} dari {total}', { page: currentPage + 1, total: pages })}</span>
 
           {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
@@ -89,7 +93,7 @@ const TentangKepalaSekolahSection = () => {
           <div className="mt-5 flex items-center justify-center gap-2">
             <button
               type="button"
-              onClick={() => setPage(Math.max(0, currentPage - 1))}
+              onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 0}
               aria-label={t('Guru sebelumnya')}
               className="mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
@@ -99,7 +103,7 @@ const TentangKepalaSekolahSection = () => {
               <button
                 key={i}
                 type="button"
-                onClick={() => setPage(i)}
+                onClick={() => goToPage(i)}
                 aria-label={t('Halaman guru {number}', { number: i + 1 })}
                 aria-current={i === currentPage}
                 className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${
@@ -110,7 +114,7 @@ const TentangKepalaSekolahSection = () => {
             </div>
             <button
               type="button"
-              onClick={() => setPage(Math.min(pages - 1, currentPage + 1))}
+              onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === pages - 1}
               aria-label={t('Guru berikutnya')}
               className="ml-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"

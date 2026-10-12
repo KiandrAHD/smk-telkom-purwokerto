@@ -12,6 +12,7 @@ import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
 import SectionAccents from '../components/SectionAccents';
 import TeacherPhoto from '../components/TeacherPhoto';
+import useSlidingPage from '../hooks/useSlidingPage';
 import headmasterAccent from '../assets/tentang/kepala-sekolah-motif.svg';
 
 const getPageSize = () => {
@@ -28,13 +29,11 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
   const pageCount = Math.max(1, Math.ceil(teachers.length / pageSize));
   const page = Math.min(pagination.page, pageCount - 1);
   const shown = teachers.slice(page * pageSize, (page + 1) * pageSize);
+  const { viewport: viewportRef, goTo: slideTo } = useSlidingPage(`${page}-${pageSize}`);
   const indicatorCount = Math.min(pageSize === 2 ? 5 : 10, pageCount);
   // On mobile, advance the dot window gradually rather than resetting batches of four.
   const indicatorStart = Math.min(Math.max(page - Math.floor(indicatorCount / 2), 0), pageCount - indicatorCount);
-  const goToPage = next => setPagination(current => {
-    const page = Math.max(0, Math.min(next, pageCount - 1));
-    return page === current.page ? current : { ...current, page };
-  });
+  const goToPage = next => slideTo(Math.max(0, Math.min(next, pageCount - 1)), page, nextPage => setPagination(current => ({ ...current, page: nextPage })));
 
   useEffect(() => {
     const tablet = window.matchMedia('(min-width: 48rem)');
@@ -63,6 +62,7 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
         </Reveal>
 
         <div className="relative">
+          <div ref={viewportRef} data-sliding-page className="relative overflow-x-clip">
           {shown.length ? <div id={`${id}-grid`} data-teacher-grid className={`grid auto-rows-fr grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-x-8 min-[75rem]:grid-cols-4 min-[75rem]:gap-x-14 ${pageCount > 1 || shown.length > pageSize / 2 ? 'grid-rows-2' : ''}`}>
             {shown.map(guru => (
               <div key={guru.nama} data-teacher-card={slugify(guru.nama)}>
@@ -90,6 +90,7 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
               </div>
             ))}
           </div> : <p className="py-8 text-center text-sm text-dark-500">{t('Belum ada profil guru.')}</p>}
+          </div>
           <span className="sr-only" aria-live="polite">{t('Halaman {page} dari {total}', { page: page + 1, total: pageCount })}</span>
 
           {pageCount > 1 && (
