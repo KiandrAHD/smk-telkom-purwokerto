@@ -7,7 +7,7 @@ import { stelaCardEn, stelaEnglishSrcSet, stelaHelpSizes, restoreOriginalStelaAr
 const PengumumanBantuanCard = () => {
   const { t, language } = useLanguage();
   return (
-  <div className="font-['Plus_Jakarta_Sans']">
+  <div className="font-[family-name:'Plus_Jakarta_Sans',var(--font-sans)]">
     {/* Figma menempatkan ilustrasi/chat dan tombol sebagai dua bagian terpisah. */}
     <div className="relative aspect-[565/265] overflow-hidden rounded-xl bg-[#830b19]">
       <img

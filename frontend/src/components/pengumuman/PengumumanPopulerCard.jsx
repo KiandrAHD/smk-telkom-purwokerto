@@ -18,7 +18,7 @@ const warnaNomor = [
 const PengumumanPopulerCard = ({ items = [], tampilkanLihatSemua = true }) => {
   const { t, locale } = useLanguage();
   return (
-  <div className="rounded-xl bg-white p-4 font-['Plus_Jakarta_Sans'] shadow-card">
+  <div className="rounded-xl bg-white p-4 font-[family-name:'Plus_Jakarta_Sans',var(--font-sans)] shadow-card">
     <div className="flex items-center justify-between gap-3">
       <h2 className="text-base font-extrabold text-dark-900">{t("Pengumuman Terbaru")}</h2>
       {tampilkanLihatSemua && (

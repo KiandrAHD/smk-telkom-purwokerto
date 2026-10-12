@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
+import { ArrowRight, ChevronRight, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import navbarLogo from '../assets/landing/beranda-navbar-logo.png';
 import LanguageToggle from './LanguageToggle';
@@ -74,7 +74,7 @@ const Navbar = () => {
   const currentPage = (href) => location.pathname === href ? 'page' : isSectionRoute(location.pathname, href) ? 'location' : undefined;
 
   const linkClass = (link) =>
-    `relative inline-flex items-center whitespace-nowrap py-1.5 text-sm font-semibold tracking-[0.12em] transition-colors ${
+    `relative inline-flex items-center whitespace-nowrap py-1.5 text-sm font-medium tracking-normal transition-colors ${
       isActive(link) ? 'text-primary' : 'text-dark-600 hover:text-primary'
     }`;
 
@@ -120,8 +120,8 @@ const Navbar = () => {
                     aria-controls={`desktop-${link.label.toLowerCase()}-links`}
                   >
                     {navLabel(link)}
-                    <ChevronDown
-                      className={`h-3.5 w-3.5 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}
+                    <ChevronRight
+                      className={`h-3.5 w-3.5 transition-transform ${openDropdown === link.label ? 'rotate-90' : ''}`}
                       aria-hidden="true"
                     />
                     {activeBar(link)}
@@ -214,8 +214,8 @@ const Navbar = () => {
                       aria-controls={`mobile-${link.label.toLowerCase()}-links`}
                     >
                       {navLabel(link)}
-                      <ChevronDown
-                        className={`h-4 w-4 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}
+                      <ChevronRight
+                        className={`h-4 w-4 transition-transform ${openDropdown === link.label ? 'rotate-90' : ''}`}
                         aria-hidden="true"
                       />
                     </button>
