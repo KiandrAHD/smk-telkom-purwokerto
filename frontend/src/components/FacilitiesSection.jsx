@@ -1,30 +1,31 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { useLenis } from 'lenis/react';
-import { ArrowRight, BookOpen, Bot, Building2, Monitor, Network, School } from 'lucide-react';
+import { ArrowRight, BookOpen, Bot, Building2, Monitor, Network, Pause, Play, School } from 'lucide-react';
 import { fasilitasData } from '../data/fasilitasData';
 import { useLanguage } from '../context/LanguageContext';
 import Modal from './dashboard/Modal';
-import motifLeft from '../assets/fasilitas/motif-left.svg';
-import motifTop from '../assets/fasilitas/motif-top.svg';
-import backgroundLeft from '../assets/fasilitas/background-left.webp';
 import backgroundRight from '../assets/fasilitas/background-right.webp';
 import arrowPrev from '../assets/fasilitas/arrow-prev.svg';
 import arrowNext from '../assets/fasilitas/arrow-next.svg';
+import './FacilitiesSection.css';
 
 gsap.registerPlugin(Flip);
 
 const filters = ['Semua', 'Laboratorium', 'Kelas', 'Perpustakaan'];
 const slides = [
   { name: 'Lab Jaringan', title: 'Laboratorium Jaringan', image: fasilitasData[5].image, category: 'Laboratorium', Icon: Network },
-  { name: 'Ruang Kelas', image: fasilitasData[2].image, category: 'Kelas', Icon: School },
-  { name: 'Perpustakaan', image: fasilitasData[7].image, category: 'Perpustakaan', Icon: BookOpen },
-  { name: 'Lab Komputer', image: fasilitasData[4].image, category: 'Laboratorium', Icon: Monitor },
-  { name: 'Lab Robotik', image: fasilitasData[6].image, category: 'Laboratorium', Icon: Bot },
-  { name: 'Fasilitas Lainnya', image: fasilitasData[0].image, category: 'Semua', Icon: Building2 },
+  { name: 'Ruang Kelas', image: fasilitasData[2].image, preview: fasilitasData[2].preview, category: 'Kelas', Icon: School },
+  { name: 'Perpustakaan', image: fasilitasData[7].image, preview: fasilitasData[7].preview, category: 'Perpustakaan', Icon: BookOpen },
+  { name: 'Lab Komputer', image: fasilitasData[4].image, preview: fasilitasData[4].preview, category: 'Laboratorium', Icon: Monitor },
+  { name: 'Lab Robotik', image: fasilitasData[6].image, preview: fasilitasData[6].preview, category: 'Laboratorium', Icon: Bot },
+  { name: 'Fasilitas Lainnya', image: fasilitasData[0].image, preview: fasilitasData[0].preview, category: 'Semua', Icon: Building2 },
 ];
+// Figma places Robotics immediately before Network; the timeline keeps its 01–06 order.
+const carouselOrder = [0, 1, 2, 3, 5, 4];
+const adjacentSlide = (active, offset) => carouselOrder[(carouselOrder.indexOf(active) + offset + slides.length) % slides.length];
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function FacilitiesSection() {
@@ -46,6 +47,7 @@ export default function FacilitiesSection() {
   const [filter, setFilter] = useState('Semua');
   const [busy, setBusy] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
   const lenis = useLenis();
 
   useEffect(() => {
@@ -75,15 +77,49 @@ export default function FacilitiesSection() {
     return () => media.revert();
   }, []);
 
-  const navigate = (next) => {
+  const navigate = useCallback((next) => {
     if (turning.current || next === active) return;
-    direction.current = (next - active + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
+    direction.current = (carouselOrder.indexOf(next) - carouselOrder.indexOf(active) + slides.length) % slides.length <= slides.length / 2 ? 1 : -1;
     if (!reducedMotion()) {
       slideState.current = Flip.getState(carousel.current.querySelectorAll('[data-slide]'));
       turning.current = true;
     }
     setActive((next + slides.length) % slides.length);
-  };
+  }, [active]);
+
+  useEffect(() => {
+    const node = carousel.current;
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let visible = false;
+    let disposed = false;
+    let timer;
+    const schedule = () => {
+      window.clearTimeout(timer);
+      if (disposed || !visible || autoplayPaused || media.matches || document.hidden || selected || node.matches(':hover') || node.querySelector(':focus-visible')) return;
+      timer = window.setTimeout(() => navigate(adjacentSlide(active, 1)), 6000);
+    };
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule(); }, { threshold: 0.35 });
+    observer.observe(node);
+    const pause = () => window.clearTimeout(timer);
+    const resumeFocus = () => queueMicrotask(schedule);
+    node.addEventListener('pointerenter', pause);
+    node.addEventListener('pointerleave', schedule);
+    node.addEventListener('focusin', pause);
+    node.addEventListener('focusout', resumeFocus);
+    document.addEventListener('visibilitychange', schedule);
+    media.addEventListener('change', schedule);
+    return () => {
+      disposed = true;
+      window.clearTimeout(timer);
+      observer.disconnect();
+      node.removeEventListener('pointerenter', pause);
+      node.removeEventListener('pointerleave', schedule);
+      node.removeEventListener('focusin', pause);
+      node.removeEventListener('focusout', resumeFocus);
+      document.removeEventListener('visibilitychange', schedule);
+      media.removeEventListener('change', schedule);
+    };
+  }, [active, autoplayPaused, navigate, selected]);
 
   useLayoutEffect(() => {
     if (!slideState.current) return;
@@ -140,40 +176,39 @@ export default function FacilitiesSection() {
   const visibleCount = fasilitasData.filter(item => filter === 'Semua' || item.category === filter).length;
   return (
     <section ref={root} id="fasilitas" aria-label={t('Fasilitas Sekolah')} className="overflow-hidden bg-white">
-      <div ref={carousel} className="relative isolate bg-[#484848] py-10 sm:py-12 lg:py-14 [container-type:inline-size]">
+      <div ref={carousel} className="relative isolate bg-white py-10 sm:py-12 lg:py-14">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <img src={backgroundLeft} alt="" className="absolute left-0 top-0 h-full w-1/2 object-cover opacity-10" />
-          <img src={backgroundRight} alt="" className="absolute right-0 top-0 h-full w-3/5 object-cover opacity-15" />
-          <div className="absolute left-[-0.54%] top-[-1.62%] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifTop} alt="" className="max-w-none rotate-180" /></div>
-          <div className="absolute left-[-5.57%] top-0 h-[493.607px] w-[179px] origin-top-left [transform:scale(calc(100cqw/1847px))]"><img src={motifLeft} alt="" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 rotate-90" /></div>
+          <img src={backgroundRight} alt="" className="facilities-background absolute left-[16.3%] top-0 aspect-[1592/1129.08] w-[86.19%] sm:-top-[24%]" />
+          <div className="facilities-motif absolute right-[-8.75%] top-4 aspect-[493.607/179] w-[26.72%] rotate-180 sm:top-10" />
         </div>
         <div className="mx-auto max-w-[1546px] px-6 sm:px-12 lg:px-20">
-          <p className="text-sm text-white/80">{t('Fasilitas Kelas')} —</p>
-          <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">{titleStart} <span className="text-[#f01932]">{titleEnd}</span></h2>
-          <p className="mt-4 max-w-lg text-xs leading-relaxed text-white/85 sm:text-sm">{t('Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.')}</p>
+          <p className="text-sm text-dark-600">{t('Fasilitas Kelas')} —</p>
+          <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-4xl lg:text-5xl">{titleStart} <span className="text-primary">{titleEnd}</span></h2>
+          <p className="mt-4 max-w-lg text-xs leading-relaxed text-dark-600 sm:text-sm">{t('Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.')}</p>
         </div>
         <div className="relative mx-auto mt-9 max-w-[1546px] px-12 sm:px-16 lg:px-20" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
-          <div className="relative mb-6 flex aspect-[611/354] items-center justify-center gap-0 sm:mb-8 sm:aspect-[611/134.52]">
+          <div className="relative mb-20 flex aspect-[611/354] items-center justify-center gap-0 sm:aspect-[611/134.52]">
             {[-2, -1, 0, 1, 2, 3].map(offset => {
-              const index = (active + offset + slides.length) % slides.length;
+              const index = adjacentSlide(active, offset);
               const slide = slides[index];
               return (
                 <button key={index} type="button" data-slide data-flip-id={`facility-${index}`} aria-hidden={Math.abs(offset) > 1 || undefined} disabled={Math.abs(offset) > 1} onClick={() => offset === 0 ? showDetails(slide.category) : navigate(index)}
                   aria-label={offset === 0 ? t('Lihat detail {name}', { name: t(slide.name) }) : t('Tampilkan {name}', { name: t(slide.name) })}
                   className={`relative aspect-[611/354] shrink-0 rounded-xl border-[3px] border-white bg-white shadow-card focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-primary ${Math.abs(offset) > 1 ? 'hidden' : offset === 0 ? 'z-10 w-full sm:w-[38%]' : `hidden sm:block sm:w-[33%] ${offset < 0 ? '-mr-4 -rotate-2' : '-ml-4 rotate-2'}`}`}>
                   <img src={slide.image} alt={t(slide.name)} width="611" height="354" loading="lazy" className="h-full w-full rounded-lg object-cover" />
-                  {offset === 0 ? <span className="absolute -bottom-5 left-[7%] flex min-h-16 w-[86%] items-center justify-center rounded-xl bg-white/90 px-3 py-4 font-heading text-sm font-bold leading-snug text-dark-900 shadow-card sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span>
+                  {offset === 0 ? <span className="absolute -bottom-16 left-[7%] flex min-h-28 w-[86%] flex-col justify-center rounded-xl border-[3px] border-white bg-[#e72033] px-4 py-4 text-left text-white shadow-card lg:min-h-32 lg:px-6"><span className="font-heading text-sm font-bold leading-snug sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span><span className="mt-1 text-xs leading-snug">{t(slide.preview ?? 'Ruang praktik untuk belajar mengatur, memasang, dan mengamankan jaringan komputer.')}</span></span>
                     : <span className="absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left font-heading text-base font-bold leading-snug text-white lg:text-xl">{t(slide.name)}</span>}
                 </button>
               );
             })}
           </div>
-          <button type="button" aria-label={t('Fasilitas sebelumnya')} onClick={() => navigate((active - 1 + slides.length) % slides.length)} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
-          <button type="button" aria-label={t('Fasilitas berikutnya')} onClick={() => navigate((active + 1) % slides.length)} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:right-4"><img src={arrowNext} alt="" className="max-w-none rotate-180" /></button>
-          <p aria-live="polite" className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
+          <button type="button" aria-label={t('Fasilitas sebelumnya')} onClick={() => navigate(adjacentSlide(active, -1))} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
+          <button type="button" aria-label={t('Fasilitas berikutnya')} onClick={() => navigate(adjacentSlide(active, 1))} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:right-4"><img src={arrowNext} alt="" className="max-w-none rotate-180" /></button>
+          <p aria-live={autoplayPaused ? 'polite' : 'off'} className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
         </div>
-        <div className="mt-4 flex justify-center text-xs font-semibold text-white">
-          <button type="button" onClick={() => showDetails()} className="min-h-11 rounded-lg px-3 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-white">{t('Lihat semua fasilitas')}</button>
+        <div className="mt-4 flex flex-wrap justify-center gap-3 text-xs font-semibold text-primary">
+          <button type="button" onClick={() => showDetails()} className="min-h-11 rounded-lg px-3 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat semua fasilitas')}</button>
+          <button type="button" aria-pressed={autoplayPaused} onClick={() => setAutoplayPaused(paused => !paused)} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 focus-visible:outline-2 focus-visible:outline-primary">{autoplayPaused ? <Play className="size-3.5" aria-hidden="true" /> : <Pause className="size-3.5" aria-hidden="true" />}{t(autoplayPaused ? 'Lanjutkan carousel' : 'Jeda carousel')}</button>
         </div>
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
