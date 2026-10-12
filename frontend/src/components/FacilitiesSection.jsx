@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { useLenis } from 'lenis/react';
-import { ArrowRight, BookOpen, Bot, Building2, Monitor, Network, Pause, Play, School } from 'lucide-react';
+import { ArrowRight, BookOpen, Bot, Building2, Monitor, Network, School } from 'lucide-react';
 import { fasilitasData } from '../data/fasilitasData';
 import { useLanguage } from '../context/LanguageContext';
 import Modal from './dashboard/Modal';
@@ -47,7 +47,6 @@ export default function FacilitiesSection() {
   const [filter, setFilter] = useState('Semua');
   const [busy, setBusy] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [autoplayPaused, setAutoplayPaused] = useState(false);
   const lenis = useLenis();
 
   useEffect(() => {
@@ -87,6 +86,12 @@ export default function FacilitiesSection() {
     setActive((next + slides.length) % slides.length);
   }, [active]);
 
+  const prepareNavigation = (event) => {
+    event.preventDefault();
+    // Cancel pending smooth-scroll inertia without changing the current viewport.
+    lenis?.scrollTo(lenis.actualScroll, { immediate: true });
+  };
+
   useEffect(() => {
     const node = carousel.current;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -95,7 +100,7 @@ export default function FacilitiesSection() {
     let timer;
     const schedule = () => {
       window.clearTimeout(timer);
-      if (disposed || !visible || autoplayPaused || media.matches || document.hidden || selected || node.matches(':hover') || node.querySelector(':focus-visible')) return;
+      if (disposed || !visible || media.matches || document.hidden || selected || node.matches(':hover') || node.querySelector(':focus-visible')) return;
       timer = window.setTimeout(() => navigate(adjacentSlide(active, 1)), 6000);
     };
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule(); }, { threshold: 0.35 });
@@ -119,7 +124,7 @@ export default function FacilitiesSection() {
       document.removeEventListener('visibilitychange', schedule);
       media.removeEventListener('change', schedule);
     };
-  }, [active, autoplayPaused, navigate, selected]);
+  }, [active, navigate, selected]);
 
   useLayoutEffect(() => {
     if (!slideState.current) return;
@@ -127,12 +132,12 @@ export default function FacilitiesSection() {
     slideState.current = null;
     slideAnimation.current = Flip.from(state, {
       targets: carousel.current.querySelectorAll('[data-slide]'),
-      absoluteOnLeave: true, duration: 0.45, ease: 'power3.inOut',
+      absoluteOnLeave: true, scale: true, duration: 0.45, ease: 'power2.inOut',
       onEnter: elements => {
         gsap.set(elements, { clearProps: 'transform,translate,rotate,scale' });
-        return gsap.fromTo(elements, { x: direction.current * 32, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'power3.out' });
+        return gsap.fromTo(elements, { x: direction.current * 32, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: 'power2.inOut' });
       },
-      onLeave: elements => gsap.to(elements, { opacity: 0, duration: 0.25, ease: 'power2.out' }),
+      onLeave: elements => gsap.to(elements, { opacity: 0, duration: 0.35, ease: 'power2.inOut' }),
       onComplete: () => {
         gsap.set(carousel.current.querySelectorAll('[data-slide]'), { clearProps: 'all' });
         turning.current = false;
@@ -176,7 +181,7 @@ export default function FacilitiesSection() {
   const visibleCount = fasilitasData.filter(item => filter === 'Semua' || item.category === filter).length;
   return (
     <section ref={root} id="fasilitas" aria-label={t('Fasilitas Sekolah')} className="overflow-hidden bg-white">
-      <div ref={carousel} className="relative isolate bg-white py-10 sm:py-12 lg:py-14">
+      <div ref={carousel} className="relative isolate bg-white py-10 sm:py-12 lg:py-14 [overflow-anchor:none]">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <img src={backgroundRight} alt="" className="facilities-background absolute left-[16.3%] top-0 aspect-[1592/1129.08] w-[86.19%] sm:-top-[24%]" />
           <div className="facilities-motif absolute right-[-8.75%] top-4 aspect-[493.607/179] w-[26.72%] rotate-180 sm:top-10" />
@@ -187,7 +192,8 @@ export default function FacilitiesSection() {
           <p className="mt-4 max-w-lg text-xs leading-relaxed text-dark-600 sm:text-sm">{t('Fasilitas sekolah adalah sarana dan prasarana yang disediakan untuk mendukung kegiatan belajar mengajar, supaya siswa bisa belajar dengan nyaman, aman, dan maksimal.')}</p>
         </div>
         <div className="relative mx-auto mt-9 max-w-[1546px] px-12 sm:px-16 lg:px-20" aria-roledescription={t('Karusel')} aria-label={t('Pilihan fasilitas')}>
-          <div className="relative mb-20 flex aspect-[611/354] items-center justify-center gap-0 sm:aspect-[611/134.52]">
+          <div className="relative mb-20 aspect-[611/354] sm:aspect-[611/134.52]">
+            <div className="absolute inset-0 flex items-center justify-center gap-0">
             {[-2, -1, 0, 1, 2, 3].map(offset => {
               const index = adjacentSlide(active, offset);
               const slide = slides[index];
@@ -201,14 +207,14 @@ export default function FacilitiesSection() {
                 </button>
               );
             })}
+            </div>
           </div>
-          <button type="button" aria-label={t('Fasilitas sebelumnya')} onClick={() => navigate(adjacentSlide(active, -1))} className="absolute left-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
-          <button type="button" aria-label={t('Fasilitas berikutnya')} onClick={() => navigate(adjacentSlide(active, 1))} className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:right-4"><img src={arrowNext} alt="" className="max-w-none rotate-180" /></button>
-          <p aria-live={autoplayPaused ? 'polite' : 'off'} className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
+          <button type="button" aria-label={t('Fasilitas sebelumnya')} onPointerDown={prepareNavigation} onClick={(event) => { prepareNavigation(event); navigate(adjacentSlide(active, -1)); }} className="absolute left-3 top-1/2 z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:left-4"><img src={arrowPrev} alt="" className="max-w-none" /></button>
+          <button type="button" aria-label={t('Fasilitas berikutnya')} onPointerDown={prepareNavigation} onClick={(event) => { prepareNavigation(event); navigate(adjacentSlide(active, 1)); }} className="absolute right-3 top-1/2 z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:right-4"><img src={arrowNext} alt="" className="max-w-none rotate-180" /></button>
+          <p aria-live="off" className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
         </div>
-        <div className="mt-4 flex flex-wrap justify-center gap-3 text-xs font-semibold text-primary">
+        <div className="mt-4 flex justify-center text-xs font-semibold text-primary">
           <button type="button" onClick={() => showDetails()} className="min-h-11 rounded-lg px-3 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat semua fasilitas')}</button>
-          <button type="button" aria-pressed={autoplayPaused} onClick={() => setAutoplayPaused(paused => !paused)} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 focus-visible:outline-2 focus-visible:outline-primary">{autoplayPaused ? <Play className="size-3.5" aria-hidden="true" /> : <Pause className="size-3.5" aria-hidden="true" />}{t(autoplayPaused ? 'Lanjutkan carousel' : 'Jeda carousel')}</button>
         </div>
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
