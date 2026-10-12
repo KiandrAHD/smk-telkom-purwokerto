@@ -2,7 +2,8 @@
 @import './assets/fonts/font-faces-optimized.css';
 
 @theme {
-  --font-sans: 'Inter', 'Poppins', system-ui, sans-serif;
+  --font-main: 'Inter', 'Poppins', system-ui, sans-serif;
+  --font-sans: var(--font-main);
   --font-heading: 'Poppins', 'Inter', system-ui, sans-serif;
 
   --color-primary-50: #fef2f2;

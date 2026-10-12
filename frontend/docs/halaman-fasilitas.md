@@ -4,7 +4,7 @@ Route: `/fasilitas`. Menu: Tentang → Fasilitas Sekolah.
 
 Referensi Figma: file `ca2iX76GpJSr0QC7Qyv9RV`, frame `174:534` (1847 × 4297), dan varian kategori `174:151`.
 
-Hero, heading, filter pill, section kategori, proporsi gambar card 356:201, radius 20px, shadow, STELA, CTA pendaftaran, dan dekorasi mengikuti frame. Header/Footer memakai komponen global tanpa mengubah desainnya. Font Plus Jakarta Sans hanya dimuat pada halaman fasilitas; font global tetap.
+Hero, filter pill, section kategori, proporsi gambar card 356:201, radius 20px, shadow, STELA, CTA pendaftaran, dan dekorasi berasal dari frame. Sesuai revisi user 12 Oktober 2026, lebar konten kini mengikuti container situs 1280px, hero memakai grid yang mengikuti tinggi konten, dan ukuran teks dipadatkan. Font HTML pada seluruh halaman fasilitas, termasuk Header/Footer, memakai Inter melalui `--font-main`. Heading pada halaman lain tetap mengikuti token global sebelumnya.
 
 Figma masih berisi card contoh kelas dan foto yang berulang di kategori lain. Implementasi memakai delapan data unik dari `fasilitasData.js`: tiga laboratorium, empat gedung kelas, satu perpustakaan. Tidak menambahkan fasilitas Aula/GOR/Parkiran tanpa data. Foto Gedung C/D tetap menggunakan aset yang tersedia pada project. Tinggi halaman mengikuti konten nyata, bukan jumlah card contoh Figma.
 
