@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Megaphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { beritaHero, breakingNews } from '../../data/dummyData';
+import HeroBreadcrumb from '../HeroBreadcrumb';
 
 const BeritaHeroSection = ({ items = [] }) => {
   const { t, locale, language } = useLanguage();
@@ -28,6 +29,7 @@ const BeritaHeroSection = ({ items = [] }) => {
         <div className="rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
           <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[38%_1fr] lg:gap-4">
             <div className="px-3 pt-6 lg:pb-6 lg:pl-4 lg:pt-4">
+              <HeroBreadcrumb parent="Informasi" parentTo={null} current="Berita" />
               <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
                 {t(beritaHero.badge)}
               </span>
