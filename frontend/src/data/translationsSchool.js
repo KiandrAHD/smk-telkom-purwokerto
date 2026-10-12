@@ -1,4 +1,7 @@
 export default {
+  '#DigitalSmartSchool': '#DigitalSmartSchool',
+  '#GlobalTechnopreneur': '#GlobalTechnopreneur',
+  'Lihat Selengkapnya': 'View More',
   'Bidang Kesiswaan & Karakter': 'Student Affairs & Character Development',
   'Navigasi {category}': '{category} navigation',
   'Halaman {category} sebelumnya': 'Previous {category} page',

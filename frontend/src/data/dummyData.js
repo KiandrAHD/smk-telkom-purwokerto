@@ -132,7 +132,7 @@ export const navLinks = [
 export const ctaMasukPpdb = { label: 'Masuk SPMB', href: '/spmb/masuk' };
 
 export const landingHero = {
-  hashtag: '#DigitalSmartSchool',
+  hashtags: ['#DigitalSmartSchool', '#GlobalTechnopreneur'],
   title: 'Bangun Masa Depanmu',
   titleAccent: 'Bersama Teknologi',
   description:
@@ -197,7 +197,7 @@ export const landingAbout = {
 export const jurusanData = {
   eyebrow: 'Pilihan Jurusan',
   title: 'Empat Jurusan, Banyak Peluang',
-  ctaText: 'Lihat Semua Jurusan',
+  ctaText: 'Lihat Selengkapnya',
   items: [
     {
       icon: 'code',
