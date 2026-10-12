@@ -41,9 +41,9 @@ try {
   // Check the font tokens through their rendered roles; headings and body intentionally differ.
   assert.deepEqual(typography.fonts, [typography.body, typography.heading, typography.heading, typography.heading, typography.body, typography.heading]);
   assert.equal(await page.locator('meta[name="viewport"]').getAttribute('content'), 'width=device-width, initial-scale=1.0');
-  assert.equal(await page.locator('[data-facility-card]').count(), 8);
-  assert.equal(new Set(await page.locator('[data-facility-card]').evaluateAll(nodes => nodes.map(n => n.dataset.facilityCard))).size, 8);
-  for (const [category, count] of [['Laboratorium', 3], ['Kelas', 4], ['Perpustakaan', 1], ['Semua', 8]]) {
+  assert.equal(await page.locator('[data-facility-card]').count(), 16);
+  assert.equal(new Set(await page.locator('[data-facility-card]').evaluateAll(nodes => nodes.map(n => n.dataset.facilityCard))).size, 16);
+  for (const [category, count] of [['Laboratorium', 6], ['Kelas', 16], ['Perpustakaan', 8], ['Aula', 4], ['GOR', 4], ['Parkiran', 4], ['Semua', 16]]) {
     await page.getByRole('button', { name: category, exact: true }).click();
     await page.waitForFunction(count => document.querySelectorAll('[data-facility-card]').length === count, count);
     assert.equal(await page.locator('[data-facility-card]').count(), count);
@@ -53,10 +53,10 @@ try {
   await page.waitForURL('**/fasilitas?kategori=Laboratorium');
   await page.reload();
   await page.locator('[data-facility-card]').first().waitFor();
-  assert.equal(await page.locator('[data-facility-card]').count(), 3, 'Kategori bertahan setelah refresh.');
+  assert.equal(await page.locator('[data-facility-card]').count(), 6, 'Kategori bertahan setelah refresh.');
   await page.getByRole('button', { name: 'Semua', exact: true }).click();
-  await page.waitForFunction(() => document.querySelectorAll('[data-facility-card]').length === 8);
-  for (let index = 0; index < 8; index++) {
+  await page.waitForFunction(() => document.querySelectorAll('[data-facility-card]').length === 16);
+  for (let index = 0; index < 16; index++) {
     const button = page.locator('[data-facility-card]').nth(index).getByRole('button');
     await button.click();
     const dialog = page.locator('dialog[open]');
@@ -121,5 +121,5 @@ try {
   await page.getByRole('link', { name: 'Fasilitas Sekolah', exact: true }).click();
   await page.waitForURL('**/fasilitas');
   assert.deepEqual(errors, []);
-  console.log('PASS: routing, refresh/kategori, scroll atas, grid unik, filter, 8 modal/Escape/fokus, 12 viewport/bahasa, toggle ID/EN, carousel loop/autoplay, menu Tentang desktop/mobile, runtime.');
+  console.log('PASS: routing, refresh/kategori, scroll atas, grid unik, filter, 16 modal/Escape/fokus, 12 viewport/bahasa, toggle ID/EN, carousel loop/autoplay, menu Tentang desktop/mobile, runtime.');
 } finally { await browser.close(); }

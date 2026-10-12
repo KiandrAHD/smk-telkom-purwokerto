@@ -4,10 +4,11 @@ import school from './translationsSchool';
 import publicPages from './translationsPublic';
 import portal from './translationsPortal';
 import audit from './translationsAudit';
+import facilities from './translationsFasilitas';
 
 export default {
   'Lihat semua fasilitas': 'View all facilities',
-  ...school, ...publicPages, ...portal, ...audit, ...teachers, ...spmb,
+  ...school, ...publicPages, ...portal, ...audit, ...teachers, ...spmb, ...facilities,
   'Pilihan Jurusan': school['Pilihan Jurusan'],
   'Tentang': 'About', 'Beranda': 'Home', 'Profil Sekolah': 'School Profile',
   'Profil Guru': 'Teacher Profiles', 'Ekstrakurikuler': 'Extracurricular Activities',

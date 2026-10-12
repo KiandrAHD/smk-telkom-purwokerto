@@ -13,7 +13,7 @@ const results=[];const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.route('**/rest/v1/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));
 const check=async(name,fn)=>{try{results.push({name,passed:true,detail:await fn()});console.log('PASS',name);}catch(error){results.push({name,passed:false,error:error.message});console.error('FAIL',name,error.message);}};
 const server=await createServer({appType:'custom',logLevel:'silent',server:{middlewareMode:true}});
-const {fasilitasData}=await server.ssrLoadModule('/src/data/fasilitasData.js');const {translate}=await server.ssrLoadModule('/src/utils/language.js');await server.close();
+const {fasilitasViews}=await server.ssrLoadModule('/src/data/fasilitasPageData.js');const {translate}=await server.ssrLoadModule('/src/utils/language.js');await server.close();
 const typography=el=>{const s=getComputedStyle(el);return{font:s.fontFamily,size:s.fontSize,weight:s.fontWeight,line:s.lineHeight,tracking:s.letterSpacing,color:s.color};};
 const getCard=()=>page.locator('[data-facility-card]').first().evaluate(card=>{const s=getComputedStyle(card),h=getComputedStyle(card.querySelector('h4')),p=getComputedStyle(card.querySelector('p'));return{radius:s.borderRadius,border:s.borderWidth,bg:s.backgroundColor,shadow:s.boxShadow,heading:{font:h.fontFamily,size:h.fontSize,weight:h.fontWeight,line:h.lineHeight,tracking:h.letterSpacing,color:h.color},body:{font:p.fontFamily,size:p.fontSize,weight:p.fontWeight,line:p.lineHeight,tracking:p.letterSpacing,color:p.color}};});
 try{
@@ -23,22 +23,26 @@ try{
  for(const width of [1920,1440,768,390,375]){
   await page.setViewportSize({width,height:1000});await page.goto(base+'/jurusan');await page.locator('h1').waitFor();const heroReference=await page.locator('h1').evaluate(typography);
   for(const lang of ['id','en'])await check('Konsistensi visual '+width+' '+lang,async()=>{
-   await page.goto(base+'/fasilitas');await page.waitForFunction(()=>document.querySelectorAll('[data-facility-card]').length===8);
+   await page.goto(base+'/fasilitas');await page.waitForFunction(()=>document.querySelectorAll('[data-facility-card]').length===16);
    if(lang==='en'){await page.getByRole('button',{name:'Switch to English',exact:true}).click();await page.locator('#fasilitas-title').filter({hasText:'School'}).waitFor();}
-   assert.equal(await page.locator('[data-facility-card]').count(),8);
-   assert.deepEqual(await getCard(),reference);assert.deepEqual(await page.locator('h1').evaluate(typography),heroReference);
+   assert.equal(await page.locator('[data-facility-card]').count(),16);
+   const actual=await getCard(); assert.equal(actual.heading.color,'rgb(200, 16, 46)'); actual.heading.color=reference.heading.color; assert.deepEqual(actual,reference);assert.deepEqual(await page.locator('h1').evaluate(typography),heroReference);
    assert.deepEqual(await page.locator('footer .font-heading').first().evaluate(typography),footerReference);
    const geometry=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,columns:getComputedStyle(document.querySelector('[data-facility-grid]')).gridTemplateColumns.split(' ').length}));
    assert.ok(geometry.scroll<=geometry.client);assert.equal(geometry.columns,width>=1024?4:width>=640?2:1);
    assert.equal(await page.locator('#stela').count(),1);assert.equal(await page.locator('#ppdb').count(),1);
    assert.equal(await page.locator('#stela').evaluate(el=>el.nextElementSibling?.id),'ppdb');
-   const filters=page.locator('[aria-controls="fasilitas-grid"]');
-   for(const [name,count] of [['Laboratorium',3],['Kelas',4],['Perpustakaan',1],['Semua',8]]){
-    await filters.filter({hasText:translate(name,lang)}).click();
+   for(const [name,count] of [['Laboratorium',6],['Kelas',16],['Perpustakaan',8],['Aula',4],['GOR',4],['Parkiran',4],['Semua',16]]){
+    await page.getByRole('button',{name:translate(name,lang),exact:true}).click();
     await page.waitForFunction(count=>document.querySelectorAll('[data-facility-card]').length===count,count);
     assert.equal(await page.locator('[data-facility-card]').count(),count);
     assert.equal(new URL(page.url()).searchParams.get('kategori'),name==='Semua'?null:name);
-    assert.equal(await filters.filter({hasText:translate(name,lang)}).getAttribute('aria-pressed'),'true');
+    assert.equal(await page.getByRole('button',{name:translate(name,lang),exact:true}).getAttribute('aria-pressed'),'true');
+    if(width===1440 && lang==='id' && name!=='Semua'){
+     await page.locator('#fasilitas-grid').scrollIntoViewIfNeeded();
+     await page.waitForFunction(()=>[...document.querySelectorAll('[data-facility-card] img')].every(img=>img.complete&&img.naturalWidth>0));
+     await page.locator('#fasilitas-grid').screenshot({path:out+'/category-'+name+'.png',animations:'disabled',style:'header { visibility: hidden; }'});
+    }
    }
    await page.locator('#fasilitas-grid').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>[...document.querySelectorAll('[data-facility-card] img')].every(img=>img.complete&&img.naturalWidth>0));
@@ -54,24 +58,28 @@ try{
    return geometry;
   });
  }
- for(const lang of ['id','en'])await check('Delapan modal, keyboard, bahasa '+lang,async()=>{
+ for(const lang of ['id','en'])await check('Semua kategori dan modal, keyboard, bahasa '+lang,async()=>{
   await page.setViewportSize({width:1440,height:1000});await page.goto(base+'/fasilitas');await page.locator('[data-facility-card]').first().waitFor();
   if(lang==='en')await page.getByRole('button',{name:'Switch to English',exact:true}).click();
-  for(const item of fasilitasData){
+  for(const [category,groups] of Object.entries(fasilitasViews)){
+   await page.getByRole('button',{name:translate(category,lang),exact:true}).click();
+   await page.waitForFunction(count=>document.querySelectorAll('[data-facility-card]').length===count,groups.flatMap(g=>g.items).length);
+   for(const item of groups.flatMap(group=>group.items)){
    const button=page.locator('[data-facility-card="'+item.id+'"] button');await button.focus();await page.keyboard.press('Enter');
    const dialog=page.getByRole('dialog');await dialog.waitFor();await dialog.getByRole('heading',{name:translate(item.name,lang),exact:true}).waitFor();
-   assert.ok((await dialog.innerText()).includes(translate(item.description,lang)));
+   assert.ok((await dialog.innerText()).includes(translate(item.preview,lang)));
    await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
    await page.waitForFunction(()=>document.body.style.overflow==='');
    assert.equal(await button.evaluate(el=>document.activeElement===el),true);assert.equal(await page.evaluate(()=>document.body.style.overflow),'');
+  }
   }
   if(lang==='en')await page.getByRole('button',{name:'Switch to Indonesian',exact:true}).click();
  });
  await check('Placeholder gagal gambar ID/EN dan modal',async()=>{
   const context=await browser.newContext({viewport:{width:390,height:1000}});const p=await context.newPage();
-  await p.route(/\/assets\/kelas-a-[^/]+\.webp$/,r=>r.abort());
+  await p.route(/\/assets\/belajar-kelompok-laptop-[^/]+\.png$/,r=>r.abort());
   try{
-   await p.goto(base+'/fasilitas');const card=p.locator('[data-facility-card="kelas-a"]');await card.scrollIntoViewIfNeeded();
+   await p.goto(base+'/fasilitas');const card=p.locator('[data-facility-card="semua-lab-1"]');await card.scrollIntoViewIfNeeded();
    await card.getByRole('img',{name:'Foto belum tersedia',exact:true}).waitFor();
    const size=await card.locator('[role="img"]').boundingBox();assert.ok(size.height>0&&Math.abs(size.width/size.height-16/9)<0.05);
    await p.getByRole('button',{name:'Switch to English',exact:true}).click();await card.getByRole('img',{name:'Photo unavailable',exact:true}).waitFor();
