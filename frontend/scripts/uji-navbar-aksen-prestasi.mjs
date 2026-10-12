@@ -85,9 +85,13 @@ try {
     await accents.evaluateAll(imgs => Promise.all(imgs.map(img => img.decode())));
     const geometry = await accents.evaluateAll(imgs => imgs.map(el => {
       const r = el.getBoundingClientRect(), s = document.querySelector('#prestasi').getBoundingClientRect();
-      return { id: el.dataset.figmaNode, inside: r.left >= s.left && r.right <= s.right && r.top >= s.top && r.bottom <= s.bottom, displayed: getComputedStyle(el).display !== 'none', size: r.width, pointer: getComputedStyle(el.parentElement).pointerEvents };
+      return { id: el.dataset.figmaNode, rect: { left: r.left, right: r.right, top: r.top, bottom: r.bottom }, inside: r.left >= s.left && r.right <= s.right && r.top >= s.top && r.bottom <= s.bottom, displayed: getComputedStyle(el).display !== 'none', size: r.width, pointer: getComputedStyle(el.parentElement).pointerEvents };
     }));
     assert(geometry.every(item => item.inside && item.displayed && item.size > 0 && item.pointer === 'none'));
+    for (let i = 0; i < geometry.length; i++) for (let j = i + 1; j < geometry.length; j++) {
+      const a = geometry[i].rect, b = geometry[j].rect;
+      assert(a.right < b.left || b.right < a.left || a.bottom < b.top || b.bottom < a.top, `Accents overlap: ${geometry[i].id}, ${geometry[j].id} at ${width}px (${count} cards)`);
+    }
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false);
     if (count && [1440, 768, 375].includes(width)) await page.locator('#prestasi').screenshot({ path: join(output, `prestasi-${width}.png`), animations: 'disabled', style: 'header { visibility: hidden; }' });
     results.push({ width, count, geometry });
