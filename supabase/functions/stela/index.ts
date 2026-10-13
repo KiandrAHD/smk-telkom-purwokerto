@@ -15,6 +15,9 @@ import {
   topikDiizinkan,
   buatPesanPenolakan,
   tanyaAI,
+  MODEL_BAWAAN,
+  MODEL_CADANGAN,
+  POLA_KUNCI,
 } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
 import { buatReservasiKuota } from '../ai-quota.mjs';
@@ -25,17 +28,24 @@ const KUNCI: Record<string, string | undefined> = {
   gemini: Deno.env.get('GEMINI_API_KEY'),
   groq: Deno.env.get('GROQ_API_KEY'),
 };
-const STELA_GEMINI_MODEL = Deno.env.get('STELA_GEMINI_MODEL') || 'gemini-3.6-flash';
-const STELA_GEMINI_FALLBACK_MODEL = 'gemini-3.5-flash-lite';
-const geminiAvailable =
-  typeof KUNCI.gemini === 'string' &&
-  KUNCI.gemini.trim().length > 0;
-const STELA_CANDIDATES = geminiAvailable
-  ? [
-    { penyedia: 'gemini', apiKey: KUNCI.gemini, model: STELA_GEMINI_MODEL },
-    { penyedia: 'gemini', apiKey: KUNCI.gemini, model: STELA_GEMINI_FALLBACK_MODEL },
-  ]
-  : [];
+const MODEL_ENV: Record<string, string | undefined> = {
+  ninerouter: Deno.env.get('STELA_NINEROUTER_MODEL') || Deno.env.get('NINEROUTER_MODEL'),
+  anthropic: Deno.env.get('STELA_ANTHROPIC_MODEL'),
+  gemini: Deno.env.get('STELA_GEMINI_MODEL'),
+  groq: Deno.env.get('STELA_GROQ_MODEL'),
+};
+const BASE_URL = Deno.env.get('STELA_NINEROUTER_URL') || Deno.env.get('NINEROUTER_URL');
+const STELA_CANDIDATES = ['ninerouter', 'anthropic', 'gemini', 'groq']
+  .filter((penyedia) => {
+    const key = KUNCI[penyedia];
+    return typeof key === 'string' && key.trim().length > 0;
+  })
+  .map((penyedia) => ({
+    penyedia,
+    apiKey: KUNCI[penyedia]!,
+    model: MODEL_ENV[penyedia] || MODEL_BAWAAN[penyedia as keyof typeof MODEL_BAWAAN],
+    ...(penyedia === 'ninerouter' ? { baseUrl: BASE_URL } : {}),
+  }));
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY');
@@ -65,7 +75,7 @@ let contextCache: { value: string; expires: number } | null = null;
 
 const originDiizinkan = (origin: string | null) => {
   if (ALLOWED_ORIGINS.includes('*')) return true;
-  if (!origin) return ALLOWED_ORIGINS.length === 0;
+  if (!origin) return false;
   return ALLOWED_ORIGINS.includes(origin);
 };
 
@@ -189,7 +199,7 @@ Deno.serve(async (req) => {
       sebelumPanggilan: reservasiKuota,
       batasPanggilan,
       signal: req.signal,
-      cobaModelCadangan: false,
+      cobaModelCadangan: true,
     });
 
     if (!teksProvider) return balas({ error: 'STELA sedang tidak tersedia.' }, 502, origin);

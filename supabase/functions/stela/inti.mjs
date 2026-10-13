@@ -21,7 +21,7 @@ export const BATAS = {
 export const MODEL_BAWAAN = {
   ninerouter: 'kr/claude-haiku-4.5',
   anthropic: 'claude-opus-5',
-  gemini: 'gemini-3.6-flash',
+  gemini: 'gemini-3.5-flash',
   groq: 'openai/gpt-oss-20b',
 };
 
@@ -33,10 +33,9 @@ export const MODEL_CADANGAN = {
   ],
   anthropic: ['claude-opus-5', 'claude-3-7-sonnet-20250219', 'claude-3-5-sonnet-20241022'],
   gemini: [
-    'gemini-3.6-flash',
-    'gemini-flash-lite-latest',
-    'gemini-3.1-flash-lite',
     'gemini-3.5-flash',
+    'gemini-2.5-flash-lite',
+    'gemini-3.1-flash-lite',
     'gemini-3.5-flash-lite',
     'gemini-flash-latest',
   ],

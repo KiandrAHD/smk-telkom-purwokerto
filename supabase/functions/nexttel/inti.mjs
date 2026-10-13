@@ -91,7 +91,7 @@ export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenye
   for (const provider of daftarPenyedia) {
     try {
       const ai = await tanyaAI({ ...provider, daftarPenyedia: [provider], instruksiKustom: instruksi, pesan, language,
-        sebelumPanggilan, batasPanggilan, signal, cobaModelCadangan: false });
+        sebelumPanggilan, batasPanggilan, signal, cobaModelCadangan: true });
       const output = sanitizeAIOutput(parseAIResponse(ai.teks));
       if (output) return output;
     } catch (error) {
