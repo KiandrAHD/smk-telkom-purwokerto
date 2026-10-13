@@ -64,4 +64,17 @@ const server = await createServer({
   }],
 });
 await server.listen();
-console.log('Isolated SPMB QA: http://127.0.0.1:5175/spmb/formulir');
+const address = 'http://127.0.0.1:5175';
+try {
+  const page = await fetch(`${address}/spmb/formulir`, { headers: { accept: 'text/html' } });
+  if (!page.ok) throw new Error(`SPMB QA page returned ${page.status}`);
+  const html = await page.text();
+  if (!html.includes('/scripts/fixtures/spmb-ui.jsx')) throw new Error('SPMB QA entrypoint missing');
+  const pdf = await fetch(`${address}/__spmb-qa/pdf-fixture`);
+  if (!pdf.ok || pdf.headers.get('content-type') !== 'application/pdf') throw new Error('SPMB PDF fixture unavailable');
+  const metrics = await fetch(`${address}/__spmb-qa/metrics`);
+  if (!metrics.ok || (await metrics.json()).draftExists !== true) throw new Error('SPMB QA metrics unavailable');
+  console.log('SPMB isolated server smoke QA passed: route, PDF fixture and metrics endpoint verified.');
+} finally {
+  await server.close();
+}
