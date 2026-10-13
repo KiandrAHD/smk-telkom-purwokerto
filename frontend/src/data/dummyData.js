@@ -120,6 +120,7 @@ export const navLinks = [
       { label: 'Berita', href: '/berita' },
       { label: 'Pengumuman', href: '/pengumuman' },
       { label: 'Kalender Kegiatan', href: '/kalender' },
+      { label: 'SPMB', href: '/spmb' },
     ],
   },
 ];

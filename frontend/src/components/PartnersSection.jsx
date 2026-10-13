@@ -5,7 +5,7 @@ import decoLeft from '../assets/landing/partners-deco-left.png';
 import decoRight from '../assets/landing/partners-deco-right.png';
 import { mitraIndustri } from '../data/dummyData';
 
-const PartnersSection = () => {
+const PartnersSection = ({ items = mitraIndustri, animated = true }) => {
 
   return (
     <>
@@ -20,7 +20,7 @@ const PartnersSection = () => {
           decoding="async"
           alt=""
           aria-hidden="true"
-          className="h-24 w-full object-cover sm:h-28 lg:h-32"
+          className={animated ? 'h-24 w-full object-cover sm:h-28 lg:h-32' : 'h-44 w-full object-cover sm:h-36 lg:h-32'}
         />
         <img
           src={decoLeft}
@@ -43,20 +43,20 @@ const PartnersSection = () => {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 h-full w-auto select-none"
         />
 
-        <div className="absolute inset-y-0 left-20 right-20 flex items-center overflow-hidden sm:left-24 sm:right-24 lg:left-28 lg:right-28">
-          <div id="mitra-logo-track" className="partners-marquee flex w-max">
-            {[0, 1, 2, 3].map((copyIndex) => (
+        <div className={animated ? 'absolute inset-y-0 left-20 right-20 flex items-center overflow-hidden sm:left-24 sm:right-24 lg:left-28 lg:right-28' : 'absolute inset-y-0 left-10 right-10 grid items-center sm:left-16 sm:right-16 lg:left-24 lg:right-24'}>
+          <div id="mitra-logo-track" className={animated ? 'partners-marquee flex w-max' : 'grid w-full grid-cols-3 items-center justify-items-center gap-5 py-6 md:grid-cols-6 md:gap-8'}>
+            {(animated ? [0, 1, 2, 3] : [0]).map((copyIndex) => (
               <div
                 key={copyIndex}
                 aria-hidden={copyIndex > 0 || undefined}
-                className="flex shrink-0 items-center gap-14 px-7"
+                className={animated ? 'flex shrink-0 items-center gap-14 px-7' : 'contents'}
               >
-                {mitraIndustri.map((mitra) => (
+                {items.map((mitra) => (
                   <img
                     key={mitra.name}
                     src={mitra.logo}
                     alt={copyIndex === 0 ? mitra.name : ''}
-                    className={`${mitra.size} w-auto shrink-0 object-contain`}
+                    className={`${mitra.size} ${animated ? '' : 'max-w-full'} w-auto shrink-0 object-contain`}
                   />
                 ))}
               </div>

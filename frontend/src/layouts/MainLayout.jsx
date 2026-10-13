@@ -8,7 +8,7 @@ import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
 import '../styles/hero.css';
 
-export default function MainLayout({ children, busy = false, className = '' }) {
+export default function MainLayout({ children, busy = false, className = '', ctaHref }) {
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
@@ -39,7 +39,7 @@ export default function MainLayout({ children, busy = false, className = '' }) {
       <main ref={mainRef} id="main-content" tabIndex={-1} aria-busy={busy || undefined} key={pathname} className="animate-masuk-halaman scroll-mt-24">
         {children}
         <StelaAISection variant="prestasi" className="bg-white py-6 lg:py-8" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
-        <CTASection variant="fasilitas" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
+        <CTASection href={ctaHref} variant="fasilitas" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
       </main>
       <Footer />
       {!busy && <StelaWidget />}

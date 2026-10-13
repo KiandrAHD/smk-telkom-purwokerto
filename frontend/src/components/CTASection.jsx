@@ -6,7 +6,7 @@ import prestasiArrow from '../assets/prestasi-remake/MaterialSymbolsLightArrowFo
 import nextTel from '../assets/landing/nexttel-cta.jpeg';
 import facilitiesBadge from '../assets/fasilitas/cta-badge.svg';
 
-const CTASection = ({ variant = 'default', containerClassName }) => {
+const CTASection = ({ variant = 'default', containerClassName, href = ctaBanner.href }) => {
   const { t } = useLanguage();
   if (variant === 'prestasi') return (
     <section id="ppdb" className="bg-white pb-8 font-[family-name:'Plus_Jakarta_Sans',var(--font-sans)] lg:pb-[5.0434vw]">
@@ -41,7 +41,7 @@ const CTASection = ({ variant = 'default', containerClassName }) => {
         </div>
 
         <Link
-          to={ctaBanner.href}
+          to={href}
           className={`inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-primary transition-colors hover:bg-primary-50 ${variant === 'fasilitas' ? 'min-h-11 text-sm' : 'text-xs'}`}
         >
           {t(ctaBanner.ctaText)}
