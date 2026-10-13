@@ -6,7 +6,8 @@ import { stelaDevPlugin } from './vite-plugin-stela.js'
 export default defineConfig({
   plugins: [react(), tailwindcss(), stelaDevPlugin()],
   build: {
-    assetsInlineLimit: (file) => /\.(woff2|webp|avif)$/.test(file) ? false : undefined,
+    // Keep bitmap assets cacheable instead of embedding them in the initial JavaScript.
+    assetsInlineLimit: (file) => /\.(woff2|webp|avif|png|jpe?g)$/.test(file) ? false : undefined,
     rollupOptions: {
       output: {
         manualChunks(id) {

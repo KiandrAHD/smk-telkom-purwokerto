@@ -136,6 +136,7 @@ export default {
   'Dari Ruang Kelas': 'From the Classroom',
   'Langkah Awal Menuju': 'Your First Step Toward',
   'Karier Impian': 'Your Dream Career',
+  'Kolase peraih prestasi SMK Telkom Purwokerto dengan watermark PRESTASI': 'A collage of SMK Telkom Purwokerto award winners with an achievements watermark',
   'Siswa SMK Telkom Purwokerto dengan beragam profesi di banner BKK': 'SMK Telkom Purwokerto students representing different professions in the careers banner',
   'Siswa SMK Telkom Purwokerto menunjukkan informasi sekolah pada banner Berita': 'SMK Telkom Purwokerto students showing school information in the news banner',
   'Menuju Dunia\nKerja Nyata': 'To the Real\nWorld of Work',

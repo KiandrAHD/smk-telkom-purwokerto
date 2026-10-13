@@ -25,7 +25,7 @@ import prestasiIot from '../assets/jurusan/stock-hd/fiber-optic-network.webp';
 import mapImg from '../assets/landing/peta-lokasi-smk-telkom-purwokerto.jpg';
 
 import heroJurusan from '../assets/drive/header-jurusan.webp';
-import heroPrestasi from '../assets/drive/pameran-proyek-iot.png';
+import heroPrestasi from '../assets/banners/prestasi-1106.webp';
 import heroBkk from '../assets/banners/bkk-1106.webp';
 import heroBerita from '../assets/banners/berita-1106.webp';
 
@@ -716,7 +716,7 @@ export const prestasiHero = {
     'Siswa SMK Telkom Purwokerto terus berinovasi, berkompetisi, dan mengharumkan nama sekolah di tingkat nasional hingga internasional.',
   ctaText: 'Lihat Prestasi',
   image: heroPrestasi,
-  imageAlt: 'Siswa mempresentasikan purwarupa IoT pada pameran proyek',
+  imageAlt: 'Kolase peraih prestasi SMK Telkom Purwokerto dengan watermark PRESTASI',
 };
 
 export const prestasiStats = [

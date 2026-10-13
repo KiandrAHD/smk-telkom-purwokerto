@@ -3,13 +3,15 @@ import { ArrowRight } from 'lucide-react';
 import HeroStatsBar from '../HeroStatsBar';
 import HeroBadges from '../HeroBadges';
 import { prestasiHero, prestasiStats } from '../../data/dummyData';
+import hero640 from '../../assets/banners/prestasi-640.webp';
+import hero960 from '../../assets/banners/prestasi-960.webp';
 
 const PrestasiHeroSection = () => {
   const { t } = useLanguage();
   return (
   <section className="school-hero">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--floating">
+      <div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--achievements">
         <div className="hero-grid">
           <div className="hero-copy">
             <HeroBadges />
@@ -35,7 +37,13 @@ const PrestasiHeroSection = () => {
 
           <img
             src={prestasiHero.image}
+            srcSet={`${hero640} 640w, ${hero960} 960w, ${prestasiHero.image} 1106w`}
+            sizes="(min-width: 1280px) 793px, (min-width: 1024px) 65vw, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)"
             alt={t(prestasiHero.imageAlt)}
+            width="1106"
+            height="656"
+            fetchPriority="high"
+            decoding="async"
             className="hero-image"
           />
         </div>

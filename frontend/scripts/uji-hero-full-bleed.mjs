@@ -15,7 +15,7 @@ if (!baseline) {
   assert.equal(wave.isOpaque, false, 'Calendar wave must preserve transparency above the collage');
 }
 const paths = ['/', '/profil-sekolah', '/profil-sekolah/guru', '/ekstrakurikuler', '/kalender', '/spmb', '/fasilitas', '/pengumuman', '/bkk', '/jurusan', '/prestasi', '/berita'];
-const compositions = new Set(['/', '/profil-sekolah', '/profil-sekolah/guru', '/ekstrakurikuler', '/kalender', '/spmb', '/fasilitas', '/pengumuman', '/bkk', '/jurusan', '/berita']);
+const compositions = new Set(['/', '/profil-sekolah', '/profil-sekolah/guru', '/ekstrakurikuler', '/kalender', '/spmb', '/fasilitas', '/pengumuman', '/bkk', '/jurusan', '/berita', '/prestasi']);
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage({ reducedMotion: 'reduce' });
