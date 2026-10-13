@@ -1,0 +1,40 @@
+.campus-viewport { touch-action: pan-y pinch-zoom; cursor: grab; scrollbar-width: none; user-select: none; }
+.campus-viewport::-webkit-scrollbar { display: none; }
+.lenis .campus-viewport[data-lenis-prevent-horizontal] { overscroll-behavior-x: contain; overscroll-behavior-y: auto; }
+.campus-viewport[data-dragging="true"], .campus-viewport[data-dragging="true"] button { cursor: grabbing; }
+.campus-floor { mask-image: url('../../assets/fasilitas/campus/floor-1.svg'), url('../../assets/fasilitas/campus/floor-2.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; mask-composite: intersect; }
+.campus-diamond-large { transform-origin: top left; transform: matrix(.746,.666,-.746,.666,0,0); }
+.campus-diamond-small { transform-origin: top left; transform: matrix(.707,-.707,.707,.707,0,0); }
+.campus-petal-left-top { transform: matrix(0,-1,1,0,0,0); }
+.campus-petal-left-bottom { transform: matrix(0,1,1,0,0,0); }
+.campus-petal-right-top { transform: matrix(0,-1,-1,0,0,0); }
+.campus-petal-right-bottom { transform: matrix(0,1,-1,0,0,0); }
+.campus-hotspot { cursor: pointer; }
+.campus-pin-art { width: 102px; height: 113px; bottom: -38px; transition: filter 220ms ease; }
+.campus-hotspot:hover .campus-pin-art, .campus-hotspot:focus-visible .campus-pin-art, .campus-hotspot[data-active="true"] .campus-pin-art { filter: drop-shadow(0 0 3px var(--color-primary)); }
+.campus-hotspot-label { transition: opacity 220ms ease, scale 220ms ease; }
+.campus-hotspot:hover .campus-hotspot-label, .campus-hotspot:focus-visible .campus-hotspot-label { scale: 1.03; }
+.campus-hotspot[data-active="true"] { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.campus-hotspot[data-located="true"] { animation: campus-location-highlight 1.5s ease-out both; }
+.campus-slider { appearance: none; height: 44px; background: transparent; cursor: pointer; }
+.campus-slider:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 12px; }
+.campus-slider::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: var(--color-dark-300); }
+.campus-slider::-moz-range-track { height: 4px; border-radius: 999px; background: var(--color-dark-300); }
+.campus-slider::-webkit-slider-thumb { appearance: none; width: 44px; height: 44px; margin-top: -20px; border: 0; border-radius: 999px; background: var(--color-primary) url('../../assets/fasilitas/campus/slider-arrow.svg') center / 24px no-repeat; box-shadow: 0 0 0 2px white; }
+.campus-slider::-moz-range-thumb { width: 44px; height: 44px; border: 0; border-radius: 999px; background: var(--color-primary) url('../../assets/fasilitas/campus/slider-arrow.svg') center / 24px no-repeat; }
+.campus-slider:disabled { opacity: .45; cursor: default; }
+.campus-hint { opacity: 1; visibility: visible; transition: opacity 220ms ease, visibility 0s 0s; }
+.campus-hint[data-dismissed="true"] { opacity: 0; visibility: hidden; transition: opacity 220ms ease, visibility 0s 220ms; }
+.campus-hint-icon { animation: campus-hint-slide 1.8s ease-in-out infinite; }
+.campus-hint[data-dismissed="true"] .campus-hint-icon { animation: none; }
+.campus-preview { margin-top: 1rem; width: 100%; animation: campus-preview-enter 280ms ease-out both; transition: opacity 280ms ease, transform 280ms ease; }
+.campus-preview[data-closing="true"] { animation: none; opacity: 0; transform: translateY(8px); pointer-events: none; }
+.campus-preview-photo { transition: opacity 300ms ease; }
+.campus-photo-fallback { animation: campus-preview-enter 280ms ease-out both; }
+@starting-style { .campus-hint { opacity: 0; } }
+@keyframes campus-preview-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes campus-hint-slide { 0%,100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+@keyframes campus-location-highlight { from { box-shadow: 0 0 0 12px var(--color-primary-100); } to { box-shadow: 0 0 0 0 transparent; } }
+@media (min-width: 768px) { .campus-preview { position: absolute; z-index: 30; bottom: 1rem; right: 1rem; margin-top: 0; width: 19rem; } }
+@media (max-width: 767px) { .campus-hotspot-label { opacity: 0; } .campus-hotspot:hover .campus-hotspot-label, .campus-hotspot:focus-visible .campus-hotspot-label, .campus-hotspot[data-active="true"] .campus-hotspot-label { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .campus-hint-icon, .campus-preview, .campus-photo-fallback, .campus-hotspot[data-located="true"] { animation: none; } .campus-hotspot-label, .campus-pin-art, .campus-hint, .campus-preview, .campus-preview-photo { transition: none; } .campus-hotspot:hover .campus-hotspot-label { scale: none; } }

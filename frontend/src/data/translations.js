@@ -17,7 +17,7 @@ export default {
   'Guru': 'Teachers', 'Navigasi jurusan': 'Study Programs',
   'Jurusan': 'Programs', 'Prestasi': 'Achievements', 'Berita': 'News',
   'Pengumuman': 'Announcements', 'Masuk SPMB': 'SPMB Login',
-  'Informasi': 'Information', 'Kontak': 'Contact',
+  'Informasi': 'Information', 'Informasi SPMB': 'SPMB Information', 'Kontak': 'Contact',
   'Submenu Tentang': 'About submenu', 'Submenu Informasi': 'Information submenu', 'Tutup menu': 'Close menu', 'Buka menu': 'Open menu',
   'Kebijakan Privasi': 'Privacy Policy', 'Akses Staf & Admin': 'Staff & Admin Access',
   'Pendukung lomba': 'Competition supporters', 'Kunjungi {name}': 'Visit {name}',

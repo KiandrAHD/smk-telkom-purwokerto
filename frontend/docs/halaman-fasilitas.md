@@ -1,5 +1,7 @@
 # Halaman Fasilitas Sekolah
 
+Catatan 13 Oktober 2026: School Tour kini memiliki Interactive Campus Explorer, panning, hint persisten, 12 hotspot, preview, dan hubungan ke daftar. Audit serta hasil QA terbaru ada di [laporan Campus Explorer](campus-explorer.md). Uraian di bawah merekam implementasi 12 Oktober; checkout terbaru menggunakan Poppins untuk heading dan Inter untuk body serta inventory contoh 16 kartu, bukan seluruh rincian historis delapan kartu di bawah.
+
 Route: `/fasilitas`. Menu: Tentang → Fasilitas Sekolah.
 
 Referensi Figma: file `ca2iX76GpJSr0QC7Qyv9RV`, frame `174:534` (1847 × 4297), dan varian kategori `174:151`.
