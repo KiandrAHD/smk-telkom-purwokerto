@@ -31,8 +31,9 @@ try {
   assert.deepEqual(navLinks[1].children.map(({ label, href }) => [label, href]), [
     ['Profil Sekolah', '/profil-sekolah'], ['Fasilitas Sekolah', '/fasilitas'], ['Profil Guru', '/profil-sekolah/guru'], ['Ekstrakurikuler', '/ekstrakurikuler'],
   ]);
-  assert.deepEqual(navLinks[5].children.map(({ label, href }) => [label, href]), [['Berita', '/berita'], ['Pengumuman', '/pengumuman'], ['Kalender Kegiatan', '/kalender'], ['SPMB', '/spmb']]);
+  assert.deepEqual(navLinks[5].children.map(({ label, href }) => [label, href]), [['Berita', '/berita'], ['Pengumuman', '/pengumuman'], ['Kalender Kegiatan', '/kalender'], ['Informasi SPMB', '/spmb']]);
   assert.equal(translate('Kalender Kegiatan', 'en'), 'Calendar of Events');
+  assert.equal(translate('Informasi SPMB', 'en'), 'SPMB Information');
   assert.equal(translate('Profil Guru', 'en'), 'Teacher Profiles');
   for (const [id, en] of [['Beranda', 'Home'], ['Tentang', 'About'], ['Profil Sekolah', 'School Profile'], ['Guru', 'Teachers'], ['Ekstrakurikuler', 'Extracurricular Activities'], ['Navigasi jurusan', 'Study Programs'], ['Prestasi', 'Achievements'], ['BKK', 'BKK'], ['Informasi', 'Information'], ['Berita', 'News'], ['Pengumuman', 'Announcements']]) assert.equal(translate(id, 'en'), en);
   const profileTexts = [...aboutStats.map((item) => item.label), ...Object.values(visiMisi), ...timelineData.flatMap((item) => [item.title, item.desc]), kepalaSekolah.quote, kepalaSekolah.quoteFull, kepalaSekolah.ctaText, ctaMasukPpdb.label];
