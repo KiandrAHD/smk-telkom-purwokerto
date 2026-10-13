@@ -1,4 +1,4 @@
-/* global document, getComputedStyle */
+/* global document, window, getComputedStyle */
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -29,6 +29,8 @@ try {
           await page.locator('header').getByRole('button', { name: language === 'id' ? 'Switch to Indonesian' : 'Switch to English', exact: true }).click();
           await page.waitForFunction(lang => document.documentElement.lang === lang, language);
         }
+        // A tall mobile element screenshot can scroll the page before the next language check.
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
         const geometry = await panel.evaluate(panel => {
           const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
           const p = rect(panel), copy = panel.querySelector('.hero-copy'), bar = document.querySelector('.hero-floating');

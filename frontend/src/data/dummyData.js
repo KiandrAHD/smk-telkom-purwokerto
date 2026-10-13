@@ -107,7 +107,7 @@ export const navLinks = [
     children: [
       { label: 'Profil Sekolah', href: '/profil-sekolah' },
       { label: 'Fasilitas Sekolah', href: '/fasilitas' },
-      { label: 'Guru', href: '/profil-sekolah/guru' },
+      { label: 'Profil Guru', href: '/profil-sekolah/guru' },
       { label: 'Ekstrakurikuler', href: '/ekstrakurikuler' },
     ],
   },
@@ -163,7 +163,7 @@ export const quickLinks = [
   },
   {
     icon: 'sparkles',
-    title: 'NextTel AI',
+    title: 'NextTel',
     desc: 'Temukan jurusan yang sesuai dengan minat dan bakatmu',
     linkLabel: 'Cari Jurusanmu',
     href: '/nexttel',

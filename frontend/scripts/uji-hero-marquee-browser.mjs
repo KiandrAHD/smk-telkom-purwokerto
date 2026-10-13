@@ -20,10 +20,18 @@ try {
   for (const width of [1440, 768, 375, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const route of routes) {
-      await page.goto(base + route); await page.locator('.school-hero').waitFor(); await page.locator('[data-hero-marquee]').waitFor();
+      await page.goto(base + route); await page.locator('.school-hero').waitFor(); await page.locator('[data-hero-marquee]').first().waitFor();
       await page.evaluate(() => document.fonts.ready);
-      await page.locator('[data-hero-marquee]').scrollIntoViewIfNeeded();
-      assert.equal(await page.locator('[data-hero-marquee]').count(), 1, `${route} has one marquee`);
+      await page.locator('[data-hero-marquee]').first().scrollIntoViewIfNeeded();
+      assert.equal(await page.locator('[data-hero-marquee]').count(), route === '/' ? 2 : 1, `${route} has the expected marquee placements`);
+      if (route === '/') {
+        assert.equal(await page.locator('#tentang + [data-hero-marquee] + #jurusan').count(), 1, 'One shared marquee between About and Departments');
+      }
+      for (const ribbon of await page.locator('[data-hero-marquee]').all()) {
+        const spacing = await ribbon.evaluate(el => ({ padding: parseFloat(getComputedStyle(el).paddingTop), gap: parseFloat(getComputedStyle(el.querySelector('.beranda-ribbon-group > div')).gap) }));
+        assert.equal(spacing.padding, width >= 640 ? 32 : 24);
+        assert.equal(spacing.gap, width >= 640 ? 24 : 16);
+      }
       assert.equal(await page.locator('img[src*="ribbon-divider.png"]').count(), 0, `${route} has no old raster divider`);
       await page.waitForFunction(() => [...document.querySelectorAll('.beranda-ribbon-flower img')].every(img => img.complete && img.naturalWidth));
       const layout = await page.evaluate(() => {
@@ -54,9 +62,9 @@ try {
       assert.equal(layout.equalContent, true); assert.equal(layout.coverage, true); assert(Math.abs(layout.groupWidths[0] - layout.groupWidths[1]) < 1, 'Group geometry differs by less than one device pixel');
       assert.equal(layout.pillHeights.length, 1); assert.equal(layout.textClipped, false); assert.equal(layout.petalsPerFlower, true);
       assert.equal(layout.accessibleLabels, 4); assert.equal(layout.hiddenTrack, 'true');
-      const animation = await page.locator('.beranda-ribbon-track').evaluate(el => { const a = el.getAnimations()[0]; a.pause(); a.currentTime = 0; return { duration: a.effect.getTiming().duration }; });
+      const animation = await page.locator('.beranda-ribbon-track').first().evaluate(el => { const a = el.getAnimations()[0]; a.pause(); a.currentTime = 0; return { duration: a.effect.getTiming().duration }; });
       assert.equal(animation.duration, 160000);
-      await page.locator('[data-hero-marquee]').screenshot({ path: join(output, `${slug(route)}-${width}.png`) });
+      await page.locator('[data-hero-marquee]').first().screenshot({ path: join(output, `${slug(route)}-${width}.png`) });
       results.push({ route, width, ...layout });
     }
   }
@@ -103,5 +111,5 @@ try {
     await page.goto(base + route); await page.getByRole('heading', { level: 1 }).first().waitFor(); assert.equal(await page.locator('[data-hero-marquee]').count(), 0, `${route} is excluded`);
   }
   assert.deepEqual(errors, []);
-  console.log('PASS 12 public heroes × 4 viewports: one marquee, placement/floating gaps, uniform pills/petals, identical groups, no overflow/clipping; 4K cycle coverage; reduced-motion full labels; excluded portal/dashboard/detail/utility routes.');
+  console.log('PASS 12 public heroes × 4 viewports: shared spacing, expected marquee count, About/marquee/Departments placement, floating gaps, uniform pills/petals, identical groups, no overflow/clipping; 4K cycle/seam coverage; reduced-motion full labels; excluded portal/dashboard/detail/utility routes.');
 } finally { await writeFile(join(output, 'results.json'), JSON.stringify({ results, errors }, null, 2)); await context.close(); await browser.close(); }
