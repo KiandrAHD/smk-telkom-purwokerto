@@ -100,7 +100,7 @@ export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
     if (!tanggapan.ok) {
       const serverMessage = typeof data.error === 'string' && data.error ? data.error : PESAN_STELA_GAGAL;
       const error = new Error(serverMessage);
-      if (data.code === 'quota_exhausted' || tanggapan.status === 429) error.category = KATEGORI_GALAT.RATE_LIMIT;
+      if (data.code === 'quota_exhausted' || data.code === 'rate_limit' || (tanggapan.status === 429 && data.code !== 'quota_unavailable')) error.category = KATEGORI_GALAT.RATE_LIMIT;
       else if (data.code === 'provider_timeout' || tanggapan.status === 504) error.category = KATEGORI_GALAT.TRANSIENT;
       else if (data.code === 'config' || tanggapan.status === 503) error.category = KATEGORI_GALAT.CONFIG;
       else if (data.code === 'provider_failed') error.category = KATEGORI_GALAT.TRANSIENT;

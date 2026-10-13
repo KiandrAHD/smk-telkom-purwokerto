@@ -62,13 +62,16 @@ export const modelCocokUntukPenyedia = (penyedia, model) => {
 
 // Status kuota per model, hidup selama proses berjalan
 const modelHabis = new Map();
-const HABIS_MS = 30 * 60 * 1000;
+const HABIS_MS_KONFIGURASI = 30 * 60 * 1000;
+const HABIS_MS_RATE_LIMIT = 30 * 1000;
 
-const sedangHabis = (model) => {
-  const sampai = modelHabis.get(model);
+const kunciModel = (penyedia, model) => `${penyedia}:${model}`;
+const sedangHabis = (penyedia, model) => {
+  const kunci = kunciModel(penyedia, model);
+  const sampai = modelHabis.get(kunci);
   if (!sampai) return false;
   if (Date.now() > sampai) {
-    modelHabis.delete(model);
+    modelHabis.delete(kunci);
     return false;
   }
   return true;
@@ -484,7 +487,7 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
     const badan = await tanggapan.text();
     if (tanggapan.status === 429) {
       const harian = badan.includes('PerDay');
-      throw galatPenyedia(harian ? PESAN_KUOTA_HARIAN : PESAN_SEDANG_RAMAI, 429, true);
+      throw galatPenyedia(harian ? PESAN_KUOTA_HARIAN : PESAN_SEDANG_RAMAI, 429, false);
     }
     throw galatPenyedia(`Gemini menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
@@ -525,7 +528,7 @@ const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi
   if (!tanggapan.ok) {
     const badan = await tanggapan.text();
     if (tanggapan.status === 413 || badan.includes('rate_limit_exceeded')) {
-      throw galatPenyedia(PESAN_SEDANG_RAMAI, 429, true);
+      throw galatPenyedia(PESAN_SEDANG_RAMAI, 429, false);
     }
     throw galatPenyedia(`${penyedia} menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
@@ -554,7 +557,7 @@ export const buatBatasPanggilan = ({ maksPercobaan = BATAS.MAKS_PERCOBAAN_PROVID
   percobaan: 0,
 });
 
-const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status, true), { batasPanggilan: true });
+const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status, false), { internalAttemptLimit: true });
 
 /**
  * @typedef {{penyedia: string, apiKey?: string, model?: string, baseUrl?: string}} KandidatPenyedia
@@ -623,7 +626,7 @@ export const tanyaAI = async ({
     }
     if (!cobaModelCadangan) daftarModel = daftarModel.slice(0, 1);
 
-    const belumHabis = daftarModel.filter((m) => !sedangHabis(m));
+    const belumHabis = daftarModel.filter((m) => !sedangHabis(targetPenyedia, m));
     const urutan = belumHabis.length ? belumHabis : daftarModel.slice(0, 1);
 
     for (const kandidat of urutan) {
@@ -671,13 +674,15 @@ export const tanyaAI = async ({
           throw galatBatas(PESAN_TIMEOUT, 504);
         }
         if (error?.batasPanggilan) throw error;
+        if (error?.internalAttemptLimit) throw error;
         const status = galatTerakhirSemua?.status;
         // 400 (incompatible model), 404, 429, timeout, 5xx dialihkan ke kandidat berikutnya
         if (!dibatalkan && status !== 400 && status !== 404 && status !== 429 && !(status >= 500 && status <= 599)) {
           throw error;
         }
-        if (status === 429 || status === 404 || status === 400 || dibatalkan) {
-          modelHabis.set(kandidat, Date.now() + HABIS_MS);
+        if (status === 429 || status === 404 || status === 400) {
+          const durasi = status === 429 ? HABIS_MS_RATE_LIMIT : HABIS_MS_KONFIGURASI;
+          modelHabis.set(kunciModel(targetPenyedia, kandidat), Date.now() + durasi);
         }
       } finally {
         clearTimeout(timeout);

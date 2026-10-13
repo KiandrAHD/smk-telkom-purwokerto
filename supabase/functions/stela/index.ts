@@ -218,8 +218,8 @@ Deno.serve(async (req) => {
     // melihat "Gemini menolak dengan status 429" di gelembung chat.
     const ditandai = error as { untukPengguna?: boolean; status?: number };
     if (ditandai?.untukPengguna) {
-      const status = ditandai.status ?? 429;
-      const code = status === 429 ? 'quota_exhausted' : 'quota_unavailable';
+      const status = ditandai.status ?? 503;
+      const code = ditandai.code ?? (status === 429 ? 'quota_exhausted' : 'quota_unavailable');
       return balas({ error: (error as Error).message, code }, status, origin);
     }
     const status = (error as { status?: number })?.status === 504 ? 504 : 502;

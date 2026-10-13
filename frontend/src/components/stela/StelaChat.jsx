@@ -97,6 +97,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
   const kirim = async (teks, ulang = false) => {
     const pertanyaan = teks.trim();
     if (!pertanyaan || memuat) return;
+    if (ulang && pertanyaan !== pertanyaanGagal) return;
 
     // Sapaan pembuka tidak ikut dikirim ke API (Claude/Gemini/OpenAI menolak riwayat yang diawali assistant tanpa user)
     let basis = riwayat.slice(1);
