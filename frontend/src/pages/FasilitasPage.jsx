@@ -22,6 +22,49 @@ function GroupTitle({ title, t }) {
   return <h3 className="font-heading text-xl font-bold leading-tight text-dark-900 sm:text-2xl"><span className="text-primary">{first}</span> {rest.join(' ')}</h3>;
 }
 
+function FacilityPhotos({ item, t }) {
+  const [index, setIndex] = useState(0);
+  const [photos, setPhotos] = useState(item.photos);
+  useEffect(() => {
+    if (!item.photos) return undefined;
+    let active = true;
+    import('../data/classroomPhotos').then(({ classroomPhotos }) => {
+      if (active) setPhotos(classroomPhotos[item.name]);
+    }).catch(() => {}); // The cover stays usable if the optional gallery chunk cannot load.
+    return () => { active = false; };
+  }, [item.name, item.photos]);
+  const photo = photos?.[index];
+  return <>
+    <ContentImage src={photo?.src || item.image} srcSet={photo?.srcSet} sizes={photo ? '(min-width: 704px) 624px, calc(100vw - 5rem)' : undefined} alt={photo ? t('Foto fasilitas {name}', { name: t(item.name) }) : t('Ilustrasi kegiatan belajar')} width={photo?.width || 712} height={photo?.height || 402} decoding="async" className={`aspect-video w-full rounded-xl ${photo ? 'bg-dark-50 object-contain' : 'object-cover'}`} />
+    {photos && <>
+      <p className="mt-3 text-xs text-dark-600" aria-live="polite">{t('Foto {current} dari {total}', { current: index + 1, total: photos.length })}</p>
+      <div className="mt-2 flex gap-2 overflow-x-auto pb-2" role="group" aria-label={t('Foto fasilitas {name}', { name: t(item.name) })}>
+        {photos.map((candidate, photoIndex) => <button key={candidate.source} type="button" aria-pressed={photoIndex === index} aria-label={t('Lihat foto {number} untuk {name}', { number: photoIndex + 1, name: t(item.name) })} onClick={() => setIndex(photoIndex)} className={`w-20 shrink-0 overflow-hidden rounded-lg border-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${photoIndex === index ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}>
+          <ContentImage src={candidate.thumbnail} alt="" width="320" height="240" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
+        </button>)}
+      </div>
+    </>}
+  </>;
+}
+
+function FacilityCardPhoto({ item, t }) {
+  const container = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { rootMargin: '200px' });
+    observer.observe(container.current);
+    return () => observer.disconnect();
+  }, []);
+  return <div ref={container} className="h-full w-full">
+    {visible && <ContentImage src={item.image} srcSet={item.photos?.[0].srcSet} sizes={item.photos ? '(min-width: 1280px) 284px, (min-width: 1024px) calc((100vw - 144px) / 4), (min-width: 640px) calc((100vw - 76px) / 2), calc(100vw - 34px)' : undefined} alt={item.photos ? t('Foto fasilitas {name}', { name: t(item.name) }) : t('Ilustrasi kegiatan belajar')} width={item.photos?.[0].width || 712} height={item.photos?.[0].height || 402} loading="lazy" decoding="async" className={`block h-full w-full object-cover ${item.photos ? 'object-center' : 'object-top [&:is(img)]:h-[110%]'} motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105`} />}
+  </div>;
+}
+
 export default function FasilitasPage() {
   const { t } = useLanguage();
   const [params, setParams] = useSearchParams();
@@ -105,7 +148,7 @@ export default function FasilitasPage() {
                 <div data-facility-grid className={`${group.title ? 'mt-5 ' : ''}grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4`}>
                   {group.items.map(item => <article key={item.id} data-facility-card={item.id} className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-colors hover:border-primary">
                     <div className="aspect-video shrink-0 overflow-hidden bg-dark-50">
-                      <ContentImage src={item.image} alt={t('Ilustrasi kegiatan belajar')} width="712" height="402" loading="lazy" decoding="async" className="block h-full w-full object-cover object-top [&:is(img)]:h-[110%] motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105" />
+                      <FacilityCardPhoto item={item} t={t} />
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col px-4 pb-3 pt-4">
                       <h4 className="font-heading text-base font-bold leading-snug text-primary">{t(item.name)}</h4>
@@ -120,7 +163,7 @@ export default function FasilitasPage() {
         </section>
       </div>
       <Modal terbuka={selected !== null} onTutup={() => setSelected(null)} judul={selected ? t(selected.name) : ''} labelTutup={t('Tutup')} lebar="max-w-2xl">
-        {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><ContentImage src={selected.image} alt={t('Ilustrasi kegiatan belajar')} width="712" height="402" className="aspect-video w-full rounded-xl object-cover" /><p className="mt-5 text-sm leading-relaxed text-dark-600">{t(selected.preview)}</p><p className="mt-3 text-xs leading-relaxed text-dark-500">{t('Foto merupakan ilustrasi kegiatan belajar. Dokumentasi khusus ruangan ini belum tersedia.')}</p>
+        {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><FacilityPhotos key={selected.id} item={selected} t={t} /><p className="mt-5 text-sm leading-relaxed text-dark-600">{t(selected.preview)}</p>{!selected.photos && <p className="mt-3 text-xs leading-relaxed text-dark-500">{t('Foto merupakan ilustrasi kegiatan belajar. Dokumentasi khusus ruangan ini belum tersedia.')}</p>}
           {selectedCampus && <div className="mt-4 rounded-xl bg-dark-50 p-4"><h3 className="font-heading text-sm font-bold text-primary">{t(selectedCampus.name)}</h3><p className="mt-2 text-xs leading-relaxed text-dark-600">{t(selectedCampus.preview || 'Informasi fasilitas ini belum tersedia. Nama dan titik lokasi mengikuti referensi peta sekolah.')}</p><button type="button" onClick={locateCampus} className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat lokasi di peta')}<ArrowRight className="size-4" aria-hidden="true" /></button></div>}
         </div>}
       </Modal>

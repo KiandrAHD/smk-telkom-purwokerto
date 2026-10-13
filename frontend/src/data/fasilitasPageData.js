@@ -1,7 +1,8 @@
 import image from '../assets/ekstrakurikuler/belajar-kelompok-laptop.png';
+import { classroomPhotoCovers } from './classroomPhotoCovers';
 
 // Page-specific example inventory from Figma 174:151–174:2042 and the supplied ZIP.
-// Keep the landing carousel's existing data separate. The shared photo is illustrative.
+// Keep the landing carousel separate; unavailable rooms retain the illustrative fallback.
 const previews = [
   'Ruang kelas modern dengan pencahayaan baik dan perangkat belajar lengkap.',
   'Ruang kelas nyaman dengan suasana belajar yang tenang dan tertata.',
@@ -10,7 +11,10 @@ const previews = [
 ];
 const section = (id, title, names) => ({
   id, title,
-  items: names.map((name, index) => ({ id: `${id}-${index + 1}`, name, image, preview: previews[index % previews.length] })),
+  items: names.map((name, index) => {
+    const photos = classroomPhotoCovers[name];
+    return { id: `${id}-${index + 1}`, name, image: photos?.[0].src || image, photos, preview: previews[index % previews.length] };
+  }),
 });
 const rooms = {
   A: ['1.4', '2.2', '3.4', '3.6'], B: ['1.4', '1.5', '2.3', '2.5'],
