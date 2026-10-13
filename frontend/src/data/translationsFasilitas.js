@@ -1,4 +1,9 @@
 export default {
+  'Pilih ruang kelas': 'Choose a classroom',
+  'Galeri foto': 'Photo gallery',
+  'Pilih foto fasilitas': 'Choose a facility photo',
+  'Foto fasilitas sebelumnya': 'Previous facility photo',
+  'Foto fasilitas berikutnya': 'Next facility photo',
   'Foto {current} dari {total}': 'Photo {current} of {total}',
   'Lihat foto {number} untuk {name}': 'View photo {number} of {name}',
   "Aula": "Hall",

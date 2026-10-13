@@ -1,4 +1,4 @@
-// Khusus Profil Guru dan detailnya; jangan diimpor oleh dummyData/Profil Sekolah.
+// Profil Guru dan detailnya; Profil Sekolah memakai hanya field foto melalui schoolTeacherData.
 // Nama dan jabatan: nama berkas ZIP pengguna. Ejaan hanya dirapikan pada spasi/gelar.
 // Mapel null menunggu konfirmasi; Nina: label Guru Sejarah pada foto.
 // Tiga paragraf merupakan penjelasan editorial umum bidang, bukan biografi pribadi.

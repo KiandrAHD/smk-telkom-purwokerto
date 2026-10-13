@@ -7,7 +7,7 @@ export default function useSlidingPage(pageKey) {
   const pending = useRef(null);
   const animation = useRef(null);
 
-  const goTo = (next, current, commit) => {
+  const goTo = (next, current, commit, direction = next > current ? 1 : -1) => {
     if (next === current || pending.current) return;
     const node = viewport.current;
     if (!node || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -22,7 +22,7 @@ export default function useSlidingPage(pageKey) {
     snapshot.dataset.motionOutgoing = '';
     gsap.set(snapshot, { position: 'absolute', inset: '0 auto auto 0', width: node.clientWidth, pointerEvents: 'none' });
     node.appendChild(snapshot);
-    pending.current = { snapshot, direction: next > current ? 1 : -1 };
+    pending.current = { snapshot, direction };
     commit(next);
   };
 

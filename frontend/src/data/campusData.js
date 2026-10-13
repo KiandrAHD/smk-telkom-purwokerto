@@ -1,4 +1,5 @@
 import { fasilitasData } from './fasilitasData';
+import { fasilitasViews } from './fasilitasPageData';
 import lineD1 from '../assets/fasilitas/campus/node-205-1122.svg';
 import lineD2 from '../assets/fasilitas/campus/node-205-1115.svg';
 import linePark from '../assets/fasilitas/campus/node-205-1121.svg';
@@ -16,11 +17,12 @@ import diagonalNorth from '../assets/fasilitas/campus/node-205-1150.svg';
 
 const existing = id => fasilitasData.find(item => item.id === id);
 const knownPlace = (id, name, preview = '') => ({ id, name, preview, description: '', image: null });
+const classroomGroup = id => fasilitasViews.Kelas.find(group => group.id === id).items;
 export const campusFacilities = {
-  'kelas-a': { content: existing('kelas-a'), list: { category: 'Kelas', group: 'kelas-a' } },
-  'kelas-b': { content: existing('kelas-b'), list: { category: 'Kelas', group: 'kelas-b' } },
-  'kelas-c': { content: existing('kelas-c'), list: { category: 'Kelas', group: 'kelas-c' } },
-  'kelas-d': { content: existing('kelas-d'), list: { category: 'Kelas', group: 'kelas-d' } },
+  'kelas-a': { content: existing('kelas-a'), rooms: classroomGroup('kelas-a'), location: 'Gedung A', list: { category: 'Kelas', group: 'kelas-a' } },
+  'kelas-b': { content: existing('kelas-b'), rooms: classroomGroup('kelas-b'), location: 'Gedung B', list: { category: 'Kelas', group: 'kelas-b' } },
+  'kelas-c': { content: existing('kelas-c'), rooms: classroomGroup('kelas-c'), location: 'Gedung C', list: { category: 'Kelas', group: 'kelas-c' } },
+  'kelas-d': { content: existing('kelas-d'), rooms: classroomGroup('kelas-d'), location: 'Gedung D', list: { category: 'Kelas', group: 'kelas-d' } },
   perpustakaan: { content: existing('perpustakaan'), list: { category: 'Perpustakaan', group: 'perpustakaan' } },
   'rps-selatan': { content: knownPlace('rps-selatan', 'RPS Selatan', 'Ruang Praktik Siswa'), list: { category: 'Laboratorium', group: 'lab', item: 'lab-6' } },
   'rps-utara': { content: knownPlace('rps-utara', 'RPS Utara', 'Ruang Praktik Siswa'), list: { category: 'Laboratorium', group: 'lab', item: 'lab-5' } },

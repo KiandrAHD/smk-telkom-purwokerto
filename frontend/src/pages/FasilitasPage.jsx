@@ -107,7 +107,7 @@ export default function FasilitasPage() {
   const locateCampus = () => {
     setSelected(null);
     cancelAnimationFrame(campusActionFrame.current);
-    campusActionFrame.current = requestAnimationFrame(() => setMapRequest(current => ({ id: selectedCampusId, sequence: (current?.sequence || 0) + 1 })));
+    campusActionFrame.current = requestAnimationFrame(() => setMapRequest(current => ({ id: selectedCampusId, roomName: selected?.name, sequence: (current?.sequence || 0) + 1 })));
   };
 
   return (

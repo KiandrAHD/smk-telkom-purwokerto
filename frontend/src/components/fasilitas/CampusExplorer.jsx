@@ -25,7 +25,6 @@ import './CampusExplorer.css';
 function CampusDecorations() {
   return <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
     <img src={floor} alt="" className="campus-floor absolute h-full w-full object-cover" />
-    <img src={motif} alt="" width="711" height="226" className="absolute left-[2.67%] top-[8.75%] h-auto w-[22.63%]" />
     <div className="absolute left-[40.293%] top-[68.03%] aspect-[331/297] w-[10.534%] bg-dark-300/50" />
     <div className="campus-diamond-large absolute left-[45.741%] top-[67.926%] aspect-square w-[7.133%] bg-white/50" />
     <div className="campus-diamond-large absolute left-[45.472%] top-[76.102%] aspect-square w-[3.046%] bg-primary/50" />
@@ -39,13 +38,15 @@ export default function CampusExplorer({ request, onViewFacilities }) {
   const [learned, setLearned] = useState(readCampusHint);
   const [active, setActive] = useState(null), [closing, setClosing] = useState(false), [ready, setReady] = useState(false), [failed, setFailed] = useState(false), [retry, setRetry] = useState(0), [located, setLocated] = useState(null);
   const root = useRef(null), closeTimer = useRef(null), highlightTimer = useRef(null), lastTrigger = useRef(null), restoringFocus = useRef(false);
+  const lastRequest = useRef(null), selectionIntent = useRef(0);
   const viewport = useRef(null), stage = useRef(null), slider = useRef(null), previous = useRef(null), next = useRef(null);
   const learn = useCallback(() => { saveCampusHint(); setLearned(true); }, []);
   const pan = useCampusPan({ viewport, stage, slider, previous, next }, learn);
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const select = useCallback((point, trigger) => { clearTimeout(closeTimer.current); setClosing(false); lastTrigger.current = trigger; setActive(point); }, []);
+  const select = useCallback((point, trigger) => { selectionIntent.current += 1; clearTimeout(closeTimer.current); setClosing(false); lastTrigger.current = trigger; setActive(point); }, []);
   const close = (restoreFocus = true) => {
     if (!active) return;
+    selectionIntent.current += 1;
     clearTimeout(closeTimer.current); setClosing(true);
     closeTimer.current = setTimeout(() => {
       setActive(null); setClosing(false);
@@ -60,13 +61,16 @@ export default function CampusExplorer({ request, onViewFacilities }) {
   useEffect(() => { pan.refresh(); }, [ready, failed, pan]);
   useEffect(() => () => { clearTimeout(closeTimer.current); clearTimeout(highlightTimer.current); }, []);
   useEffect(() => {
-    if (!request || !ready) return;
+    if (!request || !ready || lastRequest.current === request) return;
     const point = campusHotspots.find(point => point.facilityId === request.id);
     if (!point) return;
+    lastRequest.current = request;
+    const intent = ++selectionIntent.current;
     const trigger = root.current.querySelector(`[data-campus-hotspot="${point.id}"]`);
     root.current.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
     pan.locate(point.x, () => {
-      trigger?.focus({ preventScroll: true }); select(point, trigger);
+      if (selectionIntent.current !== intent) return;
+      trigger?.focus({ preventScroll: true }); select({ ...point, roomName: request.roomName }, trigger);
       clearTimeout(highlightTimer.current); setLocated(point.id);
       highlightTimer.current = setTimeout(() => setLocated(null), 1500);
     });
@@ -78,8 +82,12 @@ export default function CampusExplorer({ request, onViewFacilities }) {
         <p className="mt-2 text-sm font-semibold text-dark-800">{t('Menjelajahi Stematel')}</p>
       </header>
       <p id="campus-instructions" className="sr-only">{t('Geser peta ke kiri atau kanan. Gunakan tombol arah, slider, atau tombol panah pada keyboard. Pilih titik untuk melihat informasi fasilitas.')}</p>
-      <div className="relative">
+      <div className="relative mx-auto max-w-7xl">
         <div ref={viewport} className="campus-viewport relative focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" role="region" aria-label={t('Peta kampus SMK Telkom Purwokerto')} aria-describedby="campus-instructions" tabIndex={ready ? 0 : -1} data-map-ready={ready && !failed} data-map-failed={failed} data-lenis-prevent-horizontal>
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+            <img data-campus-motif="left" src={motif} alt="" width="711" height="226" className="absolute left-0 top-[8.75%] h-auto w-[28%]" />
+            <img data-campus-motif="right" src={motif} alt="" width="711" height="226" className="absolute right-0 top-[8.75%] h-auto w-[28%] -scale-x-100" />
+          </div>
           <div ref={stage} data-campus-stage className={failed ? 'relative h-56 w-full' : 'campus-stage relative mx-auto aspect-[2164/727] w-[960px]'}>
             {!failed && <><CampusDecorations /><img key={retry} src={map} alt={t('Peta isometrik sekolah dengan bangunan beratap merah')} width="2164" height="727" loading="lazy" decoding="async" draggable="false" className="pointer-events-none relative z-10 block h-full w-full select-none" onLoad={() => setReady(true)} onError={() => { setFailed(true); setReady(false); }} />
               {ready && campusHotspots.map(point => {
@@ -89,13 +97,12 @@ export default function CampusExplorer({ request, onViewFacilities }) {
                   <span className="campus-leader pointer-events-none absolute"><img src={annotation.line} alt="" className="max-w-none" /></span>
                   {annotation.diagonal && <span className="campus-diagonal pointer-events-none absolute"><img src={annotation.diagonal} alt="" className="max-w-none" /></span>}
                   <span className="campus-anchor pointer-events-none absolute"><img src={dot} alt="" className="max-w-none" /></span>
-                  <span className="campus-hotspot-label absolute whitespace-nowrap rounded border border-white bg-primary px-2 py-1 text-xs font-semibold text-white shadow-soft sm:text-sm lg:text-base xl:text-xl"><span>{t(point.label)}</span>{active?.id === point.id && <Check className="ml-1 inline size-3" aria-hidden="true" />}{annotation.subtitle && <span className="block text-[10px] font-normal leading-tight">({t(annotation.subtitle)})</span>}</span>
+                  <span className="campus-hotspot-label absolute whitespace-nowrap rounded border border-white bg-primary px-2 py-1 text-xs font-semibold text-white shadow-soft sm:text-sm"><span>{t(point.label)}</span>{active?.id === point.id && <Check className="ml-1 inline size-3" aria-hidden="true" />}{annotation.subtitle && <span className="block text-[10px] font-normal leading-tight">({t(annotation.subtitle)})</span>}</span>
                 </button>;
               })}</>}
             {failed && <div role="status" className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl bg-dark-50 px-6 text-center text-sm text-dark-500"><ImageOff className="size-9" aria-hidden="true" /><p>{t('Peta belum tersedia. Daftar fasilitas tetap dapat dibuka di bawah.')}</p><button type="button" onClick={() => { setFailed(false); setRetry(value => value + 1); }} className="min-h-11 rounded-lg border border-dark-200 px-4 text-xs font-semibold text-primary">{t('Coba lagi')}</button></div>}
           </div>
         </div>
-        {active && <CampusPreview facility={campusFacilities[active.facilityId]} closing={closing} onClose={close} onList={list => { close(false); onViewFacilities(list); }} />}
       </div>
       <div data-map-failed={failed} data-preview-open={active !== null} className="campus-controls relative z-30 mx-auto w-[88%] max-w-5xl sm:w-[72.22%]">
         <div className="flex items-center gap-3 rounded-2xl border border-dark-200 bg-white px-2 shadow-soft">
@@ -108,6 +115,7 @@ export default function CampusExplorer({ request, onViewFacilities }) {
         </div>
         <div className="mt-3 flex min-h-9 justify-center"><span data-campus-hint data-dismissed={learned || failed} aria-hidden={learned || failed} className="campus-hint pointer-events-none inline-flex items-center gap-2 rounded-lg border border-dark-100 bg-white px-3 py-1.5 text-xs font-semibold text-primary shadow-soft"><ArrowLeftRight className="campus-hint-icon size-4" aria-hidden="true" />{t('Geser untuk Menjelajah')}</span></div>
       </div>
+      {active && <CampusPreview facility={campusFacilities[active.facilityId]} initialRoomName={active.roomName} closing={closing} onClose={close} onList={list => { close(false); onViewFacilities(list); }} />}
     </div>
   </section>;
 }

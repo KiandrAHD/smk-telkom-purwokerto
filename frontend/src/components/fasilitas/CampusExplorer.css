@@ -43,15 +43,34 @@
 .campus-hint[data-dismissed="true"] { opacity: 0; visibility: hidden; transition: opacity 220ms ease, visibility 0s 220ms; }
 .campus-hint-icon { animation: campus-hint-slide 1.8s ease-in-out infinite; }
 .campus-hint[data-dismissed="true"] .campus-hint-icon { animation: none; }
-.campus-preview { margin: 1rem; min-height: 23rem; width: calc(100% - 2rem); animation: campus-preview-enter 280ms ease-out both; transition: opacity 280ms ease, transform 280ms ease; }
-.campus-preview[data-closing="true"] { animation: none; opacity: 0; transform: translateY(8px); pointer-events: none; }
+.campus-preview { margin: 1.5rem auto 0; min-height: 23rem; width: calc(100% - 2rem); max-width: 72rem; animation: campus-preview-enter 280ms ease-out both; transition: opacity 280ms ease, transform 280ms ease; }
+.campus-preview[data-closing="true"] { animation: none; opacity: 0; transform: translateY(8px) scale(.99); pointer-events: none; }
+.campus-preview-content { animation: campus-content-enter 260ms ease-out both; }
+.campus-preview-content[data-outgoing="true"] { position: absolute; inset: 0; pointer-events: none; animation: campus-content-exit 260ms ease-out both; }
+.campus-gallery-frame { padding: 1rem .5rem .25rem; }
+.campus-gallery-viewport { aspect-ratio: 8 / 5; touch-action: pan-y pinch-zoom; user-select: none; }
+.campus-photo-deck { position: relative; height: 100%; }
+.campus-photo-main { position: absolute; left: 12%; top: 4%; width: 76%; height: 90%; z-index: 2; overflow: hidden; border: 1px solid var(--color-primary); border-radius: .75rem; box-shadow: var(--shadow-soft); }
+.campus-photo-side { position: absolute; top: 10%; width: 67%; height: 77%; opacity: .65; overflow: hidden; border-radius: .75rem; }
+.campus-photo-side--previous { left: 2%; transform: rotate(-4deg); }
+.campus-photo-side--next { right: 2%; transform: rotate(4deg); }
+.campus-card-accent { position: relative; display: block; width: 12.5rem; height: 4.125rem; }
+.campus-card-accent > img { transform: scale(.6); transform-origin: top left; }
+.campus-gallery-corner { position: absolute; display: block; width: 3.5rem; height: 3.5rem; pointer-events: none; }
+.campus-gallery-corner > img { transform: scale(.313); transform-origin: top left; }
+.campus-gallery-corner--top { top: 0; left: .25rem; }
+.campus-gallery-corner--bottom { bottom: -.25rem; right: .25rem; }
+.campus-photo-arrow > img { position: absolute; left: 0; top: 0; transform: scale(.54); transform-origin: top left; }
+.campus-photo-arrow--next { rotate: 180deg; }
+@keyframes campus-content-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes campus-content-exit { from { opacity: 1; } to { opacity: 0; } }
 .campus-preview-photo { transition: opacity 300ms ease; }
 .campus-photo-fallback { animation: campus-preview-enter 280ms ease-out both; }
 @starting-style { .campus-hint { opacity: 0; } }
 @keyframes campus-preview-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes campus-hint-slide { 0%,100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
 @keyframes campus-location-highlight { from { box-shadow: 0 0 0 12px var(--color-primary-100); } to { box-shadow: 0 0 0 0 transparent; } }
-@media (min-width: 1024px) { .campus-preview { position: absolute; z-index: 30; bottom: calc(93 * var(--campus-control-unit) + 1rem); right: 1rem; margin: 0; width: 19rem; } }
-@media (max-width: 1023px) { .campus-controls[data-preview-open="true"] { margin-top: 1rem; } }
+@media (min-width: 640px) { .campus-preview { width: calc(100% - 3rem); } }
 @media (max-width: 767px) { .campus-hotspot-label, .campus-leader, .campus-diagonal, .campus-anchor { opacity: 0; } .campus-hotspot:is(:hover,:focus-visible,[data-active="true"]) :is(.campus-hotspot-label,.campus-leader,.campus-diagonal,.campus-anchor) { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .campus-hint-icon, .campus-preview, .campus-photo-fallback, .campus-hotspot[data-located="true"] { animation: none; } .campus-hotspot-label, .campus-pin-art, .campus-hint, .campus-preview, .campus-preview-photo { transition: none; } .campus-hotspot:hover .campus-hotspot-label { scale: none; } }
+@media (prefers-reduced-motion: reduce) { .campus-preview-content { animation: none; } .campus-preview-content[data-outgoing="true"] { display: none; } }
