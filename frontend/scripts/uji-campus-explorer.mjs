@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import { createServer } from 'vite';
+const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
+try {
+  const { clampPan, panLimit, centerCampusPoint, gestureAxis, meaningfulPan, readCampusHint, saveCampusHint, campusHintKey } = await server.ssrLoadModule('/src/utils/campusPan.js');
+  assert.equal(panLimit(1200, 2100), 900);
+  assert.equal(panLimit(1500, 1200), 0);
+  assert.equal(clampPan(-300, 900), 0);
+  assert.equal(clampPan(1300, 900), 900);
+  assert.equal(clampPan(0, 0), 0);
+  assert.equal(centerCampusPoint(0.75, 2000, 1000), 1000);
+  assert.equal(centerCampusPoint(0.1, 2000, 1000), 0);
+  assert.equal(centerCampusPoint(0.4, 2000, 1000), 300);
+  assert.equal(gestureAxis(6, 1), 'pending');
+  assert.equal(gestureAxis(20, 3), 'horizontal');
+  assert.equal(gestureAxis(3, 20), 'vertical');
+  assert.equal(gestureAxis(15, 15), 'pending');
+  assert.equal(meaningfulPan(50, 50), false, 'Dragging against a bound does not move the map');
+  assert.equal(meaningfulPan(50, 65), false);
+  assert.equal(meaningfulPan(50, 75), true);
+  const store = new Map(), storage = { getItem: key => store.get(key), setItem: (key, value) => store.set(key, value) };
+  assert.equal(readCampusHint(storage), false);
+  assert.equal(saveCampusHint(storage), true);
+  assert.equal(readCampusHint(storage), true);
+  assert.equal(store.get(campusHintKey), '1');
+  const blocked = { getItem() { throw new Error('Blocked'); }, setItem() { throw new Error('Blocked'); } };
+  assert.equal(readCampusHint(blocked), false);
+  assert.equal(saveCampusHint(blocked), false);
+  const { campusHotspots, campusFacilities, campusIdForCard } = await server.ssrLoadModule('/src/data/campusData.js');
+  const { fasilitasData } = await server.ssrLoadModule('/src/data/fasilitasData.js');
+  assert.equal(campusHotspots.length, 12);
+  assert.equal(new Set(campusHotspots.map(point => point.id)).size, 12);
+  assert.equal(new Set(campusHotspots.map(point => point.facilityId)).size, 11);
+  for (const point of campusHotspots) { assert.ok(campusFacilities[point.facilityId]); assert.ok(point.x > 0 && point.x < 1 && point.y > 0 && point.y < 1); }
+  for (const id of ['kelas-a', 'kelas-b', 'kelas-c', 'kelas-d', 'perpustakaan']) assert.equal(campusFacilities[id].content, fasilitasData.find(item => item.id === id), 'Reuse canonical facility record');
+  assert.equal(campusFacilities['lapangan-apel'].content.image, null, 'Unverified photography needs an honest fallback');
+  assert.equal(campusIdForCard({ name: 'Kelas B 1.4' }), 'kelas-b');
+  assert.equal(campusIdForCard({ name: 'RPS. Utara' }), 'rps-utara');
+  assert.equal(campusIdForCard({ name: 'Lab. RPL' }), null, 'Do not infer a lab location from an example card');
+  console.log('PASS campus bounds/centering, gesture threshold/axis, real movement hint persistence/storage failure, verified hotspot IDs and shared facility data.');
+} finally { await server.close(); }

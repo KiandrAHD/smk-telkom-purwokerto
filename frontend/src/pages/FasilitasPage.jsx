@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useLenis } from 'lenis/react';
 import { ArrowRight } from 'lucide-react';
@@ -7,6 +7,8 @@ import Modal from '../components/dashboard/Modal';
 import ContentImage from '../components/ContentImage';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import RibbonDivider from '../components/RibbonDivider';
+import CampusExplorer from '../components/fasilitas/CampusExplorer';
+import { campusFacilities, campusIdForCard } from '../data/campusData';
 import { useLanguage } from '../context/LanguageContext';
 import { fasilitasCategories as categories, fasilitasViews } from '../data/fasilitasPageData';
 import { ctaMasukPpdb } from '../data/dummyData';
@@ -26,6 +28,10 @@ export default function FasilitasPage() {
   const requested = params.get('kategori');
   const category = categories.includes(requested) ? requested : 'Semua';
   const [selected, setSelected] = useState(null);
+  const [mapRequest, setMapRequest] = useState(null);
+  const campusActionFrame = useRef(null);
+  const selectedCampusId = selected ? campusIdForCard(selected) : null;
+  const selectedCampus = selectedCampusId ? campusFacilities[selectedCampusId].content : null;
   const lenis = useLenis();
   const groups = fasilitasViews[category];
   const count = groups.reduce((total, group) => total + group.items.length, 0);
@@ -44,6 +50,21 @@ export default function FasilitasPage() {
     if (name === 'Semua') next.delete('kategori');
     else next.set('kategori', name);
     setParams(next, { replace: true });
+  };
+  useEffect(() => () => cancelAnimationFrame(campusActionFrame.current), []);
+  const viewCampusList = list => {
+    selectCategory(list.category);
+    cancelAnimationFrame(campusActionFrame.current);
+    campusActionFrame.current = requestAnimationFrame(() => {
+      const target = list.item ? document.querySelector(`[data-facility-card="${list.item}"]`) : document.getElementById(`fasilitas-${list.group}`);
+      (target || document.getElementById('daftar-fasilitas'))?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      target?.querySelector('button')?.focus({ preventScroll: true });
+    });
+  };
+  const locateCampus = () => {
+    setSelected(null);
+    cancelAnimationFrame(campusActionFrame.current);
+    campusActionFrame.current = requestAnimationFrame(() => setMapRequest(current => ({ id: selectedCampusId, sequence: (current?.sequence || 0) + 1 })));
   };
 
   return (
@@ -67,6 +88,7 @@ export default function FasilitasPage() {
           </div>
         </section>
         <RibbonDivider animated />
+        <CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} />
         <section id="daftar-fasilitas" aria-labelledby="fasilitas-title" className="relative isolate scroll-mt-28 bg-white py-8 lg:py-12">
         {['right', 'left'].map(side => <div key={side} aria-hidden="true" className={`pointer-events-none absolute inset-y-0 ${side === 'right' ? 'right-0' : 'left-0 rotate-180'} -z-10 hidden w-[2.11%] overflow-hidden lg:block`}>
             {[0, 1, 2, 3].map(index => <img key={index} src={accent} alt="" width="39" height="564" className="block h-auto w-full" />)}
@@ -78,7 +100,7 @@ export default function FasilitasPage() {
             </div>
             <p className="sr-only" role="status">{t('{count} fasilitas dalam kategori {category}', { count, category: t(category) })}</p>
             <div id="fasilitas-grid" className="mt-7 space-y-8 lg:space-y-12">
-              {groups.map(group => <section key={group.id} aria-label={t(group.title || category)}>
+              {groups.map(group => <section key={group.id} id={`fasilitas-${group.id}`} className="scroll-mt-28" aria-label={t(group.title || category)}>
                 {group.title && <GroupTitle title={group.title} t={t} />}
                 <div data-facility-grid className={`${group.title ? 'mt-5 ' : ''}grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4`}>
                   {group.items.map(item => <article key={item.id} data-facility-card={item.id} className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card transition-colors hover:border-primary">
@@ -98,7 +120,9 @@ export default function FasilitasPage() {
         </section>
       </div>
       <Modal terbuka={selected !== null} onTutup={() => setSelected(null)} judul={selected ? t(selected.name) : ''} labelTutup={t('Tutup')} lebar="max-w-2xl">
-        {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><ContentImage src={selected.image} alt={t('Ilustrasi kegiatan belajar')} width="712" height="402" className="aspect-video w-full rounded-xl object-cover" /><p className="mt-5 text-sm leading-relaxed text-dark-600">{t(selected.preview)}</p><p className="mt-3 text-xs leading-relaxed text-dark-500">{t('Foto merupakan ilustrasi kegiatan belajar. Dokumentasi khusus ruangan ini belum tersedia.')}</p></div>}
+        {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><ContentImage src={selected.image} alt={t('Ilustrasi kegiatan belajar')} width="712" height="402" className="aspect-video w-full rounded-xl object-cover" /><p className="mt-5 text-sm leading-relaxed text-dark-600">{t(selected.preview)}</p><p className="mt-3 text-xs leading-relaxed text-dark-500">{t('Foto merupakan ilustrasi kegiatan belajar. Dokumentasi khusus ruangan ini belum tersedia.')}</p>
+          {selectedCampus && <div className="mt-4 rounded-xl bg-dark-50 p-4"><h3 className="font-heading text-sm font-bold text-primary">{t(selectedCampus.name)}</h3><p className="mt-2 text-xs leading-relaxed text-dark-600">{t(selectedCampus.preview || 'Informasi fasilitas ini belum tersedia. Nama dan titik lokasi mengikuti referensi peta sekolah.')}</p><button type="button" onClick={locateCampus} className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat lokasi di peta')}<ArrowRight className="size-4" aria-hidden="true" /></button></div>}
+        </div>}
       </Modal>
     </MainLayout>
   );
