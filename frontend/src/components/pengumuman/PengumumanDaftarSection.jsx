@@ -7,7 +7,6 @@ import PengumumanFilterBar from './PengumumanFilterBar';
 import PengumumanTimelineBar from './PengumumanTimelineBar';
 import PengumumanCard from './PengumumanCard';
 import PengumumanPopulerCard from './PengumumanPopulerCard';
-import PengumumanBantuanCard from './PengumumanBantuanCard';
 import { daftarPengumuman } from '../../data/dummyData';
 
 // Lihat catatan tampilkanLihatSemua di PengumumanPopulerCard.
@@ -107,7 +106,6 @@ const PengumumanDaftarSection = ({ items = [], tampilkanLihatSemua = true }) => 
 
           <div className="space-y-5">
             <PengumumanPopulerCard items={items} />
-            <PengumumanBantuanCard />
           </div>
         </div>
       </div>
