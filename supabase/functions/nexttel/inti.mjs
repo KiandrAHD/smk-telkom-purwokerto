@@ -96,7 +96,7 @@ export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenye
       if (output) return output;
     } catch (error) {
       if (error?.name === 'AbortError') throw error;
-      if (error?.batasPanggilan) break;
+      if (error?.batasPanggilan) throw error;
       // Invalid JSON/schema and unavailable providers try the next candidate.
     }
   }

@@ -26,7 +26,7 @@ try {
     const next = periksaPesan([...conversation, { role: 'assistant', content: result.teks }, { role: 'user', content: 'Berikan contoh berikutnya.' }]);
     assert.ok(next.pesan, 'The returned answer must permit a valid next turn');
   }
-  const handler = await loadEdgeHandler('stela', { GEMINI_API_KEY: 'offline-fixture', STELA_ALLOWED_ORIGINS: 'https://test.invalid', SUPABASE_URL: 'https://quota.test.invalid', SUPABASE_SERVICE_ROLE_KEY: 'server-fixture' });
+  const handler = await loadEdgeHandler('stela', { GEMINI_API_KEY: 'AIza-offline-fixture', STELA_ALLOWED_ORIGINS: 'https://test.invalid', SUPABASE_URL: 'https://quota.test.invalid', SUPABASE_SERVICE_ROLE_KEY: 'server-fixture' });
   response = 'x'.repeat(BATAS.MAKS_PANJANG_ASISTEN + 1);
   const first = await handler(request('stela', { messages: conversation, language: 'id' }));
   assert.equal(first.status, 200);

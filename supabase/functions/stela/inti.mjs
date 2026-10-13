@@ -168,8 +168,16 @@ const FAQ_FAST_PATH = [
   },
 ];
 
+const JAWABAN_ROADMAP = {
+  id: 'Roadmap setelah memilih RPL: kuasai logika pemrograman dan Git, lanjutkan HTML/CSS/JavaScript serta basis data, lalu bangun proyek kecil sebagai portofolio. Setelah itu pilih fokus seperti frontend, backend, mobile, atau QA; kembangkan proyek yang lebih nyata, ikut PKL/magang, dan pertimbangkan kuliah atau sertifikasi yang relevan. Untuk jalur software engineer, biasakan membaca dokumentasi, menguji kode, bekerja kolaboratif, dan memperbarui portofolio.',
+  en: 'Roadmap after choosing RPL: learn programming logic and Git, then HTML/CSS/JavaScript and databases, while building small projects for a portfolio. Next choose a focus such as frontend, backend, mobile, or QA; build more realistic projects, join internships, and consider relevant university study or certifications. For a software engineer path, practise reading documentation, testing code, collaborating, and keeping your portfolio current.',
+};
+
 export const jawabanFaqCepat = (teks, bahasa = deteksiBahasa(teks)) => {
   const pertanyaan = String(teks ?? '').trim();
+  if (/(?:roadmap|jalur menjadi software engineer|setelah memilih jurusan rpl|roadmap belajar.*rpl)/i.test(pertanyaan)) {
+    return bahasa === 'en' ? JAWABAN_ROADMAP.en : JAWABAN_ROADMAP.id;
+  }
   if (!pertanyaan) return null;
   const faq = FAQ_FAST_PATH.find((item) => item.pola.test(pertanyaan));
   if (!faq) return null;
@@ -184,7 +192,7 @@ const POLA_BLOCKLIST = /(?:bom\s+(?:molotov|c2)|molotov|senjata|bahan\s+peledak|
 const POLA_INJECTION = /(?:ignore\s+(?:previous|all|the\s+above)|system\s*prompt|developer\s*mode|reveal\s+(?:all|system|hidden|prompt)|show\s+(?:hidden|system|all\s+rules)|api[_ -]?key|service[_ -]?role|bearer\s+[a-z0-9]|(?:master|root|admin)\s+password|bypass\s+(?:security|rules|guard)|environment\s+variable|data\s+private|(?:spmb|ppdb)\s+(?:orang|peserta|private|rahasia)|write\s+a\s+virus|tampilkan\s+(?:instruksi|system\s+prompt|prompt\s+asli)|kamu\s+adalah\s+(?:dan|dan\s+bukan)|lupakan\s+semua\s+instruksi|abaikan\s+(?:aturan|instruksi)|you\s+are\s+(?:now|a|an)|disregard\s+(?:previous|all|prior))/i;
 
 // Topik yang diizinkan (allowlist)
-const POLA_ALLOWLIST = /(?:smk|telkom|purwokerto|stematel|rpl|rekayasa\s+perangkat\s+lunak|pg|pengembangan\s+game|tkj|teknik\s+komputer(?:\s+dan)?\s+jaringan|tjat|teknik\s+jaringan\s+akses(?:\s+telekomunikasi)?|jurusan|program\s+keahlian|spmb|ppdb|pendaftaran|daftar|syarat|biaya|gelombang|kuota|bkk|bursa\s+kerja|lowongan|magang|pkl|prestasi|lomba|juara|lks|fasilitas|lab|laboratorium|gedung|kelas|perpustakaan|kegiatan|ekskul|ekstrakurikuler|organisasi|osis|pramuka|guru|pengajar|tenaga\s+pendidik|kepala\s+sekolah|kurikulum|akreditasi|beasiswa|seragam|jadwal|lokasi|alamat|kontak|telepon|email|yayasan\s+pendidikan\s+telkom|ypt|telkom\s+schools|pendidikan\s+vokasi|kejuruan|profil\s+sekolah|sejarah\s+sekolah|visi\s+misi)/i;
+const POLA_ALLOWLIST = /(?:smk|telkom|purwokerto|stematel|rpl|rekayasa\s+perangkat\s+lunak|pg|pengembangan\s+game|tkj|teknik\s+komputer(?:\s+dan)?\s+jaringan|tjat|teknik\s+jaringan\s+akses(?:\s+telekomunikasi)?|jurusan|program\s+keahlian|spmb|ppdb|pendaftaran|daftar|syarat|biaya|gelombang|kuota|bkk|bursa\s+kerja|lowongan|magang|pkl|prestasi|lomba|juara|lks|fasilitas|lab|laboratorium|gedung|kelas|perpustakaan|kegiatan|ekskul|ekstrakurikuler|organisasi|osis|pramuka|guru|pengajar|tenaga\s+pendidik|kepala\s+sekolah|kurikulum|akreditasi|beasiswa|seragam|jadwal|lokasi|alamat|kontak|telepon|email|yayasan\s+pendidikan\s+telkom|ypt|telkom\s+schools|pendidikan\s+vokasi|kejuruan|pendidikan|belajar|pembelajaran|roadmap|jalur\s+(?:karier|belajar)|software\s+engineer|software\s+developer|pengembang\s+perangkat\s+lunak|sertifikasi|kuliah|perguruan\s+tinggi|kampus|karier|profesi|skill|keterampilan|profil\s+sekolah|sejarah\s+sekolah|visi\s+misi)/i;
 
 export const topikDiizinkan = (pesan) => {
   if (!Array.isArray(pesan) || pesan.length === 0) return false;
@@ -400,7 +408,7 @@ const galatPenyedia = (pesan, status, untukPengguna = false) => {
 export const PESAN_KUOTA_HARIAN =
   'STELA sudah mencapai batas percakapan hari ini. Silakan coba lagi besok, atau hubungi Tata Usaha untuk pertanyaan yang mendesak.';
 export const PESAN_SEDANG_RAMAI = 'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.';
-export const PESAN_TIMEOUT = 'STELA sedang mengalami kendala koneksi. Silakan coba lagi.';
+export const PESAN_TIMEOUT = 'STELA belum menerima jawaban tepat waktu. Periksa koneksi lalu coba lagi.';
 
 const PESAN_DITOLAK = {
   teks: 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto atau topik edukatif lainnya.',

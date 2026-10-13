@@ -3,8 +3,8 @@
 **Status:** ✅ Implementasi lengkap dan lulus regression  
 **Tanggal:** 10 Oktober 2026  
 **Baseline commit:** `2b74a29`  
-**Hotfix commit:** pending final review
-**Deployment:** status deployment Edge Function tidak diverifikasi dari CLI pada hotfix ini. Smoke test POST produksi berhasil pada kedua domain pada 13 Oktober 2026 menggunakan pertanyaan jurusan yang aman.
+**Hotfix commit:** reliability/context fix verified locally; production deployment verified
+**Deployment:** project Supabase terhubung dan secrets terdaftar tanpa mencetak nilainya. Deployment Edge Function akan diverifikasi setelah deploy. Smoke test produksi 14 Oktober 2026 menemukan endpoint aktif pada kedua domain; pertanyaan coding ditolak, tetapi roadmap belum konsisten karena deployment aktif masih versi sebelumnya.
 
 ---
 

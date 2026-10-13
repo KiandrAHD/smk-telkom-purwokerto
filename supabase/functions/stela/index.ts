@@ -38,7 +38,9 @@ const BASE_URL = Deno.env.get('STELA_NINEROUTER_URL') || Deno.env.get('NINEROUTE
 const STELA_CANDIDATES = ['ninerouter', 'anthropic', 'gemini', 'groq']
   .filter((penyedia) => {
     const key = KUNCI[penyedia];
-    return typeof key === 'string' && key.trim().length > 0;
+    const pola = POLA_KUNCI[penyedia as keyof typeof POLA_KUNCI];
+    if (penyedia === 'ninerouter' && (!BASE_URL || !/^https:\/\//i.test(BASE_URL))) return false;
+    return typeof key === 'string' && key.trim().length > 0 && Boolean(pola?.test(key));
   })
   .map((penyedia) => ({
     penyedia,
@@ -194,12 +196,18 @@ Deno.serve(async (req) => {
       console.error('Context Supabase gagal dimuat', error instanceof Error ? error.message : 'unknown');
     }
 
+    let kuotaDicadangkan = false;
+    const reservasiSekaliPerPermintaan = async ({ signal }: { signal: AbortSignal }) => {
+      if (kuotaDicadangkan) return;
+      await reservasiKuota({ signal });
+      kuotaDicadangkan = true;
+    };
     const { teks: teksProvider, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
       daftarPenyedia: STELA_CANDIDATES,
       pesan: hasilValidasi.pesan,
       contextPublik,
       bahasa,
-      sebelumPanggilan: reservasiKuota,
+      sebelumPanggilan: reservasiSekaliPerPermintaan,
       batasPanggilan,
       signal: req.signal,
       cobaModelCadangan: true,
