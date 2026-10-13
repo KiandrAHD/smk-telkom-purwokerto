@@ -140,7 +140,7 @@ export const jawabanSapaanCepat = (teks, bahasa = deteksiBahasa(teks)) => {
 // FAQ fast path hanya untuk pertanyaan eksak sederhana
 const FAQ_FAST_PATH = [
   {
-    pola: /^(?:apa\s+saja\s+)?jurusan(?:\s+(?:apa\s+saja|yang\s+(?:ada|tersedia)(?:\s+di\s+smk\s+telkom(?:\s+purwokerto)?)?|di\s+smk\s+telkom(?:\s+purwokerto)?))?[?!., ]*$/i,
+    pola: /^(?:apa\s+(?:saja\s+)?)?jurusan(?:\s+(?:apa\s+saja|yang\s+(?:ada|tersedia)(?:\s+di\s+smk\s+telkom(?:\s+purwokerto)?)?|di\s+smk\s+telkom(?:\s+purwokerto)?))?[?!., ]*$/i,
     jawaban: 'SMK Telkom Purwokerto memiliki empat jurusan: Rekayasa Perangkat Lunak (RPL), Pengembangan Game (PG), Teknik Komputer dan Jaringan (TKJ), serta Teknik Jaringan Akses Telekomunikasi (TJAT).',
     jawabanEn: 'SMK Telkom Purwokerto offers four majors: Software Engineering (RPL), Game Development (PG), Computer and Network Engineering (TKJ), and Telecommunication Access Network Engineering (TJAT).',
   },
