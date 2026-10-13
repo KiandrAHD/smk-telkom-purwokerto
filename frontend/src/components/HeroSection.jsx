@@ -10,6 +10,7 @@ import robotIcon from '../assets/landing/quick-access-robot.svg';
 import sparkIcon from '../assets/landing/quick-access-spark.svg';
 import sparkDot from '../assets/landing/quick-access-dot.svg';
 import HeroBreadcrumb from './HeroBreadcrumb';
+import HeroBadges from './HeroBadges';
 
 const icons = {
   userPlus: accountIcon,
@@ -26,13 +27,7 @@ const HeroSection = ({ content = landingHero, links = quickLinks, media, breadcr
         <div className="hero-grid">
           <div className="hero-copy">
             {breadcrumb && <HeroBreadcrumb {...breadcrumb} />}
-            <div className="flex flex-wrap items-center gap-1">
-              {content.hashtags.map(tag => (
-                <span key={tag} className="inline-block whitespace-nowrap rounded-full border border-primary/25 bg-white px-2 py-1 text-[10px] font-bold tracking-wide text-primary">
-                  {t(tag)}
-                </span>
-              ))}
-            </div>
+            <HeroBadges tags={content.hashtags} />
 
             <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {t(content.title)}

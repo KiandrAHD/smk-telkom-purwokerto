@@ -2,6 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
+import HeroBadges from '../HeroBadges';
 import { jurusanHero, jurusanStats } from '../../data/dummyData';
 import jurusanHeroImage from '../../assets/drive/jurusan-hero-students.jpeg';
 
@@ -13,9 +14,7 @@ const JurusanHeroSection = () => {
       <div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--departments">
         <div className="hero-grid">
           <div className="hero-copy">
-            <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-              {t(jurusanHero.badge)}
-            </span>
+            <HeroBadges />
 
             <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {t(jurusanHero.title)}

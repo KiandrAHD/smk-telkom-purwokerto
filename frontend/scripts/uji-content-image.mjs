@@ -39,6 +39,14 @@ try {
   const present = renderToStaticMarkup(createElement(ContentImage, { src: '/photo.jpg', alt: 'Dokumentasi' }));
   assert.ok(present.includes('<img'));
   assert.ok(present.includes('src="/photo.jpg"'));
+  const { default: PrestasiUnggulanSection } = await server.ssrLoadModule('/src/components/prestasi/PrestasiUnggulanSection.jsx');
+  const achievementMarkup = items => renderToStaticMarkup(createElement(MemoryRouter, null, createElement(PrestasiUnggulanSection, { items })));
+  assert.equal(achievementMarkup([]), '', 'Prestasi kosong tidak menghasilkan data contoh.');
+  const featuredMarkup = achievementMarkup([achievement, ...Array.from({ length: 4 }, (_, index) => ({ ...achievement, title: `Pilihan ${index}`, slug: `pilihan-${index}`, image: `/pilihan-${index}.webp` }))]);
+  assert.ok(featuredMarkup.includes('src="https://placehold.co/1200x675/png"'), 'Foto unggulan harus berasal dari entri yang sama dengan judulnya.');
+  assert.ok(featuredMarkup.includes('alt="Prestasi uji"'));
+  assert.equal((featuredMarkup.match(/<button/g) || []).length, 3, 'Komposisi menampilkan satu prestasi utama dan tiga pilihan.');
+  assert.ok(achievementMarkup([{ ...achievement, image: '' }]).includes('Foto belum tersedia'));
   const { default: PengumumanCard } = await server.ssrLoadModule('/src/components/pengumuman/PengumumanCard.jsx');
   const announcementMarkup = (gambar_url) => renderToStaticMarkup(createElement(MemoryRouter, null,
     createElement(PengumumanCard, { item: toPengumumanItem({ judul: 'Poster SPMB', slug: 'poster-spmb', gambar_url }) })));

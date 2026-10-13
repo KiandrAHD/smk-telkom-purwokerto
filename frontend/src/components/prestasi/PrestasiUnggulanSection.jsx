@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { prestasiUnggulan } from '../../data/dummyData';
+import ContentImage from '../ContentImage';
 
 const PrestasiUnggulanSection = ({ items = [] }) => {
   const { t } = useLanguage();
 
   const [active, setActive] = useState(0);
-  // Maksimal tiga item total; seluruh prestasi tetap tersedia di galeri.
-  const sourceItems = items.slice(0, 3);
+  // Satu prestasi utama dan tiga pilihan samping mengikuti komposisi Figma.
+  const sourceItems = items.slice(0, 4);
   const selected = active % sourceItems.length;
   const featured = sourceItems[selected];
   const others = sourceItems
@@ -19,15 +20,17 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
   if (!featured) return null;
 
   return (
-    <section className="bg-white py-8 lg:py-12">
+    <section data-prestasi-unggulan className="bg-white py-8 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="font-heading text-xl sm:text-2xl font-extrabold text-dark-900">
           {t(prestasiUnggulan.title)}
         </h2>
 
-        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,38%)]">
+        <div className="mt-7 grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28%)]">
           {/* Prestasi terpilih */}
-          <div className="lg:pr-8">
+          <article data-featured-slug={featured.slug} className="grid min-w-0 items-start gap-5 md:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]">
+            <ContentImage src={featured.image} alt={t(featured.title)} loading="lazy" decoding="async" className="aspect-[535/393] w-full rounded-xl bg-dark-50 object-contain" />
+            <div className="min-w-0">
             <span className="inline-block rounded bg-primary-50 px-2.5 py-1 text-[9px] font-bold text-primary">
               {t(featured.level)}
             </span>
@@ -44,7 +47,8 @@ const PrestasiUnggulanSection = ({ items = [] }) => {
               {t(prestasiUnggulan.ctaText)}
               <ArrowRight className="h-3 w-3" />
             </Link>
-          </div>
+            </div>
+          </article>
 
           {/* Daftar prestasi lain — klik untuk menukar yang tampil di kiri */}
           <div className="grid auto-rows-fr gap-3">

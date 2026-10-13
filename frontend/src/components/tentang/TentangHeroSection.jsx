@@ -1,6 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import HeroBreadcrumb from '../HeroBreadcrumb';
+import HeroBadges from '../HeroBadges';
 import { heroData } from '../../data/dummyData';
 import profilHeroEnglish from '../../assets/tentang/profil-hero-en.jpeg';
 
@@ -24,8 +25,9 @@ const TentangHeroSection = () => {
 
         <div className="hero-copy">
             <HeroBreadcrumb current="Profil Sekolah" parentTo={null} />
+            <HeroBadges />
 
-            <h1 className="whitespace-pre-line font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
+            <h1 className="mt-4 whitespace-pre-line font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
               {t(heroData.heading)}
               {'\n'}
               <span className="text-primary">{t(heroData.headingAccent)}</span>

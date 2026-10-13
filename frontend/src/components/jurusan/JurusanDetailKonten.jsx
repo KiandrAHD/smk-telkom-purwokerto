@@ -1,139 +1,95 @@
+import { BadgeCheck, BookOpen, BriefcaseBusiness, GraduationCap, Monitor, Quote, School, Users } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { ArrowRight, Briefcase, Check, GraduationCap, Wrench } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import GaleriFoto from '../GaleriFoto';
 import Reveal from '../Reveal';
-import { jurusanDetail } from '../../data/dummyData';
+import ribbon from '../../assets/jurusan-detail/department-ribbon.webp';
 
-const Bagian = ({ Icon, judul, children }) => {
+const SectionHeading = ({ children, id }) => (
+  <h2 id={id} className="flex items-center gap-3 font-heading text-xl font-extrabold leading-tight text-dark-900 sm:text-2xl">
+    <span aria-hidden="true" className="h-7 w-1.5 shrink-0 rounded-full bg-primary" />
+    <span>{children}</span>
+  </h2>
+);
+const icons = [Monitor, BookOpen, School];
+const levels = ['Kelas X', 'Kelas XI', 'Kelas XII'];
+const delays = ['', 'delay-100', 'delay-200'];
+
+export default function JurusanDetailKonten({ item, design }) {
   const { t } = useLanguage();
-  return (
-  <Reveal as="section" className="mt-9">
-    <h2 className="flex items-center gap-2.5 font-heading text-base font-extrabold text-dark-900">
-      <Icon className="h-4 w-4 flex-shrink-0 text-primary" />
-      {t(judul)}
-    </h2>
-    {children}
-  </Reveal>
-  );
-};
-
-// Seluruh isinya datang dari objek jurusan yang dicari lewat slug — tidak ada
-// teks jurusan yang ditulis di komponen ini.
-const JurusanDetailKonten = ({ item }) => {
-  const { t } = useLanguage();
-  const lainnya = jurusanDetail.filter((j) => j.slug !== item.slug);
-
+  const facts = [
+    { Icon: GraduationCap, label: 'Jenjang', value: 'Sekolah Menengah Kejuruan (SMK)' },
+    { Icon: BriefcaseBusiness, label: 'Karier Lanjutan', value: item.facts.find(fact => fact.label === 'Prospek karier').value },
+    { Icon: BadgeCheck, label: 'Sertifikasi', value: item.facts.find(fact => fact.label === 'Sertifikasi').value },
+    { Icon: Users, label: 'Pengajar', value: 'Guru produktif berpengalaman dan tersertifikasi industri' },
+  ];
   return (
     <>
-      <Bagian Icon={Check} judul={t("Yang Kamu Pelajari")}>
-        <ul className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-          {item.kompetensi.map((k) => (
-            <li key={k} className="flex items-start gap-2.5">
-              <span className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-primary-50">
-                <Check className="h-2.5 w-2.5 text-primary" strokeWidth={3} />
-              </span>
-              <span className="text-[11px] leading-relaxed text-dark-600">{t(k)}</span>
-            </li>
-          ))}
-        </ul>
-      </Bagian>
-
-      <Bagian Icon={GraduationCap} judul={t("Perjalanan Tiga Tahun")}>
-        <ol className="mt-4 space-y-3">
-          {item.kurikulum.map((tahap, i) => (
-            <li
-              key={tahap.tingkat}
-              className="flex gap-4 rounded-xl border border-dark-100 bg-white px-4 py-3.5"
-            >
-              <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-                {i + 1}
-              </span>
-              <span className="min-w-0">
-                <span className="block font-heading text-xs font-bold text-primary">
-                  {t(tahap.tingkat)}
-                </span>
-                <span className="mt-1 block text-[11px] leading-relaxed text-dark-500">
-                  {t(tahap.fokus)}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </Bagian>
-
-      <Bagian Icon={Wrench} judul={t("Fasilitas Penunjang")}>
-        <ul className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-          {item.fasilitas.map((f) => (
-            <li
-              key={f}
-              className="rounded-xl border border-dark-100 bg-dark-50 px-4 py-3 text-[11px] leading-relaxed text-dark-600"
-            >
-              {t(f)}
-            </li>
-          ))}
-        </ul>
-      </Bagian>
-
-      <GaleriFoto
-        items={item.galeri.map((foto) => ({ ...foto, alt: t(foto.alt) }))}
-        title={t("Suasana Belajar")}
-        description={t("Ruang praktik dan hasil karya siswa di jurusan ini.")}
-      />
-
-      <Bagian Icon={Briefcase} judul={t("Prospek Karier")}>
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {item.karier.map((k) => (
-            <article
-              key={k.role}
-              className="rounded-xl border border-dark-100 bg-white px-4 py-3.5 shadow-card transition-colors hover:border-primary"
-            >
-              <h3 className="font-heading text-xs font-bold text-dark-900">{t(k.role)}</h3>
-              <p className="mt-1.5 text-[10px] leading-relaxed text-dark-500">{t(k.desc)}</p>
-            </article>
-          ))}
+      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10" aria-labelledby="tentang-jurusan-title">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
+          <Reveal>
+            <SectionHeading id="tentang-jurusan-title">{t('Apa itu {program}?', { program: design.code })}</SectionHeading>
+            <div className="mt-4 space-y-4 text-sm leading-relaxed text-dark-600">{design.about.map(text => <p key={text}>{t(text)}</p>)}</div>
+          </Reveal>
+          <Reveal as="figure" className="relative rounded-2xl bg-primary-50 p-6 lg:mt-2 delay-100">
+            <Quote aria-hidden="true" className="mb-3 size-7 fill-primary text-primary" />
+            <blockquote className="text-sm font-semibold italic leading-relaxed text-dark-600">{t(design.quote)}</blockquote>
+            <figcaption className="mt-4 text-xs leading-relaxed text-dark-500"><span className="block font-bold">{t('Tim {program}', { program: design.code })}</span>SMK Telkom Purwokerto</figcaption>
+          </Reveal>
         </div>
-      </Bagian>
-
-      {/* Ajakan mendaftar, memakai warna banner yang sama dengan halaman lain */}
-      <div className="mt-9 flex flex-col items-start gap-4 rounded-2xl bg-primary px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="font-heading text-sm font-extrabold text-white">{t('Tertarik masuk {program}?', { program: t(item.title) })}</p>
-        <Link
-          to="/spmb"
-          className="inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold text-primary transition-colors hover:bg-primary-50"
-        >{t("Daftar SPMB")} <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
-      </div>
-
-      <Bagian Icon={GraduationCap} judul={t("Jurusan Lainnya")}>
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {lainnya.map((j) => (
-            <Link
-              key={j.slug}
-              to={`/jurusan/${j.slug}`}
-              className="group flex flex-col overflow-hidden rounded-xl border border-dark-100 bg-white transition-colors hover:border-primary"
-            >
-              <div className="overflow-hidden">
-                <img
-                  src={j.image}
-                  alt={t(j.title)}
-                  loading="lazy"
-                  className="aspect-[2/1] w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
-                />
+        <Reveal as="dl" className="mt-6 grid gap-6 rounded-2xl bg-dark-50 p-5 sm:grid-cols-2 sm:p-6">
+          {facts.map(({ Icon, label, value }, index) => (
+            <div key={label} className={`flex items-start gap-4 ${index % 2 ? 'sm:border-l sm:border-dark-200 sm:pl-6' : ''}`}>
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                <Icon aria-hidden="true" className="size-5" />
+              </span>
+              <div className="min-w-0">
+                <dt className="text-sm font-bold text-dark-600">{t(label)}</dt>
+                <dd className="mt-1 text-xs leading-relaxed text-dark-500">{t(value)}</dd>
               </div>
-              <span className="flex flex-1 flex-col px-4 py-3.5">
-                <span className="block font-heading text-[11px] font-bold leading-snug text-dark-900">
-                  {t(j.title)}
-                </span>
-                <span className="mt-auto inline-flex items-center gap-1 pt-1.5 text-[10px] font-bold text-primary">{t("Lihat detail")} <ArrowRight className="h-3 w-3" />
-                </span>
-              </span>
-            </Link>
+            </div>
           ))}
-        </div>
-      </Bagian>
+        </Reveal>
+      </section>
+      <div aria-hidden="true" className="overflow-hidden"><img src={ribbon} width={1847} height={171} alt="" loading="lazy" className="block w-full" /></div>
+      <div className="detail-jurusan-content">
+        <section id="fasilitas-jurusan" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12" aria-labelledby="fasilitas-jurusan-title">
+          <Reveal><SectionHeading id="fasilitas-jurusan-title">{t('Fasilitas Pendukung')}</SectionHeading><p className="mt-3 max-w-2xl text-sm leading-relaxed text-dark-500">{t(design.facilitiesDescription)}</p></Reveal>
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {design.facilities.map((facility, index) => {
+              const Icon = icons[index];
+              return (
+                <Reveal as="article" key={facility.title} data-department-facility={facility.title} className={`group overflow-hidden rounded-2xl border border-dark-200 bg-white shadow-soft transition-transform motion-safe:hover:-translate-y-1 ${delays[index]}`}>
+                  <div className="overflow-hidden">
+                    <img src={facility.image} width={960} height={720} alt={t(facility.title) + ' — ' + design.code} loading="lazy" decoding="async" className="aspect-[5/2] w-full object-cover object-center transition-transform duration-500 motion-safe:group-hover:scale-105" />
+                  </div>
+                  <div className="relative px-4 pb-5 pt-4">
+                    <span aria-hidden="true" className="absolute -top-4 left-4 flex size-8 items-center justify-center rounded-full border-2 border-white bg-primary text-white">
+                      <Icon className="size-4" />
+                    </span>
+                    <h3 className="mt-2 font-heading text-sm font-bold text-dark-900">{t(facility.title)}</h3>
+                    <p className="mt-2 text-xs leading-relaxed text-dark-500">{t(facility.description)}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </section>
+        <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8 lg:pb-12" aria-labelledby="perjalanan-jurusan-title">
+          <Reveal><SectionHeading id="perjalanan-jurusan-title">{t('Perjalanan')} <span className="text-primary">{t('Tiga Tahun')}</span></SectionHeading><p className="mt-3 text-sm text-dark-500">{t('Dari dasar hingga siap terjun ke dunia industri')}</p></Reveal>
+          <ol className="mt-6 grid gap-5 md:grid-cols-3">
+            {design.journey.map((points, index) => (
+              <Reveal as="li" key={levels[index]} data-learning-year={levels[index]} className={`rounded-2xl border border-dark-200 bg-white p-5 ${delays[index]}`}>
+                <h3 className="flex items-center gap-3 font-heading text-base font-bold text-primary">
+                  <span aria-hidden="true" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm text-white">{index + 1}</span>
+                  {t(levels[index])}
+                </h3>
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-xs leading-relaxed text-dark-600">
+                  {points.map(point => <li key={point}>{t(point)}</li>)}
+                </ul>
+              </Reveal>
+            ))}
+          </ol>
+        </section>
+      </div>
     </>
   );
-};
-
-export default JurusanDetailKonten;
+}

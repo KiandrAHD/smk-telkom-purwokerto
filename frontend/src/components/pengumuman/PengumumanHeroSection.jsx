@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
 import HeroBreadcrumb from '../HeroBreadcrumb';
+import HeroBadges from '../HeroBadges';
 import { pengumumanHero, pengumumanStats } from '../../data/dummyData';
 
 // Hero ini dulu terasa datar dibanding halaman lain karena tiga hal yang
@@ -18,9 +19,7 @@ const PengumumanHeroSection = () => {
         <div className="hero-grid">
           <div className="hero-copy">
             <HeroBreadcrumb parent="Informasi" parentTo={null} current="Pengumuman" />
-            <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
-              {t(pengumumanHero.badge)}
-            </span>
+            <HeroBadges />
 
             <h1 className="mt-4 whitespace-pre-line font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[2rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
               {t(pengumumanHero.heading)}

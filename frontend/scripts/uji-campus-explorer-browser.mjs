@@ -35,6 +35,7 @@ async function open(page) {
   await page.evaluate(() => document.fonts.ready);
 }
 async function drag(page, dx, dy = 0, target) {
+  await (target || viewport(page)).scrollIntoViewIfNeeded();
   const box = await (target || viewport(page)).boundingBox();
   const x = box.x + box.width / 2, y = target ? box.y + box.height / 2 : box.y + box.height * 0.85;
   await page.mouse.move(x, y); await page.mouse.down(); await page.mouse.move(x + dx, y + dy, { steps: 12 }); await page.mouse.up();
@@ -83,7 +84,7 @@ try {
     const pin = point(page, id); await pin.focus(); await page.keyboard.press('Enter');
     const preview = page.locator(`[data-campus-preview="${facility}"]`); await preview.waitFor(); assert.equal(await page.locator('[data-campus-hotspot][data-active="true"]').count(), 1);
     assert.equal(await preview.getAttribute('aria-modal'), 'false');
-    if (['kelas-a', 'kelas-b', 'kelas-c', 'kelas-d', 'perpustakaan'].includes(facility)) await preview.locator('.campus-preview-photo').evaluate(image => image.decode());
+    if (['kelas-a', 'kelas-b', 'kelas-c', 'kelas-d', 'perpustakaan'].includes(facility)) await preview.locator('.campus-photo-main .campus-preview-photo').first().evaluate(image => image.decode());
     else assert.equal(await preview.locator('[data-campus-photo-fallback]').count(), 1);
     const before = await position(page); await page.keyboard.press('Escape'); await preview.waitFor({ state: 'hidden' }); assert.ok(Math.abs(await position(page) - before) < 1, 'Closing details does not reset panning');
   }
@@ -123,7 +124,8 @@ try {
   await page.setViewportSize({ width: 768, height: 650 }); await viewport(page).scrollIntoViewIfNeeded(); await page.waitForTimeout(100);
   assert.ok(Math.abs((await position(page)) / (await coords(page)).max - portraitFraction) < 0.02, 'Resize preserves panning fraction');
   await page.setViewportSize({ width: 3840, height: 1400 }); await page.waitForTimeout(80);
-  assert.equal((await coords(page)).max, 0); assert.equal(await slider(page).isDisabled(), true); assert.equal(await position(page), 0);
+  assert.ok((await coords(page)).stageWidth <= 1600.1); assert.equal((await coords(page)).width, 1280);
+  assert.equal(await slider(page).isDisabled(), false); assert.ok(await position(page) <= (await coords(page)).max);
   await page.setViewportSize({ width: 1440, height: 1100 });
   // Browser-emulated touch: assert the real Pointer Events path, native page scroll and orientation resize.
   const touchContext = await create({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); const touch = await touchContext.newPage(); await open(touch);
@@ -147,11 +149,11 @@ try {
   const failContext = await create(); await failContext.route('**/*campus-map*.webp', route => route.fulfill({ status: 404, body: '' })); const fail = await failContext.newPage(); await fail.goto(base + '/fasilitas'); await viewport(fail).scrollIntoViewIfNeeded();
   await fail.getByText('Peta belum tersedia. Daftar fasilitas tetap dapat dibuka di bawah.', { exact: true }).waitFor(); assert.equal(await fail.locator('[data-campus-hotspot]').count(), 0); assert.equal(await fail.locator('[data-facility-card]').count(), 16); assert.equal(await slider(fail).isDisabled(), true);
   await failContext.unroute('**/*campus-map*.webp'); await viewport(fail).getByRole('button', { name: 'Coba lagi', exact: true }).click(); await fail.waitForFunction(() => document.querySelector('.campus-viewport').dataset.mapReady === 'true');
-  const photoContext = await create(); await photoContext.route('**/*kelas-b*.webp', route => route.fulfill({ status: 404, body: '' })); const photo = await photoContext.newPage(); await open(photo); await point(photo, 'gedung-b').click(); await photo.locator('[data-campus-photo-fallback]').waitFor();
+  const photoContext = await create(); await photoContext.route('**/*kelas-b*.webp', route => route.fulfill({ status: 404, body: '' })); const photo = await photoContext.newPage(); await open(photo); await point(photo, 'gedung-b').click(); await photo.locator('.campus-photo-main [data-campus-photo-fallback]').waitFor();
   // Actual fonts and normal/reduced motion on rendered UI.
   const motionContext = await create({ reducedMotion: 'no-preference' }), motion = await motionContext.newPage(); await open(motion); await point(motion, 'gedung-a').click();
   assert.equal(await motion.locator('[data-campus-preview]').evaluate(node => getComputedStyle(node).animationDuration), '0.28s');
-  assert.equal(await motion.locator('.campus-preview-photo').evaluate(node => getComputedStyle(node).transitionDuration), '0.3s');
+  assert.equal(await motion.locator('.campus-photo-main .campus-preview-photo').first().evaluate(node => getComputedStyle(node).transitionDuration), '0.3s');
   const floorOffset = () => motion.locator('.campus-floor').evaluate(node => new window.DOMMatrixReadOnly(getComputedStyle(node).transform).m41);
   const floorBefore = await floorOffset(); await drag(motion, -100); await motion.waitForTimeout(50);
   assert.ok(await floorOffset() >= floorBefore && await floorOffset() <= 16, 'Parallax is confined to the floor and capped at 16px');

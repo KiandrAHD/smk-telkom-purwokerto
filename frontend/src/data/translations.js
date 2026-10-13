@@ -7,10 +7,11 @@ import audit from './translationsAudit';
 import facilities from './translationsFasilitas';
 import calendar from './translationsCalendar';
 import spmbInfo from './translationsSpmbInfo';
+import jurusanDetail from './translationsJurusanDetail';
 
 export default {
   'Lihat semua fasilitas': 'View all facilities',
-  ...school, ...publicPages, ...portal, ...audit, ...teachers, ...spmb, ...facilities, ...calendar, ...spmbInfo,
+  ...school, ...publicPages, ...portal, ...audit, ...teachers, ...spmb, ...facilities, ...calendar, ...spmbInfo, ...jurusanDetail,
   'Pilihan Jurusan': school['Pilihan Jurusan'],
   'Tentang': 'About', 'Beranda': 'Home', 'Profil Sekolah': 'School Profile',
   'Profil Guru': 'Teacher Profiles', 'Ekstrakurikuler': 'Extracurricular Activities',

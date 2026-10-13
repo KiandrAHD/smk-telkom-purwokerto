@@ -7,6 +7,7 @@ import RibbonDivider from '../components/RibbonDivider';
 import { useLenis } from 'lenis/react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
+import HeroBadges from '../components/HeroBadges';
 import SectionAccents from '../components/SectionAccents';
 import ContentImage from '../components/ContentImage';
 import heroFigma from '../assets/ekstrakurikuler/hero-figma.webp';
@@ -231,9 +232,7 @@ const EkstrakurikulerPage = () => {
             <div className="hero-grid">
             <div className="hero-copy">
               <HeroBreadcrumb current="Ekstrakurikuler" />
-              <span className="w-fit rounded-full border border-primary/35 px-2 py-0.5 text-[8px] font-bold tracking-wide text-primary">
-                {t(ekstrakurikulerData.eyebrow)}
-              </span>
+              <HeroBadges />
               <h1 className="mt-4 font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">
                 {t(ekstrakurikulerData.title)}
               </h1>

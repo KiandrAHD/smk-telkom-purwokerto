@@ -6,7 +6,8 @@ import { slugify } from '../../utils/slug';
 import SectionAccents from '../SectionAccents';
 import TeacherPhoto from '../TeacherPhoto';
 import useSlidingPage from '../../hooks/useSlidingPage';
-import { guruData, kepalaSekolah } from '../../data/dummyData';
+import { kepalaSekolah } from '../../data/dummyData';
+import { schoolTeacherData as guruData } from '../../data/schoolTeacherData';
 
 const subscribeViewport = (notify) => {
   window.addEventListener('resize', notify);
