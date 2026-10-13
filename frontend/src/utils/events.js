@@ -35,7 +35,10 @@ export function eventPayload(data) {
   for (const field of ['tanggal_selesai', 'waktu_mulai', 'waktu_selesai', 'gambar_url', 'link_informasi']) payload[field] ||= null;
   return payload;
 }
-export const eventColor = event => ['akademik', 'lomba'].includes(event.category || event.kategori) ? 'bg-blue-50 text-blue-600' : ['karier', 'lainnya'].includes(event.category || event.kategori) ? 'bg-dark-100 text-dark-600' : 'bg-primary-50 text-primary';
+const publishedEventColor = event => ['akademik', 'lomba'].includes(event.category || event.kategori) ? 'bg-blue-50 text-blue-600' : ['karier', 'lainnya'].includes(event.category || event.kategori) ? 'bg-dark-100 text-dark-600' : 'bg-primary-50 text-primary';
+
+// Drafts are intentionally distinct in the admin calendar. Public data is filtered to published rows by Supabase and therefore keeps category colors.
+export const eventColor = event => event.status === 'draft' ? 'bg-amber-50 text-amber-700' : publishedEventColor(event);
 export function toCalendarEvent(row) {
   return { id: row.id, title: row.judul, date: row.tanggal_mulai, endDate: row.tanggal_selesai || row.tanggal_mulai, start: row.waktu_mulai?.slice(0, 5) || '', end: row.waktu_selesai?.slice(0, 5) || '', location: row.lokasi, organizer: row.penyelenggara, category: row.kategori, summary: row.ringkasan, description: row.deskripsi, image: row.gambar_url, link: row.link_informasi, status: row.status };
 }

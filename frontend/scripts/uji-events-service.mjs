@@ -15,7 +15,7 @@ globalThis.__eventTestClient = {
       range(start, end) { ranges.push([start, end]); return query; },
       eq(field, value) { filters.push([field, value]); return query; },
       abortSignal(value) { signal = value; return query; },
-      upsert(payload, options) { writes.push({ payload, options }); return query; },
+      insert(payload) { writes.push({ payload }); return query; },
       update(payload) { writes.push({ payload }); return query; },
       delete: () => query,
       single: async () => ({ data: responseError ? null : { id: 'stable-id', ...writes.at(-1)?.payload }, error: responseError }),
@@ -38,7 +38,7 @@ try {
   assert.deepEqual(ranges, [[0, 499], [500, 999]]); assert.equal(signal, controller.signal);
   assert.deepEqual(filters, [['status', 'published'], ['status', 'published']]);
   await createEvent(valid, 'stable-id'); await createEvent(valid, 'stable-id');
-  assert.equal(writes[0].payload.id, writes[1].payload.id); assert.deepEqual(writes[0].options, { onConflict: 'id' });
+  assert.equal(writes[0].payload.id, writes[1].payload.id); assert.equal(writes[0].payload.status, 'draft');
   const file = new File([new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10])], 'poster.png', { type: 'image/png' });
   await updateEvent('stable-id', { ...valid, image_file: file });
   assert.match(uploads.at(-1).path, /^events\//); assert.equal(uploads.at(-1).options.upsert, false);
