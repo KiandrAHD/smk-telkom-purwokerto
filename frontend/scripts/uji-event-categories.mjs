@@ -3,7 +3,7 @@ import { createServer } from 'vite';
 
 const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
 try {
-  const { emptyEvent, validateEvent, eventPayload, toCalendarEvent, getEventCategory } = await server.ssrLoadModule('/src/utils/events.js');
+  const { emptyEvent, validateEvent, eventPayload, toCalendarEvent, getEventCategory, eventColor } = await server.ssrLoadModule('/src/utils/events.js');
   const valid = { judul: 'QA kategori', tanggal_mulai: '2030-10-06', status: 'published' };
   const official = ['upacara-nasional', 'penilaian-siswa', 'libur-tahun-pelajaran', 'awal-pkl', 'hari-pertama-sekolah', 'hut-smk', 'libur-akhir-semester', 'perkiraan-kelulusan', 'cuti-bersama', 'libur-ramadhan'];
   for (const kategori of official) {
@@ -11,6 +11,8 @@ try {
     const payload = eventPayload({ ...valid, kategori, warna: '#wrong' });
     assert.equal(toCalendarEvent(payload).category, kategori);
     assert.equal(payload.warna, undefined, 'Only category ID is stored; color comes from the shared registry');
+    assert.equal(eventColor(toCalendarEvent(payload)), getEventCategory(kategori).badgeClass, 'Published badges follow the official category registry');
+    assert.equal(eventColor({ ...toCalendarEvent(payload), status: 'draft' }), 'bg-amber-50 text-amber-700', 'Draft badge tint from main remains distinct');
   }
   assert.equal(emptyEvent.kategori, '', 'New events require an explicit selection');
   assert.ok(validateEvent({ ...valid, kategori: '' }).kategori);

@@ -21,8 +21,8 @@ export function validateEvent(data) {
   for (const field of ['gambar_url', 'link_informasi']) {
     const value = String(data[field] || '').trim();
     if (!value) continue;
-    try { const url = new URL(value); if (value.length > 2048 || /\s/.test(value) || !['https:', 'http:'].includes(url.protocol)) throw new Error(); }
-    catch { errors[field] = 'Gunakan tautan http:// atau https:// yang valid (maksimal 2048 karakter).'; }
+    try { const url = new URL(value); if (value.length > 2048 || /\s/.test(value) || url.protocol !== 'https:' || url.username || url.password) throw new Error(); }
+    catch { errors[field] = 'Gunakan tautan HTTPS yang valid (maksimal 2048 karakter).'; }
   }
   return errors;
 }
@@ -33,7 +33,8 @@ export function eventPayload(data) {
   for (const field of ['tanggal_selesai', 'waktu_mulai', 'waktu_selesai', 'gambar_url', 'link_informasi']) payload[field] ||= null;
   return payload;
 }
-export const eventColor = event => getEventCategory(event.category || event.kategori).badgeClass;
+// Draft badge tint is separate from the category dot, which always uses the shared registry.
+export const eventColor = event => event.status === 'draft' ? 'bg-amber-50 text-amber-700' : getEventCategory(event.category || event.kategori).badgeClass;
 export function toCalendarEvent(row) {
   return { id: row.id, title: row.judul, date: row.tanggal_mulai, endDate: row.tanggal_selesai || row.tanggal_mulai, start: row.waktu_mulai?.slice(0, 5) || '', end: row.waktu_selesai?.slice(0, 5) || '', location: row.lokasi, organizer: row.penyelenggara, category: row.kategori, summary: row.ringkasan, description: row.deskripsi, image: row.gambar_url, link: row.link_informasi, status: row.status };
 }

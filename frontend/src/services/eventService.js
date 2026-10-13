@@ -21,8 +21,8 @@ function changed() {
 }
 export async function createEvent(data, id) {
   const client = ensureSupabase();
-  // Stable form UUID makes a retry after a lost response update the same event.
-  const saved = await saveWithContentImage(client, { ...eventPayload(data), image_file: data.image_file }, 'events', 'gambar_url', async payload => unwrap(await client.from('events').upsert({ ...payload, id }, { onConflict: 'id' }).select(columns).single()));
+  // Stable client UUID identifies duplicate attempts; insert must never update an existing event.
+  const saved = await saveWithContentImage(client, { ...eventPayload(data), image_file: data.image_file }, 'events', 'gambar_url', async payload => unwrap(await client.from('events').insert({ ...payload, id }).select(columns).single()));
   changed(); return saved;
 }
 export async function updateEvent(id, data) {

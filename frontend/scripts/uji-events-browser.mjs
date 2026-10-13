@@ -67,8 +67,9 @@ async function contextFor(id) {
         const existing = rows.findIndex(row => row.id === url.searchParams.get('id')?.slice(3));
         if (method === 'POST') {
           const input = request.postDataJSON(); const index = rows.findIndex(row => row.id === input.id);
+          if (index >= 0) return route.fulfill({ status: 409, contentType: 'application/json', body: '{"code":"23505","message":"Duplicate event ID"}' });
           data = { ...input, created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
-          if (index < 0) rows.push(data); else rows[index] = data;
+          rows.push(data);
           if (loseSaveResponse) { loseSaveResponse = false; return route.fulfill({ status: 500, contentType: 'application/json', body: '{"code":"XX000","message":"Response lost after save"}' }); }
         } else if (method === 'PATCH' && existing >= 0) { rows[existing] = { ...rows[existing], ...request.postDataJSON(), updated_at: new Date().toISOString() }; data = rows[existing]; }
         else if (method === 'DELETE' && existing >= 0) { data = { id: rows[existing].id }; rows.splice(existing, 1); }
@@ -124,10 +125,15 @@ try {
   await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByText('Waktu selesai harus setelah waktu mulai pada hari yang sama.', { exact: true }).waitFor();
   await admin.keyboard.press('Escape');
   await add('Draft QA'); await admin.reload(); await admin.getByLabel('Bulan kalender admin').fill('2030-10'); await admin.getByRole('button', { name: 'Detail Draft QA', exact: true }).waitFor();
+  assert.match(await admin.getByRole('button', { name: 'Detail Draft QA', exact: true }).getAttribute('class'), /bg-amber-50/);
+  assert.equal(await dotColor(admin.locator('[data-admin-date="2030-10-06"] [data-category-dot="upacara-nasional"]')), '#FF0033', 'Draft tint must not change the official category dot');
   await publicPage.goto(base + '/kalender'); await publicPage.locator('[data-calendar-date]').first().waitFor();
   await legend(publicPage);
   assert.equal(await publicPage.getByText('Draft QA', { exact: true }).count(), 0);
   await add('Published QA', true); await publicPage.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await publicPage.locator('input[type="month"]').fill('2029-01');
+  await publicPage.locator('aside').getByRole('button', { name: /Published QA/ }).waitFor();
+  assert.equal(await publicPage.locator('#calendar-panel [data-calendar-event]').count(), 0, 'Upcoming sidebar spans all events even when the viewed month is empty');
   console.log('PASS create/reload and Draft privacy; checking category edit sync.');
   await publicPage.locator('input[type="month"]').fill('2030-10'); await publicPage.locator('[data-calendar-date="2030-10-06"]').click();
   await publicPage.locator('aside').getByRole('button', { name: /Published QA/ }).waitFor();
@@ -171,7 +177,15 @@ try {
   await admin.getByRole('button', { name: 'Tambah Event', exact: true }).click(); await field('Judul kegiatan (wajib)', 'Lost response QA'); await field('Tanggal mulai (wajib)', '2030-10-07'); loseSaveResponse = true;
   await selectCategory(admin, 'Penilaian Siswa (TKA, PSAS, PSAJ)');
   await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByRole('dialog').getByRole('alert').waitFor();
-  await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByRole('dialog').waitFor({ state: 'hidden' }); assert.equal(rows.filter(row => row.judul === 'Lost response QA').length, 1);
+  const lostRecord = structuredClone(rows.find(row => row.judul === 'Lost response QA'));
+  await field('Judul kegiatan (wajib)', 'Changed duplicate QA');
+  await Promise.all([admin.waitForResponse(response => response.url().includes('/events?') && response.status() === 409), admin.getByRole('button', { name: 'Simpan Event', exact: true }).click()]);
+  await admin.getByRole('dialog').getByRole('alert').waitFor();
+  assert.deepEqual(rows.find(row => row.id === lostRecord.id), lostRecord, 'Retry with an existing UUID must not overwrite its event');
+  assert.equal(rows.filter(row => row.judul === 'Lost response QA').length, 1);
+  await admin.getByRole('dialog').getByRole('button', { name: 'Batal', exact: true }).click();
+  await admin.getByRole('button', { name: 'Muat ulang kegiatan', exact: true }).click();
+  await admin.getByRole('button', { name: 'Detail Lost response QA', exact: true }).waitFor();
   await add('Third QA'); await add('Fourth QA');
   await admin.locator('[data-admin-date="2030-10-06"]').getByRole('button', { name: '+2 lainnya', exact: true }).click(); await admin.getByRole('dialog').getByText('Fourth QA', { exact: true }).waitFor(); await admin.keyboard.press('Escape');
   await field('Cari kegiatan', 'not found'); await admin.getByText('Tidak ada kegiatan yang cocok dengan pencarian.', { exact: true }).waitFor(); await field('Cari kegiatan', '');

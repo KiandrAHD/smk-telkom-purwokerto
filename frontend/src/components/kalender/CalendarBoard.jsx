@@ -26,7 +26,7 @@ export default function CalendarBoard({ events = [] }) {
   const monthLabel = formatDate(`${month}-01`, { month: 'long', year: 'numeric' });
   const cells = monthCells(view.year, view.month);
   const monthEvents = eventsForMonth(events, view.year, view.month);
-  const agenda = view.selected ? eventsOnDate(events, view.selected) : upcomingEvents(monthEvents).slice(0, 4);
+  const agenda = view.selected ? eventsOnDate(events, view.selected) : upcomingEvents(events).slice(0, 4);
   const focusKey = view.selected ?? (today.startsWith(month) ? today : `${month}-01`);
 
   const chooseDate = key => {
@@ -137,7 +137,7 @@ export default function CalendarBoard({ events = [] }) {
           <aside className="flex min-w-0 flex-col gap-3" aria-label={t('Agenda Terdekat')}>
             <div className="flex-1 rounded-2xl border border-dark-300 bg-white p-3">
               <div className="flex items-center justify-between gap-2"><h3 className="flex items-center gap-2 text-xs font-bold text-dark-900"><span className="grid size-8 shrink-0 place-items-center rounded-lg bg-primary text-white"><CalendarDays className="size-4" /></span>{view.selected ? t('Agenda pada {date}', { date: formatDate(view.selected, { day: 'numeric', month: 'short' }) }) : t('Agenda Terdekat')}</h3><button type="button" onClick={allEvents} className="min-h-9 shrink-0 text-[9px] font-semibold text-primary hover:underline">{t('Lihat Semua')}<ArrowRight className="ml-1 inline size-3" /></button></div>
-              {agenda.length ? <ul className="mt-4 space-y-3">{agenda.map(event => <li key={event.id}>{eventCard(event)}</li>)}</ul> : <p role="status" className="py-10 text-center text-xs leading-relaxed text-dark-500">{t(view.selected ? 'Belum ada kegiatan pada tanggal ini.' : 'Belum ada agenda mendatang pada bulan ini.')}</p>}
+              {agenda.length ? <ul className="mt-4 space-y-3">{agenda.map(event => <li key={event.id}>{eventCard(event)}</li>)}</ul> : <p role="status" className="py-10 text-center text-xs leading-relaxed text-dark-500">{t(view.selected ? 'Belum ada kegiatan pada tanggal ini.' : 'Belum ada agenda mendatang.')}</p>}
             </div>
           </aside>
         </div>

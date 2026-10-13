@@ -43,7 +43,7 @@ export default {
   'Contoh kegiatan': 'Example event',
   'Belum ada kegiatan pada tanggal ini.': 'No events on this date.',
   'Belum ada kegiatan pada bulan ini.': 'No events this month.',
-  'Belum ada agenda mendatang pada bulan ini.': 'No upcoming events this month.',
+  'Belum ada agenda mendatang.': 'No upcoming events.',
   '{count} kegiatan': '{count} events',
   'Jangan lewatkan setiap kesempatan!': 'Make the most of every opportunity!',
   'Ikuti berbagai kegiatan menarik yang bisa menambah pengalaman dan prestasimu di SMK Telkom Purwokerto.': 'Explore activities that enrich your experience and achievements at SMK Telkom Purwokerto.',
