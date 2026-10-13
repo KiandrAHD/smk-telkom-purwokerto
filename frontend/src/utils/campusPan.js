@@ -1,6 +1,12 @@
 export const campusHintKey = 'smk-campus-drag-understood-v1';
 export const panLimit = (viewportWidth, imageWidth) => Math.max(0, imageWidth - viewportWidth);
 export const clampPan = (value, maximum) => Math.min(Math.max(0, value), maximum);
+export function campusGeometry(viewportWidth) {
+  // Figma: a 3142px map in an 1847px frame, initially offset by 83px.
+  const width = Math.min(3142, Math.max(960, viewportWidth * 3142 / 1847));
+  const maximum = panLimit(viewportWidth, width);
+  return { width, height: width * 727 / 2164, maximum, initial: clampPan(83 * width / 3142, maximum), unit: width / 3142 };
+}
 export const centerCampusPoint = (x, imageWidth, viewportWidth) => clampPan(x * imageWidth - viewportWidth / 2, panLimit(viewportWidth, imageWidth));
 export const meaningfulPan = (start, current) => Math.abs(current - start) >= 24;
 export function gestureAxis(dx, dy) {

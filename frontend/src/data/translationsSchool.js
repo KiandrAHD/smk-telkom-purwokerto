@@ -1,6 +1,7 @@
 export default {
   'Menjelajahi Stematel': 'Explore Stematel',
   'Geser untuk melihat': 'Drag to explore',
+  'Geser untuk Menjelajah': 'Drag to explore',
   'Geser peta ke kiri atau kanan. Gunakan tombol arah, slider, atau tombol panah pada keyboard. Pilih titik untuk melihat informasi fasilitas.': 'Drag the map left or right. Use the direction buttons, slider, or keyboard arrows. Select a marker to view facility information.',
   'Peta kampus SMK Telkom Purwokerto': 'SMK Telkom Purwokerto campus map',
   'Peta isometrik sekolah dengan bangunan beratap merah': 'Isometric school map with red-roofed buildings',

@@ -1,5 +1,7 @@
 # Interactive Campus Explorer — 13 Oktober 2026
 
+Pembaruan framing/motion: [Campus framing](campus-framing.md) menjelaskan geometri baru, transform-based pan, label–pin connectors, slider progress dan subtle floor parallax. Uraian native scrollLeft, minimum 1440 px, ukuran pin dan hint di bawah merekam implementasi awal yang telah diperbarui. Daftar file perubahan terbaru mencakup laporan ini.
+
 School Tour sekarang tersedia di `/fasilitas`, setelah marquee dan sebelum daftar fasilitas. Perubahan terbatas pada peta, preview, hubungan ke daftar fasilitas, terjemahan, aset, dan pengujian. Tidak ada dependency, perubahan font global, database, API, atau deployment.
 
 ## Audit referensi dan keputusan

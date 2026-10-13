@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
-import { clampPan, centerCampusPoint, gestureAxis, meaningfulPan, panLimit } from '../utils/campusPan';
+import { campusGeometry, clampPan, centerCampusPoint, gestureAxis, meaningfulPan } from '../utils/campusPan';
 
 export default function useCampusPan({ viewport, stage, slider, previous, next }, onLearn) {
   const control = useRef(null);
@@ -7,21 +7,24 @@ export default function useCampusPan({ viewport, stage, slider, previous, next }
     const view = viewport.current, image = stage.current;
     if (!view || !image) return undefined;
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const state = { max: 0, width: 0, imageWidth: 0, fraction: 0.064, gesture: null, frame: 0, dragFrame: 0, suppressClick: false, learned: false, wheelStart: 0, wheelTime: 0, destination: null };
+    const state = { max: 0, width: 0, imageWidth: 0, fraction: null, position: 0, gesture: null, frame: 0, dragFrame: 0, suppressClick: false, learned: false, wheelStart: 0, wheelTime: 0, destination: null };
     const enabled = () => view.dataset.mapReady === 'true';
     const stop = () => { cancelAnimationFrame(state.frame); state.frame = 0; state.destination = null; };
     const sync = () => {
-      // Browser resize can clamp scrollLeft before ResizeObserver runs; keep the last fraction until measurement.
-      if (state.max > 0 && state.width === view.clientWidth && state.imageWidth === image.offsetWidth) state.fraction = view.scrollLeft / state.max;
+      if (state.max > 0) state.fraction = state.position / state.max;
+      image.style.setProperty('transform', `translate3d(${-state.position}px,0,0)`);
+      image.style.setProperty('--campus-floor-pan', `${media.matches ? 0 : Math.min(16, state.position * 0.04)}px`);
+      view.dataset.pan = String(state.position); view.dataset.panMax = String(state.max);
+      if (slider.current) { slider.current.style.setProperty('--campus-progress', `${state.max > 0 ? state.position / state.max * 100 : 0}%`); slider.current.parentElement.style.setProperty('--campus-fraction', String(state.max > 0 ? state.position / state.max : 0)); }
       if (slider.current) { slider.current.value = String(Math.round(state.max > 0 ? state.fraction * 1000 : 0)); slider.current.disabled = !enabled() || state.max <= 0; }
-      if (previous.current) previous.current.disabled = !enabled() || view.scrollLeft <= 0.5;
-      if (next.current) next.current.disabled = !enabled() || view.scrollLeft >= state.max - 0.5;
+      if (previous.current) previous.current.disabled = !enabled() || state.position <= 0.5;
+      if (next.current) next.current.disabled = !enabled() || state.position >= state.max - 0.5;
     };
-    const position = value => { view.scrollLeft = clampPan(value, state.max); sync(); };
-    const learn = start => { if (!state.learned && meaningfulPan(start, view.scrollLeft)) { state.learned = true; onLearn(); } };
+    const position = value => { state.position = clampPan(value, state.max); sync(); };
+    const learn = start => { if (!state.learned && meaningfulPan(start, state.position)) { state.learned = true; onLearn(); } };
     const to = (value, smooth = true, completed) => {
       stop();
-      const destination = clampPan(value, state.max), start = view.scrollLeft;
+      const destination = clampPan(value, state.max), start = state.position;
       if (!smooth || media.matches || Math.abs(destination - start) < 0.5) { position(destination); completed?.(); return; }
       const begun = performance.now(); state.destination = destination;
       const tick = time => {
@@ -42,14 +45,18 @@ export default function useCampusPan({ viewport, stage, slider, previous, next }
     };
     const measure = () => {
       stop(); endGesture(); const fraction = state.fraction;
-      state.width = view.clientWidth; state.imageWidth = image.offsetWidth;
-      state.max = panLimit(state.width, state.imageWidth);
-      position(state.max * fraction);
+      state.width = view.clientWidth;
+      const failed = view.dataset.mapFailed === 'true', geometry = campusGeometry(state.width);
+      state.imageWidth = failed ? state.width : geometry.width; state.max = failed ? 0 : geometry.maximum;
+      image.style.setProperty('width', `${state.imageWidth}px`); view.style.setProperty('height', `${failed ? 224 : geometry.height}px`);
+      image.style.setProperty('--campus-unit', `${geometry.unit}px`); image.style.setProperty('--campus-scale', String(geometry.unit));
+      view.closest('.campus-explorer').style.setProperty('--campus-control-unit', `${geometry.unit}px`);
+      position(fraction === null ? geometry.initial : state.max * fraction);
     };
     const down = event => {
       if (!enabled() || state.max <= 0 || !event.isPrimary || event.button !== 0) return;
       stop(); endGesture(); state.suppressClick = false;
-      state.gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, scroll: view.scrollLeft, axis: 'pending', pending: view.scrollLeft };
+      state.gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, scroll: state.position, axis: 'pending', pending: state.position };
     };
     const move = event => {
       const gesture = state.gesture;
@@ -73,36 +80,36 @@ export default function useCampusPan({ viewport, stage, slider, previous, next }
       if (!delta) return;
       event.preventDefault(); event.stopPropagation(); stop();
       const now = performance.now();
-      if (now - state.wheelTime > 250) state.wheelStart = view.scrollLeft;
+      if (now - state.wheelTime > 250) state.wheelStart = state.position;
       state.wheelTime = now;
-      position(view.scrollLeft + delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? state.width : 1)); learn(state.wheelStart);
+      position(state.position + delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? state.width : 1)); learn(state.wheelStart);
     };
     const key = event => {
       if (!enabled() || event.target !== view || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();
-      to(event.key === 'Home' ? 0 : event.key === 'End' ? state.max : view.scrollLeft + (event.key === 'ArrowLeft' ? -1 : 1) * state.width * 0.4);
+      to(event.key === 'Home' ? 0 : event.key === 'End' ? state.max : state.position + (event.key === 'ArrowLeft' ? -1 : 1) * state.width * 0.4);
     };
-    const reduced = () => { if (media.matches && state.destination !== null) { const destination = state.destination; stop(); position(destination); } };
+    const reduced = () => { if (media.matches && state.destination !== null) { const destination = state.destination; stop(); position(destination); } sync(); };
     const blur = () => { endGesture(); stop(); };
     const preventDrag = event => event.preventDefault();
     const observer = new ResizeObserver(measure); observer.observe(view); observer.observe(image);
     view.addEventListener('pointerdown', down); window.addEventListener('pointermove', move, { passive: false });
     window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up); window.addEventListener('blur', blur);
     view.addEventListener('click', click, true); view.addEventListener('wheel', wheel, { passive: false });
-    view.addEventListener('keydown', key); view.addEventListener('scroll', sync, { passive: true }); view.addEventListener('dragstart', preventDrag);
+    view.addEventListener('keydown', key); view.addEventListener('dragstart', preventDrag);
     media.addEventListener('change', reduced);
     control.current = {
       measure, stop,
-      by: amount => to(view.scrollLeft + amount * state.width),
+      by: amount => to(state.position + amount * state.width),
       fraction: value => to(value * state.max, false),
       locate: (x, completed) => to(centerCampusPoint(x, state.imageWidth, state.width), true, completed),
-      reveal: x => { const local = x * state.imageWidth - view.scrollLeft; if (local < 44 || local > state.width - 44) to(centerCampusPoint(x, state.imageWidth, state.width)); },
+      reveal: x => { const local = x * state.imageWidth - state.position; if (local < 100 || local > state.width - 100) to(centerCampusPoint(x, state.imageWidth, state.width)); },
     };
     measure();
     return () => {
       observer.disconnect(); endGesture(); stop(); cancelAnimationFrame(state.dragFrame); control.current = null;
       view.removeEventListener('pointerdown', down); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); window.removeEventListener('blur', blur);
-      view.removeEventListener('click', click, true); view.removeEventListener('wheel', wheel); view.removeEventListener('keydown', key); view.removeEventListener('scroll', sync); view.removeEventListener('dragstart', preventDrag); media.removeEventListener('change', reduced);
+      view.removeEventListener('click', click, true); view.removeEventListener('wheel', wheel); view.removeEventListener('keydown', key); view.removeEventListener('dragstart', preventDrag); media.removeEventListener('change', reduced);
     };
   }, [onLearn, viewport, stage, slider, previous, next]);
   const by = useCallback(value => control.current?.by(value), []), fraction = useCallback(value => control.current?.fraction(value), []);

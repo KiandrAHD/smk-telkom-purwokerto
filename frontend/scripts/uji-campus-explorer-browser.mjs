@@ -20,7 +20,15 @@ async function create(options = {}) {
 const viewport = page => page.locator('.campus-viewport');
 const slider = page => page.locator('.campus-slider');
 const point = (page, id) => page.locator(`[data-campus-hotspot="${id}"]`);
-const position = page => viewport(page).evaluate(node => node.scrollLeft);
+const position = page => viewport(page).evaluate(node => Math.max(0, -new window.DOMMatrixReadOnly(getComputedStyle(node.querySelector('[data-campus-stage]')).transform).m41));
+async function setSlider(page, key) {
+  await slider(page).press(key);
+  await page.waitForFunction(key => {
+    const view = document.querySelector('.campus-viewport'), input = document.querySelector('.campus-slider');
+    const expected = key === 'Home' ? 0 : Number(view.dataset.panMax);
+    return Number(input.value) === (key === 'Home' ? 0 : 1000) && Math.abs(Number(view.dataset.pan) - expected) < 0.1;
+  }, key);
+}
 async function open(page) {
   await page.goto(base + '/fasilitas'); await viewport(page).scrollIntoViewIfNeeded();
   await page.waitForFunction(() => document.querySelector('.campus-viewport')?.dataset.mapReady === 'true');
@@ -34,7 +42,7 @@ async function drag(page, dx, dy = 0, target) {
 async function coords(page) {
   return viewport(page).evaluate(view => {
     const stage = view.querySelector('[data-campus-stage]'), image = stage.querySelector('img[draggable="false"]'), box = stage.getBoundingClientRect();
-    return { left: view.scrollLeft, max: view.scrollWidth - view.clientWidth, width: view.clientWidth, stageWidth: box.width, stageHeight: box.height, ratio: box.width / box.height, imageWidth: image?.naturalWidth, imageHeight: image?.naturalHeight,
+    return { left: -new window.DOMMatrixReadOnly(getComputedStyle(stage).transform).m41, max: Math.max(0, box.width - view.clientWidth), width: view.clientWidth, stageWidth: box.width, stageHeight: box.height, ratio: box.width / box.height, imageWidth: image?.naturalWidth, imageHeight: image?.naturalHeight,
       points: [...stage.querySelectorAll('[data-campus-hotspot]')].map(pin => { const rect = pin.getBoundingClientRect(); return { id: pin.dataset.campusHotspot, x: (rect.left + rect.width / 2 - box.left) / box.width, y: (rect.bottom - box.top) / box.height, width: rect.width, height: rect.height }; }) };
   });
 }
@@ -43,10 +51,12 @@ try {
   assert.equal(await page.locator('[data-campus-hotspot]').count(), 12);
   assert.equal(await page.locator('[data-campus-hint]').isVisible(), true);
   const original = await coords(page); assert.ok(original.left > 0 && original.max > 0); assert.equal(original.imageWidth, 2164); assert.equal(original.imageHeight, 727);
+  await page.locator('#school-tour img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
+  assert.ok(Math.abs(original.left - original.stageWidth * 83 / 3142) < 0.05, 'Initial offset derives from Figma geometry');
   await page.locator('#school-tour').screenshot({ path: join(output, 'initial-1440.png') });
   await viewport(page).hover(); assert.equal(await page.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'false');
   await drag(page, -6); assert.ok(Math.abs(await position(page) - original.left) < 1); assert.equal(await page.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'false');
-  await slider(page).focus(); await page.keyboard.press('Home'); assert.equal(await position(page), 0);
+  await setSlider(page, 'Home'); assert.equal(await position(page), 0);
   await drag(page, 150); assert.equal(await position(page), 0); assert.equal(await page.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'false', 'No map movement means no learned hint');
   await drag(page, -200); assert.ok(Math.abs(await position(page) - 200) < 2);
   await page.waitForFunction(() => getComputedStyle(document.querySelector('[data-campus-hint]')).visibility === 'hidden');
@@ -54,14 +64,14 @@ try {
   const moved = await coords(page);
   for (const pin of original.points) { const next = moved.points.find(item => item.id === pin.id); assert.ok(Math.abs(pin.x - next.x) < 0.0001 && Math.abs(pin.y - next.y) < 0.0001, 'Pins share the image coordinate system'); }
   assert.ok(Math.abs(Number(await slider(page).inputValue()) - moved.left / moved.max * 1000) < 2);
-  await slider(page).focus(); await page.keyboard.press('End'); assert.ok(Math.abs(await position(page) - moved.max) < 1);
+  await setSlider(page, 'End'); assert.ok(Math.abs(await position(page) - moved.max) < 1, JSON.stringify({ pan: await position(page), movedMax: moved.max, now: await coords(page) }));
   await drag(page, -350); assert.ok(Math.abs(await position(page) - moved.max) < 1);
-  await slider(page).press('Home'); await viewport(page).scrollIntoViewIfNeeded();
+  await setSlider(page, 'Home'); await viewport(page).scrollIntoViewIfNeeded();
   const blank = await viewport(page).boundingBox(); await page.mouse.move(blank.x + blank.width / 2, blank.y + blank.height * 0.85);
   const y = await page.evaluate(() => window.scrollY), left = await position(page);
   await page.mouse.wheel(0, 180); await page.waitForFunction(y => window.scrollY > y + 20, y); assert.ok(Math.abs(await position(page) - left) < 1, 'Vertical wheel remains page scrolling');
   await viewport(page).scrollIntoViewIfNeeded(); const wheelBox = await viewport(page).boundingBox(); await page.mouse.move(wheelBox.x + wheelBox.width / 2, wheelBox.y + wheelBox.height * 0.85);
-  await page.mouse.wheel(180, 0); await page.waitForFunction(() => document.querySelector('.campus-viewport').scrollLeft > 150);
+  await page.mouse.wheel(180, 0); await page.waitForFunction(() => Number(document.querySelector('.campus-viewport').dataset.pan) > 150);
   await viewport(page).focus(); const keyStart = await position(page); await page.keyboard.press('ArrowRight'); assert.ok(await position(page) > keyStart);
   await page.reload(); await viewport(page).scrollIntoViewIfNeeded(); await page.waitForFunction(() => document.querySelector('.campus-viewport')?.dataset.mapReady === 'true');
   assert.equal(await page.locator('[data-campus-hint]').isVisible(), false, 'Learned hint stays hidden after refresh');
@@ -77,8 +87,13 @@ try {
     else assert.equal(await preview.locator('[data-campus-photo-fallback]').count(), 1);
     const before = await position(page); await page.keyboard.press('Escape'); await preview.waitFor({ state: 'hidden' }); assert.ok(Math.abs(await position(page) - before) < 1, 'Closing details does not reset panning');
   }
+  await point(page, 'gedung-c').focus(); await point(page, 'gedung-c').locator('.campus-hotspot-label').click();
+  await page.locator('[data-campus-preview="kelas-c"]').waitFor(); await page.keyboard.press('Escape'); await page.locator('[data-campus-preview]').waitFor({ state: 'hidden' });
+  const sliderBox = await slider(page).boundingBox(); await page.mouse.click(sliderBox.x + sliderBox.width / 2, sliderBox.y + sliderBox.height / 2);
+  const trackPosition = await coords(page); assert.ok(Math.abs(trackPosition.left / trackPosition.max - 0.5) < 0.03, 'Track click controls the actual map position');
+  assert.ok(Math.abs(await slider(page).evaluate(node => parseFloat(getComputedStyle(node).getPropertyValue('--campus-progress'))) - trackPosition.left / trackPosition.max * 100) < 0.1, 'Red progress is synchronized');
   await point(page, 'gedung-a').click(); await page.locator('[data-campus-preview="kelas-a"]').waitFor();
-  await slider(page).press('End'); const movedWhileOpen = await position(page);
+  await setSlider(page, 'End'); const movedWhileOpen = await position(page);
   await page.getByRole('button', { name: 'Tutup informasi fasilitas', exact: true }).click(); await page.locator('[data-campus-preview]').waitFor({ state: 'hidden' });
   assert.ok(Math.abs(await position(page) - movedWhileOpen) < 1, 'Returning focus cannot pan back to an offscreen marker');
   await point(page, 'gedung-b').focus(); await page.keyboard.press('Enter'); await page.getByRole('button', { name: 'Lihat daftar fasilitas', exact: true }).click();
@@ -95,18 +110,21 @@ try {
   for (const width of [1920, 1440, 1024, 768, 390, 375, 320]) for (const language of ['id', 'en']) {
     await page.setViewportSize({ width, height: 1100 });
     if (await page.locator('html').getAttribute('lang') !== language) await page.locator('header').getByRole('button', { name: /^Switch to / }).click();
-    await viewport(page).scrollIntoViewIfNeeded(); await slider(page).press('Home'); await page.evaluate(() => document.fonts.ready);
+    await viewport(page).scrollIntoViewIfNeeded(); await setSlider(page, 'Home'); await page.evaluate(() => document.fonts.ready);
     const geometry = await coords(page);
     assert.ok(geometry.left >= 0 && geometry.left <= geometry.max); assert.ok(Math.abs(geometry.ratio - 2164 / 727) < 0.01);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false);
     for (const pin of geometry.points) assert.ok(pin.width >= 44 && pin.height >= 44);
     await page.locator('#school-tour').screenshot({ path: join(output, `campus-${width}-${language}-left.png`) });
-    await slider(page).press('End'); await page.locator('#school-tour').screenshot({ path: join(output, `campus-${width}-${language}-right.png`) });
+    await setSlider(page, 'End'); await page.locator('#school-tour').screenshot({ path: join(output, `campus-${width}-${language}-right.png`) });
     results.push({ width, language, ...geometry });
   }
   const portraitFraction = (await position(page)) / (await coords(page)).max;
   await page.setViewportSize({ width: 768, height: 650 }); await viewport(page).scrollIntoViewIfNeeded(); await page.waitForTimeout(100);
   assert.ok(Math.abs((await position(page)) / (await coords(page)).max - portraitFraction) < 0.02, 'Resize preserves panning fraction');
+  await page.setViewportSize({ width: 3840, height: 1400 }); await page.waitForTimeout(80);
+  assert.equal((await coords(page)).max, 0); assert.equal(await slider(page).isDisabled(), true); assert.equal(await position(page), 0);
+  await page.setViewportSize({ width: 1440, height: 1100 });
   // Browser-emulated touch: assert the real Pointer Events path, native page scroll and orientation resize.
   const touchContext = await create({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); const touch = await touchContext.newPage(); await open(touch);
   const cdp = await touchContext.newCDPSession(touch);
@@ -134,6 +152,11 @@ try {
   const motionContext = await create({ reducedMotion: 'no-preference' }), motion = await motionContext.newPage(); await open(motion); await point(motion, 'gedung-a').click();
   assert.equal(await motion.locator('[data-campus-preview]').evaluate(node => getComputedStyle(node).animationDuration), '0.28s');
   assert.equal(await motion.locator('.campus-preview-photo').evaluate(node => getComputedStyle(node).transitionDuration), '0.3s');
+  const floorOffset = () => motion.locator('.campus-floor').evaluate(node => new window.DOMMatrixReadOnly(getComputedStyle(node).transform).m41);
+  const floorBefore = await floorOffset(); await drag(motion, -100); await motion.waitForTimeout(50);
+  assert.ok(await floorOffset() >= floorBefore && await floorOffset() <= 16, 'Parallax is confined to the floor and capped at 16px');
+  await motion.emulateMedia({ reducedMotion: 'reduce' }); assert.equal(await floorOffset(), 0);
+  await motion.emulateMedia({ reducedMotion: 'no-preference' });
   await point(motion, 'gedung-b').click(); await motion.locator('[data-campus-preview="kelas-b"]').waitFor();
   await motion.getByRole('button', { name: 'Tutup informasi fasilitas', exact: true }).click(); assert.equal(await motion.locator('[data-campus-preview]').getAttribute('data-closing'), 'true'); await motion.locator('[data-campus-preview]').waitFor({ state: 'hidden' });
   const fontSession = await motionContext.newCDPSession(motion); await fontSession.send('DOM.enable'); await fontSession.send('CSS.enable'); const { root } = await fontSession.send('DOM.getDocument');
