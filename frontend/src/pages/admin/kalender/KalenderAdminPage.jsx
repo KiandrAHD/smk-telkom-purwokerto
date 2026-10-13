@@ -3,11 +3,13 @@ import { CalendarDays, ChevronLeft, ChevronRight, Clock, MapPin, Pencil, Plus, R
 import { useSearchParams } from 'react-router-dom';
 import Modal from '../../../components/dashboard/Modal';
 import EventDetails from '../../../components/kalender/EventDetails';
+import EventCategoryLegend from '../../../components/kalender/EventCategoryLegend';
+import EventCategoryLabel, { EventCategoryDot } from '../../../components/kalender/EventCategoryLabel';
 import EventForm from './EventForm';
 import useEvents from '../../../hooks/useEvents';
 import { createEvent, deleteEvent, eventError, updateEvent } from '../../../services/eventService';
 import { dateFromKey, monthCells } from '../../../utils/calendar';
-import { eventCategories, eventColor, eventsOnDate, eventTimeLabel, toCalendarEvent, upcomingEvents } from '../../../utils/events';
+import { getEventCategory, eventColor, eventsOnDate, eventTimeLabel, toCalendarEvent, upcomingEvents } from '../../../utils/events';
 import { getSchoolDateKey } from '../../../utils/publicContent';
 
 export default function KalenderAdminPage() {
@@ -20,7 +22,8 @@ export default function KalenderAdminPage() {
   const { items, loading, error, refresh } = useEvents();
   const [year, number] = month.split('-').map(Number);
   const cells = monthCells(year, number - 1);
-  const rows = useMemo(() => items.filter(item => (status === 'all' || item.status === status) && [item.judul, item.kategori, eventCategories.find(category => category.value === item.kategori)?.label, item.lokasi, item.ringkasan, item.deskripsi, item.penyelenggara].join(' ').toLocaleLowerCase('id-ID').includes(query.trim().toLocaleLowerCase('id-ID'))), [items, query, status]);
+  const rows = useMemo(() => items.filter(item => (status === 'all' || item.status === status) && [item.judul, item.kategori, getEventCategory(item.kategori).label, item.lokasi, item.ringkasan, item.deskripsi, item.penyelenggara].join(' ').toLocaleLowerCase('id-ID').includes(query.trim().toLocaleLowerCase('id-ID'))), [items, query, status]);
+  const categoriesToReview = items.filter(item => getEventCategory(item.kategori).legacy).length;
   const events = useMemo(() => rows.map(toCalendarEvent), [rows]);
   const agenda = upcomingEvents(events);
   const date = (key, options = { day: 'numeric', month: 'long', year: 'numeric' }) => new Intl.DateTimeFormat('id-ID', { ...options, timeZone: 'UTC' }).format(dateFromKey(key));
@@ -66,28 +69,29 @@ export default function KalenderAdminPage() {
     </div>
     {loading && <p role="status" className="mt-4 text-sm text-dark-500">Memuat kegiatan...</p>}
     {error && <p role="alert" className="mt-4 rounded-lg bg-primary-50 p-4 text-sm text-primary-800">{error}</p>}
+    {categoriesToReview > 0 && <p role="status" className="mt-4 rounded-lg bg-dark-50 p-3 text-xs leading-relaxed text-dark-600">{categoriesToReview} kegiatan memakai kategori lama atau belum dikenali. Data tetap tersimpan; tinjau kategori melalui Edit Event.</p>}
     {!loading && !error && query && !events.length && <p role="status" className="mt-4 text-sm text-dark-500">Tidak ada kegiatan yang cocok dengan pencarian.</p>}
     <div className="mt-6 grid items-start gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(15rem,1fr)]">
-      <div className="min-w-0 overflow-hidden rounded-lg border border-dark-200"><table className="w-full table-fixed border-collapse" aria-label={date(`${month}-01`, { month: 'long', year: 'numeric' })}>
+      <div className="min-w-0 overflow-hidden rounded-lg border border-dark-200 bg-white"><table className="w-full table-fixed border-collapse" aria-label={date(`${month}-01`, { month: 'long', year: 'numeric' })}>
         <thead><tr>{['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'].map(day => <th scope="col" key={day} className="h-10 bg-dark-50 text-[10px] font-semibold text-dark-600 sm:text-xs">{day}</th>)}</tr></thead>
         <tbody>{Array.from({ length: cells.length / 7 }, (_, row) => <tr key={row}>{cells.slice(row * 7, row * 7 + 7).map(cell => {
           const dayEvents = eventsOnDate(events, cell.key);
           return <td key={cell.key} data-admin-date={cell.key} className="h-24 border border-dark-100 p-1 align-top sm:h-28 sm:p-2">
             <button type="button" aria-label={`Agenda ${date(cell.key)}`} onClick={() => setModal({ type: 'day', date: cell.key })} aria-current={cell.key === today ? 'date' : undefined} className={`grid size-6 place-items-center rounded-full text-xs font-semibold hover:bg-primary-50 ${cell.key === today ? 'bg-primary text-white' : cell.inMonth ? 'text-dark-800' : 'text-dark-400'}`}>{cell.day}</button>
-            <div className="mt-1 space-y-1">{dayEvents.slice(0, 2).map(event => <button type="button" key={event.id} aria-label={`Detail ${event.title}`} onClick={() => manage('detail', event)} className={`block w-full truncate rounded px-1 py-1 text-left text-[9px] font-semibold ${eventColor(event)}`}><span aria-hidden="true">• </span><span className="hidden sm:inline">{event.title}</span><span className="sm:hidden">{event.category === 'akademik' ? 'A' : 'E'}</span></button>)}{dayEvents.length > 2 && <button type="button" onClick={() => setModal({ type: 'day', date: cell.key })} className="w-full text-left text-[9px] font-semibold text-primary">+{dayEvents.length - 2} lainnya</button>}</div>
+            <div className="mt-1 space-y-1">{dayEvents.slice(0, 2).map(event => <button type="button" key={event.id} aria-label={`Detail ${event.title}`} aria-description={getEventCategory(event.category).label} title={`${event.title} · ${getEventCategory(event.category).label}`} onClick={() => manage('detail', event)} className={`flex w-full items-center gap-1 rounded px-1 py-1 text-left text-[9px] font-semibold ${eventColor(event)}`}><EventCategoryDot category={event.category} /><span className="min-w-0 truncate">{event.title}</span></button>)}{dayEvents.length > 2 && <button type="button" onClick={() => setModal({ type: 'day', date: cell.key })} className="w-full text-left text-[9px] font-semibold text-primary">+{dayEvents.length - 2} lainnya</button>}</div>
           </td>;
         })}</tr>)}</tbody>
-      </table></div>
+      </table><div className="px-4 pb-4"><EventCategoryLegend showTitle /></div></div>
       <aside aria-label="Agenda Mendatang" className="min-w-0 rounded-xl border border-dark-200 bg-white">
         <h2 className="px-4 pt-4 text-sm font-bold text-dark-900">Agenda Mendatang</h2>
-        {agenda.length ? <ul className="mt-2 max-h-[38rem] divide-y divide-dark-200 overflow-y-auto">{agenda.map(event => <li key={event.id} className="p-4"><div className="flex items-start gap-1"><button onClick={() => manage('detail', event)} className="min-w-0 flex-1 break-words text-left text-xs font-bold text-dark-900"><span className={`mr-1 rounded-full px-1 ${eventColor(event)}`}>•</span>{event.title}</button>{actions(event)}</div><span className="mt-1 block text-[10px] font-semibold text-dark-500">{event.status === 'draft' ? 'Draft' : 'Published'}</span><p className="mt-2 flex items-start gap-1 text-[10px] text-dark-500"><Clock className="size-3 shrink-0" />{date(event.date, { day: 'numeric', month: 'short', year: 'numeric' })} · {eventTimeLabel(event)}</p><p className="mt-1 flex items-start gap-1 break-words text-[10px] text-dark-500"><MapPin className="size-3 shrink-0" />{event.location || 'Lokasi belum ditentukan'}</p></li>)}</ul> : <p className="p-4 text-xs leading-relaxed text-dark-500">{loading ? 'Memuat agenda...' : 'Belum ada agenda mendatang.'}</p>}
+        {agenda.length ? <ul className="mt-2 max-h-[38rem] divide-y divide-dark-200 overflow-y-auto">{agenda.map(event => <li key={event.id} className="p-4"><div className="flex items-start gap-1"><button onClick={() => manage('detail', event)} className="min-w-0 flex-1 break-words text-left text-xs font-bold text-dark-900">{event.title}</button>{actions(event)}</div><div className="mt-2"><EventCategoryLabel category={event.category} badge /></div><span className="mt-1 block text-[10px] font-semibold text-dark-500">{event.status === 'draft' ? 'Draft' : 'Published'}</span><p className="mt-2 flex items-start gap-1 text-[10px] text-dark-500"><Clock className="size-3 shrink-0" />{date(event.date, { day: 'numeric', month: 'short', year: 'numeric' })} · {eventTimeLabel(event)}</p><p className="mt-1 flex items-start gap-1 break-words text-[10px] text-dark-500"><MapPin className="size-3 shrink-0" />{event.location || 'Lokasi belum ditentukan'}</p></li>)}</ul> : <p className="p-4 text-xs leading-relaxed text-dark-500">{loading ? 'Memuat agenda...' : 'Belum ada agenda mendatang.'}</p>}
       </aside>
     </div>
     <Modal terbuka={Boolean(modal)} onTutup={close} busy={submitting} judul={modal?.type === 'create' ? 'Tambah Event' : modal?.type === 'edit' ? 'Edit Event' : modal?.type === 'delete' ? 'Hapus Event' : modal?.type === 'day' ? `Agenda ${date(modal.date)}` : modal?.item?.judul || 'Detail Event'} lebar={['create', 'edit'].includes(modal?.type) ? 'max-w-2xl' : 'max-w-lg'}>
       <div className="max-h-[70dvh] overflow-y-auto pr-1" data-lenis-prevent>
         {['create', 'edit'].includes(modal?.type) && <EventForm key={modal.item?.id || modal.date || 'new'} initialData={modal.item} initialDate={modal.date} onSave={save} onCancel={close} submitting={submitting} />}
         {modal?.type === 'detail' && <><EventDetails event={toCalendarEvent(modal.item)} showStatus /><div className="mt-4 flex justify-end gap-2">{actions(toCalendarEvent(modal.item))}</div></>}
-        {modal?.type === 'day' && <><ul className="divide-y divide-dark-100">{eventsOnDate(events, modal.date).map(event => <li key={event.id} className="flex items-center gap-2 py-3"><button onClick={() => manage('detail', event)} className="min-w-0 flex-1 break-words text-left text-sm font-semibold text-dark-900">{event.title}</button>{actions(event)}</li>)}</ul>{!eventsOnDate(events, modal.date).length && <p className="text-sm text-dark-500">Belum ada kegiatan pada tanggal ini.</p>}<button onClick={() => setModal({ type: 'create', date: modal.date })} className="mt-4 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white">Tambah Event pada Tanggal Ini</button></>}
+        {modal?.type === 'day' && <><ul className="divide-y divide-dark-100">{eventsOnDate(events, modal.date).map(event => <li key={event.id} className="flex items-center gap-2 py-3"><div className="min-w-0 flex-1"><button onClick={() => manage('detail', event)} className="break-words text-left text-sm font-semibold text-dark-900">{event.title}</button><div className="mt-1"><EventCategoryLabel category={event.category} badge /></div></div>{actions(event)}</li>)}</ul>{!eventsOnDate(events, modal.date).length && <p className="text-sm text-dark-500">Belum ada kegiatan pada tanggal ini.</p>}<button onClick={() => setModal({ type: 'create', date: modal.date })} className="mt-4 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white">Tambah Event pada Tanggal Ini</button></>}
         {modal?.type === 'delete' && <><p className="text-sm text-dark-600">Hapus kegiatan “{modal.item.judul}”? Kegiatan ini juga akan dihapus dari kalender publik.</p><div className="mt-5 flex justify-end gap-2"><button disabled={submitting} onClick={close} className="rounded-lg border border-dark-200 px-4 py-2 text-xs font-semibold">Batal</button><button disabled={submitting} onClick={remove} className="rounded-lg bg-primary px-4 py-2 text-xs font-bold text-white disabled:opacity-50">{submitting ? 'Menghapus...' : 'Ya, Hapus'}</button></div></>}
       </div>
     </Modal>

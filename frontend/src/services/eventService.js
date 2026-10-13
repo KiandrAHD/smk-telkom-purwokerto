@@ -35,6 +35,7 @@ export async function deleteEvent(id) {
   changed(); return deleted;
 }
 export function eventError(error) {
+  if (error?.code === '23514') return 'Data kegiatan ditolak database. Periksa isian dan pastikan migration 011_event_categories.sql sudah diterapkan.';
   if (['PGRST205', '42P01'].includes(error?.code)) return 'Tabel kegiatan belum tersedia. Terapkan migration 010_calendar_events.sql pada Supabase.';
   if (error?.code === '42501') return 'Anda tidak memiliki izin untuk mengelola kegiatan.';
   if (error?.code === 'PGRST116') return 'Kegiatan tidak ditemukan atau Anda tidak memiliki izin.';

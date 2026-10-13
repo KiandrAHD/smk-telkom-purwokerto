@@ -18,6 +18,7 @@ const FormInput = ({
   const id = useId();
   const gaya = `w-full rounded-lg border bg-white px-3 py-2.5 text-sm text-dark-900 outline-none transition-colors placeholder:text-dark-400 focus:border-primary ${error ? 'border-red-500' : 'border-dark-200'}`;
   const accessibility = error ? { 'aria-invalid': true, 'aria-describedby': `${id}-error` } : {};
+  const CustomInput = typeof as === 'function' ? as : null;
 
   return (
     <div className={wrapperClassName}>
@@ -28,7 +29,7 @@ const FormInput = ({
         </label>
       )}
 
-      {as === 'select' ? (
+      {CustomInput ? <CustomInput id={id} className={`${gaya} ${className}`} {...accessibility} {...props} /> : as === 'select' ? (
         <select id={id} className={`${gaya} ${className}`} {...accessibility} {...props}>
           {options?.map((opsi) =>
             typeof opsi === 'string' ? (

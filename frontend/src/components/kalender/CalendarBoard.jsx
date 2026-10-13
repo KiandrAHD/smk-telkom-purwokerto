@@ -3,7 +3,9 @@ import { ArrowRight, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Clock
 import { useLanguage } from '../../context/LanguageContext';
 import Modal from '../dashboard/Modal';
 import EventDetails from './EventDetails';
-import { eventColor, eventsOnDate, eventTimeLabel, upcomingEvents } from '../../utils/events';
+import EventCategoryLegend from './EventCategoryLegend';
+import EventCategoryLabel, { EventCategoryDot } from './EventCategoryLabel';
+import { getEventCategory, eventColor, eventsOnDate, eventTimeLabel, upcomingEvents } from '../../utils/events';
 import { dateFromKey, eventsForMonth, monthCells, shiftDate } from '../../utils/calendar';
 import { getSchoolDateKey } from '../../utils/publicContent';
 import badge from '../../assets/kalender/agenda-calendar.png';
@@ -62,6 +64,7 @@ export default function CalendarBoard({ events = [] }) {
       <span className={`flex size-10 shrink-0 flex-col items-center justify-center rounded-lg font-heading text-base font-bold ${eventColors(event)}`}><span>{event.date.slice(-2)}</span><span className="text-[9px] font-normal">{formatDate(event.date, { month: 'short' })}</span></span>
       <span className="min-w-0 flex-1">
         <span className="block text-xs font-bold leading-relaxed text-dark-900">{t(event.title)}</span>
+        <span className="mt-1 block"><EventCategoryLabel category={event.category} /></span>
         <span className="mt-1 flex items-center gap-1 text-[10px] text-dark-500"><Clock className="size-3 shrink-0" />{t(eventTimeLabel(event))}</span>
         <span className="mt-1 flex items-start gap-1 text-[10px] text-dark-500"><MapPin className="size-3 shrink-0" />{event.location || t('Belum ditentukan')}</span>
       </span>
@@ -118,9 +121,9 @@ export default function CalendarBoard({ events = [] }) {
                   <tbody>{Array.from({ length: cells.length / 7 }, (_, row) => <tr key={row}>{cells.slice(row * 7, row * 7 + 7).map(cell => {
                     const dayEvents = eventsOnDate(events, cell.key);
                     return <td key={cell.key} className="border border-dark-100 p-0 align-top">
-                      <button type="button" data-calendar-date={cell.key} tabIndex={cell.key === focusKey ? 0 : -1} aria-pressed={cell.key === view.selected} aria-current={cell.key === today ? 'date' : undefined} aria-label={`${formatDate(cell.key, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${t('{count} kegiatan', { count: dayEvents.length })}`} onClick={() => chooseDate(cell.key)} onKeyDown={event => onDateKey(event, cell.key)} className={`flex h-full min-h-14 w-full flex-col gap-1 p-1 text-left transition-colors duration-200 hover:bg-primary-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-primary sm:p-2 ${cell.key === view.selected ? 'bg-primary-50' : 'bg-white'} ${cell.inMonth ? 'text-dark-900' : 'text-dark-400'}`}>
+                      <button type="button" data-calendar-date={cell.key} tabIndex={cell.key === focusKey ? 0 : -1} aria-pressed={cell.key === view.selected} aria-current={cell.key === today ? 'date' : undefined} aria-label={`${formatDate(cell.key, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${t('{count} kegiatan', { count: dayEvents.length })}`} aria-description={dayEvents.map(event => `${t(event.title)}: ${t(getEventCategory(event.category).label)}`).join('; ') || undefined} onClick={() => chooseDate(cell.key)} onKeyDown={event => onDateKey(event, cell.key)} className={`flex h-full min-h-14 w-full flex-col gap-1 p-1 text-left transition-colors duration-200 hover:bg-primary-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-primary sm:p-2 ${cell.key === view.selected ? 'bg-primary-50' : 'bg-white'} ${cell.inMonth ? 'text-dark-900' : 'text-dark-400'}`}>
                         <span className={`grid size-5 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-colors sm:text-xs ${cell.key === view.selected ? 'bg-primary text-white' : cell.key === today ? 'bg-primary-100 text-primary' : ''}`}>{cell.day}</span>
-                        {dayEvents.slice(0, 1).map(event => <span key={event.id} className={`block w-full min-w-0 rounded px-1 py-1 text-[9px] leading-tight sm:text-[10px] ${eventColors(event)}`}><span className="font-semibold sm:hidden">• {dayEvents.length}</span><span className="hidden break-words font-semibold sm:line-clamp-2">• {t(event.title)}</span><span className="mt-1 hidden text-[8px] sm:block">{t(eventTimeLabel(event))}</span></span>)}
+                        {dayEvents.slice(0, 1).map(event => <span key={event.id} title={`${t(event.title)} · ${t(getEventCategory(event.category).label)}`} className={`block w-full min-w-0 rounded py-1 text-[9px] leading-tight sm:px-1 sm:text-[10px] ${eventColors(event)}`}><span className="flex items-start gap-0.5 sm:gap-1"><EventCategoryDot category={event.category} /><span className="font-semibold sm:hidden">{dayEvents.length}</span><span className="hidden min-w-0 break-words font-semibold sm:line-clamp-2">{t(event.title)}</span></span><span className="mt-1 hidden text-[8px] sm:block">{t(eventTimeLabel(event))}</span></span>)}
                         {dayEvents.length > 1 && <span className="hidden text-[9px] text-primary sm:block">+{dayEvents.length - 1}</span>}
                       </button>
                     </td>;
@@ -134,6 +137,7 @@ export default function CalendarBoard({ events = [] }) {
               <div className="flex min-w-0 flex-1 items-start gap-3"><span className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-primary"><Megaphone className="size-4" /></span><div><h3 className="text-xs font-bold text-dark-600">{t('Jangan lewatkan setiap kesempatan!')}</h3><p className="mt-1 text-[10px] leading-relaxed text-dark-500">{t('Ikuti berbagai kegiatan menarik yang bisa menambah pengalaman dan prestasimu di SMK Telkom Purwokerto.')}</p></div></div>
               <button type="button" onClick={allEvents} className="min-h-9 text-[10px] font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat Semua Agenda')}</button>
             </div>
+            <EventCategoryLegend />
           </div>
           <aside className="flex min-w-0 flex-col gap-3" aria-label={t('Agenda Terdekat')}>
             <div className="flex-1 rounded-2xl border border-dark-300 bg-white p-3">

@@ -4,7 +4,7 @@ Dokumen ini menjelaskan database, Row Level Security (RLS), dan Storage untuk pl
 
 ## Menjalankan migration
 
-Migration dijalankan berurutan dari `001_initial_schema.sql` sampai `010_calendar_events.sql`. Terapkan migration `004` dan `005` sebelum frontend yang membaca kolom baru; `006` harus diterapkan bersama frontend yang memakai path upload baru. Migration `010` menambahkan tabel kegiatan, constraint tanggal/waktu WIB, trigger, indeks, dan RLS. Kalender admin dan publik memerlukan migration ini. Panduan dan hasil QA ada di `frontend/docs/manajemen-kalender.md`.
+Migration dijalankan berurutan dari `001_initial_schema.sql` sampai `011_event_categories.sql`. Terapkan migration `004` dan `005` sebelum frontend yang membaca kolom baru; `006` harus diterapkan bersama frontend yang memakai path upload baru. Migration `010` menambahkan tabel kegiatan, constraint tanggal/waktu WIB, trigger, indeks, dan RLS. Migration `011` memperluas kategori sesuai legenda Figma tanpa mengubah data event lama; terapkan sebelum frontend kategori baru digunakan. Panduan kalender ada di `frontend/docs/manajemen-kalender.md`; audit kategori, warna, kompatibilitas, dan QA ada di `frontend/docs/kategori-kalender.md`.
 
 ### Supabase CLI
 

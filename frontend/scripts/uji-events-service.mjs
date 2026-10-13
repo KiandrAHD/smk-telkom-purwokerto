@@ -39,6 +39,10 @@ try {
   assert.deepEqual(filters, [['status', 'published'], ['status', 'published']]);
   await createEvent(valid, 'stable-id'); await createEvent(valid, 'stable-id');
   assert.equal(writes[0].payload.id, writes[1].payload.id); assert.deepEqual(writes[0].options, { onConflict: 'id' });
+  const categoryChange = await updateEvent('stable-id', { ...valid, kategori: 'penilaian-siswa', deskripsi: 'Keep description', lokasi: 'Keep location' });
+  assert.equal(categoryChange.kategori, 'penilaian-siswa');
+  assert.equal(categoryChange.deskripsi, 'Keep description'); assert.equal(categoryChange.lokasi, 'Keep location');
+  assert.deepEqual(filters.at(-1), ['id', 'stable-id']);
   const file = new File([new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10])], 'poster.png', { type: 'image/png' });
   await updateEvent('stable-id', { ...valid, image_file: file });
   assert.match(uploads.at(-1).path, /^events\//); assert.equal(uploads.at(-1).options.upsert, false);

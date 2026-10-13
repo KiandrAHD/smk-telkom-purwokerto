@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import FormInput from '../../../components/dashboard/FormInput';
 import ImageUploadField from '../../../components/dashboard/ImageUploadField';
-import { emptyEvent, eventCategories, validateEvent } from '../../../utils/events';
+import { emptyEvent, getEventCategory, validateEvent } from '../../../utils/events';
+import EventCategorySelect from './EventCategorySelect';
 
 export default function EventForm({ initialData, initialDate = '', onSave, onCancel, submitting }) {
   const [form, setForm] = useState(() => Object.fromEntries(Object.keys(emptyEvent).map(key => [key, initialData?.[key] ?? (key === 'tanggal_mulai' ? initialDate : emptyEvent[key])])));
@@ -26,7 +27,10 @@ export default function EventForm({ initialData, initialDate = '', onSave, onCan
       {field('ringkasan', 'Deskripsi singkat', { as: 'textarea', rows: 2, maxLength: 500 })}
       {field('deskripsi', 'Deskripsi lengkap', { as: 'textarea', rows: 4, maxLength: 20000 })}
       <div className="grid gap-4 sm:grid-cols-2">
-        {field('kategori', 'Kategori', { as: 'select', options: eventCategories })}
+        <div>
+          {field('kategori', 'Kategori Kegiatan', { as: EventCategorySelect, onChange: value => update('kategori', value) })}
+          {form.kategori && getEventCategory(form.kategori).legacy && <p className="mt-1.5 text-xs leading-relaxed text-dark-500">Kategori lama dipertahankan. Pilih kategori resmi yang sesuai untuk memperbarui indikator warna.</p>}
+        </div>
         {field('status', 'Status publikasi', { as: 'select', options: [{ value: 'draft', label: 'Draft' }, { value: 'published', label: 'Published' }] })}
         {field('tanggal_mulai', 'Tanggal mulai (wajib)', { type: 'date', required: true, min: '0100-01-01', max: '9999-12-31' })}
         {field('waktu_mulai', 'Waktu mulai (WIB)', { type: 'time', value: form.waktu_mulai?.slice(0, 5) || '' })}
