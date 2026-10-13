@@ -119,6 +119,7 @@ export const navLinks = [
     children: [
       { label: 'Berita', href: '/berita' },
       { label: 'Pengumuman', href: '/pengumuman' },
+      { label: 'Kalender Kegiatan', href: '/kalender' },
     ],
   },
 ];

@@ -17,6 +17,7 @@ const PrestasiPage = lazy(() => import('./pages/PrestasiPage'));
 const BkkPage = lazy(() => import('./pages/BkkPage'));
 const BeritaPage = lazy(() => import('./pages/BeritaPage'));
 const PengumumanPage = lazy(() => import('./pages/PengumumanPage'));
+const KalenderPage = lazy(() => import('./pages/KalenderPage'));
 const JurusanDetailPage = lazy(() => import('./pages/JurusanDetailPage'));
 const PrestasiDetailPage = lazy(() => import('./pages/PrestasiDetailPage'));
 const BeritaDetailPage = lazy(() => import('./pages/BeritaDetailPage'));
@@ -68,6 +69,7 @@ const PAGE_META = {
   '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
   '/berita': ['Berita SMK Telkom Purwokerto', 'Berita terbaru dari SMK Telkom Purwokerto.'],
   '/pengumuman': ['Pengumuman SMK Telkom Purwokerto', 'Pengumuman resmi SMK Telkom Purwokerto.'],
+  '/kalender': ['Kalender Kegiatan | SMK Telkom Purwokerto', 'Jelajahi kalender kegiatan, lomba, dan acara SMK Telkom Purwokerto.'],
   '/spmb': ['SPMB 2027/2028 | SMK Telkom Purwokerto', 'Portal pendaftaran SPMB Tahun Ajaran 2027/2028 SMK Telkom Purwokerto.'],
   '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
   '/nexttel': ['NextTel | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
@@ -131,6 +133,7 @@ const App = () => {
         <Route path="/bkk" element={<BkkPage />} />
         <Route path="/berita" element={<BeritaPage />} />
         <Route path="/pengumuman" element={<PengumumanPage />} />
+        <Route path="/kalender" element={<KalenderPage />} />
         {/* Preserve old bookmarks and authentication callback parameters. */}
         <Route path="/spmb" element={<AdmissionsRedirect />} />
         <Route path="/ppdb/*" element={<AdmissionsRedirect />} />
