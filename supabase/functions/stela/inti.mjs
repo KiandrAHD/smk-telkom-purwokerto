@@ -173,14 +173,19 @@ const FAQ_FAST_PATH = [
 ];
 
 const JAWABAN_ROADMAP = {
-  id: 'Roadmap setelah memilih RPL: kuasai logika pemrograman dan Git, lanjutkan HTML/CSS/JavaScript serta basis data, lalu bangun proyek kecil sebagai portofolio. Setelah itu pilih fokus seperti frontend, backend, mobile, atau QA; kembangkan proyek yang lebih nyata, ikut PKL/magang, dan pertimbangkan kuliah atau sertifikasi yang relevan. Untuk jalur software engineer, biasakan membaca dokumentasi, menguji kode, bekerja kolaboratif, dan memperbarui portofolio.',
-  en: 'Roadmap after choosing RPL: learn programming logic and Git, then HTML/CSS/JavaScript and databases, while building small projects for a portfolio. Next choose a focus such as frontend, backend, mobile, or QA; build more realistic projects, join internships, and consider relevant university study or certifications. For a software engineer path, practise reading documentation, testing code, collaborating, and keeping your portfolio current.',
+  softwareId: 'Roadmap menjadi Software Engineer: mulai dari logika pemrograman, Git, dan satu bahasa seperti JavaScript atau Python. Lanjutkan HTML/CSS, basis data, API, pengujian, dan dasar keamanan. Bangun proyek kecil lalu proyek yang lebih nyata, dokumentasikan di portofolio, belajar bekerja kolaboratif, dan manfaatkan PKL, magang, kuliah, atau sertifikasi yang relevan.',
+  softwareEn: 'Software Engineer roadmap: start with programming logic, Git, and one language such as JavaScript or Python. Continue with HTML/CSS, databases, APIs, testing, and security basics. Build small then realistic projects, document them in a portfolio, practise collaboration, and consider internships, university study, or relevant certifications.',
+  gameId: 'Roadmap menjadi Game Developer: mulai dari logika pemrograman dan dasar desain game, lalu pilih engine seperti Godot atau Unity sesuai tujuan belajar. Pelajari scene, input, fisika, audio, UI, optimasi, dan version control. Selesaikan game kecil secara bertahap, uji dengan pengguna, dokumentasikan prosesnya, dan susun portofolio. Dasar matematika, seni, narasi, serta kerja tim juga membantu.',
+  gameEn: 'Game Developer roadmap: start with programming logic and game design basics, then choose an engine such as Godot or Unity for your learning goals. Learn scenes, input, physics, audio, UI, optimisation, and version control. Finish small games step by step, test them with users, document the process, and build a portfolio. Mathematics, art, narrative, and teamwork fundamentals also help.',
 };
 
 export const jawabanFaqCepat = (teks, bahasa = deteksiBahasa(teks)) => {
   const pertanyaan = String(teks ?? '').trim();
-  if (/(?:roadmap|jalur menjadi software engineer|setelah memilih jurusan rpl|roadmap belajar.*rpl)/i.test(pertanyaan)) {
-    return bahasa === 'en' ? JAWABAN_ROADMAP.en : JAWABAN_ROADMAP.id;
+  if (/(?:game\s*developer|game\s*dev|pengembang\s+game|membuat\s+game|developing\s+games|game\s+development)/i.test(pertanyaan)) {
+    return bahasa === 'en' ? JAWABAN_ROADMAP.gameEn : JAWABAN_ROADMAP.gameId;
+  }
+  if (/(?:software\s*engineer|software\s*developer|pengembang\s+perangkat\s+lunak|roadmap|jalur menjadi|setelah memilih jurusan rpl|roadmap belajar.*rpl)/i.test(pertanyaan)) {
+    return bahasa === 'en' ? JAWABAN_ROADMAP.softwareEn : JAWABAN_ROADMAP.softwareId;
   }
   if (!pertanyaan) return null;
   const faq = FAQ_FAST_PATH.find((item) => item.pola.test(pertanyaan));
@@ -212,17 +217,17 @@ export const topikDiizinkan = (pesan) => {
     if (POLA_BLOCKLIST.test(teks)) return false;
   }
 
-  // 2. Periksa pesan terakhir untuk memastikan relevansi dengan sekolah
+  // 2. Validasi pertanyaan terakhir bersama konteks user sebelumnya. Follow-up
+  // seperti "yang mana paling cocok?" tetap relevan setelah pertanyaan jurusan.
   const pesanTerakhir = pesanUser[pesanUser.length - 1]?.content ?? '';
-
-  // Sapaan dan pertanyaan identitas selalu diizinkan
   if (jawabanSapaanCepat(pesanTerakhir)) return true;
-
-  // Pertanyaan harus cocok dengan topik sekolah yang diizinkan
-  // PENTING: Allowlist hanya memvalidasi bahwa pertanyaan TERKAIT sekolah,
-  // bukan bahwa seluruh pesan boleh dijawab. Blocklist di atas sudah memastikan
-  // tidak ada permintaan coding/berbahaya.
-  return POLA_ALLOWLIST.test(pesanTerakhir);
+  if (POLA_ALLOWLIST.test(pesanTerakhir)) return true;
+  if (pesanUser.length > 1) {
+    const sebelumnya = pesanUser[pesanUser.length - 2]?.content ?? '';
+    const followUp = /^(?:dan\s+)?(?:yang|mana|bagaimana|mengapa|kenapa|lalu|setelah itu|kalau begitu|what about|which|how about|and)\b/i.test(pesanTerakhir.trim());
+    if (followUp && POLA_ALLOWLIST.test(sebelumnya)) return true;
+  }
+  return false;
 };
 
 export const buatPesanPenolakan = (bahasa = 'id') => {

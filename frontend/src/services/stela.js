@@ -6,9 +6,9 @@ import { supabaseSiap } from './supabase';
 // Ada dua backend, dan yang dipakai ditentukan otomatis:
 //
 //   1. Edge Function Supabase — dipakai begitu VITE_SUPABASE_URL terisi.
-//      Ini jalur produksi dan menggunakan Gemini.
+//      Provider dan failover dikendalikan server; kunci tidak pernah masuk browser.
 //   2. /api/stela — endpoint lokal dari vite-plugin-stela.js, hanya hidup
-//      selama `npm run dev`. Endpoint lokal ini juga hanya menggunakan Gemini.
+//      selama `npm run dev`; konfigurasi provider tetap berada di server lokal.
 const PAKAI_EDGE_FUNCTION = supabaseSiap;
 const ALAMAT = PAKAI_EDGE_FUNCTION
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stela`

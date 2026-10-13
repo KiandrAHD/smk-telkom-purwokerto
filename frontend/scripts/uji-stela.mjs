@@ -86,6 +86,9 @@ for (const roadmap of [
   assert.equal(topikDiizinkan([u(roadmap)]), true, `roadmap vokasi harus diterima: ${roadmap}`);
 }
 assert.equal(topikDiizinkan([u('Buatkan aplikasi Python untuk saya')]), false, 'permintaan coding umum harus ditolak');
+assert.equal(topikDiizinkan([u('Jurusan apa saja?'), a('Ada empat jurusan.'), u('Yang paling cocok untuk saya?')]), true, 'follow-up kontekstual harus diterima');
+assert.match(jawabanFaqCepat('Bagaimana roadmap menjadi Game Developer?', 'id'), /Game Developer/);
+assert.match(jawabanFaqCepat('What is the roadmap to become a game developer?', 'en'), /Game Developer/);
 
 const bolakBalik = periksaPesan([u('halo'), a('hai'), u('ada jurusan apa?')]);
 assert.equal(bolakBalik.pesan.length, 3);

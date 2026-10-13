@@ -18,6 +18,7 @@ import {
   MODEL_BAWAAN,
   MODEL_CADANGAN,
   POLA_KUNCI,
+  kategoriPertanyaan,
 } from './inti.mjs';
 import { buatPenjaga } from './penjaga-biaya.mjs';
 import { buatReservasiKuota } from '../ai-quota.mjs';
@@ -115,15 +116,11 @@ const barisContext = (label: string, rows: Record<string, unknown>[]) => {
 };
 
 const ambilContextPublik = async (pertanyaan: string) => {
-  const kunci = String(pertanyaan ?? '').toLowerCase();
-  const tabel = kunci.includes('bkk') || kunci.includes('lowongan') || kunci.includes('kerja')
-    ? ['bkk']
-    : kunci.includes('prestasi') || kunci.includes('lomba') || kunci.includes('juara')
-      ? ['prestasi']
-      : kunci.includes('berita')
-        ? ['berita']
-        : kunci.includes('pengumuman') || kunci.includes('jadwal')
-          ? ['pengumuman']
+  const kategori = kategoriPertanyaan(pertanyaan);
+  const tabel = kategori === 'bkk' ? ['bkk']
+    : kategori === 'prestasi' ? ['prestasi']
+      : kategori === 'berita' ? ['berita']
+        : kategori === 'pengumuman' || kategori === 'ppdb' ? ['pengumuman']
           : [];
   if (tabel.length === 0) return 'Tidak ada data dinamis yang relevan. Gunakan data sekolah terverifikasi.';
   const hasil = await Promise.all(tabel.map((nama) => {
@@ -145,7 +142,9 @@ Deno.serve(async (req) => {
     return balas({ error: 'STELA belum dikonfigurasi. Silakan hubungi administrator.', code: 'config' }, 503, origin);
   }
 
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? req.headers.get('cf-connecting-ip') ?? 'tanpa-ip';
+  // Gunakan header yang diisi platform edge; jangan percaya x-forwarded-for
+  // yang dapat dikirim langsung oleh klien.
+  const ip = req.headers.get('cf-connecting-ip')?.trim() || req.headers.get('x-real-ip')?.trim() || 'tanpa-ip';
   const ditolak = penjaga.periksa(ip);
   if (ditolak) return balas({ error: ditolak.galat }, ditolak.status, origin);
 
