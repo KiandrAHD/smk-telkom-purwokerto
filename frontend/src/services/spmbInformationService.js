@@ -2,11 +2,12 @@ import { ensureSupabase } from './supabase';
 import { spmbInfoPayload, spmbStatisticsId } from '../utils/spmbInformation';
 
 const columns = 'id,jenis,judul,deskripsi,urutan,tanggal_mulai,tanggal_selesai,tanggal_seleksi,tanggal_pengumuman,ikon,tautan_url,sumber_url,status,kuota_total,created_at,updated_at';
+const publicColumns = 'id,jenis,judul,deskripsi,urutan,tanggal_mulai,tanggal_selesai,tanggal_seleksi,tanggal_pengumuman,ikon,tautan_url,status,kuota_total,created_at,updated_at';
 const unwrap = ({ data, error }) => { if (error) throw error; return data; };
 export async function getSpmbInformation(published = false, signal) {
   const items = [];
   for (let offset = 0; ; offset += 500) {
-    let query = ensureSupabase().from('spmb_information').select(columns).order('urutan').order('tanggal_mulai').order('id').range(offset, offset + 499);
+    let query = ensureSupabase().from(published ? 'spmb_information_public' : 'spmb_information').select(published ? publicColumns : columns).order('urutan').order('tanggal_mulai').order('id').range(offset, offset + 499);
     if (published) query = query.eq('status', 'published');
     if (signal) query = query.abortSignal(signal);
     const rows = unwrap(await query); items.push(...rows);
@@ -26,7 +27,7 @@ function changed() {
 export async function createSpmbInformation(data, id) {
   const payload = spmbInfoPayload(data);
   if (payload.jenis === 'statistik') throw new Error('Gunakan pengaturan kuota untuk memperbarui statistik.');
-  const saved = unwrap(await ensureSupabase().from('spmb_information').upsert({ ...payload, id }, { onConflict: 'id' }).select(columns).single());
+  const saved = unwrap(await ensureSupabase().from('spmb_information').insert({ ...payload, id }).select(columns).single());
   changed(); return saved;
 }
 export async function updateSpmbInformation(id, data) {

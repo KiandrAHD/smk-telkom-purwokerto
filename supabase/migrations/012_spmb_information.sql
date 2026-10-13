@@ -18,10 +18,15 @@ CREATE TABLE public.spmb_information (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   CONSTRAINT spmb_information_date_order CHECK (tanggal_mulai IS NULL OR tanggal_selesai IS NULL OR tanggal_selesai >= tanggal_mulai),
   CONSTRAINT spmb_information_selection_order CHECK (tanggal_seleksi IS NULL OR tanggal_pengumuman IS NULL OR tanggal_pengumuman >= tanggal_seleksi),
+  CONSTRAINT spmb_information_selection_after_start CHECK (tanggal_seleksi IS NULL OR tanggal_mulai IS NULL OR tanggal_seleksi >= tanggal_mulai),
+  CONSTRAINT spmb_information_announcement_after_start CHECK (tanggal_pengumuman IS NULL OR tanggal_mulai IS NULL OR tanggal_pengumuman >= tanggal_mulai),
   CONSTRAINT spmb_information_published_source CHECK (jenis='statistik' OR status='draft' OR sumber_url IS NOT NULL),
   CONSTRAINT spmb_information_quota_kind CHECK (jenis='statistik' OR kuota_total IS NULL),
   CONSTRAINT spmb_information_statistics_identity CHECK ((jenis='statistik') = (id='00000000-0000-4000-8000-000000000012'::uuid))
 );
+CREATE UNIQUE INDEX spmb_information_one_statistics_idx ON public.spmb_information (jenis) WHERE jenis='statistik';
+CREATE VIEW public.spmb_information_public WITH (security_invoker=true) AS SELECT id,jenis,judul,deskripsi,urutan,tanggal_mulai,tanggal_selesai,tanggal_seleksi,tanggal_pengumuman,ikon,tautan_url,status,kuota_total,created_at,updated_at FROM public.spmb_information WHERE status='published';
+GRANT SELECT ON public.spmb_information_public TO anon, authenticated;
 CREATE INDEX spmb_information_public_order_idx ON public.spmb_information (jenis,urutan,tanggal_mulai) WHERE status='published';
 CREATE TRIGGER spmb_information_set_updated_at BEFORE UPDATE ON public.spmb_information FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 ALTER TABLE public.spmb_information ENABLE ROW LEVEL SECURITY;
