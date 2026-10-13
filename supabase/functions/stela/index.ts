@@ -143,7 +143,10 @@ Deno.serve(async (req) => {
   if (!originDiizinkan(origin)) return balas({ error: 'Origin tidak diizinkan.' }, 403, origin);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: headersCors(origin) });
   if (req.method !== 'POST') return balas({ error: 'Gunakan metode POST.' }, 405, origin);
-  if (STELA_CANDIDATES.length === 0) return balas({ error: 'STELA sedang tidak tersedia.' }, 503, origin);
+  if (STELA_CANDIDATES.length === 0) {
+    console.error('STELA tidak memiliki provider yang terkonfigurasi');
+    return balas({ error: 'STELA belum dikonfigurasi. Silakan hubungi administrator.', code: 'config' }, 503, origin);
+  }
 
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? req.headers.get('cf-connecting-ip') ?? 'tanpa-ip';
   const ditolak = penjaga.periksa(ip);
@@ -206,7 +209,7 @@ Deno.serve(async (req) => {
     const teks = amankanJawaban(teksProvider, bahasa);
 
     penjaga.simpanCache(hasilValidasi.pesan, teks, bahasa);
-    console.log(`stela provider=gemini model=${modelDipakai} | token ${tokenMasuk}/${tokenKeluar}`);
+    console.log(`stela provider=${modelDipakai === 'fast-sapaan' || modelDipakai === 'faq' ? 'local' : 'remote'} model=${modelDipakai} | token ${tokenMasuk}/${tokenKeluar}`);
     return balas({ reply: teks }, 200, origin);
   } catch (error) {
     console.error('Kesalahan STELA', error instanceof Error ? error.message : 'unknown');
@@ -215,10 +218,13 @@ Deno.serve(async (req) => {
     // melihat "Gemini menolak dengan status 429" di gelembung chat.
     const ditandai = error as { untukPengguna?: boolean; status?: number };
     if (ditandai?.untukPengguna) {
-      return balas({ error: (error as Error).message }, ditandai.status ?? 429, origin);
+      const status = ditandai.status ?? 429;
+      const code = status === 429 ? 'quota_exhausted' : 'quota_unavailable';
+      return balas({ error: (error as Error).message, code }, status, origin);
     }
-    const status = (error as { status?: number })?.status ? 502 : 500;
-    return balas({ error: 'STELA sedang tidak tersedia.' }, status, origin);
+    const status = (error as { status?: number })?.status === 504 ? 504 : 502;
+    const code = status === 504 ? 'provider_timeout' : 'provider_failed';
+    return balas({ error: status === 504 ? 'STELA sedang membutuhkan waktu lebih lama. Silakan coba lagi.' : 'STELA sedang mengalami kendala koneksi. Silakan coba lagi.', code }, status, origin);
   }
 });
 

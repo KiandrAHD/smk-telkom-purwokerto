@@ -98,10 +98,13 @@ export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
     const data = await tanggapan.json().catch(() => ({}));
 
     if (!tanggapan.ok) {
-      // Pesan dari server ditulis sendiri oleh tim dan sudah aman ditampilkan.
-      // Melewatkannya jauh lebih menolong daripada "kendala" generik, terutama
-      // saat yang kurang cuma satu baris di .env.
-      throw new Error(typeof data.error === 'string' && data.error ? data.error : PESAN_STELA_GAGAL);
+      const serverMessage = typeof data.error === 'string' && data.error ? data.error : PESAN_STELA_GAGAL;
+      const error = new Error(serverMessage);
+      if (data.code === 'quota_exhausted' || tanggapan.status === 429) error.category = KATEGORI_GALAT.RATE_LIMIT;
+      else if (data.code === 'provider_timeout' || tanggapan.status === 504) error.category = KATEGORI_GALAT.TRANSIENT;
+      else if (data.code === 'config' || tanggapan.status === 503) error.category = KATEGORI_GALAT.CONFIG;
+      else if (data.code === 'provider_failed') error.category = KATEGORI_GALAT.TRANSIENT;
+      throw error;
     }
 
     // Server mengirim scope_rejected=true saat pertanyaan di luar scope
