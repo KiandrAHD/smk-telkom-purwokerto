@@ -80,11 +80,12 @@ const sedangHabis = (penyedia, model) => {
   return true;
 };
 
-// Anggaran token konteks per penyedia
+// Anggaran token konteks per penyedia. Semua provider memakai konteks
+// relevan terbatas; jangan mengirim dump sekolah penuh ke provider produksi.
 export const ANGGARAN_KONTEKS = {
-  ninerouter: 0,
-  anthropic: 0,
-  gemini: 0,
+  ninerouter: 3500,
+  anthropic: 3500,
+  gemini: 3500,
   groq: 2999,
 };
 
@@ -577,7 +578,8 @@ const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status,
  * baseUrl?: string, language?: string, bahasa?: string, daftarPenyedia?: KandidatPenyedia[],
  * sebelumPanggilan?: (options: {signal: AbortSignal}) => void | Promise<void>,
  * batasPanggilan?: ReturnType<typeof buatBatasPanggilan>, timeoutMs?: number,
- * maksPercobaan?: number, cobaModelCadangan?: boolean}} options
+ * maksPercobaan?: number, cobaModelCadangan?: boolean,
+ * catatPercobaan?: (event: Record<string, unknown>) => void}} options
  */
 export const tanyaAI = async ({
   penyedia,
@@ -596,6 +598,7 @@ export const tanyaAI = async ({
   timeoutMs,
   maksPercobaan,
   cobaModelCadangan = true,
+  catatPercobaan,
 }) => {
   const anggaran = batasPanggilan ?? buatBatasPanggilan({ timeoutMs, maksPercobaan });
   const pertanyaanAwal = pesan[pesan.length - 1]?.content ?? '';
@@ -642,7 +645,12 @@ export const tanyaAI = async ({
 
     for (const kandidat of urutan) {
       if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
-      if (anggaran.percobaan >= anggaran.maksPercobaan) throw galatBatas('Batas percobaan AI tercapai. Silakan coba lagi.', 502);
+      if (anggaran.percobaan >= anggaran.maksPercobaan) {
+        // Jangan ubah kegagalan provider terakhir menjadi HTTP 502 generik.
+        // Caller perlu menerima tipe/status yang benar untuk observability dan UX.
+        if (galatTerakhirSemua) throw galatTerakhirSemua;
+        throw galatBatas('Batas percobaan AI tercapai. Silakan coba lagi.', 503);
+      }
       const sisaWaktu = anggaran.tenggat - Date.now();
       if (sisaWaktu <= 0) throw galatBatas(PESAN_TIMEOUT, 504);
       const durasiPercobaan = Math.min(sisaWaktu, BATAS.TIMEOUT_PERCOBAAN_PROVIDER_MS);
@@ -654,6 +662,9 @@ export const tanyaAI = async ({
         else signal.addEventListener('abort', batalkan, { once: true });
       }
 
+      const mulaiPercobaan = Date.now();
+      let statusPercobaan = 0;
+      let tipeGalat = 'unknown';
       try {
         if (sebelumPanggilan) {
           try {
@@ -680,6 +691,8 @@ export const tanyaAI = async ({
         return { ...hasil, teks, modelDipakai: kandidat, penyediaDipakai: targetPenyedia };
       } catch (error) {
         galatTerakhirSemua = error;
+        statusPercobaan = Number(error?.status) || 0;
+        tipeGalat = pengendali.signal.aborted ? 'timeout' : statusPercobaan === 429 ? 'rate_limit' : (statusPercobaan >= 400 && statusPercobaan < 500) ? 'provider_configuration' : statusPercobaan >= 500 ? 'provider_failure' : 'network_or_unknown';
         const dibatalkan = pengendali.signal.aborted;
         if (signal?.aborted) throw error;
         if (dibatalkan) {
@@ -701,6 +714,13 @@ export const tanyaAI = async ({
       } finally {
         clearTimeout(timeout);
         if (signal) signal.removeEventListener('abort', batalkan);
+        try {
+          catatPercobaan?.({
+            provider: targetPenyedia, model: kandidat, status: statusPercobaan,
+            errorType: tipeGalat, durationMs: Date.now() - mulaiPercobaan,
+            attempt: anggaran.percobaan, failover: Boolean(galatTerakhirSemua),
+          });
+        } catch { /* observability tidak boleh memengaruhi request */ }
       }
     }
   }
