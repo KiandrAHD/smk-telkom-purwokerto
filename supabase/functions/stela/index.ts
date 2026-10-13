@@ -216,7 +216,7 @@ Deno.serve(async (req) => {
     // Hanya pesan yang memang ditulis untuk pengunjung yang diteruskan.
     // Sebelumnya semua galat 429 diteruskan mentah, sehingga pengunjung sempat
     // melihat "Gemini menolak dengan status 429" di gelembung chat.
-    const ditandai = error as { untukPengguna?: boolean; status?: number };
+    const ditandai = error as { untukPengguna?: boolean; status?: number; code?: string };
     if (ditandai?.untukPengguna) {
       const status = ditandai.status ?? 503;
       const code = ditandai.code ?? (status === 429 ? 'quota_exhausted' : 'quota_unavailable');
