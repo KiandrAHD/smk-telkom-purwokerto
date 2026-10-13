@@ -41,7 +41,7 @@ const NADA = {
 
 // Kartu ringkasan angka di atas tabel. Dipakai ulang di halaman PPDB, BKK, dan
 // Dashboard supaya bentuk dan jaraknya tidak berbeda-beda antar halaman.
-const StatCard = ({ label, value, nada = 'merah', icon }) => {
+const StatCard = ({ label, value, nada = 'merah', icon, description, children }) => {
   const Ikon = IKON[icon];
 
   return (
@@ -58,6 +58,8 @@ const StatCard = ({ label, value, nada = 'merah', icon }) => {
         <p className="mt-0.5 font-heading text-2xl font-extrabold leading-none text-dark-900">
           {value}
         </p>
+        {description && <p className="mt-2 text-[10px] leading-relaxed text-dark-500">{description}</p>}
+        {children}
       </div>
     </div>
   );

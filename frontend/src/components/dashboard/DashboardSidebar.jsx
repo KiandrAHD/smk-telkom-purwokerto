@@ -3,6 +3,7 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   GraduationCap,
+  Info,
   LayoutDashboard,
   Layers,
   Megaphone,
@@ -18,6 +19,7 @@ import { adminMenu, adminSekolah } from '../../data/dummyData';
 const ikon = {
   dashboard: LayoutDashboard,
   ppdb: GraduationCap,
+  informasiSpmb: Info,
   jurusan: Layers,
   prestasi: Trophy,
   bkk: BriefcaseBusiness,

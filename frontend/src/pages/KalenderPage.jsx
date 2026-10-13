@@ -4,6 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import RibbonDivider from '../components/RibbonDivider';
 import CalendarBoard from '../components/kalender/CalendarBoard';
+import SchoolAgendaSection from '../components/kalender/SchoolAgendaSection';
 import PublicDataState from '../components/PublicDataState';
 import useEvents from '../hooks/useEvents';
 import { toCalendarEvent } from '../utils/events';
@@ -15,6 +16,7 @@ import './KalenderPage.css';
 export default function KalenderPage() {
   const { t } = useLanguage();
   const { items, loading, error, refresh } = useEvents(true);
+  const events = items.map(toCalendarEvent);
   const [prefix, ...accent] = t('Kalender Kegiatan Sekolah').split(' ');
   return (
     <MainLayout>
@@ -44,7 +46,7 @@ export default function KalenderPage() {
       </section>
       <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><PublicDataState loading={loading} error={error} onRetry={() => refresh()} label={t('kegiatan')} /></div>
-      {!loading && !error && <CalendarBoard events={items.map(toCalendarEvent)} />}
+      {!loading && !error && <><CalendarBoard events={events} /><SchoolAgendaSection events={events} /></>}
     </MainLayout>
   );
 }

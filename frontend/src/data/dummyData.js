@@ -2335,6 +2335,7 @@ export const adminSekolah = {
 export const adminMenu = [
   { label: 'Dashboard', to: '/dashboard', icon: 'dashboard', end: true },
   { label: 'Manajemen SPMB', to: '/dashboard/spmb', icon: 'ppdb' },
+  { label: 'Informasi SPMB', to: '/dashboard/informasi-spmb', icon: 'informasiSpmb' },
   { label: 'Jurusan', to: '/dashboard/jurusan', icon: 'jurusan' },
   { label: 'Prestasi', to: '/dashboard/prestasi', icon: 'prestasi' },
   { label: 'BKK', to: '/dashboard/bkk', icon: 'bkk' },

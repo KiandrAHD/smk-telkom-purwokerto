@@ -15,8 +15,8 @@ globalThis.__eventTestClient = {
       range(start, end) { ranges.push([start, end]); return query; },
       eq(field, value) { filters.push([field, value]); return query; },
       abortSignal(value) { signal = value; return query; },
-      insert(payload) { writes.push({ payload }); return query; },
-      update(payload) { writes.push({ payload }); return query; },
+      insert(payload) { writes.push({ kind: 'insert', payload }); return query; },
+      update(payload) { writes.push({ kind: 'update', payload }); return query; },
       delete: () => query,
       single: async () => ({ data: responseError ? null : { id: 'stable-id', ...writes.at(-1)?.payload }, error: responseError }),
       then(resolve) { resolve({ data: pages.shift() || [], error: responseError }); },
@@ -37,8 +37,16 @@ try {
   assert.equal((await getEvents(true, controller.signal)).length, 501);
   assert.deepEqual(ranges, [[0, 499], [500, 999]]); assert.equal(signal, controller.signal);
   assert.deepEqual(filters, [['status', 'published'], ['status', 'published']]);
-  await createEvent(valid, 'stable-id'); await createEvent(valid, 'stable-id');
+  await createEvent(valid, 'stable-id');
+  responseError = { code: '23505' };
+  await assert.rejects(createEvent(valid, 'stable-id'), { code: '23505' });
+  responseError = null;
   assert.equal(writes[0].payload.id, writes[1].payload.id); assert.equal(writes[0].payload.status, 'draft');
+  assert.deepEqual(writes.slice(0, 2).map(write => write.kind), ['insert', 'insert'], 'Duplicate create must not become an implicit update');
+  const categoryChange = await updateEvent('stable-id', { ...valid, kategori: 'penilaian-siswa', deskripsi: 'Keep description', lokasi: 'Keep location' });
+  assert.equal(categoryChange.kategori, 'penilaian-siswa');
+  assert.equal(categoryChange.deskripsi, 'Keep description'); assert.equal(categoryChange.lokasi, 'Keep location');
+  assert.deepEqual(filters.at(-1), ['id', 'stable-id']);
   const file = new File([new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10])], 'poster.png', { type: 'image/png' });
   await updateEvent('stable-id', { ...valid, image_file: file });
   assert.match(uploads.at(-1).path, /^events\//); assert.equal(uploads.at(-1).options.upsert, false);

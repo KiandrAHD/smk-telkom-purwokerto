@@ -1,5 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { eventCategories, eventTimeLabel } from '../../utils/events';
+import { eventTimeLabel } from '../../utils/events';
+import EventCategoryLabel from './EventCategoryLabel';
 import { dateFromKey } from '../../utils/calendar';
 
 export default function EventDetails({ event, showStatus = false }) {
@@ -11,7 +12,7 @@ export default function EventDetails({ event, showStatus = false }) {
     {showStatus && <span className="inline-flex rounded-full bg-dark-100 px-3 py-1 text-xs font-semibold">{event.status === 'published' ? 'Published' : 'Draft'}</span>}
     {event.summary && <p className="rounded-lg bg-dark-50 p-3 leading-relaxed">{event.summary}</p>}
     <dl className="grid gap-3 sm:grid-cols-2">
-      {[[t('Tanggal kegiatan'), `${date(event.date)}${event.endDate !== event.date ? ` – ${date(event.endDate)}` : ''}`], [t('Waktu'), t(eventTimeLabel(event))], [t('Lokasi'), event.location || t('Belum ditentukan')], [t('Kategori'), t(eventCategories.find(item => item.value === event.category)?.label || 'Lainnya')], [t('Penyelenggara'), event.organizer || t('Belum ditentukan')]].map(([label, value]) => <div key={label}><dt className="font-semibold text-dark-900">{label}</dt><dd className="mt-1 break-words">{value}</dd></div>)}
+      {[[t('Tanggal kegiatan'), `${date(event.date)}${event.endDate !== event.date ? ` – ${date(event.endDate)}` : ''}`], [t('Waktu'), t(eventTimeLabel(event))], [t('Lokasi'), event.location || t('Belum ditentukan')], [t('Kategori'), <EventCategoryLabel key="category" category={event.category} badge />], [t('Penyelenggara'), event.organizer || t('Belum ditentukan')]].map(([label, value]) => <div key={label}><dt className="font-semibold text-dark-900">{label}</dt><dd className="mt-1 break-words">{value}</dd></div>)}
     </dl>
     {event.description && <p className="whitespace-pre-wrap break-words leading-relaxed">{event.description}</p>}
     {safeLink(event.link) && <a href={event.link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline">{t('Informasi / Pendaftaran')}</a>}

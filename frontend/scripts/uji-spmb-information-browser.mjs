@@ -1,6 +1,6 @@
 /* global document, window, getComputedStyle */
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
@@ -9,6 +9,11 @@ const output = process.env.QA_OUTPUT || join(tmpdir(), 'spmb-information-qa');
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const context = await browser.newContext({ reducedMotion: 'reduce' });
+// Existing source-backed content is seeded by migration; keep this visual regression offline.
+const migration = await readFile(new URL('../../supabase/migrations/012_spmb_information.sql', import.meta.url), 'utf8');
+const fixtureRows = JSON.parse(migration.match(/jsonb_to_recordset\('([\s\S]+)'::jsonb\)/)[1].replace(/''/g, "'")).map((row, index) => ({ ...row, id: `seed-${index}` }));
+await context.route('**/rest/v1/spmb_information?*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(fixtureRows) }));
+await context.route('**/rest/v1/rpc/get_spmb_statistics', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ total_pendaftar: null, diterima: null, kuota_total: null, kuota_tersedia: null }) }));
 const page = await context.newPage(), errors = [], results = [];
 page.on('pageerror', error => errors.push(error.message));
 try {

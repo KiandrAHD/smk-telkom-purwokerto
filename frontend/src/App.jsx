@@ -55,6 +55,7 @@ const AdminPengumumanPage = lazy(() => import('./pages/admin/pengumuman/Pengumum
 const AdminPrestasiPage = lazy(() => import('./pages/admin/prestasi/PrestasiPage'));
 const AdminBkkPage = lazy(() => import('./pages/admin/bkk/BkkPage'));
 const KalenderAdminPage = lazy(() => import('./pages/admin/kalender/KalenderAdminPage'));
+const SpmbInformationPage = lazy(() => import('./pages/admin/spmb/SpmbInformationPage'));
 const AdminPpdbPage = lazy(() => import('./pages/admin/ppdb/PPDBPage'));
 const ProtectedRoute = lazy(() => import('./router/ProtectedRoute'));
 const NextTelPage = lazy(() => import('./pages/NextTelPage'));
@@ -216,6 +217,7 @@ const App = () => {
               }
             >
               <Route index element={<DashboardHomePage />} />
+              <Route path="informasi-spmb" element={<SpmbInformationPage />} />
               {/* Tambah/edit berita dan detail PPDB kini memakai modal di dalam
                   halamannya masing-masing, jadi tidak ada rute terpisah lagi. */}
               <Route path="berita" element={<AdminBeritaPage />} />
