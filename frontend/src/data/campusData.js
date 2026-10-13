@@ -1,4 +1,18 @@
 import { fasilitasData } from './fasilitasData';
+import lineD1 from '../assets/fasilitas/campus/node-205-1122.svg';
+import lineD2 from '../assets/fasilitas/campus/node-205-1115.svg';
+import linePark from '../assets/fasilitas/campus/node-205-1121.svg';
+import lineC from '../assets/fasilitas/campus/node-205-1137.svg';
+import lineB from '../assets/fasilitas/campus/node-205-1113.svg';
+import lineRpsSouth from '../assets/fasilitas/campus/node-205-1116.svg';
+import lineRpsNorth from '../assets/fasilitas/campus/node-205-1149.svg';
+import lineLapangan from '../assets/fasilitas/campus/node-205-1119.svg';
+import lineA from '../assets/fasilitas/campus/node-205-1118.svg';
+import lineLibrary from '../assets/fasilitas/campus/node-205-1903.svg';
+import lineDlg from '../assets/fasilitas/campus/node-205-1922.svg';
+import lineAula from '../assets/fasilitas/campus/node-205-1928.svg';
+import diagonalSouth from '../assets/fasilitas/campus/node-205-1117.svg';
+import diagonalNorth from '../assets/fasilitas/campus/node-205-1150.svg';
 
 const existing = id => fasilitasData.find(item => item.id === id);
 const knownPlace = (id, name, preview = '') => ({ id, name, preview, description: '', image: null });
@@ -31,6 +45,21 @@ export const campusHotspots = [
   { id: 'perpustakaan', facilityId: 'perpustakaan', label: 'Perpustakaan', node: '205:1902', x: 0.61106, y: 0.53473, position: 'left-[61.106%] top-[53.473%]' },
   { id: 'aula', facilityId: 'aula', label: 'Aula', node: '205:1927', x: 0.75778, y: 0.41579, position: 'left-[75.778%] top-[41.579%]' },
 ];
+// Figma label bottom / connector endpoints, measured from the pin tip in the 3142 × 1051 image.
+export const campusAnnotations = {
+  'gedung-d-1': { line: lineD1, classes: '[--label-x:-1] [--label-gap:78] [--line-gap:37]' },
+  'gedung-d-2': { line: lineD2, classes: '[--label-x:0] [--label-gap:93] [--line-gap:35]' },
+  parkiran: { line: linePark, classes: '[--label-x:13] [--label-gap:76] [--line-gap:37]' },
+  'gedung-c': { line: lineC, classes: '[--label-x:0] [--label-gap:93] [--line-gap:35]' },
+  'gedung-b': { line: lineB, classes: '[--label-x:1.5] [--label-gap:117] [--line-gap:32]' },
+  'rps-selatan': { line: lineRpsSouth, diagonal: diagonalSouth, subtitle: 'Ruang Praktik Siswa', classes: 'campus-rps-south [--label-x:75.5] [--dot-x:46] [--label-gap:76] [--line-gap:38]' },
+  'rps-utara': { line: lineRpsNorth, diagonal: diagonalNorth, subtitle: 'Ruang Praktik Siswa', classes: 'campus-rps-north [--label-x:114] [--dot-x:38.5] [--label-gap:75] [--line-gap:38]' },
+  'lapangan-apel': { line: lineLapangan, classes: '[--label-x:1.5] [--label-gap:103] [--line-gap:34]' },
+  'gedung-a': { line: lineA, classes: '[--label-x:1.5] [--label-gap:78] [--line-gap:37]' },
+  dlg: { line: lineDlg, classes: '[--label-x:23.5] [--label-gap:81] [--line-gap:37]' },
+  perpustakaan: { line: lineLibrary, classes: '[--label-x:-12] [--label-gap:81] [--line-gap:37]' },
+  aula: { line: lineAula, classes: '[--label-x:0] [--label-gap:78] [--line-gap:37]' },
+};
 export function campusIdForCard(item) {
   const building = item.name?.match(/^Kelas ([ABCD]) /)?.[1];
   if (building) return `kelas-${building.toLowerCase()}`;

@@ -2,7 +2,15 @@ import assert from 'node:assert/strict';
 import { createServer } from 'vite';
 const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
 try {
-  const { clampPan, panLimit, centerCampusPoint, gestureAxis, meaningfulPan, readCampusHint, saveCampusHint, campusHintKey } = await server.ssrLoadModule('/src/utils/campusPan.js');
+  const { campusGeometry, clampPan, panLimit, centerCampusPoint, gestureAxis, meaningfulPan, readCampusHint, saveCampusHint, campusHintKey } = await server.ssrLoadModule('/src/utils/campusPan.js');
+  const desktop = campusGeometry(1847);
+  assert.equal(desktop.width, 3142); assert.equal(desktop.initial, 83);
+  assert.equal(desktop.maximum, 1295);
+  const mobile = campusGeometry(390);
+  assert.equal(mobile.width, 960); assert.equal(mobile.maximum, 570);
+  assert.ok(Math.abs(mobile.height / mobile.width - 727 / 2164) < 0.00001);
+  assert.equal(campusGeometry(3840).maximum, 0);
+  assert.equal(campusGeometry(3840).initial, 0);
   assert.equal(panLimit(1200, 2100), 900);
   assert.equal(panLimit(1500, 1200), 0);
   assert.equal(clampPan(-300, 900), 0);
