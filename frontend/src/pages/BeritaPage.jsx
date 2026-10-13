@@ -31,11 +31,11 @@ const BeritaPage = () => {
   return (
     <MainLayout>
       <BeritaHeroSection items={items} />
+      <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("berita")} />
       </div>
       {!loading && !error && <Reveal><BeritaSorotSection items={items} /></Reveal>}
-      <RibbonDivider />
       {!loading && !error && <Reveal>
         <BeritaKategoriSection items={items}>
           {(shown) => <BeritaAgendaSection items={shown} />}

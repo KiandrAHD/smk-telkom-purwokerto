@@ -1,6 +1,7 @@
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import MainLayout from '../layouts/MainLayout';
+import RibbonDivider from '../components/RibbonDivider';
 import Reveal from '../components/Reveal';
 import PengumumanHeroSection from '../components/pengumuman/PengumumanHeroSection';
 import PengumumanPpdbSection from '../components/pengumuman/PengumumanPpdbSection';
@@ -29,6 +30,7 @@ const PengumumanPage = () => {
   return (
     <MainLayout>
       <PengumumanHeroSection />
+      <RibbonDivider animated />
       <Reveal><PengumumanPpdbSection items={items} loading={loading} error={error} /></Reveal>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("pengumuman")} />

@@ -21,17 +21,17 @@ const RibbonDivider = ({ animated = false }) => {
     </div>
   );
   return (
-    <div className="beranda-ribbon relative min-h-16 w-full overflow-hidden bg-white">
+    <div data-hero-marquee className="beranda-ribbon relative w-full overflow-hidden bg-white">
       <ul className="sr-only">
         {badges.map(({ label }) => <li key={label}>{t(label)}</li>)}
       </ul>
       <div aria-hidden="true" className="beranda-ribbon-track flex w-max select-none">
         {[0, 1].map((copy) => (
           <div key={copy} className="beranda-ribbon-group flex shrink-0 items-center">
-            {/* Two cycles per group keep a wide viewport filled at the seam. */}
-            {[0, 1].map((cycle) => badges.map(({ label, filled }) => (
+            {/* Four cycles cover a 4K viewport; both halves remain identical. */}
+            {[0, 1, 2, 3].map((cycle) => badges.map(({ label, filled }) => (
               <div key={`${cycle}-${label}`} className="flex shrink-0 items-center gap-2 pr-2">
-                <span className={`beranda-ribbon-badge flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border-2 border-[#cd0b20] px-[0.75em] text-[length:var(--ribbon-font-size)] font-extrabold leading-none ${filled ? 'bg-[#cd0b20] text-white' : 'bg-white text-[#cd0b20]'}`}>
+                <span className={`beranda-ribbon-badge flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border-2 border-primary px-[0.75em] text-[length:var(--ribbon-font-size)] font-extrabold leading-none ${filled ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
                   {t(label)}
                 </span>
                 <span className="beranda-ribbon-flower grid shrink-0 grid-cols-2 items-center">

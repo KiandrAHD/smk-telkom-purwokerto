@@ -6,6 +6,7 @@ import MainLayout from '../layouts/MainLayout';
 import Modal from '../components/dashboard/Modal';
 import ContentImage from '../components/ContentImage';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
+import RibbonDivider from '../components/RibbonDivider';
 import { useLanguage } from '../context/LanguageContext';
 import { fasilitasCategories as categories, fasilitasViews } from '../data/fasilitasPageData';
 import { ctaMasukPpdb } from '../data/dummyData';
@@ -65,6 +66,7 @@ export default function FasilitasPage() {
             </div>
           </div>
         </section>
+        <RibbonDivider animated />
         <section id="daftar-fasilitas" aria-labelledby="fasilitas-title" className="relative isolate scroll-mt-28 bg-white py-8 lg:py-12">
           {['right', ...(category !== 'Semua' && category !== 'Kelas' ? ['left'] : [])].map(side => <div key={side} aria-hidden="true" className={`pointer-events-none absolute inset-y-0 ${side === 'right' ? 'right-0' : 'left-0 rotate-180'} -z-10 hidden w-[2.11%] overflow-hidden lg:block`}>
             {[0, 1, 2, 3].map(index => <img key={index} src={accent} alt="" width="39" height="564" className="block h-auto w-full" />)}

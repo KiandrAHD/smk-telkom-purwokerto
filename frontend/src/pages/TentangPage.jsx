@@ -14,6 +14,7 @@ const ProfileSekolahPage = () => (
     <Reveal>
       <TentangStatsSection />
     </Reveal>
+    <RibbonDivider animated />
     <Reveal>
       <TentangAboutSection />
     </Reveal>
@@ -23,7 +24,6 @@ const ProfileSekolahPage = () => (
     <Reveal>
       <TentangTimelineSection />
     </Reveal>
-    <RibbonDivider />
     <Reveal>
       <TentangKepalaSekolahSection />
     </Reveal>
