@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ImageOff, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, ImageOff, X } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import useSlidingPage from '../../hooks/useSlidingPage';
 import accent from '../../assets/fasilitas/campus/detail/card-accent.svg';
@@ -21,7 +21,7 @@ function FacilityPhoto({ photo, alt, decorative = false, primary = false }) {
 function FacilityCarousel({ photos, name }) {
   const { t } = useLanguage();
   const [index, setIndex] = useState(0);
-  const { viewport, goTo } = useSlidingPage(index);
+  const { viewport, indicators, goTo } = useSlidingPage(index);
   const gesture = useRef(null);
   const current = photos[index];
   const move = (target, direction) => {
@@ -64,8 +64,8 @@ function FacilityCarousel({ photos, name }) {
           <button type="button" aria-label={t('Foto fasilitas berikutnya')} onClick={() => move(index + 1, 1)} className="campus-photo-arrow campus-photo-arrow--next absolute right-0 top-1/2 z-10 size-11 -translate-y-1/2 rounded-full"><img src={arrow} alt="" aria-hidden="true" className="max-w-none" /></button>
         </>}
       </div>
-      <div className="mt-3 flex min-h-11 flex-wrap items-center justify-center gap-1" role="group" aria-label={t('Pilih foto fasilitas')}>
-        {photos.length > 1 && photos.map((photo, photoIndex) => <button key={photo.source} type="button" aria-label={t('Lihat foto {number} untuk {name}', { number: photoIndex + 1, name: t(name) })} aria-pressed={photoIndex === index} onClick={() => move(photoIndex, photoIndex > index ? 1 : -1)} className="grid size-8 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-primary"><span aria-hidden="true" className={`h-2 rounded-full transition-colors ${photoIndex === index ? 'w-5 bg-primary' : 'w-2 bg-dark-300'}`} /></button>)}
+      <div ref={indicators} className="mt-3 flex min-h-11 flex-wrap items-center justify-center gap-1" role="group" aria-label={t('Pilih foto fasilitas')}>
+        {photos.length > 1 && photos.map((photo, photoIndex) => <button key={photo.source} type="button" aria-label={t('Lihat foto {number} untuk {name}', { number: photoIndex + 1, name: t(name) })} aria-pressed={photoIndex === index} onClick={() => move(photoIndex, photoIndex > index ? 1 : -1)} className="grid size-8 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-primary"><span data-slide-indicator aria-hidden="true" className={`h-2 rounded-full transition-none ${photoIndex === index ? 'w-5 bg-primary' : 'w-2 bg-dark-300'}`} /></button>)}
       </div>
       <p className="sr-only" aria-live="polite" aria-atomic="true">{photos.length ? t('Foto {current} dari {total}', { current: index + 1, total: photos.length }) : t('Dokumentasi fasilitas ini belum tersedia.')}</p>
     </section>
@@ -100,9 +100,12 @@ function FacilityContent({ facility, outgoing, initialRoomName }) {
           <p className="mt-4 text-xs leading-relaxed text-dark-600 sm:text-sm">{t(room?.preview || item.preview || 'Informasi fasilitas ini belum tersedia. Nama dan titik lokasi mengikuti referensi peta sekolah.')}</p>
           {facility.rooms && <label className="mt-4 block text-xs font-semibold text-dark-600">
             {t('Pilih ruang kelas')}
-            <select value={roomId} onChange={event => setRoomId(event.target.value)} className="mt-2 block min-h-11 w-full rounded-lg border border-dark-200 bg-white px-3 text-sm font-normal text-dark-800">
+            <span className="relative mt-2 block">
+            <select value={roomId} onChange={event => setRoomId(event.target.value)} className="block min-h-11 w-full appearance-none rounded-lg border border-dark-200 bg-white py-2 pl-3 pr-10 text-sm font-normal text-dark-800">
               {facility.rooms.map(candidate => <option key={candidate.id} value={candidate.id}>{t(candidate.name)}</option>)}
             </select>
+            <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 block size-4 -translate-y-1/2" />
+            </span>
           </label>}
           {facility.list && <button type="button" onClick={() => facility.onList(facility.list)} className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary hover:underline">{t('Lihat daftar fasilitas')}<ArrowRight className="size-4" aria-hidden="true" /></button>}
         </div>

@@ -8,6 +8,7 @@ export default {
   'Lihat foto {number} untuk {name}': 'View photo {number} of {name}',
   "Aula": "Hall",
   "GOR": "Sports Hall",
+  "Gedung Olahraga": "Sports Hall",
   "Parkiran": "Parking",
   "Ruang Perpustakaan": "Library Room",
   "Digital Literasi Garden": "Digital Literacy Garden",

@@ -146,7 +146,7 @@ const Navbar = () => {
                   >
                     {navLabel(link)}
                     <ChevronDown
-                      className="h-3.5 w-3.5"
+                      className="block h-3.5 w-3.5 shrink-0"
                       aria-hidden="true"
                     />
                     {activeBar(link)}
@@ -240,7 +240,7 @@ const Navbar = () => {
                     >
                       {navLabel(link)}
                       <ChevronDown
-                        className="h-4 w-4"
+                        className="block h-4 w-4 shrink-0"
                         aria-hidden="true"
                       />
                     </button>
