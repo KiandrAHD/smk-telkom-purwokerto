@@ -32,11 +32,11 @@ const PrestasiPage = () => {
   return (
     <MainLayout>
       <PrestasiHeroSection />
+      <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />
       </div>
       <Reveal><PrestasiUnggulanSection items={items} /></Reveal>
-      <RibbonDivider />
       <Reveal><PrestasiGaleriSection items={items} /></Reveal>
       <Reveal><PrestasiPerjalananSection /></Reveal>
       <Reveal><PrestasiDukunganSection /></Reveal>

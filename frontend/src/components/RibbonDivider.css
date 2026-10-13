@@ -1,7 +1,9 @@
 .beranda-ribbon {
   --ribbon-height: clamp(2.25rem, 4.4938vw, 5.1875rem);
   --ribbon-font-size: clamp(0.875rem, 1.7325vw, 2rem);
-  aspect-ratio: 1847 / 146;
+  display: flex;
+  align-items: center;
+  height: calc(var(--ribbon-height) + 2rem);
 }
 
 .beranda-ribbon-badge,
@@ -12,7 +14,8 @@
 .beranda-ribbon-flower { width: var(--ribbon-height); }
 
 .beranda-ribbon-track {
-  animation: beranda-ribbon-loop 80s linear infinite;
+  /* Twice the old distance and duration preserves the existing scroll speed. */
+  animation: beranda-ribbon-loop 160s linear infinite;
   will-change: transform;
 }
 
@@ -22,5 +25,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .beranda-ribbon-track { animation: none; will-change: auto; }
+  .beranda-ribbon { height: auto; padding-block: 1rem; }
+  .beranda-ribbon-track { width: 100%; animation: none; will-change: auto; }
+  .beranda-ribbon-group { display: grid; width: 100%; grid-template-columns: minmax(0, 1fr); gap: .75rem; padding-inline: 1rem; justify-items: center; }
+  .beranda-ribbon-group + .beranda-ribbon-group, .beranda-ribbon-group > div:nth-child(n+5) { display: none; }
+  .beranda-ribbon-group > div { padding-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 40rem) {
+  .beranda-ribbon-group { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media print {
+  .beranda-ribbon-track { animation: none; transform: none; }
 }

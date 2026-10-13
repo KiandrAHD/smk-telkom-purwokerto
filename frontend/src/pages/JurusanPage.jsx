@@ -12,10 +12,10 @@ import JurusanFaqSection from '../components/jurusan/JurusanFaqSection';
 const JurusanPage = () => (
   <MainLayout>
     <JurusanHeroSection />
+    <RibbonDivider animated />
     <Reveal>
       <JurusanListSection />
     </Reveal>
-    <RibbonDivider />
     <Reveal>
       <JurusanQuizSection />
     </Reveal>

@@ -139,6 +139,7 @@ function GuruPage() {
         </div>
       </section>
 
+      <RibbonDivider animated />
       <section aria-labelledby="kepala-sekolah-title" className="relative overflow-hidden bg-white py-8 lg:py-12">
         <SectionAccents variant="headmaster" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -168,9 +169,7 @@ function GuruPage() {
       </section>
 
       <GuruGrid teachers={kesiswaanData} id="kesiswaan" title="Bidang Kesiswaan & Karakter" />
-      <Reveal><RibbonDivider /></Reveal>
       <GuruGrid />
-      <Reveal><RibbonDivider /></Reveal>
     </MainLayout>
   );
 }

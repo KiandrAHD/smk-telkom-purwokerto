@@ -1,6 +1,7 @@
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import MainLayout from '../layouts/MainLayout';
+import RibbonDivider from '../components/RibbonDivider';
 import Reveal from '../components/Reveal';
 import BkkHeroSection from '../components/bkk/BkkHeroSection';
 import BkkLowonganSection from '../components/bkk/BkkLowonganSection';
@@ -31,6 +32,7 @@ const BkkPage = () => {
   return (
     <MainLayout>
       <BkkHeroSection />
+      <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("lowongan aktif")} />
       </div>

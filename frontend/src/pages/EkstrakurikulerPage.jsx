@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import SearchResultStatus from '../components/SearchResultStatus';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
+import RibbonDivider from '../components/RibbonDivider';
 import { useLenis } from 'lenis/react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
@@ -286,6 +287,7 @@ const EkstrakurikulerPage = () => {
         </div>
       </section>
 
+      <RibbonDivider animated />
       <SearchResultStatus message={t('{count} kegiatan ditemukan', { count: filteredItems.length })} />
       <CategorySection
         activeCategory={activeCategory}

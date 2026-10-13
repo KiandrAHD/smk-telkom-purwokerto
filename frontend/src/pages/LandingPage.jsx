@@ -18,8 +18,8 @@ const SectionFallback = () => <div className="py-12 bg-white" />;
 const LandingPage = () => (
   <MainLayout>
     <HeroSection />
-    <AboutSection />
     <RibbonDivider animated />
+    <AboutSection />
     <DepartmentsSection />
     <Suspense fallback={<SectionFallback />}>
       <FacilitiesSection />
