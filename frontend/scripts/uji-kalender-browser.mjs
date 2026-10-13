@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { calendarEvents } from '../src/data/calendarEvents.js';
 
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const base = process.env.QA_URL || 'http://127.0.0.1:4173';
@@ -12,7 +13,7 @@ const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = [], results = [];
 page.on('pageerror', error => errors.push(error.message));
-await page.route('**/rest/v1/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+await page.route('**/rest/v1/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(route.request().url().includes('/events?') ? calendarEvents.map(event => ({ id: event.id, judul: event.title, tanggal_mulai: event.date, waktu_mulai: event.start, waktu_selesai: event.end, lokasi: event.location, kategori: event.category, status: 'published' })) : []) }));
 const pickMonth = async value => {
   await page.locator('input[type="month"]').fill(value);
   await page.waitForFunction(value => document.querySelector('input[type="month"]')?.value === value, value);

@@ -25,9 +25,9 @@ Folder `src/assets/kalender` menyimpan aset lokal, tanpa URL sementara Figma di 
 
 ## Data dan interaksi
 
-`calendarEvents.js` berisi tujuh contoh dari Figma, BUKAN jadwal resmi: upacara 1 Oktober, tryout 2 Oktober, dan TKA 26–30 Oktober 2026. Banner contoh di atas kalender dihapus sesuai permintaan pengguna; label contoh tetap ada pada detail dan status data sumber. Tidak menggunakan tanggal publikasi pengumuman sebagai tanggal kegiatan.
+Kalender publik membaca tabel Supabase `public.events` melalui `eventService` dan `useEvents`, hanya untuk status Published. Admin `/dashboard/kalender` memakai tabel yang sama dengan RLS administrator. Migration `010_calendar_events.sql` perlu diterapkan sebelum kalender dapat memuat data resmi; tidak ada fallback jadwal contoh ketika API gagal.
 
-Belum ada API agenda resmi. Dataset lokal dapat diganti dengan data terverifikasi; setelah itu label contoh juga harus diperbarui. `CalendarBoard` menerima array `events`; setiap item memiliki `id`, `date` (YYYY-MM-DD), `title`, `start`, `end`, `location`, `category`. Jam menggunakan WIB. Belum ada route detail kegiatan resmi; detail ditampilkan melalui Modal existing.
+`calendarEvents.js` hanya dipakai sebagai fixture tujuh contoh Figma dalam pengujian, tidak diimpor kalender produksi. Detail memakai `EventDetails` dan Modal existing. Tanggal DATE dan waktu TIME disimpan sebagai nilai kalender WIB; event beberapa hari ditampilkan pada setiap tanggal dalam rentangnya. Lihat `manajemen-kalender.md` untuk schema, penerapan migration, sinkronisasi, dan batas verifikasi.
 
 - Navigasi bulan/tahun, picker bulan, Hari Ini menggunakan tanggal Asia/Jakarta.
 - Minggu dimulai Senin; perhitungan tanggal sintetis UTC menghindari pergeseran timezone/DST.
@@ -48,7 +48,7 @@ npm.cmd run build
 npm.cmd run bahasa:uji
 ```
 
-Browser script memakai preview di `127.0.0.1:4173`; dapat diubah melalui `QA_URL`. Gunakan `PLAYWRIGHT_MODULE` bila Playwright berasal dari runtime bundel. `QA_OUTPUT` menentukan lokasi screenshot/results.
+Browser script memakai preview di `127.0.0.1:4173`; dapat diubah melalui `QA_URL`. Gunakan `PLAYWRIGHT_MODULE` bila Playwright berasal dari runtime bundel. `QA_OUTPUT` menentukan lokasi screenshot/results. API kegiatan disimulasikan dengan fixture dalam skrip ini; hasilnya membuktikan interaksi UI, bukan penerapan migration di Supabase aktif.
 
 Unit checks: 2.412 bulan (1900–2100), susunan Senin–Minggu, kontinuitas tanggal, Februari 1900/2000/2024/2100, pergantian tahun, batas tahun maksimum, data unik, dan bulan kosong.
 
