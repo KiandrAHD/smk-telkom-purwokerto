@@ -138,27 +138,32 @@ try {
   await admin.getByRole('button', { name: 'Detail Published QA', exact: true }).click(); await admin.getByRole('dialog').getByRole('button', { name: 'Edit Published QA', exact: true }).click();
   assert.match(await admin.getByRole('combobox', { name: 'Kategori Kegiatan' }).textContent(), /Upacara Hari Nasional/);
   const publishedId = rows.find(row => row.judul === 'Published QA').id;
+  await publicPage.locator(`[data-school-agenda-event="${publishedId}"]`).waitFor();
   await selectCategory(admin, 'Cuti bersama');
   await field('Judul kegiatan (wajib)', 'Updated QA'); await field('Lokasi', 'Laboratorium QA'); await field('Deskripsi lengkap', '<script>window.qaXss=true</script>');
   await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByRole('dialog').waitFor({ state: 'hidden' });
   assert.equal(rows.length, 2);
   assert.equal(rows.find(row => row.id === publishedId).kategori, 'cuti-bersama');
   await sameOriginPublic.locator('aside').getByRole('button', { name: /Updated QA/ }).waitFor();
+  await sameOriginPublic.locator(`[data-school-agenda-event="${publishedId}"]`).getByText('Updated QA', { exact: true }).waitFor();
   await publicPage.evaluate(() => window.dispatchEvent(new Event('focus'))); await publicPage.locator('aside').getByRole('button', { name: /Updated QA/ }).click();
   await publicPage.getByRole('dialog').getByText('Laboratorium QA', { exact: true }).waitFor(); assert.equal(await publicPage.evaluate(() => window.qaXss), undefined); await publicPage.keyboard.press('Escape');
   assert.equal(await dotColor(admin.locator('aside [data-category-dot="cuti-bersama"]')), '#16B900');
   assert.equal(await dotColor(publicPage.locator('aside [data-category-dot="cuti-bersama"]')), '#16B900');
   assert.equal(await dotColor(publicPage.locator('[data-calendar-date="2030-10-06"] [data-category-dot="cuti-bersama"]')), '#16B900');
+  assert.equal(await dotColor(publicPage.locator(`[data-school-agenda-event="${publishedId}"] [data-category-dot="cuti-bersama"]`)), '#16B900');
   assert.equal(await dotColor(admin.locator('[data-admin-date="2030-10-06"] [data-category-dot="cuti-bersama"]')), '#16B900');
   console.log('PASS category edit updates admin/public calendar, detail and agenda.');
   await admin.getByRole('button', { name: 'Edit Updated QA', exact: true }).click(); await admin.getByLabel('Status publikasi', { exact: true }).selectOption('draft');
   await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByRole('dialog').waitFor({ state: 'hidden' });
   await publicPage.evaluate(() => window.dispatchEvent(new Event('focus'))); await publicPage.getByText('Belum ada kegiatan pada tanggal ini.', { exact: true }).waitFor();
+  assert.equal(await publicPage.locator(`[data-school-agenda-event="${publishedId}"]`).count(), 0);
   await admin.getByRole('button', { name: 'Edit Updated QA', exact: true }).click(); await admin.getByLabel('Status publikasi', { exact: true }).selectOption('published');
   await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByRole('dialog').waitFor({ state: 'hidden' });
   await admin.getByRole('button', { name: 'Hapus Updated QA', exact: true }).click(); await admin.getByRole('dialog').getByRole('button', { name: 'Batal', exact: true }).click(); assert.equal(rows.length, 2);
   await admin.getByRole('button', { name: 'Hapus Updated QA', exact: true }).click(); await admin.getByRole('button', { name: 'Ya, Hapus', exact: true }).click(); await admin.getByRole('dialog').waitFor({ state: 'hidden' });
   await publicPage.evaluate(() => window.dispatchEvent(new Event('focus'))); await publicPage.getByText('Belum ada kegiatan pada tanggal ini.', { exact: true }).waitFor(); assert.equal(rows.length, 1);
+  assert.equal(await publicPage.locator(`[data-school-agenda-event="${publishedId}"]`).count(), 0);
   await admin.getByRole('button', { name: 'Tambah Event', exact: true }).click(); await field('Judul kegiatan (wajib)', 'Retry QA'); await field('Tanggal mulai (wajib)', '2030-10-06'); failSave = true;
   await selectCategory(admin, 'Penilaian Siswa (TKA, PSAS, PSAJ)');
   await admin.getByRole('button', { name: 'Simpan Event', exact: true }).click(); await admin.getByRole('dialog').getByRole('alert').waitFor(); assert.equal(rows.length, 1);
@@ -218,4 +223,10 @@ try {
   assert.deepEqual(errors, []);
   await adminContext.close(); await publicContext.close();
   console.log('PASS mocked API UI: 10 Figma categories/colors in both legends and dropdown, keyboard selection, category edit/color sync, legacy edit preservation, protected CRUD/Draft privacy/retry, typography and five responsive admin/public/form viewports.');
+} catch (error) {
+  for (const [index, context] of browser.contexts().entries()) for (const [pageIndex, page] of context.pages().entries()) {
+    await page.screenshot({ path: join(output, `failure-${index}-${pageIndex}.png`), fullPage: true });
+    console.error('Failure page:', page.url(), await page.getByRole('heading').allTextContents());
+  }
+  throw error;
 } finally { await writeFile(join(output, 'results.json'), JSON.stringify({ results, errors, records: rows.length }, null, 2)); await browser.close(); }

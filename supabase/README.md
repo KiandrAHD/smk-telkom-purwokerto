@@ -4,7 +4,7 @@ Dokumen ini menjelaskan database, Row Level Security (RLS), dan Storage untuk pl
 
 ## Menjalankan migration
 
-Migration dijalankan berurutan dari `001_initial_schema.sql` sampai `011_event_categories.sql`. Terapkan migration `004` dan `005` sebelum frontend yang membaca kolom baru; `006` harus diterapkan bersama frontend yang memakai path upload baru. Migration `010` menambahkan tabel kegiatan, constraint tanggal/waktu WIB, trigger, indeks, dan RLS. Migration `011` memperluas kategori sesuai legenda Figma tanpa mengubah data event lama; terapkan sebelum frontend kategori baru digunakan. Panduan kalender ada di `frontend/docs/manajemen-kalender.md`; audit kategori, warna, kompatibilitas, dan QA ada di `frontend/docs/kategori-kalender.md`.
+Migration dijalankan berurutan dari `001_initial_schema.sql` sampai `012_spmb_information.sql`. Terapkan migration `004` dan `005` sebelum frontend yang membaca kolom baru; `006` harus diterapkan bersama frontend yang memakai path upload baru. Migration `010` menambahkan tabel kegiatan, constraint tanggal/waktu WIB, trigger, indeks, dan RLS. Migration `011` memperluas kategori sesuai legenda Figma tanpa mengubah data event lama; terapkan sebelum frontend kategori baru digunakan. Migration `012` menambahkan konten Informasi SPMB, RLS admin/Published dan RPC statistik agregat tanpa identitas pendaftar; terapkan bersama frontend Informasi SPMB. Panduan kalender ada di `frontend/docs/manajemen-kalender.md`; audit kategori ada di `frontend/docs/kategori-kalender.md`; integrasi Agenda/SPMB, sumber, QA dan batas hosted ada di `frontend/docs/agenda-spmb-admin.md`.
 
 ### Supabase CLI
 
@@ -34,8 +34,12 @@ Semua primary key menggunakan UUID dengan default `gen_random_uuid()`. Semua tab
 | `prestasi` | Data prestasi sekolah. Nilai `tingkat` sengaja berupa teks fleksibel. |
 | `bkk` | Lowongan kerja atau peluang BKK dengan status `aktif`/`ditutup`. |
 | `ppdb` | Formulir pendaftaran publik dengan status proses administrasi. |
+| `events` | Kegiatan, tanggal/waktu, kategori, foto dan Draft/Published untuk kalender serta Agenda Sekolah. |
+| `spmb_information` | Gelombang, timeline, skema, berkas, syarat dan kuota resmi nullable untuk admin/publik. |
 
 Kolom dan tipe data pada keenam tabel mengikuti rancangan fase 1. Constraint status mencegah nilai status di luar daftar yang ditentukan.
+
+Tabel lanjutan `events` dan `spmb_information` mengikuti migration 010–012. Statistik SPMB menghitung seluruh record `ppdb`, karena kolom periode penerimaan belum tersedia. Kuota tersisa = max(0, kuota total − jumlah status Diterima); kuota belum diisi tetap NULL. Migration 012 tidak mengubah data pendaftar/event atau policy `ppdb` existing.
 
 ## Row Level Security
 
@@ -46,6 +50,7 @@ RLS aktif untuk seluruh tabel.
 - User PPDB hanya dapat membaca submission miliknya sendiri; user tidak dapat mengubah atau menghapus submission.
 - Admin terautentikasi dapat SELECT/INSERT/UPDATE/DELETE berita, pengumuman, prestasi, dan BKK.
 - Admin dapat SELECT dan UPDATE PPDB, tetapi tidak diberi DELETE.
+- Anonim/authenticated membaca Published pada `events` dan `spmb_information`; admin mengelola Draft dan CRUD. Record statistik SPMB tunggal tidak dapat dihapus. RPC `get_spmb_statistics()` hanya mengembalikan total pendaftar, jumlah Diterima, kuota total dan kuota tersedia.
 - Fungsi `public.is_admin()` memeriksa keberadaan `auth.uid()` pada tabel `admins` menggunakan `SECURITY DEFINER` agar policy tidak mengalami rekursi RLS.
 
 Frontend harus memakai `VITE_SUPABASE_ANON_KEY` atau publishable key. Jangan pernah memasukkan `service_role` key ke frontend, repository publik, atau environment variable yang dikirim ke browser.

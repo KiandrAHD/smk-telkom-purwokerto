@@ -45,3 +45,11 @@ export function upcomingEvents(events, now = new Date()) {
   return events.filter(event => (event.endDate || event.date) > today || ((event.endDate || event.date) === today && (!event.end || event.end >= time)))
     .sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
 }
+export function selectSchoolAgenda(events, now = new Date()) {
+  const published = [...new Map(events.filter(event => event.status === 'published').map(event => [event.id, event])).values()];
+  const upcoming = upcomingEvents(published, now);
+  const upcomingIds = new Set(upcoming.map(event => event.id));
+  const past = published.filter(event => !upcomingIds.has(event.id)).sort((a, b) =>
+    (b.endDate || b.date).localeCompare(a.endDate || a.date) || b.date.localeCompare(a.date) || (b.end || '').localeCompare(a.end || ''));
+  return [...upcoming, ...past].slice(0, 3);
+}

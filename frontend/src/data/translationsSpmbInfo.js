@@ -1,4 +1,11 @@
 export default {
+  'informasi SPMB': 'SPMB information',
+  'Informasi belum dipublikasikan.': 'Information has not been published yet.',
+  'Informasi pendaftaran belum tersedia. Silakan coba lagi nanti.': 'Admission information is unavailable. Please try again later.',
+  'Kuota tersedia: {count}': 'Available places: {count}',
+  'Lihat informasi': 'View information',
+  'Arsip pengumuman sekolah. Jadwal yang belum diumumkan menunggu konfirmasi panitia.': 'School announcement archive. Unannounced dates await committee confirmation.',
+  'Berkas digabung dalam satu PDF sesuai ketentuan portal.': 'Combine the documents into one PDF following the portal requirements.',
   'Wujudkan Mimpimu': 'Make Your Dreams Come True', 'di Dunia Digital': 'in the Digital World',
   'Informasi SPMB | SMK Telkom Purwokerto': 'SPMB Information | SMK Telkom Purwokerto',
   'Informasi alur, jalur penerimaan, berkas, dan pendaftaran SPMB SMK Telkom Purwokerto.': 'Explore admission steps, pathways, documents, and SPMB registration at SMK Telkom Purwokerto.',

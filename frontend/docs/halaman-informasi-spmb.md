@@ -1,5 +1,7 @@
 # Halaman Informasi SPMB
 
+Pembaruan 13 Oktober 2026: sumber operasional gelombang, timeline, skema, berkas dan syarat sekarang memakai Supabase `spmb_information`, melalui hook/service yang sama dengan admin `/dashboard/informasi-spmb`. Statistik memakai RPC agregat `ppdb` dan kuota nullable. Migration 012 diperlukan sebelum aktivasi hosted. Audit, sumber seed, CRUD, QA terbaru, batas aktivasi dan Git handoff tersedia di [agenda-spmb-admin.md](agenda-spmb-admin.md). Bagian di bawah mendokumentasikan implementasi publik sebelumnya; gunakan handoff terbaru untuk perubahan tugas lanjutan.
+
 Implementasi 13 Oktober 2026. Halaman publik tersedia di `/spmb` dan submenu Informasi → SPMB pada desktop/mobile. Login tetap di `/spmb/masuk`, daftar akun di `/spmb/daftar`. Bookmark `/ppdb` serta callback lama tetap mempertahankan query/hash dan tujuan portal sebelumnya.
 
 ## Audit dan referensi

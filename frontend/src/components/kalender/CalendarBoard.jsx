@@ -8,13 +8,8 @@ import EventCategoryLabel, { EventCategoryDot } from './EventCategoryLabel';
 import { getEventCategory, eventColor, eventsOnDate, eventTimeLabel, upcomingEvents } from '../../utils/events';
 import { dateFromKey, eventsForMonth, monthCells, shiftDate } from '../../utils/calendar';
 import { getSchoolDateKey } from '../../utils/publicContent';
-import badge from '../../assets/kalender/agenda-calendar.png';
 import decorationLeft from '../../assets/kalender/decoration-left.png';
 import decorationRight from '../../assets/kalender/decoration-right.png';
-import petalRight from '../../assets/kalender/petal-right.svg';
-import petalLeft from '../../assets/kalender/petal-left.svg';
-import petalCenterA from '../../assets/kalender/petal-center-a.svg';
-import petalCenterB from '../../assets/kalender/petal-center-b.svg';
 
 const eventColors = eventColor;
 
@@ -143,12 +138,6 @@ export default function CalendarBoard({ events = [] }) {
             <div className="flex-1 rounded-2xl border border-dark-300 bg-white p-3">
               <div className="flex items-center justify-between gap-2"><h3 className="flex items-center gap-2 text-xs font-bold text-dark-900"><span className="grid size-8 shrink-0 place-items-center rounded-lg bg-primary text-white"><CalendarDays className="size-4" /></span>{view.selected ? t('Agenda pada {date}', { date: formatDate(view.selected, { day: 'numeric', month: 'short' }) }) : t('Agenda Terdekat')}</h3><button type="button" onClick={allEvents} className="min-h-9 shrink-0 text-[9px] font-semibold text-primary hover:underline">{t('Lihat Semua')}<ArrowRight className="ml-1 inline size-3" /></button></div>
               {agenda.length ? <ul className="mt-4 space-y-3">{agenda.map(event => <li key={event.id}>{eventCard(event)}</li>)}</ul> : <p role="status" className="py-10 text-center text-xs leading-relaxed text-dark-500">{t(view.selected ? 'Belum ada kegiatan pada tanggal ini.' : 'Belum ada agenda mendatang pada bulan ini.')}</p>}
-            </div>
-            <div className="rounded-2xl border border-dark-300 bg-white p-3">
-              <div className="relative overflow-hidden rounded-xl bg-primary-50 p-4 pb-9">
-                <div aria-hidden="true" className="pointer-events-none absolute inset-0"><img src={petalRight} alt="" className="absolute bottom-0 right-0 w-20" /><img src={petalLeft} alt="" className="absolute bottom-0 left-0 w-10 rotate-180" /><img src={petalCenterA} alt="" className="absolute bottom-9 left-3 w-8 rotate-180" /><img src={petalCenterB} alt="" className="absolute bottom-8 left-2 w-9 rotate-180" /></div>
-                <div className="relative flex items-start gap-2"><img src={badge} width="109" height="108" alt="" className="w-12 shrink-0" /><div><h3 className="text-xs font-bold text-dark-900">{t('Ingin tahu lebih banyak?')}</h3><p className="mt-1 text-[10px] leading-relaxed text-dark-500">{t('Lihat semua agenda kegiatan, lomba, dan acara sekolah lainnya.')}</p><button type="button" onClick={allEvents} className="mt-3 inline-flex min-h-9 items-center gap-1 rounded-lg bg-primary px-3 text-[10px] font-bold text-white hover:bg-primary-800">{t('Lihat Semua Agenda')}<ArrowRight className="size-3" /></button></div></div>
-              </div>
             </div>
           </aside>
         </div>
