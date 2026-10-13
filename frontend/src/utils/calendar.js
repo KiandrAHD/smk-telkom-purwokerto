@@ -19,5 +19,7 @@ export function monthCells(year, month) {
 
 export function eventsForMonth(events, year, month) {
   const prefix = `${String(year).padStart(4, '0')}-${String(month + 1).padStart(2, '0')}-`;
-  return events.filter(event => event.date.startsWith(prefix)).sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
+  const first = `${prefix}01`;
+  const last = `${prefix}${String(new Date(Date.UTC(year, month + 1, 0)).getUTCDate()).padStart(2, '0')}`;
+  return events.filter(event => event.date <= last && (event.endDate || event.date) >= first).sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start));
 }

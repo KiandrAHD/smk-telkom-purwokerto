@@ -19,14 +19,11 @@ const icons = {
 const HeroSection = () => {
   const { t } = useLanguage();
   return (
-  <section className="bg-white pb-6 pt-4">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="relative rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] xl:grid-cols-[34%_1fr] gap-6 lg:gap-4 items-start">
-          {/* Kolom teks */}
-          {/* pb-16 menyisakan ruang untuk kartu akses cepat yang menimpa dari bawah —
-              lihat catatan yang sama di PrestasiHeroSection. */}
-          <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-2">
+  <section className="school-hero">
+    <div className="hero-container">
+      <div className="hero-panel hero-panel--floating">
+        <div className="hero-grid">
+          <div className="hero-copy">
             <div className="flex flex-wrap items-center gap-1">
               {landingHero.hashtags.map(tag => (
                 <span key={tag} className="inline-block whitespace-nowrap rounded-full border border-primary/25 bg-white px-2 py-1 text-[10px] font-bold tracking-wide text-primary">
@@ -74,32 +71,32 @@ const HeroSection = () => {
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            className="aspect-[1208/679] w-full rounded-[1.75rem] object-contain"
+            className="hero-image"
           />
         </div>
 
       </div>
 
         {/* Keep QAC in flow outside the hero border so its height reserves space below. */}
-        <div data-quick-access className="relative z-10 mx-auto -mt-10 w-[calc(100%-2rem)] overflow-hidden rounded-2xl border border-dark-100 bg-white shadow-card sm:w-[92%] lg:w-[70.53%]">
+        <div data-quick-access className="hero-floating hero-floating--quick overflow-hidden">
           <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
             {quickLinks.map((item) => {
               return (
-                <div key={item.title} className="flex min-w-0 gap-3 px-4 py-3">
-                  <span aria-hidden="true" className="relative flex aspect-[97/105] w-12 shrink-0 items-center justify-center self-start rounded-lg bg-primary sm:w-10 lg:w-12">
+                <div key={item.title} className="quick-access-card flex min-w-0 gap-3 px-4 py-3">
+                  <span aria-hidden="true" className="quick-access-icon relative flex aspect-[97/105] w-12 shrink-0 items-center justify-center self-start rounded-lg bg-primary sm:w-10 lg:w-12">
                     <img src={icons[item.icon]} alt="" className={`h-auto ${item.icon === 'userPlus' ? 'w-[59%]' : item.icon === 'bot' ? 'w-[69%]' : 'w-[58%]'}`} />
                     {item.icon === 'sparkles' && <><span className="absolute right-[18%] top-[20%] text-[10px] font-extrabold leading-none text-white">+</span><img src={sparkDot} alt="" className="absolute bottom-[24%] left-[16%] h-auto w-[10%]" /></>}
                   </span>
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <p className="font-heading text-base font-bold leading-tight text-dark-900">
+                  <div className="quick-access-content min-w-0 flex-1">
+                    <p className="quick-access-title font-heading text-base font-bold leading-tight text-dark-900">
                       {t(item.title)}
                     </p>
-                    <p className="mt-1 flex-1 text-xs leading-snug text-dark-500 sm:text-[11px] lg:text-xs">
+                    <p className="quick-access-description text-xs text-dark-600 sm:text-[11px] lg:text-xs">
                       {t(item.desc)}
                     </p>
                     <Link
                       to={item.href}
-                      className="mt-1 inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-primary hover:underline sm:text-[11px] lg:text-xs"
+                      className="quick-access-cta inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-primary hover:underline sm:text-[11px] lg:text-xs"
                     >
                       {t(item.linkLabel)}
                       {/* flex-shrink-0 supaya panahnya tidak gepeng saat kolom

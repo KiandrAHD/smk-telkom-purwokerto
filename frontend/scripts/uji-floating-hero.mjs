@@ -29,12 +29,12 @@ try {
         }
         await page.evaluate(() => Promise.all(document.querySelector('#main-content').getAnimations().map(animation => animation.finished.catch(() => {}))));
         const geometry = await hero.evaluate(section => {
-          const panel = section.querySelector('[class*="rounded-[2rem]"]');
-          const bar = section.querySelector('.shadow-card');
+          const panel = section.querySelector('.hero-panel');
+          const bar = section.querySelector('.hero-floating');
           const rect = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height }; };
           const p = rect(panel), b = rect(bar);
           return {
-            panel: p, bar: b, barCount: section.querySelectorAll('.shadow-card').length,
+            panel: p, bar: b, barCount: section.querySelectorAll('.hero-floating').length,
             overlap: p.bottom - b.top,
             centerOffset: Math.abs((p.left + p.right - b.left - b.right) / 2),
             sectionBottom: rect(section).bottom,
@@ -49,7 +49,7 @@ try {
         assert.equal(geometry.inPanel, false, `${path}: cards must be outside the hero panel`);
         assert(geometry.bar.top < geometry.panel.bottom && geometry.bar.bottom > geometry.panel.bottom, `${path}: cards must straddle the hero border`);
         assert(geometry.centerOffset < 1, `${path}: cards must be centered`);
-        assert.equal(Math.round(geometry.overlap), path === '/' || width >= 640 ? 40 : 32);
+        assert.equal(Math.round(geometry.overlap), 40);
         assert(geometry.bar.left >= 0 && geometry.bar.right <= width);
         assert(geometry.ctaBottom < geometry.bar.top, `${path}: hero CTA must remain uncovered`);
         assert(geometry.sectionBottom >= geometry.bar.bottom && geometry.nextTop >= geometry.bar.bottom, `${path}: next section must follow cards`);

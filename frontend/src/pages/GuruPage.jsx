@@ -121,10 +121,10 @@ function GuruPage() {
   const { t } = useLanguage();
   return (
     <MainLayout>
-      <section className="bg-white pb-6 pt-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative grid overflow-hidden rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4 lg:grid-cols-[38%_1fr] lg:gap-4">
-            <div className="relative z-10 px-3 pb-6 pt-6 lg:pl-4">
+      <section className="school-hero">
+        <div className="hero-container">
+          <div className="hero-panel hero-grid overflow-hidden">
+            <div className="hero-copy">
               <HeroBreadcrumb current="Profil Guru" />
               <h1 className="font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">{t("Profil Guru")}<br /><span className="text-primary">{t("SMK Telkom")}<br />{t("Purwokerto")}</span>
               </h1>
@@ -132,8 +132,8 @@ function GuruPage() {
               <Link to="/profil-sekolah" className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t("Lihat Profil Sekolah")} <ArrowRight size={17} />
               </Link>
             </div>
-            <div className="relative min-h-[220px] self-stretch overflow-hidden rounded-[1.75rem] sm:min-h-[300px] lg:min-h-[390px]">
-              <img src={heroPhoto} alt={t("Guru dan tenaga pendidik SMK Telkom Purwokerto")} width="2200" height="1033" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-center lg:[mask-image:linear-gradient(to_right,transparent,black_13%)]" />
+            <div className="hero-media relative">
+              <img src={heroPhoto} alt={t("Guru dan tenaga pendidik SMK Telkom Purwokerto")} width="2200" height="1033" fetchPriority="high" className="hero-image lg:[mask-image:linear-gradient(to_right,transparent,black_13%)]" />
             </div>
           </div>
         </div>

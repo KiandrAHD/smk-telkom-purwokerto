@@ -53,6 +53,7 @@ const AdminBeritaPage = lazy(() => import('./pages/admin/berita/BeritaPage'));
 const AdminPengumumanPage = lazy(() => import('./pages/admin/pengumuman/PengumumanPage'));
 const AdminPrestasiPage = lazy(() => import('./pages/admin/prestasi/PrestasiPage'));
 const AdminBkkPage = lazy(() => import('./pages/admin/bkk/BkkPage'));
+const KalenderAdminPage = lazy(() => import('./pages/admin/kalender/KalenderAdminPage'));
 const AdminPpdbPage = lazy(() => import('./pages/admin/ppdb/PPDBPage'));
 const ProtectedRoute = lazy(() => import('./router/ProtectedRoute'));
 const NextTelPage = lazy(() => import('./pages/NextTelPage'));
@@ -222,6 +223,7 @@ const App = () => {
               <Route path="jurusan" element={<DashboardJurusanPage />} />
               <Route path="prestasi" element={<AdminPrestasiPage />} />
               <Route path="bkk" element={<AdminBkkPage />} />
+              <Route path="kalender" element={<KalenderAdminPage />} />
               <Route path="pengaturan" element={<PengaturanPage />} />
             </Route>
           </Route>

@@ -4,6 +4,9 @@ import MainLayout from '../layouts/MainLayout';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import RibbonDivider from '../components/RibbonDivider';
 import CalendarBoard from '../components/kalender/CalendarBoard';
+import PublicDataState from '../components/PublicDataState';
+import useEvents from '../hooks/useEvents';
+import { toCalendarEvent } from '../utils/events';
 import { useLanguage } from '../context/LanguageContext';
 import calendar from '../assets/kalender/hero-calendar-source.png';
 import wave from '../assets/kalender/hero-wave.png';
@@ -11,13 +14,14 @@ import './KalenderPage.css';
 
 export default function KalenderPage() {
   const { t } = useLanguage();
+  const { items, loading, error, refresh } = useEvents(true);
   const [prefix, ...accent] = t('Kalender Kegiatan Sekolah').split(' ');
   return (
     <MainLayout>
-      <section data-calendar-hero className="school-hero bg-white pb-10 pt-4 lg:pb-14">
-        <div className="hero-container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="hero-panel hero-panel--calendar relative overflow-hidden rounded-[2rem] border border-primary/30 bg-white lg:aspect-[1749/679]">
-            <div className="hero-copy relative z-10 px-6 pt-6 sm:px-8 lg:w-[40%] lg:pt-6">
+      <section data-calendar-hero className="school-hero">
+        <div className="hero-container">
+          <div className="hero-panel hero-panel--calendar overflow-hidden">
+            <div className="hero-copy">
               <HeroBreadcrumb parent="Informasi" parentTo={null} current="Kalender Kegiatan" />
               <div className="flex flex-wrap gap-1">
                 {['#DigitalSmartSchool', '#GlobalTechnopreneur'].map(tag => <span key={tag} className="rounded-full border border-primary/25 bg-white px-2 py-1 text-[10px] font-bold tracking-wide text-primary">{tag}</span>)}
@@ -39,7 +43,8 @@ export default function KalenderPage() {
         </div>
       </section>
       <RibbonDivider animated />
-      <CalendarBoard />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><PublicDataState loading={loading} error={error} onRetry={() => refresh()} label={t('kegiatan')} /></div>
+      {!loading && !error && <CalendarBoard events={items.map(toCalendarEvent)} />}
     </MainLayout>
   );
 }

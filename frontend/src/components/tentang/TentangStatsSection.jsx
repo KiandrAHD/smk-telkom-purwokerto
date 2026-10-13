@@ -64,11 +64,11 @@ const TentangStatsSection = () => {
   }, []);
 
   return (
-    <section className="relative z-10 -mt-10 bg-transparent pb-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="hero-stats-section relative z-10 bg-transparent">
+      <div className="hero-container">
         <div
           ref={ref}
-          className="mx-4 rounded-2xl border border-dark-100 bg-white shadow-card sm:mx-6"
+          className="hero-floating hero-floating--stats"
         >
           <div className="grid grid-cols-2 gap-y-1 px-2 py-2 sm:px-3 lg:grid-cols-4 lg:divide-x lg:divide-dark-100 lg:py-3">
             {aboutStats.map((stat) => {

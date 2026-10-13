@@ -43,7 +43,7 @@ const ikon = {
 const HeroStatsBar = ({ items }) => {
   const { t } = useLanguage();
   return (
-  <div className="relative z-10 mx-4 -mt-8 rounded-2xl border border-dark-100 bg-white shadow-card sm:mx-5 sm:-mt-10 lg:mx-20">
+  <div className="hero-floating hero-floating--stats">
     <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
       {items.map((stat) => {
         const Ikon = ikon[stat.icon];

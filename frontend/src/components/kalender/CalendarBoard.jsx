@@ -2,7 +2,8 @@ import { useRef, useState } from 'react';
 import { ArrowRight, CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Clock, List, MapPin, Megaphone } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import Modal from '../dashboard/Modal';
-import { calendarEvents } from '../../data/calendarEvents';
+import EventDetails from './EventDetails';
+import { eventColor, eventsOnDate, eventTimeLabel, upcomingEvents } from '../../utils/events';
 import { dateFromKey, eventsForMonth, monthCells, shiftDate } from '../../utils/calendar';
 import { getSchoolDateKey } from '../../utils/publicContent';
 import badge from '../../assets/kalender/agenda-calendar.png';
@@ -13,21 +14,22 @@ import petalLeft from '../../assets/kalender/petal-left.svg';
 import petalCenterA from '../../assets/kalender/petal-center-a.svg';
 import petalCenterB from '../../assets/kalender/petal-center-b.svg';
 
-const eventColors = event => event.category === 'akademik' ? 'bg-blue-50 text-blue-600' : 'bg-primary-50 text-primary';
+const eventColors = eventColor;
 
-export default function CalendarBoard({ events = calendarEvents }) {
+export default function CalendarBoard({ events = [] }) {
   const { t, locale } = useLanguage();
   const today = getSchoolDateKey(new Date());
   const [view, setView] = useState(() => ({ year: Number(today.slice(0, 4)), month: Number(today.slice(5, 7)) - 1, selected: null }));
   const [mode, setMode] = useState('calendar');
-  const [detail, setDetail] = useState(null);
+  const [detailId, setDetail] = useState(null);
+  const detail = events.find(event => event.id === detailId) || null;
   const pickerRef = useRef(null);
   const month = `${String(view.year).padStart(4, '0')}-${String(view.month + 1).padStart(2, '0')}`;
   const formatDate = (key, options = { day: 'numeric', month: 'long', year: 'numeric' }) => new Intl.DateTimeFormat(locale, { ...options, timeZone: 'UTC' }).format(dateFromKey(key));
   const monthLabel = formatDate(`${month}-01`, { month: 'long', year: 'numeric' });
   const cells = monthCells(view.year, view.month);
   const monthEvents = eventsForMonth(events, view.year, view.month);
-  const agenda = view.selected ? events.filter(event => event.date === view.selected) : monthEvents.filter(event => event.date >= today).slice(0, 4);
+  const agenda = view.selected ? eventsOnDate(events, view.selected) : upcomingEvents(monthEvents).slice(0, 4);
   const focusKey = view.selected ?? (today.startsWith(month) ? today : `${month}-01`);
 
   const chooseDate = key => {
@@ -56,12 +58,12 @@ export default function CalendarBoard({ events = calendarEvents }) {
   };
 
   const eventCard = event => (
-    <button type="button" key={event.id} data-calendar-event={event.id} onClick={() => setDetail(event)} className="flex w-full items-start gap-3 rounded-xl p-2 text-left transition-colors hover:bg-dark-50 focus-visible:outline-2 focus-visible:outline-primary">
+    <button type="button" key={event.id} data-calendar-event={event.id} onClick={() => setDetail(event.id)} className="flex w-full items-start gap-3 rounded-xl p-2 text-left transition-colors hover:bg-dark-50 focus-visible:outline-2 focus-visible:outline-primary">
       <span className={`flex size-10 shrink-0 flex-col items-center justify-center rounded-lg font-heading text-base font-bold ${eventColors(event)}`}><span>{event.date.slice(-2)}</span><span className="text-[9px] font-normal">{formatDate(event.date, { month: 'short' })}</span></span>
       <span className="min-w-0 flex-1">
         <span className="block text-xs font-bold leading-relaxed text-dark-900">{t(event.title)}</span>
-        <span className="mt-1 flex items-center gap-1 text-[10px] text-dark-500"><Clock className="size-3 shrink-0" />{event.start} – {event.end} WIB</span>
-        <span className="mt-1 flex items-start gap-1 text-[10px] text-dark-500"><MapPin className="size-3 shrink-0" />{t(event.location)}</span>
+        <span className="mt-1 flex items-center gap-1 text-[10px] text-dark-500"><Clock className="size-3 shrink-0" />{t(eventTimeLabel(event))}</span>
+        <span className="mt-1 flex items-start gap-1 text-[10px] text-dark-500"><MapPin className="size-3 shrink-0" />{event.location || t('Belum ditentukan')}</span>
       </span>
       <ChevronRight className="mt-2 size-4 shrink-0 text-dark-400" />
     </button>
@@ -114,11 +116,11 @@ export default function CalendarBoard({ events = calendarEvents }) {
                 <table className="h-96 w-full table-fixed border-collapse sm:h-[26rem]" aria-label={monthLabel}>
                   <thead><tr>{Array.from({ length: 7 }, (_, i) => <th key={i} scope="col" className="h-9 text-[10px] font-bold text-dark-700 sm:text-xs">{formatDate(shiftDate('2026-10-12', i), { weekday: 'short' })}</th>)}</tr></thead>
                   <tbody>{Array.from({ length: cells.length / 7 }, (_, row) => <tr key={row}>{cells.slice(row * 7, row * 7 + 7).map(cell => {
-                    const dayEvents = events.filter(event => event.date === cell.key);
+                    const dayEvents = eventsOnDate(events, cell.key);
                     return <td key={cell.key} className="border border-dark-100 p-0 align-top">
                       <button type="button" data-calendar-date={cell.key} tabIndex={cell.key === focusKey ? 0 : -1} aria-pressed={cell.key === view.selected} aria-current={cell.key === today ? 'date' : undefined} aria-label={`${formatDate(cell.key, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}, ${t('{count} kegiatan', { count: dayEvents.length })}`} onClick={() => chooseDate(cell.key)} onKeyDown={event => onDateKey(event, cell.key)} className={`flex h-full min-h-14 w-full flex-col gap-1 p-1 text-left transition-colors duration-200 hover:bg-primary-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-primary sm:p-2 ${cell.key === view.selected ? 'bg-primary-50' : 'bg-white'} ${cell.inMonth ? 'text-dark-900' : 'text-dark-400'}`}>
                         <span className={`grid size-5 shrink-0 place-items-center rounded-full text-[10px] font-bold transition-colors sm:text-xs ${cell.key === view.selected ? 'bg-primary text-white' : cell.key === today ? 'bg-primary-100 text-primary' : ''}`}>{cell.day}</span>
-                        {dayEvents.slice(0, 1).map(event => <span key={event.id} className={`block w-full min-w-0 rounded px-1 py-1 text-[9px] leading-tight sm:text-[10px] ${eventColors(event)}`}><span className="font-semibold sm:hidden">• {dayEvents.length}</span><span className="hidden break-words font-semibold sm:line-clamp-2">• {t(event.title)}</span><span className="mt-1 hidden text-[8px] sm:block">{event.start} – {event.end}</span></span>)}
+                        {dayEvents.slice(0, 1).map(event => <span key={event.id} className={`block w-full min-w-0 rounded px-1 py-1 text-[9px] leading-tight sm:text-[10px] ${eventColors(event)}`}><span className="font-semibold sm:hidden">• {dayEvents.length}</span><span className="hidden break-words font-semibold sm:line-clamp-2">• {t(event.title)}</span><span className="mt-1 hidden text-[8px] sm:block">{t(eventTimeLabel(event))}</span></span>)}
                         {dayEvents.length > 1 && <span className="hidden text-[9px] text-primary sm:block">+{dayEvents.length - 1}</span>}
                       </button>
                     </td>;
@@ -147,8 +149,8 @@ export default function CalendarBoard({ events = calendarEvents }) {
           </aside>
         </div>
       </div>
-      <Modal terbuka={Boolean(detail)} onTutup={() => setDetail(null)} judul={detail ? t(detail.title) : t('Detail kegiatan')} deskripsi={t('Contoh kegiatan')} labelTutup={t('Tutup')}>
-        {detail && <dl className="space-y-3 text-sm"><div><dt className="font-semibold text-dark-900">{t('Tanggal kegiatan')}</dt><dd className="mt-1 text-dark-600">{formatDate(detail.date)}</dd></div><div><dt className="font-semibold text-dark-900">{t('Waktu')}</dt><dd className="mt-1 text-dark-600">{detail.start} – {detail.end} WIB</dd></div><div><dt className="font-semibold text-dark-900">{t('Lokasi')}</dt><dd className="mt-1 text-dark-600">{t(detail.location)}</dd></div></dl>}
+      <Modal terbuka={Boolean(detail)} onTutup={() => setDetail(null)} judul={detail ? t(detail.title) : t('Detail kegiatan')} labelTutup={t('Tutup')}>
+        {detail && <div className="max-h-[65dvh] overflow-y-auto pr-1" data-lenis-prevent><EventDetails event={detail} /></div>}
       </Modal>
     </section>
   );

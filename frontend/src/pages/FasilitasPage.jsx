@@ -48,10 +48,10 @@ export default function FasilitasPage() {
   return (
     <MainLayout>
       <div>
-        <section aria-labelledby="fasilitas-hero-title" className="mx-auto max-w-7xl px-4 pb-6 pt-4 sm:px-6 lg:px-8">
-          <div className="relative mx-auto max-w-7xl overflow-hidden rounded-4xl border border-primary/30 bg-white lg:aspect-[1749/679] lg:min-h-[26rem]">
-            <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1208w`} sizes="(min-width: 1280px) 840px, (min-width: 1024px) 70vw, 100vw" alt={t('Siswa SMK Telkom Purwokerto')} width="1208" height="679" fetchPriority="high" className="aspect-[1208/679] h-auto w-full object-cover lg:absolute lg:inset-y-0 lg:right-0 lg:h-full lg:w-[70%]" />
-            <div className="relative z-10 px-6 py-8 sm:px-8 lg:flex lg:min-h-full lg:w-[40%] lg:flex-col lg:justify-center lg:py-10">
+        <section aria-labelledby="fasilitas-hero-title" className="school-hero hero-container">
+          <div className="hero-panel hero-panel--background overflow-hidden">
+            <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1208w`} sizes="(min-width: 1280px) 840px, (min-width: 1024px) 70vw, 100vw" alt={t('Siswa SMK Telkom Purwokerto')} width="1208" height="679" fetchPriority="high" className="hero-background object-cover" />
+            <div className="hero-copy">
               <HeroBreadcrumb current="Fasilitas Sekolah" />
               <span className="inline-block self-start rounded-full border border-primary/25 px-2.5 py-1 text-[10px] font-bold text-primary">#DigitalSmartSchool</span>
               <h1 id="fasilitas-hero-title" className="mt-4 font-heading text-3xl font-extrabold leading-[1.2] tracking-tight text-dark-900 sm:text-4xl lg:text-[1.75rem] xl:text-[2rem]">

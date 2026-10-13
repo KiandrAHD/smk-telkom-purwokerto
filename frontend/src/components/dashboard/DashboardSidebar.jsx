@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import {
   BriefcaseBusiness,
+  CalendarDays,
   GraduationCap,
   LayoutDashboard,
   Layers,
@@ -22,6 +23,7 @@ const ikon = {
   bkk: BriefcaseBusiness,
   berita: Newspaper,
   pengumuman: Megaphone,
+  kalender: CalendarDays,
   pengaturan: Settings,
 };
 
