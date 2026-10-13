@@ -13,8 +13,11 @@ export const BATAS = {
   MAKS_PANJANG_ASISTEN: 1200,
   MAKS_TOTAL_PANJANG: 8000,
   MAKS_TOKEN_JAWABAN: 2000,
+  // Deadline total per request. Setiap percobaan mendapat jatah sendiri agar
+  // provider lambat tidak menghabiskan seluruh failover.
   TIMEOUT_PROVIDER_MS: 12000,
-  MAKS_PERCOBAAN_PROVIDER: 3,
+  TIMEOUT_PERCOBAAN_PROVIDER_MS: 4500,
+  MAKS_PERCOBAAN_PROVIDER: 8,
 };
 
 // Model bawaan per penyedia
@@ -137,7 +140,7 @@ export const jawabanSapaanCepat = (teks, bahasa = deteksiBahasa(teks)) => {
 // FAQ fast path hanya untuk pertanyaan eksak sederhana
 const FAQ_FAST_PATH = [
   {
-    pola: /^(?:apa\s+saja\s+)?jurusan(?:\s+apa\s+saja|\s+yang\s+ada|\s+di\s+smk\s+telkom(?:\s+purwokerto)?)?[?!., ]*$/i,
+    pola: /^(?:apa\s+saja\s+)?jurusan(?:\s+(?:apa\s+saja|yang\s+(?:ada|tersedia)|di\s+smk\s+telkom(?:\s+purwokerto)?))?[?!., ]*$/i,
     jawaban: 'SMK Telkom Purwokerto memiliki empat jurusan: Rekayasa Perangkat Lunak (RPL), Pengembangan Game (PG), Teknik Komputer dan Jaringan (TKJ), serta Teknik Jaringan Akses Telekomunikasi (TJAT).',
     jawabanEn: 'SMK Telkom Purwokerto offers four majors: Software Engineering (RPL), Game Development (PG), Computer and Network Engineering (TKJ), and Telecommunication Access Network Engineering (TJAT).',
   },
@@ -642,8 +645,9 @@ export const tanyaAI = async ({
       if (anggaran.percobaan >= anggaran.maksPercobaan) throw galatBatas('Batas percobaan AI tercapai. Silakan coba lagi.', 502);
       const sisaWaktu = anggaran.tenggat - Date.now();
       if (sisaWaktu <= 0) throw galatBatas(PESAN_TIMEOUT, 504);
+      const durasiPercobaan = Math.min(sisaWaktu, BATAS.TIMEOUT_PERCOBAAN_PROVIDER_MS);
       const pengendali = new AbortController();
-      const timeout = setTimeout(() => pengendali.abort(), sisaWaktu);
+      const timeout = setTimeout(() => pengendali.abort(), durasiPercobaan);
       const batalkan = () => pengendali.abort();
       if (signal) {
         if (signal.aborted) pengendali.abort();
@@ -679,16 +683,18 @@ export const tanyaAI = async ({
         const dibatalkan = pengendali.signal.aborted;
         if (signal?.aborted) throw error;
         if (dibatalkan) {
-          throw galatBatas(PESAN_TIMEOUT, 504);
+          // Abort hanya percobaan ini. Abort dari browser tetap dihormati.
+          if (signal?.aborted) throw error;
+          galatTerakhirSemua = galatBatas(PESAN_TIMEOUT, 504);
+          if (Date.now() >= anggaran.tenggat) throw galatTerakhirSemua;
+          continue;
         }
         if (error?.batasPanggilan) throw error;
         if (error?.internalAttemptLimit) throw error;
         const status = galatTerakhirSemua?.status;
-        // 400 (incompatible model), 404, 429, timeout, 5xx dialihkan ke kandidat berikutnya
-        if (!dibatalkan && status !== 400 && status !== 404 && status !== 429 && !(status >= 500 && status <= 599)) {
-          throw error;
-        }
-        if (status === 429 || status === 404 || status === 400) {
+        // Kesalahan kredensial, model, rate limit, jaringan, dan 5xx tidak boleh
+        // menghentikan kandidat berikutnya. Batas total tetap mencegah retry tanpa batas.
+        if (status === 429 || status === 404 || status === 400 || status === 401 || status === 403) {
           const durasi = status === 429 ? HABIS_MS_RATE_LIMIT : HABIS_MS_KONFIGURASI;
           modelHabis.set(kunciModel(targetPenyedia, kandidat), Date.now() + durasi);
         }

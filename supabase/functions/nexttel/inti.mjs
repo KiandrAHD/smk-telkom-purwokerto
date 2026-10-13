@@ -84,6 +84,12 @@ export const deterministicFallback = (topRecommendation, language = 'id')=>{
  */
 export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenyedia = [], sebelumPanggilan, signal }) => {
   const batasPanggilan = buatBatasPanggilan();
+  let kuotaDicadangkan = false;
+  const reservasiSekaliPerPermintaan = async ({ signal: reservationSignal }) => {
+    if (kuotaDicadangkan) return;
+    await sebelumPanggilan?.({ signal: reservationSignal });
+    kuotaDicadangkan = true;
+  };
   const instruksi = systemPrompt(language);
   const pesan = [{ role: 'user', content: 'Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n' + JSON.stringify({
     answers: hasil.answers, scores: hasil.scores, ranking: hasil.ranking, topRecommendation: hasil.topRecommendation,
@@ -91,7 +97,7 @@ export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenye
   for (const provider of daftarPenyedia) {
     try {
       const ai = await tanyaAI({ ...provider, daftarPenyedia: [provider], instruksiKustom: instruksi, pesan, language,
-        sebelumPanggilan, batasPanggilan, signal, cobaModelCadangan: true });
+        sebelumPanggilan: reservasiSekaliPerPermintaan, batasPanggilan, signal, cobaModelCadangan: true });
       const output = sanitizeAIOutput(parseAIResponse(ai.teks));
       if (output) return output;
     } catch (error) {

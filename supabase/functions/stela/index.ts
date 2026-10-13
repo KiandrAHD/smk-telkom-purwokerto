@@ -187,6 +187,8 @@ Deno.serve(async (req) => {
   const tersimpan = penjaga.ambilCache(hasilValidasi.pesan, bahasa);
   if (tersimpan) return balas({ reply: tersimpan }, 200, origin);
 
+  const requestId = crypto.randomUUID();
+  const mulai = Date.now();
   try {
     const batasPanggilan = buatBatasPanggilan();
     let contextPublik = 'Data dinamis publik belum tersedia. Gunakan data sekolah statis jika relevan.';
@@ -217,10 +219,19 @@ Deno.serve(async (req) => {
     const teks = amankanJawaban(teksProvider, bahasa);
 
     penjaga.simpanCache(hasilValidasi.pesan, teks, bahasa);
-    console.log(`stela provider=${modelDipakai === 'fast-sapaan' || modelDipakai === 'faq' ? 'local' : 'remote'} model=${modelDipakai} | token ${tokenMasuk}/${tokenKeluar}`);
+    console.log(JSON.stringify({
+      event: 'stela_request', requestId, provider: modelDipakai === 'fast-sapaan' || modelDipakai === 'faq' ? 'local' : 'remote',
+      model: modelDipakai, durationMs: Date.now() - mulai, attempts: batasPanggilan.percobaan, result: 'success',
+      tokenIn: tokenMasuk, tokenOut: tokenKeluar,
+    }));
     return balas({ reply: teks }, 200, origin);
   } catch (error) {
-    console.error('Kesalahan STELA', error instanceof Error ? error.message : 'unknown');
+    const statusError = (error as { status?: number })?.status;
+    console.error(JSON.stringify({
+      event: 'stela_request', requestId, durationMs: Date.now() - mulai, attempts: 'unknown',
+      status: statusError ?? 0, errorType: statusError === 429 ? 'rate_limit' : statusError === 504 ? 'timeout' : 'provider_failed',
+      result: 'failed',
+    }));
     // Hanya pesan yang memang ditulis untuk pengunjung yang diteruskan.
     // Sebelumnya semua galat 429 diteruskan mentah, sehingga pengunjung sempat
     // melihat "Gemini menolak dengan status 429" di gelembung chat.

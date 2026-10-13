@@ -4,7 +4,7 @@
 **Tanggal:** 10 Oktober 2026  
 **Baseline commit:** `2b74a29`  
 **Hotfix commit:** reliability/context fix verified locally; production deployment verified
-**Deployment:** project Supabase terhubung dan secrets terdaftar tanpa mencetak nilainya. Deployment Edge Function akan diverifikasi setelah deploy. Smoke test produksi 14 Oktober 2026 menemukan endpoint aktif pada kedua domain; pertanyaan coding ditolak, tetapi roadmap belum konsisten karena deployment aktif masih versi sebelumnya.
+**Deployment:** project Supabase terhubung; nama secrets diverifikasi tanpa mencetak nilainya. Edge Function `stela` dideploy dan terdaftar `ACTIVE` pada versi 26. Smoke test 14 Oktober 2026: roadmap dilayani fast path dan permintaan coding ditolak pada kedua origin. Pertanyaan sekolah yang tidak masuk fast path masih bergantung pada provider aktif dan wajib dipantau melalui log terstruktur.
 
 ---
 
