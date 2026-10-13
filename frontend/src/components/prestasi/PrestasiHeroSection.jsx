@@ -45,8 +45,8 @@ const PrestasiHeroSection = () => {
           />
         </div>
 
-        <HeroStatsBar items={prestasiStats} />
       </div>
+      <HeroStatsBar items={prestasiStats} />
       <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
         {t('Rekap situs resmi per {date}. Angka artikel arsip berbeda dari jumlah prestasi.', { date: t(officialContentAudit.checkedAt) })}{' '}
       </p>

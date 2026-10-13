@@ -39,11 +39,11 @@ const ikon = {
 // Bilah statistik yang menimpa bagian bawah hero. Markup-nya dulu disalin sama
 // persis di hero Jurusan, Prestasi, dan BKK; disatukan di sini supaya perubahan
 // berikutnya cukup dikerjakan di satu tempat. Hero Pengumuman ikut memakainya
-// sejak statistiknya dipindah masuk ke panel hero.
+// sejak statistiknya dipindah ke bawah hero.
 const HeroStatsBar = ({ items }) => {
   const { t } = useLanguage();
   return (
-  <div className="relative z-10 mx-1 -mt-6 rounded-2xl border border-dark-100 bg-white shadow-card lg:mx-16 lg:mt-5 xl:-mt-7">
+  <div className="relative z-10 mx-4 -mt-8 rounded-2xl border border-dark-100 bg-white shadow-card sm:mx-5 sm:-mt-10 lg:mx-20">
     <div className="grid grid-cols-1 divide-y divide-dark-100 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
       {items.map((stat) => {
         const Ikon = ikon[stat.icon];

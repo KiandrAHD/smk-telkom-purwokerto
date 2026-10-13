@@ -2,6 +2,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import AchievementCard from './AchievementCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { gsap } from 'gsap';
 
 // Lebar kartu disamakan persis dengan grid aslinya (gap-5 = 1.25rem):
 // 1 kolom di mobile, 2 di sm, 4 di lg.
@@ -29,13 +30,27 @@ const getCarouselIndex = (scrollLeft, maxScroll, step, groups) => {
     ? previous : next;
 };
 
-const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = true, twoRows = false }) => {
+const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = true, twoRows = false, animated = false }) => {
   const { t } = useLanguage();
   const desktop = useSyncExternalStore(subscribeDesktop, getDesktopSnapshot, getServerSnapshot);
   const grouped = twoRows && desktop;
   const trackRef = useRef(null);
   const stepRef = useRef(1);
   const drag = useRef({ down: false, moved: false, startX: 0, startLeft: 0 });
+  const animation = useRef(null);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finish = () => animation.current?.progress(1);
+    const reduce = () => { if (media.matches) finish(); };
+    window.addEventListener('resize', finish);
+    media.addEventListener('change', reduce);
+    return () => {
+      window.removeEventListener('resize', finish);
+      media.removeEventListener('change', reduce);
+      animation.current?.kill();
+    };
+  }, []);
 
   const [groups, setGroups] = useState(1);
   const [active, setActive] = useState(0);
@@ -82,9 +97,21 @@ const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = tru
 
   const goTo = (i) => {
     const el = trackRef.current;
-    if (!el) return;
+    if (!el || animation.current) return;
+    const left = Math.min(el.scrollWidth - el.clientWidth, Math.max(0, Math.min(i, groups - 1)) * stepRef.current);
+    if (animated && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.style.scrollSnapType = 'none';
+      el.style.scrollBehavior = 'auto';
+      animation.current = gsap.to(el, { scrollLeft: left, duration: 0.5, ease: 'power3.out', onComplete: () => {
+        el.style.scrollSnapType = '';
+        el.style.scrollBehavior = '';
+        animation.current = null;
+        syncActive();
+      } });
+      return;
+    }
     el.scrollTo({
-      left: Math.max(0, Math.min(i, groups - 1)) * stepRef.current,
+      left,
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
     });
   };
@@ -92,6 +119,7 @@ const PrestasiCarousel = ({ items, renderCard, labels = {}, showIndicators = tru
   // Drag dengan mouse. Sentuh sengaja tidak ditangani di sini — swipe native
   // sudah lebih halus dan sudah dapat momentum dari browser.
   const onPointerDown = (e) => {
+    animation.current?.progress(1);
     if (e.pointerType !== 'mouse') return;
     const el = trackRef.current;
     drag.current = { down: true, moved: false, startX: e.clientX, startLeft: el.scrollLeft };

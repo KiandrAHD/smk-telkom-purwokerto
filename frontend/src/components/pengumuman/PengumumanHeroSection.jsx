@@ -51,8 +51,8 @@ const PengumumanHeroSection = () => {
           />
         </div>
 
-        <HeroStatsBar items={pengumumanStats} />
       </div>
+      <HeroStatsBar items={pengumumanStats} />
       <p className="mt-3 text-[10px] leading-relaxed text-dark-500">
         {t('Rekap arsip pengumuman situs resmi per {date}; bukan jumlah kartu dashboard.', { date: t(officialContentAudit.checkedAt) })}{' '}
       </p>
