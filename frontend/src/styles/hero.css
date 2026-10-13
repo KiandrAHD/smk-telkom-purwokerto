@@ -54,8 +54,9 @@
   .hero-grid > .hero-image, .hero-media { height: 100%; min-height: 0; aspect-ratio: auto; }
   .hero-grid > .hero-image { max-height: calc(var(--hero-height) - 2rem - 2px); }
   .hero-floating { width: calc(100% - 10rem); }
-  /* Three QAC columns need room for descriptions at the same height as stats. */
-  .hero-floating--quick > div > div { height: 5.28125rem; padding: .375rem .75rem; align-items: center; }
+  /* 84.5px row + 2px border matches Jurusan's 86.5px statistics panel. */
+  .hero-floating--quick > div > div { height: 5.28125rem; padding: .375rem .5rem; gap: .5rem; align-items: center; }
+  .hero-floating--quick > div > div > div { height: 100%; }
   .hero-floating--quick > div > div > span { width: 2.5rem; height: 2.5rem; aspect-ratio: 1; align-self: center; }
   .hero-floating--quick > div > div > div > p:nth-child(2) { margin-top: .125rem; font-size: .6875rem; }
   .hero-floating--quick > div > div > div > a { margin-top: .125rem; min-height: 0; font-size: .6875rem; line-height: 1.5; }

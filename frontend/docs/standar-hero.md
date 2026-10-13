@@ -30,9 +30,9 @@ Perbedaan sebelumnya berasal dari rasio/tinggi intrinsik aset, grid 34/38/40 per
 - Di bawah 64rem: tinggi berdasarkan konten, teks di atas gambar. Judul panjang dapat membungkus; tidak dipotong oleh overflow.
 - Grid desktop 38:62 dengan gap 1rem; area gambar memiliki tinggi seragam dan radius 1,75rem. Gambar memakai cover/center tanpa stretching; crop hasilnya diperiksa secara visual.
 - Hero dengan latar komposit (Profil Sekolah/Fasilitas/Kalender) mempertahankan overlay, mask, dan crop sumber. Kolom teks 40 persen, inset teks sejajar dengan hero grid. Variasi ini mempertahankan identitas aset dan bukan perubahan dimensi panel.
-- Floating cards tetap di luar panel dalam alur dokumen, overlap 2,5rem, center. Statistik empat kartu memakai lebar panel dikurangi 10rem di desktop; QAC tiga kartu memakai 70,53 persen seperti Beranda. Di tablet lebar 92 persen; mobile lebar panel dikurangi 2rem.
-- Statistik: 4 kolom desktop, 2 tablet, 1 mobile; ikon 40px, gap 12px, padding 20px/24px. Divider mengikuti susunan kolom/baris. QAC mempertahankan tinggi adaptif karena memuat deskripsi dan tautan tambahan.
-- Tinggi kartu tidak dipaksa sama antara statistik dan QAC; keterbacaan diprioritaskan. Tidak menambahkan floating cards pada halaman yang sebelumnya tidak memilikinya.
+- Floating cards tetap di luar panel dalam alur dokumen, overlap 2,5rem, center. Statistik empat kartu dan QAC tiga kartu memakai lebar panel dikurangi 10rem di desktop. Di tablet lebar 92 persen; mobile lebar panel dikurangi 2rem.
+- Statistik: 4 kolom desktop, 2 tablet, 1 mobile; ikon 40px, gap 12px, padding 20px/24px. Divider mengikuti susunan kolom/baris. QAC mempertahankan tinggi adaptif pada tablet/mobile karena memuat deskripsi dan tautan tambahan.
+- Perbaikan QAC lanjutan: desktop kini memiliki tinggi 86,5px seperti statistik Jurusan, ikon 40px, padding vertikal 6px/horizontal 8px, gap 8px, serta title/description/CTA sejajar. Pada 1440px tinggi sebelumnya 123px; pada 1024px 139,5px. Tablet/mobile tetap adaptif agar deskripsi dan CTA tidak terpotong. Tidak menambahkan floating cards pada halaman yang sebelumnya tidak memilikinya.
 
 ## Catatan yang dihapus
 
