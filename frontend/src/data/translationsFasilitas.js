@@ -1,4 +1,6 @@
 export default {
+  'Foto {current} dari {total}': 'Photo {current} of {total}',
+  'Lihat foto {number} untuk {name}': 'View photo {number} of {name}',
   "Aula": "Hall",
   "GOR": "Sports Hall",
   "Parkiran": "Parking",
