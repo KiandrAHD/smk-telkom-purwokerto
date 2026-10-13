@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { registrationCountdown, registrationState } from '../src/utils/spmbSchedule.js';
+import { spmbRegistration, spmbWaves, spmbContact } from '../src/data/spmbInfo.js';
+const schedule = { opensAt: '2028-02-29T08:00:00+07:00', closesAt: '2028-03-01T08:00:00+07:00' };
+assert.equal(registrationState(schedule, Date.parse('2028-02-28T01:00:00Z')), 'upcoming');
+assert.deepEqual(registrationCountdown(schedule, Date.parse('2028-02-28T01:00:00Z')), [1, 0, 0, 0]);
+assert.equal(registrationState(schedule, Date.parse('2028-02-29T01:00:00Z')), 'open');
+assert.deepEqual(registrationCountdown(schedule, Date.parse('2028-02-29T02:02:03Z')), [0, 22, 57, 57]);
+assert.equal(registrationState(schedule, Date.parse('2028-03-01T01:00:01Z')), 'closed');
+assert.equal(registrationCountdown(schedule, Date.parse('2028-03-01T01:00:01Z')), null);
+for (const invalid of ['2027-02-29T08:00:00+07:00', '2028-02-30T08:00:00+07:00', '2028-02-29T08:00:00', 'not a date']) assert.equal(registrationState({ ...schedule, opensAt: invalid }), 'unknown');
+assert.equal(registrationState({ opensAt: schedule.closesAt, closesAt: schedule.opensAt }), 'unknown');
+assert.equal(registrationState(spmbRegistration), 'unknown'); assert.equal(registrationCountdown(spmbRegistration), null); assert.equal(spmbRegistration.applicants, null);
+assert.equal(registrationState(spmbWaves[0], Date.parse('2026-10-13T00:00:00Z')), 'closed');
+assert.equal(registrationState(spmbWaves[1]), 'unknown'); assert.match(spmbContact.href, /^https:\/\/wa.me\/6281229701800$/);
+console.log('PASS SPMB schedule: WIB countdown, leap day, opening/active/closed, invalid/reversed/missing dates, no fictitious applicant count and source-backed expired EASY deadline.');

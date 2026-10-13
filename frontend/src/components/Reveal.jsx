@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 //
 // Jeda antar kartu diatur pemanggil lewat utility Tailwind (`delay-100`,
 // `delay-200`, ...) yang dioper via className, jadi tidak ada style inline.
-const Reveal = ({ children, className = '', as: Tag = 'div' }) => {
+const Reveal = ({ children, className = '', as: Tag = 'div', ...props }) => {
   const ref = useRef(null);
   const [tampil, setTampil] = useState(false);
 
@@ -31,7 +31,7 @@ const Reveal = ({ children, className = '', as: Tag = 'div' }) => {
   }, []);
 
   return (
-    <Tag ref={ref} className={`reveal ${tampil ? 'visible' : ''} ${className}`}>
+    <Tag {...props} ref={ref} className={`reveal ${tampil ? 'visible' : ''} ${className}`}>
       {children}
     </Tag>
   );

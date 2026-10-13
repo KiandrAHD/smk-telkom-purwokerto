@@ -18,6 +18,7 @@ const BkkPage = lazy(() => import('./pages/BkkPage'));
 const BeritaPage = lazy(() => import('./pages/BeritaPage'));
 const PengumumanPage = lazy(() => import('./pages/PengumumanPage'));
 const KalenderPage = lazy(() => import('./pages/KalenderPage'));
+const SpmbPage = lazy(() => import('./pages/SpmbPage'));
 const JurusanDetailPage = lazy(() => import('./pages/JurusanDetailPage'));
 const PrestasiDetailPage = lazy(() => import('./pages/PrestasiDetailPage'));
 const BeritaDetailPage = lazy(() => import('./pages/BeritaDetailPage'));
@@ -71,7 +72,7 @@ const PAGE_META = {
   '/berita': ['Berita SMK Telkom Purwokerto', 'Berita terbaru dari SMK Telkom Purwokerto.'],
   '/pengumuman': ['Pengumuman SMK Telkom Purwokerto', 'Pengumuman resmi SMK Telkom Purwokerto.'],
   '/kalender': ['Kalender Kegiatan | SMK Telkom Purwokerto', 'Jelajahi kalender kegiatan, lomba, dan acara SMK Telkom Purwokerto.'],
-  '/spmb': ['SPMB 2027/2028 | SMK Telkom Purwokerto', 'Portal pendaftaran SPMB Tahun Ajaran 2027/2028 SMK Telkom Purwokerto.'],
+  '/spmb': ['Informasi SPMB | SMK Telkom Purwokerto', 'Informasi alur, jalur penerimaan, berkas, dan pendaftaran SPMB SMK Telkom Purwokerto.'],
   '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
   '/nexttel': ['NextTel | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
   '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
@@ -110,7 +111,7 @@ const RouteLoading = () => {
   const { t } = useLanguage();
   const { pathname } = useLocation();
   const loadingStatus = <div role="status" className="grid min-h-screen place-items-center bg-white text-sm text-dark-600">{t('Memuat halaman...')}</div>;
-  if (/^\/(spmb|ppdb|dashboard|login|auth)(\/|$)/.test(pathname)) {
+  if (pathname !== '/spmb' && pathname !== '/spmb/' && /^\/(spmb|ppdb|dashboard|login|auth)(\/|$)/.test(pathname)) {
     return loadingStatus;
   }
   return <Suspense fallback={loadingStatus}><MainLayout busy><section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><p role="status" className="text-sm text-dark-600">{t('Memuat halaman...')}</p><ContentSkeleton /></section></MainLayout></Suspense>;
@@ -136,7 +137,7 @@ const App = () => {
         <Route path="/pengumuman" element={<PengumumanPage />} />
         <Route path="/kalender" element={<KalenderPage />} />
         {/* Preserve old bookmarks and authentication callback parameters. */}
-        <Route path="/spmb" element={<AdmissionsRedirect />} />
+        <Route path="/spmb" element={<SpmbPage />} />
         <Route path="/ppdb/*" element={<AdmissionsRedirect />} />
         <Route path="/ketentuan-ppdb" element={<AdmissionsRedirect />} />
         <Route path="/dashboard/ppdb" element={<AdmissionsRedirect />} />
