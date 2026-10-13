@@ -26,8 +26,8 @@ import mapImg from '../assets/landing/peta-lokasi-smk-telkom-purwokerto.jpg';
 
 import heroJurusan from '../assets/drive/header-jurusan.webp';
 import heroPrestasi from '../assets/drive/pameran-proyek-iot.png';
-import heroBkk from '../assets/drive/header-bkk.webp';
-import heroBerita from '../assets/drive/showcase-rumah.png';
+import heroBkk from '../assets/banners/bkk-1106.webp';
+import heroBerita from '../assets/banners/berita-1106.webp';
 
 import logoTelkomColor from '../assets/bkk/logo-telkom.png';
 import logoHuaweiColor from '../assets/bkk/logo-huawei.png';
@@ -853,13 +853,13 @@ export const videoHighlight = {
 // BKK diberi teksnya sendiri.
 export const bkkHero = {
   badge: 'Bursa Kerja Khusus',
-  title: 'Dari Ruang Kelas',
-  titleAccent: 'Menuju Dunia\nKerja Nyata',
+  title: 'Langkah Awal Menuju',
+  titleAccent: 'Karier Impian',
   description:
     'BKK SMK Telkom Purwokerto menjembatani siswa dan alumni dengan lowongan kerja, tempat PKL, serta mitra industri yang siap membuka pintu karier.',
   ctaText: 'Lihat Lowongan',
   image: heroBkk,
-  imageAlt: 'Siswa SMK Telkom Purwokerto membawa laptop',
+  imageAlt: 'Siswa SMK Telkom Purwokerto dengan beragam profesi di banner BKK',
 };
 
 export const bkkStats = [
@@ -2087,7 +2087,7 @@ export const beritaHero = {
     'Ikuti semua informasi terkini tentang prestasi, kegiatan, event, dan inovasi di SMK Telkom Purwokerto',
   ctaText: 'Jelajahi Berita',
   image: heroBerita,
-  imageAlt: 'Maket proyek Smart Home karya siswa kelas XII TKJ 4',
+  imageAlt: 'Siswa SMK Telkom Purwokerto menunjukkan informasi sekolah pada banner Berita',
 };
 
 export const breakingNews = {

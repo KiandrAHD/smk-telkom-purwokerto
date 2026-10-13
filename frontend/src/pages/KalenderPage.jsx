@@ -2,6 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
+import HeroBadges from '../components/HeroBadges';
 import RibbonDivider from '../components/RibbonDivider';
 import CalendarBoard from '../components/kalender/CalendarBoard';
 import SchoolAgendaSection from '../components/kalender/SchoolAgendaSection';
@@ -28,9 +29,7 @@ export default function KalenderPage() {
           <div className="hero-panel hero-panel--calendar hero-panel--bleed">
             <div className="hero-copy">
               <HeroBreadcrumb parent="Informasi" parentTo={null} current="Kalender Kegiatan" />
-              <div className="flex flex-wrap gap-1">
-                {['#DigitalSmartSchool', '#GlobalTechnopreneur'].map(tag => <span key={tag} className="rounded-full border border-primary/25 bg-white px-2 py-1 text-[10px] font-bold tracking-wide text-primary">{tag}</span>)}
-              </div>
+              <HeroBadges />
               <h1 className="mt-4 font-heading text-3xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-4xl">{prefix} <span className="text-primary">{accent.join(' ')}</span></h1>
               <p className="mt-4 max-w-md text-xs leading-relaxed text-dark-500 sm:text-sm lg:max-w-xs">{t('Temukan jadwal kegiatan, lomba, dan acara terbaru di SMK Telkom Purwokerto.')}</p>
               <div className="mt-7 flex flex-wrap gap-3">

@@ -2,6 +2,7 @@ import { ArrowRight, BadgeCheck, BookOpen, BriefcaseBusiness, ChevronRight, Moni
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import Reveal from '../Reveal';
+import HeroBadges from '../HeroBadges';
 import wave from '../../assets/kalender/hero-wave-figma.webp';
 
 const features = [
@@ -24,8 +25,8 @@ export default function JurusanDetailHero({ item, design }) {
               <ChevronRight aria-hidden="true" className="size-3 shrink-0" />
               <span aria-current="page">{title}</span>
             </nav>
-            <Reveal className="mt-4 flex flex-wrap gap-1.5">
-              {['#DigitalSmartSchool', '#GlobalTechnopreneur'].map(badge => <span key={badge} className="rounded-full border border-primary/25 px-2 py-1 text-[10px] font-bold text-primary">{badge}</span>)}
+            <Reveal className="mt-4">
+              <HeroBadges />
             </Reveal>
             <Reveal className="delay-100">
               <h1 id="jurusan-detail-title" className="mt-3 max-w-[26rem] font-heading text-2xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-3xl lg:text-[1.75rem] xl:text-[2rem]">

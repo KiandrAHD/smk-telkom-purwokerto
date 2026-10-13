@@ -1,5 +1,7 @@
 # Penyempurnaan Fasilitas, Profil Sekolah, dan Status Banner
 
+Pembaruan lanjutan: frame BKK dan Berita telah tersedia dan bannernya telah diperbarui. Lihat [laporan banner dan hashtag](banner-badges-2026-10-14.md); status menunggu banner dalam laporan di bawah mencatat hasil audit sebelum pembaruan tersebut.
+
 Tanggal pemeriksaan: 14 Oktober 2026. Implementasi dan pengujian dilakukan lokal pada production preview `http://127.0.0.1:4174`.
 
 Facility Detail Card, ukuran School Tour, dekorasi mirror, dan sinkronisasi foto guru sudah diimplementasikan dan diuji. Banner BKK dan Berita belum diubah karena node referensinya belum ditemukan. Pengguna menyatakan akan memberikan tautan node Figma yang tepat.
