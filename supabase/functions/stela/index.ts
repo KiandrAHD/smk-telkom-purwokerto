@@ -192,18 +192,15 @@ Deno.serve(async (req) => {
       console.error('Context Supabase gagal dimuat', error instanceof Error ? error.message : 'unknown');
     }
 
-    let kuotaDicadangkan = false;
-    const reservasiSekaliPerPermintaan = async ({ signal }: { signal: AbortSignal }) => {
-      if (kuotaDicadangkan) return;
+    const reservasiSetiapPanggilan = async ({ signal }: { signal: AbortSignal }) => {
       await reservasiKuota({ signal });
-      kuotaDicadangkan = true;
     };
     const { teks: teksProvider, tokenMasuk, tokenKeluar, modelDipakai } = await tanyaAI({
       daftarPenyedia: STELA_CANDIDATES,
       pesan: hasilValidasi.pesan,
       contextPublik,
       bahasa,
-      sebelumPanggilan: reservasiSekaliPerPermintaan,
+      sebelumPanggilan: reservasiSetiapPanggilan,
       batasPanggilan,
       signal: req.signal,
       cobaModelCadangan: true,

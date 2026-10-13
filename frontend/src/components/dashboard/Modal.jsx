@@ -6,20 +6,28 @@ import { X } from 'lucide-react';
 // browser, jadi tidak perlu ditulis ulang.
 const Modal = ({ terbuka, onTutup, judul, deskripsi, children, footer, lebar = 'max-w-lg', labelTutup = 'Tutup', busy = false }) => {
   const ref = useRef(null);
+  const triggerRef = useRef(null);
+  const titleId = 'dashboard-modal-title';
 
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    if (terbuka && !dialog.open) dialog.showModal();
+    if (terbuka && !dialog.open) {
+      triggerRef.current = document.activeElement;
+      dialog.showModal();
+    }
     if (!terbuka && dialog.open) dialog.close();
   }, [terbuka]);
 
   return (
     <dialog
       ref={ref}
-      aria-label={judul}
+      aria-labelledby={titleId}
       onCancel={event => { if (busy) event.preventDefault(); }}
-      onClose={onTutup}
+      onClose={() => {
+        onTutup();
+        if (triggerRef.current?.isConnected) triggerRef.current.focus();
+      }}
       onClick={(e) => {
         if (e.target === ref.current) onTutup();
       }}
@@ -29,7 +37,7 @@ const Modal = ({ terbuka, onTutup, judul, deskripsi, children, footer, lebar = '
         <div className={`w-full ${lebar} rounded-2xl bg-white p-6 shadow-card`}>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="font-heading text-base font-extrabold text-dark-900">{judul}</h2>
+              <h2 id={titleId} className="font-heading text-base font-extrabold text-dark-900">{judul}</h2>
               {deskripsi && <p className="mt-1 text-xs leading-relaxed text-dark-500">{deskripsi}</p>}
             </div>
             <button
