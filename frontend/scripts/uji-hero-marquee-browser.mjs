@@ -23,16 +23,27 @@ try {
       await page.goto(base + route); await page.locator('.school-hero').waitFor(); await page.locator('[data-hero-marquee]').first().waitFor();
       await page.evaluate(() => document.fonts.ready);
       await page.locator('[data-hero-marquee]').first().scrollIntoViewIfNeeded();
-      assert.equal(await page.locator('[data-hero-marquee]').count(), route === '/' ? 2 : 1, `${route} has the expected marquee placements`);
+      assert.equal(await page.locator('[data-hero-marquee]').count(), 1, `${route} has one hero marquee`);
       if (route === '/') {
-        assert.equal(await page.locator('#tentang + [data-hero-marquee] + #jurusan').count(), 1, 'One shared marquee between About and Departments');
+        assert.equal(await page.locator('#tentang + [data-ribbon-accent] + #jurusan').count(), 1, 'Motif ribbon between About and Departments');
+      }
+      if (route === '/profil-sekolah/guru') {
+        assert.equal(await page.locator('section[aria-labelledby="kesiswaan-list-title"] + [data-ribbon-accent] + section[aria-labelledby="guru-list-title"]').count(), 1, 'Motif ribbon below carousel controls and before teacher heading');
       }
       for (const ribbon of await page.locator('[data-hero-marquee]').all()) {
         const spacing = await ribbon.evaluate(el => ({ padding: parseFloat(getComputedStyle(el).paddingTop), gap: parseFloat(getComputedStyle(el.querySelector('.beranda-ribbon-group > div')).gap) }));
         assert.equal(spacing.padding, width >= 640 ? 32 : 24);
         assert.equal(spacing.gap, width >= 640 ? 24 : 16);
       }
-      assert.equal(await page.locator('img[src*="ribbon-divider.png"]').count(), 0, `${route} has no old raster divider`);
+      const accentCount = route === '/' || route === '/profil-sekolah/guru' ? 1 : 0;
+      assert.equal(await page.locator('[data-ribbon-accent]').count(), accentCount);
+      if (accentCount) {
+        const accent = page.locator('[data-ribbon-accent]');
+        await accent.locator('img').evaluate(image => image.decode());
+        assert.equal(await accent.getAttribute('aria-hidden'), 'true');
+        assert.equal(await accent.locator('.beranda-ribbon-badge').count(), 0);
+        await accent.screenshot({ path: join(output, `accent-${slug(route)}-${width}.png`) });
+      }
       await page.waitForFunction(() => [...document.querySelectorAll('.beranda-ribbon-flower img')].every(img => img.complete && img.naturalWidth));
       const layout = await page.evaluate(() => {
         const marquee = document.querySelector('[data-hero-marquee]'), hero = document.querySelector('.school-hero');

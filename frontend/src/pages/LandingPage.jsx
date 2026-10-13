@@ -20,7 +20,7 @@ const LandingPage = () => (
     <HeroSection />
     <RibbonDivider animated />
     <AboutSection />
-    <RibbonDivider animated />
+    <RibbonDivider />
     <DepartmentsSection />
     <Suspense fallback={<SectionFallback />}>
       <FacilitiesSection />

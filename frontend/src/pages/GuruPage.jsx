@@ -169,6 +169,7 @@ function GuruPage() {
       </section>
 
       <GuruGrid teachers={kesiswaanData} id="kesiswaan" title="Bidang Kesiswaan & Karakter" />
+      <RibbonDivider />
       <GuruGrid />
     </MainLayout>
   );

@@ -1,5 +1,9 @@
 # Penyempurnaan label, spacing, dan marquee — 13 Oktober 2026
 
+Koreksi referensi terbaru: pita sesudah Tentang di Beranda adalah aksen merah bermotif, bukan pill teks. Implementasi menggunakan varian non-animated RibbonDivider dan aset existing ribbon-divider.png. Aksen yang sama ditambahkan setelah kontrol carousel Kesiswaan, sebelum Guru & Tenaga Pendidik pada Profil Guru. Marquee pill sesudah hero tetap tersedia. Uraian penambahan marquee kedua di bawah merekam hasil sebelum koreksi ini.
+
+Validasi koreksi: lint/build lulus (build 3,50 detik), tes shared marquee 12 halaman × 4 viewport lulus dengan satu marquee hero serta aksen pada dua lokasi yang diminta; pemeriksaan tambahan pada 1440/768/390/320 px memastikan placement, tidak ada overflow, dan tombol carousel Kesiswaan tetap mengganti daftar. Screenshot: D:/LombaTelkom/qa-output/ribbon-accent/placement-guru-1440.png dan varian ukuran lainnya. File koreksi: RibbonDivider.jsx, LandingPage.jsx, GuruPage.jsx, uji-hero-marquee-browser.mjs serta laporan ini. Browser Chrome, belum perangkat fisik/Safari.
+
 ## Perubahan
 
 - Sumber bersama `quickLinks` mengubah label NextTel AI menjadi NextTel. Tidak ada string NextTel AI yang tersisa di `frontend/src`. Route `/nexttel`, deskripsi, CTA, fungsi layanan, serta nama STELA AI dipertahankan.
