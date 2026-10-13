@@ -1,31 +1,31 @@
-import { useLanguage } from '../context/LanguageContext';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import DetailLayout from '../components/DetailLayout';
+import { useLanguage } from '../context/LanguageContext';
+import MainLayout from '../layouts/MainLayout';
+import RibbonDivider from '../components/RibbonDivider';
+import JurusanDetailHero from '../components/jurusan/JurusanDetailHero';
 import JurusanDetailKonten from '../components/jurusan/JurusanDetailKonten';
 import ErrorPage from './ErrorPage';
 import { jurusanDetail } from '../data/dummyData';
+import { jurusanDetailDesign } from '../data/jurusanDetailDesign';
+import '../styles/jurusan-detail.css';
 
-// Isi halaman diambil dari slug di URL, bukan ditulis ulang di sini — kartu mana
-// pun yang diklik akan membuka data miliknya sendiri. Slug tidak dikenal = 404.
-const JurusanDetailPage = () => {
+export default function JurusanDetailPage() {
   const { t } = useLanguage();
   const { slug } = useParams();
-  const item = jurusanDetail.find((entri) => entri.slug === slug);
-
-  if (!item) return <ErrorPage />;
-
-  const displayItem = {
-    ...item,
-    title: t(item.title), kategori: t(item.kategori), subtitle: t(item.subtitle),
-    date: t(item.date), lead: t(item.lead), body: item.body.map((text) => t(text)),
-    facts: item.facts.map((fact) => ({ ...fact, label: t(fact.label), value: t(fact.value) })),
-  };
-
+  const item = jurusanDetail.find(entry => entry.slug === slug);
+  const design = Object.hasOwn(jurusanDetailDesign, slug) ? jurusanDetailDesign[slug] : undefined;
+  useEffect(() => {
+    if (!item || !design) return;
+    document.title = `${t(item.title)} | SMK Telkom Purwokerto`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t(design.description));
+  }, [item, design, t]);
+  if (!item || !design) return <ErrorPage />;
   return (
-    <DetailLayout item={displayItem} backTo="/jurusan" backLabel={t('Jurusan')}>
-      <JurusanDetailKonten item={item} />
-    </DetailLayout>
+    <MainLayout>
+      <JurusanDetailHero item={item} design={design} />
+      <RibbonDivider animated />
+      <JurusanDetailKonten item={item} design={design} />
+    </MainLayout>
   );
-};
-
-export default JurusanDetailPage;
+}
