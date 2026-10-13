@@ -9,10 +9,10 @@ const TentangHeroSection = () => {
   return (
   <section className="school-hero school-hero--profile">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--background hero-panel--floating isolate overflow-hidden">
+      <div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--school">
         <div className="hero-background overflow-hidden">
           {/* Keep the crop window at the source panel ratio to exclude viewer margins. */}
-          <div className={`relative w-full overflow-hidden rounded-[1.75rem] lg:absolute lg:right-0 lg:top-1/2 lg:h-full lg:w-auto lg:-translate-y-1/2 ${language === 'en' ? 'aspect-[1277/652]' : 'aspect-[1600/751]'}`}>
+          <div className={`hero-profile-crop relative w-full overflow-hidden lg:absolute lg:right-0 lg:top-1/2 lg:h-full lg:w-auto lg:-translate-y-1/2 ${language === 'en' ? 'aspect-[1277/652]' : 'aspect-[1600/751]'}`}>
             <img
               src={language === 'en' ? profilHeroEnglish : heroData.image}
               alt={`${t('Gedung SMK Telkom Purwokerto')}. ${heroData.badges.map((badge) => `${t(badge.title)}: ${t(badge.desc)}`).join('. ')}`}

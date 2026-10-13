@@ -35,6 +35,7 @@
 .hero-panel--calendar { padding: 0; }
 .hero-panel--calendar .hero-copy { padding: 1.5rem; }
 
+
 @media (min-width: 40rem) {
   .hero-container { padding-inline: 1.5rem; }
   .hero-panel { padding: 1rem; }
@@ -75,4 +76,73 @@
 @media (min-width: 80rem) {
   .school-hero { --hero-height: 29rem; }
   .hero-floating--quick .quick-access-card { padding-inline: 1rem; gap: .75rem; }
+}
+
+/* Composite artwork shares the panel edges; the copy and floating cards stay in flow. */
+.hero-panel--bleed {
+  --hero-media-width: 70%;
+  --hero-media-position: right center;
+  --hero-media-ratio: 1208 / 679;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero-panel--bleed .hero-grid { gap: 0; }
+.hero-panel--bleed .hero-copy { padding: 1.5rem; }
+.hero-panel--bleed .hero-image,
+.hero-panel--bleed .hero-media,
+.hero-panel--bleed .hero-background { border-radius: 0; }
+.hero-panel--bleed .hero-grid > .hero-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--hero-media-ratio);
+  object-fit: cover;
+  object-position: var(--hero-media-position);
+}
+.hero-panel--bleed .hero-media { aspect-ratio: var(--hero-media-ratio); }
+.hero-panel--bleed .hero-media .hero-image { object-position: var(--hero-media-position); }
+.hero-panel--bleed .hero-background { margin: 0; border-radius: 0; }
+.hero-panel--bleed .hero-profile-crop { border-radius: 0; }
+.hero-panel--teachers { --hero-media-ratio: 2200 / 1033; --hero-media-width: 72%; --hero-media-position: left center; }
+.hero-panel--activities { --hero-media-ratio: 1920 / 902; --hero-media-width: 69%; --hero-media-position: right center; }
+.hero-panel--admissions { --hero-media-ratio: 1248 / 676; --hero-media-width: 72%; }
+.hero-panel--school { --hero-media-width: 70%; }
+.hero-panel--announcement { --hero-media-ratio: 1600 / 751; --hero-media-position: right center; }
+.hero-panel--careers { --hero-media-ratio: 1920 / 902; --hero-media-position: right center; }
+.hero-panel--departments { --hero-media-ratio: 2300 / 1080; --hero-media-position: left center; }
+
+@media (min-width: 64rem) {
+  .hero-panel--bleed { padding: 0; }
+  .hero-panel--bleed .hero-grid { min-height: calc(var(--hero-height) - 2px); grid-template-columns: minmax(0, 38fr) minmax(0, 62fr); }
+  .hero-panel--bleed .hero-copy { padding: 2rem; }
+  .hero-panel--bleed.hero-panel--floating .hero-copy { padding-bottom: 4rem; }
+  .hero-panel--bleed .hero-grid > .hero-image,
+  .hero-panel--bleed .hero-media,
+  .hero-panel--bleed .hero-background {
+    position: absolute;
+    inset-block: 0;
+    right: 0;
+    width: var(--hero-media-width);
+    height: 100%;
+    max-height: none;
+    aspect-ratio: auto;
+    z-index: 0;
+  }
+  .hero-panel--bleed::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to right, var(--color-secondary) 28%, transparent 48%);
+  }
+  .hero-panel--teachers::after { background: linear-gradient(to right, var(--color-secondary) 29%, transparent 42%); }
+  .hero-panel--activities::after { background: linear-gradient(to right, var(--color-secondary) 31%, transparent 48%); }
+}
+
+@media (min-width: 64rem) and (max-width: 79.999rem) {
+  /* Preserve whole groups at the narrower desktop ratio, extending their sky above. */
+  .hero-panel--bleed .hero-grid > .hero-image,
+  .hero-panel--bleed .hero-media .hero-image { object-fit: contain; object-position: right bottom; }
+  .hero-panel--bleed .hero-media { background: linear-gradient(var(--color-dark-100), var(--color-secondary)); }
 }

@@ -71,8 +71,8 @@ export default function FasilitasPage() {
     <MainLayout>
       <div>
         <section aria-labelledby="fasilitas-hero-title" className="school-hero hero-container">
-          <div className="hero-panel hero-panel--background overflow-hidden">
-            <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1208w`} sizes="(min-width: 1280px) 840px, (min-width: 1024px) 70vw, 100vw" alt={t('Siswa SMK Telkom Purwokerto')} width="1208" height="679" fetchPriority="high" className="hero-background object-cover" />
+          <div className="hero-panel hero-panel--background hero-panel--bleed hero-panel--students">
+            <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1208w`} sizes="(min-width: 1280px) 850px, (min-width: 1024px) 70vw, 100vw" alt={t('Siswa SMK Telkom Purwokerto')} width="1208" height="679" fetchPriority="high" className="hero-background object-cover" />
             <div className="hero-copy">
               <HeroBreadcrumb current="Fasilitas Sekolah" />
               <span className="inline-block self-start rounded-full border border-primary/25 px-2.5 py-1 text-[10px] font-bold text-primary">#DigitalSmartSchool</span>

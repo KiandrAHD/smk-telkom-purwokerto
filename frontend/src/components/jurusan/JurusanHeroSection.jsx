@@ -10,7 +10,7 @@ const JurusanHeroSection = () => {
   return (
   <section className="school-hero">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--floating">
+      <div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--departments">
         <div className="hero-grid">
           <div className="hero-copy">
             <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
