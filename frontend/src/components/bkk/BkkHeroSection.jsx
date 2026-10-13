@@ -6,13 +6,11 @@ import { bkkHero, bkkStats } from '../../data/dummyData';
 const BkkHeroSection = () => {
   const { t } = useLanguage();
   return (
-  <section className="bg-white pt-4 pb-6">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[38%_1fr] lg:gap-4">
-          {/* pb-16 menyisakan ruang untuk kartu statistik yang menimpa dari bawah —
-              lihat catatan yang sama di PrestasiHeroSection. */}
-          <div className="px-3 pt-6 lg:pb-16 lg:pl-4 lg:pt-4">
+  <section className="school-hero">
+    <div className="hero-container">
+      <div className="hero-panel hero-panel--floating">
+        <div className="hero-grid">
+          <div className="hero-copy">
             <span className="inline-block rounded-md bg-primary-50 px-2.5 py-1 text-[10px] font-bold text-primary">
               {t(bkkHero.badge)}
             </span>
@@ -42,7 +40,7 @@ const BkkHeroSection = () => {
             width="1920"
             height="902"
             fetchPriority="high"
-            className="w-full rounded-[1.75rem] object-contain"
+            className="hero-image"
           />
         </div>
 

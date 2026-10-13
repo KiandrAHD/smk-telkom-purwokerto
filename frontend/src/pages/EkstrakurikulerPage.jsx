@@ -223,11 +223,11 @@ const EkstrakurikulerPage = () => {
 
   return (
     <MainLayout>
-      <section className="bg-white pb-6 pt-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="overflow-hidden rounded-[2rem] border border-primary/30 bg-white p-3 sm:p-4">
-            <div className="grid overflow-hidden rounded-[1.75rem] lg:min-h-[390px] lg:grid-cols-[38%_1fr]">
-            <div className="flex flex-col justify-center px-4 py-7 sm:px-6 lg:px-7 lg:py-8">
+      <section className="school-hero">
+        <div className="hero-container">
+          <div className="hero-panel overflow-hidden">
+            <div className="hero-grid">
+            <div className="hero-copy">
               <HeroBreadcrumb current="Ekstrakurikuler" />
               <span className="w-fit rounded-full border border-primary/35 px-2 py-0.5 text-[8px] font-bold tracking-wide text-primary">
                 {t(ekstrakurikulerData.eyebrow)}
@@ -271,14 +271,14 @@ const EkstrakurikulerPage = () => {
               </div>
             </div>
 
-            <div className="relative min-h-[260px] overflow-hidden lg:min-h-0">
+            <div className="hero-media relative">
               <img
                 src={ekstrakurikulerData.heroImage}
                 alt={t("Siswa SMK Telkom Purwokerto mengeksplorasi teknologi")}
                 width="1600"
                 height="769"
                 fetchPriority="high"
-                className="absolute inset-0 h-full w-full scale-[1.06] object-cover object-center"
+                className="hero-image"
               />
             </div>
           </div>

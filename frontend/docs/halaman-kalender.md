@@ -25,7 +25,7 @@ Folder `src/assets/kalender` menyimpan aset lokal, tanpa URL sementara Figma di 
 
 ## Data dan interaksi
 
-`calendarEvents.js` berisi tujuh contoh dari Figma, BUKAN jadwal resmi: upacara 1 Oktober, tryout 2 Oktober, dan TKA 26–30 Oktober 2026. Label contoh terlihat di halaman dan detail. Tidak menggunakan tanggal publikasi pengumuman sebagai tanggal kegiatan.
+`calendarEvents.js` berisi tujuh contoh dari Figma, BUKAN jadwal resmi: upacara 1 Oktober, tryout 2 Oktober, dan TKA 26–30 Oktober 2026. Banner contoh di atas kalender dihapus sesuai permintaan pengguna; label contoh tetap ada pada detail dan status data sumber. Tidak menggunakan tanggal publikasi pengumuman sebagai tanggal kegiatan.
 
 Belum ada API agenda resmi. Dataset lokal dapat diganti dengan data terverifikasi; setelah itu label contoh juga harus diperbarui. `CalendarBoard` menerima array `events`; setiap item memiliki `id`, `date` (YYYY-MM-DD), `title`, `start`, `end`, `location`, `category`. Jam menggunakan WIB. Belum ada route detail kegiatan resmi; detail ditampilkan melalui Modal existing.
 

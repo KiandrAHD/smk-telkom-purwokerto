@@ -6,6 +6,7 @@ import StelaWidget from '../components/stela/StelaWidget';
 import StelaAISection from '../components/StelaAISection';
 import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
+import '../styles/hero.css';
 
 export default function MainLayout({ children, busy = false, className = '' }) {
   const { pathname } = useLocation();
