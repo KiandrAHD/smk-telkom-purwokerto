@@ -29,7 +29,7 @@ export default function CalendarBoard({ events = [] }) {
   const monthLabel = formatDate(`${month}-01`, { month: 'long', year: 'numeric' });
   const cells = monthCells(view.year, view.month);
   const monthEvents = eventsForMonth(events, view.year, view.month);
-  const agenda = view.selected ? eventsOnDate(events, view.selected) : upcomingEvents(monthEvents).slice(0, 4);
+  const agenda = view.selected ? eventsOnDate(events, view.selected) : upcomingEvents(events).slice(0, 4);
   const focusKey = view.selected ?? (today.startsWith(month) ? today : `${month}-01`);
 
   const chooseDate = key => {

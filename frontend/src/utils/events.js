@@ -23,8 +23,8 @@ export function validateEvent(data) {
   for (const field of ['gambar_url', 'link_informasi']) {
     const value = String(data[field] || '').trim();
     if (!value) continue;
-    try { const url = new URL(value); if (value.length > 2048 || /\s/.test(value) || !['https:', 'http:'].includes(url.protocol)) throw new Error(); }
-    catch { errors[field] = 'Gunakan tautan http:// atau https:// yang valid (maksimal 2048 karakter).'; }
+    try { const url = new URL(value); if (value.length > 2048 || /\s/.test(value) || url.protocol !== 'https:' || url.username || url.password) throw new Error(); }
+    catch { errors[field] = 'Gunakan tautan HTTPS yang valid (maksimal 2048 karakter).'; }
   }
   return errors;
 }
