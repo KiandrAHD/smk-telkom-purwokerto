@@ -15,9 +15,10 @@
 .hero-image { display: block; object-fit: cover; object-position: center; }
 .hero-media > .hero-image { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero-floating { position: relative; z-index: 10; width: calc(100% - 2rem); margin-inline: auto; margin-top: calc(-1 * var(--hero-overlap, 2.5rem)); border-radius: 1rem; border: 1px solid var(--color-dark-100); background: white; box-shadow: var(--shadow-card); }
-.hero-floating--quick .quick-access-content { display: grid; grid-template-rows: auto 1fr auto; row-gap: .5rem; }
-.hero-floating--quick .quick-access-title, .hero-floating--quick .quick-access-description, .hero-floating--quick .quick-access-cta { margin: 0; }
-.hero-floating--quick .quick-access-description { line-height: 1.5; }
+.hero-floating--quick .quick-access-content { display: grid; grid-template-rows: auto minmax(2.25rem, 1fr) auto; row-gap: .25rem; }
+.hero-floating--quick .quick-access-title, .hero-floating--quick .quick-access-description, .hero-floating--quick .quick-access-cta { margin: 0; letter-spacing: normal; word-spacing: normal; text-align: left; }
+.hero-floating--quick .quick-access-title { font-size: 1rem; line-height: 1.25; }
+.hero-floating--quick .quick-access-description, .hero-floating--quick .quick-access-cta { font-size: .75rem; line-height: 1.5; }
 .hero-floating--stats > div { grid-template-columns: minmax(0, 1fr); padding: 0; gap: 0; }
 .hero-floating--stats > div > div { min-width: 0; padding: 1.25rem 1.5rem; gap: .75rem; }
 .hero-floating--stats > div > div > div { min-width: 0; overflow-wrap: anywhere; }
@@ -59,10 +60,8 @@
   .hero-grid > .hero-image { max-height: calc(var(--hero-height) - 2rem - 2px); }
   .hero-floating { width: calc(100% - 10rem); }
   .hero-floating--quick .quick-access-card { min-height: 5.5rem; padding: .75rem 1rem; gap: .75rem; align-items: stretch; }
-  .hero-floating--quick .quick-access-content { grid-template-rows: auto minmax(0, 1fr) auto; }
-  .hero-floating--quick .quick-access-icon { width: 2.5rem; height: 2.5rem; aspect-ratio: 1; align-self: center; }
-  .hero-floating--quick .quick-access-description { font-size: .6875rem; line-height: 1rem; }
-  .hero-floating--quick .quick-access-cta { min-height: 0; font-size: .6875rem; line-height: 1.5; }
+  .hero-floating--quick .quick-access-icon { width: 2.5rem; height: 2.5rem; aspect-ratio: 1; align-self: start; }
+  .hero-floating--quick .quick-access-cta { min-height: 0; }
   .hero-floating--stats > div { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .hero-floating--stats > div > div:nth-child(n+3) { border-top: 0; }
   .hero-floating--stats > div > div + div { border-left: 1px solid var(--color-dark-200); }
