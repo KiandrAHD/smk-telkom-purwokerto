@@ -22,7 +22,7 @@ const HeroSection = ({ content = landingHero, links = quickLinks, media, breadcr
   return (
   <section className="school-hero">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--floating">
+      <div className={`hero-panel hero-panel--floating hero-panel--bleed ${media?.composition === 'admissions' ? 'hero-panel--admissions' : 'hero-panel--students'}`}>
         <div className="hero-grid">
           <div className="hero-copy">
             {breadcrumb && <HeroBreadcrumb {...breadcrumb} />}
@@ -66,7 +66,7 @@ const HeroSection = ({ content = landingHero, links = quickLinks, media, breadcr
           <img
             src={media?.src || heroPanel}
             srcSet={media?.srcSet || `${hero640} 640w, ${hero960} 960w, ${heroPanel} 1208w`}
-            sizes="(min-width: 80rem) 47.7575rem, (min-width: 64rem) calc(60vw - 4.675rem), (min-width: 40rem) calc(100vw - 5.125rem), calc(100vw - 3.625rem)"
+            sizes="(min-width: 80rem) 876px, (min-width: 64rem) 72vw, (min-width: 40rem) calc(100vw - 3rem), calc(100vw - 2rem)"
             alt={t("Siswa SMK Telkom Purwokerto")}
             width={media?.width || 1208}
             height={media?.height || 679}

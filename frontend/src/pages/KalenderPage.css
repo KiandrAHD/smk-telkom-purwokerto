@@ -2,4 +2,27 @@
   mask-image: url('../assets/kalender/hero-wave-mask.svg');
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  object-fit: cover;
+  object-position: right bottom;
+}
+.hero-calendar-art { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; }
+.calendar-hero-building { position: absolute; inset-block: 0; right: 0; width: 100%; opacity: .2; overflow: hidden; mask-image: linear-gradient(to right, transparent, black 30%); }
+.calendar-hero-building img { position: absolute; width: 107.49%; max-width: none; left: -2%; top: -3.68%; }
+.calendar-hero-collage { position: absolute; top: 0; right: -1%; width: 50%; height: auto; z-index: 1; }
+.calendar-hero-logo { position: absolute; left: 71%; top: 32%; width: 9%; aspect-ratio: 107 / 105; padding: 1%; border-radius: .5rem; background: var(--color-secondary); overflow: hidden; z-index: 2; }
+.calendar-hero-logo img { width: 346.21%; height: 100%; max-width: none; }
+.calendar-hero-illustration { position: absolute; left: 4%; top: 0; width: 43%; aspect-ratio: 545 / 697; overflow: hidden; z-index: 4; }
+.calendar-hero-illustration img { position: absolute; left: -14.66%; top: -.09%; height: 100%; width: auto; max-width: none; }
+@media (min-width: 64rem) {
+  .calendar-hero-building { width: 68.67%; }
+  .calendar-hero-collage { width: 38.14%; top: -.59%; right: -1.2%; }
+  .calendar-hero-logo { left: 79.19%; top: 32.1%; width: 6.12%; padding: .65%; border-radius: .75rem; }
+  .calendar-hero-illustration { left: 32%; width: 31.16%; }
+  .calendar-hero-wave { top: -13.4%; height: 113.4%; width: 74.21%; }
 }

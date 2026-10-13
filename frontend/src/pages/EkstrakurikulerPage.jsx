@@ -9,6 +9,7 @@ import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X 
 import MainLayout from '../layouts/MainLayout';
 import SectionAccents from '../components/SectionAccents';
 import ContentImage from '../components/ContentImage';
+import heroFigma from '../assets/ekstrakurikuler/hero-figma.webp';
 import ribbon from '../assets/landing/ribbon-divider.png';
 import { ekstrakurikulerData } from '../data/dummyData';
 import { slugify } from '../utils/slug';
@@ -226,7 +227,7 @@ const EkstrakurikulerPage = () => {
     <MainLayout>
       <section className="school-hero">
         <div className="hero-container">
-          <div className="hero-panel overflow-hidden">
+          <div className="hero-panel hero-panel--bleed hero-panel--activities">
             <div className="hero-grid">
             <div className="hero-copy">
               <HeroBreadcrumb current="Ekstrakurikuler" />
@@ -274,10 +275,10 @@ const EkstrakurikulerPage = () => {
 
             <div className="hero-media relative">
               <img
-                src={ekstrakurikulerData.heroImage}
+                src={heroFigma}
                 alt={t("Siswa SMK Telkom Purwokerto mengeksplorasi teknologi")}
-                width="1600"
-                height="769"
+                width="1920"
+                height="902"
                 fetchPriority="high"
                 className="hero-image"
               />

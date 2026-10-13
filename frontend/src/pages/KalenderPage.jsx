@@ -10,7 +10,10 @@ import useEvents from '../hooks/useEvents';
 import { toCalendarEvent } from '../utils/events';
 import { useLanguage } from '../context/LanguageContext';
 import calendar from '../assets/kalender/hero-calendar-source.png';
-import wave from '../assets/kalender/hero-wave.png';
+import wave from '../assets/kalender/hero-wave-figma.webp';
+import building from '../assets/kalender/hero-building.webp';
+import collage from '../assets/kalender/hero-collage.webp';
+import heroLogo from '../assets/kalender/hero-logo.webp';
 import './KalenderPage.css';
 
 export default function KalenderPage() {
@@ -22,7 +25,7 @@ export default function KalenderPage() {
     <MainLayout>
       <section data-calendar-hero className="school-hero">
         <div className="hero-container">
-          <div className="hero-panel hero-panel--calendar overflow-hidden">
+          <div className="hero-panel hero-panel--calendar hero-panel--bleed">
             <div className="hero-copy">
               <HeroBreadcrumb parent="Informasi" parentTo={null} current="Kalender Kegiatan" />
               <div className="flex flex-wrap gap-1">
@@ -35,10 +38,13 @@ export default function KalenderPage() {
                 <a href="#kalender" className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary">{t('Lihat Event')}<ArrowRight className="size-4 text-primary" /></a>
               </div>
             </div>
-            <div aria-hidden="true" className="hero-calendar-art relative mt-5 aspect-[4/3] sm:aspect-[16/7] lg:absolute lg:inset-0 lg:mt-0 lg:aspect-auto">
-              <img src={wave} width="1298" height="770" alt="" className="calendar-hero-wave absolute bottom-0 right-0 h-full w-full lg:-top-[13.4%] lg:h-[113.4%] lg:w-[74.21%]" />
-              <div className="absolute left-[20%] top-0 h-full w-[60%] overflow-hidden sm:left-[35%] sm:w-[35%] lg:left-[32%] lg:h-[102.65%] lg:w-[31.16%]">
-                <img src={calendar} width="1774" height="887" alt="" fetchPriority="high" className="absolute -left-[14.66%] -top-[0.09%] h-full w-[255.99%] max-w-none" />
+            <div aria-hidden="true" className="hero-calendar-art">
+              <div className="calendar-hero-building"><img src={building} width="1200" height="900" alt="" /></div>
+              <img src={collage} width="545" height="458" alt="" className="calendar-hero-collage" />
+              <div className="calendar-hero-logo"><img src={heroLogo} width="600" height="172" alt="" /></div>
+              <img src={wave} width="1298" height="770" alt="" className="calendar-hero-wave" />
+              <div className="calendar-hero-illustration">
+                <img src={calendar} width="1774" height="887" alt="" fetchPriority="high" />
               </div>
             </div>
           </div>

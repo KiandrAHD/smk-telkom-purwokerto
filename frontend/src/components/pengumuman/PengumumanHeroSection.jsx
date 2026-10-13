@@ -14,7 +14,7 @@ const PengumumanHeroSection = () => {
   return (
   <section className="school-hero">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--floating">
+      <div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--announcement">
         <div className="hero-grid">
           <div className="hero-copy">
             <HeroBreadcrumb parent="Informasi" parentTo={null} current="Pengumuman" />
