@@ -113,12 +113,18 @@
 .hero-panel--achievements { --hero-media-ratio: 1106 / 656; --hero-media-width: 65.2%; --hero-media-position: right center; }
 .hero-panel--achievements .hero-image { mask-image: url('../assets/banners/prestasi-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
 .hero-panel--departments { --hero-media-ratio: 2300 / 1080; --hero-media-position: left center; }
+.hero-panel--facilities { --hero-media-width: 65.4%; }
+.hero-panel--facilities .hero-background { aspect-ratio: 1144 / 679; }
+.hero-panel--facilities .hero-copy { width: auto; }
+.hero-panel--facilities .hero-background > img { mask-image: url('../assets/fasilitas/hero-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
+.hero-panel--facilities + .hero-floating--quick .quick-access-cta { min-height: 2.75rem; }
 
 @media (min-width: 64rem) {
   .hero-panel--bleed { padding: 0; }
   .hero-panel--bleed .hero-grid { min-height: calc(var(--hero-height) - 2px); grid-template-columns: minmax(0, 38fr) minmax(0, 62fr); }
   .hero-panel--bleed .hero-copy { padding: 2rem; }
   .hero-panel--bleed.hero-panel--floating .hero-copy { padding-bottom: 4rem; }
+  .hero-panel--facilities .hero-copy { width: 40%; }
   .hero-panel--bleed .hero-grid > .hero-image,
   .hero-panel--bleed .hero-media,
   .hero-panel--bleed .hero-background {
@@ -144,6 +150,7 @@
 }
 
 @media (min-width: 64rem) and (max-width: 79.999rem) {
+  .hero-panel--facilities .hero-background { top: auto; height: auto; }
   /* Preserve whole groups at the narrower desktop ratio, extending their sky above. */
   .hero-panel--bleed .hero-grid > .hero-image,
   .hero-panel--bleed .hero-media .hero-image { object-fit: contain; object-position: right bottom; }

@@ -23,11 +23,31 @@ try {
   await page.waitForURL('**/fasilitas');
   await page.getByRole('heading', { level: 1 }).waitFor();
   assert.equal(await page.evaluate(() => window.__facilitiesNavigation), true, 'Navigasi tanpa reload.');
-  await page.waitForTimeout(600);
-  assert.equal(await page.evaluate(() => window.scrollY), 0);
+  await page.waitForFunction(() => window.scrollY === 0);
   await page.reload();
   await page.locator('[data-facility-card]').first().waitFor();
   await page.evaluate(() => document.fonts.ready);
+  const quick = page.locator('[data-facilities-quick-access]');
+  assert.equal(await quick.getByRole('link').count(), 4, 'Hero menyediakan empat akses cepat.');
+  assert.deepEqual(await quick.getByRole('link').evaluateAll(links => links.map(link => link.getAttribute('href'))), ['/fasilitas?kategori=Kelas#daftar-fasilitas', '/fasilitas#school-tour', '/stela', '/nexttel']);
+  assert.equal(await page.locator('#fasilitas-title img').count(), 2, 'Judul memakai ikon dan garis Figma.');
+  await quick.getByRole('link', { name: 'Lihat Sekarang', exact: true }).click();
+  await page.waitForURL('**/fasilitas?kategori=Kelas#daftar-fasilitas');
+  await page.waitForFunction(() => [...document.querySelectorAll('#daftar-fasilitas button')].some(button => button.textContent === 'Kelas' && button.getAttribute('aria-pressed') === 'true'));
+  await page.waitForFunction(() => document.getElementById('daftar-fasilitas').getBoundingClientRect().top < 200);
+  await page.goto(`${base}/fasilitas`);
+  await page.locator('[data-facility-card]').first().waitFor();
+  await quick.getByRole('link', { name: 'Jelajah Sekarang', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => document.getElementById('school-tour-title').getBoundingClientRect().top < 200);
+  for (const [label, route] of [['Tanya STELA', '/stela'], ['Cari Jurusanmu', '/nexttel']]) {
+    await page.goto(`${base}/fasilitas`);
+    await quick.getByRole('link', { name: label, exact: true }).click();
+    await page.waitForURL(`**${route}`);
+    await page.getByRole('heading', { level: 1 }).waitFor();
+  }
+  await page.goto(`${base}/fasilitas`);
+  await page.locator('[data-facility-card]').first().waitFor();
   const typography = await page.evaluate(() => {
     const selectors = ['header nav', '#fasilitas-hero-title', '#fasilitas-title', '[data-facility-card] h4', '[data-facility-card] p', 'footer h3'];
     const root = getComputedStyle(document.documentElement);
@@ -59,15 +79,18 @@ try {
   await page.waitForFunction(() => document.querySelectorAll('[data-facility-card]').length === 16);
   for (let index = 0; index < 16; index++) {
     const button = page.locator('[data-facility-card]').nth(index).getByRole('button');
+    const title = await page.locator('[data-facility-card]').nth(index).locator('h4').innerText();
+    const description = await page.locator('[data-facility-card]').nth(index).locator('p').innerText();
     await button.click();
     const dialog = page.locator('dialog[open]');
     await dialog.waitFor();
-    assert.ok((await dialog.innerText()).length > 100);
+    assert.equal(await dialog.getByRole('heading', { level: 2 }).innerText(), title);
+    assert.ok((await dialog.innerText()).includes(description), 'Modal menampilkan deskripsi fasilitas yang dipilih.');
     await page.keyboard.press('Escape');
     await dialog.waitFor({ state: 'hidden' });
     assert.equal(await button.evaluate(el => el === document.activeElement), true);
   }
-  for (const width of [1920, 1440, 1366, 768, 390, 375]) {
+  for (const width of [1920, 1440, 1366, 1024, 768, 390, 375, 320]) {
     await page.setViewportSize({ width, height: 900 });
     for (const language of ['id', 'en']) {
       await page.evaluate(language => sessionStorage.setItem('smk-telkom-language', language), language);
@@ -80,9 +103,15 @@ try {
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(500);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0, `${width} ${language}: overflow`);
-      assert.ok(await page.locator('[aria-labelledby="fasilitas-hero-title"] > div').evaluate(el => el.getBoundingClientRect().width <= 1280), 'Hero mengikuti lebar konten situs.');
+      assert.ok(await page.locator('[aria-labelledby="fasilitas-hero-title"] > .hero-panel').evaluate(el => el.getBoundingClientRect().width <= 1280), 'Hero mengikuti lebar konten situs.');
       assert.equal(await page.locator('#main-content').evaluate(el => getComputedStyle(el).zoom), '1');
       assert.equal(await page.locator('main img').evaluateAll(images => images.every(img => img.naturalWidth > 0)), true);
+      const titleAlignment = await page.locator('#fasilitas-title').evaluate(el => {
+        const title = el.getBoundingClientRect(), parent = el.parentElement.getBoundingClientRect();
+        return Math.abs((title.left + title.right) / 2 - (parent.left + parent.right) / 2);
+      });
+      assert.ok(titleAlignment <= 1, 'Judul fasilitas berada di tengah.');
+      assert.equal(await page.locator('[data-facilities-quick-access] > div').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), width >= 1024 ? 4 : width >= 640 ? 2 : 1);
       const expectedCols = width >= 1024 ? 4 : width >= 640 ? 2 : 1;
       assert.equal(await page.locator('[data-facility-grid]').first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), expectedCols);
       await page.screenshot({ path: `${output}/${width}-${language}.png`, fullPage: true });
@@ -123,5 +152,5 @@ try {
   await page.getByRole('link', { name: 'Fasilitas Sekolah', exact: true }).click();
   await page.waitForURL('**/fasilitas');
   assert.deepEqual(errors, []);
-  console.log('PASS: routing, refresh/kategori, scroll atas, grid unik, filter, 16 modal/Escape/fokus, 12 viewport/bahasa, toggle ID/EN, carousel loop/autoplay, menu Tentang desktop/mobile, runtime.');
+  console.log('PASS: hero baru, judul di tengah, empat akses cepat, routing, refresh/kategori, scroll atas, grid unik, filter, 16 modal/Escape/fokus, 16 viewport/bahasa, toggle ID/EN, carousel loop/autoplay, menu Tentang desktop/mobile, runtime.');
 } finally { await browser.close(); }
