@@ -1,4 +1,4 @@
-import { ctaMasukPpdb, heroData, jurusanHero, landingHero, prestasiHero } from './dummyData';
+import { ctaMasukPpdb, heroData, jurusanHero, landingHero, prestasiHero, bkkHero, beritaHero, pengumumanHero, ekstrakurikulerData, ppdbMeta } from './dummyData';
 import facilities640 from '../assets/fasilitas/hero-640.webp';
 import facilities960 from '../assets/fasilitas/hero-960.webp';
 import facilities from '../assets/fasilitas/hero-1144.webp';
@@ -7,6 +7,11 @@ import departments from '../assets/drive/jurusan-hero-students.jpeg';
 import achievements640 from '../assets/banners/prestasi-640.webp';
 import achievements960 from '../assets/banners/prestasi-960.webp';
 import profileEnglish from '../assets/tentang/profil-hero-en.jpeg';
+import teachers from '../assets/tentang/guru-page-hero.webp';
+import activities from '../assets/ekstrakurikuler/hero-figma.webp';
+import admissions from '../assets/spmb/hero-1248.webp';
+import admissions640 from '../assets/spmb/hero-640.webp';
+import admissions960 from '../assets/spmb/hero-960.webp';
 
 // Each entry uses existing school copy, artwork, and routes; the opening slide stays unchanged.
 export const landingHeroSlides = [
@@ -34,5 +39,40 @@ export const landingHeroSlides = [
     id: 'profil', name: 'Profil Sekolah',
     content: { title: 'Profil Sekolah', titleAccent: '', description: heroData.description, primaryCta: { label: 'Lihat Profil Sekolah', href: '/profil-sekolah' }, secondaryCta: ctaMasukPpdb },
     media: { src: heroData.image, srcEn: profileEnglish, width: 1600, height: 751, composition: 'school', alt: 'Gedung SMK Telkom Purwokerto' },
+  },
+  {
+    id: 'guru', name: 'Profil Guru',
+    content: { title: 'Profil Guru', titleAccent: 'SMK Telkom', description: 'Tim pengajar kami memadukan kurikulum berbasis teknologi terbaru dengan metode pembelajaran interaktif. Kami siap membimbing siswa menguasai logika, pemrograman, hingga mampu menciptakan solusi digital masa depan.', primaryCta: { label: 'Profil Guru', href: '/profil-sekolah/guru' } },
+    media: { src: teachers, width: 2200, height: 1033, composition: 'teachers', alt: 'Guru dan tenaga pendidik SMK Telkom Purwokerto' },
+  },
+  {
+    id: 'ekstrakurikuler', name: 'Ekstrakurikuler',
+    content: { title: 'Ekstrakurikuler', titleAccent: '', description: ekstrakurikulerData.subtitle, primaryCta: { label: 'Lihat Kegiatan', href: '/ekstrakurikuler' } },
+    media: { src: activities, width: 1920, height: 902, composition: 'activities', alt: 'Ekstrakurikuler' },
+  },
+  {
+    id: 'bkk', name: 'BKK',
+    content: { ...bkkHero, primaryCta: { label: bkkHero.ctaText, href: '/bkk' } },
+    media: { src: bkkHero.image, width: 1106, height: 656, composition: 'careers', alt: bkkHero.imageAlt },
+  },
+  {
+    id: 'berita', name: 'Berita',
+    content: { ...beritaHero, primaryCta: { label: beritaHero.ctaText, href: '/berita' } },
+    media: { src: beritaHero.image, width: 1106, height: 656, composition: 'news', alt: beritaHero.imageAlt },
+  },
+  {
+    id: 'pengumuman', name: 'Pengumuman',
+    content: { title: pengumumanHero.heading, titleAccent: pengumumanHero.headingAccent, description: pengumumanHero.description, primaryCta: { label: 'Pengumuman', href: '/pengumuman' } },
+    media: { src: pengumumanHero.image, width: 1600, height: 751, composition: 'announcement', alt: 'Pengumuman sekolah' },
+  },
+  {
+    id: 'kalender', name: 'Kalender Kegiatan',
+    content: { title: 'Kalender', titleAccent: 'Kegiatan Sekolah', description: 'Temukan jadwal kegiatan, lomba, dan acara terbaru di SMK Telkom Purwokerto.', primaryCta: { label: 'Lihat Event', href: '/kalender' } },
+    media: { src: beritaHero.image, width: 1106, height: 656, composition: 'news', alt: beritaHero.imageAlt },
+  },
+  {
+    id: 'spmb', name: 'Informasi SPMB',
+    content: { title: 'Wujudkan Mimpimu', titleAccent: 'di Dunia Digital', description: `Daftar SPMB SMK Telkom Purwokerto Tahun Ajaran ${ppdbMeta.tahun}/${Number(ppdbMeta.tahun) + 1} dan mulai langkah pertamamu menuju karier di bidang teknologi.`, primaryCta: { label: 'Informasi SPMB', href: '/spmb' } },
+    media: { src: admissions, srcSet: `${admissions640} 640w, ${admissions960} 960w, ${admissions} 1248w`, width: 1248, height: 676, composition: 'admissions', alt: 'Informasi SPMB' },
   },
 ];
