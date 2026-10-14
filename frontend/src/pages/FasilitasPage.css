@@ -1,8 +1,0 @@
-/* Reuse the bundled variable font, isolated to the requested frame. */
-@font-face {
-  font-family: 'Facility Jakarta';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('../assets/fonts/plusjakartasans-v12-LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2') format('woff2');
-}

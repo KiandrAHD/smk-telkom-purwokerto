@@ -10,7 +10,7 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const errors = [], results = [], contexts = [];
 const hintKey = 'smk-campus-drag-understood-v1';
-const expected = { 'gedung-d-1': 'gor', 'gedung-d-2': 'gor', parkiran: 'parkiran', 'gedung-c': 'kelas-c', 'gedung-b': 'kelas-b', 'rps-selatan': 'rps-selatan', 'rps-utara': 'rps-utara', 'lapangan-apel': 'lapangan-apel', 'gedung-a': 'kelas-a', dlg: 'dlg', perpustakaan: 'perpustakaan', aula: 'aula' };
+const expected = { 'gedung-d-1': 'gor', 'gedung-d-2': 'kelas-d', parkiran: 'parkiran', 'gedung-c': 'kelas-c', 'gedung-b': 'kelas-b', 'rps-selatan': 'rps-selatan', 'rps-utara': 'rps-utara', 'lapangan-apel': 'lapangan-apel', 'gedung-a': 'kelas-a', dlg: 'dlg', perpustakaan: 'perpustakaan', aula: 'aula' };
 async function create(options = {}) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1100 }, reducedMotion: 'reduce', ...options }); contexts.push(context);
   context.on('page', page => page.on('pageerror', error => errors.push(error.message)));
@@ -86,8 +86,8 @@ try {
     const pin = point(page, id); await pin.focus(); await page.keyboard.press('Enter');
     const preview = page.locator(`[data-campus-preview="${facility}"]`); await preview.waitFor(); assert.equal(await page.locator('[data-campus-hotspot][data-active="true"]').count(), 1);
     assert.equal(await preview.getAttribute('aria-modal'), 'false');
-    if (['kelas-a', 'kelas-b', 'kelas-c', 'kelas-d', 'perpustakaan'].includes(facility)) await preview.locator('.campus-photo-main .campus-preview-photo').first().evaluate(image => image.decode());
-    else assert.equal(await preview.locator('[data-campus-photo-fallback]').count(), 1);
+    await preview.locator('.campus-photo-main .campus-preview-photo').first().evaluate(image => image.decode());
+    assert.equal(await preview.locator('[data-campus-photo-fallback]').count(), 0);
     const before = await position(page); await page.keyboard.press('Escape'); await preview.waitFor({ state: 'hidden' }); assert.ok(Math.abs(await position(page) - before) < 1, 'Closing details does not reset panning');
   }
   await point(page, 'gedung-c').focus(); await point(page, 'gedung-c').locator('.campus-hotspot-label').click();
@@ -152,7 +152,7 @@ try {
   const blockedContext = await create(); await blockedContext.addInitScript(() => { Storage.prototype.getItem = () => { throw new Error('Blocked'); }; Storage.prototype.setItem = () => { throw new Error('Blocked'); }; });
   const blocked = await blockedContext.newPage(); await open(blocked); assert.equal(await blocked.locator('[data-campus-hint]').isVisible(), true); await drag(blocked, -80); assert.equal(await blocked.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'true');
   const failContext = await create(); await failContext.route('**/*campus-map*.webp', route => route.fulfill({ status: 404, body: '' })); const fail = await failContext.newPage(); await fail.goto(base + '/fasilitas'); await viewport(fail).scrollIntoViewIfNeeded();
-  await fail.getByText('Peta belum tersedia. Daftar fasilitas tetap dapat dibuka di bawah.', { exact: true }).waitFor(); assert.equal(await fail.locator('[data-campus-hotspot]').count(), 0); assert.equal(await fail.locator('[data-facility-card]').count(), 16); assert.equal(await slider(fail).isDisabled(), true);
+  await fail.getByText('Peta belum tersedia. Daftar fasilitas tetap dapat dibuka di bawah.', { exact: true }).waitFor(); assert.equal(await fail.locator('[data-campus-hotspot]').count(), 0); assert.equal(await fail.locator('[data-facility-card]').count(), 24); assert.equal(await slider(fail).isDisabled(), true);
   await failContext.unroute('**/*campus-map*.webp'); await viewport(fail).getByRole('button', { name: 'Coba lagi', exact: true }).click(); await fail.waitForFunction(() => document.querySelector('.campus-viewport').dataset.mapReady === 'true');
   const photoContext = await create(); await photoContext.route('**/*kelas-b*.webp', route => route.fulfill({ status: 404, body: '' })); const photo = await photoContext.newPage(); await open(photo); await point(photo, 'gedung-b').click(); await photo.locator('.campus-photo-main [data-campus-photo-fallback]').waitFor();
   // Actual fonts and normal/reduced motion on rendered UI.

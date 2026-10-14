@@ -26,7 +26,7 @@ try{
    await page.goto(base+'/fasilitas');await page.waitForFunction(()=>document.querySelectorAll('[data-facility-card]').length===24);
    if(lang==='en'){await page.getByRole('button',{name:'Switch to English',exact:true}).click();await page.locator('#fasilitas-title').filter({hasText:'School'}).waitFor();}
    assert.equal(await page.locator('[data-facility-card]').count(),24);
-   const actual=await getCard(); assert.equal(actual.heading.color,'rgb(205, 11, 32)'); assert.ok(actual.heading.font.includes('Facility Jakarta')); assert.ok(reference.heading.font);assert.deepEqual(await page.locator('h1').evaluate(typography),heroReference);
+   const actual=await getCard(); assert.equal(actual.heading.color,'rgb(205, 11, 32)'); assert.equal(actual.heading.font,reference.heading.font); assert.equal(actual.body.font,reference.body.font);assert.deepEqual(await page.locator('h1').evaluate(typography),heroReference);
    assert.deepEqual(await page.locator('footer .font-heading').first().evaluate(typography),footerReference);
    const geometry=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,columns:getComputedStyle(document.querySelector('[data-facility-grid]')).gridTemplateColumns.split(' ').length}));
    assert.ok(geometry.scroll<=geometry.client);assert.equal(geometry.columns,width>=1024?4:width>=640?2:1);
