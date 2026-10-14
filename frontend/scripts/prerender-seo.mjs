@@ -11,7 +11,7 @@ const root = process.cwd();
 const dist = path.join(root, 'dist');
 const server = await createServer({ appType: 'custom', logLevel: 'error', server: { middlewareMode: true } });
 const escape = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const plain = html => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&#x27;/g, "'").replace(/&quot;/g, '"').trim();
+const plain = html => html.replace(/<[^>]*>/g, '').replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').trim();
 try {
   const { default: App } = await server.ssrLoadModule('/src/App.jsx');
   const { default: LanguageProvider } = await server.ssrLoadModule('/src/context/LanguageProvider.jsx');
