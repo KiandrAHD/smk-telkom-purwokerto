@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../components/PageHeroCarousel';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
@@ -26,7 +27,7 @@ export default function KalenderPage() {
     <MainLayout>
       <section data-calendar-hero className="school-hero">
         <div className="hero-container">
-          <div className="hero-panel hero-panel--calendar hero-panel--bleed">
+          <PageHeroCarousel page="kalender"><div className="hero-panel hero-panel--calendar hero-panel--bleed">
             <div className="hero-copy">
               <HeroBreadcrumb parent="Informasi" parentTo={null} current="Kalender Kegiatan" />
               <HeroBadges />
@@ -46,7 +47,7 @@ export default function KalenderPage() {
                 <img src={calendar} width="1774" height="887" alt="" fetchPriority="high" />
               </div>
             </div>
-          </div>
+          </div></PageHeroCarousel>
         </div>
       </section>
       <RibbonDivider animated />

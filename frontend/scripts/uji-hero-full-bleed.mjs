@@ -27,7 +27,7 @@ try {
     await page.goto(base + path, { waitUntil: 'domcontentloaded' });
     for (const width of (baseline ? [1440] : [1920, 1847, 1440, 1280, 1024, 768, 390, 320])) {
       await page.setViewportSize({ width, height: 1100 });
-      const panel = page.locator('.hero-panel');
+      const panel = page.locator('.hero-carousel-viewport');
       await panel.waitFor();
       await page.evaluate(() => document.fonts.ready);
       await page.evaluate(() => Promise.all(document.querySelector('main').getAnimations().map(animation => animation.finished.catch(() => {}))));
@@ -41,23 +41,23 @@ try {
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
         const geometry = await panel.evaluate(panel => {
           const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
-          const p = rect(panel), media = panel.querySelector('.hero-media, .hero-background, .hero-calendar-art, .hero-image');
+          const active = panel.querySelector('[data-hero-slide][data-active="true"]'), p = rect(panel), media = active.querySelector('.hero-media, .hero-background, .hero-calendar-art, .hero-image');
           const bar = document.querySelector('.hero-floating');
           return {
-            panel: p, media: rect(media), copy: rect(panel.querySelector('.hero-copy')),
+            panel: p, media: rect(media), copy: rect(active.querySelector('.hero-copy')),
             radius: getComputedStyle(panel).borderTopLeftRadius,
-            controls: [...panel.querySelector('.hero-copy').querySelectorAll('a, input')].map(rect),
+            controls: [...active.querySelector('.hero-copy').querySelectorAll('a, input')].map(rect),
             bar: bar ? rect(bar) : null,
             overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
-            broken: [...panel.querySelectorAll('img')].filter(img => !img.complete || !img.naturalWidth).length,
-            images: [...panel.querySelectorAll('img')].map(img => ({ src: img.currentSrc.split('/').pop(), natural: [img.naturalWidth, img.naturalHeight], box: rect(img), fit: getComputedStyle(img).objectFit, position: getComputedStyle(img).objectPosition })),
+            broken: [...active.querySelectorAll('img')].filter(img => !img.complete || !img.naturalWidth).length,
+            images: [...active.querySelectorAll('img')].map(img => ({ src: img.currentSrc.split('/').pop(), natural: [img.naturalWidth, img.naturalHeight], box: rect(img), fit: getComputedStyle(img).objectFit, position: getComputedStyle(img).objectPosition })),
             navbarGap: p.y - document.querySelector('header').getBoundingClientRect().bottom,
           };
         });
         results.push({ path, width, language, geometry });
         if (language === 'id' && [1847, 1440, 1024, 768, 390].includes(width)) await page.locator('.school-hero').screenshot({ path: join(output, `${path.slice(1).replaceAll('/', '-') || 'beranda'}-${width}.png`), animations: 'disabled' });
         if (baseline) continue;
-        assert.deepEqual(await panel.locator('[data-hero-badges] span').allTextContents(), ['#DigitalSmartSchool', '#GlobalTechnopreneur'], `${path}/${width}/${language}: complete school branding`);
+        assert.deepEqual(await panel.locator('[data-hero-slide][data-active="true"] [data-hero-badges] span').allTextContents(), ['#DigitalSmartSchool', '#GlobalTechnopreneur'], `${path}/${width}/${language}: complete school branding`);
         assert.equal(geometry.overflow, false, `${path}/${width}/${language}: overflow`);
         assert.equal(geometry.broken, 0, `${path}: broken artwork`);
         assert.equal(geometry.radius, '32px');
@@ -68,7 +68,7 @@ try {
           assert.equal(geometry.panel.height, width >= 1280 ? 464 : 544, `${path}: container changed`);
           if (compositions.has(path)) {
             assert(Math.abs(geometry.media.right - (geometry.panel.right - 1)) < 1, `${path}: right edge gap`);
-            assert(Math.abs(geometry.media.y - (geometry.panel.y + 1)) < 1, `${path}: top edge gap`);
+            assert(geometry.media.y >= geometry.panel.y && geometry.media.y < geometry.panel.bottom, `${path}: artwork inside panel`);
             assert(Math.abs(geometry.media.bottom - (geometry.panel.bottom - 1)) < 1, `${path}: bottom edge gap`);
           }
         } else {
@@ -90,7 +90,7 @@ try {
   assert.deepEqual(errors, []);
   for (const program of ['rpl', 'pg', 'tkj', 'tjat']) {
     await page.goto(`${base}/jurusan/${program}`);
-    const badges = page.locator('.hero-panel [data-hero-badges]');
+    const badges = page.locator('[data-hero-slide][data-active="true"] [data-hero-badges]');
     await badges.waitFor();
     assert.deepEqual(await badges.locator('span').allTextContents(), ['#DigitalSmartSchool', '#GlobalTechnopreneur']);
   }

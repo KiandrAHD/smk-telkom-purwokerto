@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../../components/PageHeroCarousel';
 import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import HeroBreadcrumb from '../HeroBreadcrumb';
@@ -10,7 +11,7 @@ const TentangHeroSection = () => {
   return (
   <section className="school-hero school-hero--profile">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--school">
+      <PageHeroCarousel page="profil"><div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--school">
         <div className="hero-background overflow-hidden">
           {/* Keep the crop window at the source panel ratio to exclude viewer margins. */}
           <div className={`hero-profile-crop relative w-full overflow-hidden lg:absolute lg:right-0 lg:top-1/2 lg:h-full lg:w-auto lg:-translate-y-1/2 ${language === 'en' ? 'aspect-[1277/652]' : 'aspect-[1600/751]'}`}>
@@ -45,7 +46,7 @@ const TentangHeroSection = () => {
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </a>
         </div>
-      </div>
+      </div></PageHeroCarousel>
     </div>
   </section>
   );

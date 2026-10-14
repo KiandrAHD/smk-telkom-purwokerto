@@ -9,6 +9,13 @@ export function campusGeometry(viewportWidth) {
 }
 export const centerCampusPoint = (x, imageWidth, viewportWidth) => clampPan(x * imageWidth - viewportWidth / 2, panLimit(viewportWidth, imageWidth));
 export const meaningfulPan = (start, current) => Math.abs(current - start) >= 24;
+export function snapCampusPan(value, start, maximum, viewportWidth) {
+  if (!maximum || Math.abs(value - start) < 24) return clampPan(start, maximum);
+  // Even camera stops include both map edges; pins and the slider still pan continuously.
+  const stops = Math.max(1, Math.ceil(maximum / (viewportWidth * 0.45)));
+  const step = maximum / stops;
+  return Math.round(clampPan(value, maximum) / step) * step;
+}
 export function gestureAxis(dx, dy) {
   if (Math.abs(dx) >= 8 && Math.abs(dx) > Math.abs(dy) * 1.1) return 'horizontal';
   if (Math.abs(dy) >= 8 && Math.abs(dy) > Math.abs(dx) * 1.1) return 'vertical';

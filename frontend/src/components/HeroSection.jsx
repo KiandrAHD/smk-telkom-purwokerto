@@ -8,6 +8,7 @@ import sparkIcon from '../assets/landing/quick-access-spark.svg';
 import sparkDot from '../assets/landing/quick-access-dot.svg';
 import HeroPanel from './HeroPanel';
 import HeroCarousel from './HeroCarousel';
+import PageHeroCarousel from './PageHeroCarousel';
 
 const icons = {
   userPlus: accountIcon,
@@ -15,12 +16,12 @@ const icons = {
   sparkles: sparkIcon,
 };
 
-const HeroSection = ({ content = landingHero, links = quickLinks, media, breadcrumb, slides }) => {
+const HeroSection = ({ content = landingHero, links = quickLinks, media, breadcrumb, slides, page }) => {
   const { t } = useLanguage();
   return (
   <section className="school-hero">
     <div className="hero-container">
-      {slides ? <HeroCarousel slides={slides} /> : <HeroPanel content={content} media={media} breadcrumb={breadcrumb} />}
+      {slides ? <HeroCarousel slides={slides} /> : page ? <PageHeroCarousel page={page}><HeroPanel content={content} media={media} breadcrumb={breadcrumb} /></PageHeroCarousel> : <HeroPanel content={content} media={media} breadcrumb={breadcrumb} />}
 
         {/* Keep QAC in flow outside the hero border so its height reserves space below. */}
         <div data-quick-access className="hero-floating hero-floating--quick overflow-hidden">

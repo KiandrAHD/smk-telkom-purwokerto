@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../../components/PageHeroCarousel';
 import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -11,7 +12,7 @@ const JurusanHeroSection = () => {
   return (
   <section className="school-hero">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--departments">
+      <PageHeroCarousel page="jurusan"><div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--departments">
         <div className="hero-grid">
           <div className="hero-copy">
             <HeroBadges />
@@ -46,7 +47,7 @@ const JurusanHeroSection = () => {
           />
         </div>
 
-      </div>
+      </div></PageHeroCarousel>
       <HeroStatsBar items={jurusanStats} />
     </div>
   </section>

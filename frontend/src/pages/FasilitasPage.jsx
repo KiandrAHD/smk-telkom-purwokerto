@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../components/PageHeroCarousel';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useLenis } from 'lenis/react';
@@ -131,7 +132,7 @@ export default function FasilitasPage() {
     <MainLayout>
       <div>
         <section aria-labelledby="fasilitas-hero-title" className="school-hero hero-container">
-          <div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--facilities">
+          <PageHeroCarousel page="fasilitas"><div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--facilities">
             <div className="hero-background relative aspect-[1144/679]">
               <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1144w`} sizes="(min-width: 1280px) 795px, (min-width: 1024px) 65vw, calc(100vw - 2rem)" alt={t('Kolase ruang kelas dan laboratorium SMK Telkom Purwokerto')} width="1144" height="679" fetchPriority="high" decoding="async" className="block h-full w-full object-cover" />
               <span aria-hidden="true" className="absolute left-[57%] top-[34.61%] aspect-[107/105] w-[9.35%] overflow-hidden rounded-[14%] bg-white">
@@ -150,7 +151,7 @@ export default function FasilitasPage() {
                 <Link to="#daftar-fasilitas" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">{t('Lihat Fasilitas')}<ArrowRight aria-hidden="true" className="size-4" /></Link>
               </div>
             </div>
-          </div>
+          </div></PageHeroCarousel>
           <div data-facilities-quick-access className="hero-floating hero-floating--quick overflow-hidden">
             <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
               {facilityQuickLinks.map((item, index) => <div key={item.title} className={`quick-access-card flex min-w-0 gap-3 px-4 py-3 ${index % 2 ? 'sm:border-l sm:border-dark-200' : ''} ${index >= 2 ? 'sm:border-t sm:border-dark-200 lg:border-t-0' : ''} ${index === 2 ? 'lg:border-l lg:border-dark-200' : ''}`}>

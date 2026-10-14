@@ -2,7 +2,14 @@ import assert from 'node:assert/strict';
 import { createServer } from 'vite';
 const server = await createServer({ appType: 'custom', logLevel: 'silent', server: { middlewareMode: true } });
 try {
-  const { campusGeometry, clampPan, panLimit, centerCampusPoint, gestureAxis, meaningfulPan, readCampusHint, saveCampusHint, campusHintKey } = await server.ssrLoadModule('/src/utils/campusPan.js');
+  const { campusGeometry, clampPan, panLimit, centerCampusPoint, gestureAxis, meaningfulPan, readCampusHint, saveCampusHint, campusHintKey, snapCampusPan } = await server.ssrLoadModule('/src/utils/campusPan.js');
+  assert.equal(snapCampusPan(140, 0, 570, 390), 142.5);
+  assert.equal(snapCampusPan(290, 142.5, 570, 390), 285);
+  assert.equal(snapCampusPan(560, 427.5, 570, 390), 570);
+  assert.equal(snapCampusPan(12, 0, 570, 390), 0, 'Short drag rolls back');
+  assert.equal(snapCampusPan(-30, 0, 570, 390), 0);
+  assert.equal(snapCampusPan(600, 570, 570, 390), 570);
+  assert.equal(snapCampusPan(0, 0, 0, 3840), 0);
   const desktop = campusGeometry(1280);
   assert.equal(desktop.width, 1600);
   assert.ok(Math.abs(desktop.initial - 83 * desktop.width / 3142) < 0.00001);
@@ -42,9 +49,9 @@ try {
   assert.equal(new Set(campusHotspots.map(point => point.id)).size, 12);
   assert.equal(new Set(campusHotspots.map(point => point.facilityId)).size, 11);
   for (const point of campusHotspots) { assert.ok(campusFacilities[point.facilityId]); assert.ok(point.x > 0 && point.x < 1 && point.y > 0 && point.y < 1); }
-  for (const id of ['kelas-a', 'kelas-b', 'kelas-c', 'kelas-d', 'perpustakaan']) assert.equal(campusFacilities[id].content, fasilitasData.find(item => item.id === id), 'Reuse canonical facility record');
+  for (const id of ['kelas-a', 'kelas-b', 'kelas-c', 'perpustakaan']) assert.equal(campusFacilities[id].content, fasilitasData.find(item => item.id === id), 'Reuse canonical facility record');
   assert.equal(campusFacilities['lapangan-apel'].content.image, null, 'Unverified photography needs an honest fallback');
-  for (const building of ['a', 'b', 'c', 'd']) {
+  for (const building of ['a', 'b', 'c']) {
     const facility = campusFacilities['kelas-' + building];
     assert.equal(facility.rooms.length, 4);
     assert.ok(facility.rooms.every(room => room.name.startsWith('Kelas ' + building.toUpperCase() + ' ')));

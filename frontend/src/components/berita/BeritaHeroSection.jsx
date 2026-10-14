@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../../components/PageHeroCarousel';
 import { useLanguage } from '../../context/LanguageContext';
 import { formatPublicDate } from '../../utils/publicContent';
 import { useEffect, useState } from 'react';
@@ -30,7 +31,7 @@ const BeritaHeroSection = ({ items = [] }) => {
   return (
     <section className="school-hero">
       <div className="hero-container">
-        <div className="hero-panel hero-panel--bleed hero-panel--news">
+        <PageHeroCarousel page="berita"><div className="hero-panel hero-panel--bleed hero-panel--news">
           <div className="hero-grid">
             <div className="hero-copy">
               <HeroBreadcrumb parent="Informasi" parentTo={null} current="Berita" />
@@ -68,7 +69,7 @@ const BeritaHeroSection = ({ items = [] }) => {
               className="hero-image"
             />
           </div>
-        </div>
+        </div></PageHeroCarousel>
 
         {/* Baris breaking news */}
         {item && <div

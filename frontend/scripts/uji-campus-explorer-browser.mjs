@@ -59,7 +59,9 @@ try {
   await drag(page, -6); assert.ok(Math.abs(await position(page) - original.left) < 1); assert.equal(await page.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'false');
   await setSlider(page, 'Home'); assert.equal(await position(page), 0);
   await drag(page, 150); assert.equal(await position(page), 0); assert.equal(await page.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'false', 'No map movement means no learned hint');
-  await drag(page, -200); assert.ok(Math.abs(await position(page) - 200) < 2);
+  await drag(page, -200);
+  const snap = await coords(page), step = snap.max / Math.ceil(snap.max / (snap.width * 0.45));
+  assert.ok(Math.abs(await position(page) - Math.round(200 / step) * step) < 2, 'Mouse release snaps to the nearest camera stop');
   await page.waitForFunction(() => getComputedStyle(document.querySelector('[data-campus-hint]')).visibility === 'hidden');
   assert.equal(await page.evaluate(key => localStorage.getItem(key), hintKey), '1');
   const moved = await coords(page);
@@ -134,7 +136,10 @@ try {
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: tx, y: ty }] });
   for (let i = 1; i <= 12; i++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: tx - i * 12, y: ty }] });
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-  assert.ok(await position(touch) > 120); assert.equal(await touch.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'true');
+  assert.ok(await position(touch) > 120);
+  const touchGeometry = await coords(touch), touchStep = touchGeometry.max / Math.ceil(touchGeometry.max / (touchGeometry.width * 0.45));
+  assert.ok(Math.abs(await position(touch) / touchStep - Math.round(await position(touch) / touchStep)) < 0.001, 'Touch release snaps to a camera stop');
+  assert.equal(await touch.locator('[data-campus-hint]').getAttribute('data-dismissed'), 'true');
   touchBox = await viewport(touch).boundingBox(); tx = touchBox.x + 160; ty = touchBox.y + touchBox.height * 0.8;
   const touchY = await touch.evaluate(() => window.scrollY), touchLeft = await position(touch);
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: tx, y: ty }] });

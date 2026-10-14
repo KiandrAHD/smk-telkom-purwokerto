@@ -39,7 +39,7 @@ try {
     if (language === 'en') await page.getByRole('button', { name: 'Switch to English', exact: true }).click();
     for (const width of [1920, 1440, 1024, 768, 375, 320]) {
       await page.setViewportSize({ width, height: 1000 });
-      await page.locator('.spmb-page .hero-image').waitFor();
+      await page.locator('.spmb-page [data-hero-slide][data-active="true"] .hero-image').waitFor();
       for (const section of await page.locator('.spmb-page .reveal').all()) { await section.scrollIntoViewIfNeeded(); }
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await page.waitForFunction(() => window.scrollY < 2);
       await page.waitForFunction(() => [...document.images].filter(img => img.getBoundingClientRect().height > 0).every(img => img.complete && img.naturalWidth > 0));
@@ -56,9 +56,9 @@ try {
   await page.setViewportSize({ width: 1440, height: 1000 });
   // Capture related rectangles in one frame; scroll restoration can move the page between calls.
   const measureHero = () => page.evaluate(() => { const hero = document.querySelector('.hero-panel').getBoundingClientRect(), qac = document.querySelector('[data-quick-access]').getBoundingClientRect(); return { height: hero.height, width: hero.width, qacHeight: qac.height, overlap: qac.top - hero.bottom }; });
-  await page.goto(base + '/'); await page.locator('.hero-panel').waitFor();
+  await page.goto(base + '/'); await page.locator('[data-hero-slide][data-active="true"] .hero-panel').waitFor();
   const home = await measureHero();
-  await page.goto(base + '/spmb'); await page.locator('.hero-panel').waitFor();
+  await page.goto(base + '/spmb'); await page.locator('[data-hero-slide][data-active="true"] .hero-panel').waitFor();
   const spmb = await measureHero();
   assert.deepEqual(home, spmb); results.push({ baseline: 'Beranda', spmb });
   await page.getByRole('button', { name: /Information|Informasi/, exact: true }).click(); await page.getByRole('link', { name: 'SPMB', exact: true }).first().click(); await page.waitForURL(base + '/spmb');

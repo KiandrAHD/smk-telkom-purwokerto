@@ -32,7 +32,7 @@ export const landingHeroSlides = [
   },
   {
     id: 'profil', name: 'Profil Sekolah',
-    content: { title: 'Profil Sekolah', titleAccent: 'SMK Telkom Purwokerto', description: heroData.description, primaryCta: { label: 'Lihat Profil Sekolah', href: '/profil-sekolah' }, secondaryCta: ctaMasukPpdb },
+    content: { title: 'Profil Sekolah', titleAccent: '', description: heroData.description, primaryCta: { label: 'Lihat Profil Sekolah', href: '/profil-sekolah' }, secondaryCta: ctaMasukPpdb },
     media: { src: heroData.image, srcEn: profileEnglish, width: 1600, height: 751, composition: 'school', alt: 'Gedung SMK Telkom Purwokerto' },
   },
 ];

@@ -82,7 +82,7 @@ export default function SpmbPage() {
   const empty = <p role="status" className="py-6 text-center text-xs leading-relaxed text-dark-500">{t('Informasi belum dipublikasikan.')}</p>;
   const formatDate = value => value ? new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value)) : t('Belum diumumkan');
   return <MainLayout className="spmb-page" ctaHref="/spmb/daftar">
-    <HeroSection content={content} links={admissionLinks} breadcrumb={{ current: 'SPMB', parent: 'Informasi', parentTo: null }} media={{ src: hero, srcSet: `${hero640} 640w, ${hero960} 960w, ${hero} 1248w`, width: 1248, height: 676, className: 'spmb-hero-image', composition: 'admissions' }} />
+    <HeroSection page="spmb" content={content} links={admissionLinks} breadcrumb={{ current: 'SPMB', parent: 'Informasi', parentTo: null }} media={{ src: hero, srcSet: `${hero640} 640w, ${hero960} 960w, ${hero} 1248w`, width: 1248, height: 676, className: 'spmb-hero-image', composition: 'admissions' }} />
     <RibbonDivider animated />
     <div className="spmb-container"><PublicDataState loading={loading} error={error ? t('Informasi pendaftaran belum tersedia. Silakan coba lagi nanti.') : ''} onRetry={() => refresh()} label={t('informasi SPMB')} /></div>
     <RegistrationInfo schedule={schedule} />

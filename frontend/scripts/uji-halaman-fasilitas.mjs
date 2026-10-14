@@ -103,7 +103,7 @@ try {
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(500);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0, `${width} ${language}: overflow`);
-      assert.ok(await page.locator('[aria-labelledby="fasilitas-hero-title"] > .hero-panel').evaluate(el => el.getBoundingClientRect().width <= 1280), 'Hero mengikuti lebar konten situs.');
+      assert.ok(await page.locator('[aria-labelledby="fasilitas-hero-title"] [data-hero-slide][data-active="true"] > .hero-panel').evaluate(el => el.getBoundingClientRect().width <= 1280), 'Hero mengikuti lebar konten situs.');
       assert.equal(await page.locator('#main-content').evaluate(el => getComputedStyle(el).zoom), '1');
       assert.equal(await page.locator('main img').evaluateAll(images => images.every(img => img.naturalWidth > 0)), true);
       const titleAlignment = await page.locator('#fasilitas-title').evaluate(el => {

@@ -117,7 +117,7 @@
 .hero-panel--facilities .hero-background { aspect-ratio: 1144 / 679; }
 .hero-panel--facilities .hero-copy { width: auto; }
 .hero-panel--facilities .hero-background > img { mask-image: url('../assets/fasilitas/hero-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
-.hero-panel--facilities + .hero-floating--quick .quick-access-cta { min-height: 2.75rem; }
+[data-facilities-quick-access] .quick-access-cta { min-height: 2.75rem; }
 
 @media (min-width: 64rem) {
   .hero-panel--bleed { padding: 0; }

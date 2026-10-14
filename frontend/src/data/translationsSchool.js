@@ -1,4 +1,12 @@
 export default {
+  'School Tour': 'School Tour',
+  'Jelajahi Sekarang': 'Explore Now',
+  'Lihat Kegiatan': 'View Activities',
+  'GLOBAL TECHNOPRENEUR': 'GLOBAL TECHNOPRENEUR',
+  'Karya Siswa': 'Student Work',
+  'Lihat Video': 'Watch Video',
+  'Peta sekolah': 'School map',
+  'Pengumuman sekolah': 'School announcements',
   'Sorotan sekolah': 'School highlights',
   'Slide': 'slide',
   'Gunakan tombol panah kiri atau kanan untuk mengganti sorotan sekolah.': 'Use the left or right arrow keys to change the school highlight.',

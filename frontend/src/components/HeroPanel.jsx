@@ -24,19 +24,19 @@ export default function HeroPanel({ content, media, breadcrumb, carousel = false
         {breadcrumb && <HeroBreadcrumb {...breadcrumb} />}
         <HeroBadges tags={content.hashtags} />
         <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
-          {t(content.title)}<br /><span className="text-primary">{t(content.titleAccent)}</span>
+          {t(content.title)}{content.titleAccent && <><br /><span className="whitespace-pre-line text-primary">{t(content.titleAccent)}</span></>}
         </h1>
         <p className="mt-4 max-w-md text-xs sm:text-sm leading-relaxed text-dark-500">{t(content.description)}</p>
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <Link to={content.primaryCta.href} className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
             {t(content.primaryCta.label)}<ArrowRight aria-hidden="true" className="w-4 h-4" />
           </Link>
-          <Link to={content.secondaryCta.href} className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
+          {content.secondaryCta && <Link to={content.secondaryCta.href} className="inline-flex items-center gap-2 rounded-full border border-dark-200 bg-white px-6 py-3 text-sm font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
             {t(content.secondaryCta.label)}<ArrowRight aria-hidden="true" className="w-4 h-4" />
-          </Link>
+          </Link>}
         </div>
       </div>
-      {carousel ? <div className="hero-media relative">
+      {carousel ? <div className={`hero-media relative ${media?.photo ? 'hero-media--photo' : ''}`}>
         {language === 'en' && media?.srcEn ? <div className="hero-carousel-profile-crop">{artwork}</div> : artwork}
         {media?.logo && <span aria-hidden="true" className="absolute left-[57%] top-[34.61%] aspect-[107/105] w-[9.35%] overflow-hidden rounded-[14%] bg-white">
           <span className="absolute inset-x-[14.95%] bottom-[10.48%] top-[11.43%] overflow-hidden"><img src={media.logo} alt="" className="absolute left-[-0.18%] top-0 h-full w-[346.21%] max-w-none" /></span>
