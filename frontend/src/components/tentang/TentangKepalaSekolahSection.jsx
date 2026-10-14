@@ -24,7 +24,7 @@ const TentangKepalaSekolahSection = () => {
   // Ketika viewport membesar, halaman terakhir tetap dibatasi ke rentang yang ada.
   const currentPage = Math.min(page, pages - 1);
   const shown = guruData.slice(currentPage * perPage, currentPage * perPage + perPage);
-  const { viewport: viewportRef, goTo: slideTo } = useSlidingPage(`${currentPage}-${perPage}`);
+  const { viewport: viewportRef, indicators, goTo: slideTo } = useSlidingPage(`${currentPage}-${perPage}`);
   const goToPage = next => slideTo(Math.max(0, Math.min(next, pages - 1)), currentPage, setPage);
 
   return (
@@ -99,15 +99,16 @@ const TentangKepalaSekolahSection = () => {
               aria-label={t('Guru sebelumnya')}
               className="mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-dark-200 bg-white text-primary transition-colors hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             ><ChevronLeft className="h-5 w-5" aria-hidden="true" /></button>
-            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-2 sm:flex-none">
+            <div ref={indicators} className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-2 sm:flex-none">
             {Array.from({ length: pages }).map((_, i) => (
               <button
                 key={i}
                 type="button"
+                data-slide-indicator
                 onClick={() => goToPage(i)}
                 aria-label={t('Halaman guru {number}', { number: i + 1 })}
                 aria-current={i === currentPage}
-                className={`relative h-2 rounded-full transition-all before:absolute before:-inset-2 before:content-[''] ${
+                className={`relative h-2 rounded-full transition-none before:absolute before:-inset-2 before:content-[''] ${
                   i === currentPage ? 'w-5 bg-primary' : 'w-2 bg-dark-200 hover:bg-dark-300'
                 }`}
               />

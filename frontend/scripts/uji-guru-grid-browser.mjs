@@ -114,13 +114,13 @@ try {
   await nav().locator('[data-teacher-pill]').evaluate(el => { window.teacherPill = el; });
   await nav().locator(':scope > div > button').nth(1).click();
   const samples = await nav().locator('[data-teacher-pill]').evaluate(el => new Promise(resolve => {
-    const positions = [], start = performance.now(); const sample = now => { positions.push(new window.DOMMatrixReadOnly(getComputedStyle(el).transform).m41); if (now - start < 380) requestAnimationFrame(sample); else resolve(positions); }; requestAnimationFrame(sample);
+    const positions = [], start = performance.now(); const sample = now => { positions.push(new window.DOMMatrixReadOnly(getComputedStyle(el).transform).m41); if (now - start < 600) requestAnimationFrame(sample); else resolve(positions); }; requestAnimationFrame(sample);
   }));
   assert.ok(samples.some(x => x > 0 && x < 32)); assert.ok(Math.abs(samples.at(-1) - 32) < 0.1); assert.ok(samples.every((x, index) => index === 0 || x >= samples[index - 1] - 0.1));
   assert.equal(await nav().locator('[data-teacher-pill]').evaluate(el => window.teacherPill === el), true);
-  assert.equal(await nav().locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionDuration), '0.3s');
+  assert.equal(await nav().locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionProperty), 'none');
   await page.emulateMedia({ reducedMotion: 'reduce' }); assert.ok(parseFloat(await nav().locator('[data-teacher-pill]').evaluate(el => getComputedStyle(el).transitionDuration)) <= 0.001);
   results.push({ resize: 'passed', keyboard: 'passed', motion: 'passed', transformSamples: samples, reducedMotion: 'passed', runtimeErrors: errors });
-  assert.deepEqual(errors, []); console.log('PASS resize, shared pill interpolation, 300ms easing, reduced motion, no runtime errors');
+  assert.deepEqual(errors, []); console.log('PASS resize, shared pill interpolation, 500ms shared timeline, reduced motion, no runtime errors');
 } catch (error) { console.error('Runtime errors:', errors, 'Body:', (await page.locator('body').innerText()).slice(0, 500)); throw error; }
 finally { await writeFile(join(output, 'results.json'), JSON.stringify(results, null, 2)); await browser.close(); await server.close(); }

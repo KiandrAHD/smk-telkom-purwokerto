@@ -10,7 +10,7 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const errors = [], results = [], contexts = [];
 const hintKey = 'smk-campus-drag-understood-v1';
-const expected = { 'gedung-d-1': 'kelas-d', 'gedung-d-2': 'kelas-d', parkiran: 'parkiran', 'gedung-c': 'kelas-c', 'gedung-b': 'kelas-b', 'rps-selatan': 'rps-selatan', 'rps-utara': 'rps-utara', 'lapangan-apel': 'lapangan-apel', 'gedung-a': 'kelas-a', dlg: 'dlg', perpustakaan: 'perpustakaan', aula: 'aula' };
+const expected = { 'gedung-d-1': 'gor', 'gedung-d-2': 'gor', parkiran: 'parkiran', 'gedung-c': 'kelas-c', 'gedung-b': 'kelas-b', 'rps-selatan': 'rps-selatan', 'rps-utara': 'rps-utara', 'lapangan-apel': 'lapangan-apel', 'gedung-a': 'kelas-a', dlg: 'dlg', perpustakaan: 'perpustakaan', aula: 'aula' };
 async function create(options = {}) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1100 }, reducedMotion: 'reduce', ...options }); contexts.push(context);
   context.on('page', page => page.on('pageerror', error => errors.push(error.message)));
@@ -78,7 +78,7 @@ try {
   assert.equal(await page.locator('[data-campus-hint]').isVisible(), false, 'Learned hint stays hidden after refresh');
   await point(page, 'gedung-d-1').focus();
   await drag(page, -120, 0, point(page, 'gedung-d-1')); assert.equal(await page.locator('[data-campus-preview]').count(), 0, 'Drag starting on a pin must not click it');
-  await point(page, 'gedung-d-2').click(); await page.locator('[data-campus-preview="kelas-d"]').waitFor();
+  await point(page, 'gedung-d-2').click(); await page.locator('[data-campus-preview="gor"]').waitFor();
   await page.keyboard.press('Escape'); await page.locator('[data-campus-preview]').waitFor({ state: 'hidden' });
   for (const [id, facility] of Object.entries(expected)) {
     const pin = point(page, id); await pin.focus(); await page.keyboard.press('Enter');

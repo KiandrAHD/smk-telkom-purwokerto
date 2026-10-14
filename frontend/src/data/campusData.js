@@ -22,7 +22,7 @@ export const campusFacilities = {
   'kelas-a': { content: existing('kelas-a'), rooms: classroomGroup('kelas-a'), location: 'Gedung A', list: { category: 'Kelas', group: 'kelas-a' } },
   'kelas-b': { content: existing('kelas-b'), rooms: classroomGroup('kelas-b'), location: 'Gedung B', list: { category: 'Kelas', group: 'kelas-b' } },
   'kelas-c': { content: existing('kelas-c'), rooms: classroomGroup('kelas-c'), location: 'Gedung C', list: { category: 'Kelas', group: 'kelas-c' } },
-  'kelas-d': { content: existing('kelas-d'), rooms: classroomGroup('kelas-d'), location: 'Gedung D', list: { category: 'Kelas', group: 'kelas-d' } },
+  gor: { content: knownPlace('gor', 'GOR', 'Gedung Olahraga'), location: 'GOR', list: { category: 'GOR', group: 'gor' } },
   perpustakaan: { content: existing('perpustakaan'), list: { category: 'Perpustakaan', group: 'perpustakaan' } },
   'rps-selatan': { content: knownPlace('rps-selatan', 'RPS Selatan', 'Ruang Praktik Siswa'), list: { category: 'Laboratorium', group: 'lab', item: 'lab-6' } },
   'rps-utara': { content: knownPlace('rps-utara', 'RPS Utara', 'Ruang Praktik Siswa'), list: { category: 'Laboratorium', group: 'lab', item: 'lab-5' } },
@@ -34,8 +34,8 @@ export const campusFacilities = {
 
 // Pin tips normalized against the Figma image, not the page viewport. Static classes keep Tailwind aware of coordinates.
 export const campusHotspots = [
-  { id: 'gedung-d-1', facilityId: 'kelas-d', label: 'Gedung D', node: '205:1108', x: 0.13461, y: 0.43102, position: 'left-[13.461%] top-[43.102%]' },
-  { id: 'gedung-d-2', facilityId: 'kelas-d', label: 'Gedung D', node: '205:1114', x: 0.21704, y: 0.41199, position: 'left-[21.704%] top-[41.199%]' },
+  { id: 'gedung-d-1', facilityId: 'gor', label: 'GOR', node: '205:1108', x: 0.13461, y: 0.43102, position: 'left-[13.461%] top-[43.102%]' },
+  { id: 'gedung-d-2', facilityId: 'gor', label: 'GOR', node: '205:1114', x: 0.21704, y: 0.41199, position: 'left-[21.704%] top-[41.199%]' },
   { id: 'parkiran', facilityId: 'parkiran', label: 'Parkiran', node: '205:1107', x: 0.16357, y: 0.49382, position: 'left-[16.357%] top-[49.382%]' },
   { id: 'gedung-c', facilityId: 'kelas-c', label: 'Gedung C', node: '205:1136', x: 0.25714, y: 0.34158, position: 'left-[25.714%] top-[34.158%]' },
   { id: 'gedung-b', facilityId: 'kelas-b', label: 'Gedung B', node: '205:1109', x: 0.33148, y: 0.36061, position: 'left-[33.148%] top-[36.061%]' },
@@ -63,7 +63,8 @@ export const campusAnnotations = {
   aula: { line: lineAula, classes: '[--label-x:0] [--label-gap:78] [--line-gap:37]' },
 };
 export function campusIdForCard(item) {
-  const building = item.name?.match(/^Kelas ([ABCD]) /)?.[1];
+  if (item.id?.startsWith('gor-')) return 'gor';
+  const building = item.name?.match(/^Kelas ([ABC]) /)?.[1];
   if (building) return `kelas-${building.toLowerCase()}`;
   return ({ 'RPS. Utara': 'rps-utara', 'RPS. Selatan': 'rps-selatan' })[item.name] || null;
 }

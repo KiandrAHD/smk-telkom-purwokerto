@@ -30,7 +30,7 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
   const pageCount = Math.max(1, Math.ceil(teachers.length / pageSize));
   const page = Math.min(pagination.page, pageCount - 1);
   const shown = teachers.slice(page * pageSize, (page + 1) * pageSize);
-  const { viewport: viewportRef, goTo: slideTo } = useSlidingPage(`${page}-${pageSize}`);
+  const { viewport: viewportRef, indicators, goTo: slideTo } = useSlidingPage(`${page}-${pageSize}`);
   const indicatorCount = Math.min(pageSize === 2 ? 5 : 10, pageCount);
   // On mobile, advance the dot window gradually rather than resetting batches of four.
   const indicatorStart = Math.min(Math.max(page - Math.floor(indicatorCount / 2), 0), pageCount - indicatorCount);
@@ -97,10 +97,10 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
           {pageCount > 1 && (
             <nav data-teacher-pagination aria-label={t('Navigasi {category}', { category: t(title) })} className="mt-6 flex items-center justify-center gap-3 sm:mt-8">
               <button type="button" disabled={page === 0} onClick={() => goToPage(page - 1)} aria-controls={`${id}-grid`} aria-label={t('Halaman {category} sebelumnya', { category: t(title) })} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
-                <ChevronLeft size={22} />
+                <ChevronLeft size={22} className="block shrink-0" aria-hidden="true" />
               </button>
-              <div className="relative flex shrink-0 items-center">
-                <span data-teacher-pill aria-hidden="true" className="pointer-events-none absolute left-1 top-1/2 z-10 h-3 w-6 rounded-full bg-primary transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none" style={{ transform: `translate3d(${(page - indicatorStart) * 32}px, -50%, 0)` }} />
+              <div ref={indicators} className="relative flex shrink-0 items-center">
+                <span data-teacher-pill data-slide-indicator aria-hidden="true" className="pointer-events-none absolute left-1 top-1/2 z-10 h-3 w-6 rounded-full bg-primary transition-none" style={{ transform: `translate3d(${(page - indicatorStart) * 32}px, -50%, 0)` }} />
                 {Array.from({ length: indicatorCount }, (_, offset) => indicatorStart + offset).map((index) => (
                   <button key={index} type="button" onClick={() => goToPage(index)} aria-controls={`${id}-grid`} aria-label={t('Lihat halaman {category} {number}', { category: t(title), number: index + 1 })} aria-current={page === index ? 'page' : undefined} className="grid h-8 w-8 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                     <span aria-hidden="true" className="h-3 w-3 rounded-full bg-primary/40" />
@@ -108,7 +108,7 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
                 ))}
               </div>
               <button type="button" disabled={page === pageCount - 1} onClick={() => goToPage(page + 1)} aria-controls={`${id}-grid`} aria-label={t('Halaman {category} berikutnya', { category: t(title) })} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-primary-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
-                <ChevronRight size={22} />
+                <ChevronRight size={22} className="block shrink-0" aria-hidden="true" />
               </button>
             </nav>
           )}

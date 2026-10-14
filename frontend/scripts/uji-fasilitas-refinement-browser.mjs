@@ -86,7 +86,7 @@ try {
   await page.waitForTimeout(350);
   assert.equal(await card().getAttribute('data-campus-preview'), 'kelas-c', 'An old close timer cannot hide a newly selected hotspot.');
   assert.equal(await page.locator('#campus-preview-title').count(), 1);
-  for (const [id, building] of [['gedung-a','A'],['gedung-b','B'],['gedung-c','C'],['gedung-d-1','D']]) {
+  for (const [id, building] of [['gedung-a','A'],['gedung-b','B'],['gedung-c','C']]) {
     await openHotspot(id);
     const select = currentContent().getByLabel('Pilih ruang kelas');
     const options = await select.locator('option').evaluateAll(nodes => nodes.map(node => ({ id: node.value, name: node.textContent })));
@@ -99,7 +99,13 @@ try {
       results.rooms.push({ name: option.name, photos: manifest[option.name]?.length || 0 });
     }
   }
-  assert.equal(results.rooms.filter(room => room.photos > 0).length, 13);
+  assert.equal(results.rooms.filter(room => room.photos > 0).length, 10);
+  for (const id of ['gedung-d-1', 'gedung-d-2']) {
+    await openHotspot(id);
+    assert.equal(await card().getAttribute('data-campus-preview'), 'gor');
+    assert.equal(await currentContent().locator('select').count(), 0);
+    assert.match(await currentContent().innerText(), /GOR/);
+  }
   assert.ok(manifest['Kelas C 2.2'].every(photo => photo.source.endsWith('.jpeg')));
   await openHotspot('perpustakaan');
   assert.equal(await currentContent().getByRole('button', { name: /Foto fasilitas (sebelumnya|berikutnya)/ }).count(), 0);
@@ -186,20 +192,20 @@ try {
   const seen = [];
   for (let index=0;index<4;index++) {
     await page.locator('#guru [data-sliding-page] img').evaluateAll(nodes => Promise.all(nodes.map(node => node.decode())));
-    const teachers = await page.locator('#guru [data-sliding-page] article').evaluateAll(nodes => nodes.map(node => ({ name:node.querySelector('h3').textContent.trim(), image:node.querySelector('img').src })));
+    const teachers = await page.locator('#guru [data-sliding-page] article').evaluateAll(nodes => nodes.map(node => ({ name:node.querySelector('h3').textContent.trim(), image:node.querySelector('img').src, naturalWidth:node.querySelector('img').naturalWidth })));
     seen.push(...teachers);
     if(index<3){await page.getByRole('button',{name:'Guru berikutnya',exact:true}).click();await page.waitForFunction(() => !document.querySelector('#guru [data-motion-outgoing]'));}
   }
   assert.equal(seen.length,13);
   assert.equal(new Set(seen.map(teacher=>teacher.name)).size,13);
-  assert.equal(seen.filter(teacher=>teacher.image.endsWith('.webp')).length,9);
+  assert.ok(seen.every(teacher => teacher.naturalWidth > 0), 'Every teacher photo must load');
   assert.match(seen[12].name,/Reza Aditya/);
   results.teachers = seen;
   await page.getByRole('button',{name:'Guru sebelumnya',exact:true}).click();await page.waitForTimeout(650);
   await page.locator('#guru').screenshot({path:`${output}/teachers-after.png`});
   assert.deepEqual(errors,[]);assert.deepEqual(failedAssets,[]);
   await writeFile(`${output}/refinement-results.json`,JSON.stringify({ ...results,errors,failedAssets },null,2));
-  console.log(JSON.stringify({ rooms:results.rooms.length,verifiedRooms:13,responsiveCases:results.responsive.length,teachers:seen.length,swipe:'pass',errors,failedAssets },null,2));
+  console.log(JSON.stringify({ rooms:results.rooms.length,verifiedRooms:10,responsiveCases:results.responsive.length,teachers:seen.length,swipe:'pass',errors,failedAssets },null,2));
 } finally {
   await browser.close();
 }
