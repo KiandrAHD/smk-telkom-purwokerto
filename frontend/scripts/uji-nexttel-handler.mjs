@@ -11,8 +11,9 @@ const env = {
 const originalFetch = globalThis.fetch;
 let scenario = 'valid';
 let calls = [];
+let quotaCalls = 0;
 globalThis.fetch = async (url) => {
-  if (String(url) === 'https://quota.test.invalid/rest/v1/rpc/reserve_ai_attempt') return Response.json(true);
+  if (String(url) === 'https://quota.test.invalid/rest/v1/rpc/reserve_ai_attempt') { quotaCalls += 1; return Response.json(true); }
   const u = String(url); calls.push(u);
   assert.ok(u.startsWith('https://generativelanguage.googleapis.com/') || u.startsWith('https://api.groq.com/'), 'Unmocked network request');
   if (scenario === 'http') return new Response('Unavailable', { status: 503 });
@@ -31,6 +32,14 @@ try {
     if (mode === 'second') assert.ok(calls.some(url => url.includes('groq')), 'Malformed first provider must allow the next configured provider');
   }
   const before = calls.length;
+  const ambiguousAnswers = answers.map(question => ({ ...question, optionId: 'e', text: 'Saya suka musik dan membaca buku.' }));
+  const quotaBeforeAmbiguous = quotaCalls;
+  const ambiguous = await handler(request('nexttel', { answers: ambiguousAnswers, language: 'id' }));
+  assert.equal(ambiguous.status, 200);
+  const ambiguousBody = await ambiguous.json();
+  assert.match(ambiguousBody.explanation, /belum bisa disimpulkan/i);
+  assert.equal(calls.length, before, 'Ambiguous result must not call a provider');
+  assert.equal(quotaCalls, quotaBeforeAmbiguous, 'Ambiguous result must not reserve quota');
   const invalid = await handler(request('nexttel', { answers: [], language: 'id' }));
   assert.equal(invalid.status, 400);
   assert.equal(calls.length, before, 'Invalid user answers must never call a provider');

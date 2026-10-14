@@ -26,5 +26,7 @@ assert.equal(hitungHasilNextTel(free('Saya ingin belajar fiber optik dan telekom
 assert.equal(hitungHasilNextTel(free('Saya suka musik dan membaca buku.')).topRecommendation, null);
 assert.equal(hitungHasilNextTel(free('   ')), null);
 assert.equal(hitungHasilNextTel(free('x'.repeat(241))), null);
-assert.equal(hitungHasilNextTel(free('software dan jaringan komputer')).topRecommendation, null);
+const ambiguous = hitungHasilNextTel(free('software dan jaringan komputer'));
+assert.equal(ambiguous.topRecommendation, null);
+assert.deepEqual(ambiguous.ranking, [['RPL', 16], ['TKJ', 16], ['PG', 0], ['TJAT', 0]]);
 console.log('NextTel: penilaian dan validasi jawaban lulus.');

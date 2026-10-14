@@ -72,6 +72,7 @@ export function hitungHasilNextTel(answers) {
       for (const major of MAJOR_ORDER) scores[major] += classified.scores[major];
     }
   }
+  /** @type {Array<[string, number]>} */
   const ranking = [...MAJOR_ORDER].sort((a, b) => scores[b] - scores[a] || MAJOR_ORDER.indexOf(a) - MAJOR_ORDER.indexOf(b)).map((major) => [major, scores[major]]);
   const highest = ranking[0][1];
   const tied = ranking.filter(([, score]) => score === highest).length > 1;

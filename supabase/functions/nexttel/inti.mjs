@@ -81,11 +81,13 @@ export const deterministicFallback = (topRecommendation, language = 'id')=>{
 
 // Provider/model errors belong to this boundary, never to request validation.
 /**
- * @param {{hasil: {topRecommendation: string, answers?: unknown, scores?: unknown, ranking?: unknown},
+ * @param {{hasil: {topRecommendation: string | null, answers?: unknown, scores?: unknown, ranking?: Array<[string, number]>},
  * language?: string, daftarPenyedia?: import('../stela/inti.mjs').KandidatPenyedia[],
  * sebelumPanggilan?: (options: {signal: AbortSignal}) => void | Promise<void>, signal?: AbortSignal}} options
  */
 export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenyedia = [], sebelumPanggilan, signal }) => {
+  if (!hasil.topRecommendation) return deterministicFallback(null, language);
+
   const batasPanggilan = buatBatasPanggilan();
   let kuotaDicadangkan = false;
   const reservasiSekaliPerPermintaan = async ({ signal: reservationSignal }) => {
