@@ -4,7 +4,7 @@ Referensi: frame FASILITAS SEKOLAH NEW (242:499), page Telkom remake again, file
 
 Perubahan:
 - Katalog Semua memiliki 24 kartu dalam urutan Laboratorium, Ruang Kelas, Perpustakaan, Aula, GOR, Parkiran.
-- Judul tengah, filter pill merah/putih, ukuran filter, spacing, tipografi Poppins/Plus Jakarta Sans, radius 20 px, dan panel kartu yang bertumpuk mengikuti frame.
+- Judul tengah, filter pill merah/putih, ukuran filter, spacing, radius 20 px, dan panel kartu yang bertumpuk mengikuti frame. Tipografi mengikuti aturan web: Poppins untuk heading, Inter untuk isi dan kontrol.
 - Filter Kelas tetap memiliki empat kelompok gedung. C 2.3 menjadi C 2.1; C 3.3 menjadi C 3.1.
 - Label peta yang ditandai menjadi Gedung D dan membuka kelas gedung D. Foto RPS Selatan/Utara tersedia di detail peta dan filter Laboratorium.
 - Foto kartu memakai cover; modal memakai rasio 4:3 untuk mempertahankan komposisi asli. Galeri tetap mendukung thumbnail, Escape, dan pengembalian fokus.
@@ -45,5 +45,20 @@ Perintah Git khusus perbaikan galeri peta (belum dijalankan):
 Set-Location 'D:\LombaTelkom\smk-telkom-purwokerto'
 git add -- frontend/src/data/campusData.js frontend/src/data/campusFieldPhotos.js frontend/src/assets/fasilitas/dokumentasi frontend/docs/campus-field-photo-sources.json frontend/docs/fasilitas-layout.md frontend/scripts/uji-fasilitas-layout.mjs frontend/scripts/uji-campus-photos-browser.mjs frontend/scripts/uji-campus-explorer.mjs frontend/scripts/uji-campus-explorer-browser.mjs
 git commit -m "Lengkapi foto galeri pada semua titik peta fasilitas"
+git push origin feat/fasilitas-sekolah
+```
+
+Penyelarasan font fasilitas:
+- Font khusus Facility Jakarta dihapus. Kartu, filter, dan tombol kini memakai token global font-sans/font-heading.
+- Judul kartu memakai Poppins 16 px/700; deskripsi Inter 12 px/400; tombol Inter 12 px/600, sesuai DepartmentCard. Heading kelompok memakai 20/24 px; heading utama section 24/30 px. Jarak huruf khusus dari Figma dihapus.
+- Hero, akses cepat, peta, label, modal, dan pilihan kelas diperiksa melalui computed styles dan font glyph yang benar-benar dirender di Chrome. Empat skenario 1440/390 px × ID/EN, masing-masing 17 peran teks, lolos tanpa overflow atau runtime error.
+- Lint, build produksi, dan git diff --check lolos. Bukti font: D:/LombaTelkom/qa-output/fasilitas-fonts-2026-10-14/results.json.
+
+Perintah Git khusus font (belum dijalankan):
+
+```powershell
+Set-Location 'D:\LombaTelkom\smk-telkom-purwokerto'
+git add -- frontend/src/pages/FasilitasPage.jsx frontend/src/pages/FasilitasPage.css frontend/scripts/uji-fasilitas-design.mjs frontend/docs/fasilitas-layout.md
+git commit -m "Selaraskan tipografi fasilitas dengan aturan font website"
 git push origin feat/fasilitas-sekolah
 ```

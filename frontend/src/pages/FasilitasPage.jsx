@@ -27,7 +27,6 @@ import sparkIcon from '../assets/fasilitas/quick-spark.svg';
 import sparkDot from '../assets/fasilitas/quick-dot.svg';
 import quickArrow from '../assets/fasilitas/quick-arrow.svg';
 import accent from '../assets/fasilitas/page-accent.png';
-import './FasilitasPage.css';
 
 const facilityQuickLinks = [
   { title: 'Ruang Kelas', desc: 'Ruang kelas nyaman berbasis teknologi', linkLabel: 'Lihat Sekarang', href: '/fasilitas?kategori=Kelas#daftar-fasilitas', image: classroomIcon },
@@ -47,7 +46,7 @@ const filterWidths = {
 
 function GroupTitle({ title, t }) {
   const [first, ...rest] = t(title).split(' ');
-  return <h3 className="font-heading text-2xl font-semibold leading-normal tracking-[0.05em] text-black lg:text-[clamp(1.5rem,2.17vw,2.5rem)]"><span className="text-[#cd0b20]">{first}</span> {rest.join(' ')}</h3>;
+  return <h3 className="font-heading text-xl font-bold leading-tight text-black sm:text-2xl"><span className="text-[#cd0b20]">{first}</span> {rest.join(' ')}</h3>;
 }
 
 function FacilityPhotos({ item, t }) {
@@ -186,26 +185,26 @@ export default function FasilitasPage() {
             {[0, 1, 2, 3].map(index => <img key={index} src={accent} alt="" width="39" height="564" className="block h-auto w-full" />)}
           </div>)}
           <div className="mx-auto max-w-[1644px] px-4 sm:px-6 lg:px-10">
-            <h2 id="fasilitas-title" className="mx-auto flex w-fit max-w-full items-center justify-center gap-2 font-heading text-2xl font-bold leading-normal tracking-[0.05em] text-black sm:gap-3 sm:text-3xl lg:text-[clamp(1.875rem,2.6vw,3rem)]">
+            <h2 id="fasilitas-title" className="mx-auto flex w-fit max-w-full items-center justify-center gap-2 font-heading text-2xl font-bold leading-tight text-black sm:gap-3 sm:text-3xl">
               <img src={headingIcon} alt="" aria-hidden="true" className="size-12 shrink-0 sm:size-16 lg:size-[clamp(4rem,5.52vw,6.375rem)]" />
               <span className="relative"><span className="text-[#cd091d]">{titleStart}</span> {titleEnd.join(' ')}<img src={headingUnderline} alt="" aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px w-full" /></span>
             </h2>
             <div className="mt-7 flex flex-wrap gap-3 lg:mt-10 lg:gap-[clamp(0.75rem,1.25vw,1.4375rem)]" role="group" aria-label={t('Filter fasilitas')}>
-              {categories.map(name => <button key={name} type="button" aria-pressed={category === name} aria-controls="fasilitas-grid" onClick={() => selectCategory(name)} className={`min-h-11 min-w-24 rounded-full px-5 py-2.5 font-heading text-sm font-semibold tracking-[0.05em] shadow-[inset_0_0_4px_0_#cd0b20] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:min-h-[clamp(2.75rem,3.47vw,4rem)] ${filterWidths[name]} lg:px-[clamp(1rem,1.19vw,1.375rem)] lg:text-[clamp(0.875rem,1.3vw,1.5rem)] ${category === name ? 'bg-[#cd0b20] text-white hover:bg-primary-800' : 'bg-white text-[#cd0b20] hover:bg-primary-50'}`}>{t(name)}</button>)}
+              {categories.map(name => <button key={name} type="button" aria-pressed={category === name} aria-controls="fasilitas-grid" onClick={() => selectCategory(name)} className={`min-h-11 min-w-24 rounded-full px-5 py-2.5 font-sans text-xs font-semibold shadow-[inset_0_0_4px_0_#cd0b20] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:min-h-[clamp(2.75rem,3.47vw,4rem)] ${filterWidths[name]} lg:px-[clamp(1rem,1.19vw,1.375rem)] ${category === name ? 'bg-[#cd0b20] text-white hover:bg-primary-800' : 'bg-white text-[#cd0b20] hover:bg-primary-50'}`}>{t(name)}</button>)}
             </div>
             <p className="sr-only" role="status">{t('{count} fasilitas dalam kategori {category}', { count, category: t(category) })}</p>
             <div id="fasilitas-grid" className="mt-8 space-y-12 lg:mt-[clamp(2rem,3.3vw,3.8125rem)] lg:space-y-[clamp(3rem,6.6vw,7.625rem)]">
               {groups.map(group => <section key={group.id} id={`fasilitas-${group.id}`} className="scroll-mt-28" aria-label={t(group.title || category)}>
                 {group.title && <GroupTitle title={group.title} t={t} />}
                 <div data-facility-grid className={`${group.title ? 'mt-4 ' : ''}grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-[clamp(1.5rem,2.44vw,2.8125rem)]`}>
-                  {group.items.map(item => <article key={item.id} data-facility-card={item.id} className="group flex h-full min-w-0 flex-col font-['Facility_Jakarta',sans-serif]">
+                  {group.items.map(item => <article key={item.id} data-facility-card={item.id} className="group flex h-full min-w-0 flex-col font-sans">
                     <div className="aspect-video shrink-0 overflow-hidden rounded-[20px] bg-dark-50">
                       <FacilityCardPhoto item={item} t={t} />
                     </div>
                     <div className="relative -mt-4 flex min-w-0 flex-1 flex-col rounded-[20px] bg-[#fffdfd] px-6 pt-5 shadow-[0_0_24px_0_rgba(130,130,130,0.25)] lg:-mt-[clamp(1rem,1.41vw,1.625rem)] lg:px-[clamp(1.25rem,1.4vw,1.625rem)]">
-                      <h4 className="text-xl font-bold leading-snug text-[#cd0b20] lg:text-[clamp(1.25rem,1.73vw,2rem)]">{t(item.name)}</h4>
-                      <p className="mt-1.5 text-xs font-medium leading-relaxed text-black/68">{t(item.preview)}</p>
-                      <button type="button" onClick={() => setSelected(item)} aria-label={t('Selengkapnya tentang {name}', { name: t(item.name) })} className="mt-auto inline-flex min-h-11 items-center gap-2 self-start text-[13px] tracking-[0.08em] text-[#e8232a] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t('Selengkapnya')}<ArrowRight aria-hidden="true" className="size-4" /></button>
+                      <h4 className="font-heading text-base font-bold leading-snug text-[#cd0b20]">{t(item.name)}</h4>
+                      <p className="mt-1.5 text-xs font-normal leading-relaxed text-black/68">{t(item.preview)}</p>
+                      <button type="button" onClick={() => setSelected(item)} aria-label={t('Selengkapnya tentang {name}', { name: t(item.name) })} className="mt-auto inline-flex min-h-11 items-center gap-2 self-start text-xs font-semibold text-[#e8232a] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t('Selengkapnya')}<ArrowRight aria-hidden="true" className="size-4" /></button>
                     </div>
                   </article>)}
                 </div>
