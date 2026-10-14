@@ -19,5 +19,6 @@
       ]
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "trailingSlash": false,
+  "rewrites": [{ "source": "/(.*)", "destination": "/app.html" }]
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { applyPageMetadata } from '../utils/seo';
+import { useParams, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import MainLayout from '../layouts/MainLayout';
 import RibbonDivider from '../components/RibbonDivider';
@@ -12,14 +13,14 @@ import '../styles/jurusan-detail.css';
 
 export default function JurusanDetailPage() {
   const { t } = useLanguage();
+  const { pathname } = useLocation();
   const { slug } = useParams();
   const item = jurusanDetail.find(entry => entry.slug === slug);
   const design = Object.hasOwn(jurusanDetailDesign, slug) ? jurusanDetailDesign[slug] : undefined;
   useEffect(() => {
     if (!item || !design) return;
-    document.title = `${t(item.title)} | SMK Telkom Purwokerto`;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', t(design.description));
-  }, [item, design, t]);
+    applyPageMetadata({ pathname, title: `${t(item.title)} | SMK Telkom Purwokerto`, description: t(design.description), indexable: true });
+  }, [pathname, item, design, t]);
   if (!item || !design) return <ErrorPage />;
   return (
     <MainLayout>

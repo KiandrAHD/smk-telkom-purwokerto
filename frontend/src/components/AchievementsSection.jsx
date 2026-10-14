@@ -7,11 +7,11 @@ import laurelBranch from '../assets/landing/laurel-branch.png';
 import { prestasiData } from '../data/dummyData';
 import { toPrestasiItem } from '../utils/publicContent';
 
-const AchievementsSection = () => {
+const AchievementsSection = ({ initialItems }) => {
   const { t } = useLanguage();
   const sectionRef = useRef(null);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(initialItems || []);
+  const [loading, setLoading] = useState(!initialItems);
   const [requestStarted, setRequestStarted] = useState(false);
   const [error, setError] = useState('');
 

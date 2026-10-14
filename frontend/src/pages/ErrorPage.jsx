@@ -3,6 +3,7 @@ import { ArrowLeft, House, MapPinOff, RefreshCw, ShieldX, WifiOff, TriangleAlert
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import { useLanguage } from '../context/LanguageContext';
+import { applyPageMetadata } from '../utils/seo';
 
 const ERRORS = {
   notFound: { code: '404', title: 'Halaman Tidak Ditemukan', description: 'Halaman yang Anda cari tidak tersedia. Periksa kembali alamat URL atau kembali ke beranda.', icon: MapPinOff },
@@ -22,18 +23,7 @@ export default function ErrorPage({ kind = 'notFound', onRetry }) {
   const heading = `${code ? `${code} — ` : ''}${t(title)}`;
 
   useEffect(() => {
-    document.title = `${heading} | SMK Telkom Purwokerto`;
-    const meta = document.querySelector('meta[name="description"]');
-    const previousDescription = meta?.getAttribute('content');
-    meta?.setAttribute('content', t(description));
-    const robots = document.createElement('meta');
-    robots.name = 'robots';
-    robots.content = 'noindex';
-    document.head.append(robots);
-    return () => {
-      robots.remove();
-      if (previousDescription != null) meta?.setAttribute('content', previousDescription);
-    };
+    applyPageMetadata({ pathname, title: `${heading} | SMK Telkom Purwokerto`, description: t(description), indexable: false });
   }, [heading, description, t, pathname, key]);
 
   return (

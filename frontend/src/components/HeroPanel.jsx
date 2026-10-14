@@ -7,7 +7,8 @@ import hero640 from '../assets/landing/beranda-hero-640.webp';
 import hero960 from '../assets/landing/beranda-hero-960.webp';
 import heroPanel from '../assets/landing/beranda-hero.webp';
 
-export default function HeroPanel({ content, media, breadcrumb, carousel = false, priority = true }) {
+export default function HeroPanel({ content, media, breadcrumb, carousel = false, priority = true, heading = 'h1' }) {
+  const Heading = heading;
   const { t, language } = useLanguage();
   const artwork = <img
     src={language === 'en' && media?.srcEn ? media.srcEn : media?.src || heroPanel}
@@ -23,9 +24,10 @@ export default function HeroPanel({ content, media, breadcrumb, carousel = false
       <div className="hero-copy">
         {breadcrumb && <HeroBreadcrumb {...breadcrumb} />}
         <HeroBadges tags={content.hashtags} />
-        <h1 className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
+        <Heading className="mt-4 font-heading text-3xl sm:text-4xl lg:text-[1.75rem] xl:text-[1.875rem] font-extrabold leading-[1.2] tracking-tight text-dark-900">
           {t(content.title)}{content.titleAccent && <><br /><span className="whitespace-pre-line text-primary">{t(content.titleAccent)}</span></>}
-        </h1>
+          {heading === 'h1' && <span className="sr-only"> — SMK Telkom Purwokerto</span>}
+        </Heading>
         <p className="mt-4 max-w-md text-xs sm:text-sm leading-relaxed text-dark-500">{t(content.description)}</p>
         <div className="mt-7 flex flex-wrap items-center gap-3">
           <Link to={content.primaryCta.href} className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">

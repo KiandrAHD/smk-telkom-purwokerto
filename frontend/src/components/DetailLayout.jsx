@@ -1,5 +1,5 @@
 import { ArrowLeft, CalendarDays, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import Reveal from './Reveal';
 import VideoEmbed from './VideoEmbed';
@@ -7,6 +7,7 @@ import ContentImage from './ContentImage';
 import TeacherPhoto from './TeacherPhoto';
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect } from 'react';
+import { applyPageMetadata } from '../utils/seo';
 import { formatPublicDate } from '../utils/publicContent';
 
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
@@ -14,10 +15,11 @@ import { formatPublicDate } from '../utils/publicContent';
 // slug di halaman detail masing-masing, jadi tidak ada teks yang dipaku di sini.
 // Penekanan yang berbeda tiap kategori dititipkan lewat `children`.
 const DetailLayout = ({ item, backTo, backLabel, children }) => {
+  const { pathname } = useLocation();
   const { t, locale } = useLanguage();
   useEffect(() => {
-    document.title = `${t(item.title)} | SMK Telkom Purwokerto`;
-  }, [item.title, t]);
+    applyPageMetadata({ pathname, title: `${t(item.title)} | SMK Telkom Purwokerto`, description: t(item.lead || item.subtitle || item.title), indexable: true });
+  }, [pathname, item.title, item.lead, item.subtitle, t]);
   return (
   <MainLayout>
     <article className="bg-white py-8 lg:py-12">
