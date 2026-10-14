@@ -19,7 +19,7 @@ try {
     for (const width of [1920, 1440, 1280, 1024, 768, 375, 320]) {
       await page.setViewportSize({ width, height: 1100 });
       await page.goto(base + path);
-      const panel = page.locator('.hero-panel');
+      const panel = page.locator('.hero-carousel-viewport');
       await panel.waitFor();
       await page.evaluate(() => document.fonts.ready);
       await page.evaluate(() => Promise.all(document.querySelector('main').getAnimations().map(animation => animation.finished.catch(() => {}))));
@@ -33,9 +33,9 @@ try {
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
         const geometry = await panel.evaluate(panel => {
           const rect = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; };
-          const p = rect(panel), copy = panel.querySelector('.hero-copy'), bar = document.querySelector('.hero-floating');
+          const active = panel.querySelector('[data-hero-slide][data-active="true"]'), p = rect(panel), copy = active.querySelector('.hero-copy'), bar = document.querySelector('.hero-floating');
           const controls = Array.from(copy.querySelectorAll('a, input'), rect);
-          const media = panel.querySelector('.hero-image, .hero-background, .hero-calendar-art');
+          const media = active.querySelector('.hero-image, .hero-background, .hero-calendar-art');
           return {
             panel: p, media: media ? rect(media) : null,
             radius: getComputedStyle(panel).borderTopLeftRadius, border: getComputedStyle(panel).borderTopWidth,
@@ -49,7 +49,7 @@ try {
             cardContentFits: !bar || Array.from(bar.firstElementChild.children).every(card => Array.from(card.querySelectorAll('p, a')).every(text => rect(text).right <= rect(card).right + 1 && text.scrollWidth <= text.clientWidth + 1)),
             panelOverflow: panel.scrollWidth > panel.clientWidth,
             overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
-            brokenImages: Array.from(panel.querySelectorAll('img')).filter(img => !img.complete || !img.naturalWidth).length,
+            brokenImages: Array.from(active.querySelectorAll('img')).filter(img => !img.complete || !img.naturalWidth).length,
           };
         });
         assert.equal(geometry.panel.width, Math.min(width, 1280) - (width >= 1024 ? 64 : width >= 640 ? 48 : 32), `${path}: container width`);
@@ -78,7 +78,7 @@ try {
     console.log(`PASS ${path}: 14 viewport/language checks`);
   }
   for (const [path, text] of [['/kalender', 'Contoh desain Figma'], ['/prestasi', 'Rekap situs resmi per'], ['/pengumuman', 'Rekap arsip pengumuman']]) {
-    await page.goto(base + path); await page.locator('.hero-panel').waitFor();
+    await page.goto(base + path); await page.locator('.hero-carousel-viewport').waitFor();
     assert.equal(await page.getByText(text, { exact: false }).count(), 0);
   }
   assert.deepEqual(errors, []);

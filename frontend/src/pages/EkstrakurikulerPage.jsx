@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../components/PageHeroCarousel';
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -228,7 +229,7 @@ const EkstrakurikulerPage = () => {
     <MainLayout>
       <section className="school-hero">
         <div className="hero-container">
-          <div className="hero-panel hero-panel--bleed hero-panel--activities">
+          <PageHeroCarousel page="ekstrakurikuler"><div className="hero-panel hero-panel--bleed hero-panel--activities">
             <div className="hero-grid">
             <div className="hero-copy">
               <HeroBreadcrumb current="Ekstrakurikuler" />
@@ -283,7 +284,7 @@ const EkstrakurikulerPage = () => {
               />
             </div>
           </div>
-        </div>
+        </div></PageHeroCarousel>
         </div>
       </section>
 

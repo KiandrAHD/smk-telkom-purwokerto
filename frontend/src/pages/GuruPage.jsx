@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../components/PageHeroCarousel';
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
@@ -124,7 +125,7 @@ function GuruPage() {
     <MainLayout>
       <section className="school-hero">
         <div className="hero-container">
-          <div className="hero-panel hero-grid hero-panel--bleed hero-panel--teachers">
+          <PageHeroCarousel page="guru"><div className="hero-panel hero-grid hero-panel--bleed hero-panel--teachers">
             <div className="hero-copy">
               <HeroBreadcrumb current="Profil Guru" />
               <HeroBadges />
@@ -137,7 +138,7 @@ function GuruPage() {
             <div className="hero-media relative">
               <img src={heroPhoto} alt={t("Guru dan tenaga pendidik SMK Telkom Purwokerto")} width="2200" height="1033" fetchPriority="high" className="hero-image" />
             </div>
-          </div>
+          </div></PageHeroCarousel>
         </div>
       </section>
 

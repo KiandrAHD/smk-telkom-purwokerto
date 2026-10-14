@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import Reveal from '../Reveal';
 import HeroBadges from '../HeroBadges';
+import PageHeroCarousel from '../PageHeroCarousel';
 import wave from '../../assets/kalender/hero-wave-figma.webp';
 
 const features = [
@@ -18,6 +19,7 @@ export default function JurusanDetailHero({ item, design }) {
   return (
     <section className="school-hero" aria-labelledby="jurusan-detail-title">
       <div className="hero-container">
+        <PageHeroCarousel page="Jurusan" slides={[{ id: item.slug, name: 'Fasilitas Pendukung', content: { title: 'Fasilitas Pendukung', titleAccent: design.code, description: design.facilitiesDescription, primaryCta: { href: `/jurusan/${item.slug}#fasilitas-jurusan`, label: 'Lihat Fasilitas' } }, media: { src: design.hero, width: design.heroWidth, height: design.heroHeight, alt: design.heroAlt, composition: 'photo', photo: true } }]}>
         <div className={`hero-panel hero-panel--bleed hero-panel--background hero-panel--detail hero-panel--detail-${item.slug}`}>
           <div className="hero-copy">
             <nav aria-label={t('Jejak navigasi')} className="flex flex-wrap items-center gap-1 text-[10px] leading-relaxed text-dark-500">
@@ -57,6 +59,7 @@ export default function JurusanDetailHero({ item, design }) {
           <span aria-hidden="true" className="detail-hero-stroke" />
           <img src={wave} width={649} height={385} alt="" aria-hidden="true" className="detail-hero-wave" />
         </div>
+        </PageHeroCarousel>
       </div>
     </section>
   );

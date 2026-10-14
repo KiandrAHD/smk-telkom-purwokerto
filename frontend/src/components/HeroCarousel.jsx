@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import HeroPanel from './HeroPanel';
 import './HeroCarousel.css';
 
-export default function HeroCarousel({ slides }) {
+export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
   const { t } = useLanguage();
   const root = useRef(null), actions = useRef({});
   const [active, setActive] = useState(0);
@@ -32,6 +32,9 @@ export default function HeroCarousel({ slides }) {
         return image.decode().catch(() => {});
       }));
       if (disposed) return;
+      if (document.hidden) {
+        pending = 0; moving = false; node.dataset.heroMoving = 'false'; schedule(); return;
+      }
       if (outgoing.contains(document.activeElement)) node.focus({ preventScroll: true });
       outgoing.inert = true;
       const complete = () => {
@@ -41,6 +44,7 @@ export default function HeroCarousel({ slides }) {
         animation = null;
         moving = false;
         node.dataset.heroMoving = 'false';
+        incoming.inert = false;
         setActive(next);
         if (pending) { const direction = pending; pending = 0; move(direction); }
         else schedule();
@@ -66,7 +70,7 @@ export default function HeroCarousel({ slides }) {
     mediaChanged();
     actions.current = { move };
     // Load upcoming artwork after the opening image, then decode again before each transition.
-    panels[0].querySelector('img').decode().catch(() => {}).then(() => {
+    Promise.all([...panels[0].querySelectorAll('img')].map(image => image.decode().catch(() => {}))).then(() => {
       if (disposed) return;
       panels.slice(1).forEach(panel => panel.querySelectorAll('img').forEach(image => { image.loading = 'eager'; image.decode().catch(() => {}); }));
     });
@@ -84,13 +88,13 @@ export default function HeroCarousel({ slides }) {
     };
   }, [slides.length]);
 
-  return <div ref={root} data-hero-carousel data-hero-index={active} data-hero-moving="false" className="hero-carousel relative" role="region" tabIndex={0} aria-roledescription={t('Karusel')} aria-label={t('Sorotan sekolah')} aria-describedby="hero-keyboard-instructions" onKeyDown={event => {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); actions.current.move?.(event.key === 'ArrowRight' ? 1 : -1); }
+  return <div ref={root} data-hero-carousel data-hero-index={active} data-hero-moving="false" className={`hero-carousel hero-carousel--${page} relative`} role="region" tabIndex={0} aria-roledescription={t('Karusel')} aria-label={t('Sorotan sekolah')} aria-describedby="hero-keyboard-instructions" onKeyDown={event => {
+    if (!event.target.closest('input,textarea,select') && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) { event.preventDefault(); actions.current.move?.(event.key === 'ArrowRight' ? 1 : -1); }
   }}>
     <p id="hero-keyboard-instructions" className="sr-only">{t('Gunakan tombol panah kiri atau kanan untuk mengganti sorotan sekolah.')}</p>
     <div className="hero-carousel-viewport" aria-live="off">
       {slides.map((slide, index) => <div key={slide.id} data-hero-slide={index} data-active={active === index} className="hero-carousel-slide" role="group" aria-roledescription={t('Slide')} aria-label={t('{number} dari {total}: {name}', { number: index + 1, total: slides.length, name: t(slide.name) })} aria-hidden={active !== index} inert={active !== index}>
-        <HeroPanel content={slide.content} media={slide.media} carousel priority={index === 0} />
+        {index === 0 && opening ? opening : <HeroPanel content={slide.content} media={slide.media} carousel priority={index === 0} />}
       </div>)}
     </div>
   </div>;

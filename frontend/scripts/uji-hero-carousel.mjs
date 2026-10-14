@@ -145,10 +145,10 @@ try {
     await navigation.getByRole('heading', { level: 1 }).waitFor();
   }
   await navigation.goto(`${base}/spmb`);
-  await navigation.locator('.hero-panel').waitFor();
-  assert.equal(await navigation.locator('[data-hero-carousel]').count(), 0, 'Hero SPMB tetap statis.');
+  await navigation.locator('[data-hero-slide][data-active="true"] .hero-panel').waitFor();
+  assert.equal(await navigation.locator('[data-hero-carousel]').count(), 1, 'Hero SPMB memakai animasi bersama.');
   await navigation.close();
-  console.log('PASS kelima CTA benar-benar membuka route dan hero SPMB tetap statis');
+  console.log('PASS kelima CTA benar-benar membuka route dan hero SPMB memakai carousel bersama');
 
   const autoplay = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   monitor(autoplay);

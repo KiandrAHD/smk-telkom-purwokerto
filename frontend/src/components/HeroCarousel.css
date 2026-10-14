@@ -1,16 +1,18 @@
 .hero-carousel-viewport { display: grid; overflow: hidden; isolation: isolate; border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent); border-radius: var(--hero-radius); background: white; }
-.hero-carousel-slide { grid-area: 1 / 1; min-width: 0; visibility: hidden; }
+.hero-carousel-slide { grid-area: 1 / 1; min-width: 0; visibility: hidden; isolation: isolate; overflow: hidden; background: white; }
 .hero-carousel-slide[data-active="true"] { visibility: visible; }
 .hero-carousel-slide > .hero-panel { height: 100%; border: 0; border-radius: 0; }
 .hero-carousel .hero-grid > .hero-copy { width: auto; }
 .hero-carousel[data-hero-moving="true"] .hero-carousel-slide { pointer-events: none; }
-.hero-carousel .hero-media { aspect-ratio: 1208 / 679; }
+.hero-carousel .hero-media { aspect-ratio: var(--hero-carousel-ratio, 1208 / 679); }
 .hero-carousel .hero-panel--facilities .hero-image { mask-image: url('../assets/fasilitas/hero-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
 .hero-carousel .hero-panel--school .hero-media { overflow: hidden; }
 .hero-carousel-profile-crop { position: absolute; right: 0; bottom: 0; width: 100%; aspect-ratio: 1277 / 652; overflow: hidden; }
 .hero-carousel .hero-panel--school .hero-carousel-profile-en { position: absolute; width: 105.48%; height: auto; max-width: none; left: -2.82%; top: -39.72%; }
 .hero-carousel:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; border-radius: var(--hero-radius); }
 @media (min-width: 64rem) {
+  .hero-carousel-viewport { height: var(--hero-height); grid-template-rows: minmax(0, 1fr); }
+  .hero-carousel-slide { min-height: 0; }
   .hero-carousel-slide > .hero-panel { min-height: calc(var(--hero-height) - 2px); }
   .hero-carousel .hero-media { aspect-ratio: auto; }
   .hero-carousel-profile-crop { width: auto; height: 100%; }
@@ -18,4 +20,32 @@
 @media (max-width: 63.999rem) {
   .hero-carousel .hero-grid { height: 100%; grid-template-rows: minmax(0, 1fr) auto; }
   .hero-carousel .hero-media .hero-image { object-fit: contain; object-position: right bottom; }
+}
+
+/* Each slide owns its artwork and copy, including while translated across its neighbours. */
+.hero-carousel .hero-copy { min-width: 0; overflow-wrap: break-word; }
+.hero-carousel .hero-carousel-slide .hero-panel--bleed .hero-image { object-fit: contain; object-position: right bottom; }
+.hero-carousel .hero-media--photo { display: grid; place-items: center; background: white; }
+.hero-carousel .hero-media--photo .hero-image { width: 100%; height: 100%; object-fit: contain; mask-image: none; }
+@media (min-width: 64rem) {
+  .hero-carousel .hero-copy { background: linear-gradient(to right, white 90%, transparent); }
+  .hero-carousel .hero-media--photo { width: 62%; padding: 1.5rem 1.5rem 3rem 0; }
+  .hero-carousel .hero-media--photo .hero-image { border-radius: 1.75rem; }
+  .hero-carousel .hero-profile-crop { width: 100%; height: auto; top: auto; bottom: 0; transform: none; translate: none; }
+  .hero-carousel-profile-crop { width: 100%; height: auto; }
+  .hero-carousel .hero-panel--facilities .hero-media,
+  .hero-carousel .hero-panel--facilities .hero-background { inset-block: auto 0; width: min(65.4%, calc((var(--hero-height) - 2px) * 1.68483)); height: auto; aspect-ratio: 1144 / 679; }
+  .hero-carousel .hero-panel--facilities .hero-background > img { object-fit: contain; }
+}
+.hero-carousel--jurusan { --hero-carousel-ratio: 2300 / 1080; }
+.hero-carousel--pengumuman { --hero-carousel-ratio: 1600 / 751; }
+.hero-carousel--guru { --hero-carousel-ratio: 2200 / 1033; }
+.hero-carousel--ekstrakurikuler { --hero-carousel-ratio: 1920 / 902; }
+.hero-carousel--spmb { --hero-carousel-ratio: 1248 / 676; }
+.hero-carousel--profil { --hero-carousel-ratio: 1600 / 751; }
+.hero-carousel--berita, .hero-carousel--prestasi, .hero-carousel--bkk { --hero-carousel-ratio: 1106 / 656; }
+.hero-carousel--fasilitas { --hero-carousel-ratio: 1144 / 679; }
+@media (max-width: 63.999rem) {
+  .hero-carousel--kalender .hero-media { aspect-ratio: 2 / 1; }
+  .hero-carousel--guru .hero-carousel-profile-crop { width: auto; height: 100%; }
 }

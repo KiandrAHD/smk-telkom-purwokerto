@@ -1,17 +1,23 @@
 import { useLanguage } from '../context/LanguageContext';
 import ribbon from '../assets/landing/ribbon-divider.png';
-import petalTopLeft from '../assets/landing/beranda-150-568.png';
-import petalTopRight from '../assets/landing/beranda-150-570.png';
-import petalBottomLeft from '../assets/landing/beranda-150-581.png';
-import petalBottomRight from '../assets/landing/beranda-150-583.png';
+import { Award, Lightbulb, Rocket } from 'lucide-react';
+import school from '../assets/landing/marquee-school.png';
 import './RibbonDivider.css';
 
 const badges = [
-  { label: 'NEXT GENERATION', filled: true },
+  { label: 'GLOBAL TECHNOPRENEUR', filled: false, icon: Lightbulb },
+  { label: 'NEXT GENERATION', filled: true, icon: Rocket },
   { label: 'SMK PUSAT UNGGULAN', filled: false },
-  { label: 'AKREDITASI A', filled: true },
-  { label: 'GLOBAL TECHNOPRENUER', filled: false },
+  { label: 'AKREDITASI A', filled: true, icon: Award },
 ];
+
+export function MarqueeBadge({ label, filled, icon: Icon }) {
+  const { t } = useLanguage();
+  return <span className={`beranda-ribbon-badge flex shrink-0 items-center justify-center gap-[0.4em] whitespace-nowrap rounded-full border-2 border-primary px-[0.75em] text-[length:var(--ribbon-font-size)] font-extrabold leading-none ${filled ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
+    {Icon ? <Icon aria-hidden="true" className="size-[1.2em] shrink-0" strokeWidth={1.8} /> : <img src={school} alt="" className="size-[1.2em] shrink-0 object-contain" />}
+    {t(label)}
+  </span>;
+}
 
 const RibbonDivider = ({ animated = false }) => {
   const { t } = useLanguage();
@@ -29,16 +35,9 @@ const RibbonDivider = ({ animated = false }) => {
         {[0, 1].map((copy) => (
           <div key={copy} className="beranda-ribbon-group flex shrink-0 items-center">
             {/* Four cycles cover a 4K viewport; both halves remain identical. */}
-            {[0, 1, 2, 3].map((cycle) => badges.map(({ label, filled }) => (
-              <div key={`${cycle}-${label}`} className="flex shrink-0 items-center gap-4 pr-4 sm:gap-6 sm:pr-6">
-                <span className={`beranda-ribbon-badge flex shrink-0 items-center justify-center whitespace-nowrap rounded-full border-2 border-primary px-[0.75em] text-[length:var(--ribbon-font-size)] font-extrabold leading-none ${filled ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
-                  {t(label)}
-                </span>
-                <span className="beranda-ribbon-flower grid shrink-0 grid-cols-2 items-center">
-                  {[petalTopLeft, petalTopRight, petalBottomLeft, petalBottomRight].map((src) => (
-                    <img key={src} src={src} alt="" className="w-full" />
-                  ))}
-                </span>
+            {[0, 1, 2, 3].map((cycle) => badges.map(badge => (
+              <div key={`${cycle}-${badge.label}`} className="flex shrink-0 items-center pr-4 sm:pr-6">
+                <MarqueeBadge {...badge} />
               </div>
             )))}
           </div>

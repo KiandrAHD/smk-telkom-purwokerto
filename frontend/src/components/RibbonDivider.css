@@ -5,12 +5,9 @@
   align-items: center;
 }
 
-.beranda-ribbon-badge,
-.beranda-ribbon-flower {
+.beranda-ribbon-badge {
   height: var(--ribbon-height);
 }
-
-.beranda-ribbon-flower { width: var(--ribbon-height); }
 
 .beranda-ribbon-track {
   /* Twice the old distance and duration preserves the existing scroll speed. */

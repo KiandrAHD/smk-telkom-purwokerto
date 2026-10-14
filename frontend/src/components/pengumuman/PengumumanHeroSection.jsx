@@ -1,3 +1,4 @@
+import PageHeroCarousel from '../../components/PageHeroCarousel';
 import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -15,7 +16,7 @@ const PengumumanHeroSection = () => {
   return (
   <section className="school-hero">
     <div className="hero-container">
-      <div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--announcement">
+      <PageHeroCarousel page="pengumuman"><div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--announcement">
         <div className="hero-grid">
           <div className="hero-copy">
             <HeroBreadcrumb parent="Informasi" parentTo={null} current="Pengumuman" />
@@ -48,7 +49,7 @@ const PengumumanHeroSection = () => {
           />
         </div>
 
-      </div>
+      </div></PageHeroCarousel>
       <HeroStatsBar items={pengumumanStats} />
 
     </div>
