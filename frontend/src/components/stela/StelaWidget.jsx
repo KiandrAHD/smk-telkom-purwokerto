@@ -8,13 +8,46 @@ const StelaChat = lazy(() => import('./StelaChat'));
 
 // Gelembung chat yang mengambang di seluruh halaman publik. Sengaja tidak
 // dipasang di /stela karena di sana chat-nya sudah jadi isi halaman.
+const REMINDER_DISMISSED_KEY = 'stela-reminder-dismissed-at';
+const REMINDER_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+const REMINDER_CYCLE_MS = 5000;
+
 const StelaWidget = () => {
   const { t } = useLanguage();
   const [terbuka, setTerbuka] = useState(false);
   const [pernahDibuka, setPernahDibuka] = useState(false);
+  const [reminderVisible, setReminderVisible] = useState(false);
+  const [reminderDismissed, setReminderDismissed] = useState(false);
   const triggerRef = useRef(null);
   const [filterVisible, setFilterVisible] = useState(false);
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === '/stela') return undefined;
+    let dismissedAt = 0;
+    try {
+      dismissedAt = Number.parseInt(window.localStorage.getItem(REMINDER_DISMISSED_KEY) || '0', 10) || 0;
+    } catch {
+      // Continue without persistence when storage is unavailable.
+    }
+    if (Date.now() - dismissedAt < REMINDER_COOLDOWN_MS) return undefined;
+
+    const typing = () => {
+      const element = document.activeElement;
+      return element?.matches('input, textarea, select, [contenteditable="true"]');
+    };
+    const cycle = window.setInterval(() => {
+      if (terbuka || reminderDismissed || typing() || document.visibilityState !== 'visible') return;
+      setReminderVisible((visible) => !visible);
+    }, REMINDER_CYCLE_MS);
+    const initialTimer = window.setTimeout(() => {
+      if (!terbuka && !reminderDismissed && !typing() && document.visibilityState === 'visible') setReminderVisible(true);
+    }, 0);
+    return () => {
+      window.clearTimeout(initialTimer);
+      window.clearInterval(cycle);
+    };
+  }, [pathname, terbuka, reminderDismissed]);
 
   useEffect(() => {
     if (pathname !== '/ekstrakurikuler') return undefined;
@@ -27,6 +60,18 @@ const StelaWidget = () => {
 
   if (pathname === '/stela') return null;
 
+  const bukaPengingat = () => {
+    setReminderVisible(false);
+    setPernahDibuka(true);
+    setTerbuka(true);
+  };
+
+  const tutupPengingat = () => {
+    try { window.localStorage.setItem(REMINDER_DISMISSED_KEY, String(Date.now())); } catch { /* no-op */ }
+    setReminderVisible(false);
+    setReminderDismissed(true);
+  };
+
   return (
     <div onKeyDown={(event) => {
       if (event.key !== 'Escape' || !terbuka) return;
@@ -34,6 +79,16 @@ const StelaWidget = () => {
       setTerbuka(false);
       triggerRef.current?.focus();
     }} className={`fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6 ${pathname === '/ekstrakurikuler' && filterVisible && !terbuka ? 'max-sm:invisible max-sm:pointer-events-none' : ''}`}>
+      {reminderVisible && !terbuka && (
+        <aside aria-label={t('Pengingat STELA')} className="relative flex w-[min(20rem,calc(100vw-2rem))] items-center gap-3 rounded-2xl border border-primary/15 bg-white p-3 pr-10 shadow-card motion-chat-enter motion-reduce:animate-none">
+          <button type="button" onClick={tutupPengingat} aria-label={t('Tutup pengingat STELA')} className="absolute right-2 top-2 rounded-full p-1.5 text-dark-500 hover:bg-dark-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"><X className="h-4 w-4" aria-hidden="true" /></button>
+          <button type="button" onClick={bukaPengingat} className="flex min-w-0 items-center gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={t('Buka obrolan dengan STELA')}>
+            <img src={maskot} alt="" aria-hidden="true" className="h-12 w-12 shrink-0 object-contain" />
+            <span className="font-heading text-sm font-bold text-primary">{t('Tanya Stela!')}</span>
+          </button>
+        </aside>
+      )}
+
       {pernahDibuka && (
         <div id="stela-widget-panel" role="region" aria-labelledby="stela-widget-title" className={`${terbuka ? 'motion-chat-enter flex' : 'hidden'} max-h-[calc(100dvh-10rem)] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl shadow-card sm:max-h-[calc(100dvh-11rem)]`}>
           <div className="flex shrink-0 items-center gap-2.5 bg-primary px-4 py-3">
