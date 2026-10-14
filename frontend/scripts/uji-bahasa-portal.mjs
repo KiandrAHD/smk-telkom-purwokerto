@@ -40,8 +40,8 @@ try {
   assert.ok(questionnaire.includes('Choose one answer'));
   assert.ok(questionnaire.includes('Question 1 of 1'));
   assert.ok(questionnaire.includes('aria-checked="true"'));
-  assert.ok(questionnaire.includes('View Results'));
-  assert.ok(questionnaire.includes('Building applications'));
+  assert.ok(questionnaire.includes('Complete'));
+  assert.ok(questionnaire.includes('Membuat aplikasi'), 'Questionnaire copy preserves the exact supplied Indonesian text.');
 
   // Catalogued assistant copy follows the selected language.
   const result = render(createElement(NextTelResult, {
