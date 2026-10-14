@@ -9,7 +9,8 @@ const base = process.env.QA_URL || 'http://127.0.0.1:5173';
 const output = process.env.QA_OUTPUT || '../outputs/hero-carousel-2026-10-14';
 await mkdir(output, { recursive: true });
 const errors = [], results = [];
-const paths = ['/spmb/masuk', '/fasilitas', '/jurusan', '/prestasi', '/profil-sekolah'];
+const paths = ['/spmb/masuk', '/fasilitas', '/jurusan', '/prestasi', '/profil-sekolah', '/profil-sekolah/guru', '/ekstrakurikuler', '/bkk', '/berita', '/pengumuman', '/kalender', '/spmb'];
+const slideCount = paths.length;
 const monitor = page => page.on('pageerror', error => errors.push(error.message));
 const index = page => page.locator('[data-hero-carousel]').getAttribute('data-hero-index').then(Number);
 const settled = page => page.waitForFunction(() => document.querySelector('[data-hero-carousel]')?.dataset.heroMoving === 'false');
@@ -22,7 +23,7 @@ const ready = async page => {
 const step = async (page, direction = 1) => {
   const before = await index(page);
   await page.locator('[data-hero-carousel]').press(direction > 0 ? 'ArrowRight' : 'ArrowLeft');
-  await page.waitForFunction(next => document.querySelector('[data-hero-carousel]').dataset.heroIndex === String(next), (before + direction + 5) % 5);
+  await page.waitForFunction(next => document.querySelector('[data-hero-carousel]').dataset.heroIndex === String(next), (before + direction + slideCount) % slideCount);
   await settled(page);
 };
 try {
@@ -31,7 +32,7 @@ try {
   await page.goto(base);
   await ready(page);
   assert.equal(await page.locator('[data-hero-carousel]').count(), 1, 'Beranda memiliki carousel hero.');
-  assert.equal(await page.locator('[data-hero-slide]').count(), 5);
+  assert.equal(await page.locator('[data-hero-slide]').count(), slideCount);
   assert.equal(await page.locator('[data-hero-carousel] button').count(), 0, 'Hero tidak memakai tombol arah atau pause.');
   const motion = await page.evaluate(() => new Promise(resolve => {
     const root = document.querySelector('[data-hero-carousel]'), viewport = root.querySelector('.hero-carousel-viewport');
@@ -61,7 +62,7 @@ try {
   console.log('PASS horizontal sliding, coverage setiap frame, tinggi hero/QAC stabil, transform-only');
   for (const direction of [1, -1]) {
     const start = await index(page);
-    for (let i = 0; i < 10; i++) await step(page, direction);
+    for (let i = 0; i < slideCount * 2; i++) await step(page, direction);
     assert.equal(await index(page), start, 'Dua loop manual kembali ke slide awal.');
   }
   await page.locator('[data-hero-carousel]').evaluate(root => { for (let i = 0; i < 30; i++) root.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })); });
@@ -73,7 +74,7 @@ try {
   });
   await settled(page);
   assert.equal(await index(page), 3, 'Perubahan arah tidak membuat animasi bertumpuk.');
-  console.log('PASS 20 navigasi keyboard, loop dua arah, input cepat, dan perubahan arah');
+  console.log('PASS loop keyboard, loop dua arah, input cepat, dan perubahan arah');
   await page.clock.install();
   await page.evaluate(() => document.activeElement.blur());
   const beforeReset = await index(page);
@@ -81,7 +82,7 @@ try {
   assert.equal(await index(page), beforeReset, 'Timer di-reset setelah interaksi manual.');
   await page.clock.runFor(1300);
   await settled(page);
-  assert.equal(await index(page), (beforeReset + 1) % 5);
+  assert.equal(await index(page), (beforeReset + 1) % slideCount);
   await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: true }); document.dispatchEvent(new window.Event('visibilitychange')); });
   const hidden = await index(page);
   await page.clock.runFor(21000);
@@ -89,7 +90,7 @@ try {
   await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new window.Event('visibilitychange')); });
   await page.clock.runFor(7500);
   await settled(page);
-  assert.equal(await index(page), (hidden + 1) % 5);
+  assert.equal(await index(page), (hidden + 1) % slideCount);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const reduced = await index(page);
   await page.clock.runFor(21000);
@@ -110,12 +111,12 @@ try {
     const root = page.locator('[data-hero-carousel]'), geometry = await root.boundingBox();
     assert.equal(geometry.width, baseline[position].width, 'Lebar container existing dipertahankan.');
     if (language === 'id') assert.equal(geometry.height, baseline[position].height, 'Tinggi container existing dipertahankan.');
-    for (let slide = 0; slide < 5; slide++) {
+    for (let slide = 0; slide < slideCount; slide++) {
       const active = page.locator('[data-hero-slide][data-active="true"]');
       assert.equal(await index(page), slide);
       assert.equal(await page.getByRole('heading', { level: 1 }).count(), 1, 'Hanya heading slide aktif dibaca pembaca layar.');
       assert.equal(await active.locator('a').first().getAttribute('href'), paths[slide]);
-      assert.equal(await root.locator('[inert]').count(), 4, 'Slide tersembunyi tidak dapat menerima fokus.');
+      assert.equal(await root.locator('[inert]').count(), slideCount - 1, 'Slide tersembunyi tidak dapat menerima fokus.');
       const bounds = await root.boundingBox();
       assert.equal(bounds.height, geometry.height, 'Pergantian slide tidak mengubah layout.');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
@@ -127,16 +128,16 @@ try {
         return bounds.left >= panel.left && bounds.right <= panel.right + 1 && bounds.bottom < quick.top;
       })), 'CTA tidak terpotong atau tertutup kartu akses cepat.');
       if ([1440, 1024, 390].includes(width)) await root.screenshot({ path: `${output}/${width}-${language}-${slide}.png` });
-      if (slide < 4) await step(page);
+      if (slide < slideCount - 1) await step(page);
     }
-    results.push({ width, language, height: geometry.height, slides: 5 });
-    console.log(`PASS responsive ${width}px ${language.toUpperCase()}, lima slide, CTA, dan layout`);
+    results.push({ width, language, height: geometry.height, slides: slideCount });
+    console.log(`PASS responsive ${width}px ${language.toUpperCase()}, seluruh slide navbar, CTA, dan layout`);
     await page.close();
   }
 
   const navigation = await browser.newPage({ viewport: { width: 1440, height: 1100 }, reducedMotion: 'reduce' });
   monitor(navigation);
-  for (let slide = 0; slide < 5; slide++) {
+  for (let slide = 0; slide < slideCount; slide++) {
     await navigation.goto(base);
     await ready(navigation);
     for (let i = 0; i < slide; i++) await step(navigation);
@@ -148,7 +149,7 @@ try {
   await navigation.locator('[data-hero-slide][data-active="true"] .hero-panel').waitFor();
   assert.equal(await navigation.locator('[data-hero-carousel]').count(), 1, 'Hero SPMB memakai animasi bersama.');
   await navigation.close();
-  console.log('PASS kelima CTA benar-benar membuka route dan hero SPMB memakai carousel bersama');
+  console.log('PASS seluruh CTA navbar benar-benar membuka route dan hero SPMB memakai carousel bersama');
 
   const autoplay = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   monitor(autoplay);
@@ -157,15 +158,15 @@ try {
   await autoplay.mouse.move(0, 0);
   const autoplayHeight = (await autoplay.locator('[data-hero-carousel]').boundingBox()).height;
   const started = Date.now();
-  for (let transition = 1; transition <= 15; transition++) {
+  for (let transition = 1; transition <= slideCount * 3; transition++) {
     const before = await index(autoplay);
     await autoplay.waitForFunction(before => Number(document.querySelector('[data-hero-carousel]').dataset.heroIndex) !== before, before, { timeout: 11000 });
-    assert.equal(await index(autoplay), transition % 5);
+    assert.equal(await index(autoplay), transition % slideCount);
     await settled(autoplay);
     assert.equal((await autoplay.locator('[data-hero-carousel]').boundingBox()).height, autoplayHeight);
-    console.log(`PASS autoplay nyata ${transition}/15: slide ${(transition % 5) + 1}`);
+    console.log(`PASS autoplay nyata ${transition}/${slideCount * 3}: slide ${(transition % slideCount) + 1}`);
   }
-  results.push({ autoplay: { realTransitions: 15, completeCycles: 3, elapsedSeconds: Number(((Date.now() - started) / 1000).toFixed(1)) } });
+  results.push({ autoplay: { realTransitions: slideCount * 3, completeCycles: 3, elapsedSeconds: Number(((Date.now() - started) / 1000).toFixed(1)) } });
   await autoplay.locator('[data-hero-carousel]').press('ArrowRight');
   await autoplay.goto(`${base}/profil-sekolah`);
   await autoplay.getByRole('heading', { level: 1 }).waitFor();
