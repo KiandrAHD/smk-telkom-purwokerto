@@ -61,9 +61,9 @@ try {
   // Check the font tokens through their rendered roles; headings and body intentionally differ.
   assert.deepEqual(typography.fonts, [typography.body, typography.heading, typography.heading, typography.heading, typography.body, typography.heading]);
   assert.equal(await page.locator('meta[name="viewport"]').getAttribute('content'), 'width=device-width, initial-scale=1.0');
-  assert.equal(await page.locator('[data-facility-card]').count(), 16);
-  assert.equal(new Set(await page.locator('[data-facility-card]').evaluateAll(nodes => nodes.map(n => n.dataset.facilityCard))).size, 16);
-  for (const [category, count] of [['Laboratorium', 6], ['Kelas', 16], ['Perpustakaan', 8], ['Aula', 4], ['GOR', 4], ['Parkiran', 4], ['Semua', 16]]) {
+  assert.equal(await page.locator('[data-facility-card]').count(), 24);
+  assert.equal(new Set(await page.locator('[data-facility-card]').evaluateAll(nodes => nodes.map(n => n.dataset.facilityCard))).size, 24);
+  for (const [category, count] of [['Laboratorium', 6], ['Kelas', 16], ['Perpustakaan', 8], ['Aula', 4], ['GOR', 4], ['Parkiran', 4], ['Semua', 24]]) {
     await page.getByRole('button', { name: category, exact: true }).click();
     // Different categories can have equal card counts; also wait for the selected filter.
     await page.waitForFunction(({ category, count }) => document.querySelectorAll('[data-facility-card]').length === count && [...document.querySelectorAll('#daftar-fasilitas button')].some(button => button.textContent.trim() === category && button.getAttribute('aria-pressed') === 'true'), { category, count });
@@ -76,8 +76,8 @@ try {
   await page.locator('[data-facility-card]').first().waitFor();
   assert.equal(await page.locator('[data-facility-card]').count(), 6, 'Kategori bertahan setelah refresh.');
   await page.getByRole('button', { name: 'Semua', exact: true }).click();
-  await page.waitForFunction(() => document.querySelectorAll('[data-facility-card]').length === 16);
-  for (let index = 0; index < 16; index++) {
+  await page.waitForFunction(() => document.querySelectorAll('[data-facility-card]').length === 24);
+  for (let index = 0; index < 24; index++) {
     const button = page.locator('[data-facility-card]').nth(index).getByRole('button');
     const title = await page.locator('[data-facility-card]').nth(index).locator('h4').innerText();
     const description = await page.locator('[data-facility-card]').nth(index).locator('p').innerText();
@@ -152,5 +152,5 @@ try {
   await page.getByRole('link', { name: 'Fasilitas Sekolah', exact: true }).click();
   await page.waitForURL('**/fasilitas');
   assert.deepEqual(errors, []);
-  console.log('PASS: hero baru, judul di tengah, empat akses cepat, routing, refresh/kategori, scroll atas, grid unik, filter, 16 modal/Escape/fokus, 16 viewport/bahasa, toggle ID/EN, carousel loop/autoplay, menu Tentang desktop/mobile, runtime.');
+  console.log('PASS: hero baru, judul di tengah, empat akses cepat, routing, refresh/kategori, scroll atas, grid unik, filter, 24 modal/Escape/fokus, 16 viewport/bahasa, toggle ID/EN, carousel loop/autoplay, menu Tentang desktop/mobile, runtime.');
 } finally { await browser.close(); }

@@ -23,16 +23,16 @@ try{
  for(const width of [1920,1440,768,390,375]){
   await page.setViewportSize({width,height:1000});await page.goto(base+'/jurusan');await page.locator('h1').waitFor();const heroReference=await page.locator('h1').evaluate(typography);
   for(const lang of ['id','en'])await check('Konsistensi visual '+width+' '+lang,async()=>{
-   await page.goto(base+'/fasilitas');await page.waitForFunction(()=>document.querySelectorAll('[data-facility-card]').length===16);
+   await page.goto(base+'/fasilitas');await page.waitForFunction(()=>document.querySelectorAll('[data-facility-card]').length===24);
    if(lang==='en'){await page.getByRole('button',{name:'Switch to English',exact:true}).click();await page.locator('#fasilitas-title').filter({hasText:'School'}).waitFor();}
-   assert.equal(await page.locator('[data-facility-card]').count(),16);
-   const actual=await getCard(); assert.equal(actual.heading.color,'rgb(200, 16, 46)'); actual.heading.color=reference.heading.color; assert.deepEqual(actual,reference);assert.deepEqual(await page.locator('h1').evaluate(typography),heroReference);
+   assert.equal(await page.locator('[data-facility-card]').count(),24);
+   const actual=await getCard(); assert.equal(actual.heading.color,'rgb(205, 11, 32)'); assert.ok(actual.heading.font.includes('Facility Jakarta')); assert.ok(reference.heading.font);assert.deepEqual(await page.locator('h1').evaluate(typography),heroReference);
    assert.deepEqual(await page.locator('footer .font-heading').first().evaluate(typography),footerReference);
    const geometry=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,columns:getComputedStyle(document.querySelector('[data-facility-grid]')).gridTemplateColumns.split(' ').length}));
    assert.ok(geometry.scroll<=geometry.client);assert.equal(geometry.columns,width>=1024?4:width>=640?2:1);
    assert.equal(await page.locator('#stela').count(),1);assert.equal(await page.locator('#ppdb').count(),1);
    assert.equal(await page.locator('#stela').evaluate(el=>el.nextElementSibling?.id),'ppdb');
-   for(const [name,count] of [['Laboratorium',6],['Kelas',16],['Perpustakaan',8],['Aula',4],['GOR',4],['Parkiran',4],['Semua',16]]){
+   for(const [name,count] of [['Laboratorium',6],['Kelas',16],['Perpustakaan',8],['Aula',4],['GOR',4],['Parkiran',4],['Semua',24]]){
     await page.getByRole('button',{name:translate(name,lang),exact:true}).click();
     await page.waitForFunction(count=>document.querySelectorAll('[data-facility-card]').length===count,count);
     assert.equal(await page.locator('[data-facility-card]').count(),count);
@@ -77,7 +77,7 @@ try{
  });
  await check('Placeholder gagal gambar ID/EN dan modal',async()=>{
   const context=await browser.newContext({viewport:{width:390,height:1000}});const p=await context.newPage();
-  await p.route(/\/assets\/belajar-kelompok-laptop-[^/]+\.png$/,r=>r.abort());
+  await p.route(/\/.*p1250087[^/]*\.webp$/,r=>r.abort());
   try{
    await p.goto(base+'/fasilitas');const card=p.locator('[data-facility-card="semua-lab-1"]');await card.scrollIntoViewIfNeeded();
    await card.getByRole('img',{name:'Foto belum tersedia',exact:true}).waitFor();
