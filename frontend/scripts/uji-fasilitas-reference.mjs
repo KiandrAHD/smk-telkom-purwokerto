@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { createServer } from 'vite';
 
 const expected = {
-  Semua: [['Laboratorium', 4], ['Ruang Kelas', 4], ['Perpustakaan', 4], ['Aula', 4]],
+  Semua: [['Laboratorium', 4], ['Ruang Kelas', 4], ['Perpustakaan', 4], ['Aula', 4], ['GOR', 4], ['Parkiran', 4]],
   Laboratorium: [['', 6]],
   Kelas: ['A', 'B', 'C', 'D'].map(building => [`Kelas Gedung ${building}`, 4]),
   Perpustakaan: [['Ruang Perpustakaan', 4], ['Digital Literasi Garden', 4]],

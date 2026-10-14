@@ -15,7 +15,7 @@ function FacilityPhoto({ photo, alt, decorative = false, primary = false }) {
       <span><ImageOff aria-hidden="true" className="mx-auto mb-2 size-8" />{t('Dokumentasi fasilitas ini belum tersedia.')}</span>
     </div>
   );
-  return <img src={photo.src} srcSet={photo.srcSet} sizes={photo.srcSet ? primary ? '(min-width: 1024px) 460px, (min-width: 768px) 400px, 80vw' : '320px' : undefined} alt={decorative ? '' : alt} aria-hidden={decorative || undefined} width={photo.width || 1280} height={photo.height || 960} loading={primary ? 'eager' : 'lazy'} decoding="async" draggable="false" onError={() => setFailed(true)} className="campus-preview-photo h-full w-full rounded-xl bg-dark-50 object-contain" />;
+  return <img src={photo.src} srcSet={photo.srcSet} sizes={photo.srcSet ? primary ? '(min-width: 1024px) 460px, (min-width: 768px) 400px, 80vw' : '320px' : undefined} alt={decorative ? '' : alt} aria-hidden={decorative || undefined} width={photo.width || 1280} height={photo.height || 960} loading={primary ? 'eager' : 'lazy'} decoding="async" draggable="false" onError={() => setFailed(true)} className="campus-preview-photo h-full w-full rounded-xl bg-dark-50 object-cover object-center" />;
 }
 
 function FacilityCarousel({ photos, name }) {
@@ -79,14 +79,14 @@ function FacilityContent({ facility, outgoing, initialRoomName }) {
   const [galleries, setGalleries] = useState({});
   const room = facility.rooms?.find(candidate => candidate.id === roomId);
   useEffect(() => {
-    if (!room?.photos) return undefined;
+    if (!room?.classroomGallery) return undefined;
     let mounted = true;
     import('../../data/classroomPhotos').then(({ classroomPhotos }) => {
-      if (mounted) setGalleries(previous => ({ ...previous, [room.name]: classroomPhotos[room.name] }));
+      if (mounted) setGalleries(previous => ({ ...previous, [room.name]: classroomPhotos[room.photoKey] || room.photos }));
     }).catch(() => {}); // The verified cover remains available if the optional gallery chunk fails.
     return () => { mounted = false; };
   }, [room]);
-  const photos = room ? galleries[room.name] || room.photos || [] : item.image ? [{ source: item.id, src: item.image }] : [];
+  const photos = room ? galleries[room.name] || room.photos || [] : facility.photos || (item.image ? [{ source: item.id, src: item.image }] : []);
   const name = room?.name || item.name;
   const location = facility.location || (item.category === item.name ? 'Fasilitas Sekolah' : item.name);
   const type = room ? 'Ruang Kelas' : item.category || item.preview || item.name;
@@ -98,6 +98,7 @@ function FacilityContent({ facility, outgoing, initialRoomName }) {
           <h3 id={outgoing ? undefined : 'campus-preview-title'} aria-live={outgoing ? undefined : 'polite'} aria-atomic="true" className="mt-1 font-heading text-2xl font-bold leading-tight text-dark-900 sm:text-3xl">{t(type)}<span className="sr-only"> — {t(location)} {room ? t(room.name) : ''}</span></h3>
           {room && <p className="mt-2 inline-block rounded-md bg-primary px-3 py-1 font-heading text-xl font-bold leading-tight text-white">{room.name.replace(/^Kelas /, '')}</p>}
           <p className="mt-4 text-xs leading-relaxed text-dark-600 sm:text-sm">{t(room?.preview || item.preview || 'Informasi fasilitas ini belum tersedia. Nama dan titik lokasi mengikuti referensi peta sekolah.')}</p>
+          {room?.photoNote && <p className="mt-3 text-xs leading-relaxed text-dark-500">{t(room.photoNote, { name: t(room.photoKey) })}</p>}
           {facility.rooms && <label className="mt-4 block text-xs font-semibold text-dark-600">
             {t('Pilih ruang kelas')}
             <span className="relative mt-2 block">

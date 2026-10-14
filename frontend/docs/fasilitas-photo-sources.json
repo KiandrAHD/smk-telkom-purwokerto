@@ -1,0 +1,1580 @@
+[
+  {
+    "source": "Foto Kelas/Lab TKJ/IMG_20261013_155611.jpg",
+    "sha256": "bcddd00c1657cba2b3a16731133d9c48a0801242891ded32a62828544ad399e3",
+    "variants": [
+      {
+        "file": "img-20261013-155611-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9326
+      },
+      {
+        "file": "img-20261013-155611-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 22614
+      },
+      {
+        "file": "img-20261013-155611-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 39588
+      },
+      {
+        "file": "img-20261013-155611-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 57202
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TKJ/IMG_20261013_155618.jpg",
+    "sha256": "4cb6d6fd74b21c5084b4fa6f6cb7df27159800deb15873064a2af4e9feb55719",
+    "variants": [
+      {
+        "file": "img-20261013-155618-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 12902
+      },
+      {
+        "file": "img-20261013-155618-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 37214
+      },
+      {
+        "file": "img-20261013-155618-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 74806
+      },
+      {
+        "file": "img-20261013-155618-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 119678
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TKJ/IMG_20261013_155629.jpg",
+    "sha256": "bce09b598827dc804567feec0890294728bf0eaa28a2ea6c8e27beb58f81c871",
+    "variants": [
+      {
+        "file": "img-20261013-155629-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 12696
+      },
+      {
+        "file": "img-20261013-155629-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 36880
+      },
+      {
+        "file": "img-20261013-155629-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 71150
+      },
+      {
+        "file": "img-20261013-155629-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 110038
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TKJ/IMG_20261013_155633.jpg",
+    "sha256": "7778e9284e51486446870f6c0ac9c38af33e9a9d82d4501d26fda627e78e8cb0",
+    "variants": [
+      {
+        "file": "img-20261013-155633-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 12976
+      },
+      {
+        "file": "img-20261013-155633-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 38552
+      },
+      {
+        "file": "img-20261013-155633-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 77656
+      },
+      {
+        "file": "img-20261013-155633-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 127816
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TKJ/IMG_20261013_155637.jpg",
+    "sha256": "9b9179fd600a1863919203e621048b0925709f04db6e004f7ee73a21143359ba",
+    "variants": [
+      {
+        "file": "img-20261013-155637-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 12112
+      },
+      {
+        "file": "img-20261013-155637-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 35216
+      },
+      {
+        "file": "img-20261013-155637-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 70378
+      },
+      {
+        "file": "img-20261013-155637-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 114268
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TJA/IMG_20261013_161012.jpg",
+    "sha256": "6fa4a862a3a08b1800231fe927e4082793ddad38ef33ddd6d41033fbe1ec98c2",
+    "variants": [
+      {
+        "file": "img-20261013-161012-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 18298
+      },
+      {
+        "file": "img-20261013-161012-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 52624
+      },
+      {
+        "file": "img-20261013-161012-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 100530
+      },
+      {
+        "file": "img-20261013-161012-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 154936
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TJA/IMG_20261013_161013.jpg",
+    "sha256": "34978dfc70943a1287c51adb4f8c759896a186e90065d3772412b4d710896ffb",
+    "variants": [
+      {
+        "file": "img-20261013-161013-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 18110
+      },
+      {
+        "file": "img-20261013-161013-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 52610
+      },
+      {
+        "file": "img-20261013-161013-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 100316
+      },
+      {
+        "file": "img-20261013-161013-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 153312
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TJA/IMG_20261013_161023.jpg",
+    "sha256": "4f59680dd6d129a1c798718f3ddaffc10d528326a19a4c312adcd385e08226e2",
+    "variants": [
+      {
+        "file": "img-20261013-161023-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 16930
+      },
+      {
+        "file": "img-20261013-161023-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 48436
+      },
+      {
+        "file": "img-20261013-161023-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 89846
+      },
+      {
+        "file": "img-20261013-161023-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 137698
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TJA/IMG_20261013_161030.jpg",
+    "sha256": "6886f05fd689a97215e1980d2e40f3099763ed02e19435fffb1226f4d398010f",
+    "variants": [
+      {
+        "file": "img-20261013-161030-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 16740
+      },
+      {
+        "file": "img-20261013-161030-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 48648
+      },
+      {
+        "file": "img-20261013-161030-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 92244
+      },
+      {
+        "file": "img-20261013-161030-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 143152
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TJA/IMG_20261013_161037.jpg",
+    "sha256": "10293a4bf89d99494daff1fb008d2ab2818cc6e306d1d72a5e5ce20fb39a875f",
+    "variants": [
+      {
+        "file": "img-20261013-161037-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 17346
+      },
+      {
+        "file": "img-20261013-161037-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 50768
+      },
+      {
+        "file": "img-20261013-161037-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 97714
+      },
+      {
+        "file": "img-20261013-161037-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 152952
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Lab TJA/IMG_20261013_161054.jpg",
+    "sha256": "3d0b5cd65a2e095936b10c6e036bac6c7f98b25cf162d13300b9a5f62b08ff85",
+    "variants": [
+      {
+        "file": "img-20261013-161054-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 17116
+      },
+      {
+        "file": "img-20261013-161054-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 50782
+      },
+      {
+        "file": "img-20261013-161054-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 97870
+      },
+      {
+        "file": "img-20261013-161054-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 154616
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Perpustakaan/IMG_20261012_152806.jpg",
+    "sha256": "be9aff341b6a5b2def28d5a757bf8244386a749439f0a292b65c6f89a9dfa242",
+    "variants": [
+      {
+        "file": "img-20261012-152806-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 12278
+      },
+      {
+        "file": "img-20261012-152806-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 34284
+      },
+      {
+        "file": "img-20261012-152806-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 62560
+      },
+      {
+        "file": "img-20261012-152806-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 93610
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/DLG/IMG_2496.jpeg",
+    "sha256": "5dcf6ed41df94264650551c56f6ac56a8ae7e028c8a14abbcecd5e03eda44b38",
+    "variants": [
+      {
+        "file": "img-2496-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 16774
+      },
+      {
+        "file": "img-2496-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 52196
+      },
+      {
+        "file": "img-2496-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 108626
+      },
+      {
+        "file": "img-2496-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 173040
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/DLG/IMG_20261012_101228.jpg",
+    "sha256": "6cd45b4ab7f55d378cc16af7bf6f6fb07bddaa7c660bb10cfa8f797615bbdcdb",
+    "variants": [
+      {
+        "file": "img-20261012-101228-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 14666
+      },
+      {
+        "file": "img-20261012-101228-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 42374
+      },
+      {
+        "file": "img-20261012-101228-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 81530
+      },
+      {
+        "file": "img-20261012-101228-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 127246
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/DLG/IMG_2494.jpeg",
+    "sha256": "63a61df05d2e079fba4b5ae5ca1b66644675cc2a05d767a3d7e9e672ca88430e",
+    "variants": [
+      {
+        "file": "img-2494-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 19820
+      },
+      {
+        "file": "img-2494-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 59930
+      },
+      {
+        "file": "img-2494-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 110900
+      },
+      {
+        "file": "img-2494-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 164542
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/DLG/IMG_2497.jpeg",
+    "sha256": "e3c1e2c18961cb2df32d01741b25d37b922393f90334c971fc624d304f35ae4e",
+    "variants": [
+      {
+        "file": "img-2497-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 17940
+      },
+      {
+        "file": "img-2497-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 57054
+      },
+      {
+        "file": "img-2497-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 116536
+      },
+      {
+        "file": "img-2497-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 187174
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Perpustakaan/IMG_20261012_095246.jpg",
+    "sha256": "f96ca0a4633a476eee301ec5051c8d1084f680257195c0416aee19af0c3a73c7",
+    "variants": [
+      {
+        "file": "img-20261012-095246-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 17516
+      },
+      {
+        "file": "img-20261012-095246-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 47424
+      },
+      {
+        "file": "img-20261012-095246-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 85998
+      },
+      {
+        "file": "img-20261012-095246-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 129390
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Perpustakaan/IMG_20261012_095249.jpg",
+    "sha256": "13263d5fc745f785382ab74e8a8971f683c9e19b0e0ef9e2801564fd14673371",
+    "variants": [
+      {
+        "file": "img-20261012-095249-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 16332
+      },
+      {
+        "file": "img-20261012-095249-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 43890
+      },
+      {
+        "file": "img-20261012-095249-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 78444
+      },
+      {
+        "file": "img-20261012-095249-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 119660
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Perpustakaan/IMG_20261012_095330.jpg",
+    "sha256": "e4b2efc40737983f0ff1fcddb8501191632bce6d03e8ba8594339d3e1243aa73",
+    "variants": [
+      {
+        "file": "img-20261012-095330-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 15984
+      },
+      {
+        "file": "img-20261012-095330-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 46638
+      },
+      {
+        "file": "img-20261012-095330-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 88042
+      },
+      {
+        "file": "img-20261012-095330-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 133886
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Perpustakaan/IMG_20261012_095322.jpg",
+    "sha256": "3aa0890b62343bb26968d03400ebbaaf170793730a89f610ba4beceedbb02b64",
+    "variants": [
+      {
+        "file": "img-20261012-095322-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 19682
+      },
+      {
+        "file": "img-20261012-095322-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 61798
+      },
+      {
+        "file": "img-20261012-095322-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 121732
+      },
+      {
+        "file": "img-20261012-095322-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 188542
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Perpustakaan/IMG_20261012_095323.jpg",
+    "sha256": "fe5701eef26dd8649f81ede4162fe51c0d0faa15264f2951ea617ee1fcdc66c3",
+    "variants": [
+      {
+        "file": "img-20261012-095323-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 19238
+      },
+      {
+        "file": "img-20261012-095323-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 59344
+      },
+      {
+        "file": "img-20261012-095323-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 116660
+      },
+      {
+        "file": "img-20261012-095323-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 180518
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101613.jpg",
+    "sha256": "77dadbbdba51e0e5968e085d6f24aaedd99f83b9465ff610fc9cc10aad666197",
+    "variants": [
+      {
+        "file": "img-20261012-101613-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 8834
+      },
+      {
+        "file": "img-20261012-101613-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 25834
+      },
+      {
+        "file": "img-20261012-101613-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 52620
+      },
+      {
+        "file": "img-20261012-101613-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 82752
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101625.jpg",
+    "sha256": "f58a92903f7bc7ee3e57b26a77d775f2de832a14ee6d2b41ae639fadcd798614",
+    "variants": [
+      {
+        "file": "img-20261012-101625-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 10736
+      },
+      {
+        "file": "img-20261012-101625-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 31442
+      },
+      {
+        "file": "img-20261012-101625-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 62052
+      },
+      {
+        "file": "img-20261012-101625-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 99968
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101507.jpg",
+    "sha256": "7263efb51fbf7ceb542cfe30d1e5cb009144592e95332f0cb560ff7680bf9f15",
+    "variants": [
+      {
+        "file": "img-20261012-101507-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 11668
+      },
+      {
+        "file": "img-20261012-101507-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 42052
+      },
+      {
+        "file": "img-20261012-101507-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 96202
+      },
+      {
+        "file": "img-20261012-101507-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 167352
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101515.jpg",
+    "sha256": "6cde249abdabc58adca03ef3b2aaed0de3602dd1adaa92d513c5a78b917851c1",
+    "variants": [
+      {
+        "file": "img-20261012-101515-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 11510
+      },
+      {
+        "file": "img-20261012-101515-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 41266
+      },
+      {
+        "file": "img-20261012-101515-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 94378
+      },
+      {
+        "file": "img-20261012-101515-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 159796
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101519.jpg",
+    "sha256": "c8c0fe3663ad0ea51bb0f297e1acf80dba58391dc48df6938c7a02c8ed990c42",
+    "variants": [
+      {
+        "file": "img-20261012-101519-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 11152
+      },
+      {
+        "file": "img-20261012-101519-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 41196
+      },
+      {
+        "file": "img-20261012-101519-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 92364
+      },
+      {
+        "file": "img-20261012-101519-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 163924
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101644.jpg",
+    "sha256": "07a90dca3d01ab5cf9a1ce1b64205d3b1db2dbbb06760d4e43e360f81033a610",
+    "variants": [
+      {
+        "file": "img-20261012-101644-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 13622
+      },
+      {
+        "file": "img-20261012-101644-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 42956
+      },
+      {
+        "file": "img-20261012-101644-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 89166
+      },
+      {
+        "file": "img-20261012-101644-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 153114
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101646_1.jpg",
+    "sha256": "b0b99ed16f9626c1c6a6338223d601f2e8b392c8cd598d0d70d0de616e5e0d18",
+    "variants": [
+      {
+        "file": "img-20261012-101646-1-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 14122
+      },
+      {
+        "file": "img-20261012-101646-1-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 44132
+      },
+      {
+        "file": "img-20261012-101646-1-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 94296
+      },
+      {
+        "file": "img-20261012-101646-1-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 160400
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101654.jpg",
+    "sha256": "832dbba688c5bdfcd0e441d06475c866f345d1ff02e1c1e6d9162bb50b37381a",
+    "variants": [
+      {
+        "file": "img-20261012-101654-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 11624
+      },
+      {
+        "file": "img-20261012-101654-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 36630
+      },
+      {
+        "file": "img-20261012-101654-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 80560
+      },
+      {
+        "file": "img-20261012-101654-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 140140
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Aula/IMG_20261012_101656.jpg",
+    "sha256": "2ce8dce1e1ded2e3aab69988f7a5b7acc67d614733b200f6f9fa7b6e5b21dc2b",
+    "variants": [
+      {
+        "file": "img-20261012-101656-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 11116
+      },
+      {
+        "file": "img-20261012-101656-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 30454
+      },
+      {
+        "file": "img-20261012-101656-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 54054
+      },
+      {
+        "file": "img-20261012-101656-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 78356
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102251.jpg",
+    "sha256": "0591e80fbbdef186163a69caa22766df0a0eb30ad0a2ab6574172aa6a31e1e22",
+    "variants": [
+      {
+        "file": "img-20261012-102251-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 15924
+      },
+      {
+        "file": "img-20261012-102251-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 52446
+      },
+      {
+        "file": "img-20261012-102251-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 106594
+      },
+      {
+        "file": "img-20261012-102251-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 171642
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102142.jpg",
+    "sha256": "032d8bd91184f9b54ee057618868d6d6fe919534bbcbf3c96cdf5adb77dc8049",
+    "variants": [
+      {
+        "file": "img-20261012-102142-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 12210
+      },
+      {
+        "file": "img-20261012-102142-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 42398
+      },
+      {
+        "file": "img-20261012-102142-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 90416
+      },
+      {
+        "file": "img-20261012-102142-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 150382
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102202.jpg",
+    "sha256": "6906a6cc4cbac38ac9a8414a2c1e0df91396d0629b275448b0ad8f5dc650e089",
+    "variants": [
+      {
+        "file": "img-20261012-102202-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 16210
+      },
+      {
+        "file": "img-20261012-102202-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 55190
+      },
+      {
+        "file": "img-20261012-102202-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 119942
+      },
+      {
+        "file": "img-20261012-102202-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 194054
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102423.jpg",
+    "sha256": "73dfc0f8304e7c77605a98987c282a3eb4c80a0568487d00d8e6fd2a85dd9053",
+    "variants": [
+      {
+        "file": "img-20261012-102423-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 16974
+      },
+      {
+        "file": "img-20261012-102423-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 52186
+      },
+      {
+        "file": "img-20261012-102423-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 101524
+      },
+      {
+        "file": "img-20261012-102423-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 165358
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102308.jpg",
+    "sha256": "7859ee5b459a70ac51932008bd00433e39e9dbc38c330138ceb9bee1b10ea1b9",
+    "variants": [
+      {
+        "file": "img-20261012-102308-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 14740
+      },
+      {
+        "file": "img-20261012-102308-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 45790
+      },
+      {
+        "file": "img-20261012-102308-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 94748
+      },
+      {
+        "file": "img-20261012-102308-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 157296
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102513.jpg",
+    "sha256": "cd513f10e66d7ac25b26dc89414ebd81f50d6562ae85f6c9e784c746e1dcf93b",
+    "variants": [
+      {
+        "file": "img-20261012-102513-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 5508
+      },
+      {
+        "file": "img-20261012-102513-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 14848
+      },
+      {
+        "file": "img-20261012-102513-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 27062
+      },
+      {
+        "file": "img-20261012-102513-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 42082
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_102456.jpg",
+    "sha256": "1a105620233ea48044fd9f1fe53f0617ef08792173b076d24aa96c71c829acd6",
+    "variants": [
+      {
+        "file": "img-20261012-102456-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9642
+      },
+      {
+        "file": "img-20261012-102456-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 24442
+      },
+      {
+        "file": "img-20261012-102456-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 41186
+      },
+      {
+        "file": "img-20261012-102456-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 57624
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_101957.jpg",
+    "sha256": "bf368765808021dfb9dff1e952453d6ce26f1f8203eb958e90b6274073fcc6a9",
+    "variants": [
+      {
+        "file": "img-20261012-101957-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9732
+      },
+      {
+        "file": "img-20261012-101957-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 31772
+      },
+      {
+        "file": "img-20261012-101957-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 69656
+      },
+      {
+        "file": "img-20261012-101957-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 120754
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Gor/IMG_20261012_101959.jpg",
+    "sha256": "599662fa4b1c7929571522b0a05f476c5bd0b5859f03e6df8314c975080dc922",
+    "variants": [
+      {
+        "file": "img-20261012-101959-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9782
+      },
+      {
+        "file": "img-20261012-101959-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 31420
+      },
+      {
+        "file": "img-20261012-101959-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 68664
+      },
+      {
+        "file": "img-20261012-101959-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 118374
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Parkiran /IMG_20261012_101906.jpg",
+    "sha256": "2449906389a8f0f2fdb438033717b9aad4fff40ac32e9ba90c244a06ab8ced7f",
+    "variants": [
+      {
+        "file": "img-20261012-101906-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 19970
+      },
+      {
+        "file": "img-20261012-101906-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 68822
+      },
+      {
+        "file": "img-20261012-101906-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 147336
+      },
+      {
+        "file": "img-20261012-101906-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 243904
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Parkiran /IMG_20261012_101920.jpg",
+    "sha256": "ea8ab1b03d09afc3ee695dcdea62b9c89ae569f901076109438b7af952bc05a3",
+    "variants": [
+      {
+        "file": "img-20261012-101920-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 21304
+      },
+      {
+        "file": "img-20261012-101920-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 71280
+      },
+      {
+        "file": "img-20261012-101920-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 151450
+      },
+      {
+        "file": "img-20261012-101920-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 250520
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Parkiran /IMG_20261012_101935.jpg",
+    "sha256": "2e3b0ebf3a4b19437a33fb03e45a50f6d884404fc81f6b2f883ff67069236619",
+    "variants": [
+      {
+        "file": "img-20261012-101935-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 22212
+      },
+      {
+        "file": "img-20261012-101935-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 79524
+      },
+      {
+        "file": "img-20261012-101935-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 174778
+      },
+      {
+        "file": "img-20261012-101935-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 300630
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/Parkiran /IMG_20261012_101937.jpg",
+    "sha256": "bc9b649341075d30471df2dfb54223cf24af92a10bcc865ef95d0a5a062db298",
+    "variants": [
+      {
+        "file": "img-20261012-101937-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 17712
+      },
+      {
+        "file": "img-20261012-101937-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 60342
+      },
+      {
+        "file": "img-20261012-101937-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 128904
+      },
+      {
+        "file": "img-20261012-101937-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 217120
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/C 3.1/IMG_20261012_065630.jpg",
+    "sha256": "eacbe9f837cf08a80bdec4e9d8d813cf8cecdbf56d330bd1a7639a786006a13e",
+    "variants": [
+      {
+        "file": "img-20261012-065630-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9118
+      },
+      {
+        "file": "img-20261012-065630-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 24378
+      },
+      {
+        "file": "img-20261012-065630-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 44750
+      },
+      {
+        "file": "img-20261012-065630-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 70598
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/C 3.1/IMG_20261012_065640.jpg",
+    "sha256": "d163e59f085d8267f98316713b39bacb503b22f90deadcb9f6242ea61a4c2539",
+    "variants": [
+      {
+        "file": "img-20261012-065640-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 8644
+      },
+      {
+        "file": "img-20261012-065640-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 22986
+      },
+      {
+        "file": "img-20261012-065640-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 42982
+      },
+      {
+        "file": "img-20261012-065640-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 64524
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/C 3.1/IMG_20261012_065652.jpg",
+    "sha256": "08cbe0797af87d710e3b9871c695e5a4ef6c507000712c99c20051d4b827d6b0",
+    "variants": [
+      {
+        "file": "img-20261012-065652-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 8100
+      },
+      {
+        "file": "img-20261012-065652-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 21444
+      },
+      {
+        "file": "img-20261012-065652-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 39858
+      },
+      {
+        "file": "img-20261012-065652-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 62544
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/C 3.1/IMG_20261012_065658.jpg",
+    "sha256": "c40c0c01ddf81f5cd13b1572a8014bd2caf4d7b4fdf2749585a3914e0ab76dbd",
+    "variants": [
+      {
+        "file": "img-20261012-065658-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9294
+      },
+      {
+        "file": "img-20261012-065658-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 24296
+      },
+      {
+        "file": "img-20261012-065658-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 44844
+      },
+      {
+        "file": "img-20261012-065658-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 73184
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/C 3.1/IMG_20261012_065703.jpg",
+    "sha256": "bf966dc4d75e4c01a145f66720fbffe59cf03196479f511c9d27bd67397880f2",
+    "variants": [
+      {
+        "file": "img-20261012-065703-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 10822
+      },
+      {
+        "file": "img-20261012-065703-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 27472
+      },
+      {
+        "file": "img-20261012-065703-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 48108
+      },
+      {
+        "file": "img-20261012-065703-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 76960
+      }
+    ]
+  },
+  {
+    "source": "Foto Kelas/C 3.1/IMG_20261012_065732.jpg",
+    "sha256": "ec8f249da06787a233155bbbc67e30893deec0f12ca7f95527b9b81eb718d84d",
+    "variants": [
+      {
+        "file": "img-20261012-065732-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 8596
+      },
+      {
+        "file": "img-20261012-065732-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 24518
+      },
+      {
+        "file": "img-20261012-065732-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 46346
+      },
+      {
+        "file": "img-20261012-065732-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 76630
+      }
+    ]
+  },
+  {
+    "source": "RPS Selatan.jpeg",
+    "sha256": "1fc8ae8dde036c933bf7ecfe3c9afcc8b9ccf79138dcad78f0021a4908def4aa",
+    "variants": [
+      {
+        "file": "rps-selatan-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 14432
+      },
+      {
+        "file": "rps-selatan-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 39234
+      },
+      {
+        "file": "rps-selatan-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 66288
+      },
+      {
+        "file": "rps-selatan-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 95386
+      }
+    ]
+  },
+  {
+    "source": "RPS selatan 2.jpeg",
+    "sha256": "e8a71488818ab4b6f0de82306c83170a82c7a763158955577b549bd65bd5d943",
+    "variants": [
+      {
+        "file": "rps-selatan-2-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 13434
+      },
+      {
+        "file": "rps-selatan-2-640.webp",
+        "width": 640,
+        "height": 480,
+        "bytes": 39094
+      },
+      {
+        "file": "rps-selatan-2-960.webp",
+        "width": 960,
+        "height": 720,
+        "bytes": 66466
+      },
+      {
+        "file": "rps-selatan-2-1280.webp",
+        "width": 1280,
+        "height": 960,
+        "bytes": 96412
+      }
+    ]
+  },
+  {
+    "source": "RPS utara.jpeg",
+    "sha256": "05ac1d3e57e5e297596d477c00f4c46f7a6605e65a15a566e61954f66dd6e88a",
+    "variants": [
+      {
+        "file": "rps-utara-320.webp",
+        "width": 320,
+        "height": 214,
+        "bytes": 16128
+      },
+      {
+        "file": "rps-utara-588.webp",
+        "width": 588,
+        "height": 393,
+        "bytes": 38828
+      }
+    ]
+  },
+  {
+    "source": "P1250087.JPG",
+    "sha256": "21078467a5b4e71c4f210b58c663c2e33813f7de2886b155c5529c3d79013873",
+    "variants": [
+      {
+        "file": "p1250087-320.webp",
+        "width": 320,
+        "height": 240,
+        "bytes": 9994
+      },
+      {
+        "file": "p1250087-640.webp",
+        "width": 640,
+        "height": 481,
+        "bytes": 25212
+      },
+      {
+        "file": "p1250087-960.webp",
+        "width": 960,
+        "height": 721,
+        "bytes": 42252
+      },
+      {
+        "file": "p1250087-1280.webp",
+        "width": 1280,
+        "height": 961,
+        "bytes": 59770
+      }
+    ]
+  }
+]

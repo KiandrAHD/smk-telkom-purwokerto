@@ -104,7 +104,7 @@ try {
     await openHotspot(id);
     assert.equal(await card().getAttribute('data-campus-preview'), 'gor');
     assert.equal(await currentContent().locator('select').count(), 0);
-    assert.match(await currentContent().innerText(), /GOR/);
+    assert.match(await currentContent().innerText(), id === 'gedung-d-1' ? /GOR/ : /Gedung D/);
   }
   assert.ok(manifest['Kelas C 2.2'].every(photo => photo.source.endsWith('.jpeg')));
   await openHotspot('perpustakaan');

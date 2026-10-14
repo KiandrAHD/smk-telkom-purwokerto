@@ -1,5 +1,6 @@
 import { fasilitasData } from './fasilitasData';
 import { fasilitasViews } from './fasilitasPageData';
+import { facilityPhotoCovers } from './facilityPhotoCovers';
 import lineD1 from '../assets/fasilitas/campus/node-205-1122.svg';
 import lineD2 from '../assets/fasilitas/campus/node-205-1115.svg';
 import linePark from '../assets/fasilitas/campus/node-205-1121.svg';
@@ -22,10 +23,11 @@ export const campusFacilities = {
   'kelas-a': { content: existing('kelas-a'), rooms: classroomGroup('kelas-a'), location: 'Gedung A', list: { category: 'Kelas', group: 'kelas-a' } },
   'kelas-b': { content: existing('kelas-b'), rooms: classroomGroup('kelas-b'), location: 'Gedung B', list: { category: 'Kelas', group: 'kelas-b' } },
   'kelas-c': { content: existing('kelas-c'), rooms: classroomGroup('kelas-c'), location: 'Gedung C', list: { category: 'Kelas', group: 'kelas-c' } },
+  'kelas-d': { content: knownPlace('kelas-d', 'Gedung D'), rooms: classroomGroup('kelas-d'), location: 'Gedung D', list: { category: 'Kelas', group: 'kelas-d' } },
   gor: { content: knownPlace('gor', 'GOR', 'Gedung Olahraga'), location: 'GOR', list: { category: 'GOR', group: 'gor' } },
   perpustakaan: { content: existing('perpustakaan'), list: { category: 'Perpustakaan', group: 'perpustakaan' } },
-  'rps-selatan': { content: knownPlace('rps-selatan', 'RPS Selatan', 'Ruang Praktik Siswa'), list: { category: 'Laboratorium', group: 'lab', item: 'lab-6' } },
-  'rps-utara': { content: knownPlace('rps-utara', 'RPS Utara', 'Ruang Praktik Siswa'), list: { category: 'Laboratorium', group: 'lab', item: 'lab-5' } },
+  'rps-selatan': { content: knownPlace('rps-selatan', 'RPS Selatan', 'Ruang Praktik Siswa'), photos: facilityPhotoCovers['RPS. Selatan'], list: { category: 'Laboratorium', group: 'lab', item: 'lab-6' } },
+  'rps-utara': { content: knownPlace('rps-utara', 'RPS Utara', 'Ruang Praktik Siswa'), photos: facilityPhotoCovers['RPS. Utara'], list: { category: 'Laboratorium', group: 'lab', item: 'lab-5' } },
   dlg: { content: knownPlace('dlg', 'DLG', 'Digital Literacy Garden'), list: { category: 'Perpustakaan', group: 'literasi' } },
   'lapangan-apel': { content: knownPlace('lapangan-apel', 'Lapangan Apel'), list: null },
   aula: { content: knownPlace('aula', 'Aula'), list: null },
@@ -35,7 +37,7 @@ export const campusFacilities = {
 // Pin tips normalized against the Figma image, not the page viewport. Static classes keep Tailwind aware of coordinates.
 export const campusHotspots = [
   { id: 'gedung-d-1', facilityId: 'gor', label: 'GOR', node: '205:1108', x: 0.13461, y: 0.43102, position: 'left-[13.461%] top-[43.102%]' },
-  { id: 'gedung-d-2', facilityId: 'gor', label: 'GOR', node: '205:1114', x: 0.21704, y: 0.41199, position: 'left-[21.704%] top-[41.199%]' },
+  { id: 'gedung-d-2', facilityId: 'kelas-d', label: 'Gedung D', node: '205:1114', x: 0.21704, y: 0.41199, position: 'left-[21.704%] top-[41.199%]' },
   { id: 'parkiran', facilityId: 'parkiran', label: 'Parkiran', node: '205:1107', x: 0.16357, y: 0.49382, position: 'left-[16.357%] top-[49.382%]' },
   { id: 'gedung-c', facilityId: 'kelas-c', label: 'Gedung C', node: '205:1136', x: 0.25714, y: 0.34158, position: 'left-[25.714%] top-[34.158%]' },
   { id: 'gedung-b', facilityId: 'kelas-b', label: 'Gedung B', node: '205:1109', x: 0.33148, y: 0.36061, position: 'left-[33.148%] top-[36.061%]' },
@@ -64,7 +66,7 @@ export const campusAnnotations = {
 };
 export function campusIdForCard(item) {
   if (item.id?.startsWith('gor-')) return 'gor';
-  const building = item.name?.match(/^Kelas ([ABC]) /)?.[1];
+  const building = item.name?.match(/^Kelas ([ABCD]) /)?.[1];
   if (building) return `kelas-${building.toLowerCase()}`;
   return ({ 'RPS. Utara': 'rps-utara', 'RPS. Selatan': 'rps-selatan' })[item.name] || null;
 }
