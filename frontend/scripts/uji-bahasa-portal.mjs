@@ -40,8 +40,8 @@ try {
   assert.ok(questionnaire.includes('Choose one answer'));
   assert.ok(questionnaire.includes('Question 1 of 1'));
   assert.ok(questionnaire.includes('aria-checked="true"'));
-  assert.ok(questionnaire.includes('View Results'));
-  assert.ok(questionnaire.includes('Building applications'));
+  assert.ok(questionnaire.includes('Complete'));
+  assert.ok(questionnaire.includes('Membuat aplikasi'), 'Questionnaire copy preserves the exact supplied Indonesian text.');
 
   // Catalogued assistant copy follows the selected language.
   const result = render(createElement(NextTelResult, {
@@ -54,6 +54,12 @@ try {
   assert.ok(result.includes('>Top Recommendation</p>'));
   assert.ok(result.includes('>Score Summary</li>'));
   assert.ok(result.includes(`>${value.t('Mulai ulang')}</li>`));
+  const ambiguousResult = render(createElement(NextTelResult, {
+    result: { topRecommendation: null, ranking: [['RPL', 0], ['PG', 0], ['TKJ', 0], ['TJAT', 0]], maxScore: 1 },
+    explanation: null, loading: false, error: '', onRetry: () => {}, onRestart: () => {},
+  }));
+  assert.ok(ambiguousResult.includes('Your interests are not clear yet'));
+  assert.ok(ambiguousResult.includes('Your answers do not provide enough information to identify one study program.'));
 
   const chat = render(createElement(StelaChat));
   assert.ok(chat.includes(value.t(stelaData.sapaan)));

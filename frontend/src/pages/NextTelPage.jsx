@@ -7,16 +7,7 @@ import NextTelResult from '../components/nexttel/NextTelResult';
 import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
 import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
 
-const QUESTIONS = [
-  { id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }, { id: 'b', label: 'Membuat game' }, { id: 'c', label: 'Mengatur jaringan' }, { id: 'd', label: 'Teknologi telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'interest', prompt: 'Kamu lebih tertarik pada?', options: [{ id: 'a', label: 'Coding' }, { id: 'b', label: 'Game' }, { id: 'c', label: 'Hardware dan networking' }, { id: 'd', label: 'Jaringan telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'project', prompt: 'Saat membuat project, kamu lebih memilih?', options: [{ id: 'a', label: 'Website atau aplikasi' }, { id: 'b', label: 'Game interaktif' }, { id: 'c', label: 'Infrastruktur jaringan' }, { id: 'd', label: 'Sistem komunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'learning', prompt: 'Kamu lebih suka belajar?', options: [{ id: 'a', label: 'Programming' }, { id: 'b', label: 'Game development' }, { id: 'c', label: 'Networking' }, { id: 'd', label: 'Telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'problem', prompt: 'Masalah seperti apa yang ingin kamu selesaikan?', options: [{ id: 'a', label: 'Membuat solusi digital' }, { id: 'b', label: 'Menciptakan pengalaman bermain' }, { id: 'c', label: 'Membuat koneksi perangkat stabil' }, { id: 'd', label: 'Menghubungkan komunikasi jarak jauh' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'tool', prompt: 'Alat atau bidang mana yang paling membuatmu penasaran?', options: [{ id: 'a', label: 'Editor kode dan database' }, { id: 'b', label: 'Game engine dan desain' }, { id: 'c', label: 'Router dan server' }, { id: 'd', label: 'Kabel fiber dan perangkat akses' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'work', prompt: 'Jenis karya apa yang ingin kamu buat?', options: [{ id: 'a', label: 'Aplikasi yang membantu orang' }, { id: 'b', label: 'Game yang seru dimainkan' }, { id: 'c', label: 'Jaringan yang aman dan cepat' }, { id: 'd', label: 'Infrastruktur telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-  { id: 'future', prompt: 'Bayangan pekerjaan masa depan yang paling menarik?', options: [{ id: 'a', label: 'Software developer' }, { id: 'b', label: 'Game developer' }, { id: 'c', label: 'Network engineer' }, { id: 'd', label: 'Teknisi telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
-];
+import { NEXTTEL_QUESTIONS as QUESTIONS } from '../data/nexttelQuestions';
 
 const NextTelPage = () => {
   const { language } = useLanguage();
@@ -28,18 +19,16 @@ const NextTelPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const controllerRef = useRef(null);
-  const requestIdRef = useRef(0);
 
   useEffect(() => () => controllerRef.current?.abort(), []);
 
   const mulai = () => { setMode('questionnaire'); setCurrentIndex(0); setAnswers({}); setError(null); };
   const jawab = (questionId, optionId, text = '') => setAnswers((previous) => ({ ...previous, [questionId]: { optionId, text } }));
   const selesai = async () => {
-    const selectedAnswers = Object.entries(answers).map(([questionId, answer]) => ({
-      questionId,
-      optionId: answer.optionId,
-      ...(answer.optionId === 'e' ? { text: answer.text.trim() } : {}),
-    }));
+    const selectedAnswers = QUESTIONS.map(({ id: questionId }) => {
+      const answer = answers[questionId];
+      return { questionId, optionId: answer?.optionId, ...(answer?.optionId === 'e' ? { text: answer.text.trim() } : {}) };
+    });
     const computed = hitungHasilNextTel(selectedAnswers);
     if (!computed) {
       setError(language === 'en' ? 'Please complete each answer with valid text.' : 'Lengkapi setiap jawaban dengan teks yang valid.');
@@ -50,19 +39,17 @@ const NextTelPage = () => {
     setLoading(true);
     setError(null);
     setExplanation(null);
+    controllerRef.current?.abort();
     const controller = new AbortController();
-    const requestId = ++requestIdRef.current;
     controllerRef.current = controller;
     try {
       const response = await jelaskanRekomendasiNextTel({
         answers: selectedAnswers,
         language,
       }, { signal: controller.signal });
-      if (requestId !== requestIdRef.current || controller.signal.aborted) return;
-      if (requestId !== requestIdRef.current) return;
-      setExplanation({ ...response, language });
+      if (controllerRef.current === controller && !controller.signal.aborted) setExplanation({ ...response, language });
     } catch (requestError) {
-      if (requestError?.name !== 'AbortError' && requestId === requestIdRef.current && !controller.signal.aborted) {
+      if (requestError?.name !== 'AbortError' && controllerRef.current === controller && !controller.signal.aborted) {
         setExplanation({ ...hasilFallbackNextTel(computed, language), language });
         setError(PESAN_NEXTTEL_GAGAL);
       }
@@ -70,14 +57,20 @@ const NextTelPage = () => {
       if (controllerRef.current === controller) { controllerRef.current = null; setLoading(false); }
     }
   };
-  const lanjut = () => (currentIndex === QUESTIONS.length - 1 ? selesai() : setCurrentIndex((value) => value + 1));
-  const restart = () => { requestIdRef.current += 1; controllerRef.current?.abort(); setMode('intro'); setResult(null); setExplanation(null); setError(null); setLoading(false); };
+  const lanjut = () => {
+    const answer = answers[QUESTIONS[currentIndex].id];
+    if (!answer?.optionId || (answer.optionId === 'e' && !answer.text.trim())) return;
+    if (currentIndex === QUESTIONS.length - 1) selesai();
+    else setCurrentIndex((value) => value + 1);
+  };
+  const restart = () => { controllerRef.current?.abort(); controllerRef.current = null; setMode('intro'); setResult(null); setExplanation(null); setError(null); setLoading(false); };
 
   return (
-    <MainLayout>
+    <MainLayout showSupportSections={false}>
       <section className="bg-white py-8 lg:py-12">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${mode === 'questionnaire' ? 'max-w-5xl' : 'max-w-7xl'}`}>
           {mode === 'intro' && <NextTelIntro onStart={mulai} />}
+          {mode === 'questionnaire' && error && <p role="alert" className="mb-4 text-sm text-primary">{error}</p>}
           {mode === 'questionnaire' && <NextTelQuestionnaire questions={QUESTIONS} currentIndex={currentIndex} answers={answers} onAnswer={jawab} onNext={lanjut} onBack={() => setCurrentIndex((value) => Math.max(0, value - 1))} />}
           {mode === 'result' && result && <NextTelResult result={result} explanation={explanation} loading={loading} error={error} onRetry={selesai} onRestart={restart} />}
         </div>

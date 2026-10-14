@@ -9,7 +9,7 @@ import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
 import '../styles/hero.css';
 
-export default function MainLayout({ children, busy = false, className = '', ctaHref }) {
+export default function MainLayout({ children, busy = false, className = '', ctaHref, showSupportSections = true }) {
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
@@ -39,8 +39,10 @@ export default function MainLayout({ children, busy = false, className = '', cta
           memakai komponen yang sama (mis. /berita/a -> /berita/b). */}
       <main ref={mainRef} id="main-content" tabIndex={-1} aria-busy={busy || undefined} key={pathname} className="animate-masuk-halaman scroll-mt-24">
         {children}
+        {showSupportSections && <>
         <StelaAISection variant="prestasi" className="bg-white py-6 lg:py-8" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
         <CTASection href={ctaHref} variant="fasilitas" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
+        </>}
       </main>
       <Footer />
       {!busy && <>
