@@ -53,6 +53,9 @@ export const sanitizeAIOutput = (input)=>{
 };
 export const deterministicFallback = (topRecommendation, language = 'id')=>{
     const lang = language === 'en' ? 'en' : 'id';
+    if (!LABELS[lang][topRecommendation]) return lang === 'en'
+        ? { explanation: 'Your interests are not clear enough yet. Try describing the activities or field you enjoy most.', strengths: ['Your answers do not point clearly to one program yet.'], learningSuggestions: ['Try a small activity in software, games, networking, or telecommunications.'] }
+        : { explanation: 'Minatmu belum bisa disimpulkan. Coba ceritakan aktivitas atau bidang yang paling kamu sukai.', strengths: ['Jawabanmu belum menunjukkan satu jurusan yang paling jelas.'], learningSuggestions: ['Coba kegiatan kecil di bidang software, game, jaringan, atau telekomunikasi.'] };
     const label = LABELS[lang][topRecommendation] ?? topRecommendation;
     if (lang === 'en') {
         return {

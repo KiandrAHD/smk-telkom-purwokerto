@@ -41,7 +41,10 @@ const NextTelPage = () => {
       ...(answer.optionId === 'e' ? { text: answer.text.trim() } : {}),
     }));
     const computed = hitungHasilNextTel(selectedAnswers);
-    if (!computed) return;
+    if (!computed) {
+      setError(language === 'en' ? 'Please complete each answer with valid text.' : 'Lengkapi setiap jawaban dengan teks yang valid.');
+      return;
+    }
     setResult(computed);
     setMode('result');
     setLoading(true);
