@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
 import HeroSection from '../components/HeroSection';
+import { landingHeroSlides } from '../data/landingHeroSlides';
 import AboutSection from '../components/AboutSection';
 import RibbonDivider from '../components/RibbonDivider';
 import DepartmentsSection from '../components/DepartmentsSection';
@@ -17,7 +18,7 @@ const SectionFallback = () => <div className="py-12 bg-white" />;
 // membuat gerakannya dobel.
 const LandingPage = () => (
   <MainLayout>
-    <HeroSection />
+    <HeroSection slides={landingHeroSlides} />
     <RibbonDivider animated />
     <AboutSection />
     <RibbonDivider />

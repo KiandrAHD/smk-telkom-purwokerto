@@ -12,11 +12,27 @@ import CampusExplorer from '../components/fasilitas/CampusExplorer';
 import { campusFacilities, campusIdForCard } from '../data/campusData';
 import { useLanguage } from '../context/LanguageContext';
 import { fasilitasCategories as categories, fasilitasViews } from '../data/fasilitasPageData';
-import { ctaMasukPpdb } from '../data/dummyData';
-import hero from '../assets/landing/beranda-hero.webp';
-import hero640 from '../assets/landing/beranda-hero-640.webp';
-import hero960 from '../assets/landing/beranda-hero-960.webp';
+import { ctaMasukPpdb, quickLinks } from '../data/dummyData';
+import hero from '../assets/fasilitas/hero-1144.webp';
+import hero640 from '../assets/fasilitas/hero-640.webp';
+import hero960 from '../assets/fasilitas/hero-960.webp';
+import heroLogo from '../assets/fasilitas/hero-logo.png';
+import headingIcon from '../assets/fasilitas/heading-icon.svg';
+import headingUnderline from '../assets/fasilitas/heading-underline.svg';
+import classroomIcon from '../assets/fasilitas/quick-classroom.svg';
+import tourIcon from '../assets/fasilitas/quick-tour.svg';
+import robotIcon from '../assets/fasilitas/quick-robot.svg';
+import sparkIcon from '../assets/fasilitas/quick-spark.svg';
+import sparkDot from '../assets/fasilitas/quick-dot.svg';
+import quickArrow from '../assets/fasilitas/quick-arrow.svg';
 import accent from '../assets/fasilitas/page-accent.png';
+
+const facilityQuickLinks = [
+  { title: 'Ruang Kelas', desc: 'Ruang kelas nyaman berbasis teknologi', linkLabel: 'Lihat Sekarang', href: '/fasilitas?kategori=Kelas#daftar-fasilitas', image: classroomIcon },
+  { title: 'School Tour', desc: 'Jelajahi fasilitas modern sekolah kami', linkLabel: 'Jelajah Sekarang', href: '#school-tour', image: tourIcon },
+  { ...quickLinks[1], image: robotIcon },
+  { ...quickLinks[2], title: 'NexTel', image: sparkIcon },
+];
 
 function GroupTitle({ title, t }) {
   const [first, ...rest] = t(title).split(' ');
@@ -97,7 +113,7 @@ export default function FasilitasPage() {
   };
   useEffect(() => () => cancelAnimationFrame(campusActionFrame.current), []);
   const viewCampusList = list => {
-    selectCategory(list.category);
+    if (list.category) selectCategory(list.category);
     cancelAnimationFrame(campusActionFrame.current);
     campusActionFrame.current = requestAnimationFrame(() => {
       const target = list.item ? document.querySelector(`[data-facility-card="${list.item}"]`) : document.getElementById(`fasilitas-${list.group}`);
@@ -115,8 +131,13 @@ export default function FasilitasPage() {
     <MainLayout>
       <div>
         <section aria-labelledby="fasilitas-hero-title" className="school-hero hero-container">
-          <div className="hero-panel hero-panel--background hero-panel--bleed hero-panel--students">
-            <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1208w`} sizes="(min-width: 1280px) 850px, (min-width: 1024px) 70vw, 100vw" alt={t('Siswa SMK Telkom Purwokerto')} width="1208" height="679" fetchPriority="high" className="hero-background object-cover" />
+          <div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--facilities">
+            <div className="hero-background relative aspect-[1144/679]">
+              <img src={hero} srcSet={`${hero640} 640w, ${hero960} 960w, ${hero} 1144w`} sizes="(min-width: 1280px) 795px, (min-width: 1024px) 65vw, calc(100vw - 2rem)" alt={t('Kolase ruang kelas dan laboratorium SMK Telkom Purwokerto')} width="1144" height="679" fetchPriority="high" decoding="async" className="block h-full w-full object-cover" />
+              <span aria-hidden="true" className="absolute left-[57%] top-[34.61%] aspect-[107/105] w-[9.35%] overflow-hidden rounded-[14%] bg-white">
+                <span className="absolute inset-x-[14.95%] bottom-[10.48%] top-[11.43%] overflow-hidden"><img src={heroLogo} alt="" className="absolute left-[-0.18%] top-0 h-full w-[346.21%] max-w-none" /></span>
+              </span>
+            </div>
             <div className="hero-copy">
               <HeroBreadcrumb current="Fasilitas Sekolah" />
               <HeroBadges />
@@ -130,6 +151,21 @@ export default function FasilitasPage() {
               </div>
             </div>
           </div>
+          <div data-facilities-quick-access className="hero-floating hero-floating--quick overflow-hidden">
+            <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
+              {facilityQuickLinks.map((item, index) => <div key={item.title} className={`quick-access-card flex min-w-0 gap-3 px-4 py-3 ${index % 2 ? 'sm:border-l sm:border-dark-200' : ''} ${index >= 2 ? 'sm:border-t sm:border-dark-200 lg:border-t-0' : ''} ${index === 2 ? 'lg:border-l lg:border-dark-200' : ''}`}>
+                <span aria-hidden="true" className="quick-access-icon relative flex size-10 shrink-0 items-center justify-center self-start rounded-lg bg-primary">
+                  <img src={item.image} alt="" className={`h-auto ${index === 0 ? 'w-[47%]' : index === 1 ? 'w-[57%]' : 'w-[66%]'}`} />
+                  {index === 3 && <><span className="absolute right-[18%] top-[20%] text-[7px] font-extrabold leading-none text-white">+</span><img src={sparkDot} alt="" className="absolute bottom-[24%] left-[16%] h-auto w-[10%]" /></>}
+                </span>
+                <div className="quick-access-content min-w-0 flex-1">
+                  <p className="quick-access-title font-heading font-bold text-dark-900">{t(item.title)}</p>
+                  <p className="quick-access-description text-dark-600">{t(item.desc)}</p>
+                  <Link to={item.href} onClick={index === 0 ? () => viewCampusList({}) : undefined} className="quick-access-cta inline-flex min-h-11 items-center gap-1 font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t(item.linkLabel)}<img src={quickArrow} alt="" aria-hidden="true" className="h-auto w-3 shrink-0" /></Link>
+                </div>
+              </div>)}
+            </div>
+          </div>
         </section>
         <RibbonDivider animated />
         <CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} />
@@ -138,7 +174,10 @@ export default function FasilitasPage() {
             {[0, 1, 2, 3].map(index => <img key={index} src={accent} alt="" width="39" height="564" className="block h-auto w-full" />)}
           </div>)}
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 id="fasilitas-title" className="font-heading text-2xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-3xl"><span className="text-primary">{titleStart}</span> {titleEnd.join(' ')}</h2>
+            <h2 id="fasilitas-title" className="mx-auto flex w-fit items-center justify-center gap-2 font-heading text-2xl font-bold leading-tight tracking-wide text-dark-900 sm:gap-3 sm:text-3xl">
+              <img src={headingIcon} alt="" aria-hidden="true" className="size-12 shrink-0 sm:size-16" />
+              <span className="relative"><span className="text-primary">{titleStart}</span> {titleEnd.join(' ')}<img src={headingUnderline} alt="" aria-hidden="true" className="absolute inset-x-0 -bottom-1 h-px w-full" /></span>
+            </h2>
             <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label={t('Filter fasilitas')}>
               {categories.map(name => <button key={name} type="button" aria-pressed={category === name} aria-controls="fasilitas-grid" onClick={() => selectCategory(name)} className={`min-h-11 rounded-full border px-5 py-2.5 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary ${category === name ? 'border-primary bg-primary text-white hover:bg-primary-800' : 'border-dark-200 bg-white text-dark-600 hover:border-primary hover:text-primary'}`}>{t(name)}</button>)}
             </div>

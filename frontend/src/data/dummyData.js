@@ -835,8 +835,8 @@ export const perjalananPrestasi = {
 export const videoHighlight = {
   sectionTitle: 'Didukung & Diakui Oleh',
   title: 'Video Highlight',
-  videoTitle: 'Highlight Prestasi SMK Telkom Purwokerto\nTahun 2024',
-  videoDesc: 'Perjalanan, kerja keras, dan momen terbaik siswa SMK Telkom Purwokerto',
+  videoTitle: 'Highlight Video Short Movie Karya Siswa SMK Telkom Purwokerto',
+  videoDesc: 'Merekam perjalanan panjang, dedikasi, serta kerja keras siswa-siswi SMK Telkom Purwokerto dalam proses merancang dan mempresentasikan karya inovatif terbaik mereka di hadapan publik dan dunia industri.',
   // ponytail: memakai video profil resmi sekolah karena reel khusus prestasi
   // belum ada. Ganti `videoId` di sini begitu videonya tersedia.
   video: { ...videoProfilSekolah, poster: showcaseIot },
