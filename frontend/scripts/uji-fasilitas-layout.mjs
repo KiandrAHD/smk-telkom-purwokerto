@@ -19,5 +19,13 @@ try {
   const point = campusHotspots.find(point => point.id === 'gedung-d-2');
   assert.equal(point.label, 'Gedung D');
   assert.equal(campusFacilities[point.facilityId].location, 'Gedung D');
+  for (const hotspot of campusHotspots) {
+    const facility = campusFacilities[hotspot.facilityId];
+    const galleries = facility.rooms ? facility.rooms.map(room => room.photos) : [facility.photos];
+    for (const photos of galleries) {
+      assert(photos?.length, `${hotspot.label}: map preview must have supplied photos`);
+      assert(photos.every(photo => photo.src && photo.srcSet && photo.source), `${hotspot.label}: every photo must resolve`);
+    }
+  }
   console.log('PASS Figma groups, 24 slots, corrected classroom names, traceable photos, and Gedung D destination');
 } finally { await server.close(); }

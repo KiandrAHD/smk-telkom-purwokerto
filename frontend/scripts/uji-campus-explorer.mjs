@@ -47,17 +47,17 @@ try {
   const { fasilitasData } = await server.ssrLoadModule('/src/data/fasilitasData.js');
   assert.equal(campusHotspots.length, 12);
   assert.equal(new Set(campusHotspots.map(point => point.id)).size, 12);
-  assert.equal(new Set(campusHotspots.map(point => point.facilityId)).size, 11);
+  assert.equal(new Set(campusHotspots.map(point => point.facilityId)).size, 12);
   for (const point of campusHotspots) { assert.ok(campusFacilities[point.facilityId]); assert.ok(point.x > 0 && point.x < 1 && point.y > 0 && point.y < 1); }
   for (const id of ['kelas-a', 'kelas-b', 'kelas-c', 'perpustakaan']) assert.equal(campusFacilities[id].content, fasilitasData.find(item => item.id === id), 'Reuse canonical facility record');
-  assert.equal(campusFacilities['lapangan-apel'].content.image, null, 'Unverified photography needs an honest fallback');
-  for (const building of ['a', 'b', 'c']) {
+  assert.ok(campusFacilities['lapangan-apel'].photos.every(photo => photo.source.includes('Lapangan Upacara')), 'Field photos come from the supplied ZIP');
+  for (const building of ['a', 'b', 'c', 'd']) {
     const facility = campusFacilities['kelas-' + building];
     assert.equal(facility.rooms.length, 4);
     assert.ok(facility.rooms.every(room => room.name.startsWith('Kelas ' + building.toUpperCase() + ' ')));
     assert.ok(facility.rooms[0].photos?.length, 'Each default room has a verified photo.');
   }
-  assert.equal(campusFacilities['kelas-c'].rooms.find(room => room.name === 'Kelas C 2.3').photos, undefined);
+  assert.equal(campusFacilities['kelas-c'].rooms.find(room => room.name === 'Kelas C 2.1').photoKey, 'Kelas C 2.2');
   assert.equal(campusIdForCard({ name: 'Kelas B 1.4' }), 'kelas-b');
   assert.equal(campusIdForCard({ name: 'RPS. Utara' }), 'rps-utara');
   assert.equal(campusIdForCard({ name: 'Lab. RPL' }), null, 'Do not infer a lab location from an example card');
