@@ -148,6 +148,7 @@ export const toPrestasiItem = (row) => ({
   date: formatPublicDate(row.tanggal),
   iso: row.tanggal || row.created_at || '',
   ...contentWithLead(row.deskripsi),
+  instagramUrl: row.instagram_url || '',
 });
 
 export const toBkkItem = (row) => ({

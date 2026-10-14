@@ -139,6 +139,7 @@ const PrestasiPage = () => {
         <h3 className="mt-3 font-heading text-xl font-extrabold text-dark-900">{modal.item.judul}</h3>
         <p className="mt-2 text-xs text-dark-500">/{modal.item.slug} - Tanggal: {modal.item.tanggal ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'long' }).format(new Date(modal.item.tanggal)) : 'Belum diisi'}</p>
         <div className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-dark-700">{modal.item.deskripsi}</div>
+        {modal.item.instagram_url && <a href={modal.item.instagram_url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex text-sm font-semibold text-primary hover:underline">Lihat post Instagram</a>}
         <p className="mt-5 text-xs text-dark-400">Dibuat: {formatDateTime(modal.item.created_at)}</p>
       </PrestasiModal>}
 

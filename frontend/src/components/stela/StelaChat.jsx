@@ -1,7 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle, HelpCircle, Send } from 'lucide-react';
+import { AlertCircle, Send } from 'lucide-react';
 import { PESAN_STELA_GAGAL, tanyaStela, kategorikanGalat, KATEGORI_GALAT } from '../../services/stela';
 import { stelaData } from '../../data/dummyData';
 import { canonicalAdmissionsPath, formatAdmissionsText } from '../../utils/admissions';
@@ -192,26 +192,12 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
         {galat && (
           <div
             role="alert"
-            className={`flex items-start gap-2.5 rounded-xl px-4 py-3 text-[11px] leading-relaxed ${
-              jenisGalat === KATEGORI_GALAT.SCOPE || jenisGalat === KATEGORI_GALAT.SECURITY
-                ? 'bg-amber-50 text-amber-900 border border-amber-200'
-                : 'bg-primary-50 text-primary-900 border border-primary-100'
-            }`}
+            className="flex items-start gap-2.5 rounded-xl border border-primary-100 bg-primary-50 px-4 py-3 text-[11px] leading-relaxed text-primary-900"
           >
-            {jenisGalat === KATEGORI_GALAT.SCOPE || jenisGalat === KATEGORI_GALAT.SECURITY ? (
-              <HelpCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
-            ) : (
-              <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-            )}
+            <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
 
             <div className="min-w-0 flex-1">
               <p className="[overflow-wrap:anywhere] font-medium">{t(galat)}</p>
-
-              {(jenisGalat === KATEGORI_GALAT.SCOPE || jenisGalat === KATEGORI_GALAT.SECURITY) && (
-                <p className="mt-1 text-[10px] opacity-80">
-                  {t("STELA berfokus menjawab seputar jurusan, fasilitas, SPMB, prestasi, dan informasi sekolah.")}
-                </p>
-              )}
             </div>
 
             {/* Tombol 'Coba lagi' hanya muncul untuk error transient/koneksi, bukan untuk ditolak/scope */}

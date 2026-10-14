@@ -52,6 +52,12 @@ const PrestasiDetailKonten = ({ item, relatedItems = [] }) => {
         </section>
       )}
 
+      {item.instagramUrl && (
+        <a href={item.instagramUrl} target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-11 items-center rounded-full border border-primary/40 px-5 py-2 text-xs font-bold text-primary hover:bg-primary-50">
+          {t('Lihat post Instagram')}
+        </a>
+      )}
+
       <GaleriFoto
         items={item.galeri}
         title={t("Momen Juara")}

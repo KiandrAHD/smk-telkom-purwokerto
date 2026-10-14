@@ -5,8 +5,11 @@ import NextTelProgress from './NextTelProgress';
 const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNext, onBack }) => {
   const { t } = useLanguage();
   const question = questions[currentIndex];
-  const selected = answers[question.id];
+  const selected = typeof answers[question.id] === 'string' ? answers[question.id] : answers[question.id]?.optionId;
+  const freeText = answers[question.id]?.text ?? '';
   const isLast = currentIndex === questions.length - 1;
+  const selectedFreeText = selected === 'e';
+  const answerReady = Boolean(selected && (!selectedFreeText || freeText.trim()));
 
   return (
     <div className="mx-auto max-w-2xl rounded-3xl border border-dark-100 bg-white p-5 shadow-card sm:p-8">
@@ -24,7 +27,7 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
               type="button"
               role="radio"
               aria-checked={active}
-              onClick={() => onAnswer(question.id, option.id)}
+              onClick={() => onAnswer(question.id, option.id, option.id === 'e' ? freeText : '')}
               className={`flex w-full items-start gap-3 rounded-2xl border px-4 py-4 text-left text-sm transition-colors ${
                 active
                   ? 'border-primary bg-primary-50 text-primary-900'
@@ -39,6 +42,13 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
           );
         })}
       </div>
+      {selectedFreeText && (
+        <div className="mt-4">
+          <label htmlFor="nexttel-free-text" className="text-sm font-semibold text-dark-700">{t('Ceritakan sedikit')}</label>
+          <textarea id="nexttel-free-text" value={freeText} maxLength={240} onChange={(event) => onAnswer(question.id, 'e', event.target.value)} rows={3} className="mt-2 w-full rounded-2xl border border-dark-200 p-3 text-sm text-dark-800 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30" aria-describedby="nexttel-free-text-help" />
+          <p id="nexttel-free-text-help" className="mt-1 text-xs text-dark-500">{freeText.length}/240</p>
+        </div>
+      )}
       <div className="mt-8 flex items-center justify-between gap-3">
         <button
           type="button"
@@ -50,7 +60,7 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
         <button
           type="button"
           onClick={onNext}
-          disabled={!selected}
+          disabled={!answerReady}
           className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white transition-opacity hover:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {t(isLast ? 'Lihat hasil' : 'Lanjut')} <ArrowRight className="h-4 w-4" aria-hidden="true" />

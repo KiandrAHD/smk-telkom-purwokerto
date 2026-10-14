@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import StelaWidget from '../components/stela/StelaWidget';
+import StelaReminder from '../components/stela/StelaReminder';
 import StelaAISection from '../components/StelaAISection';
 import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
@@ -42,7 +43,10 @@ export default function MainLayout({ children, busy = false, className = '', cta
         <CTASection href={ctaHref} variant="fasilitas" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
       </main>
       <Footer />
-      {!busy && <StelaWidget />}
+      {!busy && <>
+        <StelaReminder />
+        <StelaWidget />
+      </>}
     </div>
   );
 }

@@ -121,7 +121,8 @@ const ambilContextPublik = async (pertanyaan: string) => {
     : kategori === 'prestasi' ? ['prestasi']
       : kategori === 'berita' ? ['berita']
         : kategori === 'pengumuman' || kategori === 'ppdb' ? ['pengumuman']
-          : [];
+          : kategori === 'umum' || kategori === 'sekolah' ? ['berita', 'pengumuman']
+            : [];
   if (tabel.length === 0) return 'Tidak ada data dinamis yang relevan. Gunakan data sekolah terverifikasi.';
   const hasil = await Promise.all(tabel.map((nama) => {
     if (nama === 'bkk') return ambilTabelPublik('bkk', 'perusahaan,posisi,deskripsi,lokasi,tipe_pekerjaan,deadline,status', 'status=eq.aktif&order=deadline.asc');

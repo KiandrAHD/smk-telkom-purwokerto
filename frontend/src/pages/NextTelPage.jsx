@@ -8,14 +8,14 @@ import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL }
 import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
 
 const QUESTIONS = [
-  { id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }, { id: 'b', label: 'Membuat game' }, { id: 'c', label: 'Mengatur jaringan' }, { id: 'd', label: 'Teknologi telekomunikasi' }] },
-  { id: 'interest', prompt: 'Kamu lebih tertarik pada?', options: [{ id: 'a', label: 'Coding' }, { id: 'b', label: 'Game' }, { id: 'c', label: 'Hardware dan networking' }, { id: 'd', label: 'Jaringan telekomunikasi' }] },
-  { id: 'project', prompt: 'Saat membuat project, kamu lebih memilih?', options: [{ id: 'a', label: 'Website atau aplikasi' }, { id: 'b', label: 'Game interaktif' }, { id: 'c', label: 'Infrastruktur jaringan' }, { id: 'd', label: 'Sistem komunikasi' }] },
-  { id: 'learning', prompt: 'Kamu lebih suka belajar?', options: [{ id: 'a', label: 'Programming' }, { id: 'b', label: 'Game development' }, { id: 'c', label: 'Networking' }, { id: 'd', label: 'Telekomunikasi' }] },
-  { id: 'problem', prompt: 'Masalah seperti apa yang ingin kamu selesaikan?', options: [{ id: 'a', label: 'Membuat solusi digital' }, { id: 'b', label: 'Menciptakan pengalaman bermain' }, { id: 'c', label: 'Membuat koneksi perangkat stabil' }, { id: 'd', label: 'Menghubungkan komunikasi jarak jauh' }] },
-  { id: 'tool', prompt: 'Alat atau bidang mana yang paling membuatmu penasaran?', options: [{ id: 'a', label: 'Editor kode dan database' }, { id: 'b', label: 'Game engine dan desain' }, { id: 'c', label: 'Router dan server' }, { id: 'd', label: 'Kabel fiber dan perangkat akses' }] },
-  { id: 'work', prompt: 'Jenis karya apa yang ingin kamu buat?', options: [{ id: 'a', label: 'Aplikasi yang membantu orang' }, { id: 'b', label: 'Game yang seru dimainkan' }, { id: 'c', label: 'Jaringan yang aman dan cepat' }, { id: 'd', label: 'Infrastruktur telekomunikasi' }] },
-  { id: 'future', prompt: 'Bayangan pekerjaan masa depan yang paling menarik?', options: [{ id: 'a', label: 'Software developer' }, { id: 'b', label: 'Game developer' }, { id: 'c', label: 'Network engineer' }, { id: 'd', label: 'Teknisi telekomunikasi' }] },
+  { id: 'activity', prompt: 'Aktivitas yang paling kamu sukai?', options: [{ id: 'a', label: 'Membuat aplikasi' }, { id: 'b', label: 'Membuat game' }, { id: 'c', label: 'Mengatur jaringan' }, { id: 'd', label: 'Teknologi telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'interest', prompt: 'Kamu lebih tertarik pada?', options: [{ id: 'a', label: 'Coding' }, { id: 'b', label: 'Game' }, { id: 'c', label: 'Hardware dan networking' }, { id: 'd', label: 'Jaringan telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'project', prompt: 'Saat membuat project, kamu lebih memilih?', options: [{ id: 'a', label: 'Website atau aplikasi' }, { id: 'b', label: 'Game interaktif' }, { id: 'c', label: 'Infrastruktur jaringan' }, { id: 'd', label: 'Sistem komunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'learning', prompt: 'Kamu lebih suka belajar?', options: [{ id: 'a', label: 'Programming' }, { id: 'b', label: 'Game development' }, { id: 'c', label: 'Networking' }, { id: 'd', label: 'Telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'problem', prompt: 'Masalah seperti apa yang ingin kamu selesaikan?', options: [{ id: 'a', label: 'Membuat solusi digital' }, { id: 'b', label: 'Menciptakan pengalaman bermain' }, { id: 'c', label: 'Membuat koneksi perangkat stabil' }, { id: 'd', label: 'Menghubungkan komunikasi jarak jauh' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'tool', prompt: 'Alat atau bidang mana yang paling membuatmu penasaran?', options: [{ id: 'a', label: 'Editor kode dan database' }, { id: 'b', label: 'Game engine dan desain' }, { id: 'c', label: 'Router dan server' }, { id: 'd', label: 'Kabel fiber dan perangkat akses' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'work', prompt: 'Jenis karya apa yang ingin kamu buat?', options: [{ id: 'a', label: 'Aplikasi yang membantu orang' }, { id: 'b', label: 'Game yang seru dimainkan' }, { id: 'c', label: 'Jaringan yang aman dan cepat' }, { id: 'd', label: 'Infrastruktur telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
+  { id: 'future', prompt: 'Bayangan pekerjaan masa depan yang paling menarik?', options: [{ id: 'a', label: 'Software developer' }, { id: 'b', label: 'Game developer' }, { id: 'c', label: 'Network engineer' }, { id: 'd', label: 'Teknisi telekomunikasi' }, { id: 'e', label: 'Lainnya', freeText: true }] },
 ];
 
 const NextTelPage = () => {
@@ -28,13 +28,18 @@ const NextTelPage = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const controllerRef = useRef(null);
+  const requestIdRef = useRef(0);
 
   useEffect(() => () => controllerRef.current?.abort(), []);
 
   const mulai = () => { setMode('questionnaire'); setCurrentIndex(0); setAnswers({}); setError(null); };
-  const jawab = (questionId, optionId) => setAnswers((previous) => ({ ...previous, [questionId]: optionId }));
+  const jawab = (questionId, optionId, text = '') => setAnswers((previous) => ({ ...previous, [questionId]: { optionId, text } }));
   const selesai = async () => {
-    const selectedAnswers = Object.entries(answers).map(([questionId, optionId]) => ({ questionId, optionId }));
+    const selectedAnswers = Object.entries(answers).map(([questionId, answer]) => ({
+      questionId,
+      optionId: answer.optionId,
+      ...(answer.optionId === 'e' ? { text: answer.text.trim() } : {}),
+    }));
     const computed = hitungHasilNextTel(selectedAnswers);
     if (!computed) return;
     setResult(computed);
@@ -43,15 +48,18 @@ const NextTelPage = () => {
     setError(null);
     setExplanation(null);
     const controller = new AbortController();
+    const requestId = ++requestIdRef.current;
     controllerRef.current = controller;
     try {
       const response = await jelaskanRekomendasiNextTel({
         answers: selectedAnswers,
         language,
       }, { signal: controller.signal });
+      if (requestId !== requestIdRef.current || controller.signal.aborted) return;
+      if (requestId !== requestIdRef.current) return;
       setExplanation({ ...response, language });
     } catch (requestError) {
-      if (requestError?.name !== 'AbortError') {
+      if (requestError?.name !== 'AbortError' && requestId === requestIdRef.current && !controller.signal.aborted) {
         setExplanation({ ...hasilFallbackNextTel(computed, language), language });
         setError(PESAN_NEXTTEL_GAGAL);
       }
@@ -60,7 +68,7 @@ const NextTelPage = () => {
     }
   };
   const lanjut = () => (currentIndex === QUESTIONS.length - 1 ? selesai() : setCurrentIndex((value) => value + 1));
-  const restart = () => { controllerRef.current?.abort(); setMode('intro'); setResult(null); setExplanation(null); setError(null); setLoading(false); };
+  const restart = () => { requestIdRef.current += 1; controllerRef.current?.abort(); setMode('intro'); setResult(null); setExplanation(null); setError(null); setLoading(false); };
 
   return (
     <MainLayout>

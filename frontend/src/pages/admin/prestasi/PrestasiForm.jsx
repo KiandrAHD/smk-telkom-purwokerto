@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { slugify } from '../../../utils/slug';
 import ImageUploadField from '../../../components/dashboard/ImageUploadField';
+import { isValidInstagramUrl } from '../../../utils/instagramUrl';
 
 const emptyForm = {
   judul: '',
@@ -10,6 +11,7 @@ const emptyForm = {
   gambar_url: '',
   tingkat: '',
   tanggal: '',
+  instagram_url: '',
 };
 
 const tingkatOptions = ['Sekolah', 'Kabupaten', 'Provinsi', 'Nasional', 'Internasional', 'Lainnya'];
@@ -39,6 +41,7 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
     if (!form.slug.trim()) nextErrors.slug = 'Slug wajib diisi.';
     else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(form.slug.trim())) nextErrors.slug = 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.';
     if (!form.deskripsi.trim()) nextErrors.deskripsi = 'Deskripsi wajib diisi.';
+    if (form.instagram_url.trim() && !isValidInstagramUrl(form.instagram_url.trim())) nextErrors.instagram_url = 'URL harus HTTPS dan berasal dari instagram.com atau subdomainnya.';
     return nextErrors;
   };
 
@@ -61,6 +64,7 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
       image_file: imageFile,
       tingkat: form.tingkat || null,
       tanggal: form.tanggal || null,
+      instagram_url: form.instagram_url.trim() || null,
     });
     if (submitError) setErrors({ submit: submitError });
   };
@@ -108,6 +112,12 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
           <label htmlFor="prestasi-tanggal" className={labelClass}>Tanggal</label>
           <input id="prestasi-tanggal" type="date" value={form.tanggal} onChange={(event) => updateField('tanggal', event.target.value)} className={inputClass} />
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="prestasi-instagram" className={labelClass}>URL Post Instagram</label>
+        <input id="prestasi-instagram" type="url" value={form.instagram_url} onChange={(event) => updateField('instagram_url', event.target.value)} className={inputClass} placeholder="https://www.instagram.com/p/..." />
+        {errors.instagram_url && <p className="mt-1 text-xs text-primary-700">{errors.instagram_url}</p>}
       </div>
 
       {errors.submit && <p role="alert" className="text-xs text-primary-700">{errors.submit}</p>}

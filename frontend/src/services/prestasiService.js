@@ -1,7 +1,7 @@
 import { ensureSupabase } from './supabase';
 import { saveWithContentImage } from './contentImageService';
 
-const prestasiColumns = 'id, judul, slug, kategori, deskripsi, gambar_url, tingkat, tanggal, created_at, updated_at';
+const prestasiColumns = 'id, judul, slug, kategori, deskripsi, gambar_url, tingkat, tanggal, instagram_url, created_at, updated_at';
 
 const throwIfError = ({ data, error }) => {
   if (error) throw error;
