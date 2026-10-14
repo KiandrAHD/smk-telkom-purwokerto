@@ -1,0 +1,21 @@
+.hero-carousel-viewport { display: grid; overflow: hidden; isolation: isolate; border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent); border-radius: var(--hero-radius); background: white; }
+.hero-carousel-slide { grid-area: 1 / 1; min-width: 0; visibility: hidden; }
+.hero-carousel-slide[data-active="true"] { visibility: visible; }
+.hero-carousel-slide > .hero-panel { height: 100%; border: 0; border-radius: 0; }
+.hero-carousel .hero-grid > .hero-copy { width: auto; }
+.hero-carousel[data-hero-moving="true"] .hero-carousel-slide { pointer-events: none; }
+.hero-carousel .hero-media { aspect-ratio: 1208 / 679; }
+.hero-carousel .hero-panel--facilities .hero-image { mask-image: url('../assets/fasilitas/hero-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
+.hero-carousel .hero-panel--school .hero-media { overflow: hidden; }
+.hero-carousel-profile-crop { position: absolute; right: 0; bottom: 0; width: 100%; aspect-ratio: 1277 / 652; overflow: hidden; }
+.hero-carousel .hero-panel--school .hero-carousel-profile-en { position: absolute; width: 105.48%; height: auto; max-width: none; left: -2.82%; top: -39.72%; }
+.hero-carousel:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; border-radius: var(--hero-radius); }
+@media (min-width: 64rem) {
+  .hero-carousel-slide > .hero-panel { min-height: calc(var(--hero-height) - 2px); }
+  .hero-carousel .hero-media { aspect-ratio: auto; }
+  .hero-carousel-profile-crop { width: auto; height: 100%; }
+}
+@media (max-width: 63.999rem) {
+  .hero-carousel .hero-grid { height: 100%; grid-template-rows: minmax(0, 1fr) auto; }
+  .hero-carousel .hero-media .hero-image { object-fit: contain; object-position: right bottom; }
+}

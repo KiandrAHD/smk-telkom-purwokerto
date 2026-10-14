@@ -1,4 +1,9 @@
 export default {
+  'Sorotan sekolah': 'School highlights',
+  'Slide': 'slide',
+  'Gunakan tombol panah kiri atau kanan untuk mengganti sorotan sekolah.': 'Use the left or right arrow keys to change the school highlight.',
+  '{number} dari {total}: {name}': '{number} of {total}: {name}',
+  'Membanggakan': 'To Be Proud Of',
   'Menjelajahi Stematel': 'Explore Stematel',
   'Geser untuk melihat': 'Drag to explore',
   'Geser untuk Menjelajah': 'Drag to explore',
