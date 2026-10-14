@@ -6,6 +6,7 @@ import RouteErrorBoundary from './components/RouteErrorBoundary';
 import ErrorPage from './pages/ErrorPage';
 import MainLayout from './layouts/MainLayout';
 import { canonicalAdmissionsPath } from './utils/admissions';
+import { PAGE_META, applyPageMetadata } from './utils/seo';
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const FasilitasPage = lazy(() => import('./pages/FasilitasPage'));
 import { useLanguage } from './context/LanguageContext';
@@ -62,37 +63,19 @@ const NextTelPage = lazy(() => import('./pages/NextTelPage'));
 const EkstrakurikulerPage = lazy(() => import('./pages/EkstrakurikulerPage'));
 const KebijakanPrivasiPage = lazy(() => import('./pages/KebijakanPrivasiPage'));
 
-const PAGE_META = {
-  '/': ['SMK Telkom Purwokerto', 'SMK Telkom Purwokerto, sekolah vokasi teknologi di Purwokerto.'],
-  '/fasilitas': ['Fasilitas Sekolah | SMK Telkom Purwokerto', 'Jelajahi ruang kelas, laboratorium, dan perpustakaan SMK Telkom Purwokerto.'],
-  '/profil-sekolah': ['Profil Sekolah | SMK Telkom Purwokerto', 'Kenali profil, visi misi, dan fasilitas SMK Telkom Purwokerto.'],
-  '/profil-sekolah/guru': ['Profil Guru | SMK Telkom Purwokerto', 'Kenali kepala sekolah, guru, dan tenaga pendidik SMK Telkom Purwokerto.'],
-  '/jurusan': ['Jurusan SMK Telkom Purwokerto', 'Pilih program keahlian teknologi sesuai minat dan bakatmu.'],
-  '/prestasi': ['Prestasi SMK Telkom Purwokerto', 'Lihat prestasi dan pencapaian siswa SMK Telkom Purwokerto.'],
-  '/bkk': ['BKK SMK Telkom Purwokerto', 'Informasi lowongan kerja dan career center SMK Telkom Purwokerto.'],
-  '/berita': ['Berita SMK Telkom Purwokerto', 'Berita terbaru dari SMK Telkom Purwokerto.'],
-  '/pengumuman': ['Pengumuman SMK Telkom Purwokerto', 'Pengumuman resmi SMK Telkom Purwokerto.'],
-  '/kalender': ['Kalender Kegiatan | SMK Telkom Purwokerto', 'Jelajahi kalender kegiatan, lomba, dan acara SMK Telkom Purwokerto.'],
-  '/spmb': ['Informasi SPMB | SMK Telkom Purwokerto', 'Informasi alur, jalur penerimaan, berkas, dan pendaftaran SPMB SMK Telkom Purwokerto.'],
-  '/stela': ['STELA AI | SMK Telkom Purwokerto', 'Asisten informasi umum SMK Telkom Purwokerto.'],
-  '/nexttel': ['NextTel | SMK Telkom Purwokerto', 'Cari jurusan yang sesuai dengan minatmu.'],
-  '/ekstrakurikuler': ['Ekstrakurikuler | SMK Telkom Purwokerto', 'Kegiatan pengembangan minat, bakat, dan karakter siswa.'],
-  '/login': ['Login Admin | SMK Telkom Purwokerto', 'Halaman login administrator website sekolah.'],
-  '/dashboard': ['Dashboard Admin | SMK Telkom Purwokerto', 'Kelola konten dan data website sekolah.'],
-  '/kebijakan-privasi': ['Kebijakan Privasi | SMK Telkom Purwokerto', 'Kebijakan privasi dan perlindungan data website SMK Telkom Purwokerto.'],
-};
+
 
 const PageMetadata = () => {
   const { t } = useLanguage();
   const { pathname } = useLocation();
   useEffect(() => {
-    const key = Object.keys(PAGE_META).find((path) => pathname === path || (['/dashboard', '/spmb'].includes(path) && pathname.startsWith(`${path}/`)));
+    if (document.querySelector('#error-title')) return;
+    const path = pathname.replace(/\/+$/, '') || '/';
+    const key = Object.keys(PAGE_META).find((entry) => path === entry || (['/dashboard', '/spmb'].includes(entry) && path.startsWith(`${entry}/`)));
     // DetailLayout sets the title when its asynchronously loaded item exists.
-    const collectionPaths = ['/pengumuman/populer', '/pengumuman/semua', '/pengumuman/timeline', '/pengumuman/informasi-penting', '/berita/trending', '/berita/agenda', '/prestasi/galeri', '/jurusan/faq', '/jurusan/perbandingan'];
-    if (!key && !collectionPaths.includes(pathname) && /^\/(berita|prestasi|jurusan|pengumuman)\/[^/]+$/.test(pathname)) return;
+    if (!key && document.querySelector('main h1')) return;
     const [title, description] = PAGE_META[key] || ['SMK Telkom Purwokerto', 'Website resmi SMK Telkom Purwokerto.'];
-    document.title = t(title);
-    document.querySelector('meta[name="description"]')?.setAttribute('content', t(description));
+    applyPageMetadata({ pathname, title: t(title), description: t(description), indexable: Boolean(key) && !/^\/(login|dashboard|auth|lupa-sandi)(\/|$)/.test(path) && !path.startsWith('/spmb/') });
   }, [pathname, t]);
   return null;
 };

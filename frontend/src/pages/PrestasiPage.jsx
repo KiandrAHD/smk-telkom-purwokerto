@@ -12,11 +12,11 @@ import PublicDataState from '../components/PublicDataState';
 import { getPrestasi } from '../services/prestasiService';
 import { toPrestasiItem } from '../utils/publicContent';
 
-const PrestasiPage = () => {
+const PrestasiPage = ({ initialItems }) => {
   const { t } = useLanguage();
 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(initialItems || []);
+  const [loading, setLoading] = useState(!initialItems);
   const [error, setError] = useState('');
   const [requestVersion, setRequestVersion] = useState(0);
 

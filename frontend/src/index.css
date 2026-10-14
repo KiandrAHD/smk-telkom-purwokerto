@@ -362,6 +362,14 @@ body {
   transform: none;
 }
 
+/* Prerendered public content remains readable when JavaScript is disabled. */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .reveal .department-photo {
   transition-duration: 1.6s;
 }

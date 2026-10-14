@@ -2,9 +2,9 @@
 
 # 1. Main SPA HTML: never cache, always revalidate
 <IfModule mod_headers.c>
-  <Files "index.html">
+  <FilesMatch "^(index|app)\.html$">
     Header set Cache-Control "public, max-age=0, must-revalidate"
-  </Files>
+  </FilesMatch>
 </IfModule>
 
 # 2. Static asset hashes: cache forever
@@ -21,5 +21,5 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/assets/
-RewriteRule ^ index.html [L]
+RewriteRule ^ app.html [L]
 </IfModule>

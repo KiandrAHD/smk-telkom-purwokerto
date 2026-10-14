@@ -11,11 +11,11 @@ import PublicDataState from '../components/PublicDataState';
 import { getPublishedBerita } from '../services/beritaService';
 import { toBeritaItem } from '../utils/publicContent';
 
-const BeritaPage = () => {
+const BeritaPage = ({ initialItems }) => {
   const { t } = useLanguage();
 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(initialItems || []);
+  const [loading, setLoading] = useState(!initialItems);
   const [error, setError] = useState('');
   const [requestVersion, setRequestVersion] = useState(0);
 

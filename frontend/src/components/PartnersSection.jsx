@@ -4,12 +4,15 @@ import bg1440 from '../assets/responsive/partners-1440.webp';
 import decoLeft from '../assets/landing/partners-deco-left.png';
 import decoRight from '../assets/landing/partners-deco-right.png';
 import { mitraIndustri } from '../data/dummyData';
+import { useLanguage } from '../context/LanguageContext';
 
 const PartnersSection = ({ items = mitraIndustri, animated = true }) => {
+  const { t } = useLanguage();
 
   return (
     <>
-      <section id="mitra" className="relative w-full overflow-hidden">
+      <section id="mitra" aria-labelledby="mitra-title" className="relative w-full overflow-hidden">
+        <h2 id="mitra-title" className="sr-only">{t('Mitra Industri')}</h2>
         <img
           src={bg}
           srcSet={`${bg960} 960w, ${bg1440} 1440w, ${bg} 1847w`}

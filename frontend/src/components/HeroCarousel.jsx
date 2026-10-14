@@ -94,7 +94,7 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
     <p id="hero-keyboard-instructions" className="sr-only">{t('Gunakan tombol panah kiri atau kanan untuk mengganti sorotan sekolah.')}</p>
     <div className="hero-carousel-viewport" aria-live="off">
       {slides.map((slide, index) => <div key={slide.id} data-hero-slide={index} data-active={active === index} className="hero-carousel-slide" role="group" aria-roledescription={t('Slide')} aria-label={t('{number} dari {total}: {name}', { number: index + 1, total: slides.length, name: t(slide.name) })} aria-hidden={active !== index} inert={active !== index}>
-        {index === 0 && opening ? opening : <HeroPanel content={slide.content} media={slide.media} carousel priority={index === 0} />}
+        {index === 0 && opening ? opening : <HeroPanel content={slide.content} media={slide.media} carousel heading={index === 0 ? 'h1' : 'h2'} priority={index === 0} />}
       </div>)}
     </div>
   </div>;

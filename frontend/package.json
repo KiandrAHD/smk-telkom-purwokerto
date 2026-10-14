@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender-seo.mjs",
+    "seo:uji": "node scripts/uji-seo.mjs",
     "lint": "eslint .",
     "animasi:uji": "node scripts/uji-animasi.mjs",
     "bahasa:uji": "node scripts/uji-bahasa.mjs && node scripts/uji-bahasa-portal.mjs && node scripts/uji-bahasa-konten.mjs",
