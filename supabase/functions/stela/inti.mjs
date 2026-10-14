@@ -13,15 +13,18 @@ export const BATAS = {
   MAKS_PANJANG_ASISTEN: 1200,
   MAKS_TOTAL_PANJANG: 8000,
   MAKS_TOKEN_JAWABAN: 2000,
+  // Deadline total per request. Setiap percobaan mendapat jatah sendiri agar
+  // provider lambat tidak menghabiskan seluruh failover.
   TIMEOUT_PROVIDER_MS: 12000,
-  MAKS_PERCOBAAN_PROVIDER: 3,
+  TIMEOUT_PERCOBAAN_PROVIDER_MS: 4500,
+  MAKS_PERCOBAAN_PROVIDER: 8,
 };
 
 // Model bawaan per penyedia
 export const MODEL_BAWAAN = {
   ninerouter: 'kr/claude-haiku-4.5',
   anthropic: 'claude-opus-5',
-  gemini: 'gemini-3.6-flash',
+  gemini: 'gemini-3.5-flash',
   groq: 'openai/gpt-oss-20b',
 };
 
@@ -33,10 +36,9 @@ export const MODEL_CADANGAN = {
   ],
   anthropic: ['claude-opus-5', 'claude-3-7-sonnet-20250219', 'claude-3-5-sonnet-20241022'],
   gemini: [
-    'gemini-3.6-flash',
-    'gemini-flash-lite-latest',
-    'gemini-3.1-flash-lite',
     'gemini-3.5-flash',
+    'gemini-2.5-flash-lite',
+    'gemini-3.1-flash-lite',
     'gemini-3.5-flash-lite',
     'gemini-flash-latest',
   ],
@@ -63,23 +65,27 @@ export const modelCocokUntukPenyedia = (penyedia, model) => {
 
 // Status kuota per model, hidup selama proses berjalan
 const modelHabis = new Map();
-const HABIS_MS = 30 * 60 * 1000;
+const HABIS_MS_KONFIGURASI = 30 * 60 * 1000;
+const HABIS_MS_RATE_LIMIT = 30 * 1000;
 
-const sedangHabis = (model) => {
-  const sampai = modelHabis.get(model);
+const kunciModel = (penyedia, model) => `${penyedia}:${model}`;
+const sedangHabis = (penyedia, model) => {
+  const kunci = kunciModel(penyedia, model);
+  const sampai = modelHabis.get(kunci);
   if (!sampai) return false;
   if (Date.now() > sampai) {
-    modelHabis.delete(model);
+    modelHabis.delete(kunci);
     return false;
   }
   return true;
 };
 
-// Anggaran token konteks per penyedia
+// Anggaran token konteks per penyedia. Semua provider memakai konteks
+// relevan terbatas; jangan mengirim dump sekolah penuh ke provider produksi.
 export const ANGGARAN_KONTEKS = {
-  ninerouter: 0,
-  anthropic: 0,
-  gemini: 0,
+  ninerouter: 3500,
+  anthropic: 3500,
+  gemini: 3500,
   groq: 2999,
 };
 
@@ -135,7 +141,7 @@ export const jawabanSapaanCepat = (teks, bahasa = deteksiBahasa(teks)) => {
 // FAQ fast path hanya untuk pertanyaan eksak sederhana
 const FAQ_FAST_PATH = [
   {
-    pola: /^(?:apa\s+saja\s+)?jurusan(?:\s+apa\s+saja|\s+yang\s+ada|\s+di\s+smk\s+telkom(?:\s+purwokerto)?)?[?!., ]*$/i,
+    pola: /^(?:apa\s+(?:saja\s+)?)?jurusan(?:\s+(?:apa\s+saja|yang\s+(?:ada|tersedia)(?:\s+di\s+smk\s+telkom(?:\s+purwokerto)?)?|di\s+smk\s+telkom(?:\s+purwokerto)?))?[?!., ]*$/i,
     jawaban: 'SMK Telkom Purwokerto memiliki empat jurusan: Rekayasa Perangkat Lunak (RPL), Pengembangan Game (PG), Teknik Komputer dan Jaringan (TKJ), serta Teknik Jaringan Akses Telekomunikasi (TJAT).',
     jawabanEn: 'SMK Telkom Purwokerto offers four majors: Software Engineering (RPL), Game Development (PG), Computer and Network Engineering (TKJ), and Telecommunication Access Network Engineering (TJAT).',
   },
@@ -166,8 +172,21 @@ const FAQ_FAST_PATH = [
   },
 ];
 
+const JAWABAN_ROADMAP = {
+  softwareId: 'Roadmap menjadi Software Engineer: mulai dari logika pemrograman, Git, dan satu bahasa seperti JavaScript atau Python. Lanjutkan HTML/CSS, basis data, API, pengujian, dan dasar keamanan. Bangun proyek kecil lalu proyek yang lebih nyata, dokumentasikan di portofolio, belajar bekerja kolaboratif, dan manfaatkan PKL, magang, kuliah, atau sertifikasi yang relevan.',
+  softwareEn: 'Software Engineer roadmap: start with programming logic, Git, and one language such as JavaScript or Python. Continue with HTML/CSS, databases, APIs, testing, and security basics. Build small then realistic projects, document them in a portfolio, practise collaboration, and consider internships, university study, or relevant certifications.',
+  gameId: 'Roadmap menjadi Game Developer: mulai dari logika pemrograman dan dasar desain game, lalu pilih engine seperti Godot atau Unity sesuai tujuan belajar. Pelajari scene, input, fisika, audio, UI, optimasi, dan version control. Selesaikan game kecil secara bertahap, uji dengan pengguna, dokumentasikan prosesnya, dan susun portofolio. Dasar matematika, seni, narasi, serta kerja tim juga membantu.',
+  gameEn: 'Game Developer roadmap: start with programming logic and game design basics, then choose an engine such as Godot or Unity for your learning goals. Learn scenes, input, physics, audio, UI, optimisation, and version control. Finish small games step by step, test them with users, document the process, and build a portfolio. Mathematics, art, narrative, and teamwork fundamentals also help.',
+};
+
 export const jawabanFaqCepat = (teks, bahasa = deteksiBahasa(teks)) => {
   const pertanyaan = String(teks ?? '').trim();
+  if (/(?:game\s*developer|game\s*dev|pengembang\s+game|membuat\s+game|developing\s+games|game\s+development)/i.test(pertanyaan)) {
+    return bahasa === 'en' ? JAWABAN_ROADMAP.gameEn : JAWABAN_ROADMAP.gameId;
+  }
+  if (/(?:software\s*engineer|software\s*developer|pengembang\s+perangkat\s+lunak|roadmap|jalur menjadi|setelah memilih jurusan rpl|roadmap belajar.*rpl)/i.test(pertanyaan)) {
+    return bahasa === 'en' ? JAWABAN_ROADMAP.softwareEn : JAWABAN_ROADMAP.softwareId;
+  }
   if (!pertanyaan) return null;
   const faq = FAQ_FAST_PATH.find((item) => item.pola.test(pertanyaan));
   if (!faq) return null;
@@ -182,7 +201,8 @@ const POLA_BLOCKLIST = /(?:bom\s+(?:molotov|c2)|molotov|senjata|bahan\s+peledak|
 const POLA_INJECTION = /(?:ignore\s+(?:previous|all|the\s+above)|system\s*prompt|developer\s*mode|reveal\s+(?:all|system|hidden|prompt)|show\s+(?:hidden|system|all\s+rules)|api[_ -]?key|service[_ -]?role|bearer\s+[a-z0-9]|(?:master|root|admin)\s+password|bypass\s+(?:security|rules|guard)|environment\s+variable|data\s+private|(?:spmb|ppdb)\s+(?:orang|peserta|private|rahasia)|write\s+a\s+virus|tampilkan\s+(?:instruksi|system\s+prompt|prompt\s+asli)|kamu\s+adalah\s+(?:dan|dan\s+bukan)|lupakan\s+semua\s+instruksi|abaikan\s+(?:aturan|instruksi)|you\s+are\s+(?:now|a|an)|disregard\s+(?:previous|all|prior))/i;
 
 // Topik yang diizinkan (allowlist)
-const POLA_ALLOWLIST = /(?:smk|telkom|purwokerto|stematel|rpl|rekayasa\s+perangkat\s+lunak|pg|pengembangan\s+game|tkj|teknik\s+komputer(?:\s+dan)?\s+jaringan|tjat|teknik\s+jaringan\s+akses(?:\s+telekomunikasi)?|jurusan|program\s+keahlian|spmb|ppdb|pendaftaran|daftar|syarat|biaya|gelombang|kuota|bkk|bursa\s+kerja|lowongan|magang|pkl|prestasi|lomba|juara|lks|fasilitas|lab|laboratorium|gedung|kelas|perpustakaan|kegiatan|ekskul|ekstrakurikuler|organisasi|osis|pramuka|guru|pengajar|tenaga\s+pendidik|kepala\s+sekolah|kurikulum|akreditasi|beasiswa|seragam|jadwal|lokasi|alamat|kontak|telepon|email|yayasan\s+pendidikan\s+telkom|ypt|telkom\s+schools|pendidikan\s+vokasi|kejuruan|profil\s+sekolah|sejarah\s+sekolah|visi\s+misi)/i;
+const POLA_EDUKASI_UMUM = /(?:apa\s+itu|jelaskan|jelaskanlah|pengertian|definisi|bagaimana\s+cara\s+belajar|cara\s+belajar|what\s+is|explain|definition\s+of|how\s+does|difference\s+between|contoh\s+konsep|materi\s+pelajaran|matematika|fisika|kimia|biologi|sejarah|bahasa|literasi|logika|algoritma|struktur\s+data|computer\s+science|programming|pemrograman|coding|belajar|tutorial|edukasi|pendidikan)/i;
+const POLA_ALLOWLIST = /(?:smk|telkom|purwokerto|stematel|rpl|rekayasa\s+perangkat\s+lunak|pg|pengembangan\s+game|tkj|teknik\s+komputer(?:\s+dan)?\s+jaringan|tjat|teknik\s+jaringan\s+akses(?:\s+telekomunikasi)?|jurusan|program\s+keahlian|spmb|ppdb|pendaftaran|daftar|syarat|biaya|gelombang|kuota|bkk|bursa\s+kerja|lowongan|magang|pkl|prestasi|lomba|juara|lks|fasilitas|lab|laboratorium|gedung|kelas|perpustakaan|kegiatan|ekskul|ekstrakurikuler|organisasi|osis|pramuka|guru|pengajar|tenaga\s+pendidik|kepala\s+sekolah|kurikulum|akreditasi|beasiswa|seragam|jadwal|lokasi|alamat|kontak|telepon|email|yayasan\s+pendidikan\s+telkom|ypt|telkom\s+schools|pendidikan\s+vokasi|kejuruan|pendidikan|belajar|pembelajaran|roadmap|jalur\s+(?:karier|belajar)|software\s+engineer|software\s+developer|pengembang\s+perangkat\s+lunak|sertifikasi|kuliah|perguruan\s+tinggi|kampus|karier|profesi|skill|keterampilan|profil\s+sekolah|sejarah\s+sekolah|visi\s+misi|algorithm|data\s+structure|computer\s+science|programming|coding|software\s+development|learning|tutorial|explain|definition)/i;
 
 export const topikDiizinkan = (pesan) => {
   if (!Array.isArray(pesan) || pesan.length === 0) return false;
@@ -198,17 +218,17 @@ export const topikDiizinkan = (pesan) => {
     if (POLA_BLOCKLIST.test(teks)) return false;
   }
 
-  // 2. Periksa pesan terakhir untuk memastikan relevansi dengan sekolah
+  // 2. Validasi pertanyaan terakhir bersama konteks user sebelumnya. Follow-up
+  // seperti "yang mana paling cocok?" tetap relevan setelah pertanyaan jurusan.
   const pesanTerakhir = pesanUser[pesanUser.length - 1]?.content ?? '';
-
-  // Sapaan dan pertanyaan identitas selalu diizinkan
   if (jawabanSapaanCepat(pesanTerakhir)) return true;
-
-  // Pertanyaan harus cocok dengan topik sekolah yang diizinkan
-  // PENTING: Allowlist hanya memvalidasi bahwa pertanyaan TERKAIT sekolah,
-  // bukan bahwa seluruh pesan boleh dijawab. Blocklist di atas sudah memastikan
-  // tidak ada permintaan coding/berbahaya.
-  return POLA_ALLOWLIST.test(pesanTerakhir);
+  if (POLA_ALLOWLIST.test(pesanTerakhir) || POLA_EDUKASI_UMUM.test(pesanTerakhir)) return true;
+  if (pesanUser.length > 1) {
+    const sebelumnya = pesanUser[pesanUser.length - 2]?.content ?? '';
+    const followUp = /^(?:dan\s+)?(?:yang|mana|bagaimana|mengapa|kenapa|lalu|setelah itu|kalau begitu|what about|which|how about|and)\b/i.test(pesanTerakhir.trim());
+    if (followUp && POLA_ALLOWLIST.test(sebelumnya)) return true;
+  }
+  return false;
 };
 
 export const buatPesanPenolakan = (bahasa = 'id') => {
@@ -398,7 +418,7 @@ const galatPenyedia = (pesan, status, untukPengguna = false) => {
 export const PESAN_KUOTA_HARIAN =
   'STELA sudah mencapai batas percakapan hari ini. Silakan coba lagi besok, atau hubungi Tata Usaha untuk pertanyaan yang mendesak.';
 export const PESAN_SEDANG_RAMAI = 'STELA sedang ramai. Tunggu sekitar satu menit lalu coba lagi.';
-export const PESAN_TIMEOUT = 'STELA sedang mengalami kendala koneksi. Silakan coba lagi.';
+export const PESAN_TIMEOUT = 'STELA belum menerima jawaban tepat waktu. Periksa koneksi lalu coba lagi.';
 
 const PESAN_DITOLAK = {
   teks: 'Maaf, pertanyaan itu tidak bisa saya jawab. Silakan tanyakan hal lain seputar SMK Telkom Purwokerto atau topik edukatif lainnya.',
@@ -485,7 +505,7 @@ const tanyaGemini = async ({ apiKey, model, pesan, instruksi, signal }) => {
     const badan = await tanggapan.text();
     if (tanggapan.status === 429) {
       const harian = badan.includes('PerDay');
-      throw galatPenyedia(harian ? PESAN_KUOTA_HARIAN : PESAN_SEDANG_RAMAI, 429, true);
+      throw galatPenyedia(harian ? PESAN_KUOTA_HARIAN : PESAN_SEDANG_RAMAI, 429, false);
     }
     throw galatPenyedia(`Gemini menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
@@ -526,7 +546,7 @@ const tanyaOpenAICompatible = async ({ penyedia, apiKey, model, pesan, instruksi
   if (!tanggapan.ok) {
     const badan = await tanggapan.text();
     if (tanggapan.status === 413 || badan.includes('rate_limit_exceeded')) {
-      throw galatPenyedia(PESAN_SEDANG_RAMAI, 429, true);
+      throw galatPenyedia(PESAN_SEDANG_RAMAI, 429, false);
     }
     throw galatPenyedia(`${penyedia} menolak dengan status ${tanggapan.status}`, tanggapan.status);
   }
@@ -555,7 +575,7 @@ export const buatBatasPanggilan = ({ maksPercobaan = BATAS.MAKS_PERCOBAAN_PROVID
   percobaan: 0,
 });
 
-const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status, true), { batasPanggilan: true });
+const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status, false), { internalAttemptLimit: true });
 
 /**
  * @typedef {{penyedia: string, apiKey?: string, model?: string, baseUrl?: string}} KandidatPenyedia
@@ -564,7 +584,8 @@ const galatBatas = (pesan, status) => Object.assign(galatPenyedia(pesan, status,
  * baseUrl?: string, language?: string, bahasa?: string, daftarPenyedia?: KandidatPenyedia[],
  * sebelumPanggilan?: (options: {signal: AbortSignal}) => void | Promise<void>,
  * batasPanggilan?: ReturnType<typeof buatBatasPanggilan>, timeoutMs?: number,
- * maksPercobaan?: number, cobaModelCadangan?: boolean}} options
+ * maksPercobaan?: number, cobaModelCadangan?: boolean,
+ * catatPercobaan?: (event: Record<string, unknown>) => void}} options
  */
 export const tanyaAI = async ({
   penyedia,
@@ -583,6 +604,7 @@ export const tanyaAI = async ({
   timeoutMs,
   maksPercobaan,
   cobaModelCadangan = true,
+  catatPercobaan,
 }) => {
   const anggaran = batasPanggilan ?? buatBatasPanggilan({ timeoutMs, maksPercobaan });
   const pertanyaanAwal = pesan[pesan.length - 1]?.content ?? '';
@@ -624,22 +646,31 @@ export const tanyaAI = async ({
     }
     if (!cobaModelCadangan) daftarModel = daftarModel.slice(0, 1);
 
-    const belumHabis = daftarModel.filter((m) => !sedangHabis(m));
+    const belumHabis = daftarModel.filter((m) => !sedangHabis(targetPenyedia, m));
     const urutan = belumHabis.length ? belumHabis : daftarModel.slice(0, 1);
 
     for (const kandidat of urutan) {
       if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
-      if (anggaran.percobaan >= anggaran.maksPercobaan) throw galatBatas('Batas percobaan AI tercapai. Silakan coba lagi.', 502);
+      if (anggaran.percobaan >= anggaran.maksPercobaan) {
+        // Jangan ubah kegagalan provider terakhir menjadi HTTP 502 generik.
+        // Caller perlu menerima tipe/status yang benar untuk observability dan UX.
+        if (galatTerakhirSemua) throw galatTerakhirSemua;
+        throw galatBatas('Batas percobaan AI tercapai. Silakan coba lagi.', 503);
+      }
       const sisaWaktu = anggaran.tenggat - Date.now();
       if (sisaWaktu <= 0) throw galatBatas(PESAN_TIMEOUT, 504);
+      const durasiPercobaan = Math.min(sisaWaktu, BATAS.TIMEOUT_PERCOBAAN_PROVIDER_MS);
       const pengendali = new AbortController();
-      const timeout = setTimeout(() => pengendali.abort(), sisaWaktu);
+      const timeout = setTimeout(() => pengendali.abort(), durasiPercobaan);
       const batalkan = () => pengendali.abort();
       if (signal) {
         if (signal.aborted) pengendali.abort();
         else signal.addEventListener('abort', batalkan, { once: true });
       }
 
+      const mulaiPercobaan = Date.now();
+      let statusPercobaan = 0;
+      let tipeGalat = 'unknown';
       try {
         if (sebelumPanggilan) {
           try {
@@ -666,23 +697,36 @@ export const tanyaAI = async ({
         return { ...hasil, teks, modelDipakai: kandidat, penyediaDipakai: targetPenyedia };
       } catch (error) {
         galatTerakhirSemua = error;
+        statusPercobaan = Number(error?.status) || 0;
+        tipeGalat = pengendali.signal.aborted ? 'timeout' : statusPercobaan === 429 ? 'rate_limit' : (statusPercobaan >= 400 && statusPercobaan < 500) ? 'provider_configuration' : statusPercobaan >= 500 ? 'provider_failure' : 'network_or_unknown';
         const dibatalkan = pengendali.signal.aborted;
         if (signal?.aborted) throw error;
         if (dibatalkan) {
-          throw galatBatas(PESAN_TIMEOUT, 504);
+          // Abort hanya percobaan ini. Abort dari browser tetap dihormati.
+          if (signal?.aborted) throw error;
+          galatTerakhirSemua = galatBatas(PESAN_TIMEOUT, 504);
+          if (Date.now() >= anggaran.tenggat) throw galatTerakhirSemua;
+          continue;
         }
         if (error?.batasPanggilan) throw error;
+        if (error?.internalAttemptLimit) throw error;
         const status = galatTerakhirSemua?.status;
-        // 400 (incompatible model), 404, 429, timeout, 5xx dialihkan ke kandidat berikutnya
-        if (!dibatalkan && status !== 400 && status !== 404 && status !== 429 && !(status >= 500 && status <= 599)) {
-          throw error;
-        }
-        if (status === 429 || status === 404 || status === 400 || dibatalkan) {
-          modelHabis.set(kandidat, Date.now() + HABIS_MS);
+        // Kesalahan kredensial, model, rate limit, jaringan, dan 5xx tidak boleh
+        // menghentikan kandidat berikutnya. Batas total tetap mencegah retry tanpa batas.
+        if (status === 429 || status === 404 || status === 400 || status === 401 || status === 403) {
+          const durasi = status === 429 ? HABIS_MS_RATE_LIMIT : HABIS_MS_KONFIGURASI;
+          modelHabis.set(kunciModel(targetPenyedia, kandidat), Date.now() + durasi);
         }
       } finally {
         clearTimeout(timeout);
         if (signal) signal.removeEventListener('abort', batalkan);
+        try {
+          catatPercobaan?.({
+            provider: targetPenyedia, model: kandidat, status: statusPercobaan,
+            errorType: tipeGalat, durationMs: Date.now() - mulaiPercobaan,
+            attempt: anggaran.percobaan, failover: Boolean(galatTerakhirSemua),
+          });
+        } catch { /* observability tidak boleh memengaruhi request */ }
       }
     }
   }

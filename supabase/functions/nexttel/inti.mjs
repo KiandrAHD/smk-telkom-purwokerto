@@ -53,6 +53,9 @@ export const sanitizeAIOutput = (input)=>{
 };
 export const deterministicFallback = (topRecommendation, language = 'id')=>{
     const lang = language === 'en' ? 'en' : 'id';
+    if (!LABELS[lang][topRecommendation]) return lang === 'en'
+        ? { explanation: 'Your interests are not clear enough yet. Try describing the activities or field you enjoy most.', strengths: ['Your answers do not point clearly to one program yet.'], learningSuggestions: ['Try a small activity in software, games, networking, or telecommunications.'] }
+        : { explanation: 'Minatmu belum bisa disimpulkan. Coba ceritakan aktivitas atau bidang yang paling kamu sukai.', strengths: ['Jawabanmu belum menunjukkan satu jurusan yang paling jelas.'], learningSuggestions: ['Coba kegiatan kecil di bidang software, game, jaringan, atau telekomunikasi.'] };
     const label = LABELS[lang][topRecommendation] ?? topRecommendation;
     if (lang === 'en') {
         return {
@@ -78,12 +81,20 @@ export const deterministicFallback = (topRecommendation, language = 'id')=>{
 
 // Provider/model errors belong to this boundary, never to request validation.
 /**
- * @param {{hasil: {topRecommendation: string, answers?: unknown, scores?: unknown, ranking?: unknown},
+ * @param {{hasil: {topRecommendation: string | null, answers?: unknown, scores?: unknown, ranking?: Array<[string, number]>},
  * language?: string, daftarPenyedia?: import('../stela/inti.mjs').KandidatPenyedia[],
  * sebelumPanggilan?: (options: {signal: AbortSignal}) => void | Promise<void>, signal?: AbortSignal}} options
  */
 export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenyedia = [], sebelumPanggilan, signal }) => {
+  if (!hasil.topRecommendation) return deterministicFallback(null, language);
+
   const batasPanggilan = buatBatasPanggilan();
+  let kuotaDicadangkan = false;
+  const reservasiSekaliPerPermintaan = async ({ signal: reservationSignal }) => {
+    if (kuotaDicadangkan) return;
+    await sebelumPanggilan?.({ signal: reservationSignal });
+    kuotaDicadangkan = true;
+  };
   const instruksi = systemPrompt(language);
   const pesan = [{ role: 'user', content: 'Jelaskan hasil sistem berikut. Jangan mengubah rekomendasi atau score.\n' + JSON.stringify({
     answers: hasil.answers, scores: hasil.scores, ranking: hasil.ranking, topRecommendation: hasil.topRecommendation,
@@ -91,12 +102,12 @@ export const jelaskanHasilNextTel = async ({ hasil, language = 'id', daftarPenye
   for (const provider of daftarPenyedia) {
     try {
       const ai = await tanyaAI({ ...provider, daftarPenyedia: [provider], instruksiKustom: instruksi, pesan, language,
-        sebelumPanggilan, batasPanggilan, signal, cobaModelCadangan: false });
+        sebelumPanggilan: reservasiSekaliPerPermintaan, batasPanggilan, signal, cobaModelCadangan: true });
       const output = sanitizeAIOutput(parseAIResponse(ai.teks));
       if (output) return output;
     } catch (error) {
       if (error?.name === 'AbortError') throw error;
-      if (error?.batasPanggilan) break;
+      if (error?.batasPanggilan) throw error;
       // Invalid JSON/schema and unavailable providers try the next candidate.
     }
   }

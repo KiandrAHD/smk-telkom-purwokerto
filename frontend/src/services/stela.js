@@ -6,9 +6,9 @@ import { supabaseSiap } from './supabase';
 // Ada dua backend, dan yang dipakai ditentukan otomatis:
 //
 //   1. Edge Function Supabase — dipakai begitu VITE_SUPABASE_URL terisi.
-//      Ini jalur produksi dan menggunakan Gemini.
+//      Provider dan failover dikendalikan server; kunci tidak pernah masuk browser.
 //   2. /api/stela — endpoint lokal dari vite-plugin-stela.js, hanya hidup
-//      selama `npm run dev`. Endpoint lokal ini juga hanya menggunakan Gemini.
+//      selama `npm run dev`; konfigurasi provider tetap berada di server lokal.
 const PAKAI_EDGE_FUNCTION = supabaseSiap;
 const ALAMAT = PAKAI_EDGE_FUNCTION
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stela`
@@ -98,10 +98,13 @@ export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
     const data = await tanggapan.json().catch(() => ({}));
 
     if (!tanggapan.ok) {
-      // Pesan dari server ditulis sendiri oleh tim dan sudah aman ditampilkan.
-      // Melewatkannya jauh lebih menolong daripada "kendala" generik, terutama
-      // saat yang kurang cuma satu baris di .env.
-      throw new Error(typeof data.error === 'string' && data.error ? data.error : PESAN_STELA_GAGAL);
+      const serverMessage = typeof data.error === 'string' && data.error ? data.error : PESAN_STELA_GAGAL;
+      const error = new Error(serverMessage);
+      if (data.code === 'quota_exhausted' || data.code === 'rate_limit' || (tanggapan.status === 429 && data.code !== 'quota_unavailable')) error.category = KATEGORI_GALAT.RATE_LIMIT;
+      else if (data.code === 'provider_timeout' || tanggapan.status === 504) error.category = KATEGORI_GALAT.TRANSIENT;
+      else if (data.code === 'config' || tanggapan.status === 503) error.category = KATEGORI_GALAT.CONFIG;
+      else if (data.code === 'provider_failed') error.category = KATEGORI_GALAT.TRANSIENT;
+      throw error;
     }
 
     // Server mengirim scope_rejected=true saat pertanyaan di luar scope

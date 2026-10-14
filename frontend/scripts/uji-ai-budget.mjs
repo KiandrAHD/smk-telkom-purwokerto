@@ -15,7 +15,7 @@ await test('one request has a bounded number of provider attempts', async () => 
   globalThis.fetch = async () => { attempts++; return new Response('Unavailable', { status: 503 }); };
   try {
     await assert.rejects(() => tanyaAI({ ...provider, pesan }));
-    assert.equal(attempts, 3, 'Failover must stop after three attempts');
+    assert.equal(attempts, 5, 'Failover must try available models within the bounded request budget');
   } finally { globalThis.fetch = realFetch; }
 });
 
@@ -73,7 +73,7 @@ await test('two Edge instances use the same shared quota reservation', async () 
     attempts++; return geminiReply('Jawaban latihan jaringan yang aman.');
   };
   try {
-    const env = { GEMINI_API_KEY: 'offline-fixture', STELA_ALLOWED_ORIGINS: 'https://test.invalid', STELA_MAKS_PER_HARI: '1', SUPABASE_URL: 'https://quota.test.invalid', SUPABASE_ANON_KEY: 'public-fixture', SUPABASE_SERVICE_ROLE_KEY: 'server-fixture' };
+    const env = { GEMINI_API_KEY: 'AIza-offline-fixture', STELA_ALLOWED_ORIGINS: 'https://test.invalid', STELA_MAKS_PER_HARI: '1', SUPABASE_URL: 'https://quota.test.invalid', SUPABASE_ANON_KEY: 'public-fixture', SUPABASE_SERVICE_ROLE_KEY: 'server-fixture' };
     const first = await loadEdgeHandler('stela', env), second = await loadEdgeHandler('stela', env);
     const responses = await Promise.all([first(request('stela', { messages: pesan })), second(request('stela', { messages: [{ role: 'user', content: 'Jelaskan jurusan RPL di SMK Telkom Purwokerto.' }] }))]);
     assert.deepEqual(responses.map(r => r.status).sort(), [200, 429]);
@@ -88,8 +88,8 @@ await test('NextTel shares the attempt ceiling across all configured providers',
   try {
     const output = await jelaskanHasilNextTel({ hasil: { topRecommendation: 'RPL' }, daftarPenyedia: [provider, { penyedia: 'groq', apiKey: 'offline-fixture' }, { penyedia: 'anthropic', apiKey: 'offline-fixture' }, provider], sebelumPanggilan: async () => { reservations++; } });
     assert.ok(output.explanation.includes('Rekayasa Perangkat Lunak'));
-    assert.equal(attempts, 3);
-    assert.equal(reservations, 3, 'Each attempt must reserve independently');
+    assert.equal(attempts, 8);
+    assert.equal(reservations, 1, 'One request must reserve quota once despite failover');
   } finally { globalThis.fetch = realFetch; }
 });
 

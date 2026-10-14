@@ -13,7 +13,7 @@ assert.equal(pilihPenyedia({ ninerouterKey: 'token-lain' }), null);
 assert.equal(buatAlamatPenyedia('ninerouter', 'https://router.example/'), 'https://router.example/v1/chat/completions');
 assert.equal(buatAlamatPenyedia('ninerouter', 'https://router.example/v1/'), 'https://router.example/v1/chat/completions');
 assert.throws(() => buatAlamatPenyedia('ninerouter', ''), /NINEROUTER_URL/);
-assert.equal(ANGGARAN_KONTEKS.ninerouter, 0);
+assert.equal(ANGGARAN_KONTEKS.ninerouter, 3500);
 assert.equal(MODEL_BAWAAN.ninerouter, 'kr/claude-haiku-4.5');
 assert.deepEqual(MODEL_CADANGAN.ninerouter, [
   'kr/claude-haiku-4.5',

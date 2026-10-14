@@ -76,6 +76,20 @@ tolak(banyak, 'total panjang melebihi batas');
 const satu = periksaPesan([u('  Jurusan apa saja yang ada?  ')]);
 assert.deepEqual(satu.pesan, [{ role: 'user', content: 'Jurusan apa saja yang ada?' }]);
 
+// Pertanyaan pendidikan vokasi umum tetap relevan meskipun tidak menyebut sekolah.
+for (const roadmap of [
+  'Bagaimana jalur menjadi software engineer setelah memilih jurusan RPL?',
+  'Apa roadmap belajar untuk siswa TKJ setelah lulus?',
+  'Apa yang perlu dipelajari siswa Pengembangan Game untuk karier?',
+  'Bagaimana hubungan materi sekolah dengan kuliah dan sertifikasi?',
+]) {
+  assert.equal(topikDiizinkan([u(roadmap)]), true, `roadmap vokasi harus diterima: ${roadmap}`);
+}
+assert.equal(topikDiizinkan([u('Buatkan aplikasi Python untuk saya')]), false, 'permintaan coding umum harus ditolak');
+assert.equal(topikDiizinkan([u('Jurusan apa saja?'), a('Ada empat jurusan.'), u('Yang paling cocok untuk saya?')]), true, 'follow-up kontekstual harus diterima');
+assert.match(jawabanFaqCepat('Bagaimana roadmap menjadi Game Developer?', 'id'), /Game Developer/);
+assert.match(jawabanFaqCepat('What is the roadmap to become a game developer?', 'en'), /Game Developer/);
+
 const bolakBalik = periksaPesan([u('halo'), a('hai'), u('ada jurusan apa?')]);
 assert.equal(bolakBalik.pesan.length, 3);
 assert.equal(bolakBalik.galat, undefined);

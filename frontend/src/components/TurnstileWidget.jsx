@@ -55,14 +55,28 @@ export function useTurnstile() {
       renderWidget();
       return undefined;
     }
+    const existingScript = document.querySelector('script[data-turnstile-api]');
+    if (existingScript) {
+      existingScript.addEventListener('load', renderWidget, { once: true });
+      return () => {
+        if (widgetIdRef.current != null && window.turnstile) {
+          window.turnstile.remove(widgetIdRef.current);
+          widgetIdRef.current = null;
+        }
+      };
+    }
     const script = document.createElement('script');
+    script.dataset.turnstileApi = 'true';
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
     script.async = true;
     script.onload = renderWidget;
     script.onerror = () => setStatus('error');
     document.head.appendChild(script);
     return () => {
-      if (widgetIdRef.current != null && window.turnstile) window.turnstile.remove(widgetIdRef.current);
+      if (widgetIdRef.current != null && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
     };
   }, [renderWidget]);
 

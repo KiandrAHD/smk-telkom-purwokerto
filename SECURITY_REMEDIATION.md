@@ -13,9 +13,9 @@
 - `ce86007` - Up Projek
 
 **Exposed secrets:**
-- `GEMINI_API_KEY=AIzaSyBnQN5ntjnOwrHPv8GBd8isXQ2v675oK_4.`
-- `NINEROUTER_KEY=sk-5a75f0bbdeb4e8ef-gf42jk-92c4be6d`
-- `CF_TURNSTILE_SECRET=0x4AAAAAAFNXevb7tqcYXAX3`
+- Previously exposed Gemini API key (value intentionally omitted)
+- Previously exposed 9Router key (value intentionally omitted)
+- Previously exposed Turnstile secret (value intentionally omitted)
 
 **Impact:** API keys in git history can be extracted by anyone with repository access. These keys provide:
 - Unrestricted access to Gemini AI API (billing abuse)
@@ -42,16 +42,16 @@
 VITE_SUPABASE_URL=https://jxrcbkseudollokdtfxy.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_J1tIp85wUcPmFRdz9D6UVQ_9a98EXMo
 VITE_ADMIN_BYPASS=true
-GEMINI_API_KEY=AIzaSyBnQN5ntjnOwrHPv8GBd8isXQ2v675oK_4.
-NINEROUTER_KEY=sk-5a75f0bbdeb4e8ef-gf42jk-92c4be6d
-CF_TURNSTILE_SECRET=0x4AAAAAAFNXevb7tqcYXAX3
+GEMINI_API_KEY=[REDACTED-ROTATE-IMMEDIATELY]
+NINEROUTER_KEY=[REDACTED-ROTATE-IMMEDIATELY]
+CF_TURNSTILE_SECRET=[REDACTED-ROTATE-IMMEDIATELY]
 ```
 
 **After:**
 ```env
 VITE_SUPABASE_URL=https://jxrcbkseudollokdtfxy.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_J1tIp85wUcPmFRdz9D6UVQ_9a98EXMo
-VITE_TURNSTILE_SITE_KEY=0x4AAAAAAFNXevb7tqcYXAX3
+VITE_TURNSTILE_SITE_KEY=[REDACTED-ROTATE-IMMEDIATELY]
 VITE_TURNSTILE_ENABLED=false
 ```
 
@@ -106,19 +106,19 @@ VITE_TURNSTILE_ENABLED=false
 
 **Google Gemini:**
 1. Go to https://aistudio.google.com/apikey
-2. Delete key: `AIzaSyBnQN5ntjnOwrHPv8GBd8isXQ2v675oK_4.`
+2. Delete key: `[REDACTED-ROTATE-IMMEDIATELY]`
 3. Generate new key
 4. Set via: `npx supabase secrets set GEMINI_API_KEY=<new_key>`
 
 **9Router:**
 1. Access 9Router dashboard
-2. Revoke key: `sk-5a75f0bbdeb4e8ef-gf42jk-92c4be6d`
+2. Revoke key: `[REDACTED-ROTATE-IMMEDIATELY]`
 3. Generate new key
 4. Set via: `npx supabase secrets set NINEROUTER_KEY=<new_key>`
 
 **Cloudflare Turnstile:**
 1. Go to Cloudflare Dashboard → Turnstile
-2. Rotate secret: `0x4AAAAAAFNXevb7tqcYXAX3`
+2. Rotate secret: `[REDACTED-ROTATE-IMMEDIATELY]`
 3. Generate new secret
 4. Set via: `npx supabase secrets set CF_TURNSTILE_SECRET=<new_secret>`
 

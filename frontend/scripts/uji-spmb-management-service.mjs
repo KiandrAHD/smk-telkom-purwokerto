@@ -5,13 +5,13 @@ const writes = [], filters = [], ranges = [];
 let pages = [], error = null, abort, statistic = null;
 globalThis.__spmbFixture = {
   from(table) {
-    assert.equal(table, 'spmb_information');
+    assert(['spmb_information', 'spmb_information_public'].includes(table));
     const query = {
       select: () => query, order: () => query,
       eq(field, value) { filters.push([field, value]); return query; },
       range(start, end) { ranges.push([start, end]); return query; },
       abortSignal(signal) { abort = signal; return query; },
-      upsert(payload, options) { writes.push({ payload, options }); return query; },
+      insert(payload) { writes.push({ payload }); return query; },
       update(payload) { writes.push({ payload }); return query; }, delete: () => query,
       single: async () => ({ data: error ? null : { id: 'stable', ...writes.at(-1)?.payload }, error }),
       then(resolve) { resolve({ data: pages.shift() || [], error }); },
@@ -25,7 +25,7 @@ try {
   const controller = new AbortController(); pages = [Array.from({ length: 500 }, (_, id) => ({ id })), [{ id: 500 }]];
   assert.equal((await getSpmbInformation(true, controller.signal)).length, 501); assert.deepEqual(ranges, [[0, 499], [500, 999]]); assert.equal(abort, controller.signal);
   assert.deepEqual(filters, [['status', 'published'], ['status', 'published']]);
-  await createSpmbInformation(valid, 'stable'); await createSpmbInformation(valid, 'stable'); assert.equal(writes[0].payload.id, writes[1].payload.id); assert.deepEqual(writes[0].options, { onConflict: 'id' });
+  await createSpmbInformation(valid, 'stable'); await createSpmbInformation(valid, 'stable'); assert.equal(writes[0].payload.id, writes[1].payload.id); assert.equal(writes[0].payload.status, 'published');
   const result = await updateSpmbInformation('stable', { ...valid, judul: 'Edited', id: 'wrong' }); assert.equal(result.judul, 'Edited'); assert.equal(result.deskripsi, 'Description'); assert.equal(writes.at(-1).payload.id, undefined); assert.deepEqual(filters.at(-1), ['id', 'stable']);
   assert.equal(await getSpmbStatistics(controller.signal), null, 'Unavailable count is not fabricated'); statistic = { total_pendaftar: 0, diterima: 0, kuota_total: null, kuota_tersedia: null }; assert.deepEqual(await getSpmbStatistics(), statistic);
   error = { code: 'PGRST116' }; await assert.rejects(updateSpmbInformation('missing', valid), error); await assert.rejects(deleteSpmbInformation('missing'), error);

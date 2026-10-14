@@ -19,6 +19,11 @@ const CONTENT = {
 export const hasilFallbackNextTel = (result, language = 'id') => {
   const bahasa = language === 'en' ? 'en' : 'id';
   const major = result?.topRecommendation;
+  if (!major) {
+    return bahasa === 'en'
+      ? { explanation: 'Your interests are not clear enough yet. Try describing the activities or field you enjoy most.', strengths: ['Your answers do not point clearly to one program yet.'], learningSuggestions: ['Try a small activity in software, games, networking, or telecommunications and see what you enjoy.'] }
+      : { explanation: 'Minatmu belum bisa disimpulkan. Coba ceritakan aktivitas atau bidang yang paling kamu sukai.', strengths: ['Jawabanmu belum menunjukkan satu jurusan yang paling jelas.'], learningSuggestions: ['Coba kegiatan kecil di bidang software, game, jaringan, atau telekomunikasi untuk menemukan minatmu.'] };
+  }
   const label = LABELS[major]?.[bahasa] ?? LABELS.RPL[bahasa];
   const content = CONTENT[major] ?? CONTENT.RPL;
   return bahasa === 'en'

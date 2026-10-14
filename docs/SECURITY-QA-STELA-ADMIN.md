@@ -3,7 +3,8 @@
 **Status:** ✅ Implementasi lengkap dan lulus regression  
 **Tanggal:** 10 Oktober 2026  
 **Baseline commit:** `2b74a29`  
-**Hotfix commit:** `2b74a29 + fixes`
+**Hotfix commit:** reliability/context fix verified locally; production deployment verified
+**Deployment:** project Supabase terhubung; nama secrets diverifikasi tanpa mencetak nilainya. Edge Function `stela` dideploy dan terdaftar `ACTIVE` pada versi 26. Smoke test 14 Oktober 2026: roadmap dilayani fast path dan permintaan coding ditolak pada kedua origin. Pertanyaan sekolah yang tidak masuk fast path masih bergantung pada provider aktif dan wajib dipantau melalui log terstruktur.
 
 ---
 
@@ -47,7 +48,7 @@ STELA awalnya menjawab pertanyaan di luar scope sekolah (contoh: pembuatan bom M
 2. **`supabase/functions/stela/index.ts`** (lines 168-173)
    - Scope guard sebelum cache/check/quota (URUTAN BENAR)
    - Cache tidak bypass scope validation (check sudah sebelum cache lookup)
-   - No quota consumption untuk rejected requests
+   - Pertanyaan di luar scope ditolak sebelum cache, reservasi kuota, dan provider. Pembatas IP tetap merupakan abuse limiter dan dapat menghitung request malformed/rejected.
 
 3. **`frontend/vite-plugin-stela.js`**
    - Local dev menggunakan `topikDiizinkan()` dari `inti.mjs` (identik dengan production)

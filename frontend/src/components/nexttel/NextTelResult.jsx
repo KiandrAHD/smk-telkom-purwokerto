@@ -28,8 +28,8 @@ const NextTelResult = ({ result, explanation, loading, error, onRetry, onRestart
         <div className="flex items-center gap-2 text-xs font-semibold text-white/85">
           <CheckCircle2 className="h-4 w-4" aria-hidden="true" /> {t('Rekomendasi utama')}
         </div>
-        <h1 ref={headingRef} tabIndex={-1} className="mt-3 font-heading text-2xl font-extrabold leading-tight outline-none sm:text-3xl">{t(LABELS[result.topRecommendation])}</h1>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85">{t('Rekomendasi ini merupakan panduan berdasarkan minat dan jawabanmu, bukan keputusan resmi penerimaan siswa.')}</p>
+        <h1 ref={headingRef} tabIndex={-1} className="mt-3 font-heading text-2xl font-extrabold leading-tight outline-none sm:text-3xl">{result.topRecommendation ? t(LABELS[result.topRecommendation]) : t('Minat belum dapat disimpulkan')}</h1>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85">{t(result.topRecommendation ? 'Rekomendasi ini merupakan panduan berdasarkan minat dan jawabanmu, bukan keputusan resmi penerimaan siswa.' : 'Informasi dari jawabanmu belum cukup untuk menentukan satu jurusan.')}</p>
       </div>
 
       <section className="rounded-2xl border border-dark-200 bg-white p-5 sm:p-8" aria-labelledby="nexttel-statistics">

@@ -18,9 +18,9 @@ const reservasiKuota = buatReservasiKuota({
 });
 
 const KUNCI_KHUSUS: Record<string, string | undefined> = {
-  gemini: Deno.env.get('NEXTTEL_GEMINI_API_KEY'),
   ninerouter: Deno.env.get('NEXTTEL_NINEROUTER_KEY'),
   anthropic: Deno.env.get('NEXTTEL_ANTHROPIC_API_KEY'),
+  gemini: Deno.env.get('NEXTTEL_GEMINI_API_KEY'),
   groq: Deno.env.get('NEXTTEL_GROQ_API_KEY'),
 };
 const KUNCI_BERSAMA: Record<string, string | undefined> = {
@@ -61,7 +61,6 @@ const visits = new Map<string, { count: number; reset: number }>();
 
 const allowed = (origin: string | null) =>
   ALLOWED_ORIGINS.includes('*')
-  || (!origin && ALLOWED_ORIGINS.length === 0)
   || (!!origin && ALLOWED_ORIGINS.includes(origin));
 
 const cors = (origin: string | null) => ({
@@ -140,7 +139,8 @@ Deno.serve(async (request) => {
   if (!allowed(origin)) return reply({ error: 'Origin tidak diizinkan.' }, 403, origin);
   if (request.method === 'OPTIONS') return new Response('ok', { headers: cors(origin) });
   if (request.method !== 'POST') return reply({ error: 'Gunakan metode POST.' }, 405, origin);
-  if (rateLimited(request.headers.get('x-forwarded-for') ?? 'unknown')) return reply({ error: 'Terlalu banyak permintaan.' }, 429, origin);
+  const clientIp = request.headers.get('cf-connecting-ip')?.trim() || request.headers.get('x-real-ip')?.trim() || 'edge-client';
+  if (rateLimited(clientIp)) return reply({ error: 'Terlalu banyak permintaan.' }, 429, origin);
 
   try {
     const body = await bodyJson(request);

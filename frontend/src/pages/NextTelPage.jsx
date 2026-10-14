@@ -23,11 +23,17 @@ const NextTelPage = () => {
   useEffect(() => () => controllerRef.current?.abort(), []);
 
   const mulai = () => { setMode('questionnaire'); setCurrentIndex(0); setAnswers({}); setError(null); };
-  const jawab = (questionId, optionId) => setAnswers((previous) => ({ ...previous, [questionId]: optionId }));
+  const jawab = (questionId, optionId, text = '') => setAnswers((previous) => ({ ...previous, [questionId]: { optionId, text } }));
   const selesai = async () => {
-    const selectedAnswers = QUESTIONS.map(({ id: questionId }) => ({ questionId, optionId: answers[questionId] }));
+    const selectedAnswers = QUESTIONS.map(({ id: questionId }) => {
+      const answer = answers[questionId];
+      return { questionId, optionId: answer?.optionId, ...(answer?.optionId === 'e' ? { text: answer.text.trim() } : {}) };
+    });
     const computed = hitungHasilNextTel(selectedAnswers);
-    if (!computed) return;
+    if (!computed) {
+      setError(language === 'en' ? 'Please complete each answer with valid text.' : 'Lengkapi setiap jawaban dengan teks yang valid.');
+      return;
+    }
     setResult(computed);
     setMode('result');
     setLoading(true);
@@ -52,7 +58,8 @@ const NextTelPage = () => {
     }
   };
   const lanjut = () => {
-    if (!answers[QUESTIONS[currentIndex].id]) return;
+    const answer = answers[QUESTIONS[currentIndex].id];
+    if (!answer?.optionId || (answer.optionId === 'e' && !answer.text.trim())) return;
     if (currentIndex === QUESTIONS.length - 1) selesai();
     else setCurrentIndex((value) => value + 1);
   };
@@ -63,6 +70,7 @@ const NextTelPage = () => {
       <section className="bg-white py-8 lg:py-12">
         <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${mode === 'questionnaire' ? 'max-w-5xl' : 'max-w-7xl'}`}>
           {mode === 'intro' && <NextTelIntro onStart={mulai} />}
+          {mode === 'questionnaire' && error && <p role="alert" className="mb-4 text-sm text-primary">{error}</p>}
           {mode === 'questionnaire' && <NextTelQuestionnaire questions={QUESTIONS} currentIndex={currentIndex} answers={answers} onAnswer={jawab} onNext={lanjut} onBack={() => setCurrentIndex((value) => Math.max(0, value - 1))} />}
           {mode === 'result' && result && <NextTelResult result={result} explanation={explanation} loading={loading} error={error} onRetry={selesai} onRestart={restart} />}
         </div>

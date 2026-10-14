@@ -15,11 +15,15 @@ const GaleriFoto = ({ items, title, description }) => {
 
   const [aktif, setAktif] = useState(null);
   const dialogRef = useRef(null);
+  const triggerRef = useRef(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (aktif !== null && !dialog.open) dialog.showModal();
+    if (aktif !== null && !dialog.open) {
+      triggerRef.current = document.activeElement;
+      dialog.showModal();
+    }
     if (aktif === null && dialog.open) dialog.close();
   }, [aktif]);
 
@@ -38,7 +42,7 @@ const GaleriFoto = ({ items, title, description }) => {
           <Reveal key={foto.image + i} className={JEDA[i % JEDA.length]}>
             <button
               type="button"
-              onClick={() => setAktif(i)}
+              onClick={(event) => { triggerRef.current = event.currentTarget; setAktif(i); }}
               aria-label={t('Perbesar foto: {alt}', { alt: t(foto.alt) })}
               className="group block w-full overflow-hidden rounded-xl border border-dark-100 bg-dark-50"
             >
@@ -55,7 +59,15 @@ const GaleriFoto = ({ items, title, description }) => {
 
       <dialog
         ref={dialogRef}
-        onClose={() => setAktif(null)}
+        aria-label={t('Galeri foto')}
+        onClose={() => {
+          setAktif(null);
+          if (triggerRef.current?.isConnected) triggerRef.current.focus();
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'ArrowLeft') geser(-1);
+          if (event.key === 'ArrowRight') geser(1);
+        }}
         onClick={(e) => {
           if (e.target === dialogRef.current) setAktif(null);
         }}

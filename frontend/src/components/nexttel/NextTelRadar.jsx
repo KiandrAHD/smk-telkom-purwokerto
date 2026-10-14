@@ -10,18 +10,19 @@ const AXES = [
 export default function NextTelRadar({ ranking, labels }) {
   const { t } = useLanguage();
   const scores = Object.fromEntries(ranking);
-  // Fixed scale keeps scores comparable between attempts (eight answers, at most 24 per major).
-  const point = (axis, score) => [310 + axis.dx * score / 30 * 170, 240 + axis.dy * score / 30 * 170];
+  // A-D uses the Figma scale; free-text scores can exceed 30 and must remain inside the chart.
+  const maxScale = Math.max(30, Math.ceil(Math.max(...Object.values(scores)) / 30) * 30);
+  const point = (axis, score) => [310 + axis.dx * score / maxScale * 170, 240 + axis.dy * score / maxScale * 170];
   return (
     <svg viewBox="0 0 620 480" className="mx-auto w-full max-w-2xl text-dark-600" role="img" aria-label={ranking.map(([code, score]) => `${t(labels[code])}: ${score}`).join(', ')}>
       <title>{t('Statistik Minat Jurusan')}</title>
       {[5, 10, 15, 20, 25, 30].map((scale) => (
-        <polygon key={scale} points={AXES.map((axis) => point(axis, scale).join(',')).join(' ')} fill="none" className="stroke-dark-300" strokeWidth="1.5" />
+        <polygon key={scale} points={AXES.map((axis) => point(axis, scale * maxScale / 30).join(',')).join(' ')} fill="none" className="stroke-dark-300" strokeWidth="1.5" />
       ))}
       <path d="M310 70V410M140 240H480" fill="none" className="stroke-dark-400" strokeWidth="1" />
       <polygon points={AXES.map((axis) => point(axis, scores[axis.code] || 0).join(',')).join(' ')} className="fill-primary/25 stroke-primary" strokeWidth="2" strokeLinejoin="round" />
       {[0, 5, 10, 15, 20, 25].map((scale) => (
-        <text key={scale} x="315" y={240 - scale / 30 * 170 - 4} fontSize="10" className="fill-dark-500">{scale}</text>
+        <text key={scale} x="315" y={240 - scale / 30 * 170 - 4} fontSize="10" className="fill-dark-500">{scale * maxScale / 30}</text>
       ))}
       {AXES.map((axis) => {
         const [cx, cy] = point(axis, scores[axis.code] || 0);
