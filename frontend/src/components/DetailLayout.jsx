@@ -7,7 +7,7 @@ import ContentImage from './ContentImage';
 import TeacherPhoto from './TeacherPhoto';
 import { useLanguage } from '../context/LanguageContext';
 import { useEffect } from 'react';
-import { applyPageMetadata } from '../utils/seo';
+import { applyPageMetadata, detailDescription, articleMetadata } from '../utils/seo';
 import { formatPublicDate } from '../utils/publicContent';
 
 // Tampilan bersama untuk semua halaman detail. Komponen ini sengaja tidak tahu
@@ -18,8 +18,8 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
   const { pathname } = useLocation();
   const { t, locale } = useLanguage();
   useEffect(() => {
-    applyPageMetadata({ pathname, title: `${t(item.title)} | SMK Telkom Purwokerto`, description: t(item.lead || item.subtitle || item.title), indexable: true });
-  }, [pathname, item.title, item.lead, item.subtitle, t]);
+    applyPageMetadata({ pathname, title: `${t(item.title)} | SMK Telkom Purwokerto`, description: detailDescription({ title: t(item.title), lead: t(item.lead || ''), subtitle: t(item.subtitle || '') }), article: /^\/berita\/[^/]+\/?$/.test(pathname) ? articleMetadata({ ...item, title: t(item.title) }) : undefined, indexable: true });
+  }, [pathname, item, backTo, t]);
   return (
   <MainLayout>
     <article className="bg-white py-8 lg:py-12">

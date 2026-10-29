@@ -5,6 +5,7 @@ import sharp from 'sharp';
 
 const offline = process.argv.includes('--offline');
 const dist = path.resolve('dist');
+const titles = new Set(), descriptions = new Set();
 const routes = JSON.parse(await readFile(path.join(dist, 'seo-routes.json'), 'utf8'));
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
 const robots = await readFile(path.join(dist, 'robots.txt'), 'utf8');
@@ -21,6 +22,11 @@ for (const route of routes) {
     previousLevel = level;
   }
   assert.equal((head.match(/<title>/g) || []).length, 1, `${route}: title`);
+  const title = head.match(/<title>(.*?)<\/title>/s)[1];
+  const description = head.match(/name="description" content="([^"]*)"/)[1];
+  assert.ok(!titles.has(title), `${route}: duplicate title`);
+  assert.ok(!descriptions.has(description), `${route}: duplicate description`);
+  titles.add(title); descriptions.add(description);
   for (const name of ['description', 'robots', 'twitter:card', 'twitter:title', 'twitter:description', 'twitter:image']) {
     assert.equal((head.match(new RegExp(`name="${name}"`, 'g')) || []).length, 1, `${route}: ${name}`);
   }
@@ -45,7 +51,22 @@ for (const route of routes) {
   const schema = JSON.parse(schemas[0][1]);
   assert.equal(schema['@context'], 'https://schema.org');
   assert.equal(new Set(schema['@graph'].map(node => node['@id'])).size, schema['@graph'].length);
-  assert.deepEqual(schema['@graph'].map(node => node['@type']), ['School', 'WebSite', 'WebPage', ...(route === '/' ? [] : ['BreadcrumbList'])]);
+  const hasTrail = /<nav\b[^>]*aria-label="(?:Jejak navigasi|Breadcrumb)"/.test(html);
+  const article = schema['@graph'].find(node => node['@type'] === 'Article');
+  if (article) {
+    assert.ok(route.startsWith('/berita/') && !route.startsWith('/berita/agenda/'), `${route}: Article only on news details`);
+    assert.ok(article.headline, `${route}: article headline`);
+    assert.equal(article.mainEntityOfPage['@id'], `${canonical}#webpage`);
+    assert.ok(head.includes('property="og:type" content="article"'));
+    assert.ok(!article.datePublished, `${route}: do not invent original publication dates from imported timestamps`);
+  }
+  const breadcrumb = schema['@graph'].find(node => node['@type'] === 'BreadcrumbList');
+  if (breadcrumb) {
+    assert.ok(hasTrail, `${route}: breadcrumb must exist in visible markup`);
+    assert.ok(breadcrumb.itemListElement.length >= 2, `${route}: meaningful breadcrumb`);
+    assert.equal(breadcrumb.itemListElement.at(-1).item, canonical, `${route}: current breadcrumb URL`);
+  }
+  assert.deepEqual(schema['@graph'].map(node => node['@type']), ['School', 'WebSite', 'WebPage', ...(schema['@graph'].some(node => node['@type'] === 'Article') ? ['Article'] : []), ...(breadcrumb ? ['BreadcrumbList'] : [])]);
   assert.equal(schema['@graph'][2].url, canonical);
   assert.ok(!html.includes('/src/assets/'), `${route}: production assets`);
   for (const attribute of html.matchAll(/(?:src|srcSet|href)="([^"]+)"/g)) {
@@ -65,6 +86,10 @@ for (const route of ['/', '/profil-sekolah', '/berita', '/prestasi']) {
 for (const route of ['/pengumuman/populer', '/pengumuman/semua', '/pengumuman/timeline', '/pengumuman/informasi-penting', '/berita/trending', '/berita/agenda', '/prestasi/galeri']) {
   const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
   assert.ok(!/Memuat (berita|pengumuman|prestasi)/.test(html), `${route}: collection must not be a loading-only prerender`);
+}
+for (const [route, loadingText] of [['/bkk', 'Memuat lowongan'], ['/kalender', 'Memuat kegiatan']]) {
+  const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
+  assert.ok(!html.includes(loadingText), `${route}: public feed available at build time`);
 }
 const homepage = await readFile(path.join(dist, 'index.html'), 'utf8');
 const homepageText = homepage.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');

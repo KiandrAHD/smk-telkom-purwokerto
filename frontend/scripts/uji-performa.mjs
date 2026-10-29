@@ -59,6 +59,13 @@ const originalAlpha = await sharp(originalFile).ensureAlpha().extractChannel('al
 const losslessAlpha = await sharp(losslessFile).ensureAlpha().extractChannel('alpha').raw().toBuffer();
 assert.ok(originalAlpha.equals(losslessAlpha), 'Lossless partner background changed alpha');
 
+const calendarSource = path.join(root, 'src/assets/kalender/hero-calendar-source.png');
+const calendarWebp = path.join(root, 'src/assets/kalender/hero-calendar-lossless.webp');
+for (const background of ['#000000', '#ffffff']) {
+  assert.ok((await sharp(calendarSource).flatten({ background }).raw().toBuffer()).equals(await sharp(calendarWebp).flatten({ background }).raw().toBuffer()), 'Calendar artwork must preserve visible pixels');
+}
+assert.ok((await stat(calendarWebp)).size < (await stat(calendarSource)).size, 'Calendar lossless format must reduce transfer size');
+
 const englishSource = path.join(root, 'src/assets/landing/stela-card-en.png');
 const englishFull = path.join(root, 'src/assets/responsive/stela-card-en-2172.webp');
 assert.ok((await sharp(englishSource).raw().toBuffer()).equals(await sharp(englishFull).raw().toBuffer()), 'Full-size English STELA must preserve every decoded pixel');

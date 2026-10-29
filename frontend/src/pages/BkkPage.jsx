@@ -12,11 +12,11 @@ import PublicDataState from '../components/PublicDataState';
 import { getActiveBkk } from '../services/bkkService';
 import { toBkkItem } from '../utils/publicContent';
 
-const BkkPage = () => {
+const BkkPage = ({ initialItems }) => {
   const { t } = useLanguage();
 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState(initialItems || []);
+  const [loading, setLoading] = useState(!initialItems);
   const [error, setError] = useState('');
   const [requestVersion, setRequestVersion] = useState(0);
 

@@ -35,17 +35,34 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://smk-telkom-pu
 export const OG_IMAGE = `${SITE_URL}/og-school.jpg`;
 const schoolId = `${SITE_URL}/#school`;
 const websiteId = `${SITE_URL}/#website`;
+let retainedSchool; // Preserve known identity across private/noindex SPA screens.
 
-export function pageMetadata({ pathname, title, description, indexable = true, school, breadcrumbs }) {
+// Use the same identity-based summary in browser navigation and static HTML.
+export function detailDescription({ title, lead, subtitle }) {
+  const summary = (lead || subtitle || '').replace(/\s+/g, ' ').trim();
+  return summary && !summary.includes(title) ? `${title} — ${summary}` : summary || title;
+}
+
+export function articleMetadata(item) {
+  return {
+    headline: item.title,
+    // Author entity type is not verified; do not turn an editorial label into a Person.
+    ...(item.image && /^https?:\/\//.test(item.image) ? { image: [item.image] } : {}),
+    // created_at on imported records is not proof of the original publication date.
+  };
+}
+
+export function pageMetadata({ pathname, title, description, indexable = true, school, breadcrumbs, article }) {
   const path = pathname.replace(/\/+$/, '') || '/';
   const url = new URL(path, `${SITE_URL}/`).href;
   const graph = indexable ? [
     { '@type': 'School', '@id': schoolId, name: 'SMK Telkom Purwokerto', url: `${SITE_URL}/`, ...(school || {}) },
     { '@type': 'WebSite', '@id': websiteId, name: 'SMK Telkom Purwokerto', url: `${SITE_URL}/`, publisher: { '@id': schoolId } },
     { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: title, description, isPartOf: { '@id': websiteId }, about: { '@id': schoolId }, ...(breadcrumbs ? { breadcrumb: { '@id': `${url}#breadcrumb` } } : {}) },
+    ...(article ? [{ '@type': 'Article', '@id': `${url}#article`, ...article, mainEntityOfPage: { '@id': `${url}#webpage` }, publisher: { '@id': schoolId } }] : []),
     ...(breadcrumbs ? [{ '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`, itemListElement: breadcrumbs.map((item, i) => ({ '@type': 'ListItem', position: i + 1, name: item.name, item: new URL(item.path, `${SITE_URL}/`).href })) }] : []),
   ] : [];
-  return { title, description, url, indexable, jsonLd: { '@context': 'https://schema.org', '@graph': graph } };
+  return { title, description, url, indexable, ogType: article && indexable ? 'article' : 'website', jsonLd: { '@context': 'https://schema.org', '@graph': graph } };
 }
 
 export function applyPageMetadata(options) {
@@ -62,20 +79,26 @@ export function applyPageMetadata(options) {
   for (const [name, content] of Object.entries({ description: metadata.description, robots: metadata.indexable ? 'index, follow' : 'noindex, follow', 'twitter:card': 'summary_large_image', 'twitter:title': metadata.title, 'twitter:description': metadata.description, 'twitter:image': OG_IMAGE })) {
     upsert(`meta[name="${name}"]`, 'meta', { name, content });
   }
-  for (const [property, content] of Object.entries({ 'og:title': metadata.title, 'og:description': metadata.description, 'og:type': 'website', 'og:image': OG_IMAGE, 'og:url': metadata.url })) {
+  for (const [property, content] of Object.entries({ 'og:title': metadata.title, 'og:description': metadata.description, 'og:type': metadata.ogType, 'og:image': OG_IMAGE, 'og:url': metadata.url })) {
     upsert(`meta[property="${property}"]`, 'meta', { property, content });
   }
   if (metadata.indexable) upsert('link[rel="canonical"]', 'link', { rel: 'canonical', href: metadata.url });
   else document.querySelectorAll('link[rel="canonical"]').forEach(node => node.remove());
   const script = upsert('script[data-school-schema]', 'script', { type: 'application/ld+json', 'data-school-schema': '' });
   // Keep build-time school contact fields when updating the same graph in the browser.
-  const previousSchool = JSON.parse(script.textContent || '{}')['@graph']?.find(node => node['@type'] === 'School');
+  let previousSchool;
+  try { previousSchool = JSON.parse(script.textContent || '{}')['@graph']?.find(node => node['@type'] === 'School'); }
+  catch { /* A stale or malformed graph must not prevent metadata repair. */ }
+  if (previousSchool?.['@id'] === schoolId) retainedSchool = previousSchool;
+  previousSchool = retainedSchool;
   if (previousSchool && metadata.indexable) metadata.jsonLd['@graph'][0] = previousSchool;
-  const breadcrumbLinks = [...document.querySelectorAll('main nav[aria-label="Jejak navigasi"] a, main nav[aria-label="Breadcrumb"] a')];
+  const trail = document.querySelector('main nav[aria-label="Jejak navigasi"], main nav[aria-label="Breadcrumb"]');
+  const breadcrumbLinks = [...(trail?.querySelectorAll('a') || [])];
   if (metadata.indexable && breadcrumbLinks.length) {
     const breadcrumbs = breadcrumbLinks.map(link => ({ name: link.textContent.trim(), path: new URL(link.href).pathname }));
-    breadcrumbs.push({ name: document.querySelector('main h1')?.textContent.trim() || metadata.title, path: options.pathname });
-    metadata.jsonLd = pageMetadata({ ...options, breadcrumbs, school: previousSchool }).jsonLd;
+    const current = trail.querySelector('[aria-current="page"]');
+    if (current) breadcrumbs.push({ name: current.textContent.trim(), path: options.pathname });
+    if (breadcrumbs.length >= 2) metadata.jsonLd = pageMetadata({ ...options, breadcrumbs, school: previousSchool }).jsonLd;
   }
   script.textContent = JSON.stringify(metadata.jsonLd).replace(/</g, '\\u003c');
 }

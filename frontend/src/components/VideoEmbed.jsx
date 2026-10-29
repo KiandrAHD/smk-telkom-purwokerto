@@ -10,7 +10,7 @@ import schoolPoster from '../assets/tentang/profil-hero.jpg';
 //
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
-const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption, title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', appearance = 'default', playIcon, className = '' }) => {
+const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption, posterLoading = 'lazy', title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', appearance = 'default', playIcon, className = '' }) => {
   const { t } = useLanguage();
   const [diputar, setDiputar] = useState(false);
   const isAbout = appearance === 'about';
@@ -37,6 +37,8 @@ const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption,
               src={poster || schoolPoster}
               srcSet={posterSrcSet}
               sizes={posterSizes}
+              loading={posterLoading}
+              decoding="async"
               onError={({ currentTarget }) => {
                 // A failed responsive candidate must not override the fallback.
                 currentTarget.removeAttribute('srcset');

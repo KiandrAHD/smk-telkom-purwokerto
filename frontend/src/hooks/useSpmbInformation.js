@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getSpmbInformation, getSpmbStatistics, spmbInformationError } from '../services/spmbInformationService';
 
-export default function useSpmbInformation(published = false) {
-  const [items, setItems] = useState([]), [stats, setStats] = useState(null), [loading, setLoading] = useState(true), [error, setError] = useState('');
+export default function useSpmbInformation(published = false, initialData) {
+  const [items, setItems] = useState(initialData?.items || []), [stats, setStats] = useState(initialData?.stats || null), [loading, setLoading] = useState(!initialData), [error, setError] = useState('');
   const request = useRef(null);
   const refresh = useCallback(async (quiet = false) => {
     request.current?.abort(); const controller = new AbortController(); request.current = controller;

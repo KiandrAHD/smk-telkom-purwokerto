@@ -6,6 +6,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { createServer } from 'vite';
 import sharp from 'sharp';
+import { parse } from 'parse5';
 
 // Explicit test-only build: no live database, no invented records, never deploy this output.
 const offline = process.argv.includes('--offline');
@@ -19,23 +20,24 @@ const plain = html => {
   let previous;
   do {
     previous = text;
-    text = text.replace(/<[^>]*>/g, '');
+    text = text.replace(/<br\s*\/?\s*>/gi, ' ').replace(/<[^>]*>/g, '');
   } while (text !== previous);
   return text.replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').trim();
 };
 try {
   const { default: App } = await server.ssrLoadModule('/src/App.jsx');
   const { default: LanguageProvider } = await server.ssrLoadModule('/src/context/LanguageProvider.jsx');
-  const { PAGE_META, SITE_URL, OG_IMAGE, pageMetadata } = await server.ssrLoadModule('/src/utils/seo.js');
+  const { PAGE_META, SITE_URL, OG_IMAGE, pageMetadata, detailDescription, articleMetadata } = await server.ssrLoadModule('/src/utils/seo.js');
   const data = await server.ssrLoadModule('/src/data/dummyData.js');
   const { profilGuruDetail } = await server.ssrLoadModule('/src/data/profilGuruData.js');
   const { default: DetailLayout } = await server.ssrLoadModule('/src/components/DetailLayout.jsx');
   const publicContent = {};
-  const { toBeritaItem, toPengumumanItem, toPrestasiItem } = await server.ssrLoadModule('/src/utils/publicContent.js');
+  const { toBeritaItem, toPengumumanItem, toPrestasiItem, toBkkItem } = await server.ssrLoadModule('/src/utils/publicContent.js');
   for (const [type, service, method, map] of [
     ['berita', 'beritaService', 'getPublishedBerita', toBeritaItem],
     ['pengumuman', 'pengumumanService', 'getPublishedPengumuman', toPengumumanItem],
     ['prestasi', 'prestasiService', 'getPrestasi', toPrestasiItem],
+    ['bkk', 'bkkService', 'getActiveBkk', toBkkItem],
   ]) {
     if (offline) {
       publicContent[type] = [];
@@ -46,8 +48,16 @@ try {
     try { publicContent[type] = (await module[method]()).map(map); }
     catch (cause) { throw new Error(`SEO: cannot prerender published ${type}; aborting instead of deploying loading-only pages. Retry when the public data source is available.`, { cause }); }
   }
+  let spmbData = { items: [], stats: null }, events = [];
+  if (!offline) {
+    const { getSpmbInformation, getSpmbStatistics } = await server.ssrLoadModule('/src/services/spmbInformationService.js');
+    const { getEvents } = await server.ssrLoadModule('/src/services/eventService.js');
+    const [items, stats, rows] = await Promise.all([getSpmbInformation(true), getSpmbStatistics(), getEvents(true)]);
+    spmbData = { items, stats };
+    events = rows;
+  }
   const pages = {};
-  for (const name of ['Landing', 'Berita', 'Pengumuman', 'Prestasi']) pages[name] = (await server.ssrLoadModule(`/src/pages/${name}Page.jsx`)).default;
+  for (const name of ['Landing', 'Berita', 'Pengumuman', 'Prestasi', 'Bkk', 'Spmb', 'Kalender']) pages[name] = (await server.ssrLoadModule(`/src/pages/${name}Page.jsx`)).default;
   const { default: KoleksiPage } = await server.ssrLoadModule('/src/pages/KoleksiPage.jsx');
   const collections = {
     '/pengumuman/populer': 'pengumuman-populer',
@@ -76,6 +86,9 @@ try {
     output.on('error', reject);
     let content = h(App);
     if (pathname === '/') content = h(pages.Landing, { initialPrestasi: publicContent.prestasi });
+    if (pathname === '/bkk') content = h(pages.Bkk, { initialItems: publicContent.bkk });
+    if (pathname === '/spmb') content = h(pages.Spmb, { initialData: spmbData });
+    if (pathname === '/kalender') content = h(pages.Kalender, { initialItems: events });
     for (const [type, name] of [['berita', 'Berita'], ['pengumuman', 'Pengumuman'], ['prestasi', 'Prestasi']]) {
       if (pathname === `/${type}`) content = h(pages[name], { initialItems: publicContent[type] });
       const item = publicContent[type]?.find(entry => pathname === `/${type}/${entry.slug}`);
@@ -95,7 +108,7 @@ try {
   const routes = [...new Set([
     ...Object.keys(PAGE_META).filter(route => !['/login', '/dashboard'].includes(route)),
     ...staticDetails.flatMap(([base, entries]) => entries.map(item => `${base}/${item.slug}`)),
-    ...Object.entries(publicContent).flatMap(([type, entries]) => entries.map(item => `/${type}/${item.slug}`)),
+    ...Object.entries(publicContent).filter(([type]) => type !== 'bkk').flatMap(([type, entries]) => entries.map(item => `/${type}/${item.slug}`)),
   ])];
   const school = { description: PAGE_META['/'][1], address: data.footerData.kontak.address, telephone: data.footerData.kontak.phone, email: data.footerData.kontak.email, sameAs: data.footerData.socials.map(item => item.href) };
   const stylesFor = route => {
@@ -122,13 +135,34 @@ try {
     if (route === '/spmb') collect('src/pages/SpmbPage.jsx');
     return [...css].filter(file => !template.includes(`href="/${file}"`)).map(file => `<link rel="stylesheet" data-seo-style href="/${file}" />`).join('');
   };
+  const breadcrumbsFrom = (html, route) => {
+    const trails = [];
+    const visit = node => {
+      const attrs = Object.fromEntries((node.attrs || []).map(attr => [attr.name, attr.value]));
+      if (node.tagName === 'nav' && ['Jejak navigasi', 'Breadcrumb'].includes(attrs['aria-label'])) trails.push(node);
+      else (node.childNodes || []).forEach(visit);
+    };
+    visit(parse(html));
+    const trail = trails[0];
+    if (!trail) return undefined; // Do not invent a trail where the UI has none.
+    const items = [];
+    const label = node => node.nodeName === '#text' ? node.value : (node.childNodes || []).map(label).join('');
+    const links = node => {
+      const attrs = Object.fromEntries((node.attrs || []).map(attr => [attr.name, attr.value]));
+      if (node.tagName === 'a' && attrs.href) items.push({ name: label(node).trim(), path: attrs.href });
+      if (attrs['aria-current'] === 'page') items.push({ name: label(node).trim(), path: route });
+      (node.childNodes || []).forEach(links);
+    };
+    links(trail);
+    return items.length >= 2 ? items : undefined;
+  };
   const head = metadata => `<title>${escape(metadata.title)}</title>
     <meta name="description" content="${escape(metadata.description)}" />
     <meta name="robots" content="${metadata.indexable && !offline ? 'index, follow' : 'noindex, follow'}" />
     ${metadata.indexable ? `<link rel="canonical" href="${metadata.url}" />` : ''}
     <meta property="og:title" content="${escape(metadata.title)}" />
     <meta property="og:description" content="${escape(metadata.description)}" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="${metadata.ogType}" />
     <meta property="og:url" content="${metadata.url}" />
     <meta property="og:image" content="${OG_IMAGE}" />
     <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
@@ -143,9 +177,10 @@ try {
     if ((html.match(/<h1\b/g) || []).length !== 1) throw new Error(`${route}: expected exactly one H1`);
     if (html.includes('id="error-title"')) throw new Error(`${route}: rendered an error page`);
     const title = PAGE_META[route]?.[0] || `${plain(html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)[1])} | SMK Telkom Purwokerto`;
-    const description = PAGE_META[route]?.[1] || plain(html.match(/<h1\b[\s\S]*?<\/h1>[\s\S]*?<p\b[^>]*>([\s\S]*?)<\/p>/)?.[1] || title);
-    const breadcrumbs = route === '/' ? undefined : [{ name: 'Beranda', path: '/' }, { name: title.split(' | ')[0], path: route }];
-    const metadata = pageMetadata({ pathname: route, title, description, school, breadcrumbs });
+    const description = PAGE_META[route]?.[1] || detailDescription({ title: plain(html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)[1]), lead: plain(html.match(/<h1\b[\s\S]*?<\/h1>[\s\S]*?<p\b[^>]*>([\s\S]*?)<\/p>/)?.[1] || '') });
+    const breadcrumbs = breadcrumbsFrom(html, route);
+    const article = publicContent.berita?.find(item => route === `/berita/${item.slug}`);
+    const metadata = pageMetadata({ pathname: route, title, description, school, breadcrumbs, article: article ? articleMetadata(article) : undefined });
     // SSR uses source asset URLs; map them to the exact files emitted by the client build.
     html = html.replace(/\/src\/assets\/[^"\s<>]+/g, url => {
       const asset = manifest[url.slice(1).split('?')[0]];
