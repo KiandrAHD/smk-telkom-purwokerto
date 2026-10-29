@@ -1,9 +1,19 @@
 // Read-only production evidence. Run: node scripts/audit-seo-http.mjs [origin]
+import { parse } from 'parse5';
+
+// Extract text with an HTML parser, not regex-based pseudo-sanitization.
+// Evidence remains untrusted text and is only emitted as JSON, never HTML.
+const textContent = node => {
+  if (['script', 'style', 'template'].includes(node.tagName)) return '';
+  if (node.nodeName === '#text') return node.value;
+  return (node.childNodes || []).map(textContent).join(' ');
+};
+const plainText = html => textContent(parse(html)).replace(/\s+/g, ' ').trim();
 const origin = process.argv[2] || 'https://smk-telkom-purwokerto.vercel.app';
 const read = async (pathname, userAgent) => {
   const response = await fetch(new URL(pathname, origin), { headers: userAgent ? { 'user-agent': userAgent } : {} });
   const html = await response.text();
-  const body = html.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const body = plainText(html);
   let schema;
   try { schema = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)?.[1] || '{}'); } catch { schema = 'INVALID JSON'; }
   const evidence = {
@@ -11,7 +21,7 @@ const read = async (pathname, userAgent) => {
     contentType: response.headers.get('content-type'), xRobotsTag: response.headers.get('x-robots-tag'),
     htmlCharacters: html.length, textWords: body.split(/\s+/).length,
     title: html.match(/<title>([\s\S]*?)<\/title>/)?.[1],
-    h1: [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map(match => match[1].replace(/<[^>]*>/g, '')),
+    h1: [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map(match => plainText(match[1])),
     canonical: html.match(/<link rel="canonical" href="([^"]+)"/)?.[1],
     robots: html.match(/<meta name="robots" content="([^"]+)"/)?.[1],
     ogImage: html.match(/<meta property="og:image" content="([^"]+)"/)?.[1],
