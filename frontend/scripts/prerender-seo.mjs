@@ -37,10 +37,20 @@ try {
     const module = await server.ssrLoadModule(`/src/services/${service}.js`);
     // Only existing public read APIs participate; a failed fetch must never publish dummy records.
     try { publicContent[type] = (await module[method]()).map(map); }
-    catch { console.warn(`SEO: ${type} unavailable; dynamic pages remain client-rendered and are excluded from this sitemap snapshot.`); }
+    catch (cause) { throw new Error(`SEO: cannot prerender published ${type}; aborting instead of deploying loading-only pages. Retry when the public data source is available.`, { cause }); }
   }
   const pages = {};
   for (const name of ['Landing', 'Berita', 'Pengumuman', 'Prestasi']) pages[name] = (await server.ssrLoadModule(`/src/pages/${name}Page.jsx`)).default;
+  const { default: KoleksiPage } = await server.ssrLoadModule('/src/pages/KoleksiPage.jsx');
+  const collections = {
+    '/pengumuman/populer': 'pengumuman-populer',
+    '/pengumuman/semua': 'pengumuman-semua',
+    '/pengumuman/timeline': 'pengumuman-timeline',
+    '/pengumuman/informasi-penting': 'pengumuman-informasi-penting',
+    '/berita/trending': 'berita-trending',
+    '/berita/agenda': 'berita-agenda',
+    '/prestasi/galeri': 'prestasi-galeri',
+  };
   const detailContent = {};
   for (const [type, name] of [['berita', 'Berita'], ['pengumuman', 'Pengumuman'], ['prestasi', 'Prestasi']]) detailContent[type] = (await server.ssrLoadModule(`/src/components/${type}/${name}DetailKonten.jsx`)).default;
   const manifest = JSON.parse(await readFile(path.join(dist, '.vite/manifest.json'), 'utf8'));
@@ -64,6 +74,7 @@ try {
       const item = publicContent[type]?.find(entry => pathname === `/${type}/${entry.slug}`);
       if (item) content = h(DetailLayout, { item, backTo: `/${type}`, backLabel: name }, h(detailContent[type], { item, relatedItems: publicContent[type].filter(entry => entry.slug !== item.slug).slice(0, 3) }));
     }
+    if (collections[pathname]) content = h(KoleksiPage, { jenis: collections[pathname], initialItems: publicContent[pathname.split('/')[1]] });
     const stream = renderToPipeableStream(h(MemoryRouter, { initialEntries: [pathname] }, h(LanguageProvider, null, content)), {
       onAllReady() { stream.pipe(output); }, onError: reject,
     });
@@ -91,9 +102,13 @@ try {
       entry?.imports?.forEach(collect);
     };
     collect('index.html');
-    // Shared divider styles and route-specific layouts must also work before lazy JavaScript loads.
-    Object.keys(manifest).filter(key => key.startsWith('_RibbonDivider-')).forEach(collect);
-    if (route === '/') collect('src/components/FacilitiesSection.jsx');
+    // Hero/carousel CSS is emitted into a shared lazy chunk, not index.html.
+    // Include the same existing styles before JS; never expose inactive slides unstyled.
+    Object.keys(manifest).filter(key => key.startsWith('_RibbonDivider-') || key.startsWith('_PageHeroCarousel-')).forEach(collect);
+    if (route === '/') {
+      collect('src/pages/LandingPage.jsx');
+      collect('src/components/FacilitiesSection.jsx');
+    }
     if (route === '/fasilitas') collect('src/pages/FasilitasPage.jsx');
     if (/^\/jurusan\/[^/]+$/.test(route)) collect('src/pages/JurusanDetailPage.jsx');
     if (route === '/kalender') collect('src/pages/KalenderPage.jsx');

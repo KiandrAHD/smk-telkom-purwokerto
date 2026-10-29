@@ -48,6 +48,18 @@ for (const route of routes) {
   for (const image of html.matchAll(/<img\b[^>]*>/g)) assert.ok(/\balt="/.test(image[0]), `${route}: missing image alt`);
   assert.equal((html.match(/<main\b/g) || []).length, 1, `${route}: main landmark`);
 }
+// Shared hero styles must exist before JavaScript, including carousel visibility.
+const manifest = JSON.parse(await readFile(path.join(dist, '.vite/manifest.json'), 'utf8'));
+const heroCss = Object.entries(manifest).filter(([key]) => key.startsWith('_PageHeroCarousel-')).flatMap(([, entry]) => entry.css || []);
+assert.ok(heroCss.length, 'Shared hero CSS emitted');
+for (const route of ['/', '/profil-sekolah', '/berita', '/prestasi']) {
+  const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
+  for (const css of heroCss) assert.ok(html.includes(`href="/${css}"`), `${route}: initial hero CSS`);
+}
+for (const route of ['/pengumuman/populer', '/pengumuman/semua', '/pengumuman/timeline', '/pengumuman/informasi-penting', '/berita/trending', '/berita/agenda', '/prestasi/galeri']) {
+  const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
+  assert.ok(!/Memuat (berita|pengumuman|prestasi)/.test(html), `${route}: collection must not be a loading-only prerender`);
+}
 const homepage = await readFile(path.join(dist, 'index.html'), 'utf8');
 const homepageText = homepage.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
 for (const text of ['Tentang SMK Telkom Purwokerto', 'Rekayasa Perangkat Lunak', 'Pengembangan Game', 'Teknik Komputer', 'Teknik Jaringan', 'DI Panjaitan']) assert.ok(homepageText.includes(text), `Homepage content: ${text}`);

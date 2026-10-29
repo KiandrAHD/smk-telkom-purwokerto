@@ -44,9 +44,9 @@ const PengumumanCard = ({ item }) => {
 
       <div className="mt-2.5 flex flex-1 flex-col items-start justify-between gap-3 sm:flex-row">
         <div className="min-w-0 flex-1">
-          <h3 className="break-words text-sm font-extrabold leading-snug tracking-[0.05em] text-white sm:text-[clamp(14px,2.25cqw,24px)]">
+          <h2 className="break-words text-sm font-extrabold leading-snug tracking-[0.05em] text-white sm:text-[clamp(14px,2.25cqw,24px)]">
             {t(item.title)}
-          </h3>
+          </h2>
           <p className="mt-1 break-words text-[11px] font-extrabold leading-snug tracking-[0.05em] text-white sm:text-[clamp(11px,1.88cqw,20px)]">
             {t(item.desc)}
           </p>
