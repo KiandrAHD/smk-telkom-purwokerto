@@ -19,7 +19,10 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
-      - run: npm run build
+      # Validate the production bundle without secrets or a live school database.
+      # Vercel must keep using npm run build (strict public-data prerender).
+      - run: npm run build:ci
+      - run: npm run seo:uji -- --offline
       - run: node scripts/uji-kredensial.mjs --build
       - run: npm run security:uji
       - run: npm run performa:uji

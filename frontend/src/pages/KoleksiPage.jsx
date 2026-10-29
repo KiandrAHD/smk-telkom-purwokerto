@@ -97,14 +97,14 @@ const KOLEKSI = {
   },
 };
 
-const KoleksiPage = ({ jenis }) => {
+const KoleksiPage = ({ jenis, initialItems }) => {
   const { t } = useLanguage();
 
   const koleksi = KOLEKSI[jenis];
   const ambil = koleksi?.sumber ? AMBIL[koleksi.sumber] : null;
 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(Boolean(ambil));
+  const [items, setItems] = useState(initialItems || []);
+  const [loading, setLoading] = useState(Boolean(ambil) && !initialItems);
   const [error, setError] = useState('');
   const [requestVersion, setRequestVersion] = useState(0);
 

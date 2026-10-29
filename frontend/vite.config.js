@@ -12,6 +12,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          // Shared school content is cacheable data, not application bootstrap code.
+          if (id.replace(/\\/g, '/').endsWith('/src/data/dummyData.js')) return 'school-content';
           if (id.includes('node_modules/react-dom/')) return 'react-vendor';
           if (id.includes('node_modules/gsap/')) return 'gsap-vendor';
           if (id.includes('node_modules/lenis/')) return 'lenis-vendor';

@@ -3,6 +3,7 @@ import { readFile, access } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
+const offline = process.argv.includes('--offline');
 const dist = path.resolve('dist');
 const routes = JSON.parse(await readFile(path.join(dist, 'seo-routes.json'), 'utf8'));
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
@@ -26,14 +27,19 @@ for (const route of routes) {
   for (const property of ['og:title', 'og:description', 'og:image', 'og:url']) {
     assert.equal((head.match(new RegExp(`property="${property}"`, 'g')) || []).length, 1, `${route}: ${property}`);
   }
-  assert.ok(head.includes('content="index, follow"'), `${route}: indexable`);
+  assert.ok(head.includes(`content="${offline ? 'noindex' : 'index'}, follow"`), `${route}: indexing policy`);
   const canonicals = [...head.matchAll(/<link rel="canonical" href="([^"]+)"/g)];
   assert.equal(canonicals.length, 1, `${route}: single canonical`);
   const canonical = canonicals[0][1];
   assert.equal(new URL(canonical).pathname, route, `${route}: canonical path`);
   assert.ok(head.includes(`property="og:url" content="${canonical}"`));
-  assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `${route}: sitemap`);
-  assert.ok(robots.includes(`${new URL(canonical).origin}/sitemap.xml`));
+  if (!offline) {
+    assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `${route}: sitemap`);
+    assert.ok(robots.includes(`${new URL(canonical).origin}/sitemap.xml`));
+  } else {
+    assert.ok(!sitemap.includes('<loc>'), 'Offline output has no sitemap entries');
+    assert.ok(robots.includes('Disallow: /'), 'Offline output blocks crawling');
+  }
   const schemas = [...head.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
   assert.equal(schemas.length, 1, `${route}: single JSON-LD graph`);
   const schema = JSON.parse(schemas[0][1]);
@@ -47,6 +53,18 @@ for (const route of routes) {
   }
   for (const image of html.matchAll(/<img\b[^>]*>/g)) assert.ok(/\balt="/.test(image[0]), `${route}: missing image alt`);
   assert.equal((html.match(/<main\b/g) || []).length, 1, `${route}: main landmark`);
+}
+// Shared hero styles must exist before JavaScript, including carousel visibility.
+const manifest = JSON.parse(await readFile(path.join(dist, '.vite/manifest.json'), 'utf8'));
+const heroCss = Object.entries(manifest).filter(([key]) => key.startsWith('_PageHeroCarousel-')).flatMap(([, entry]) => entry.css || []);
+assert.ok(heroCss.length, 'Shared hero CSS emitted');
+for (const route of ['/', '/profil-sekolah', '/berita', '/prestasi']) {
+  const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
+  for (const css of heroCss) assert.ok(html.includes(`href="/${css}"`), `${route}: initial hero CSS`);
+}
+for (const route of ['/pengumuman/populer', '/pengumuman/semua', '/pengumuman/timeline', '/pengumuman/informasi-penting', '/berita/trending', '/berita/agenda', '/prestasi/galeri']) {
+  const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
+  assert.ok(!/Memuat (berita|pengumuman|prestasi)/.test(html), `${route}: collection must not be a loading-only prerender`);
 }
 const homepage = await readFile(path.join(dist, 'index.html'), 'utf8');
 const homepageText = homepage.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');

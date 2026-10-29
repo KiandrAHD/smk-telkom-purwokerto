@@ -32,7 +32,7 @@ const LinkColumn = ({ title, links }) => {
   const { t } = useLanguage();
   return (
   <div className="min-w-0">
-    <h3 className="font-heading text-xs font-bold text-dark-900">{t(title)}</h3>
+    <h2 className="font-heading text-xs font-bold text-dark-900">{t(title)}</h2>
     <ul className="mt-3 space-y-2 text-[11px] leading-relaxed">
       {links.map((link) => (
         <li key={link.label}>
@@ -102,7 +102,7 @@ const Footer = () => {
 
             {/* Lima logo memakai bitmap asli; CSS hanya membatasi area putih tiap logo. */}
             <div className="mt-4 max-w-[280px]">
-              <h3 className="font-heading text-xs font-bold text-dark-900">Supported by</h3>
+              <h2 className="font-heading text-xs font-bold text-dark-900">Supported by</h2>
               <ul className="footer-supporters mt-3" aria-label={t('Pendukung lomba')}>
                 {supporterLogos.map(({ id, name, href }) => {
                   const logo = (
@@ -135,7 +135,7 @@ const Footer = () => {
 
           {/* Kontak */}
           <div className="footer-contact col-span-2 min-w-0 [overflow-wrap:anywhere] lg:col-span-1">
-            <h3 className="font-heading text-xs font-bold text-dark-900">{t('Kontak')}</h3>
+            <h2 className="font-heading text-xs font-bold text-dark-900">{t('Kontak')}</h2>
             <ul className="mt-3 space-y-2 text-dark-500 text-[11px]">
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-3 w-3 flex-shrink-0" />
