@@ -70,9 +70,9 @@ function RegistrationInfo({ schedule }) {
   </Reveal>;
 }
 
-export default function SpmbPage() {
+export default function SpmbPage({ initialData }) {
   const { t, locale } = useLanguage();
-  const { items, stats, loading, error, refresh } = useSpmbInformation(true);
+  const { items, stats, loading, error, refresh } = useSpmbInformation(true, initialData);
   const schedule = registrationForSpmb(items, stats);
   const spmbSteps = items.filter(item => item.jenis === 'timeline');
   const spmbSchemes = items.filter(item => item.jenis === 'skema');

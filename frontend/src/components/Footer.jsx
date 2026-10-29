@@ -53,7 +53,7 @@ const Footer = () => {
   const { t } = useLanguage();
   const schoolMap = (
     <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(footerData.kontak.mapsQuery ?? footerData.kontak.address)}`} target="_blank" rel="noopener noreferrer" aria-label={t('Buka lokasi SMK Telkom Purwokerto di Google Maps')} className="mt-3 block self-start overflow-hidden rounded-xl transition-transform hover:scale-[1.01] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
-      <img src={footerData.map} alt={t('Peta lokasi SMK Telkom Purwokerto')} loading="lazy" className="h-auto w-full border border-dark-100" />
+      <img src={footerData.map} alt={t('Peta lokasi SMK Telkom Purwokerto')} width="760" height="354" loading="lazy" decoding="async" className="h-auto w-full border border-dark-100" />
     </a>
   );
   return (

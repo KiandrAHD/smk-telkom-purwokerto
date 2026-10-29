@@ -11,16 +11,16 @@ import PublicDataState from '../components/PublicDataState';
 import useEvents from '../hooks/useEvents';
 import { toCalendarEvent } from '../utils/events';
 import { useLanguage } from '../context/LanguageContext';
-import calendar from '../assets/kalender/hero-calendar-source.png';
+import calendar from '../assets/kalender/hero-calendar-lossless.webp';
 import wave from '../assets/kalender/hero-wave-figma.webp';
 import building from '../assets/kalender/hero-building.webp';
 import collage from '../assets/kalender/hero-collage.webp';
 import heroLogo from '../assets/kalender/hero-logo.webp';
 import './KalenderPage.css';
 
-export default function KalenderPage() {
+export default function KalenderPage({ initialItems }) {
   const { t } = useLanguage();
-  const { items, loading, error, refresh } = useEvents(true);
+  const { items, loading, error, refresh } = useEvents(true, initialItems);
   const events = items.map(toCalendarEvent);
   const [prefix, ...accent] = t('Kalender Kegiatan Sekolah').split(' ');
   return (

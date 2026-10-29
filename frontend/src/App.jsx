@@ -72,7 +72,13 @@ const PageMetadata = () => {
     if (document.querySelector('#error-title')) return;
     const path = pathname.replace(/\/+$/, '') || '/';
     const key = Object.keys(PAGE_META).find((entry) => path === entry || (['/dashboard', '/spmb'].includes(entry) && path.startsWith(`${entry}/`)));
-    // DetailLayout sets the title when its asynchronously loaded item exists.
+    // Detail components own metadata after validating the item. Do not overwrite
+    // a current-route prerender canonical with transient noindex while data loads.
+    if (!key && /^\/(berita|prestasi|pengumuman|jurusan|galeri|bkk|profil-sekolah)\//.test(path)) {
+      const canonical = document.querySelector('link[rel="canonical"]')?.href;
+      if (canonical && new URL(canonical).pathname === path) return;
+      if (document.querySelector('main h1')) return;
+    }
     if (!key && document.querySelector('main h1')) return;
     const [title, description] = PAGE_META[key] || ['SMK Telkom Purwokerto', 'Website resmi SMK Telkom Purwokerto.'];
     applyPageMetadata({ pathname, title: t(title), description: t(description), indexable: Boolean(key) && !/^\/(login|dashboard|auth|lupa-sandi)(\/|$)/.test(path) && !path.startsWith('/spmb/') });
@@ -105,9 +111,9 @@ const App = () => {
   return (
     <>
       <ScrollToTop />
-      <PageMetadata />
       <RouteErrorBoundary>
       <Suspense fallback={<RouteLoading />}>
+      <PageMetadata />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/fasilitas" element={<FasilitasPage />} />

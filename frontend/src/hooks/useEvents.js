@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { eventError, getEvents } from '../services/eventService';
 
-export default function useEvents(published = false) {
-  const [items, setItems] = useState([]), [loading, setLoading] = useState(true), [error, setError] = useState('');
+export default function useEvents(published = false, initialItems) {
+  const [items, setItems] = useState(initialItems || []), [loading, setLoading] = useState(!initialItems), [error, setError] = useState('');
   const request = useRef(null);
   const refresh = useCallback(async (quiet = false) => {
     request.current?.abort();

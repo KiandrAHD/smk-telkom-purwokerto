@@ -48,7 +48,17 @@ try {
     assert.equal(state.robots, 1);
     assert.equal(state.schemas, 1);
     assert.equal(state.url, state.canonicalUrl);
+    const isNews = /^\/berita\/[^/]+\/?$/.test(route) && !['/berita/trending', '/berita/agenda'].includes(route);
+    assert.equal(state.schema['@graph'].some(node => node['@type'] === 'Article'), isNews, `${route}: Article only on news details`);
+    assert.equal(await page.locator('meta[property="og:type"]').getAttribute('content'), isNews ? 'article' : 'website');
     assert.equal(state.schema['@graph'].find(node => node['@type'] === 'WebPage').url, state.canonicalUrl);
+    assert.ok(state.schema['@graph'].find(node => node['@type'] === 'School').telephone, `${route}: retain school contacts`);
+    const trail = await page.locator('main nav[aria-label="Jejak navigasi"], main nav[aria-label="Breadcrumb"]').first().evaluateAll(nodes => nodes[0] ? [...nodes[0].querySelectorAll('a, [aria-current="page"]')].map(node => ({ name: node.textContent.trim(), path: node.tagName === 'A' ? new URL(node.href).pathname : window.location.pathname })) : []);
+    if (trail.length >= 2) {
+      const breadcrumb = state.schema['@graph'].find(node => node['@type'] === 'BreadcrumbList');
+      assert.ok(breadcrumb, `${route}: runtime breadcrumb`);
+      assert.deepEqual(breadcrumb.itemListElement.map(item => ({ name: item.name, path: new URL(item.item).pathname })), trail);
+    }
   };
   for (const route of examples.filter(Boolean)) { await page.goto(`${base}${route}`); await ready(); await verify(route); }
   // Exercise client navigation rather than reload alone, including a query-string duplicate.
@@ -56,6 +66,9 @@ try {
     await page.evaluate(route => { history.pushState({}, '', route); window.dispatchEvent(new PopStateEvent('popstate')); }, route);
     await ready();
   };
+  for (const route of [routes.find(route => route.startsWith('/berita/agenda/')), routes.find(route => route.startsWith('/galeri/'))].filter(Boolean)) {
+    await page.goto(`${base}${route}?from=berita`); await ready(); await verify(route);
+  }
   await navigate('/fasilitas?utm_source=seo-qa'); await verify('/fasilitas');
   await navigate('/random-page');
   await page.locator('#error-title').waitFor();

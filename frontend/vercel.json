@@ -1,4 +1,9 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "seo/technical-audit-2026-10-29": false
+    }
+  },
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -10,6 +15,12 @@
       "source": "/(.*)\\.(svg|ico|webp|avif|png|jpe?g|woff2?)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/og-school.jpg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
