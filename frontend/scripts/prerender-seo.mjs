@@ -7,6 +7,9 @@ import path from 'node:path';
 import { createServer } from 'vite';
 import sharp from 'sharp';
 
+// Explicit test-only build: no live database, no invented records, never deploy this output.
+const offline = process.argv.includes('--offline');
+if (offline && (process.env.CI !== 'true' || process.env.VERCEL)) throw new Error('SEO: --offline is restricted to non-Vercel CI tests.');
 const root = process.cwd();
 const dist = path.join(root, 'dist');
 const server = await createServer({ appType: 'custom', logLevel: 'error', server: { middlewareMode: true } });
@@ -34,6 +37,10 @@ try {
     ['pengumuman', 'pengumumanService', 'getPublishedPengumuman', toPengumumanItem],
     ['prestasi', 'prestasiService', 'getPrestasi', toPrestasiItem],
   ]) {
+    if (offline) {
+      publicContent[type] = [];
+      continue;
+    }
     const module = await server.ssrLoadModule(`/src/services/${service}.js`);
     // Only existing public read APIs participate; a failed fetch must never publish dummy records.
     try { publicContent[type] = (await module[method]()).map(map); }
@@ -117,7 +124,7 @@ try {
   };
   const head = metadata => `<title>${escape(metadata.title)}</title>
     <meta name="description" content="${escape(metadata.description)}" />
-    <meta name="robots" content="${metadata.indexable ? 'index, follow' : 'noindex, follow'}" />
+    <meta name="robots" content="${metadata.indexable && !offline ? 'index, follow' : 'noindex, follow'}" />
     ${metadata.indexable ? `<link rel="canonical" href="${metadata.url}" />` : ''}
     <meta property="og:title" content="${escape(metadata.title)}" />
     <meta property="og:description" content="${escape(metadata.description)}" />
@@ -155,6 +162,11 @@ try {
   await writeFile(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes.map(route => `<url><loc>${SITE_URL}${route}</loc></url>`).join('')}</urlset>\n`);
   await writeFile(path.join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`);
   await writeFile(path.join(dist, 'seo-routes.json'), JSON.stringify(routes));
+  if (offline) {
+    await writeFile(path.join(dist, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
+    await writeFile(path.join(dist, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
+    console.warn('SEO: OFFLINE CI TEST OUTPUT ONLY. Public feeds are empty. Do not deploy dist.');
+  }
   console.log(`SEO: prerendered ${routes.length} public routes, generated sitemap, robots and school OG image.`);
 } finally {
   await server.close();

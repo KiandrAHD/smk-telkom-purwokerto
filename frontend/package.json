@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/prerender-seo.mjs",
+    "build:ci": "vite build && node scripts/prerender-seo.mjs --offline",
     "seo:uji": "node scripts/uji-seo.mjs",
     "lint": "eslint .",
     "animasi:uji": "node scripts/uji-animasi.mjs",

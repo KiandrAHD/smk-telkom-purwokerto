@@ -3,6 +3,7 @@ import { readFile, access } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
+const offline = process.argv.includes('--offline');
 const dist = path.resolve('dist');
 const routes = JSON.parse(await readFile(path.join(dist, 'seo-routes.json'), 'utf8'));
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
@@ -26,14 +27,19 @@ for (const route of routes) {
   for (const property of ['og:title', 'og:description', 'og:image', 'og:url']) {
     assert.equal((head.match(new RegExp(`property="${property}"`, 'g')) || []).length, 1, `${route}: ${property}`);
   }
-  assert.ok(head.includes('content="index, follow"'), `${route}: indexable`);
+  assert.ok(head.includes(`content="${offline ? 'noindex' : 'index'}, follow"`), `${route}: indexing policy`);
   const canonicals = [...head.matchAll(/<link rel="canonical" href="([^"]+)"/g)];
   assert.equal(canonicals.length, 1, `${route}: single canonical`);
   const canonical = canonicals[0][1];
   assert.equal(new URL(canonical).pathname, route, `${route}: canonical path`);
   assert.ok(head.includes(`property="og:url" content="${canonical}"`));
-  assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `${route}: sitemap`);
-  assert.ok(robots.includes(`${new URL(canonical).origin}/sitemap.xml`));
+  if (!offline) {
+    assert.ok(sitemap.includes(`<loc>${canonical}</loc>`), `${route}: sitemap`);
+    assert.ok(robots.includes(`${new URL(canonical).origin}/sitemap.xml`));
+  } else {
+    assert.ok(!sitemap.includes('<loc>'), 'Offline output has no sitemap entries');
+    assert.ok(robots.includes('Disallow: /'), 'Offline output blocks crawling');
+  }
   const schemas = [...head.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
   assert.equal(schemas.length, 1, `${route}: single JSON-LD graph`);
   const schema = JSON.parse(schemas[0][1]);
