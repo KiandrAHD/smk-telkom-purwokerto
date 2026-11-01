@@ -26,7 +26,7 @@ export default function InnovationReveal() {
         else reel.paused(!visible || document.hidden);
       };
       const highlight = node => node.hasAttribute('data-innovation-highlight');
-      gsap.fromTo(root.querySelectorAll('[data-innovation-word]'), {
+      const reveal = gsap.fromTo(root.querySelectorAll('[data-innovation-word]'), {
         opacity: 0.7, color: (_, node) => highlight(node) ? '#fff' : '#999',
       }, {
         opacity: 1, color: (_, node) => highlight(node) ? '#fff' : '#000',
@@ -39,8 +39,20 @@ export default function InnovationReveal() {
       });
       const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
       observer.observe(root);
+      // Lazy sections above can change height after ScrollTrigger's initial measurement.
+      let refreshFrame;
+      const layoutObserver = new ResizeObserver(() => {
+        cancelAnimationFrame(refreshFrame);
+        refreshFrame = requestAnimationFrame(() => reveal.scrollTrigger.refresh());
+      });
+      layoutObserver.observe(root.parentElement);
       document.addEventListener('visibilitychange', sync);
-      return () => { observer.disconnect(); document.removeEventListener('visibilitychange', sync); };
+      return () => {
+        observer.disconnect();
+        layoutObserver.disconnect();
+        cancelAnimationFrame(refreshFrame);
+        document.removeEventListener('visibilitychange', sync);
+      };
     }, root);
     return () => media.revert();
   }, [language]);
