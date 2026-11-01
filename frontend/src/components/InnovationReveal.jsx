@@ -16,15 +16,27 @@ export default function InnovationReveal() {
     const root = ref.current;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.fromTo(root.querySelectorAll('[data-innovation-word]'), { opacity: 0.4, y: 8 }, {
-        opacity: 1, y: 0, duration: 0.45, stagger: 0.07, ease: 'power2.out',
-        scrollTrigger: { trigger: root, start: 'top 85%', toggleActions: 'play none none reverse' },
-      });
       const reel = gsap.fromTo(root.querySelector('[data-innovation-reel]'), { xPercent: 0, yPercent: 0 }, {
         xPercent: -50, duration: 0.85, repeat: -1, repeatDelay: 2.5, ease: 'power3.inOut', paused: true,
       });
       let visible = false;
-      const sync = () => reel.paused(!visible || document.hidden);
+      let revealed = false;
+      const sync = () => {
+        if (!revealed) reel.pause(0);
+        else reel.paused(!visible || document.hidden);
+      };
+      const highlight = node => node.hasAttribute('data-innovation-highlight');
+      gsap.fromTo(root.querySelectorAll('[data-innovation-word]'), {
+        opacity: 0.7, color: (_, node) => highlight(node) ? '#fff' : '#999',
+      }, {
+        opacity: 1, color: (_, node) => highlight(node) ? '#fff' : '#000',
+        duration: 0.7, stagger: 0.12, ease: 'none',
+        onUpdate() { revealed = this.progress() >= 0.99; sync(); },
+        scrollTrigger: {
+          trigger: root, start: 'clamp(top 88%)', end: 'clamp(top 48%)',
+          scrub: 0.35, invalidateOnRefresh: true,
+        },
+      });
       const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
       observer.observe(root);
       document.addEventListener('visibilitychange', sync);
@@ -40,9 +52,9 @@ export default function InnovationReveal() {
           <span className="sr-only">{t('Bukan sekadar belajar Teknologi')}. {phrase}. {t('Kami bikin karya nyata')}.</span>
           <span aria-hidden="true" className="home-innovation-line">{words('Bukan sekadar belajar Teknologi')}</span>
           <span aria-hidden="true" className="home-innovation-line">
-            <span data-innovation-word className="home-innovation-box">
+            <span className="home-innovation-box">
               <span className="home-innovation-size">{phrase}</span>
-              <span className="home-innovation-window"><span data-innovation-reel className="home-innovation-reel">
+              <span data-innovation-word data-innovation-highlight className="home-innovation-window"><span data-innovation-reel className="home-innovation-reel">
                 <span>{phrase}</span><span>{phrase}</span>
               </span></span>
             </span>
