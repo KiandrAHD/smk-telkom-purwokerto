@@ -20,8 +20,8 @@ export default function InnovationReveal() {
         opacity: 1, y: 0, duration: 0.45, stagger: 0.07, ease: 'power2.out',
         scrollTrigger: { trigger: root, start: 'top 85%', toggleActions: 'play none none reverse' },
       });
-      const reel = gsap.to(root.querySelector('[data-innovation-reel]'), {
-        yPercent: -50, duration: 0.75, repeat: -1, repeatDelay: 2.25, ease: 'power3.inOut', paused: true,
+      const reel = gsap.fromTo(root.querySelector('[data-innovation-reel]'), { xPercent: 0, yPercent: 0 }, {
+        xPercent: -50, duration: 0.85, repeat: -1, repeatDelay: 2.5, ease: 'power3.inOut', paused: true,
       });
       let visible = false;
       const sync = () => reel.paused(!visible || document.hidden);
