@@ -1,0 +1,22 @@
+{
+  "boxStable": true,
+  "cells": [
+    {
+      "clientWidth": 498,
+      "height": 89.7874984741211,
+      "scrollWidth": 498,
+      "width": 497.6375122070313
+    },
+    {
+      "clientWidth": 498,
+      "height": 89.7874984741211,
+      "scrollWidth": 498,
+      "width": 497.6375122070313
+    }
+  ],
+  "horizontalOnly": true,
+  "movesHorizontally": true,
+  "overflow": false,
+  "samples": 659,
+  "wraps": 3
+}
