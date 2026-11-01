@@ -22,7 +22,6 @@ const LandingPage = ({ initialPrestasi }) => (
   <MainLayout>
     <HeroSection slides={landingHeroSlides} />
     <WaveMarquee />
-    <InnovationReveal />
     <AboutSection />
     <RibbonDivider />
     <DepartmentsSection />
@@ -35,6 +34,7 @@ const LandingPage = ({ initialPrestasi }) => (
         <AchievementsSection initialItems={initialPrestasi} />
       </Reveal>
     </Suspense>
+    <InnovationReveal />
   </MainLayout>
 );
 
