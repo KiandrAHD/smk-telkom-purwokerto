@@ -10,6 +10,11 @@ import spmbInfo from './translationsSpmbInfo';
 import jurusanDetail from './translationsJurusanDetail';
 
 export default {
+  'Bukan sekadar belajar Teknologi': 'More than learning Technology',
+  'Kami bikin karya nyata': 'We create real work',
+  'Digital Innovation': 'Digital Innovation',
+  'NEXT GENERATION': 'NEXT GENERATION',
+  'AKREDITASI A': 'A ACCREDITATION',
   'Lihat semua fasilitas': 'View all facilities',
   ...school, ...publicPages, ...portal, ...audit, ...teachers, ...spmb, ...facilities, ...calendar, ...spmbInfo, ...jurusanDetail,
   'Pilihan Jurusan': school['Pilihan Jurusan'],

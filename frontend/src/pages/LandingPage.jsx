@@ -5,6 +5,8 @@ import HeroSection from '../components/HeroSection';
 import { landingHeroSlides } from '../data/landingHeroSlides';
 import AboutSection from '../components/AboutSection';
 import RibbonDivider from '../components/RibbonDivider';
+import WaveMarquee from '../components/WaveMarquee';
+import InnovationReveal from '../components/InnovationReveal';
 import DepartmentsSection from '../components/DepartmentsSection';
 
 const FacilitiesSection = lazy(() => import('../components/FacilitiesSection'));
@@ -19,7 +21,7 @@ const SectionFallback = () => <div className="py-12 bg-white" />;
 const LandingPage = ({ initialPrestasi }) => (
   <MainLayout>
     <HeroSection slides={landingHeroSlides} />
-    <RibbonDivider animated />
+    <WaveMarquee />
     <AboutSection />
     <RibbonDivider />
     <DepartmentsSection />
@@ -32,6 +34,7 @@ const LandingPage = ({ initialPrestasi }) => (
         <AchievementsSection initialItems={initialPrestasi} />
       </Reveal>
     </Suspense>
+    <InnovationReveal />
   </MainLayout>
 );
 
