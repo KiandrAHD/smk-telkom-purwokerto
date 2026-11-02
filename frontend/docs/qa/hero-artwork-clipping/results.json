@@ -1,0 +1,332 @@
+{
+  "home": [
+    {
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1024
+    },
+    {
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1280
+    },
+    {
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1440
+    },
+    {
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 768
+    },
+    {
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    }
+  ],
+  "pages": [
+    {
+      "path": "/fasilitas",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/fasilitas",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/jurusan",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/jurusan",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/prestasi",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/prestasi",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/profil-sekolah",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/profil-sekolah",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/profil-sekolah/guru",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/profil-sekolah/guru",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/ekstrakurikuler",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/ekstrakurikuler",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/bkk",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/bkk",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/berita",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/berita",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/pengumuman",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/pengumuman",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/kalender",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/kalender",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    },
+    {
+      "path": "/spmb",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/spmb",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    }
+  ],
+  "english": [
+    {
+      "path": "/spmb",
+      "language": "en",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1024
+    },
+    {
+      "path": "/spmb",
+      "language": "en",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "path": "/spmb",
+      "language": "en",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1280
+    },
+    {
+      "path": "/spmb",
+      "language": "en",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 1440
+    },
+    {
+      "path": "/spmb",
+      "language": "en",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 768
+    },
+    {
+      "path": "/spmb",
+      "language": "en",
+      "issues": [],
+      "overflow": false,
+      "slides": 12,
+      "width": 390
+    }
+  ],
+  "englishRoutes": [
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/fasilitas",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/jurusan",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/prestasi",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/profil-sekolah",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/profil-sekolah/guru",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/ekstrakurikuler",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/bkk",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/berita",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/pengumuman",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/kalender",
+      "slides": 12,
+      "width": 1160
+    },
+    {
+      "issues": [],
+      "language": "en",
+      "path": "/spmb",
+      "slides": 12,
+      "width": 1160
+    }
+  ]
+}

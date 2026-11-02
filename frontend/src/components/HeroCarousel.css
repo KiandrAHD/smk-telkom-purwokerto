@@ -45,6 +45,18 @@
 .hero-carousel--profil { --hero-carousel-ratio: 1600 / 751; }
 .hero-carousel--berita, .hero-carousel--prestasi, .hero-carousel--bkk { --hero-carousel-ratio: 1106 / 656; }
 .hero-carousel--fasilitas { --hero-carousel-ratio: 1144 / 679; }
+/* Keep composite artwork at its native ratio and fill the panel vertically.
+   A narrow, bottom-aligned contain box otherwise leaves a hard blank strip above it. */
+@media (min-width: 64rem) {
+  .hero-carousel .hero-panel--school { --hero-media-ratio: 1600 / 751; }
+  .hero-carousel .hero-panel--bleed .hero-media:not(.hero-media--photo),
+  .hero-carousel .hero-panel--bleed .hero-background {
+    inset-block: 0;
+    width: calc((var(--hero-height) - 2px) * (var(--hero-media-ratio)));
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
 @media (max-width: 63.999rem) {
   .hero-carousel--kalender .hero-media { aspect-ratio: 2 / 1; }
   .hero-carousel--guru .hero-carousel-profile-crop { width: auto; height: 100%; }
