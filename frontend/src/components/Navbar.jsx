@@ -93,7 +93,7 @@ const Navbar = () => {
         <div className="flex h-16 lg:h-20 items-center justify-between gap-3 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           {/* Brand */}
           <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0 xl:justify-self-start">
-            <img src={settings?.logo_url || navbarLogo} alt={settings?.school_name || 'SMK Telkom Purwokerto'} width={257} height={74} className="h-auto w-40 object-contain lg:w-[11.25rem]" />
+            <img src={settings?.logo_url || navbarLogo} alt={settings?.school_name || 'SMK Telkom Purwokerto'} width={257} height={74} className="h-[2.875rem] w-40 object-contain object-left lg:h-[3.25rem] lg:w-[11.25rem]" />
           </Link>
 
           {/* Desktop menu */}
