@@ -124,9 +124,9 @@ function GuruPage() {
   const { t } = useLanguage();
   return (
     <MainLayout>
-      <section className="school-hero">
+      <section className="school-hero school-hero--teachers">
         <div className="hero-container">
-          <PageHeroCarousel page="guru"><div className="hero-panel hero-grid hero-panel--bleed hero-panel--teachers">
+          <PageHeroCarousel page="guru"><div className="hero-panel hero-grid hero-panel--floating hero-panel--bleed hero-panel--teachers">
             <div className="hero-copy">
               <HeroBreadcrumb current="Profil Guru" />
               <HeroBadges />

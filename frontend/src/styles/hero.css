@@ -77,6 +77,14 @@
   .hero-floating--quick .quick-access-card { padding-inline: 1rem; gap: .75rem; }
 }
 
+/* Reserve enough room for the longer teacher introduction above the floating cards. */
+@media (min-width: 64rem) {
+  .school-hero--teachers { --hero-height: 38rem; }
+}
+@media (min-width: 80rem) {
+  .school-hero--teachers { --hero-height: 36rem; }
+}
+
 /* Composite artwork shares the panel edges; the copy and floating cards stay in flow. */
 .hero-panel--bleed {
   --hero-media-width: 70%;

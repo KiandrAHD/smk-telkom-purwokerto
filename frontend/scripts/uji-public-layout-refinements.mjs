@@ -19,6 +19,9 @@ assert.match(styles, /repeat\(7, minmax\(0, 1fr\)\)/);
 assert.match(styles, /100% auto repeat-y/);
 assert.match(styles, /scaleX\(-1\)/);
 assert.match(hero, /\.hero-panel--departments \.hero-image\s*\{\s*mask-image: linear-gradient/);
+const profileHero = read('components/tentang/TentangHeroSection.jsx');
+assert.doesNotMatch(profileHero, /lg:top-1\/2|lg:-translate-y-1\/2/);
+assert.match(read('components/HeroCarousel.css'), /\.hero-profile-crop \{ position: absolute; inset: 0; width: 100%; height: 100%;/);
 const profile = read('pages/TentangPage.jsx');
 assert.match(profile, /<>\s*<TentangHeroSection\s*\/>\s*<TentangStatsSection\s*\/>\s*<\/>/);
 assert.doesNotMatch(read('components/RibbonDivider.jsx'), /MarqueeBadge|beranda-ribbon-track/);
@@ -34,4 +37,6 @@ for (const path of ['components/berita/BeritaHeroSection.jsx', 'pages/KalenderPa
   assert.match(read(path), /<\/div><\/PageHeroCarousel>\s*<HeroQuickAccess\s*\/>/);
 }
 assert.match(facilities, /hero-floating hero-floating--quick/);
+assert.match(read('pages/GuruPage.jsx'), /hero-panel hero-grid hero-panel--floating/);
+assert.match(hero, /\.school-hero--teachers \{ --hero-height: 36rem; \}/);
 console.log('Public layout refinements: one wave, no legacy marquee, preserved floating cards, hero fade, filters and mirrored chains passed.');

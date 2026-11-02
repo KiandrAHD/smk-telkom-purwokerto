@@ -14,11 +14,11 @@ const TentangHeroSection = () => {
       <PageHeroCarousel page="profil"><div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--school">
         <div className="hero-background overflow-hidden">
           {/* Keep the crop window at the source panel ratio to exclude viewer margins. */}
-          <div className={`hero-profile-crop relative w-full overflow-hidden lg:absolute lg:right-0 lg:top-1/2 lg:h-full lg:w-auto lg:-translate-y-1/2 ${language === 'en' ? 'aspect-[1277/652]' : 'aspect-[1600/751]'}`}>
+          <div className={`hero-profile-crop relative w-full overflow-hidden ${language === 'en' ? 'hero-profile-crop--english aspect-[1277/652]' : 'aspect-[1600/751]'}`}>
             <img
               src={language === 'en' ? profilHeroEnglish : heroData.image}
               alt={`${t('Gedung SMK Telkom Purwokerto')}. ${heroData.badges.map((badge) => `${t(badge.title)}: ${t(badge.desc)}`).join('. ')}`}
-              className={language === 'en' ? 'absolute left-[-2.82%] top-[-39.72%] w-[105.48%] max-w-none' : 'h-full w-full object-cover'}
+              className={language === 'en' ? 'hero-profile-english absolute left-[-2.82%] top-[-39.72%] w-[105.48%] max-w-none' : 'h-full w-full object-cover'}
             />
           </div>
         </div>
