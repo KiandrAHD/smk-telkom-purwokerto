@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import HeroStatsBar from '../HeroStatsBar';
 import HeroBadges from '../HeroBadges';
 import { jurusanHero, jurusanStats } from '../../data/dummyData';
-import jurusanHeroImage from '../../assets/drive/jurusan-hero-students.jpeg';
+import jurusanHeroImage from '../../assets/drive/jurusan-hero-artwork.webp';
 
 const JurusanHeroSection = () => {
   const { t } = useLanguage();
@@ -40,8 +40,8 @@ const JurusanHeroSection = () => {
           <img
             src={jurusanHeroImage}
             alt={t('Siswa SMK Telkom Purwokerto')}
-            width={2300}
-            height={1080}
+            width={1106}
+            height={656}
             fetchPriority="high"
             className="hero-image"
           />

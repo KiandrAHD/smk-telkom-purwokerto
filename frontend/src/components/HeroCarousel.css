@@ -37,7 +37,12 @@
   .hero-carousel .hero-panel--facilities .hero-background { inset-block: auto 0; width: min(65.4%, calc((var(--hero-height) - 2px) * 1.68483)); height: auto; aspect-ratio: 1144 / 679; }
   .hero-carousel .hero-panel--facilities .hero-background > img { object-fit: contain; }
 }
-.hero-carousel--jurusan { --hero-carousel-ratio: 2300 / 1080; }
+.hero-carousel--jurusan { --hero-carousel-ratio: 1106 / 656; }
+@media (min-width: 64rem) {
+  .hero-carousel .hero-panel--departments .hero-grid > .hero-image {
+    width: calc((var(--hero-height) - 2px) * (var(--hero-media-ratio)));
+  }
+}
 .hero-carousel--pengumuman { --hero-carousel-ratio: 1600 / 751; }
 .hero-carousel--guru { --hero-carousel-ratio: 2200 / 1033; }
 .hero-carousel--ekstrakurikuler { --hero-carousel-ratio: 1920 / 902; }

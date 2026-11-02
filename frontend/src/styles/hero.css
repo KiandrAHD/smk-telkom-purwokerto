@@ -112,7 +112,7 @@
 .hero-panel--news .hero-image { mask-image: url('../assets/banners/berita-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
 .hero-panel--achievements { --hero-media-ratio: 1106 / 656; --hero-media-width: 65.2%; --hero-media-position: right center; }
 .hero-panel--achievements .hero-image { mask-image: url('../assets/banners/prestasi-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
-.hero-panel--departments { --hero-media-ratio: 2300 / 1080; --hero-media-position: left center; }
+.hero-panel--departments { --hero-media-ratio: 1106 / 656; --hero-media-position: right center; }
 .hero-panel--facilities { --hero-media-width: 65.4%; }
 .hero-panel--facilities .hero-background { aspect-ratio: 1144 / 679; }
 .hero-panel--facilities .hero-copy { width: auto; }

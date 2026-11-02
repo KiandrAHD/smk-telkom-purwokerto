@@ -3,7 +3,7 @@ import facilities640 from '../assets/fasilitas/hero-640.webp';
 import facilities960 from '../assets/fasilitas/hero-960.webp';
 import facilities from '../assets/fasilitas/hero-1144.webp';
 import facilitiesLogo from '../assets/fasilitas/hero-logo.png';
-import departments from '../assets/drive/jurusan-hero-students.jpeg';
+import departments from '../assets/drive/jurusan-hero-artwork.webp';
 import achievements640 from '../assets/banners/prestasi-640.webp';
 import achievements960 from '../assets/banners/prestasi-960.webp';
 import profileEnglish from '../assets/tentang/profil-hero-en.jpeg';
@@ -28,7 +28,7 @@ export const landingHeroSlides = [
   {
     id: 'jurusan', name: 'Jurusan',
     content: { ...jurusanHero, primaryCta: { label: 'Lihat Jurusan', href: '/jurusan' }, secondaryCta: ctaMasukPpdb },
-    media: { src: departments, width: 2300, height: 1080, composition: 'departments', alt: 'Siswa SMK Telkom Purwokerto' },
+    media: { src: departments, width: 1106, height: 656, composition: 'departments', alt: 'Siswa SMK Telkom Purwokerto' },
   },
   {
     id: 'prestasi', name: 'Prestasi',
