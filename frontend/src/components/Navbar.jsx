@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSiteSettings } from '../context/SiteSettingsContext';
 import navbarLogo from '../assets/landing/beranda-navbar-logo.png';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../context/LanguageContext';
@@ -30,7 +29,6 @@ const prefetchRoute = (href) => {
 };
 
 const Navbar = () => {
-  const { settings } = useSiteSettings();
   const { t, language } = useLanguage();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -93,7 +91,7 @@ const Navbar = () => {
         <div className="flex h-16 lg:h-20 items-center justify-between gap-3 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           {/* Brand */}
           <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0 xl:justify-self-start">
-            <img src={settings?.logo_url || navbarLogo} alt={settings?.school_name || 'SMK Telkom Purwokerto'} width={257} height={74} className="h-[2.875rem] w-40 object-contain object-left lg:h-[3.25rem] lg:w-[11.25rem]" />
+            <img src={navbarLogo} alt="SMK Telkom Purwokerto" width={257} height={74} className="h-[2.875rem] w-40 object-contain object-left lg:h-[3.25rem] lg:w-[11.25rem]" />
           </Link>
 
           {/* Desktop menu */}
