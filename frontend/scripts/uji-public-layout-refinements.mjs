@@ -34,4 +34,6 @@ for (const path of ['components/berita/BeritaHeroSection.jsx', 'pages/KalenderPa
   assert.match(read(path), /<\/div><\/PageHeroCarousel>\s*<HeroQuickAccess\s*\/>/);
 }
 assert.match(facilities, /hero-floating hero-floating--quick/);
+assert.match(read('pages/GuruPage.jsx'), /hero-panel hero-grid hero-panel--floating/);
+assert.match(hero, /\.school-hero--teachers \{ --hero-height: 36rem; \}/);
 console.log('Public layout refinements: one wave, no legacy marquee, preserved floating cards, hero fade, filters and mirrored chains passed.');
