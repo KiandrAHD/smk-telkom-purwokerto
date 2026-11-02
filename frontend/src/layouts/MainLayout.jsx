@@ -10,7 +10,7 @@ import CTASection from '../components/CTASection';
 import { useLanguage } from '../context/LanguageContext';
 import '../styles/hero.css';
 
-export default function MainLayout({ children, busy = false, className = '', ctaHref, showSupportSections = true, showMarquees = true }) {
+export default function MainLayout({ children, busy = false, className = '', ctaHref, showSupportSections = true, showMarquees = true, showOpeningMarquee = true }) {
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
@@ -41,7 +41,7 @@ export default function MainLayout({ children, busy = false, className = '', cta
           memakai komponen yang sama (mis. /berita/a -> /berita/b). */}
       <main ref={mainRef} id="main-content" tabIndex={-1} aria-busy={busy || undefined} key={pathname} className="animate-masuk-halaman scroll-mt-24">
         {opening}
-        {!busy && showMarquees && <WaveMarquee />}
+        {!busy && showMarquees && showOpeningMarquee && <WaveMarquee />}
         {content}
         {!busy && showMarquees && <InnovationReveal />}
         {showSupportSections && <>

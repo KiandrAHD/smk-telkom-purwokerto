@@ -6,7 +6,9 @@ import decoRight from '../assets/landing/partners-deco-right.png';
 import { mitraIndustri } from '../data/dummyData';
 import { useLanguage } from '../context/LanguageContext';
 
-const PartnersSection = ({ items = mitraIndustri, animated = true }) => {
+const PartnersSection = ({ items = mitraIndustri, animated = true, variant = 'default' }) => {
+  const home = variant === 'home';
+  const marquee = animated && !home;
   const { t } = useLanguage();
 
   return (
@@ -23,7 +25,7 @@ const PartnersSection = ({ items = mitraIndustri, animated = true }) => {
           decoding="async"
           alt=""
           aria-hidden="true"
-          className={animated ? 'h-24 w-full object-cover sm:h-28 lg:h-32' : 'h-44 w-full object-cover sm:h-36 lg:h-32'}
+          className={home ? 'h-44 w-full object-cover sm:h-36 lg:h-32' : animated ? 'h-24 w-full object-cover sm:h-28 lg:h-32' : 'h-44 w-full object-cover sm:h-36 lg:h-32'}
         />
         <img
           src={decoLeft}
@@ -46,20 +48,20 @@ const PartnersSection = ({ items = mitraIndustri, animated = true }) => {
           className="pointer-events-none absolute inset-y-0 right-0 z-10 h-full w-auto select-none"
         />
 
-        <div className={animated ? 'absolute inset-y-0 left-20 right-20 flex items-center overflow-hidden sm:left-24 sm:right-24 lg:left-28 lg:right-28' : 'absolute inset-y-0 left-10 right-10 grid items-center sm:left-16 sm:right-16 lg:left-24 lg:right-24'}>
-          <div id="mitra-logo-track" className={animated ? 'partners-marquee flex w-max' : 'grid w-full grid-cols-3 items-center justify-items-center gap-5 py-6 md:grid-cols-6 md:gap-8'}>
-            {(animated ? [0, 1, 2, 3] : [0]).map((copyIndex) => (
+        <div className={marquee ? 'absolute inset-y-0 left-20 right-20 flex items-center overflow-hidden sm:left-24 sm:right-24 lg:left-28 lg:right-28' : 'absolute inset-y-0 left-8 right-8 grid items-center sm:left-12 sm:right-12 lg:left-24 lg:right-24'}>
+          <div id="mitra-logo-track" className={marquee ? 'partners-marquee flex w-max' : `grid w-full grid-cols-3 items-center justify-items-center gap-4 py-6 ${home ? 'sm:grid-cols-4 lg:grid-cols-7' : 'md:grid-cols-6'} md:gap-6`}>
+            {(marquee ? [0, 1, 2, 3] : [0]).map((copyIndex) => (
               <div
                 key={copyIndex}
                 aria-hidden={copyIndex > 0 || undefined}
-                className={animated ? 'flex shrink-0 items-center gap-14 px-7' : 'contents'}
+                className={marquee ? 'flex shrink-0 items-center gap-14 px-7' : 'contents'}
               >
                 {items.map((mitra) => (
                   <img
                     key={mitra.name}
                     src={mitra.logo}
                     alt={copyIndex === 0 ? mitra.name : ''}
-                    className={`${mitra.size} ${animated ? '' : 'max-w-full'} w-auto shrink-0 object-contain`}
+                    className={`${mitra.size} ${marquee ? '' : 'max-w-full'} w-auto shrink-0 object-contain`}
                   />
                 ))}
               </div>
