@@ -15,6 +15,7 @@ export default defineConfig({
           // Shared school content is cacheable data, not application bootstrap code.
           if (id.replace(/\\/g, '/').endsWith('/src/data/dummyData.js')) return 'school-content';
           if (id.includes('node_modules/react-dom/')) return 'react-vendor';
+          if (/node_modules\/(framer-motion|motion-dom|motion-utils)\//.test(id.replace(/\\/g, '/'))) return 'motion-vendor';
           if (id.includes('node_modules/gsap/')) return 'gsap-vendor';
           if (id.includes('node_modules/lenis/')) return 'lenis-vendor';
           if (id.includes('node_modules/@supabase/supabase-js/')) return 'supabase-vendor';
