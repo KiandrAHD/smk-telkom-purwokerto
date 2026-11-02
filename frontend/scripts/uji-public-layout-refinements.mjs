@@ -25,6 +25,8 @@ assert.match(read('components/HeroCarousel.css'), /\.hero-profile-crop \{ positi
 const profile = read('pages/TentangPage.jsx');
 assert.match(profile, /<>\s*<TentangHeroSection\s*\/>\s*<TentangStatsSection\s*\/>\s*<\/>/);
 assert.doesNotMatch(read('components/RibbonDivider.jsx'), /MarqueeBadge|beranda-ribbon-track/);
+assert.match(read('components/RibbonDivider.jsx'), /h-full w-full select-none object-cover/);
+assert.match(read('pages/JurusanPage.jsx'), /<JurusanListSection\s*\/>\s*<\/Reveal>\s*<RibbonDivider className="min-h-12 sm:min-h-16"\s*\/>\s*<Reveal>\s*<JurusanQuizSection/);
 for (const name of ['Berita', 'Bkk', 'Prestasi', 'Pengumuman', 'Jurusan', 'JurusanDetail', 'Tentang', 'Kalender', 'Spmb', 'Ekstrakurikuler', 'Guru', 'Fasilitas']) {
   assert.doesNotMatch(read(`pages/${name}Page.jsx`), /<RibbonDivider animated/);
 }

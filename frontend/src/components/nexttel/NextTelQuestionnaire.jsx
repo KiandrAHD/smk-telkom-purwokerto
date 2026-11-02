@@ -19,14 +19,14 @@ const NextTelQuestionnaire = ({ questions, currentIndex, answers, onAnswer, onNe
   }, [currentIndex]);
 
   return (
-    <div className="mx-auto rounded-3xl border border-dark-200 bg-white p-5 shadow-card sm:p-8 lg:p-10">
+    <div className="nexttel-questionnaire">
       <NextTelProgress current={currentIndex + 1} total={questions.length} />
       <div key={question.id} className="motion-filter-results">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">{t('Pilih satu jawaban')}</p>
-        <h1 ref={headingRef} id="nexttel-question" tabIndex={-1} className="mt-3 font-heading text-2xl font-extrabold leading-snug text-dark-900 outline-none sm:text-3xl">
+        <p className="nexttel-questionnaire__eyebrow">{t('Pilih satu jawaban')}</p>
+        <h1 ref={headingRef} id="nexttel-question" tabIndex={-1} className="nexttel-questionnaire__title">
           {question.prompt}
         </h1>
-        <div className="mt-7 space-y-4 sm:space-y-5" role="radiogroup" aria-labelledby="nexttel-question">
+        <div className="nexttel-questionnaire__options" role="radiogroup" aria-labelledby="nexttel-question">
           {question.options.map((option) => <NextTelOption key={option.id} questionId={question.id} option={option} selected={selected} onAnswer={(id, optionId) => onAnswer(id, optionId, optionId === 'e' ? freeText : '')} />)}
         </div>
       </div>

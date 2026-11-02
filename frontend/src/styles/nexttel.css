@@ -1,0 +1,178 @@
+/* Use the site's Inter/Poppins tokens and max-w-7xl rhythm, not raw Figma canvas sizes. */
+.nexttel-page {
+  font-family: var(--font-sans);
+  color: var(--color-dark-800);
+  background: #fff;
+  padding-block: 32px 80px;
+}
+.nexttel-page__container {
+  width: 100%;
+  max-width: 1280px;
+  padding-inline: 32px;
+  margin-inline: auto;
+}
+.nexttel-intro > nav { margin: 0 0 24px; }
+.nexttel-intro__panel {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  width: 100%;
+  min-height: 440px;
+  overflow: hidden;
+  border: 3px solid #cd091d;
+  border-radius: 20px;
+  background: linear-gradient(131.504deg, #c8102e 65.182%, #870a1e 104.23%);
+  box-shadow: var(--shadow-soft);
+  color: #fff;
+}
+.nexttel-intro__background {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: url('/assets/nexttel/intro-pattern.svg') left top / 148% 100% no-repeat;
+}
+.nexttel-intro__content { position: relative; padding: 110px 23% 64px 23%; }
+.nexttel-intro__heading { position: relative; }
+.nexttel-intro__heading h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3cqw, 36px);
+  font-weight: 800;
+  line-height: 1.25;
+  outline: none;
+}
+.nexttel-intro__mascot {
+  position: absolute;
+  width: 140px;
+  height: 124px;
+  top: -40px;
+  right: calc(100% + 20px);
+  overflow: hidden;
+  transform: scaleX(-1);
+}
+.nexttel-intro__mascot img {
+  position: absolute;
+  width: 129.44%;
+  max-width: none;
+  height: 146.55%;
+  left: -15.74%;
+  top: -22.41%;
+}
+.nexttel-intro__description {
+  margin-top: 28px;
+  max-width: 600px;
+  font-size: 14px;
+  line-height: 1.75;
+  font-weight: 400;
+  color: #ffffffe6;
+}
+.nexttel-intro__start {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 200px;
+  max-width: 100%;
+  min-height: 48px;
+  margin-top: 32px;
+  padding: 12px 20px;
+  border-radius: 16px;
+  background: #fff;
+  color: #cd091d;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.nexttel-intro__start:hover { background: #fff1f3; }
+.nexttel-intro__start:focus-visible { outline: 3px solid white; outline-offset: 5px; }
+.nexttel-intro__start img { flex: none; }
+.nexttel-accents { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
+.nexttel-accents__top { position: absolute; top: 0; right: 5.45%; width: 29.18%; height: auto; overflow: visible; }
+.nexttel-accents__rail { position: absolute; top: 0; right: 0; width: 11.79%; height: 100%; }
+.nexttel-page--questionnaire .nexttel-page__container { max-width: 1024px; }
+.nexttel-questionnaire {
+  padding: 32px;
+  border: 1px solid var(--color-dark-200);
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+}
+.nexttel-progress { margin-bottom: 24px; }
+.nexttel-progress__label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; color: var(--color-dark-500); font-size: 14px; font-weight: 600; }
+.nexttel-progress progress { height: 10px; }
+.nexttel-questionnaire__eyebrow { color: var(--color-primary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+.nexttel-questionnaire__title {
+  margin-top: 12px;
+  font-family: var(--font-heading);
+  font-size: 30px;
+  line-height: 1.35;
+  font-weight: 800;
+  color: var(--color-dark-900);
+  outline: none;
+  scroll-margin-top: 120px;
+}
+.nexttel-questionnaire__options { display: grid; gap: 16px; margin-top: 24px; }
+.nexttel-option { min-height: 72px; padding: 14px 20px; gap: 20px; border-color: var(--color-dark-300); border-radius: 16px; color: var(--color-dark-600); font-size: 16px; font-weight: 600; line-height: 1.5; }
+.nexttel-option__badge { width: 42px; height: 42px; font-size: 16px; background: var(--color-dark-100); color: var(--color-dark-700); }
+.peer:checked + .nexttel-option .nexttel-option__badge { background: var(--color-primary); color: white; }
+.nexttel-navigation { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; }
+.nexttel-navigation button { min-width: 120px; min-height: 48px; font-size: 14px; }
+.nexttel-result__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 16px 24px; color: var(--color-primary); }
+.nexttel-result__tags span { border: 1px solid #ce0b2140; border-radius: 25px; padding: 5px 10px; font-size: 11px; font-weight: 600; letter-spacing: .5px; }
+.nexttel-result__banner { position: relative; isolation: isolate; overflow: hidden; border-radius: 20px; padding: 28px 32px; color: white; background: #c2112f; }
+.nexttel-result__artwork { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.nexttel-result__banner > div { font-size: 12px; font-weight: 600; }
+.nexttel-result__banner h1 { font-family: var(--font-heading); font-size: 36px; font-weight: 800; line-height: 1.3; }
+.nexttel-result__banner p { max-width: 720px; font-size: 14px; font-weight: 400; line-height: 1.75; color: #ffffffe6; margin-block: 16px 0; }
+.nexttel-result__statistics { margin-top: 24px; padding: 24px; border: 1px solid var(--color-dark-200); border-radius: 20px; }
+.nexttel-result__statistics h2, .nexttel-result__explanation h2 { font-family: var(--font-heading); font-size: 22px; font-weight: 700; }
+.nexttel-result__statistics h2 svg { width: 24px; height: 24px; }
+.nexttel-result__statistics > div { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 24px; }
+.nexttel-result__statistics svg[role='img'] { max-width: 620px; }
+.nexttel-result__statistics svg[role='img'] > polygon[fill='none'] { stroke: #9ca3af; }
+.nexttel-result__statistics svg[role='img'] circle { fill: white; stroke: #cd091d; stroke-width: 2; }
+.nexttel-result__statistics svg[role='img'] foreignObject div { font-weight: 500; }
+.nexttel-result__statistics table { font-size: 14px; }
+.nexttel-result__statistics td, .nexttel-result__statistics th { padding-block: 20px; }
+.nexttel-result__explanation { margin-top: 24px; padding: 32px; border: 1px solid var(--color-dark-200); border-radius: 20px; }
+.nexttel-result__explanation [role='alert'] { font-size: 14px; font-weight: 500; padding: 12px 16px; }
+.nexttel-result__explanation > p, .nexttel-result__explanation li { font-size: 14px; font-weight: 400; line-height: 1.75; }
+.nexttel-result__explanation h3 { font-family: var(--font-heading); font-size: 16px; font-weight: 600; }
+.nexttel-result__explanation > button { font-size: 14px; border-width: 1px; }
+@media (min-width: 1024px) {
+  .nexttel-page { padding-top: 48px; }
+}
+@media (max-width: 1023px) {
+  .nexttel-page__container { padding-inline: 24px; }
+  .nexttel-intro__content { padding: 100px 20% 48px 23%; }
+  .nexttel-intro__mascot { width: 112px; height: 99px; right: calc(100% + 12px); top: -24px; }
+  .nexttel-result__banner h1 { font-size: 30px; }
+  .nexttel-result__statistics > div { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 639px) {
+  .nexttel-page { padding-block: 24px 56px; }
+  .nexttel-page__container { padding-inline: 16px; }
+  .nexttel-intro > nav { margin-bottom: 20px; }
+  .nexttel-intro__panel { min-height: 0; border-width: 2px; }
+  .nexttel-intro__content { padding: 124px 20% 32px 20px; }
+  .nexttel-intro__heading h1 { font-size: 26px; }
+  .nexttel-intro__mascot { top: -104px; right: auto; left: 0; width: 104px; height: 92px; }
+  .nexttel-intro__description { margin-top: 20px; font-size: 14px; line-height: 1.65; }
+  .nexttel-intro__start { margin-top: 24px; font-size: 13px; gap: 14px; padding-inline: 16px; }
+  .nexttel-accents__top { width: 50%; right: 8%; }
+  .nexttel-accents__rail { width: 12%; }
+  .nexttel-questionnaire { padding: 24px 16px; border-radius: 20px; }
+  .nexttel-progress__label { font-size: 12px; }
+  .nexttel-questionnaire__title { font-size: 24px; }
+  .nexttel-option { padding: 12px; min-height: 64px; gap: 12px; font-size: 14px; }
+  .nexttel-option__badge { width: 36px; height: 36px; font-size: 14px; }
+  .nexttel-navigation button { min-width: 0; padding: 12px 18px; font-size: 13px; }
+  .nexttel-result__banner { padding: 24px 20px; }
+  .nexttel-result__banner h1 { font-size: 26px; }
+  .nexttel-result__statistics { padding: 20px 12px; }
+  .nexttel-result__statistics h2, .nexttel-result__explanation h2 { font-size: 18px; }
+  .nexttel-result__statistics td, .nexttel-result__statistics th { padding-block: 16px; }
+  .nexttel-result__explanation { padding: 24px 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nexttel-page *, .nexttel-page *::before, .nexttel-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

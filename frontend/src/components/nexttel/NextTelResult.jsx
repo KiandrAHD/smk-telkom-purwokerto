@@ -22,9 +22,17 @@ const NextTelResult = ({ result, explanation, loading, error, onRetry, onRestart
   }, []);
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="nexttel-result">
       <HeroBreadcrumb current="Hasil tes minat" parent="NextTel AI" parentTo="/nexttel" />
-      <div className="rounded-3xl bg-primary px-6 py-8 text-white sm:px-10">
+      <div className="nexttel-result__tags"><span>#DigitalSmartSchool</span><span>#GlobalTechnopreneur</span></div>
+      <div className="nexttel-result__banner">
+        <svg className="nexttel-result__artwork" viewBox="0 0 1694 237" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <image href="/assets/nexttel/result-ellipse-326.svg" x="526.87" y="138" width="246.256" height="99.129" />
+          <image href="/assets/nexttel/result-ellipse-323.svg" x="1490.62" y="165" width="203.372" height="218.708" />
+          <image href="/assets/nexttel/result-ellipse-324.svg" x="1471.92" y="-176" width="184.449" height="218.708" transform="translate(0 -133.292) scale(1 -1)" />
+          <image href="/assets/nexttel/result-ellipse-325.svg" x="-104.5" y="11.5" width="121" height="144" transform="rotate(90 -44 83.5)" />
+          <image href="/assets/nexttel/result-logo.svg" x="1611.37" y="149.23" width="88.365" height="88.504" />
+        </svg>
         <div className="flex items-center gap-2 text-xs font-semibold text-white/85">
           <CheckCircle2 className="h-4 w-4" aria-hidden="true" /> {t('Rekomendasi utama')}
         </div>
@@ -32,7 +40,7 @@ const NextTelResult = ({ result, explanation, loading, error, onRetry, onRestart
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/85">{t(result.topRecommendation ? 'Rekomendasi ini merupakan panduan berdasarkan minat dan jawabanmu, bukan keputusan resmi penerimaan siswa.' : 'Informasi dari jawabanmu belum cukup untuk menentukan satu jurusan.')}</p>
       </div>
 
-      <section className="rounded-2xl border border-dark-200 bg-white p-5 sm:p-8" aria-labelledby="nexttel-statistics">
+      <section className="nexttel-result__statistics" aria-labelledby="nexttel-statistics">
         <h2 id="nexttel-statistics" className="flex items-center gap-2 font-heading text-xl font-bold text-dark-900">
           <ChartNoAxesCombined className="h-5 w-5 text-dark-500" aria-hidden="true" /> {t('Statistik Minat Jurusan')}
         </h2>
@@ -57,7 +65,7 @@ const NextTelResult = ({ result, explanation, loading, error, onRetry, onRestart
         </div>
       </section>
 
-      <section className="rounded-2xl border border-dark-200 bg-white p-5 sm:p-8" aria-labelledby="nexttel-explanation">
+      <section className="nexttel-result__explanation" aria-labelledby="nexttel-explanation">
         <h2 id="nexttel-explanation" className="flex items-center gap-2 font-heading text-xl font-bold text-dark-900">
           <Sparkles className="h-5 w-5 text-primary" aria-hidden="true" /> {t('Kenapa jurusan ini cocok?')}
         </h2>
