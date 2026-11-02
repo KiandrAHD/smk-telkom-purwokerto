@@ -19,4 +19,19 @@ assert.match(styles, /repeat\(7, minmax\(0, 1fr\)\)/);
 assert.match(styles, /100% auto repeat-y/);
 assert.match(styles, /scaleX\(-1\)/);
 assert.match(hero, /\.hero-panel--departments \.hero-image\s*\{\s*mask-image: linear-gradient/);
-console.log('Public layout refinements: shared sections, hero fade, filters and continuous mirrored chains passed.');
+const profile = read('pages/TentangPage.jsx');
+assert.match(profile, /<>\s*<TentangHeroSection\s*\/>\s*<TentangStatsSection\s*\/>\s*<\/>/);
+assert.doesNotMatch(read('components/RibbonDivider.jsx'), /MarqueeBadge|beranda-ribbon-track/);
+for (const name of ['Berita', 'Bkk', 'Prestasi', 'Pengumuman', 'Jurusan', 'JurusanDetail', 'Tentang', 'Kalender', 'Spmb', 'Ekstrakurikuler', 'Guru', 'Fasilitas']) {
+  assert.doesNotMatch(read(`pages/${name}Page.jsx`), /<RibbonDivider animated/);
+}
+for (const name of ['jurusan/Jurusan', 'prestasi/Prestasi', 'bkk/Bkk', 'pengumuman/Pengumuman']) {
+  assert.match(read(`components/${name}HeroSection.jsx`), /<HeroStatsBar items=/);
+}
+assert.match(read('components/HeroQuickAccess.jsx'), /hero-floating hero-floating--quick/);
+assert.match(read('components/HeroSection.jsx'), /<HeroQuickAccess links=/);
+for (const path of ['components/berita/BeritaHeroSection.jsx', 'pages/KalenderPage.jsx', 'pages/EkstrakurikulerPage.jsx', 'pages/GuruPage.jsx']) {
+  assert.match(read(path), /<\/div><\/PageHeroCarousel>\s*<HeroQuickAccess\s*\/>/);
+}
+assert.match(facilities, /hero-floating hero-floating--quick/);
+console.log('Public layout refinements: one wave, no legacy marquee, preserved floating cards, hero fade, filters and mirrored chains passed.');

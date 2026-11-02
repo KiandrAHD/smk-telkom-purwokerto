@@ -4,7 +4,6 @@ import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
 import BeritaHeroSection from '../components/berita/BeritaHeroSection';
 import BeritaSorotSection from '../components/berita/BeritaSorotSection';
-import RibbonDivider from '../components/RibbonDivider';
 import BeritaKategoriSection from '../components/berita/BeritaKategoriSection';
 import BeritaAgendaSection from '../components/berita/BeritaAgendaSection';
 import PublicDataState from '../components/PublicDataState';
@@ -31,7 +30,6 @@ const BeritaPage = ({ initialItems }) => {
   return (
     <MainLayout>
       <BeritaHeroSection items={items} />
-      <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("berita")} />
       </div>

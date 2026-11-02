@@ -8,7 +8,6 @@ import HeroBadges from '../components/HeroBadges';
 import Modal from '../components/dashboard/Modal';
 import ContentImage from '../components/ContentImage';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
-import RibbonDivider from '../components/RibbonDivider';
 import CampusExplorer from '../components/fasilitas/CampusExplorer';
 import { campusFacilities, campusIdForCard } from '../data/campusData';
 import { useLanguage } from '../context/LanguageContext';
@@ -168,7 +167,6 @@ export default function FasilitasPage() {
             </div>
           </div>
         </section>
-        <RibbonDivider animated />
         <CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} />
         <section id="daftar-fasilitas" aria-labelledby="fasilitas-title" className="relative isolate scroll-mt-28 bg-white py-8 lg:py-12">
         {['right', 'left'].map(side => <div key={side} aria-hidden="true" className={`facility-chain facility-chain--${side}`} />)}

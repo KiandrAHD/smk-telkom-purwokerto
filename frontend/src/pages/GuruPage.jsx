@@ -9,6 +9,7 @@ import { kepalaSekolah, visiMisi } from '../data/dummyData';
 import { kesiswaanData, tenagaPendidikData, profilGuruTranslations } from '../data/profilGuruData';
 import MainLayout from '../layouts/MainLayout';
 import HeroBadges from '../components/HeroBadges';
+import HeroQuickAccess from '../components/HeroQuickAccess';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
@@ -139,10 +140,10 @@ function GuruPage() {
               <img src={heroPhoto} alt={t("Guru dan tenaga pendidik SMK Telkom Purwokerto")} width="2200" height="1033" fetchPriority="high" className="hero-image" />
             </div>
           </div></PageHeroCarousel>
+          <HeroQuickAccess />
         </div>
       </section>
 
-      <RibbonDivider animated />
       <section aria-labelledby="kepala-sekolah-title" className="relative overflow-hidden bg-white py-8 lg:py-12">
         <SectionAccents variant="headmaster" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

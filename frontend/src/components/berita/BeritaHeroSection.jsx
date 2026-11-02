@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { beritaHero, breakingNews } from '../../data/dummyData';
 import HeroBreadcrumb from '../HeroBreadcrumb';
 import HeroBadges from '../HeroBadges';
+import HeroQuickAccess from '../HeroQuickAccess';
 import hero640 from '../../assets/banners/berita-640.webp';
 import hero960 from '../../assets/banners/berita-960.webp';
 
@@ -70,6 +71,7 @@ const BeritaHeroSection = ({ items = [] }) => {
             />
           </div>
         </div></PageHeroCarousel>
+        <HeroQuickAccess />
 
         {/* Baris breaking news */}
         {item && <div

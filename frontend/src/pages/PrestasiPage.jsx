@@ -4,7 +4,6 @@ import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
 import PrestasiHeroSection from '../components/prestasi/PrestasiHeroSection';
 import PrestasiUnggulanSection from '../components/prestasi/PrestasiUnggulanSection';
-import RibbonDivider from '../components/RibbonDivider';
 import PrestasiGaleriSection from '../components/prestasi/PrestasiGaleriSection';
 import PrestasiPerjalananSection from '../components/prestasi/PrestasiPerjalananSection';
 import PrestasiDukunganSection from '../components/prestasi/PrestasiDukunganSection';
@@ -32,7 +31,6 @@ const PrestasiPage = ({ initialItems }) => {
   return (
     <MainLayout>
       <PrestasiHeroSection />
-      <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <PublicDataState onRetry={() => { setLoading(true); setError(''); setRequestVersion((value) => value + 1); }} loading={loading} error={error} empty={!loading && !error && items.length === 0} label={t("prestasi")} />
       </div>
