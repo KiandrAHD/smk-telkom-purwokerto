@@ -33,7 +33,7 @@ const DepartmentCard = ({ icon, name, desc, image, slug }) => {
       </div>
 
       <div className="flex flex-1 flex-col px-4 pb-3 pt-7">
-        <h3 className="font-heading text-base font-bold leading-snug text-dark-900">
+        <h3 className="font-heading text-base font-bold leading-snug text-primary">
           {t(name)}
         </h3>
         <p className="mt-1.5 text-xs leading-relaxed text-dark-500">{t(desc)}</p>

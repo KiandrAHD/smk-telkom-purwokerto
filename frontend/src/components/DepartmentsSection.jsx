@@ -15,12 +15,12 @@ const DepartmentsSection = () => {
     <SectionAccents variant="departments" />
 
     <div className="relative mx-auto max-w-[1546px] px-4 sm:px-6 lg:px-8">
-      <p className="text-center font-heading text-sm font-semibold leading-normal tracking-normal text-primary sm:text-base lg:text-lg">
+      <h2 className="text-center font-heading text-2xl font-bold leading-tight tracking-wide text-primary sm:text-3xl">
         {t(jurusanData.eyebrow)}
-      </p>
-      <h2 className="mt-2 text-center font-heading text-2xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-3xl lg:text-4xl">
-        {t(jurusanData.title)}
       </h2>
+      <p className="mt-2 text-center font-heading text-base font-bold leading-tight text-dark-900 sm:text-lg">
+        {t(jurusanData.title)}
+      </p>
 
       <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {jurusanData.items.map((item, index) => (

@@ -37,6 +37,9 @@ const PrestasiPerjalananSection = ({ items = hallOfFame.items }) => {
     <section id="hall-of-fame" aria-labelledby="hall-of-fame-title" className="relative isolate overflow-hidden bg-[#cd091d] py-6 font-[family-name:'Plus_Jakarta_Sans',var(--font-sans)] [container-type:inline-size] lg:pb-[1.6811cqw] lg:pt-[1.3015cqw]">
       <PrestasiHallDecoration />
       <h2 id="hall-of-fame-title" className="relative flex items-center justify-center gap-2 text-2xl font-extrabold leading-tight text-white lg:gap-[0.4338cqw] lg:text-[2.603cqw]">
+        <span aria-hidden="true" className="relative block size-6 lg:size-[2.17cqw]">
+          <img src={star} alt="" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 -rotate-12 scale-[0.6] lg:scale-[calc(100cqw/1844px)]" />
+        </span>
         {t(hallOfFame.title)}
         <span className="relative block size-6 lg:size-[2.17cqw]">
           <img src={star} alt="" aria-hidden="true" className="absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-[0.6] lg:scale-[calc(100cqw/1844px)]" />

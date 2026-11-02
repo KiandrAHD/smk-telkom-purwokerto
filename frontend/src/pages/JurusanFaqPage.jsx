@@ -43,11 +43,11 @@ const JurusanFaqPage = () => {
         <Reveal>
           <div className="rounded-2xl bg-primary px-6 py-6 text-center text-white">
             <p className="font-heading text-sm font-extrabold">{t("Masih ada yang ingin ditanyakan?")}</p>
-            <p className="mt-1.5 text-xs text-white/80">{t("STELA siap menjawab pertanyaanmu seputar jurusan kapan saja.")} </p>
+            <p className="mt-1.5 text-xs text-white/80">{t("NEXA siap menjawab pertanyaanmu seputar jurusan kapan saja.")} </p>
             <Link
-              to="/stela"
+              to="/nexa"
               className="mt-4 inline-flex rounded-full bg-white px-6 py-2.5 text-xs font-bold text-primary transition-transform hover:-translate-y-0.5"
-            >{t("Tanya STELA")} </Link>
+            >{t("Tanya NEXA")} </Link>
           </div>
         </Reveal>
       </div>

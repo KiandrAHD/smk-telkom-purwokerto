@@ -47,7 +47,7 @@ export default {
   'Sambutan Lengkap': 'Read Full Welcome Address',
   'Lihat profil alumni': 'View Alumni Profile',
   'Perjalanan Prestasi': 'Achievement Journey',
-  'STELA (Stematel Learning Assistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto': 'STELA (Stematel Learning Assistant) is ready to answer your questions about programs, facilities, achievements, admissions, and more at SMK Telkom Purwokerto',
+  'NEXA siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto': 'NEXA is ready to answer your questions about programs, facilities, achievements, admissions, and more at SMK Telkom Purwokerto',
   'Daftar PPDB Sekarang': 'Register for PPDB',
   'Buka lokasi SMK Telkom Purwokerto di Google Maps': 'Open SMK Telkom Purwokerto in Google Maps',
   'Peta lokasi SMK Telkom Purwokerto': 'Map of SMK Telkom Purwokerto',

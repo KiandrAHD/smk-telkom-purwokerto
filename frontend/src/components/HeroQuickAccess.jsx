@@ -3,11 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { quickLinks } from '../data/dummyData';
 import accountIcon from '../assets/landing/quick-access-account.svg';
-import robotIcon from '../assets/landing/quick-access-robot.svg';
-import sparkIcon from '../assets/landing/quick-access-spark.svg';
-import sparkDot from '../assets/landing/quick-access-dot.svg';
 
-const icons = { userPlus: accountIcon, bot: robotIcon, sparkles: sparkIcon };
+const icons = { userPlus: accountIcon, bot: '/assets/branding/nexa-mark.png', sparkles: '/assets/branding/nexttel-mark.png' };
 
 export default function HeroQuickAccess({ links = quickLinks }) {
   const { t } = useLanguage();
@@ -15,8 +12,7 @@ export default function HeroQuickAccess({ links = quickLinks }) {
     <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
       {links.map(item => <div key={item.title} className="quick-access-card flex min-w-0 gap-3 px-4 py-3">
         <span aria-hidden="true" className="quick-access-icon relative flex aspect-[97/105] w-12 shrink-0 items-center justify-center self-start rounded-lg bg-primary sm:w-10 lg:w-12">
-          <img src={icons[item.icon]} alt="" className={`h-auto ${item.icon === 'userPlus' ? 'w-[59%]' : item.icon === 'bot' ? 'w-[69%]' : 'w-[58%]'}`} />
-          {item.icon === 'sparkles' && <><span className="absolute right-[18%] top-[20%] text-[10px] font-extrabold leading-none text-white">+</span><img src={sparkDot} alt="" className="absolute bottom-[24%] left-[16%] h-auto w-[10%]" /></>}
+          <img src={icons[item.icon]} alt="" className={`h-auto max-h-[80%] object-contain ${item.icon === 'userPlus' ? 'w-[59%]' : item.icon === 'bot' ? 'w-[69%]' : 'w-[80%]'}`} />
         </span>
         <div className="quick-access-content min-w-0 flex-1">
           <p className="quick-access-title font-heading text-base font-bold leading-tight text-dark-900">{t(item.title)}</p>

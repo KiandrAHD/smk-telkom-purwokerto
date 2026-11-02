@@ -13,7 +13,7 @@ const privacySections = {
           text: 'Nama lengkap, alamat email, nomor telepon, atau data pendaftaran saat pengguna mengisi formulir pendaftaran ekskul, pengajuan layanan kesiswaan, atau kontak PPDB.',
         },
         {
-          subtitle: 'Penggunaan Asisten AI (STELA & NexTel)',
+          subtitle: 'Penggunaan Asisten AI (NEXA & NextTel)',
           text: 'Pertanyaan yang diajukan kepada sistem AI diproses untuk menghasilkan respons informasi sekolah. Riwayat percakapan tidak disimpan secara permanen dan hanya digunakan selama sesi aktif berlangsung.',
         },
         {
@@ -67,7 +67,7 @@ const privacySections = {
           text: 'Full name, email address, phone number, or registration data when users fill in extracurricular registration forms, student services requests, or PPDB contact forms.',
         },
         {
-          subtitle: 'AI Assistant Usage (STELA & NexTel)',
+          subtitle: 'AI Assistant Usage (NEXA & NextTel)',
           text: 'Questions submitted to the AI system are processed to generate school information responses. Conversation history is not stored permanently and is only used during the active session.',
         },
         {

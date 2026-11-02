@@ -18,9 +18,14 @@ const ALAMAT = PAKAI_EDGE_FUNCTION
 // dari bundel produksi — bukan sekadar tidak terpanggil.
 export const stelaSiap = PAKAI_EDGE_FUNCTION || import.meta.env.DEV;
 
-export const PESAN_STELA_GAGAL = 'STELA sedang mengalami kendala. Silakan coba lagi.';
+export const PESAN_STELA_GAGAL = 'NEXA sedang mengalami kendala. Silakan coba lagi.';
 export const PESAN_STELA_BELUM_SIAP =
-  'STELA belum dikonfigurasi. Isi GEMINI_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
+  'NEXA belum dikonfigurasi. Isi GEMINI_API_KEY di frontend/.env untuk mode lokal, atau VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY untuk memakai Edge Function.';
+
+// Presentation only: keep backend replies, request history, URLs, and identifiers unchanged.
+export const formatStelaPublicText = (text) => String(text ?? '')
+  .replace(/\s*\(Stematel Learning Assistant\)/gi, '')
+  .replace(/(?<![\w/.-])stela(?![\w/-]|\.[a-z])/gi, (brand) => brand === 'STELA' ? 'NEXA' : 'Nexa');
 
 export const KATEGORI_GALAT = {
   SCOPE: 'scope',        // Pertanyaan di luar scope (rejection oleh model)

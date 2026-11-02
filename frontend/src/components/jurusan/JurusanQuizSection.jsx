@@ -4,7 +4,7 @@ import { ArrowRight, Check, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { jurusanData, jurusanQuiz } from '../../data/dummyData';
 import SectionAccents from '../SectionAccents';
-import stelaBot from '../../assets/pengumuman/stela-bot.png';
+const stelaBot = '/assets/branding/nexa-mark.png';
 
 // Rekomendasi = jurusan dengan skor tertinggi dari opsi yang dipilih.
 const recommend = (picked) => {
@@ -40,7 +40,7 @@ const JurusanQuizSection = () => {
         <div className="grid grid-cols-1 items-center gap-6 rounded-2xl bg-primary/7 p-5 sm:p-6 lg:grid-cols-[1.4fr_1fr_0.8fr] lg:gap-5 lg:p-4 xl:gap-6 xl:p-5">
           {/* Ajakan */}
           <div className="flex min-w-0 items-center gap-4">
-            <img src={stelaBot} alt="" width="250" height="252" className="h-auto w-24 flex-none sm:w-32 lg:w-36 xl:w-44" />
+            <img src={stelaBot} alt="" aria-hidden="true" width="250" height="250" className="aspect-square h-auto w-24 flex-none rounded-2xl bg-primary object-contain p-4 sm:w-32 sm:p-5 lg:w-36 xl:w-44 xl:p-7" />
             <div className="min-w-0">
               <h2 className="font-heading text-sm font-extrabold leading-snug text-dark-900 xl:text-base">{t("Belum Tahu Memilih")} <span className="text-primary">{t("Jurusan?")}</span>
               </h2>

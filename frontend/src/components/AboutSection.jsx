@@ -19,7 +19,8 @@ const AboutSection = () => {
   const { t, language } = useLanguage();
   const [titleLead, ...titleRest] = t(landingAbout.title).split(' ');
   return (
-  <section id="tentang" className="bg-white pb-10 pt-8 sm:pb-12 lg:pb-14 lg:pt-0">
+  <section id="tentang" className="relative isolate bg-white pb-10 pt-8 sm:pb-12 lg:pb-14 lg:pt-0">
+    <img src="/assets/branding/about-background.png" alt="" aria-hidden="true" loading="lazy" className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover object-right" />
     {/* Preserve Figma's 715:694 columns and 111/1609 gap inside the site's 80rem container. */}
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="[container-type:inline-size]">
