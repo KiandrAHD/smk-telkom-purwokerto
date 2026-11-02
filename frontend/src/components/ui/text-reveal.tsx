@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { ReactNode, RefObject } from 'react';
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import type { MotionValue } from 'framer-motion';
@@ -22,6 +22,9 @@ export function TextRevealByWord({ text, className = '', targetRef, render, onRe
     trackContentSize: true,
   });
   useMotionValueEvent(scrollYProgress, 'change', value => onRevealChange?.(reduced || value >= 0.99));
+  useEffect(() => {
+    onRevealChange?.(Boolean(reduced) || scrollYProgress.get() >= 0.99);
+  }, [reduced, scrollYProgress, onRevealChange]);
   const words = text.trim().split(/\s+/);
   return <span ref={ownRef} className={className}>
     {render ? render(scrollYProgress) : words.map((word, index) => (
@@ -44,8 +47,8 @@ export function TextRevealWord({ children, progress, range, ghost = true, classN
   const reduced = useReducedMotion();
   const opacity = useTransform(progress, range, ghost ? [0, 1] : [0.3, 1]);
   if (!ghost) return <motion.span className={className} style={{ opacity: reduced ? 1 : opacity }}>{children}</motion.span>;
-  return <span data-innovation-word className={`scroll-reveal-word ${className}`}>
-    <span aria-hidden="true" className="scroll-reveal-ghost">{children}</span>
-    <motion.span className="scroll-reveal-foreground" style={{ opacity: reduced ? 1 : opacity }}>{children}</motion.span>
+  return <span data-innovation-word className={`relative inline-block whitespace-pre ${className}`}>
+    <span aria-hidden="true" className="absolute inset-0 opacity-30 motion-reduce:invisible print:invisible">{children}</span>
+    <motion.span data-reveal-foreground className="relative motion-reduce:opacity-100! print:opacity-100!" style={{ opacity: reduced ? 1 : opacity }}>{children}</motion.span>
   </span>;
 }
