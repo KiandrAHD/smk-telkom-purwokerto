@@ -1,0 +1,21 @@
+.facility-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+.facility-chain {
+  position: absolute;
+  inset-block: 0;
+  width: clamp(6px, 2.11vw, 39px);
+  z-index: -1;
+  pointer-events: none;
+  background: url('../assets/fasilitas/page-accent.png') top center / 100% auto repeat-y;
+}
+.facility-chain--right { right: 0; }
+.facility-chain--left { left: 0; transform: scaleX(-1); }
+@media (min-width: 40rem) {
+  .facility-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 64rem) {
+  .facility-filters { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(.75rem, 1.25vw, 1.4375rem); }
+}
