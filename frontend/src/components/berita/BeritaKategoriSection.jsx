@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../../context/SiteSettingsContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { formatPublicDate } from '../../utils/publicContent';
 import { useMemo } from 'react';
@@ -9,6 +10,8 @@ import SearchResultStatus from '../SearchResultStatus';
 
 const BeritaKategoriSection = ({ items = [], children }) => {
   const { t, locale } = useLanguage();
+  const { settings } = useSiteSettings();
+  const perPage = settings?.news_page_size ?? kategoriBerita.perPage;
 
   const [params, setParams] = useSearchParams();
   const chip = params.get('kategori') || 'Semua';
@@ -16,7 +19,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
   const sort = params.get('sort') === 'terlama' ? 'terlama' : 'terbaru';
   const count = Number(params.get('jumlah'));
   const shownCount = Number.isSafeInteger(count) && count > 0
-    ? Math.max(kategoriBerita.perPage, Math.min(count, 10000)) : kategoriBerita.perPage;
+    ? Math.max(perPage, Math.min(count, 10000)) : perPage;
   const sourceItems = items;
 
   // Chip dulu diambil dari daftar tetap sepuluh kategori (Prestasi, Sekolah,
@@ -62,7 +65,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
   const setShownCount = (value) => {
     setParams((current) => {
       const next = new URLSearchParams(current);
-      if (value === kategoriBerita.perPage) next.delete('jumlah');
+      if (value === perPage) next.delete('jumlah');
       else next.set('jumlah', String(value));
       return next;
     }, { replace: true });
@@ -166,8 +169,8 @@ const BeritaKategoriSection = ({ items = [], children }) => {
         <div className="mt-7 flex items-center justify-center gap-6">
           <button
             type="button"
-            onClick={() => setShownCount(kategoriBerita.perPage)}
-            disabled={shownCount <= kategoriBerita.perPage}
+            onClick={() => setShownCount(perPage)}
+            disabled={shownCount <= perPage}
             aria-label={t("Kembali ke berita awal")}
             className="relative text-primary transition-opacity before:absolute before:-inset-2 before:content-[''] disabled:opacity-30"
           >
@@ -176,7 +179,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
 
           <button
             type="button"
-            onClick={() => setShownCount(shownCount + kategoriBerita.perPage)}
+            onClick={() => setShownCount(shownCount + perPage)}
             disabled={!hasMore}
             className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white px-4 py-2 text-[10px] font-bold text-primary transition-colors hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-primary"
           >
@@ -185,7 +188,7 @@ const BeritaKategoriSection = ({ items = [], children }) => {
 
           <button
             type="button"
-            onClick={() => setShownCount(shownCount + kategoriBerita.perPage)}
+            onClick={() => setShownCount(shownCount + perPage)}
             disabled={!hasMore}
             aria-label={t("Berita berikutnya")}
             className="relative text-primary transition-opacity before:absolute before:-inset-2 before:content-[''] disabled:opacity-30"

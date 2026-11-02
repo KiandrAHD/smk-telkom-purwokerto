@@ -5,7 +5,7 @@ const user = { id: 'siswa-1', email: 'siswa@example.com' };
 const document = { type: 'application/pdf', size: 100 };
 const path = `submissions/${user.id}/document.pdf`;
 
-function buatClient({ existing = [], insertError = null } = {}) {
+function buatClient({ existing = [], insertError = null, spmbOpen = true } = {}) {
   const stored = new Set();
   const uploads = [];
   const removals = [];
@@ -14,6 +14,7 @@ function buatClient({ existing = [], insertError = null } = {}) {
   const client = {
     auth: { getUser: async () => ({ data: { user }, error: null }) },
     from(table) {
+      if (table === 'site_settings') return { select: () => ({ eq: () => ({ single: async () => ({ data: { spmb_open: spmbOpen }, error: null }) }) }) };
       if (table === 'ppdb_drafts') return { delete: () => ({ eq: async () => ({ error: null }) }) };
       assert.equal(table, 'ppdb');
       return {
@@ -71,6 +72,12 @@ const server = await createServer({
 try {
   const { submitPpdb, savePpdbDraft, signUpPpdb } = await server.ssrLoadModule('/src/services/ppdbService.js');
   const submission = { nama_lengkap: 'Siswa', dokumen: document };
+  const closed = buatClient({ spmbOpen: false });
+  globalThis.__ppdbTestClient = closed.client;
+  await assert.rejects(submitPpdb(submission), /ditutup/);
+  await assert.rejects(signUpPpdb('student@example.invalid', 'not-used'), /ditutup/);
+  assert.equal(closed.inserts, 0);
+  assert.deepEqual(closed.uploads, []);
 
   const duplicate = buatClient({ existing: [{ id: 'sudah-ada' }] });
   globalThis.__ppdbTestClient = duplicate.client;
@@ -108,7 +115,7 @@ try {
   const previousWindow = globalThis.window;
   let signup;
   globalThis.window = { location: { origin: 'http://localhost:5173' } };
-  globalThis.__ppdbTestClient = { auth: { signUp: async (payload) => { signup = payload; return { data: {}, error: null }; } } };
+  globalThis.__ppdbTestClient = { ...buatClient().client, auth: { signUp: async (payload) => { signup = payload; return { data: {}, error: null }; } } };
   try {
     await signUpPpdb('qa@example.invalid', 'qa-password-only');
     assert.equal(signup.email, 'qa@example.invalid');
