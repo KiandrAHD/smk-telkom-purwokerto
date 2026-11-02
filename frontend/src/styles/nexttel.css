@@ -1,0 +1,103 @@
+/* NextTel's Figma canvas is 1847px wide. Artwork scales independently of readable content. */
+@font-face { font-family: 'NextTel Jakarta'; font-style: normal; font-weight: 200 800; font-display: swap; src: url('../assets/fonts/plusjakartasans-v12-LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2') format('woff2'); }
+.nexttel-page { font-family: 'NextTel Jakarta', 'Plus Jakarta Sans', var(--font-sans); color: #000; background: #fff; }
+.nexttel-page__container { width: min(100% - 48px, 1501px); margin-inline: auto; }
+.nexttel-page--intro { padding-block: clamp(56px, 10.1vw, 186px) clamp(100px, 14.8vw, 273px); }
+.nexttel-intro > nav { margin: 0 0 clamp(32px, 4.5vw, 83px) 7px; font-size: 14px; font-weight: 800; letter-spacing: 1.2px; }
+.nexttel-intro__panel { position: relative; isolation: isolate; container-type: inline-size; width: 100%; min-height: 480px; aspect-ratio: 1501 / 800; overflow: hidden; border: 4px solid #cd091d; border-radius: 20px; background: linear-gradient(131.504deg, #c8102e 65.182%, #870a1e 104.23%); box-shadow: 0 0 24px #00000015; color: white; }
+.nexttel-intro__background { position: absolute; z-index: -1; inset: 0; background: url('/assets/nexttel/intro-pattern.svg') left top / auto 100% no-repeat; }
+.nexttel-intro__content { position: relative; padding: 14.3% 23% 8.3% 23%; }
+.nexttel-intro__heading { position: relative; }
+.nexttel-intro__heading h1 { font-family: inherit; font-size: clamp(28px, 3.2cqw, 48px); font-weight: 800; line-height: 1.28; letter-spacing: 0; outline: none; }
+.nexttel-intro__mascot { position: absolute; width: 196.883px; height: 173.897px; top: -67px; right: calc(100% + 4px); overflow: hidden; transform: scaleX(-1); transform-origin: center; }
+.nexttel-intro__mascot img { position: absolute; width: 129.44%; max-width: none; height: 146.55%; left: -15.74%; top: -22.41%; }
+.nexttel-intro__description { margin-top: clamp(30px, 4cqw, 60px); max-width: 759px; font-size: clamp(16px, 1.333cqw, 20px); line-height: 1.28; font-weight: 700; color: #ffffffb3; }
+.nexttel-intro__start { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 232px; max-width: 100%; min-height: 51px; margin-top: clamp(60px, 9.7cqw, 146px); padding: 12px 20px; border-radius: 20px; background: #fff; color: #cd091d; font-size: 15px; font-weight: 700; cursor: pointer; transition: background-color .2s; }
+.nexttel-intro__start:hover { background: #fff1f3; }
+.nexttel-intro__start:focus-visible { outline: 3px solid white; outline-offset: 5px; }
+.nexttel-intro__start img { flex: none; }
+.nexttel-accents { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
+.nexttel-accents__top { position: absolute; top: 0; right: 5.45%; width: 29.18%; height: auto; overflow: visible; }
+.nexttel-accents__rail { position: absolute; top: 0; right: 0; width: 11.79%; height: 100%; }
+.nexttel-page--questionnaire { padding-block: clamp(32px, 3.8vw, 70px) clamp(100px, 25vw, 462px); }
+.nexttel-page--questionnaire .nexttel-page__container { max-width: 1248px; }
+.nexttel-questionnaire { padding: 40px 55px 32px; border: 2px solid #eee; border-radius: 30px; box-shadow: inset 0 0 4px #00000008; }
+.nexttel-progress { margin-bottom: 22px; }
+.nexttel-progress__label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; color: #6f6f6f; font-size: 20px; font-weight: 800; }
+.nexttel-progress progress { height: 17px; }
+.nexttel-progress progress::-webkit-progress-bar { background: #d9d9d9; }
+.nexttel-questionnaire__eyebrow { color: #cd091d; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; }
+.nexttel-questionnaire__title { margin-top: 12px; font-family: inherit; font-size: clamp(28px, 2.93vw, 54px); line-height: 1.2; font-weight: 800; letter-spacing: 1px; outline: none; scroll-margin-top: 120px; }
+.nexttel-questionnaire__options { display: grid; gap: 28px; margin-top: 18px; }
+.nexttel-option { min-height: 92px; padding: 16px; gap: 32px; border-color: #8a8a8a; border-radius: 20px; color: #6f6f6f; font-size: 24px; font-weight: 700; line-height: 1.4; }
+.nexttel-option__badge { width: 58px; height: 58px; font-size: 24px; background: #e1e1e1; color: #000; }
+.peer:checked + .nexttel-option .nexttel-option__badge { background: #cd091d; color: white; }
+.nexttel-navigation { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
+.nexttel-navigation button { min-width: 160px; min-height: 55px; font-size: 20px; }
+.nexttel-page--result { padding-block: 28px 140px; }
+.nexttel-page--result .nexttel-page__container { width: min(100% - 48px, 1694px); }
+.nexttel-result > nav { font-weight: 800; letter-spacing: 1px; }
+.nexttel-result__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 22px 40px; color: #cd091d; }
+.nexttel-result__tags span { border: 1px solid #ce0b2140; border-radius: 25px; padding: 5px 10px; font-size: 11px; font-weight: 800; letter-spacing: 1px; }
+.nexttel-result__banner { position: relative; isolation: isolate; overflow: hidden; border-radius: 20px; padding: 25px 55px; color: white; background: #c2112f; }
+.nexttel-result__artwork { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.nexttel-result__banner > div { font-size: 20px; font-weight: 800; }
+.nexttel-result__banner h1 { font-family: inherit; font-size: clamp(28px, 3.47vw, 64px); font-weight: 800; line-height: 1.25; letter-spacing: 2px; }
+.nexttel-result__banner p { max-width: 1000px; font-size: clamp(16px, 1.3vw, 24px); font-weight: 800; line-height: 1.3; color: #fffafaB3; margin-block: 24px 4px; }
+.nexttel-result__statistics { margin-top: 40px; padding: 24px; border: 2px solid #eee; border-radius: 20px; }
+.nexttel-result__statistics h2, .nexttel-result__explanation h2 { font-family: inherit; font-size: clamp(22px, 1.95vw, 36px); font-weight: 800; }
+.nexttel-result__statistics h2 svg { width: 36px; height: 36px; color: #000; }
+.nexttel-result__statistics > div { grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 30px; }
+.nexttel-result__statistics svg[role='img'] { max-width: none; }
+.nexttel-result__statistics svg[role='img'] > polygon[fill='none'] { stroke: #6f6f6f; }
+.nexttel-result__statistics svg[role='img'] circle { fill: white; stroke: #cd091d; stroke-width: 2; }
+.nexttel-result__statistics svg[role='img'] foreignObject div { font-weight: 700; }
+.nexttel-result__explanation [role='alert'] { font-size: clamp(16px, 1.5vw, 28px); font-weight: 800; padding: 16px 24px; }
+.nexttel-result__statistics table { font-size: 20px; }
+.nexttel-result__statistics td, .nexttel-result__statistics th { padding-block: 32px; }
+.nexttel-result__explanation { margin-top: 80px; padding: 50px 90px 24px; border: 2px solid #eee; border-radius: 20px; }
+.nexttel-result__explanation > p, .nexttel-result__explanation li { font-size: clamp(16px, 1.3vw, 24px); font-weight: 700; line-height: 1.4; }
+.nexttel-result__explanation h3 { font-size: clamp(18px, 1.5vw, 28px); }
+.nexttel-result__explanation > button { font-size: 20px; border-width: 3px; }
+@media (max-width: 1199px) {
+  .nexttel-intro__mascot { transform: scaleX(-1) scale(.75); }
+  .nexttel-questionnaire { padding: 32px; }
+  .nexttel-option { font-size: 20px; }
+  .nexttel-result__statistics > div { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+  .nexttel-result__explanation { padding: 40px; }
+}
+@media (max-width: 767px) {
+  .nexttel-page__container { width: calc(100% - 32px); }
+  .nexttel-page--intro { padding-block: 36px 80px; }
+  .nexttel-intro > nav { margin-left: 0; font-size: 12px; }
+  .nexttel-intro__panel { aspect-ratio: auto; min-height: 0; border-width: 3px; }
+  .nexttel-intro__content { padding: 150px 21% 40px 24px; }
+  .nexttel-intro__heading h1 { font-size: clamp(26px, 5.5vw, 38px); letter-spacing: -1px; }
+  .nexttel-intro__mascot { top: -126px; right: auto; left: 0; width: 130px; height: 115px; transform: scaleX(-1); }
+  .nexttel-intro__description { margin-top: 28px; font-size: 16px; line-height: 1.55; }
+  .nexttel-intro__start { margin-top: 40px; font-size: 14px; gap: 14px; }
+  .nexttel-accents__top { width: 58%; right: 8%; }
+  .nexttel-accents__rail { width: 14%; }
+  .nexttel-questionnaire { padding: 24px 16px; border-radius: 22px; }
+  .nexttel-progress__label { font-size: 14px; }
+  .nexttel-progress progress { height: 10px; }
+  .nexttel-questionnaire__eyebrow { font-size: 14px; letter-spacing: 2px; }
+  .nexttel-questionnaire__title { font-size: 28px; letter-spacing: -.5px; }
+  .nexttel-questionnaire__options { gap: 16px; margin-top: 24px; }
+  .nexttel-option { padding: 14px 12px; min-height: 76px; gap: 14px; font-size: 16px; border-radius: 16px; }
+  .nexttel-option__badge { width: 42px; height: 42px; font-size: 18px; }
+  .nexttel-navigation button { min-width: 0; min-height: 48px; padding: 12px 18px; font-size: 14px; }
+  .nexttel-page--questionnaire { padding-bottom: 100px; }
+  .nexttel-page--result { padding-bottom: 80px; }
+  .nexttel-result__banner { padding: 26px 22px; }
+  .nexttel-result__banner > div { font-size: 14px; }
+  .nexttel-result__banner h1 { letter-spacing: -.5px; }
+  .nexttel-result__statistics { padding: 20px 12px; margin-top: 28px; }
+  .nexttel-result__statistics > div { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .nexttel-result__statistics table { font-size: 16px; }
+  .nexttel-result__statistics td, .nexttel-result__statistics th { padding-block: 18px; }
+  .nexttel-result__explanation { padding: 28px 20px; margin-top: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nexttel-page *, .nexttel-page *::before, .nexttel-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

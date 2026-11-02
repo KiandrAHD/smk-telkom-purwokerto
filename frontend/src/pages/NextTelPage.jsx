@@ -8,6 +8,7 @@ import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL }
 import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
 
 import { NEXTTEL_QUESTIONS as QUESTIONS } from '../data/nexttelQuestions';
+import '../styles/nexttel.css';
 
 const NextTelPage = () => {
   const { language } = useLanguage();
@@ -66,9 +67,9 @@ const NextTelPage = () => {
   const restart = () => { controllerRef.current?.abort(); controllerRef.current = null; setMode('intro'); setResult(null); setExplanation(null); setError(null); setLoading(false); };
 
   return (
-    <MainLayout showSupportSections={false}>
-      <section className="bg-white py-8 lg:py-12">
-        <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${mode === 'questionnaire' ? 'max-w-5xl' : 'max-w-7xl'}`}>
+    <MainLayout showSupportSections={false} showMarquees={false}>
+      <section className={`nexttel-page nexttel-page--${mode}`}>
+        <div className="nexttel-page__container">
           {mode === 'intro' && <NextTelIntro onStart={mulai} />}
           {mode === 'questionnaire' && error && <p role="alert" className="mb-4 text-sm text-primary">{error}</p>}
           {mode === 'questionnaire' && <NextTelQuestionnaire questions={QUESTIONS} currentIndex={currentIndex} answers={answers} onAnswer={jawab} onNext={lanjut} onBack={() => setCurrentIndex((value) => Math.max(0, value - 1))} />}

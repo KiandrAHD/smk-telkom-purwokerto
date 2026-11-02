@@ -4,8 +4,8 @@ const NextTelProgress = ({ current, total }) => {
   const { t } = useLanguage();
   const label = t('Pertanyaan {current} dari {total}', { current, total });
   return (
-  <div className="mb-6" aria-label={label}>
-    <div className="mb-2 flex items-center justify-between text-xs font-semibold text-dark-500">
+  <div className="nexttel-progress" aria-label={label}>
+    <div className="nexttel-progress__label">
       <span>{label}</span>
       <span>{Math.round((current / total) * 100)}%</span>
     </div>
