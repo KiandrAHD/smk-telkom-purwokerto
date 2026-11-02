@@ -113,6 +113,11 @@
 .hero-panel--achievements { --hero-media-ratio: 1106 / 656; --hero-media-width: 65.2%; --hero-media-position: right center; }
 .hero-panel--achievements .hero-image { mask-image: url('../assets/banners/prestasi-mask.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
 .hero-panel--departments { --hero-media-ratio: 1106 / 656; --hero-media-position: right center; }
+@media (min-width: 64rem) {
+  .hero-panel--departments .hero-image {
+    mask-image: linear-gradient(to right, transparent, black 24%);
+  }
+}
 .hero-panel--facilities { --hero-media-width: 65.4%; }
 .hero-panel--facilities .hero-background { aspect-ratio: 1144 / 679; }
 .hero-panel--facilities .hero-copy { width: auto; }
