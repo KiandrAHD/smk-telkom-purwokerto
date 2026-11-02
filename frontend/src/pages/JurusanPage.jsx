@@ -1,5 +1,6 @@
 import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
+import RibbonDivider from '../components/RibbonDivider';
 import JurusanHeroSection from '../components/jurusan/JurusanHeroSection';
 import JurusanListSection from '../components/jurusan/JurusanListSection';
 import JurusanQuizSection from '../components/jurusan/JurusanQuizSection';
@@ -14,6 +15,7 @@ const JurusanPage = () => (
     <Reveal>
       <JurusanListSection />
     </Reveal>
+    <RibbonDivider className="min-h-12 sm:min-h-16" />
     <Reveal>
       <JurusanQuizSection />
     </Reveal>
