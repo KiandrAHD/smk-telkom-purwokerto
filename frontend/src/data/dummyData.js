@@ -33,14 +33,12 @@ import logoTelkomColor from '../assets/bkk/logo-telkom.png';
 import logoHuaweiColor from '../assets/bkk/logo-huawei.png';
 import logoAgate from '../assets/bkk/logo-agate.png';
 import logoDicodingColor from '../assets/bkk/logo-dicoding.png';
-import stelaMascot from '../assets/bkk/stela-mascot.png';
 import showcaseRpl from '../assets/drive/jurusan-rpl.png';
 import showcasePg from '../assets/drive/jurusan-pg.webp';
 import showcaseTkj from '../assets/drive/jurusan-tkj.webp';
 import showcaseTjat from '../assets/drive/jurusan-tjat.webp';
 
 import pengumumanHeroImg from '../assets/pengumuman/pengumuman-hero.jpg';
-import stelaBot from '../assets/pengumuman/stela-bot.png';
 import profilHero from '../assets/tentang/profil-hero.jpg';
 import profilKepsek from '../assets/tentang/guru/aris-puji-santoso.png';
 import { slugify } from '../utils/slug';
@@ -94,6 +92,9 @@ import logoMicrosoft from '../assets/landing/logo-microsoft.png';
 import logoCisco from '../assets/landing/logo-cisco.png';
 import logoAws from '../assets/landing/logo-aws.png';
 import logoDicoding from '../assets/landing/logo-dicoding.png';
+
+const stelaMascot = '/assets/branding/nexa-mark.png';
+const stelaBot = stelaMascot;
 
 /* =========================================================
    LANDING PAGE (Beranda)
@@ -156,10 +157,10 @@ export const quickLinks = [
   },
   {
     icon: 'bot',
-    title: 'STELA AI',
+    title: 'NEXA AI',
     desc: 'Tanya aja tentang SMK Telkom Purwokerto',
-    linkLabel: 'Tanya STELA',
-    href: '/stela',
+    linkLabel: 'Tanya NEXA',
+    href: '/nexa',
   },
   {
     icon: 'sparkles',
@@ -310,16 +311,16 @@ export const ekstrakurikulerData = {
   ],
 };
 
-// ── STELA AI ──
+// ── NEXA AI ──
 export const stelaData = {
-  title: 'Tanyakan apa saja\nke STELA',
+  title: 'Tanyakan apa saja\nke NEXA',
   description:
-    'STELA (Stematel Learning Assistant) siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto',
-  ctaText: 'Tanya STELA Sekarang',
+    'NEXA siap menjawab pertanyaanmu tentang jurusan, fasilitas, prestasi, PPDB, dan informasi lainnya seputar SMK Telkom Purwokerto',
+  ctaText: 'Tanya NEXA Sekarang',
   // Sapaan pembuka dan pertanyaan contoh untuk halaman /stela. Ditaruh di sini,
   // bukan di komponen, supaya bisa diubah tanpa menyentuh kode.
   sapaan:
-    'Halo! Aku STELA, asisten SMK Telkom Purwokerto. Tanya apa saja soal jurusan, PPDB, prestasi, atau fasilitas sekolah ya.',
+    'Halo! Aku NEXA, asisten SMK Telkom Purwokerto. Tanya apa saja soal jurusan, PPDB, prestasi, atau fasilitas sekolah ya.',
   saran: [
     'Apa saja jurusan di SMK Telkom Purwokerto?',
     'Kapan PPDB gelombang 2 ditutup?',
@@ -519,7 +520,7 @@ export const footerData = {
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
     { label: 'SPMB', href: '/spmb' },
-    { label: 'STELA AI', href: '/stela' },
+    { label: 'NEXA AI', href: '/nexa' },
     { label: 'NextTel', href: '/nexttel' },
     { label: 'Kebijakan Privasi', href: '/kebijakan-privasi' },
   ],
@@ -582,10 +583,10 @@ export const jurusanTags = ['AI', 'WEB', 'Mobile', 'Cloud'];
 export const jurusanQuiz = {
   title: 'Belum Tahu Memilih Jurusan?',
   description:
-    'Jawab 5 pertanyaan singkat dan biarkan STELA memberikan rekomendasi jurusan yang paling sesuai untukmu.',
+    'Jawab 5 pertanyaan singkat dan biarkan NEXA memberikan rekomendasi jurusan yang paling sesuai untukmu.',
   ctaText: 'Mulai Sekarang',
   resetText: 'Ulangi',
-  resultLabel: 'Rekomendasi STELA',
+  resultLabel: 'Rekomendasi NEXA',
   resultNote: 'Cocok dengan minatmu!',
   // Tiap opsi menambah skor ke satu jurusan; skor tertinggi jadi rekomendasi.
   options: [
@@ -961,8 +962,8 @@ export const pklData = {
     },
   ],
   stela: {
-    title: 'Tanyakan Informasi Magang/PKL\nYang kamu butuhkan ke STELA',
-    ctaText: 'Tanya STELA',
+    title: 'Tanyakan Informasi Magang/PKL\nYang kamu butuhkan ke NEXA',
+    ctaText: 'Tanya NEXA',
     mascot: stelaMascot,
   },
 };
@@ -1190,8 +1191,8 @@ export const pengumumanPopuler = {
 
 export const butuhBantuan = {
   title: 'Butuh Bantuan?',
-  description: 'Tanyakan Informasi Pengumuman Yang kamu butuhkan ke STELA',
-  ctaText: 'Tanya STELA',
+  description: 'Tanyakan Informasi Pengumuman Yang kamu butuhkan ke NEXA',
+  ctaText: 'Tanya NEXA',
   mascot: stelaBot,
 };
 

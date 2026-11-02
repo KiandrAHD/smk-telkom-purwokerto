@@ -2,7 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
-import maskot from '../../assets/landing/stela-ai-chatbot.png';
+const maskot = '/assets/branding/nexa-mark.png';
 
 const StelaChat = lazy(() => import('./StelaChat'));
 
@@ -23,7 +23,7 @@ const StelaWidget = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (pathname === '/stela') return undefined;
+    if (pathname === '/stela' || pathname === '/nexa') return undefined;
     let dismissedAt = 0;
     try {
       dismissedAt = Number.parseInt(window.localStorage.getItem(REMINDER_DISMISSED_KEY) || '0', 10) || 0;
@@ -58,7 +58,7 @@ const StelaWidget = () => {
     return () => observer.disconnect();
   }, [pathname]);
 
-  if (pathname === '/stela') return null;
+  if (pathname === '/stela' || pathname === '/nexa') return null;
 
   const bukaPengingat = () => {
     setReminderVisible(false);
@@ -80,11 +80,11 @@ const StelaWidget = () => {
       triggerRef.current?.focus();
     }} className={`fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6 ${pathname === '/ekstrakurikuler' && filterVisible && !terbuka ? 'max-sm:invisible max-sm:pointer-events-none' : ''}`}>
       {reminderVisible && !terbuka && (
-        <aside aria-label={t('Pengingat STELA')} className="relative flex w-[min(20rem,calc(100vw-2rem))] items-center gap-3 rounded-2xl border border-primary/15 bg-white p-3 pr-10 shadow-card motion-chat-enter motion-reduce:animate-none">
-          <button type="button" onClick={tutupPengingat} aria-label={t('Tutup pengingat STELA')} className="absolute right-2 top-2 rounded-full p-1.5 text-dark-500 hover:bg-dark-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"><X className="h-4 w-4" aria-hidden="true" /></button>
-          <button type="button" onClick={bukaPengingat} className="flex min-w-0 items-center gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={t('Buka obrolan dengan STELA')}>
-            <img src={maskot} alt="" aria-hidden="true" className="h-12 w-12 shrink-0 object-contain" />
-            <span className="font-heading text-sm font-bold text-primary">{t('Tanya Stela!')}</span>
+        <aside aria-label={t('Pengingat NEXA')} className="relative flex w-[min(20rem,calc(100vw-2rem))] items-center gap-3 rounded-2xl border border-primary/15 bg-white p-3 pr-10 shadow-card motion-chat-enter motion-reduce:animate-none">
+          <button type="button" onClick={tutupPengingat} aria-label={t('Tutup pengingat NEXA')} className="absolute right-2 top-2 rounded-full p-1.5 text-dark-500 hover:bg-dark-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"><X className="h-4 w-4" aria-hidden="true" /></button>
+          <button type="button" onClick={bukaPengingat} className="flex min-w-0 items-center gap-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={t('Buka obrolan dengan NEXA')}>
+            <img src={maskot} alt="" aria-hidden="true" className="h-12 w-12 shrink-0 rounded-xl bg-primary object-contain p-2" />
+            <span className="font-heading text-sm font-bold text-primary">{t('Tanya Nexa!')}</span>
           </button>
         </aside>
       )}
@@ -93,7 +93,7 @@ const StelaWidget = () => {
         <div id="stela-widget-panel" role="region" aria-labelledby="stela-widget-title" className={`${terbuka ? 'motion-chat-enter flex' : 'hidden'} max-h-[calc(100dvh-10rem)] w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl shadow-card sm:max-h-[calc(100dvh-11rem)]`}>
           <div className="flex shrink-0 items-center gap-2.5 bg-primary px-4 py-3">
             <img src={maskot} alt="" aria-hidden="true" className="h-7 w-7 object-contain" />
-            <span id="stela-widget-title" className="font-heading text-xs font-bold text-white">{t("Tanya STELA")}</span>
+            <span id="stela-widget-title" className="font-heading text-xs font-bold text-white">{t("Tanya NEXA")}</span>
           </div>
           <Suspense fallback={<div role="status" className="flex h-96 items-center justify-center bg-white text-xs text-dark-600">{t("Memuat obrolan...")}</div>}>
             <StelaChat focusInput={terbuka} className="min-h-0 h-96 max-h-[calc(100dvh-13rem)] rounded-none border-0 sm:max-h-[calc(100dvh-14rem)]" />
@@ -110,7 +110,7 @@ const StelaWidget = () => {
         }}
         aria-expanded={terbuka}
         aria-controls="stela-widget-panel"
-        aria-label={t(terbuka ? 'Tutup obrolan STELA' : 'Buka obrolan dengan STELA')}
+        aria-label={t(terbuka ? 'Tutup obrolan NEXA' : 'Buka obrolan dengan NEXA')}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-card transition-transform duration-300 hover:scale-105"
       >
         {terbuka ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}

@@ -15,7 +15,7 @@ const NextTelIntro = ({ onStart }) => {
         <NextTelAccents />
         <div className="nexttel-intro__content">
           <div className="nexttel-intro__heading">
-            <div className="nexttel-intro__mascot" aria-hidden="true"><img src="/assets/nexttel/robot-figma.png" alt="" /></div>
+            <div className="nexttel-intro__mascot transform-none! rounded-xl bg-primary" aria-hidden="true"><img src="/assets/branding/nexttel-mark.png" alt="" className="static! size-full! max-w-full! object-contain p-2" /></div>
             <h1 ref={headingRef} tabIndex={-1}>{t('Temukan jurusan yang cocok dengan minatmu')}</h1>
           </div>
           <p className="nexttel-intro__description">{t('Jawab 8 pertanyaan singkat tentang hal yang kamu sukai. NextTel akan membantu membaca kecenderungan minatmu pada jurusan teknologi di SMK Telkom Purwokerto.')}</p>

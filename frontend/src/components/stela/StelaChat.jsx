@@ -2,7 +2,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertCircle, Send } from 'lucide-react';
-import { PESAN_STELA_GAGAL, tanyaStela, kategorikanGalat, KATEGORI_GALAT } from '../../services/stela';
+import { PESAN_STELA_GAGAL, tanyaStela, kategorikanGalat, KATEGORI_GALAT, formatStelaPublicText } from '../../services/stela';
 import { stelaData } from '../../data/dummyData';
 import { canonicalAdmissionsPath, formatAdmissionsText } from '../../utils/admissions';
 
@@ -32,7 +32,7 @@ const TautanPath = ({ path }) => (
 );
 
 const IsiPesan = ({ teks }) =>
-  formatAdmissionsText(teks).split(PEMISAH).map((bagian, i) => {
+  formatAdmissionsText(formatStelaPublicText(teks)).split(PEMISAH).map((bagian, i) => {
     if (!bagian) return null;
 
     if (bagian.startsWith('**') && bagian.endsWith('**')) {
@@ -171,7 +171,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
                   : 'rounded-bl-sm bg-dark-50 text-dark-700'
               }`}
             >
-              {pesan.role === 'assistant' ? <IsiPesan teks={i === 0 ? t(pesan.content) : pesan.language === language ? t(pesan.content) : t('Tanyakan kembali untuk mendapatkan jawaban dalam bahasa yang dipilih.')} /> : pesan.content}
+              {pesan.role === 'assistant' ? <IsiPesan teks={i === 0 ? t(formatStelaPublicText(pesan.content)) : pesan.language === language ? t(formatStelaPublicText(pesan.content)) : t('Tanyakan kembali untuk mendapatkan jawaban dalam bahasa yang dipilih.')} /> : pesan.content}
             </p>
           </div>
         ))}
@@ -179,7 +179,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
         {memuat && (
           <div className="flex justify-start">
             <p className="rounded-2xl rounded-bl-sm bg-dark-50 px-4 py-3">
-              <span className="sr-only">{t("STELA sedang mengetik")}</span>
+              <span className="sr-only">{t("NEXA sedang mengetik")}</span>
               <span className="flex gap-1" aria-hidden="true">
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dark-400" />
                 <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dark-400 delay-100" />
@@ -197,7 +197,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
             <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
 
             <div className="min-w-0 flex-1">
-              <p className="[overflow-wrap:anywhere] font-medium">{t(galat)}</p>
+              <p className="[overflow-wrap:anywhere] font-medium">{formatStelaPublicText(t(formatStelaPublicText(galat)))}</p>
             </div>
 
             {/* Tombol 'Coba lagi' hanya muncul untuk error transient/koneksi, bukan untuk ditolak/scope */}
@@ -238,7 +238,7 @@ const StelaChat = ({ className = '', tampilkanSaran = true, focusInput = false }
         }}
         className="flex min-w-0 shrink-0 items-end gap-2 border-t border-dark-100 bg-white px-3 py-3"
       >
-        <label htmlFor="stela-masukan" className="sr-only">{t("Tulis pertanyaan untuk STELA")} </label>
+        <label htmlFor="stela-masukan" className="sr-only">{t("Tulis pertanyaan untuk NEXA")} </label>
         <textarea
           ref={inputRef}
           id="stela-masukan"

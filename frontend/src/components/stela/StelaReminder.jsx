@@ -6,14 +6,14 @@ import { useLanguage } from '../../context/LanguageContext';
 const DISMISSAL_KEY = 'stela-reminder-dismissed-at';
 const CYCLE_MS = 7 * 24 * 60 * 60 * 1000;
 
-/** A small, infrequent prompt that does not open or modify the STELA chat. */
+/** A small, infrequent prompt that does not open or modify the NEXA chat. */
 export default function StelaReminder() {
   const { t } = useLanguage();
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (pathname === '/stela') return undefined;
+    if (pathname === '/stela' || pathname === '/nexa') return undefined;
 
     let dismissedAt = 0;
     try {
@@ -36,18 +36,18 @@ export default function StelaReminder() {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  if (!visible || pathname === '/stela' || pathname === '/nexa') return null;
 
   return (
     <aside
-      aria-label={t('Pengingat STELA')}
+      aria-label={t('Pengingat NEXA')}
       className="fixed bottom-24 left-4 right-4 z-40 sm:bottom-28 sm:left-auto sm:right-6 sm:w-80"
     >
       <div className="relative rounded-2xl border border-primary/15 bg-white p-4 pr-11 shadow-card motion-reduce:animate-none motion-chat-enter">
         <button
           type="button"
           onClick={dismiss}
-          aria-label={t('Tutup pengingat STELA')}
+          aria-label={t('Tutup pengingat NEXA')}
           className="absolute right-2 top-2 rounded-full p-2 text-dark-500 transition-colors hover:bg-dark-100 hover:text-dark-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
         >
           <X className="h-4 w-4" aria-hidden="true" />
@@ -57,14 +57,14 @@ export default function StelaReminder() {
           <div>
             <p className="font-heading text-sm font-bold text-dark-900">{t('Punya pertanyaan?')}</p>
             <p className="mt-1 text-xs leading-relaxed text-dark-600">
-              {t('STELA siap membantu menemukan informasi tentang sekolah.')}
+              {t('NEXA siap membantu menemukan informasi tentang sekolah.')}
             </p>
             <Link
-              to="/stela"
+              to="/nexa"
               onClick={dismiss}
               className="mt-2 inline-flex min-h-8 items-center rounded-lg text-xs font-bold text-primary underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
             >
-              {t('Tanya STELA')}
+              {t('Tanya NEXA')}
             </Link>
           </div>
         </div>

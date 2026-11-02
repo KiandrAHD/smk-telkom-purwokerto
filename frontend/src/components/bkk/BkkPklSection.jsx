@@ -39,7 +39,7 @@ const BkkPklSection = () => {
         </div>
       </div>
 
-      {/* Ajakan tanya STELA */}
+      {/* Ajakan tanya NEXA */}
       <div className="flex flex-col items-center rounded-2xl bg-primary-100 px-5 py-6 text-center">
         <h2 className="whitespace-pre-line font-heading text-[11px] font-extrabold leading-snug text-primary-900">
           {t(pklData.stela.title)}
@@ -48,10 +48,10 @@ const BkkPklSection = () => {
           src={pklData.stela.mascot}
           alt=""
           aria-hidden="true"
-          className="mt-4 h-28 w-28 rounded-full object-cover"
+          className="mt-4 h-28 w-28 rounded-2xl bg-primary object-contain p-5"
         />
         <Link
-          to="/stela"
+          to="/nexa"
           className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-[11px] font-bold text-white transition-colors hover:bg-primary-800"
         >
           {t(pklData.stela.ctaText)}
