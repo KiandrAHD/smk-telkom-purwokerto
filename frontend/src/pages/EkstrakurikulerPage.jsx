@@ -4,11 +4,11 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import SearchResultStatus from '../components/SearchResultStatus';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
-import RibbonDivider from '../components/RibbonDivider';
 import { useLenis } from 'lenis/react';
 import { ArrowRight, Bookmark, BriefcaseBusiness, Search, Trophy, UsersRound, X } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import HeroBadges from '../components/HeroBadges';
+import HeroQuickAccess from '../components/HeroQuickAccess';
 import SectionAccents from '../components/SectionAccents';
 import ContentImage from '../components/ContentImage';
 import heroFigma from '../assets/ekstrakurikuler/hero-figma.webp';
@@ -285,10 +285,10 @@ const EkstrakurikulerPage = () => {
             </div>
           </div>
         </div></PageHeroCarousel>
+        <HeroQuickAccess />
         </div>
       </section>
 
-      <RibbonDivider animated />
       <SearchResultStatus message={t('{count} kegiatan ditemukan', { count: filteredItems.length })} />
       <CategorySection
         activeCategory={activeCategory}

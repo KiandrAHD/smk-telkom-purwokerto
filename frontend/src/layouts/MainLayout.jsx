@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import { useRef, useEffect, useState } from 'react';
+import { Children, useRef, useEffect, useState } from 'react';
+import WaveMarquee from '../components/WaveMarquee';
+import InnovationReveal from '../components/InnovationReveal';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import StelaWidget from '../components/stela/StelaWidget';
@@ -12,6 +14,7 @@ export default function MainLayout({ children, busy = false, className = '', cta
   const { pathname } = useLocation();
   const { t } = useLanguage();
   const mainRef = useRef(null);
+  const [opening, ...content] = Children.toArray(children);
   const [SmoothScroll, setSmoothScroll] = useState(null);
 
   useEffect(() => {
@@ -37,7 +40,10 @@ export default function MainLayout({ children, busy = false, className = '', cta
           animasi masuknya ikut jalan saat berpindah antar halaman detail yang
           memakai komponen yang sama (mis. /berita/a -> /berita/b). */}
       <main ref={mainRef} id="main-content" tabIndex={-1} aria-busy={busy || undefined} key={pathname} className="animate-masuk-halaman scroll-mt-24">
-        {children}
+        {opening}
+        {!busy && <WaveMarquee />}
+        {content}
+        {!busy && <InnovationReveal />}
         {showSupportSections && <>
         <StelaAISection variant="prestasi" className="bg-white py-6 lg:py-8" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
         <CTASection href={ctaHref} variant="fasilitas" containerClassName="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />

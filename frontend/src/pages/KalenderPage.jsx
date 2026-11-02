@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import HeroBadges from '../components/HeroBadges';
-import RibbonDivider from '../components/RibbonDivider';
+import HeroQuickAccess from '../components/HeroQuickAccess';
 import CalendarBoard from '../components/kalender/CalendarBoard';
 import SchoolAgendaSection from '../components/kalender/SchoolAgendaSection';
 import PublicDataState from '../components/PublicDataState';
@@ -48,9 +48,9 @@ export default function KalenderPage({ initialItems }) {
               </div>
             </div>
           </div></PageHeroCarousel>
+          <HeroQuickAccess />
         </div>
       </section>
-      <RibbonDivider animated />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><PublicDataState loading={loading} error={error} onRetry={() => refresh()} label={t('kegiatan')} /></div>
       {!loading && !error && <><CalendarBoard events={events} /><SchoolAgendaSection events={events} /></>}
     </MainLayout>

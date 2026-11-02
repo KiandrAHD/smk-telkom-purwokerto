@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle } from 'lucide-react';
 import MainLayout from '../layouts/MainLayout';
 import HeroSection from '../components/HeroSection';
-import RibbonDivider from '../components/RibbonDivider';
 import Reveal from '../components/Reveal';
 import PartnersSection from '../components/PartnersSection';
 import SpmbOrnaments from '../components/ppdb/SpmbOrnaments';
@@ -87,7 +86,6 @@ export default function SpmbPage({ initialData }) {
   return <MainLayout className="spmb-page" ctaHref="/spmb/daftar">
     <HeroSection page="spmb" content={liveContent} links={admissionLinks} breadcrumb={{ current: 'SPMB', parent: 'Informasi', parentTo: null }} media={{ src: hero, srcSet: `${hero640} 640w, ${hero960} 960w, ${hero} 1248w`, width: 1248, height: 676, className: 'spmb-hero-image', composition: 'admissions' }} />
     {settings && <p id="informasi-pendaftaran" role="status" className="mx-auto max-w-7xl px-4 py-3 text-sm">{settings.academic_year} · {t(settings.spmb_open ? "Pendaftaran dibuka" : "Pendaftaran ditutup")}</p>}
-    <RibbonDivider animated />
     <div className="spmb-container"><PublicDataState loading={loading} error={error ? t('Informasi pendaftaran belum tersedia. Silakan coba lagi nanti.') : ''} onRetry={() => refresh()} label={t('informasi SPMB')} /></div>
     <RegistrationInfo schedule={schedule} closed={settings?.spmb_open === false} />
     <section id="alur-spmb" className="spmb-section relative overflow-hidden scroll-mt-28" aria-labelledby="spmb-timeline-title">

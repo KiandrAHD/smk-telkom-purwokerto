@@ -8,7 +8,6 @@ import HeroBadges from '../components/HeroBadges';
 import Modal from '../components/dashboard/Modal';
 import ContentImage from '../components/ContentImage';
 import HeroBreadcrumb from '../components/HeroBreadcrumb';
-import RibbonDivider from '../components/RibbonDivider';
 import CampusExplorer from '../components/fasilitas/CampusExplorer';
 import { campusFacilities, campusIdForCard } from '../data/campusData';
 import { useLanguage } from '../context/LanguageContext';
@@ -26,7 +25,7 @@ import robotIcon from '../assets/fasilitas/quick-robot.svg';
 import sparkIcon from '../assets/fasilitas/quick-spark.svg';
 import sparkDot from '../assets/fasilitas/quick-dot.svg';
 import quickArrow from '../assets/fasilitas/quick-arrow.svg';
-import accent from '../assets/fasilitas/page-accent.png';
+import '../styles/fasilitas.css';
 
 const facilityQuickLinks = [
   { title: 'Ruang Kelas', desc: 'Ruang kelas nyaman berbasis teknologi', linkLabel: 'Lihat Sekarang', href: '/fasilitas?kategori=Kelas#daftar-fasilitas', image: classroomIcon },
@@ -34,15 +33,6 @@ const facilityQuickLinks = [
   { ...quickLinks[1], image: robotIcon },
   { ...quickLinks[2], title: 'NexTel', image: sparkIcon },
 ];
-const filterWidths = {
-  Semua: 'lg:min-w-[clamp(6rem,10.12vw,11.6875rem)]',
-  Kelas: 'lg:min-w-[clamp(6rem,9.26vw,10.6875rem)]',
-  Laboratorium: 'lg:min-w-[clamp(6rem,12.13vw,14rem)]',
-  Perpustakaan: 'lg:min-w-[clamp(6rem,12.13vw,14rem)]',
-  Parkiran: 'lg:min-w-[clamp(6rem,12.13vw,14rem)]',
-  Aula: 'lg:min-w-[clamp(6rem,7.69vw,8.875rem)]',
-  GOR: 'lg:min-w-[clamp(6rem,7.69vw,8.875rem)]',
-};
 
 function GroupTitle({ title, t }) {
   const [first, ...rest] = t(title).split(' ');
@@ -140,7 +130,6 @@ export default function FasilitasPage() {
 
   return (
     <MainLayout>
-      <div>
         <section aria-labelledby="fasilitas-hero-title" className="school-hero hero-container">
           <PageHeroCarousel page="fasilitas"><div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--facilities">
             <div className="hero-background relative aspect-[1144/679]">
@@ -178,19 +167,16 @@ export default function FasilitasPage() {
             </div>
           </div>
         </section>
-        <RibbonDivider animated />
         <CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} />
         <section id="daftar-fasilitas" aria-labelledby="fasilitas-title" className="relative isolate scroll-mt-28 bg-white py-8 lg:py-12">
-        {['right', 'left'].map(side => <div key={side} aria-hidden="true" className={`pointer-events-none absolute inset-y-0 ${side === 'right' ? 'right-0' : 'left-0 rotate-180'} -z-10 hidden w-[2.11%] overflow-hidden lg:block`}>
-            {[0, 1, 2, 3].map(index => <img key={index} src={accent} alt="" width="39" height="564" className="block h-auto w-full" />)}
-          </div>)}
+        {['right', 'left'].map(side => <div key={side} aria-hidden="true" className={`facility-chain facility-chain--${side}`} />)}
           <div className="mx-auto max-w-[1644px] px-4 sm:px-6 lg:px-10">
             <h2 id="fasilitas-title" className="mx-auto flex w-fit max-w-full items-center justify-center gap-2 font-heading text-2xl font-bold leading-tight text-black sm:gap-3 sm:text-3xl">
               <img src={headingIcon} alt="" aria-hidden="true" className="size-12 shrink-0 sm:size-16 lg:size-[clamp(4rem,5.52vw,6.375rem)]" />
               <span className="relative"><span className="text-[#cd091d]">{titleStart}</span> {titleEnd.join(' ')}<img src={headingUnderline} alt="" aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px w-full" /></span>
             </h2>
-            <div className="mt-7 flex flex-wrap gap-3 lg:mt-10 lg:gap-[clamp(0.75rem,1.25vw,1.4375rem)]" role="group" aria-label={t('Filter fasilitas')}>
-              {categories.map(name => <button key={name} type="button" aria-pressed={category === name} aria-controls="fasilitas-grid" onClick={() => selectCategory(name)} className={`min-h-11 min-w-24 rounded-full px-5 py-2.5 font-sans text-xs font-semibold shadow-[inset_0_0_4px_0_#cd0b20] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:min-h-[clamp(2.75rem,3.47vw,4rem)] ${filterWidths[name]} lg:px-[clamp(1rem,1.19vw,1.375rem)] ${category === name ? 'bg-[#cd0b20] text-white hover:bg-primary-800' : 'bg-white text-[#cd0b20] hover:bg-primary-50'}`}>{t(name)}</button>)}
+            <div className="facility-filters mt-7 lg:mt-10" role="group" aria-label={t('Filter fasilitas')}>
+              {categories.map(name => <button key={name} type="button" aria-pressed={category === name} aria-controls="fasilitas-grid" onClick={() => selectCategory(name)} className={`min-h-11 min-w-24 rounded-full px-5 py-2.5 font-sans text-xs font-semibold shadow-[inset_0_0_4px_0_#cd0b20] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary lg:min-h-[clamp(2.75rem,3.47vw,4rem)] min-w-0 w-full lg:px-[clamp(1rem,1.19vw,1.375rem)] ${category === name ? 'bg-[#cd0b20] text-white hover:bg-primary-800' : 'bg-white text-[#cd0b20] hover:bg-primary-50'}`}>{t(name)}</button>)}
             </div>
             <p className="sr-only" role="status">{t('{count} fasilitas dalam kategori {category}', { count, category: t(category) })}</p>
             <div id="fasilitas-grid" className="mt-8 space-y-12 lg:mt-[clamp(2rem,3.3vw,3.8125rem)] lg:space-y-[clamp(3rem,6.6vw,7.625rem)]">
@@ -212,7 +198,6 @@ export default function FasilitasPage() {
             </div>
           </div>
         </section>
-      </div>
       <Modal terbuka={selected !== null} onTutup={() => setSelected(null)} judul={selected ? t(selected.name) : ''} labelTutup={t('Tutup')} lebar="max-w-2xl">
         {selected && <div data-lenis-prevent className="max-h-[70dvh] overflow-y-auto overscroll-contain"><FacilityPhotos key={selected.id} item={selected} t={t} /><p className="mt-5 text-sm leading-relaxed text-dark-600">{t(selected.preview)}</p>{!selected.photos && <p className="mt-3 text-xs leading-relaxed text-dark-500">{t('Foto merupakan ilustrasi kegiatan belajar. Dokumentasi khusus ruangan ini belum tersedia.')}</p>}
           {selectedCampus && <div className="mt-4 rounded-xl bg-dark-50 p-4"><h3 className="font-heading text-sm font-bold text-primary">{t(selectedCampus.name)}</h3><p className="mt-2 text-xs leading-relaxed text-dark-600">{t(selectedCampus.preview || 'Informasi fasilitas ini belum tersedia. Nama dan titik lokasi mengikuti referensi peta sekolah.')}</p><button type="button" onClick={locateCampus} className="mt-3 inline-flex min-h-11 items-center gap-2 text-xs font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat lokasi di peta')}<ArrowRight className="size-4" aria-hidden="true" /></button></div>}
