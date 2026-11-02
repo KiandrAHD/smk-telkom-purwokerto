@@ -12,6 +12,7 @@ import DepartmentsSection from '../components/DepartmentsSection';
 const FacilitiesSection = lazy(() => import('../components/FacilitiesSection'));
 const PartnersSection = lazy(() => import('../components/PartnersSection'));
 const AchievementsSection = lazy(() => import('../components/AchievementsSection'));
+const HallOfFameSection = lazy(() => import('../components/prestasi/PrestasiPerjalananSection'));
 
 const SectionFallback = () => <div className="py-12 bg-white" />;
 
@@ -32,6 +33,9 @@ const LandingPage = ({ initialPrestasi }) => (
       </Reveal>
       <Reveal>
         <AchievementsSection initialItems={initialPrestasi} />
+      </Reveal>
+      <Reveal>
+        <HallOfFameSection />
       </Reveal>
     </Suspense>
     <InnovationReveal />
