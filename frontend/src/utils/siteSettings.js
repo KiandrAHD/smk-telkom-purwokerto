@@ -2,7 +2,7 @@ export const schoolFields = { school_name: 'Nama Sekolah', npsn: 'NPSN', address
 export const generalFields = { academic_year: 'Tahun Ajaran', spmb_open: 'Status SPMB', news_page_size: 'Berita per Halaman' };
 export function validateSettings(data, group) {
   const errors = {};
-  const http = (value, https = false) => { try { const url = new URL(value); return (https ? url.protocol === 'https:' : ['http:', 'https:'].includes(url.protocol)) && !url.username && !url.password && !!url.hostname; } catch { return false; } };
+  const http = (value, https = false) => { try { const url = new URL(value); return !/\s/.test(value) && (https ? url.protocol === 'https:' : ['http:', 'https:'].includes(url.protocol)) && !url.username && !url.password && !!url.hostname; } catch { return false; } };
   if (group === 'school') {
     if (data.school_name.trim().length < 2 || data.school_name.length > 150) errors.school_name = 'Isi nama sekolah (2–150 karakter).';
     if (!/^\d{8}$/.test(data.npsn)) errors.npsn = 'NPSN harus terdiri dari 8 angka.';

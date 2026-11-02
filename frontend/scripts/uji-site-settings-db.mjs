@@ -14,12 +14,12 @@ const other = '22222222-2222-4222-8222-222222222222';
 const session = id => `SET LOCAL ROLE authenticated; SELECT set_config('request.jwt.claims','{"sub":"${id}"}',true);`;
 try {
   await db.exec(await readFile(new URL('../../supabase/tests/security-fixture.sql',import.meta.url),'utf8'));
-  for (const name of ['001_initial_schema.sql','014_site_settings.sql']) await db.exec(await readFile(new URL('../../supabase/migrations/'+name,import.meta.url),'utf8'));
+  for (const name of ['001_initial_schema.sql','014_site_settings.sql','015_settings_url_validation.sql']) await db.exec(await readFile(new URL('../../supabase/migrations/'+name,import.meta.url),'utf8'));
   await db.exec(`INSERT INTO auth.users VALUES ('${admin}'),('${other}'); INSERT INTO public.admins(user_id,nama) VALUES ('${admin}','Admin QA');`);
   await assert.rejects(db.exec(`BEGIN; SET LOCAL ROLE anon; UPDATE public.site_settings SET school_name='Forbidden'; COMMIT;`)); await db.exec('ROLLBACK');
   await db.exec(`BEGIN; ${session(other)} UPDATE public.site_settings SET school_name='Forbidden'; COMMIT;`);
   assert.equal((await db.query('SELECT school_name FROM site_settings')).rows[0].school_name,'SMK Telkom Purwokerto');
-  for (const change of ["npsn='123'","academic_year='2027/2030'",'news_page_size=0',"website='javascript:alert(1)'", "phone='123'"]) {
+  for (const change of ["npsn='123'","academic_year='2027/2030'",'news_page_size=0',"website='javascript:alert(1)'", "phone='123'", "website='https://example.com/not valid'", "logo_url='https://user:password@example.com/logo.png'"]) {
     await assert.rejects(db.exec(`BEGIN; ${session(admin)} UPDATE site_settings SET ${change}; COMMIT;`)); await db.exec('ROLLBACK');
   }
   await db.exec(`BEGIN; ${session(admin)} UPDATE site_settings SET school_name='Sekolah QA',news_page_size=7,spmb_open=false WHERE revision=1; COMMIT;`);
