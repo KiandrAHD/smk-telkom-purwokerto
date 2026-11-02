@@ -14,13 +14,14 @@ export async function saveSiteSettings(data, group, revision, file) {
   if (!['school','general'].includes(group)) throw new Error('Kelompok pengaturan tidak valid.');
   const fields = group === 'school' ? schoolFields : generalFields;
   const payload = Object.fromEntries(Object.keys(fields).map(key => [key, typeof data[key] === 'string' ? data[key].trim() : data[key]]));
+  if (group === 'school' && file) payload.logo_url = null;
   if (group === 'general') payload.news_page_size = Number(payload.news_page_size);
   if (Object.keys(validateSettings(payload,group)).length) throw new Error('Periksa kembali isian pengaturan.');
   const persist = async values => {
     const saved = unwrap(await client.from('site_settings').update(values).eq('id',true).eq('revision',revision).select('*').maybeSingle());
     if (!saved) throw new Error('Pengaturan telah berubah atau akses ditolak. Muat ulang sebelum menyimpan kembali.');
     const verified = await getSiteSettings();
-    if (verified.revision !== saved.revision) throw new Error('Data berubah lagi setelah disimpan. Muat ulang untuk melihat versi terbaru.');
+    if (verified.revision !== saved.revision || Object.keys(values).some(key => String(verified[key] ?? '') !== String(values[key] ?? ''))) throw new Error('Data berubah lagi setelah disimpan. Muat ulang untuk melihat versi terbaru.');
     window.dispatchEvent(new Event('site-settings-changed'));
     try { localStorage.setItem('site-settings-changed', String(Date.now())); } catch { /* Focus refresh remains available. */ }
     return verified;
@@ -37,5 +38,5 @@ export async function saveAdminAccount({full_name,email}, redirectTo) {
   unwrap(await client.auth.updateUser(changes, {emailRedirectTo:redirectTo}));
   const verified = unwrap(await client.auth.getUser()).user;
   if (verified.user_metadata?.full_name !== full_name) throw new Error('Nama akun belum dapat diverifikasi. Muat ulang untuk memeriksa.');
-  return {user:verified,emailPending:!!changes.email};
+  return {user:verified,emailPending:!!changes.email && verified.email !== changes.email};
 }

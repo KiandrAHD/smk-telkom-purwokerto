@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { Bell, LogOut, Menu, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { canLeaveSettings } from '../../hooks/useUnsavedSettings';
 import { useAuth } from '../../context/AuthContext';
 import { adminProfil } from '../../data/dummyData';
 import telkomLogo from '../../assets/landing/logo-smk-telkom-purwokerto.png';
 
 const DashboardHeader = ({ onBukaMenu }) => {
   const [cari, setCari] = useState('');
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const navigate = useNavigate();
 
   const keluar = async () => {
+    if (!canLeaveSettings()) return;
     try {
       await signOut();
     } finally {
@@ -24,7 +26,7 @@ const DashboardHeader = ({ onBukaMenu }) => {
   const cariGlobal = (e) => {
     e.preventDefault();
     const kata = cari.trim();
-    if (!kata) return;
+    if (!kata || !canLeaveSettings()) return;
     navigate(`/dashboard/berita?cari=${encodeURIComponent(kata)}`);
   };
 
@@ -67,7 +69,7 @@ const DashboardHeader = ({ onBukaMenu }) => {
           <img src={telkomLogo} alt="Logo SMK Telkom Purwokerto" width="40" height="40" className="h-10 w-10 rounded-full bg-dark-200 p-1.5 object-contain" />
           <div className="hidden sm:block">
             <p className="font-heading text-xs font-bold leading-tight text-dark-900">
-              {adminProfil.nama}
+              {typeof user?.user_metadata?.full_name === 'string' ? user.user_metadata.full_name : user?.email || adminProfil.nama}
             </p>
             <p className="text-[11px] text-dark-500">{adminProfil.peran}</p>
           </div>

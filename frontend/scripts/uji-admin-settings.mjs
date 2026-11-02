@@ -29,10 +29,11 @@ try {
   }
   globalThis.__settingsAuthFixture = { user: { email: 'empty@example.invalid', user_metadata: { full_name: { invalid: true } } }, isAdmin: false };
   const missing = render(module.AkunAdmin);
-  assert.ok(missing.includes('Belum tersedia'));
+  assert.ok(missing.includes('value=""'), 'Missing metadata must remain editable and empty');
   assert.ok(!missing.includes('value="Administrator"'), 'Role cannot come from a static admin label');
-  const config = render(module.PengaturanUmum);
-  assert.ok(config.includes('2027/2028') && config.includes('Pratinjau'));
-  assert.ok(!config.includes('2025/2026') && !config.includes('value="Dibuka"'));
-  console.log('Settings: current Auth identity, missing metadata, role and truthful configuration preview pass.');
+  const config = renderToStaticMarkup(React.createElement(module.PengaturanUmum,{value:{academic_year:'2028/2029',spmb_open:false,news_page_size:7},onChange:()=>{}}));
+  assert.ok(config.includes('2028/2029'));
+  assert.ok(config.includes('value="7"'));
+  assert.ok(!config.includes('disabled'), 'General settings must be editable');
+  console.log('Settings: current Auth identity, editable metadata, readonly role and general settings fields pass.');
 } finally { await server.close(); delete globalThis.__settingsAuthFixture; }
