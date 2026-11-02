@@ -3,7 +3,8 @@ import { FaInstagram, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import VisitorCounter from './VisitorCounter';
-import { footerData } from '../data/dummyData';
+import { useSiteSettings } from '../context/SiteSettingsContext';
+import { footerData as defaults } from '../data/dummyData';
 import footerAccentFill from '../assets/footer/footer-motif-fill.svg';
 import competitionSupporters from '../assets/footer/competition-supporters.png';
 import { useLanguage } from '../context/LanguageContext';
@@ -50,6 +51,8 @@ const LinkColumn = ({ title, links }) => {
 };
 
 const Footer = () => {
+  const { settings } = useSiteSettings();
+  const footerData = settings ? {...defaults, kontak:{...defaults.kontak,address:settings.address,phone:settings.phone,email:settings.email,mapsQuery:settings.address}} : defaults;
   const { t } = useLanguage();
   const schoolMap = (
     <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(footerData.kontak.mapsQuery ?? footerData.kontak.address)}`} target="_blank" rel="noopener noreferrer" aria-label={t('Buka lokasi SMK Telkom Purwokerto di Google Maps')} className="mt-3 block self-start overflow-hidden rounded-xl transition-transform hover:scale-[1.01] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
@@ -71,14 +74,12 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-x-6 gap-y-6 lg:gap-x-8 lg:grid-cols-[1.3fr_0.8fr_0.8fr_1.3fr]">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-3">
+            <a href={settings?.website || '/'} className="flex items-center gap-3">
               <Logo className="h-11 w-11" />
               <span className="font-heading text-base font-extrabold leading-[1.15] text-dark-900">
-                SMK Telkom
-                <br />
-                Purwokerto
+                {settings?.school_name || <>SMK Telkom<br />Purwokerto</>}
               </span>
-            </div>
+            </a>
             <p className="mt-3 leading-relaxed text-dark-500 max-w-xs text-[11px]">
               {t(footerData.tagline)}
             </p>
@@ -174,7 +175,7 @@ const Footer = () => {
     </div>
     <div className="footer-bottom-bar relative bg-primary text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 pl-4 pr-24 py-2 text-[10px] sm:flex-row sm:pl-6 lg:pl-8 2xl:pr-8">
-        <p>© 2026 SMK Telkom Purwokerto. All Rights Reserved.</p>
+        <p>© 2026 {settings?.school_name || 'SMK Telkom Purwokerto'}. All Rights Reserved.</p>
         <div className="flex items-center gap-3">
           <Link
             to="/kebijakan-privasi"

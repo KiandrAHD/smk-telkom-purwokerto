@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../../context/SiteSettingsContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../Logo';
@@ -9,6 +10,7 @@ import { ppdbMeta } from '../../data/dummyData';
 // tengah terlihat mengambang di atasnya, seperti pada desain.
 const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children }) => {
   const { t } = useLanguage();
+  const { settings } = useSiteSettings();
   const { pathname } = useLocation();
 
   return (
@@ -22,9 +24,9 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
           </span>
           <span className="min-w-0">
             <span className="block font-heading text-sm font-extrabold leading-tight text-white">
-              {ppdbMeta.namaSekolah}
+              {settings?.school_name || ppdbMeta.namaSekolah}
             </span>
-            <span className="block text-[11px] text-white/75">{t(ppdbMeta.sistem)}</span>
+            <span className="block text-[11px] text-white/75">{settings ? `SPMB ${settings.academic_year}` : t(ppdbMeta.sistem)}</span>
           </span>
         </Link>
 
@@ -47,6 +49,7 @@ const PpdbAuthLayout = ({ aksiLabel, aksiTo = '/', tinggiPita = 'h-44', children
       key={pathname}
       className="animate-masuk-halaman relative mx-auto -mt-24 w-full max-w-6xl flex-1 px-4 pb-10 sm:px-6"
     >
+      {settings && !settings.spmb_open && <p role="status" className="mb-4 rounded-xl bg-white p-4 text-sm">{t("Pendaftaran ditutup")}</p>}
       {children}
     </main>
 

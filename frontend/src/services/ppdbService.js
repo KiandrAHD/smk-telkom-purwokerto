@@ -1,3 +1,4 @@
+import { getSiteSettings } from './siteSettingsService';
 import { ensureSupabase } from './supabase';
 import { preparePpdbSubmission } from '../utils/ppdbSubmission';
 
@@ -29,6 +30,7 @@ export async function submitPpdb(data) {
   const user = userData?.user;
   if (!user) throw new Error('Sesi SPMB tidak ditemukan. Silakan login kembali.');
   if (expectedUserId && user.id !== expectedUserId) throw new Error('Sesi SPMB telah berubah. Masuk kembali sebelum mengirim.');
+  if (!(await getSiteSettings()).spmb_open) throw new Error('Pendaftaran SPMB sedang ditutup.');
 
   const { data: existingSubmissions, error: existingError } = await client
     .from('ppdb')
@@ -106,6 +108,7 @@ export async function getMyPpdb() {
 }
 
 export async function signUpPpdb(email, password, biodata = { nisn: '', namaLengkap: '', whatsapp: '', jurusan: '' }) {
+  if (!(await getSiteSettings()).spmb_open) throw new Error('Pendaftaran SPMB sedang ditutup.');
   const client = ensureSupabase();
   return throwIfError(await client.auth.signUp({
     email,

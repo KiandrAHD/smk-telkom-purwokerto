@@ -70,6 +70,7 @@ export function AuthProvider({ children }) {
     if (!supabaseSiap) return undefined;
 
     let mounted = true;
+    const pendingSessions = new Set();
 
     const initialize = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -89,11 +90,18 @@ export function AuthProvider({ children }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (!mounted) return;
-      void applySession(nextSession);
+      // Leave the Auth callback before querying PostgREST, which may need
+      // the same Auth lock held by updateUser/token refresh.
+      const timer = setTimeout(() => {
+        pendingSessions.delete(timer);
+        if (mounted) void applySession(nextSession);
+      }, 0);
+      pendingSessions.add(timer);
     });
 
     return () => {
       mounted = false;
+      pendingSessions.forEach(clearTimeout);
       subscription.unsubscribe();
     };
   }, [applySession]);

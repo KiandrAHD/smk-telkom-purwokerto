@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../context/SiteSettingsContext';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle } from 'lucide-react';
@@ -49,7 +50,7 @@ function InformationLink({ href, className, children }) {
   if (!safeSpmbLink(href)) return <div className={className}>{children}</div>;
   return href.startsWith('/') ? <Link to={href} className={className}>{children}</Link> : <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}</a>;
 }
-function RegistrationInfo({ schedule }) {
+function RegistrationInfo({ schedule, closed = false }) {
   const { t } = useLanguage();
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
@@ -58,7 +59,7 @@ function RegistrationInfo({ schedule }) {
     const timer = setInterval(tick, 1000); document.addEventListener('visibilitychange', tick);
     return () => { clearInterval(timer); document.removeEventListener('visibilitychange', tick); };
   }, [schedule.opensAt, schedule.closesAt]);
-  const state = registrationState(schedule, now), countdown = registrationCountdown(schedule, now);
+  const state = closed ? 'closed' : registrationState(schedule, now), countdown = closed ? null : registrationCountdown(schedule, now);
   return <Reveal as="section" className="spmb-container spmb-information" aria-label={t('Informasi Pendaftaran')}>
     <div className="spmb-information-bar" aria-hidden="true" />
     <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -71,7 +72,9 @@ function RegistrationInfo({ schedule }) {
 }
 
 export default function SpmbPage({ initialData }) {
+  const { settings } = useSiteSettings();
   const { t, locale } = useLanguage();
+  const liveContent = settings ? {...content, description: t(content.description).replace(`${ppdbMeta.tahun}/${Number(ppdbMeta.tahun) + 1}`,settings.academic_year).replace('SMK Telkom Purwokerto',settings.school_name), primaryCta: settings.spmb_open ? content.primaryCta : {label:t('Pendaftaran ditutup'),href:'/spmb#informasi-pendaftaran'}} : content;
   const { items, stats, loading, error, refresh } = useSpmbInformation(true, initialData);
   const schedule = registrationForSpmb(items, stats);
   const spmbSteps = items.filter(item => item.jenis === 'timeline');
@@ -82,10 +85,11 @@ export default function SpmbPage({ initialData }) {
   const empty = <p role="status" className="py-6 text-center text-xs leading-relaxed text-dark-500">{t('Informasi belum dipublikasikan.')}</p>;
   const formatDate = value => value ? new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value)) : t('Belum diumumkan');
   return <MainLayout className="spmb-page" ctaHref="/spmb/daftar">
-    <HeroSection page="spmb" content={content} links={admissionLinks} breadcrumb={{ current: 'SPMB', parent: 'Informasi', parentTo: null }} media={{ src: hero, srcSet: `${hero640} 640w, ${hero960} 960w, ${hero} 1248w`, width: 1248, height: 676, className: 'spmb-hero-image', composition: 'admissions' }} />
+    <HeroSection page="spmb" content={liveContent} links={admissionLinks} breadcrumb={{ current: 'SPMB', parent: 'Informasi', parentTo: null }} media={{ src: hero, srcSet: `${hero640} 640w, ${hero960} 960w, ${hero} 1248w`, width: 1248, height: 676, className: 'spmb-hero-image', composition: 'admissions' }} />
+    {settings && <p id="informasi-pendaftaran" role="status" className="mx-auto max-w-7xl px-4 py-3 text-sm">{settings.academic_year} · {t(settings.spmb_open ? "Pendaftaran dibuka" : "Pendaftaran ditutup")}</p>}
     <RibbonDivider animated />
     <div className="spmb-container"><PublicDataState loading={loading} error={error ? t('Informasi pendaftaran belum tersedia. Silakan coba lagi nanti.') : ''} onRetry={() => refresh()} label={t('informasi SPMB')} /></div>
-    <RegistrationInfo schedule={schedule} />
+    <RegistrationInfo schedule={schedule} closed={settings?.spmb_open === false} />
     <section id="alur-spmb" className="spmb-section relative overflow-hidden scroll-mt-28" aria-labelledby="spmb-timeline-title">
       <img src={timelineLeft} alt="" aria-hidden="true" loading="lazy" className="spmb-deco spmb-deco-timeline-left" />
       <img src={timelineRight} alt="" aria-hidden="true" loading="lazy" className="spmb-deco spmb-deco-timeline-right" />
