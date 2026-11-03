@@ -5,7 +5,7 @@ import NextTelIntro from '../components/nexttel/NextTelIntro';
 import NextTelQuestionnaire from '../components/nexttel/NextTelQuestionnaire';
 import NextTelResult from '../components/nexttel/NextTelResult';
 import { hasilFallbackNextTel, jelaskanRekomendasiNextTel, PESAN_NEXTTEL_GAGAL } from '../services/nexttel';
-import { hitungHasilNextTel } from '../../../supabase/functions/nexttel/scoring.mjs';
+import { hitungHasilNextTel } from '../../../backend/src/modules/nexttel/scoring.mjs';
 
 import { NEXTTEL_QUESTIONS as QUESTIONS } from '../data/nexttelQuestions';
 import '../styles/nexttel.css';

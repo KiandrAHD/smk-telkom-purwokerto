@@ -6,3 +6,9 @@ node_modules/
 dist/
 *.log
 frontend/error_log
+backend/.agents/
+backend/.claude/
+backend/.cursor/
+backend/.devin/
+backend/uploads/
+

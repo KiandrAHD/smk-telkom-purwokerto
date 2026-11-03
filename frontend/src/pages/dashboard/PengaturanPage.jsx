@@ -6,7 +6,7 @@ import PageHeader from '../../components/dashboard/PageHeader';
 import { useAuth } from '../../context/AuthContext';
 import { adminTabPengaturan } from '../../data/dummyData';
 import { getSiteSettings, saveAdminAccount, saveSiteSettings } from '../../services/siteSettingsService';
-import { ensureSupabase } from '../../services/supabase';
+import { apiMe } from '../../services/apiAuthService';
 import { generalFields, schoolFields, validateSettings } from '../../utils/siteSettings';
 import useUnsavedSettings from '../../hooks/useUnsavedSettings';
 
@@ -40,11 +40,10 @@ export default function PengaturanPage() {
   const [version,setVersion] = useState(0); const lock = useRef(false); const fileInput = useRef(null);
   useEffect(()=>{
     let active=true;
-    Promise.resolve().then(()=>Promise.all([getSiteSettings(),ensureSupabase().auth.getUser()])).then(([row,result])=>{
-      if (result.error) throw result.error;
+    Promise.resolve().then(()=>Promise.all([getSiteSettings(),apiMe()])).then(([row,result])=>{
       if (!active) return;
-      setRecord(row);setDraft(row); const value=accountValue(result.data.user);setAccount(value);setSavedAccount(value);setFile(null);
-    }).catch(cause=>{if(active)setError(['PGRST205','42P01'].includes(cause.code)?'Pengaturan belum tersedia. Terapkan migration 014_site_settings.sql pada proyek Supabase.':`Gagal memuat pengaturan: ${cause.message}`);}).finally(()=>{if(active)setLoading(false);});
+      setRecord(row);setDraft(row); const value=accountValue(result.user);setAccount(value);setSavedAccount(value);setFile(null);
+    }).catch(cause=>{if(active)setError(`Gagal memuat pengaturan: ${cause.message}`);}).finally(()=>{if(active)setLoading(false);});
     return ()=>{active=false;};
   },[user?.id,version]);
   const dirty = !!file || Object.keys({...schoolFields,...generalFields}).some(key=>String(draft?.[key]??'')!==String(record?.[key]??'')) || Object.keys(account).some(key=>account[key]!==savedAccount[key]);

@@ -1,44 +1,10 @@
-import { ensureSupabase } from './supabase';
-import { saveWithContentImage } from './contentImageService';
+import { api } from './apiClient';
 
-const prestasiColumns = 'id, judul, slug, kategori, deskripsi, gambar_url, tingkat, tanggal, instagram_url, created_at, updated_at';
+const normalize = (row) => ({ ...row, gambar_url: row.gambarUrl ?? row.gambar_url, instagram_url: row.instagramUrl ?? row.instagram_url, created_at: row.createdAt ?? row.created_at, updated_at: row.updatedAt ?? row.updated_at, tanggal: row.tanggal ?? null });
+const parse = (data) => ({ ...data, gambarUrl: data.gambar_url ?? data.gambarUrl, instagramUrl: data.instagram_url ?? data.instagramUrl });
 
-const throwIfError = ({ data, error }) => {
-  if (error) throw error;
-  return data;
-};
-
-export async function getPrestasi() {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase
-      .from('prestasi')
-      .select(prestasiColumns)
-      .order('tanggal', { ascending: false, nullsFirst: false })
-      .order('created_at', { ascending: false }),
-  );
-}
-
-export async function getPrestasiBySlug(slug) {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('prestasi').select(prestasiColumns).eq('slug', slug).maybeSingle(),
-  );
-}
-
-export async function createPrestasi(data) {
-  const supabase = ensureSupabase();
-  return saveWithContentImage(supabase, data, 'prestasi', 'gambar_url', async (payload) =>
-    throwIfError(await supabase.from('prestasi').insert(payload).select(prestasiColumns).single()));
-}
-
-export async function updatePrestasi(id, data) {
-  const supabase = ensureSupabase();
-  return saveWithContentImage(supabase, data, 'prestasi', 'gambar_url', async (payload) =>
-    throwIfError(await supabase.from('prestasi').update(payload).eq('id', id).select(prestasiColumns).single()));
-}
-
-export async function deletePrestasi(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(await supabase.from('prestasi').delete().eq('id', id));
-}
+export async function getPrestasi() { const response = await api.get('/api/prestasi?limit=100'); return response.data.map(normalize); }
+export async function getPrestasiBySlug(slug) { const response = await api.get(`/api/prestasi/${encodeURIComponent(slug)}`); return normalize(response.data); }
+export async function createPrestasi(data) { const response = await api.post('/api/prestasi', parse(data)); return normalize(response.data); }
+export async function updatePrestasi(id, data) { const response = await api.patch(`/api/prestasi/${id}`, parse(data)); return normalize(response.data); }
+export async function deletePrestasi(id) { return api.delete(`/api/prestasi/${id}`); }

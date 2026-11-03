@@ -5,16 +5,11 @@ const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
 
 
 export async function verifyTurnstileToken(token) {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-  if (!supabaseUrl || !anonKey) throw new Error('Konfigurasi server belum lengkap.');
-
-  const response = await fetch(`${supabaseUrl}/functions/v1/turnstile`, {
+  const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+  const response = await fetch(`${backendUrl}/api/turnstile/verify`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: anonKey,
-    },
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token }),
   });
   const result = await response.json();

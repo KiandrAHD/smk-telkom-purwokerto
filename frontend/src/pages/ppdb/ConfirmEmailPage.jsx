@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { CheckCircle2, CircleAlert, Mail } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';import { CheckCircle2, CircleAlert, Mail } from 'lucide-react';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
-import { ensureSupabase, supabaseSiap } from '../../services/supabase';
+import { api } from '../../services/apiClient';
 import { canonicalAdmissionsPath } from '../../utils/admissions';
-
-const errorMessage = (code) => {
-  if (code === 'otp_expired') return 'Tautan konfirmasi sudah kedaluwarsa. Silakan minta email konfirmasi baru.';
-  if (code === 'otp_disabled') return 'Konfirmasi email sedang tidak tersedia. Silakan hubungi panitia SPMB.';
-  return 'Tautan konfirmasi tidak valid atau sudah digunakan. Silakan minta email konfirmasi baru.';
-};
 
 const safeNextPath = (value) => (value?.startsWith('/') && !value.startsWith('//') ? canonicalAdmissionsPath(value) : '/spmb/verifikasi');
 
@@ -18,50 +11,28 @@ const ConfirmEmailPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [state, setState] = useState(supabaseSiap ? 'checking' : 'error');
-  const [message, setMessage] = useState(supabaseSiap ? 'Memuat tautan konfirmasi...' : 'Layanan verifikasi belum dikonfigurasi. Silakan hubungi panitia SPMB.');
+  const [state, setState] = useState('checking');
+  const [message, setMessage] = useState('Memuat tautan konfirmasi...');
   const [tokenHash, setTokenHash] = useState('');
   const [nextPath, setNextPath] = useState('/spmb/verifikasi');
   const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
-    if (!supabaseSiap) return undefined;
-
-    const token = searchParams.get('token_hash');
-    const type = searchParams.get('type');
-    const errorCode = searchParams.get('error_code');
-    const error = searchParams.get('error');
-    const errorDescription = searchParams.get('error_description');
+    const token = searchParams.get('token') || searchParams.get('token_hash');
     const redirectPath = safeNextPath(searchParams.get('next'));
     let active = true;
 
     const prepareConfirmation = async () => {
       setNextPath(redirectPath);
-      try {
-        const { data, error: userError } = await ensureSupabase().auth.getUser();
-        if (!userError && data?.user?.email_confirmed_at) {
-          if (!active) return;
-          setState('success');
-          setMessage('Email Anda sudah dikonfirmasi. Anda dapat melanjutkan pendaftaran SPMB.');
-          navigate(redirectPath, { replace: true });
-          return;
-        }
-      } catch {
-        // Validasi token di bawah tetap menjadi sumber kebenaran bila sesi belum tersedia.
-      }
-
-      if (!active) return;
-      if (errorCode || error) {
-        setState('error');
-        setMessage(errorDescription || errorMessage(errorCode || error));
-      } else if (!token || type !== 'email') {
+      if (!token) {
+        if (!active) return;
         setState('error');
         setMessage('Tautan konfirmasi tidak lengkap atau tidak valid. Silakan minta email konfirmasi baru.');
-      } else {
-        setTokenHash(token);
-        setState('ready');
-        setMessage('Tautan konfirmasi siap digunakan. Tekan tombol di bawah untuk mengonfirmasi email Anda.');
+        return;
       }
+      setTokenHash(token);
+      setState('ready');
+      setMessage('Tautan konfirmasi siap digunakan. Tekan tombol di bawah untuk mengonfirmasi email Anda.');
     };
 
     void prepareConfirmation();
@@ -74,23 +45,9 @@ const ConfirmEmailPage = () => {
     setMessage('Mengonfirmasi email Anda...');
 
     try {
-      const client = ensureSupabase();
-      const { error: verifyError } = await client.auth.verifyOtp({ token_hash: tokenHash, type: 'email' });
-      if (verifyError) {
-        setState('error');
-        setMessage(verifyError.message || errorMessage(verifyError.code));
-        return;
-      }
-
-      const { data: sessionData, error: sessionError } = await client.auth.getSession();
-      if (sessionError || !sessionData?.session) {
-        setState('error');
-        setMessage('Email berhasil diverifikasi, tetapi sesi belum aktif. Silakan masuk kembali untuk melanjutkan pendaftaran.');
-        return;
-      }
-
+      const result = await api.post('/api/auth/verify-email', { token: tokenHash });
       setState('success');
-      setMessage('Email berhasil dikonfirmasi. Anda dapat melanjutkan pendaftaran SPMB.');
+      setMessage(result.message || 'Email berhasil dikonfirmasi. Anda dapat melanjutkan pendaftaran SPMB.');
       navigate(nextPath, { replace: true });
     } catch (verifyError) {
       setState('error');

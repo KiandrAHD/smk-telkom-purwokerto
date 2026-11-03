@@ -1,4 +1,4 @@
-import { supabase, supabaseSiap } from './supabase';
+import { api } from './apiClient';
 
 const SESSION_KEY = 'smk-visitor-recorded';
 const STATS_CACHE_KEY = 'smk-visitor-stats';
@@ -40,14 +40,10 @@ function markRecorded() {
 }
 
 export async function recordVisit() {
-  if (!supabaseSiap || isRecordedToday()) return { ok: false, reason: 'not-configured-or-recorded' };
+  if (isRecordedToday()) return { ok: false, reason: 'not-configured-or-recorded' };
   try {
     const hash = getVisitorHash();
-    const { error } = await supabase.rpc('record_visit', { p_visitor_hash: hash });
-    if (error) {
-      console.warn('Visitor counter record RPC failed. Apply migration 009 and verify Supabase RPC permissions.');
-      return { ok: false, reason: 'rpc-failed' };
-    }
+    await api.post('/api/stats/visitors', { visitor_hash: hash });
     markRecorded();
     return { ok: true };
   } catch {
@@ -75,19 +71,9 @@ function setCachedStats(data) {
 export async function getVisitorStats() {
   const cached = getCachedStats();
   if (cached) return cached;
-  if (!supabaseSiap) return null;
   try {
-    const { data, error } = await supabase.rpc('get_visitor_stats');
-    if (error) throw error;
-    if (!data || !['daily', 'monthly', 'yearly'].every((key) => Number.isFinite(Number(data[key])))) {
-      console.warn('Visitor counter stats RPC returned an invalid response shape.');
-      return null;
-    }
-    const stats = {
-      daily: Number(data.daily),
-      monthly: Number(data.monthly),
-      yearly: Number(data.yearly),
-    };
+    const { data } = await api.get('/api/stats/visitors');
+    const stats = { daily: Number(data.today), monthly: Number(data.month), yearly: Number(data.year) };
     setCachedStats(stats);
     return stats;
   } catch {

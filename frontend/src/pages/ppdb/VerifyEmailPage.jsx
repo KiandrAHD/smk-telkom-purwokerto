@@ -5,7 +5,7 @@ import { CheckCircle2, Mail } from 'lucide-react';
 import PpdbAuthLayout from '../../components/ppdb/PpdbAuthLayout';
 import { usePpdb } from '../../context/PpdbContext';
 import { ppdbVerifikasi } from '../../data/dummyData';
-import { ensureSupabase, supabaseSiap } from '../../services/supabase';
+import { apiMe } from '../../services/apiAuthService';
 import { resendPpdbVerification } from '../../services/ppdbService';
 
 const COOLDOWN_SECONDS = 60;
@@ -14,7 +14,7 @@ const VerifyEmailPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { biodata, currentUser, authLoading, mulaiAkunBaru } = usePpdb();
-  const [state, setState] = useState(supabaseSiap ? 'checking' : 'error');
+  const [state, setState] = useState('checking');
   const [verifiedUser, setVerifiedUser] = useState(null);
   const [sisa, setSisa] = useState(COOLDOWN_SECONDS);
   const [feedback, setFeedback] = useState('');
@@ -23,10 +23,6 @@ const VerifyEmailPage = () => {
   const email = useMemo(() => biodata.email || currentUser?.email || '', [biodata.email, currentUser?.email]);
 
   useEffect(() => {
-    if (!supabaseSiap) {
-      return undefined;
-    }
-
     let mounted = true;
     const checkUser = (user) => {
       if (!mounted) return;
@@ -36,22 +32,14 @@ const VerifyEmailPage = () => {
         return;
       }
       setVerifiedUser(user);
-      setState(user.email_confirmed_at ? 'verified' : 'unverified');
+      setState(user.emailVerified ? 'verified' : 'unverified');
     };
 
-    const client = ensureSupabase();
-    client.auth.getSession()
-      .then(({ data, error }) => {
-        if (error) throw error;
-        checkUser(data?.session?.user);
-      })
+    apiMe()
+      .then(({ user }) => checkUser(user))
       .catch(() => mounted && setState('error'));
-    const { data: listener } = client.auth.onAuthStateChange((_event, session) => checkUser(session?.user));
 
-    return () => {
-      mounted = false;
-      listener.subscription.unsubscribe();
-    };
+    return () => { mounted = false; };
   }, []);
 
   useEffect(() => {
@@ -67,10 +55,8 @@ const VerifyEmailPage = () => {
       return;
     }
     try {
-      const { data, error } = await ensureSupabase().auth.getUser();
-      if (error) throw error;
-      const refreshedUser = data?.user;
-      if (refreshedUser?.email_confirmed_at) {
+      const { user: refreshedUser } = await apiMe();
+      if (refreshedUser?.emailVerified) {
         setVerifiedUser(refreshedUser);
         setState('verified');
         navigate('/spmb/formulir');

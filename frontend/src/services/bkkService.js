@@ -1,49 +1,10 @@
-import { ensureSupabase } from './supabase';
-import { saveWithContentImage } from './contentImageService';
+import { api } from './apiClient';
 
-const bkkColumns = 'id, perusahaan, posisi, deskripsi, lokasi, tipe_pekerjaan, deadline, status, link_pendaftaran, logo_url, created_at, updated_at';
+const normalize = (row) => ({ ...row, tipe_pekerjaan: row.tipePekerjaan ?? row.tipe_pekerjaan, link_pendaftaran: row.linkPendaftaran ?? row.link_pendaftaran, logo_url: row.logoUrl ?? row.logo_url, created_at: row.createdAt ?? row.created_at, updated_at: row.updatedAt ?? row.updated_at, deadline: row.deadline ?? null });
+const parse = (data) => ({ ...data, tipePekerjaan: data.tipe_pekerjaan ?? data.tipePekerjaan, linkPendaftaran: data.link_pendaftaran ?? data.linkPendaftaran, logoUrl: data.logo_url ?? data.logoUrl });
 
-const throwIfError = ({ data, error }) => {
-  if (error) throw error;
-  return data;
-};
-
-export async function getBkk() {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase
-      .from('bkk')
-      .select(bkkColumns)
-      .order('deadline', { ascending: true, nullsFirst: false })
-      .order('created_at', { ascending: false }),
-  );
-}
-
-export async function getActiveBkk() {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase
-      .from('bkk')
-      .select(bkkColumns)
-      .eq('status', 'aktif')
-      .order('deadline', { ascending: true, nullsFirst: false })
-      .order('created_at', { ascending: false }),
-  );
-}
-
-export async function createBkk(data) {
-  const supabase = ensureSupabase();
-  return saveWithContentImage(supabase, data, 'bkk', 'logo_url', async (payload) =>
-    throwIfError(await supabase.from('bkk').insert(payload).select(bkkColumns).single()));
-}
-
-export async function updateBkk(id, data) {
-  const supabase = ensureSupabase();
-  return saveWithContentImage(supabase, data, 'bkk', 'logo_url', async (payload) =>
-    throwIfError(await supabase.from('bkk').update(payload).eq('id', id).select(bkkColumns).single()));
-}
-
-export async function deleteBkk(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(await supabase.from('bkk').delete().eq('id', id));
-}
+export async function getBkk() { const response = await api.get('/api/bkk?limit=100'); return response.data.map(normalize); }
+export async function getActiveBkk() { return getBkk(); }
+export async function createBkk(data) { const response = await api.post('/api/bkk', parse(data)); return normalize(response.data); }
+export async function updateBkk(id, data) { const response = await api.patch(`/api/bkk/${id}`, parse(data)); return normalize(response.data); }
+export async function deleteBkk(id) { return api.delete(`/api/bkk/${id}`); }

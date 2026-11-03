@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum ContentStatus {
+  draft
+  published
+}
+enum BkkStatus {
+  aktif
+  ditutup
+}
+enum PpdbStatus {
+  menunggu
+  diproses
+  diterima
+  ditolak
+}
+enum EventCategory {
+  kegiatan
+  akademik
+  lomba
+  karier
+  lainnya
+}
+enum SpmbKind {
+  jadwal
+  timeline
+  skema
+  persyaratan
+  syarat
+  statistik
+}
+enum AiFeature {
+  stela
+  nexttel
+}
+enum AuthTokenPurpose {
+  verify_email
+  password_reset
+}
+
+model Admin {
+  id        String   @id @default(uuid()) @db.Char(36)
+  userId    String   @unique @map("user_id") @db.Char(36)
+  nama      String   @db.VarChar(180)
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("admins")
+}
+
+model User {
+  id            String      @id @default(uuid()) @db.Char(36)
+  email         String      @unique @db.VarChar(254)
+  passwordHash  String      @map("password_hash") @db.VarChar(255)
+  emailVerified DateTime?   @map("email_verified")
+  role          String      @default("applicant") @db.VarChar(30)
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  admin         Admin?
+  applications  Ppdb[]
+  draft         PpdbDraft?
+  sessions      Session[]
+  authTokens    AuthToken[]
+  @@map("users")
+}
+
+model AuthToken {
+  id        String          @id @default(uuid()) @db.Char(36)
+  userId    String          @map("user_id") @db.Char(36)
+  tokenHash String          @unique @map("token_hash") @db.Char(64)
+  purpose   AuthTokenPurpose
+  expiresAt DateTime        @map("expires_at")
+  createdAt DateTime        @default(now()) @map("created_at")
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, purpose])
+  @@index([expiresAt])
+  @@map("auth_tokens")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Char(36)
+  userId    String   @map("user_id") @db.Char(36)
+  tokenHash String   @unique @map("token_hash") @db.Char(64)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model Berita {
+  id        String        @id @default(uuid()) @db.Char(36)
+  judul     String        @db.VarChar(255)
+  slug      String        @unique @db.VarChar(255)
+  ringkasan String?       @db.Text
+  konten    String        @db.LongText
+  gambarUrl String?       @map("gambar_url") @db.VarChar(2048)
+  penulis   String?       @db.VarChar(180)
+  status    ContentStatus @default(draft)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  @@index([status, createdAt])
+  @@map("berita")
+}
+
+model Pengumuman {
+  id        String        @id @default(uuid()) @db.Char(36)
+  judul     String        @db.VarChar(255)
+  slug      String        @unique @db.VarChar(255)
+  ringkasan String?       @db.Text
+  konten    String        @db.LongText
+  gambarUrl String?       @map("gambar_url") @db.VarChar(2048)
+  status    ContentStatus @default(draft)
+  tanggal   DateTime?
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  @@index([status, createdAt])
+  @@map("pengumuman")
+}
+
+model Prestasi {
+  id           String   @id @default(uuid()) @db.Char(36)
+  judul        String   @db.VarChar(255)
+  slug         String   @unique @db.VarChar(255)
+  kategori     String?  @db.VarChar(120)
+  deskripsi    String   @db.Text
+  gambarUrl    String?  @map("gambar_url") @db.VarChar(2048)
+  instagramUrl String?  @map("instagram_url") @db.VarChar(2048)
+  tingkat      String?  @db.VarChar(120)
+  tanggal      DateTime?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@index([tanggal])
+  @@map("prestasi")
+}
+
+model Bkk {
+  id              String    @id @default(uuid()) @db.Char(36)
+  perusahaan      String    @db.VarChar(255)
+  posisi          String    @db.VarChar(255)
+  deskripsi       String?   @db.Text
+  lokasi          String?   @db.VarChar(255)
+  tipePekerjaan   String?   @map("tipe_pekerjaan") @db.VarChar(100)
+  deadline        DateTime?
+  status          BkkStatus @default(aktif)
+  linkPendaftaran String?   @map("link_pendaftaran") @db.VarChar(2048)
+  logoUrl         String?   @map("logo_url") @db.VarChar(2048)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  @@index([status, deadline])
+  @@map("bkk")
+}
+
+model Ppdb {
+  id             String     @id @default(uuid()) @db.Char(36)
+  userId         String?    @unique @map("auth_user_id") @db.Char(36)
+  namaLengkap    String     @map("nama_lengkap") @db.VarChar(255)
+  nisn           String?    @db.VarChar(30)
+  nik            String?    @db.VarChar(30)
+  asalSekolah    String     @map("asal_sekolah") @db.VarChar(255)
+  tempatLahir    String?    @map("tempat_lahir") @db.VarChar(120)
+  tanggalLahir   DateTime?  @map("tanggal_lahir")
+  jenisKelamin   String?    @map("jenis_kelamin") @db.VarChar(30)
+  agama          String?    @db.VarChar(50)
+  tahunLulus     String?    @map("tahun_lulus") @db.VarChar(10)
+  alamat         String?    @db.Text
+  noHp           String?    @map("no_hp") @db.VarChar(30)
+  email          String?    @db.VarChar(254)
+  pilihanJurusan String     @map("pilihan_jurusan") @db.VarChar(120)
+  nilaiRapor     Json?      @map("nilai_rapor")
+  dokumenUrl     String?    @map("dokumen_url") @db.VarChar(2048)
+  status         PpdbStatus @default(menunggu)
+  catatanAdmin   String?    @map("catatan_admin") @db.Text
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  user           User?      @relation(fields: [userId], references: [id], onDelete: Restrict)
+  @@index([status, createdAt])
+  @@map("ppdb")
+}
+
+model PpdbDraft {
+  userId    String   @id @map("auth_user_id") @db.Char(36)
+  biodata   Json     @default("{}")
+  nilai     Json     @default("{}")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("ppdb_drafts")
+}
+
+model Event {
+  id              String        @id @default(uuid()) @db.Char(36)
+  judul           String        @db.VarChar(180)
+  ringkasan       String        @default("") @db.VarChar(500)
+  deskripsi       String        @default("") @db.Text
+  kategori        EventCategory @default(kegiatan)
+  tanggalMulai    DateTime      @map("tanggal_mulai") @db.Date
+  waktuMulai      String?       @map("waktu_mulai") @db.VarChar(8)
+  tanggalSelesai  DateTime?     @map("tanggal_selesai") @db.Date
+  waktuSelesai    String?       @map("waktu_selesai") @db.VarChar(8)
+  lokasi          String        @default("") @db.VarChar(240)
+  penyelenggara   String        @default("") @db.VarChar(160)
+  gambarUrl       String?       @map("gambar_url") @db.VarChar(2048)
+  linkInformasi   String?       @map("link_informasi") @db.VarChar(2048)
+  status          ContentStatus @default(draft)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  @@index([status, tanggalMulai])
+  @@map("events")
+}
+
+model SpmbInformation {
+  id                  String        @id @default(uuid()) @db.Char(36)
+  jenis               SpmbKind
+  judul               String        @db.VarChar(180)
+  deskripsi           String        @default("") @db.Text
+  urutan              Int           @default(1)
+  tanggalMulai        DateTime?     @map("tanggal_mulai") @db.Date
+  tanggalSelesai      DateTime?     @map("tanggal_selesai") @db.Date
+  tanggalSeleksi      DateTime?     @map("tanggal_seleksi") @db.Date
+  tanggalPengumuman   DateTime?     @map("tanggal_pengumuman") @db.Date
+  ikon                String?       @db.VarChar(30)
+  tautanUrl           String?       @map("tautan_url") @db.VarChar(2048)
+  sumberUrl           String?       @map("sumber_url") @db.VarChar(2048)
+  status              ContentStatus @default(draft)
+  kuotaTotal          Int?          @map("kuota_total")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+  @@index([jenis, status, urutan])
+  @@map("spmb_information")
+}
+
+model SiteSettings {
+  id           Boolean  @id @default(true)
+  schoolName   String   @map("school_name") @db.VarChar(150)
+  npsn         String   @db.Char(8)
+  address      String   @db.VarChar(1000)
+  phone        String   @db.VarChar(30)
+  email        String   @db.VarChar(254)
+  website      String   @db.VarChar(2048)
+  logoUrl      String?  @map("logo_url") @db.VarChar(2048)
+  academicYear String   @map("academic_year") @db.Char(9)
+  spmbOpen     Boolean  @default(true) @map("spmb_open")
+  newsPageSize Int      @map("news_page_size")
+  revision     BigInt   @default(1)
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@map("site_settings")
+}
+
+model AiDailyAttempt {
+  feature  AiFeature
+  day      DateTime  @db.Date
+  attempts Int
+  @@id([feature, day])
+  @@map("ai_daily_attempts")
+}
+
+model SiteVisitor {
+  visitorHash String   @map("visitor_hash") @db.VarChar(128)
+  day         DateTime @db.Date
+  createdAt   DateTime @default(now()) @map("created_at")
+  @@id([visitorHash, day])
+  @@map("site_visitors")
+}

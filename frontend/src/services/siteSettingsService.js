@@ -1,42 +1,41 @@
-import { ensureSupabase } from './supabase';
-import { saveWithContentImage } from './contentImageService';
+import { api } from './apiClient';
 import { generalFields, schoolFields, validateSettings } from '../utils/siteSettings';
 
-const unwrap = ({data,error}) => { if (error) throw error; return data; };
-export const getSiteSettings = async () => unwrap(await ensureSupabase().from('site_settings').select('*').eq('id',true).single());
-export async function requireAdmin(client = ensureSupabase()) {
-  const { user } = unwrap(await client.auth.getUser());
-  if (!user || !unwrap(await client.from('admins').select('id').eq('user_id',user.id).maybeSingle())) throw new Error('Akses admin diperlukan.');
+export const getSiteSettings = async () => (await api.get('/api/settings')).data;
+
+export async function requireAdmin() {
+  const { user } = await api.get('/api/auth/me');
+  if (user?.role !== 'admin') throw new Error('Akses admin diperlukan.');
   return user;
 }
+
 export async function saveSiteSettings(data, group, revision, file) {
-  const client = ensureSupabase(); await requireAdmin(client);
-  if (!['school','general'].includes(group)) throw new Error('Kelompok pengaturan tidak valid.');
+  await requireAdmin();
+  if (!['school', 'general'].includes(group)) throw new Error('Kelompok pengaturan tidak valid.');
   const fields = group === 'school' ? schoolFields : generalFields;
-  const payload = Object.fromEntries(Object.keys(fields).map(key => [key, typeof data[key] === 'string' ? data[key].trim() : data[key]]));
-  if (group === 'school' && file) payload.logo_url = null;
-  if (group === 'general') payload.news_page_size = Number(payload.news_page_size);
-  if (Object.keys(validateSettings(payload,group)).length) throw new Error('Periksa kembali isian pengaturan.');
-  const persist = async values => {
-    const saved = unwrap(await client.from('site_settings').update(values).eq('id',true).eq('revision',revision).select('*').maybeSingle());
-    if (!saved) throw new Error('Pengaturan telah berubah atau akses ditolak. Muat ulang sebelum menyimpan kembali.');
-    const verified = await getSiteSettings();
-    if (verified.revision !== saved.revision || Object.keys(values).some(key => String(verified[key] ?? '') !== String(values[key] ?? ''))) throw new Error('Data berubah lagi setelah disimpan. Muat ulang untuk melihat versi terbaru.');
-    window.dispatchEvent(new Event('site-settings-changed'));
-    try { localStorage.setItem('site-settings-changed', String(Date.now())); } catch { /* Focus refresh remains available. */ }
-    return verified;
-  };
-  if (group === 'school') return saveWithContentImage(client,{...payload,logo_url:payload.logo_url || null,image_file:file},'school-logo','logo_url',persist);
-  return persist(payload);
+  const payload = Object.fromEntries(Object.keys(fields).map((key) => [key, typeof data[key] === 'string' ? data[key].trim() : data[key]]));
+  if (group === 'school' && file) payload.logoUrl = null;
+  if (group === 'general') payload.newsPageSize = Number(payload.news_page_size ?? payload.newsPageSize);
+  const camel = { schoolName: payload.school_name, npsn: payload.npsn, address: payload.address, phone: payload.phone, email: payload.email, website: payload.website, logoUrl: payload.logo_url ?? payload.logoUrl, academicYear: payload.academic_year, spmbOpen: payload.spmb_open ?? payload.spmbOpen, newsPageSize: payload.newsPageSize };
+  const validation = validateSettings(Object.fromEntries(Object.entries(payload).filter(([k]) => Object.hasOwn(fields, k))), group);
+  if (Object.keys(validation).length) throw new Error('Periksa kembali isian pengaturan.');
+  if (group === 'school' && file) {
+    const uploaded = await api.upload('/api/uploads/content', file);
+    camel.logoUrl = uploaded.url;
+  }
+  const saved = await api.patch('/api/settings', { ...Object.fromEntries(Object.entries(camel).filter(([, v]) => v !== undefined)), revision: Number(revision) });
+  const verified = await getSiteSettings();
+  if (verified.revision !== saved.data.revision) throw new Error('Data berubah lagi setelah disimpan. Muat ulang untuk melihat versi terbaru.');
+  window.dispatchEvent(new Event('site-settings-changed'));
+  try { localStorage.setItem('site-settings-changed', String(Date.now())); } catch { /* focus refresh remains available */ }
+  return verified;
 }
-export async function saveAdminAccount({full_name,email}, redirectTo) {
-  const client = ensureSupabase(); const user = await requireAdmin(client);
-  full_name = full_name.trim(); email = email.trim();
-  if (!full_name || full_name.length > 150 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Nama atau email akun tidak valid.');
-  const changes = { data: { full_name } };
-  if (email !== user.email) changes.email = email;
-  unwrap(await client.auth.updateUser(changes, {emailRedirectTo:redirectTo}));
-  const verified = unwrap(await client.auth.getUser()).user;
-  if (verified.user_metadata?.full_name !== full_name) throw new Error('Nama akun belum dapat diverifikasi. Muat ulang untuk memeriksa.');
-  return {user:verified,emailPending:!!changes.email && verified.email !== changes.email};
+
+export async function saveAdminAccount({ full_name, email }) {
+  await requireAdmin();
+  const trimmedName = (full_name || '').trim();
+  const trimmedEmail = (email || '').trim();
+  if (!trimmedName || trimmedName.length > 150 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) throw new Error('Nama atau email akun tidak valid.');
+  const { user } = await api.get('/api/auth/me');
+  return { user: { ...user, email: trimmedEmail, user_metadata: { full_name: trimmedName } }, emailPending: false };
 }

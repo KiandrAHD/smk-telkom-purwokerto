@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { ensureSupabase, supabaseSiap } from '../services/supabase';
+import { apiMe } from '../services/apiAuthService';
 import { getMyPpdb, getMyPpdbDraft, savePpdbDraft, signOutPpdb, submitPpdb } from '../services/ppdbService';
 import { restoreSignupBiodata } from '../utils/ppdbIdentity';
 import { useLocation } from 'react-router-dom';
@@ -37,7 +37,7 @@ export const PpdbProvider = ({ children }) => {
   const [nomorRegistrasi, setNomorRegistrasi] = useState(null);
   const [draftTersimpan, setDraftTersimpan] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(supabaseSiap);
+  const [authLoading, setAuthLoading] = useState(true);
   const [draftLoading, setDraftLoading] = useState(false);
   const userIdRef = useRef(null);
   const [draftStatus, setDraftStatus] = useState('idle');
@@ -64,12 +64,7 @@ export const PpdbProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!supabaseSiap) {
-      return undefined;
-    }
-
     let mounted = true;
-    const client = ensureSupabase();
     const applyUser = (user) => {
       if (!mounted) return;
       const changedAccount = Boolean(userIdRef.current && user?.id !== userIdRef.current);
@@ -85,18 +80,12 @@ export const PpdbProvider = ({ children }) => {
       if (newUser) setDraftLoading(true);
     };
 
-    client.auth.getSession().then(({ data, error }) => {
-      if (error) console.error('Gagal membaca sesi PPDB:', error);
-      applyUser(data?.session?.user ?? null);
-    });
-
-    const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
-      applyUser(session?.user ?? null);
-    });
+    apiMe()
+      .then(({ user }) => applyUser(user))
+      .catch(() => applyUser(null));
 
     return () => {
       mounted = false;
-      listener.subscription.unsubscribe();
     };
   }, [resetWizard]);
 
@@ -106,7 +95,7 @@ export const PpdbProvider = ({ children }) => {
     const submissionRequest = getMyPpdb().then((submissions) => {
       if (active && submissions?.[0]) setNomorRegistrasi(submissions[0].id);
     });
-    const draftRequest = getMyPpdbDraft(currentUser.id).then((draft) => {
+    const draftRequest = getMyPpdbDraft().then((draft) => {
       if (!active || !draft) return;
       setBiodata((current) => {
         const restored = { ...current, ...draft.biodata, email: currentUser.email };
@@ -148,7 +137,7 @@ export const PpdbProvider = ({ children }) => {
       if (savedSnapshot.current === captured) return;
       setDraftStatus('saving');
       try {
-        const result = await savePpdbDraft(biodata, nilai, owner);
+        const result = await savePpdbDraft(biodata, nilai);
         if (userIdRef.current !== owner) throw new Error('Sesi SPMB telah berubah.');
         savedSnapshot.current = captured;
         if (latestSnapshot.current === captured) {

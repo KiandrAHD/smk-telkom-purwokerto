@@ -1,72 +1,11 @@
-import { ensureSupabase } from './supabase';
-import { saveWithContentImage } from './contentImageService';
+import { api } from './apiClient';
 
-const pengumumanColumns = 'id, judul, slug, ringkasan, konten, gambar_url, status, tanggal, created_at, updated_at';
-const STATUS_PENGUMUMAN = ['draft', 'published'];
+const normalize = (row) => ({ ...row, gambar_url: row.gambarUrl ?? row.gambar_url, created_at: row.createdAt ?? row.created_at, updated_at: row.updatedAt ?? row.updated_at, tanggal: row.tanggal ?? null });
+const parse = (data) => ({ ...data, gambarUrl: data.gambar_url ?? data.gambarUrl, ringkasan: data.ringkasan ?? null });
 
-const normalizePayload = (data) => {
-  const payload = { ...data, status: String(data.status || '').toLowerCase() };
-  if (!STATUS_PENGUMUMAN.includes(payload.status)) {
-    throw new Error('Status pengumuman tidak valid. Pilih Draft atau Published.');
-  }
-  return payload;
-};
-
-const throwIfError = ({ data, error }) => {
-  if (error) throw error;
-  return data;
-};
-
-export async function getPengumuman() {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase.from('pengumuman').select(pengumumanColumns).order('created_at', { ascending: false }),
-  );
-}
-
-export async function getPublishedPengumuman() {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase
-      .from('pengumuman')
-      .select(pengumumanColumns)
-      .eq('status', 'published')
-      .order('tanggal', { ascending: false, nullsFirst: false })
-      .order('created_at', { ascending: false }),
-  );
-}
-
-export async function getPengumumanBySlug(slug) {
-  const supabase = ensureSupabase();
-  return throwIfError(
-    await supabase
-      .from('pengumuman')
-      .select(pengumumanColumns)
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .maybeSingle(),
-  );
-}
-
-export async function createPengumuman(data) {
-  const supabase = ensureSupabase();
-  return saveWithContentImage(supabase, normalizePayload(data), 'pengumuman', 'gambar_url', async (payload) =>
-    throwIfError(await supabase.from('pengumuman').insert(payload).select(pengumumanColumns).single()));
-}
-
-export async function updatePengumuman(id, data) {
-  const supabase = ensureSupabase();
-  return saveWithContentImage(supabase, normalizePayload(data), 'pengumuman', 'gambar_url', async (payload) => {
-    const result = await supabase.from('pengumuman').update(payload).eq('id', id).select(pengumumanColumns).single();
-    const updated = throwIfError(result);
-    if (!updated || updated.id !== id || !STATUS_PENGUMUMAN.includes(updated.status)) {
-      throw new Error('Pengumuman tidak ditemukan atau status gagal diperbarui.');
-    }
-    return updated;
-  });
-}
-
-export async function deletePengumuman(id) {
-  const supabase = ensureSupabase();
-  return throwIfError(await supabase.from('pengumuman').delete().eq('id', id));
-}
+export async function getPengumuman() { const response = await api.get('/api/pengumuman?limit=100'); return response.data.map(normalize); }
+export async function getPublishedPengumuman() { return getPengumuman(); }
+export async function getPengumumanBySlug(slug) { const response = await api.get(`/api/pengumuman/${encodeURIComponent(slug)}`); return normalize(response.data); }
+export async function createPengumuman(data) { const response = await api.post('/api/pengumuman', parse(data)); return normalize(response.data); }
+export async function updatePengumuman(id, data) { const response = await api.patch(`/api/pengumuman/${id}`, parse(data)); return normalize(response.data); }
+export async function deletePengumuman(id) { return api.delete(`/api/pengumuman/${id}`); }

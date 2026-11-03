@@ -1,4 +1,4 @@
-import { supabaseSiap } from './supabase';
+import { api } from './apiClient';
 
 // Widget chat tidak memanggil Gemini langsung. Semua permintaan lewat backend,
 // karena API key hanya disimpan di server dan tidak pernah masuk ke bundel browser.
@@ -9,14 +9,11 @@ import { supabaseSiap } from './supabase';
 //      Provider dan failover dikendalikan server; kunci tidak pernah masuk browser.
 //   2. /api/stela — endpoint lokal dari vite-plugin-stela.js, hanya hidup
 //      selama `npm run dev`; konfigurasi provider tetap berada di server lokal.
-const PAKAI_EDGE_FUNCTION = supabaseSiap;
-const ALAMAT = PAKAI_EDGE_FUNCTION
-  ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stela`
-  : '/api/stela';
+const ALAMAT = api.url('/api/ai/stela');
 
 // import.meta.env.DEV dilipat saat build, jadi cabang lokal ini hilang total
 // dari bundel produksi — bukan sekadar tidak terpanggil.
-export const stelaSiap = PAKAI_EDGE_FUNCTION || import.meta.env.DEV;
+export const stelaSiap = true;
 
 export const PESAN_STELA_GAGAL = 'NEXA sedang mengalami kendala. Silakan coba lagi.';
 export const PESAN_STELA_BELUM_SIAP =
@@ -89,15 +86,9 @@ export const tanyaStela = async (pesan, { signal, language = 'id' } = {}) => {
     const tanggapan = await fetch(ALAMAT, {
       method: 'POST',
       signal,
-      headers: {
-        'Content-Type': 'application/json',
-        // Anon key memang dirancang untuk publik; ia hanya membuka pintu ke Edge
-        // Function, bukan ke API berbayar. Endpoint lokal tidak memerlukannya.
-        ...(PAKAI_EDGE_FUNCTION
-          ? { Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` }
-          : {}),
-      },
-      body: JSON.stringify({ messages: pesan, language }),
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pertanyaan: typeof pesan === 'string' ? pesan : JSON.stringify(pesan), language }),
     });
 
     const data = await tanggapan.json().catch(() => ({}));

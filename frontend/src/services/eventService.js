@@ -1,44 +1,31 @@
-import { ensureSupabase } from './supabase';
-import { saveWithContentImage } from './contentImageService';
+import { api } from './apiClient';
 import { eventPayload } from '../utils/events';
 
-const columns = 'id,judul,ringkasan,deskripsi,kategori,tanggal_mulai,waktu_mulai,tanggal_selesai,waktu_selesai,lokasi,penyelenggara,gambar_url,link_informasi,status,created_at,updated_at';
-const unwrap = ({ data, error }) => { if (error) throw error; return data; };
+const normalize = (row) => ({ ...row, tanggal_mulai: row.tanggalMulai ?? row.tanggal_mulai, waktu_mulai: row.waktuMulai ?? row.waktu_mulai, tanggal_selesai: row.tanggalSelesai ?? row.tanggal_selesai, waktu_selesai: row.waktuSelesai ?? row.waktu_selesai, gambar_url: row.gambarUrl ?? row.gambar_url, link_informasi: row.linkInformasi ?? row.link_informasi, created_at: row.createdAt ?? row.created_at, updated_at: row.updatedAt ?? row.updated_at });
+const parse = (data) => { const p = eventPayload(data); return { ...p, tanggalMulai: p.tanggal_mulai, waktuMulai: p.waktu_mulai, tanggalSelesai: p.tanggal_selesai, waktuSelesai: p.waktu_selesai, gambarUrl: p.gambar_url, linkInformasi: p.link_informasi }; };
+
 export const getEvents = async (published = false, signal) => {
+  void published;
   const items = [];
-  for (let offset = 0; ; offset += 500) {
-    let query = ensureSupabase().from('events').select(columns).order('tanggal_mulai').order('waktu_mulai').order('id').range(offset, offset + 499);
-    if (published) query = query.eq('status', 'published');
-    if (signal) query = query.abortSignal(signal);
-    const rows = unwrap(await query); items.push(...rows);
-    if (rows.length < 500) return items;
+  for (let page = 1; ; page += 1) {
+    const response = await api.get(`/api/events?limit=100&page=${page}`);
+    if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+    items.push(...response.data.map(normalize));
+    if (page >= response.pagination.pages) return items;
   }
 };
 function changed() {
   if (typeof window === 'undefined') return;
   window.dispatchEvent(new Event('school-events-changed'));
-  try { localStorage.setItem('school-events-changed', `${Date.now()}-${Math.random()}`); } catch { /* Focus refresh also works when storage is unavailable. */ }
+  try { localStorage.setItem('school-events-changed', `${Date.now()}-${Math.random()}`); } catch { /* focus refresh works without storage */ }
 }
-export async function createEvent(data, id) {
-  const client = ensureSupabase();
-  // Stable client UUID identifies duplicate attempts; insert must never update an existing event.
-  const saved = await saveWithContentImage(client, { ...eventPayload(data), image_file: data.image_file }, 'events', 'gambar_url', async payload => unwrap(await client.from('events').insert({ ...payload, id }).select(columns).single()));
-  changed(); return saved;
-}
-export async function updateEvent(id, data) {
-  const client = ensureSupabase();
-  const saved = await saveWithContentImage(client, { ...eventPayload(data), image_file: data.image_file }, 'events', 'gambar_url', async payload => unwrap(await client.from('events').update(payload).eq('id', id).select(columns).single()));
-  changed(); return saved;
-}
-export async function deleteEvent(id) {
-  const deleted = unwrap(await ensureSupabase().from('events').delete().eq('id', id).select('id').single());
-  changed(); return deleted;
-}
+export async function createEvent(data) { const response = await api.post('/api/events', parse(data)); changed(); return normalize(response.data); }
+export async function updateEvent(id, data) { const response = await api.patch(`/api/events/${id}`, parse(data)); changed(); return normalize(response.data); }
+export async function deleteEvent(id) { await api.delete(`/api/events/${id}`); changed(); return { id }; }
 export function eventError(error) {
-  if (error?.code === '23514') return 'Data kegiatan ditolak database. Periksa isian dan pastikan migration 011_event_categories.sql sudah diterapkan.';
-  if (['PGRST205', '42P01'].includes(error?.code)) return 'Tabel kegiatan belum tersedia. Terapkan migration 010_calendar_events.sql pada Supabase.';
-  if (error?.code === '42501') return 'Anda tidak memiliki izin untuk mengelola kegiatan.';
-  if (error?.code === 'PGRST116') return 'Kegiatan tidak ditemukan atau Anda tidak memiliki izin.';
+  if (error?.status === 400) return 'Data kegiatan ditolak server. Periksa isian tanggal, kategori, dan tautan.';
+  if (error?.status === 403) return 'Anda tidak memiliki izin untuk mengelola kegiatan.';
+  if (error?.status === 404) return 'Kegiatan tidak ditemukan atau Anda tidak memiliki izin.';
   if (error?.code?.startsWith('CONTENT_IMAGE_') || error?.fields) return error.message;
   return 'Kegiatan gagal dimuat atau disimpan. Periksa koneksi lalu coba lagi.';
 }

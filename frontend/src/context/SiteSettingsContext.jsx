@@ -1,11 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getSiteSettings } from '../services/siteSettingsService';
-import { supabaseSiap } from '../services/supabase';
 const Context = createContext({ settings:null });
 export function SiteSettingsProvider({children}) {
   const [settings,setSettings] = useState(null);
   useEffect(() => {
-    if (!supabaseSiap) return;
     let active = true, request = 0;
     const refresh = () => {
       const version = ++request;
