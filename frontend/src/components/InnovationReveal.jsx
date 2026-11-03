@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { Typewriter } from './ui/typewriter-text';
@@ -11,13 +11,10 @@ export default function InnovationReveal() {
   const { t, language } = useLanguage();
   const ref = useRef(null);
   const phrase = t('Digital Innovation');
-  const syncRef = useRef(null);
-  const revealedRef = useRef(false);
   const lead = t('Bukan sekadar belajar Teknologi');
   const tail = t('Kami bikin karya nyata');
   const reduced = useReducedMotion();
   const [active, setActive] = useState(false);
-  const onComplete = useCallback(() => { revealedRef.current = true; syncRef.current?.(); }, []);
   const characters = (text, visible, offset = 0) => Array.from(text).map((character, index) => (
     <span key={index} className={visible > offset + index ? 'innovation-character is-typed' : 'innovation-character'}>{character}</span>
   ));
@@ -40,7 +37,6 @@ export default function InnovationReveal() {
 
   useLayoutEffect(() => {
     const root = ref.current;
-    revealedRef.current = false;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       const reel = gsap.to(root.querySelector('[data-innovation-reel]'), {
@@ -49,16 +45,13 @@ export default function InnovationReveal() {
       let visible = false;
 
       const sync = () => {
-        if (!revealedRef.current) reel.pause(0);
-        else reel.paused(!visible || document.hidden);
+        reel.paused(!visible || document.hidden);
       };
-      syncRef.current = sync;
       const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
       observer.observe(root);
       document.addEventListener('visibilitychange', sync);
       return () => {
         observer.disconnect();
-        syncRef.current = null;
         document.removeEventListener('visibilitychange', sync);
       };
     }, root);
@@ -70,7 +63,7 @@ export default function InnovationReveal() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 id="innovation-title" className="home-innovation-title">
           <span className="sr-only">{t('Bukan sekadar belajar Teknologi')}. {phrase}. {t('Kami bikin karya nyata')}.</span>
-          <Typewriter key={language} text={`${lead} ${phrase} ${tail}`} active={active} reducedMotion={Boolean(reduced)} speed={35} cursor="" onComplete={onComplete} render={visible => <>
+          <Typewriter key={language} text={`${lead} ${phrase} ${tail}`} active={active} reducedMotion={Boolean(reduced)} speed={35} cursor="" render={visible => <>
           <span aria-hidden="true" className="home-innovation-line">{words(lead, visible)}</span>
           <span aria-hidden="true" className="home-innovation-line">
             <span className="home-innovation-box">
