@@ -34,6 +34,10 @@
 .hero-carousel .hero-panel--careers { --hero-artwork-mask: url('../assets/banners/bkk-mask.svg'); }
 .hero-carousel .hero-panel--news { --hero-artwork-mask: url('../assets/banners/berita-mask.svg'); }
 .hero-carousel .hero-panel--achievements { --hero-artwork-mask: url('../assets/banners/prestasi-mask.svg'); }
+@media (max-width: 63.999rem) {
+  /* The school artwork is bottom-contained inside a taller media box. Fade its visible edge, not the empty band. */
+  .hero-carousel .hero-panel--school .hero-media { mask-image: linear-gradient(to bottom, transparent 16%, rgb(0 0 0 / .5) 20%, black 25%); }
+}
 .hero-carousel .hero-grid > .hero-image {
   mask-image: var(--hero-artwork-mask, linear-gradient(black, black)), var(--hero-edge-fade);
   mask-size: 100% 100%;
