@@ -29,6 +29,13 @@
 }
 .home-innovation-line { display: flex; flex-wrap: wrap; align-items: center; column-gap: .22em; }
 .home-innovation-line [data-innovation-word] { display: inline-block; }
+.innovation-character { color: #b3b3b3; white-space: pre; }
+.innovation-character.is-typed { color: inherit; }
+.home-innovation-reel .innovation-character { color: rgb(255 255 255 / .3); }
+.home-innovation-reel .innovation-character.is-typed { color: white; }
+@media print {
+  .innovation-character { color: inherit !important; }
+}
 .home-innovation-box {
   position: relative;
   flex: none;
