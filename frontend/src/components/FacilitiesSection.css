@@ -1,3 +1,73 @@
+/* Figma 314:2016–2019: 344/551 × 105 buttons, scaled with the section. */
+.facilities-actions-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1.5rem 3rem;
+}
+
+.facilities-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.75rem, 2.166vw, 2.5rem);
+  padding: clamp(0.75rem, 1.733vw, 2rem);
+  border-radius: 999px;
+  background: #f7f7f7;
+}
+
+.facilities-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: clamp(0.875rem, 2.166vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 150ms, color 150ms;
+}
+
+.facilities-action--primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.facilities-action--secondary {
+  border-width: clamp(1px, 0.1624vw, 3px);
+  background: white;
+  color: var(--color-primary);
+}
+
+.facilities-action--primary:hover { background: var(--color-primary-800); }
+.facilities-action--secondary:hover { background: var(--color-primary-50); }
+.facilities-action:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+@media (min-width: 40rem) {
+  .facilities-action {
+    min-height: clamp(2.75rem, 5.685vw, 6.5625rem);
+    padding-inline: clamp(1.25rem, 2.38vw, 2.75rem);
+  }
+  .facilities-action--primary { min-width: clamp(8.5rem, 18.625vw, 21.5rem); }
+  .facilities-action--secondary { min-width: clamp(13.5rem, 29.832vw, 34.4375rem); }
+}
+
+@media (max-width: 25rem) {
+  .facilities-actions { width: 100%; border-radius: 1.75rem; }
+  .facilities-action { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .facilities-action { transition: none; }
+}
+
 .facilities-background {
   mask-image: url('../assets/fasilitas/background-mask.svg');
   mask-size: 100% 100%;
