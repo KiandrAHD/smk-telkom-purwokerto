@@ -1,3 +1,4 @@
+import RichTextEditor from '../../../components/dashboard/RichTextEditor';
 import { useRef, useState } from 'react';
 import FormInput from '../../../components/dashboard/FormInput';
 import ImageUploadField from '../../../components/dashboard/ImageUploadField';
@@ -25,7 +26,7 @@ export default function EventForm({ initialData, initialDate = '', onSave, onCan
     <fieldset disabled={submitting} className="space-y-4">
       {field('judul', 'Judul kegiatan (wajib)', { required: true, maxLength: 180, autoFocus: true })}
       {field('ringkasan', 'Deskripsi singkat', { as: 'textarea', rows: 2, maxLength: 500 })}
-      {field('deskripsi', 'Deskripsi lengkap', { as: 'textarea', rows: 4, maxLength: 20000 })}
+      {field('deskripsi', 'Deskripsi lengkap', { as: RichTextEditor, disabled: submitting, maxLength: 20000 })}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           {field('kategori', 'Kategori Kegiatan', { as: EventCategorySelect, onChange: value => update('kategori', value) })}

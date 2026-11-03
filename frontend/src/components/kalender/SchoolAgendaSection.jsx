@@ -1,3 +1,4 @@
+import { richTextToPlain } from '../../utils/richText';
 import { useState } from 'react';
 import { ArrowRight, CalendarDays, ImageOff } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
@@ -35,7 +36,7 @@ export default function SchoolAgendaSection({ events = [] }) {
             <AgendaImage key={event.image || 'no-image'} event={event} />
             <span className="flex min-h-64 flex-1 flex-col rounded-b-2xl border border-t-0 border-dark-200 bg-white p-4 sm:p-5">
               <span className="line-clamp-2 min-h-14 break-words font-heading text-lg font-bold leading-7 text-dark-900">{t(event.title)}</span>
-              <span className="mt-2 line-clamp-3 min-h-[4.5rem] break-words text-sm leading-6 text-dark-500">{t(event.summary || event.description || 'Informasi kegiatan selengkapnya tersedia pada detail.')}</span>
+              <span className="mt-2 line-clamp-3 min-h-[4.5rem] break-words text-sm leading-6 text-dark-500">{t(richTextToPlain(event.summary || event.description) || 'Informasi kegiatan selengkapnya tersedia pada detail.')}</span>
               <span className="mt-4 flex items-start gap-2 text-xs text-dark-600"><CalendarDays aria-hidden="true" className="size-4 shrink-0" /><span>{date(event.date)}{event.endDate !== event.date ? ` – ${date(event.endDate)}` : ''}</span></span>
               <span className="mt-2"><EventCategoryLabel category={event.category} /></span>
               <span className="mt-auto flex items-center gap-1 pt-4 text-xs font-semibold text-primary">{t('Lihat Detail')}<ArrowRight aria-hidden="true" className="size-4" /></span>

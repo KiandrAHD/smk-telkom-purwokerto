@@ -2,10 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import {
   BriefcaseBusiness,
   CalendarDays,
-  GraduationCap,
-  Info,
   LayoutDashboard,
-  Layers,
   Megaphone,
   Newspaper,
   Settings,
@@ -18,9 +15,6 @@ import { adminMenu, adminSekolah } from '../../data/dummyData';
 // pola yang sudah dipakai HeroStatsBar.
 const ikon = {
   dashboard: LayoutDashboard,
-  ppdb: GraduationCap,
-  informasiSpmb: Info,
-  jurusan: Layers,
   prestasi: Trophy,
   bkk: BriefcaseBusiness,
   berita: Newspaper,

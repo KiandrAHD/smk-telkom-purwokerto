@@ -1,3 +1,4 @@
+import RichTextEditor from '../../../components/dashboard/RichTextEditor';
 import { useState } from 'react';
 import FormInput from '../../../components/dashboard/FormInput';
 import { emptySpmbInfo, spmbIcons, spmbIconLabels, validateSpmbInfo } from '../../../utils/spmbInformation';
@@ -18,7 +19,7 @@ export default function SpmbInformationForm({ initialData, jenis, onSave, onCanc
     <fieldset disabled={submitting} className="space-y-4">
       {quota ? <>{field('kuota_total', 'Kuota total', { type: 'number', min: 0, max: 100000, step: 1, autoFocus: true })}<p className="text-xs leading-relaxed text-dark-500">Kosongkan jika kuota resmi belum tersedia. Kuota tersedia dihitung dari kuota total dikurangi siswa berstatus Diterima.</p></> : <>
         {field('judul', 'Nama', { required: true, maxLength: 180, autoFocus: true })}
-        {field('deskripsi', 'Deskripsi', { as: 'textarea', rows: 3, maxLength: 5000 })}
+        {field('deskripsi', 'Deskripsi', { as: RichTextEditor, disabled: submitting, maxLength: 5000 })}
         <div className="grid gap-4 sm:grid-cols-2">
           {field('urutan', 'Urutan', { type: 'number', min: 0, max: 9999, step: 1, required: true })}
           {field('status', 'Status publikasi', { as: 'select', options: [{ value: 'draft', label: 'Draft' }, { value: 'published', label: 'Published' }] })}

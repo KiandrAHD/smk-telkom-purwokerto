@@ -1,3 +1,4 @@
+import RichContent from '../RichContent';
 import { useLanguage } from '../../context/LanguageContext';
 import { eventTimeLabel } from '../../utils/events';
 import EventCategoryLabel from './EventCategoryLabel';
@@ -14,7 +15,7 @@ export default function EventDetails({ event, showStatus = false }) {
     <dl className="grid gap-3 sm:grid-cols-2">
       {[[t('Tanggal kegiatan'), `${date(event.date)}${event.endDate !== event.date ? ` – ${date(event.endDate)}` : ''}`], [t('Waktu'), t(eventTimeLabel(event))], [t('Lokasi'), event.location || t('Belum ditentukan')], [t('Kategori'), <EventCategoryLabel key="category" category={event.category} badge />], [t('Penyelenggara'), event.organizer || t('Belum ditentukan')]].map(([label, value]) => <div key={label}><dt className="font-semibold text-dark-900">{label}</dt><dd className="mt-1 break-words">{value}</dd></div>)}
     </dl>
-    {event.description && <p className="whitespace-pre-wrap break-words leading-relaxed">{event.description}</p>}
+    {event.description && <RichContent className="break-words leading-relaxed" value={event.description} />}
     {safeLink(event.link) && <a href={event.link} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline">{t('Informasi / Pendaftaran')}</a>}
   </div>;
 }

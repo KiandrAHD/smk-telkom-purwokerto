@@ -1,3 +1,5 @@
+import { isRichText, richTextToPlain, sanitizeRichText } from './richText';
+
 export const formatPublicDate = (value, options = {}, locale = 'id-ID') => {
   if (!value) return locale === 'en-US' ? 'Date unavailable' : 'Tanggal belum tersedia';
 
@@ -98,6 +100,7 @@ export const getBeritaCategories = (items) => {
 export const getBeritaGallery = (items) => items.filter((item) => item.slug && normalizeImage(item.image));
 
 const contentWithLead = (value, summary) => {
+  if (isRichText(value)) return { lead: richTextToPlain(summary || ''), body: [], richBody: sanitizeRichText(value) };
   const paragraphs = splitContent(value);
   const lead = summary || paragraphs[0] || '';
   return { lead, body: paragraphs[0] === lead ? paragraphs.slice(1) : paragraphs };
@@ -106,10 +109,10 @@ const contentWithLead = (value, summary) => {
 export const toBeritaItem = (row) => ({
   ...row,
   title: row.judul,
-  desc: row.ringkasan || row.konten,
+  desc: richTextToPlain(row.ringkasan || row.konten),
   sourceUrl: getContentSource(row.konten),
-  excerpt: row.ringkasan || row.konten,
-  text: row.ringkasan || row.konten,
+  excerpt: richTextToPlain(row.ringkasan || row.konten),
+  text: richTextToPlain(row.ringkasan || row.konten),
   image: normalizeImage(row.gambar_url),
   author: row.penulis || 'SMK Telkom Purwokerto',
   // Tabel `berita` belum punya kolom kategori; sampai ada, semua
@@ -124,7 +127,7 @@ export const toBeritaItem = (row) => ({
 export const toPengumumanItem = (row) => ({
   ...row,
   title: row.judul,
-  desc: row.ringkasan || row.konten,
+  desc: richTextToPlain(row.ringkasan || row.konten),
   sourceUrl: getContentSource(row.konten),
   image: normalizeImage(row.gambar_url),
   kategori: row.kategori || 'Pengumuman',
@@ -140,7 +143,7 @@ export const toPengumumanItem = (row) => ({
 export const toPrestasiItem = (row) => ({
   ...row,
   title: row.judul,
-  desc: row.deskripsi,
+  desc: richTextToPlain(row.deskripsi),
   sourceUrl: getContentSource(row.deskripsi),
   image: normalizeImage(row.gambar_url),
   level: row.tingkat || 'Prestasi',

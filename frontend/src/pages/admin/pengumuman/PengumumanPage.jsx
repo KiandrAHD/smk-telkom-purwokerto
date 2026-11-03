@@ -1,3 +1,4 @@
+import RichContent from '../../../components/RichContent';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AlertCircle, CheckCircle2, Plus, RefreshCw, Search, X } from 'lucide-react';
 import PengumumanForm from './PengumumanForm';
@@ -180,7 +181,7 @@ const PengumumanPage = () => {
           <h3 className="mt-3 font-heading text-xl font-extrabold text-dark-900">{modal.item.judul}</h3>
           <p className="mt-2 text-xs text-dark-500">/{modal.item.slug} - {formatDateTime(modal.item.tanggal)}</p>
           {modal.item.ringkasan && <p className="mt-5 rounded-lg bg-dark-50 p-4 text-sm font-medium leading-relaxed text-dark-700">{modal.item.ringkasan}</p>}
-          <div className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-dark-700">{modal.item.konten}</div>
+          <RichContent className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-dark-700" value={modal.item.konten} />
         </PengumumanModal>
       )}
 
