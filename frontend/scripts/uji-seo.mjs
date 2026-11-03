@@ -14,6 +14,14 @@ assert.ok(!routes.some(route => /^\/(dashboard|login|auth|ppdb)(\/|$)/.test(rout
 for (const route of routes) {
   const html = await readFile(path.join(dist, route.slice(1), 'index.html'), 'utf8');
   const head = html.match(/<head>([\s\S]*?)<\/head>/)[1];
+  assert.ok(!html.includes('/src/assets/'), `${route}: source asset URL leaked into production HTML`);
+  if (route === '/profil-sekolah') {
+    const mask = html.match(/mask-image:url\(([^)]+)\)/);
+    assert.ok(mask, 'Profile school logo mask is prerendered');
+    const assetPath = mask[1].replace(/&quot;|["']/g, '');
+    assert.ok(assetPath.startsWith('/assets/'), 'CSS URL maps to a production asset without swallowing the closing parenthesis');
+    await access(path.join(dist, assetPath));
+  }
   assert.equal((html.match(/<h1\b/g) || []).length, 1, `${route}: H1`);
   let previousLevel = 0;
   for (const heading of html.matchAll(/<h([1-6])\b/g)) {

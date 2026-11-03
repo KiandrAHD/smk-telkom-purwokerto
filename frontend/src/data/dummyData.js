@@ -397,7 +397,7 @@ export const aboutStats = [
 // ── About Description Section ──
 export const aboutDescription = {
   title: 'Tentang\nSMK Telkom Purwokerto',
-  text: 'SMK Telkom Purwokerto adalah sekolah vokasi di bawah naungan Yayasan Pendidikan Telkom. Pembelajaran berfokus pada teknologi informasi, jaringan, dan telekomunikasi dengan pendekatan yang relevan dengan kebutuhan industri.',
+  text: 'SMK Telkom Purwokerto merupakan sekolah vokasi di bawah naungan Yayasan Pendidikan Telkom yang berfokus pada bidang teknologi informasi, jaringan, dan telekomunikasi. Kami berkomitmen untuk menghadirkan pendidikan berkualitas yang relevan dengan dunia industri dan perkembangan teknologi.',
   ctaText: 'Pelajari Selengkapnya',
 };
 
@@ -412,7 +412,7 @@ export const nilaiStematel = [
   {
     icon: 'lightbulb',
     title: 'Innovation',
-    desc: 'Selalu berinovasi, menghadapi dan menciptakan perubahan.',
+    desc: 'Selalu berinovasi menghadapi perubahan.',
   },
   {
     icon: 'shield',
@@ -427,7 +427,7 @@ export const nilaiStematel = [
   {
     icon: 'handshake',
     title: 'Collaboration',
-    desc: 'Berkolaborasi untuk menciptakan kebersamaan.',
+    desc: 'Berkolaborasi untuk menciptakan kebermanfaatan.',
   },
 ];
 
@@ -472,7 +472,7 @@ export const timelineData = [
   {
     year: '2020',
     title: 'Kerja Sama Industri',
-    desc: 'Memperluas kolaborasi dan berbagai mitra industri terkemuka.',
+    desc: 'Memperluas kolaborasi dengan berbagai mitra industri ternama.',
   },
   {
     year: '2023',

@@ -1,64 +1,35 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { useState } from 'react';
-import { Award, Building2, Cpu, GraduationCap, Trophy } from 'lucide-react';
 import { timelineData } from '../../data/dummyData';
+import school from '../../assets/tentang/profile/school.svg';
+import accreditation from '../../assets/tentang/profile/accreditation.svg';
+import industry from '../../assets/tentang/profile/industry.svg';
+import smartSchool from '../../assets/tentang/profile/smart-school.svg';
+import ai from '../../assets/tentang/profile/ai.svg';
 
-const icons = [Building2, GraduationCap, Trophy, Award, Cpu];
+const icons = [school, accreditation, industry, smartSchool, ai];
 
 const TentangTimelineSection = () => {
   const { t } = useLanguage();
   const [active, setActive] = useState(0);
-
   return (
-    <section id="perjalanan" className="bg-white py-6 lg:py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-heading text-xl font-extrabold text-primary">{t("Perjalanan Kami")}</h2>
-
-        <ol className="relative mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-4">
-          {/* Garis putus-putus penghubung (desktop) */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 right-0 top-[4.25rem] hidden border-t border-dashed border-dark-200 lg:block"
-          />
-
-          {timelineData.map((item, i) => {
-            const Icon = icons[i] ?? Building2;
-            const isActive = i === active;
-            return (
-              <li key={item.year} className="relative">
-                <button
-                  type="button"
-                  onClick={() => setActive(i)}
-                  onMouseEnter={() => setActive(i)}
-                  aria-current={isActive ? 'step' : undefined}
-                  className="w-full text-left"
-                >
-                  <p
-                    className={`font-heading text-2xl font-extrabold transition-colors ${
-                      isActive ? 'text-primary' : 'text-dark-900'
-                    }`}
-                  >
-                    {item.year}
-                  </p>
-
-                  <span
-                    className={`relative z-10 mt-3 flex h-9 w-9 items-center justify-center rounded-lg transition-all ${
-                      isActive ? 'scale-110 bg-primary' : 'bg-primary/85'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4 text-white" />
-                  </span>
-
-                  <h3 className="mt-3 font-heading text-xs font-bold text-dark-900">
-                    {t(item.title)}
-                  </h3>
-                  <p className="mt-1 max-w-[15rem] text-[10px] leading-relaxed text-dark-500">
-                    {t(item.desc)}
-                  </p>
-                </button>
-              </li>
-            );
-          })}
+    <section id="perjalanan" className="profile-section profile-history">
+      <div className="profile-container">
+        <h2 className="profile-section-heading">{t('Perjalanan Kami')}</h2>
+        <ol className="profile-timeline">
+          {timelineData.map((item, i) => (
+            <li key={item.year}>
+              <button type="button" onClick={() => setActive(i)} aria-current={active === i ? 'step' : undefined} className="profile-milestone">
+                <span className="profile-milestone-icon"><img src={icons[i]} alt="" aria-hidden="true" /></span>
+                <span className="profile-milestone-content">
+                  <span className="profile-milestone-year">{item.year}</span>
+                  <span className="profile-milestone-track" aria-hidden="true"><i /><i /><i /></span>
+                  <span className="profile-milestone-title">{t(item.title)}</span>
+                  <span className="profile-milestone-description">{t(item.desc)}</span>
+                </span>
+              </button>
+            </li>
+          ))}
         </ol>
       </div>
     </section>

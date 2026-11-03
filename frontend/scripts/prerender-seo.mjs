@@ -182,7 +182,7 @@ try {
     const article = publicContent.berita?.find(item => route === `/berita/${item.slug}`);
     const metadata = pageMetadata({ pathname: route, title, description, school, breadcrumbs, article: article ? articleMetadata(article) : undefined });
     // SSR uses source asset URLs; map them to the exact files emitted by the client build.
-    html = html.replace(/\/src\/assets\/[^"\s<>]+/g, url => {
+    html = html.replace(/\/src\/assets\/[^"'\s<>)]+/g, url => {
       const asset = manifest[url.slice(1).split('?')[0]];
       if (!asset) throw new Error(`Missing production asset: ${url}`);
       return `/${asset.file}`;
