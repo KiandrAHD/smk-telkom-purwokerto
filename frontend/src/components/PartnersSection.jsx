@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Pause, Play } from 'lucide-react';
 import bg from '../assets/responsive/partners-1847.webp';
 import bg960 from '../assets/responsive/partners-960.webp';
 import bg1440 from '../assets/responsive/partners-1440.webp';
@@ -71,8 +70,8 @@ const PartnersSection = ({ items = mitraIndustri, animated = true, variant = 'de
             ))}
           </div>
         </div>
-        {marquee && <button type="button" onClick={() => setPaused(value => !value)} aria-controls="mitra-logo-track" aria-pressed={paused} aria-label={language === 'en' ? 'Pause partner animation' : 'Jeda animasi mitra'} className="absolute bottom-2 right-2 z-20 flex size-11 items-center justify-center rounded-full bg-white/90 text-primary shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-          {paused ? <Play aria-hidden="true" className="size-4" /> : <Pause aria-hidden="true" className="size-4" />}
+        {marquee && <button type="button" onClick={() => setPaused(value => !value)} aria-controls="mitra-logo-track" aria-pressed={paused} aria-label={language === 'en' ? 'Pause partner animation' : 'Jeda animasi mitra'} className="sr-only focus:not-sr-only focus:absolute focus:bottom-2 focus:right-2 focus:z-20 focus:rounded-full focus:bg-white focus:px-4 focus:py-3 focus:text-primary focus:outline-2 focus:outline-primary">
+          {language === 'en' ? 'Pause partner animation' : 'Jeda animasi mitra'}
         </button>}
       </section>
     </>
