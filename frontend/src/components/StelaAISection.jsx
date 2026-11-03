@@ -11,7 +11,7 @@ const StelaAISection = ({ variant = 'default', className, containerClassName }) 
     <section id="nexa" aria-label="Nexa AI" className={className ?? 'bg-white py-6 lg:py-8'}>
       <div className={containerClassName ?? (variant === 'prestasi' ? 'mx-auto w-[calc(100%-2rem)] max-w-[1683px] sm:w-[calc(100%-3rem)] lg:w-[91.27%]' : 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8')}>
         <div className={`relative overflow-hidden rounded-3xl ${translatedPanel ? 'bg-[#a60012]' : 'bg-transparent'}`}>
-          {!translatedPanel && <img src="/assets/branding/nexa-banner.png" width="2000" height="667" alt="" aria-hidden="true" loading="lazy" className="block h-auto w-full" />}
+          {!translatedPanel && <img src="/assets/branding/nexa-banner-1540.webp" srcSet="/assets/branding/nexa-banner-640.webp 640w, /assets/branding/nexa-banner-960.webp 960w, /assets/branding/nexa-banner-1540.webp 1540w" sizes={variant === 'prestasi' ? '(min-width: 1844px) 1683px, (min-width: 1024px) 91.27vw, (min-width: 640px) calc(100vw - 48px), calc(100vw - 32px)' : '(min-width: 1280px) 1216px, (min-width: 1024px) calc(100vw - 64px), (min-width: 640px) calc(100vw - 48px), calc(100vw - 32px)'} width="1540" height="513" alt="" aria-hidden="true" loading="lazy" decoding="async" className="block h-auto w-full" />}
           {translatedPanel && <img src="/assets/branding/nexa-mark.png" alt="" aria-hidden="true" loading="lazy" className="ml-6 mt-6 h-16 w-auto object-contain" />}
           <div className={`px-6 pb-6 pt-4 ${translatedPanel ? 'text-white' : 'text-dark-800 sm:sr-only'}`}>
             <h2 className="font-heading text-xl font-bold">{t(stelaData.title).replace('\n', ' ')}</h2>
