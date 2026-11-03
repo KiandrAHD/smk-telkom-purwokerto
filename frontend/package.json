@@ -10,6 +10,7 @@
     "seo:uji": "node scripts/uji-seo.mjs",
     "lint": "eslint .",
     "animasi:uji": "node scripts/uji-animasi.mjs",
+    "hero:uji": "node scripts/uji-floating-hero-structure.mjs",
     "bahasa:uji": "node scripts/uji-bahasa.mjs && node scripts/uji-bahasa-portal.mjs && node scripts/uji-bahasa-konten.mjs",
     "preview": "vite preview",
     "stela:konten": "node scripts/buat-konten-stela.mjs",
@@ -53,6 +54,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@babel/parser": "^8.1.0",
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
