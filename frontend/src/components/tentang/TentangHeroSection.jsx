@@ -3,6 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import HeroBreadcrumb from '../HeroBreadcrumb';
 import HeroBadges from '../HeroBadges';
+import TentangStatsSection from './TentangStatsSection';
 import { heroData } from '../../data/dummyData';
 import profilHeroEnglish from '../../assets/tentang/profil-hero-en.jpeg';
 
@@ -47,6 +48,7 @@ const TentangHeroSection = () => {
             </a>
         </div>
       </div></PageHeroCarousel>
+      <TentangStatsSection />
     </div>
   </section>
   );
