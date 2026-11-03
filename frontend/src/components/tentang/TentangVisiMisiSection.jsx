@@ -1,52 +1,45 @@
 import { useLanguage } from '../../context/LanguageContext';
-import { Cpu, Handshake, Lightbulb, ShieldCheck, Target, Telescope } from 'lucide-react';
 import { nilaiStematel, visiMisi } from '../../data/dummyData';
+import vision from '../../assets/tentang/profile/vision.svg';
+import mission from '../../assets/tentang/profile/mission.svg';
+import innovation from '../../assets/tentang/profile/innovation.svg';
+import character from '../../assets/tentang/profile/character.svg';
+import technology from '../../assets/tentang/profile/technology.svg';
+import collaboration from '../../assets/tentang/profile/collaboration.svg';
 
-const nilaiIcons = { lightbulb: Lightbulb, shield: ShieldCheck, cpu: Cpu, handshake: Handshake };
+const nilaiIcons = { lightbulb: innovation, shield: character, cpu: technology, handshake: collaboration };
 
-const Card = ({ Icon, title, desc, className = '' }) => {
+const Card = ({ icon, title, desc }) => {
   const { t } = useLanguage();
   return (
-  <div
-    className={`group rounded-2xl border border-dark-100 bg-white p-5 shadow-card transition-all hover:-translate-y-1 hover:border-primary/40 ${className}`}
-  >
-    <Icon className="h-8 w-8 text-primary" strokeWidth={2.2} />
-    <h3 className="mt-4 font-heading text-sm font-bold text-dark-900">{t(title)}</h3>
-    <p className="mt-2 text-[11px] leading-relaxed text-dark-500">{t(desc)}</p>
-  </div>
+    <article className="profile-value-card">
+      <div className="profile-value-icon"><img src={icon} alt="" aria-hidden="true" /></div>
+      <h3>{t(title)}</h3>
+      <p>{t(desc)}</p>
+    </article>
   );
 };
 
 const TentangVisiMisiSection = () => {
   const { t } = useLanguage();
   return (
-  <section className="bg-white py-6 lg:py-8">
-    <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8">
-      {/* Visi & Misi */}
-      <div>
-        <h2 className="font-heading text-xl font-extrabold text-primary">{t("Visi & Misi")}</h2>
-        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Card Icon={Target} title={t("Visi")} desc={t(visiMisi.visi)} />
-          <Card Icon={Telescope} title={t("Misi")} desc={t(visiMisi.misi)} />
+    <section className="profile-section" aria-label={t('Visi, Misi, dan Nilai-Nilai Stematel')}>
+      <div className="profile-container profile-principles">
+        <div className="profile-vision">
+          <h2 className="profile-section-heading">{t('Visi & Misi')}</h2>
+          <div className="profile-vision-grid">
+            <Card icon={vision} title="Visi" desc={visiMisi.visi} />
+            <Card icon={mission} title="Misi" desc={visiMisi.misi} />
+          </div>
+        </div>
+        <div className="profile-values">
+          <h2 className="profile-section-heading">{t('Nilai-Nilai Stematel')}</h2>
+          <div className="profile-values-grid">
+            {nilaiStematel.map(nilai => <Card key={nilai.title} icon={nilaiIcons[nilai.icon]} title={nilai.title} desc={nilai.desc} />)}
+          </div>
         </div>
       </div>
-
-      {/* Nilai-Nilai Stematel */}
-      <div>
-        <h2 className="font-heading text-xl font-extrabold text-primary">{t("Nilai-Nilai Stematel")}</h2>
-        <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {nilaiStematel.map((nilai) => (
-            <Card
-              key={nilai.title}
-              Icon={nilaiIcons[nilai.icon]}
-              title={t(nilai.title)}
-              desc={t(nilai.desc)}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
   );
 };
 

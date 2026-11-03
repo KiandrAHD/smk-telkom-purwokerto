@@ -2,32 +2,31 @@ import { useLanguage } from '../../context/LanguageContext';
 import { ArrowRight } from 'lucide-react';
 import { aboutDescription, videoProfilSekolah } from '../../data/dummyData';
 import VideoEmbed from '../VideoEmbed';
+import poster from '../../assets/tentang/video-profil-thumbnail.png';
+import schoolLogoMask from '../../assets/tentang/profile/school-logo-mask.png';
+import playIcon from '../../assets/landing/about-play.svg';
 
 const TentangAboutSection = () => {
   const { t } = useLanguage();
   return (
-  <section id="profil" className="scroll-mt-20 bg-white py-6 lg:scroll-mt-24 lg:py-10">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid items-center gap-8 rounded-3xl border border-dark-100 bg-white p-6 shadow-card sm:p-8 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:p-10">
-        <div>
-          <h2 className="whitespace-pre-line font-heading text-2xl sm:text-3xl font-extrabold leading-tight text-primary">
-            {t(aboutDescription.title)}
-          </h2>
-          <p className="mt-5 max-w-3xl text-xs sm:text-sm leading-relaxed text-dark-600">
-            {t(aboutDescription.text)}
-          </p>
-          <a
-            href="#perjalanan"
-            className="mt-6 inline-flex items-center rounded-full border border-dark-200 bg-white px-6 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary"
-          >
-            {t(aboutDescription.ctaText)}
-            <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4" />
-          </a>
+    <section id="profil" className="profile-section profile-about">
+      <div className="profile-container">
+        <div className="profile-about-panel">
+          <div className="profile-about-copy">
+            <h2>{t(aboutDescription.title)}</h2>
+            <p>{t(aboutDescription.text)}</p>
+            <a href="#perjalanan" className="profile-about-action">
+              {t(aboutDescription.ctaText)}<ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
+            </a>
+          </div>
+          <div className="profile-video">
+            <VideoEmbed {...videoProfilSekolah} poster={poster} title={t(videoProfilSekolah.title)} desc={t(videoProfilSekolah.desc)} showCaption={false} appearance="about" playIcon={playIcon} />
+            <span aria-hidden="true" className="profile-video-logo"><span style={{ maskImage: `url(${schoolLogoMask})` }} /></span>
+            <p>{t('Tentang SMK Telkom Purwokerto')}</p>
+          </div>
         </div>
-        <VideoEmbed {...videoProfilSekolah} title={t(videoProfilSekolah.title)} desc={t(videoProfilSekolah.desc)} showCaption={false} />
       </div>
-    </div>
-  </section>
+    </section>
   );
 };
 

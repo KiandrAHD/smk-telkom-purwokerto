@@ -10,7 +10,7 @@ import arrowPrev from '../assets/fasilitas/arrow-prev.svg';
 import arrowNext from '../assets/fasilitas/arrow-next.svg';
 import './FacilitiesSection.css';
 
-const slides = [
+const defaultSlides = [
   { name: 'Lab Jaringan', title: 'Laboratorium Jaringan', image: fasilitasData[5].image, category: 'Laboratorium', Icon: Network },
   { name: 'Ruang Kelas', image: fasilitasData[2].image, preview: fasilitasData[2].preview, category: 'Kelas', Icon: School },
   { name: 'Perpustakaan', image: fasilitasData[7].image, preview: fasilitasData[7].preview, category: 'Perpustakaan', Icon: BookOpen },
@@ -18,7 +18,9 @@ const slides = [
   { name: 'Lab Robotik', image: fasilitasData[6].image, preview: fasilitasData[6].preview, category: 'Laboratorium', Icon: Bot },
   { name: 'Fasilitas Lainnya', image: fasilitasData[0].image, preview: fasilitasData[0].preview, category: 'Semua', Icon: Building2 },
 ];
-const adjacentSlide = (active, offset) => (active + offset + slides.length) % slides.length;
+// Profile frame places the robotics lab immediately before the network lab.
+const profileSlides = [...defaultSlides.slice(0, 4), defaultSlides[5], defaultSlides[4]];
+const adjacentSlide = (active, offset) => (active + offset + defaultSlides.length) % defaultSlides.length;
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const measureCard = card => {
   const bounds = card.getBoundingClientRect();
@@ -29,7 +31,8 @@ const measureCard = card => {
   };
 };
 
-export default function FacilitiesSection() {
+export default function FacilitiesSection({ variant = 'default' }) {
+  const slides = variant === 'profile' ? profileSlides : defaultSlides;
   const { t } = useLanguage();
   const navigatePage = useNavigate();
   // Both supported translations have two words; keep the existing accent on the last word.
@@ -80,7 +83,7 @@ export default function FacilitiesSection() {
       turning.current = true;
     }
     setActive((next + slides.length) % slides.length);
-  }, [active]);
+  }, [active, slides.length]);
 
   const prepareNavigation = (event) => {
     event.preventDefault();
@@ -193,7 +196,7 @@ export default function FacilitiesSection() {
     } else {
       slideAnimation.current.to(indicators.current, { '--facility-progress': progress, duration: 0.5, ease: 'power3.out' }, 0);
     }
-  }, [active]);
+  }, [active, slides.length]);
 
   const showDetails = (category = 'Semua') => {
     navigatePage(category === 'Semua' ? '/fasilitas' : `/fasilitas?kategori=${encodeURIComponent(category)}`);

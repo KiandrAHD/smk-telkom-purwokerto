@@ -1,4 +1,9 @@
 export default {
+  'Visi, Misi, dan Nilai-Nilai Stematel': 'Stematel Vision, Mission, and Values',
+  'SMK Telkom Purwokerto merupakan sekolah vokasi di bawah naungan Yayasan Pendidikan Telkom yang berfokus pada bidang teknologi informasi, jaringan, dan telekomunikasi. Kami berkomitmen untuk menghadirkan pendidikan berkualitas yang relevan dengan dunia industri dan perkembangan teknologi.': 'SMK Telkom Purwokerto is a vocational school under the Telkom Education Foundation, focusing on information technology, networking, and telecommunications. We are committed to providing quality education that stays relevant to industry and technological developments.',
+  'Selalu berinovasi menghadapi perubahan.': 'Always innovating in response to change.',
+  'Berkolaborasi untuk menciptakan kebermanfaatan.': 'Collaborating to create a positive impact.',
+  'Memperluas kolaborasi dengan berbagai mitra industri ternama.': 'Expanding collaboration with leading industry partners.',
   'School Tour': 'School Tour',
   'Lihat Fasilitas Lainnya': 'View More Facilities',
   'Jelajahi Sekarang': 'Explore Now',
