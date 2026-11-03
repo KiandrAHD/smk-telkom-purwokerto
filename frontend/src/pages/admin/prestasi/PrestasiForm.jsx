@@ -1,3 +1,5 @@
+import RichTextEditor from '../../../components/dashboard/RichTextEditor';
+import { richTextToPlain } from '../../../utils/richText';
 import { useState } from 'react';
 import { slugify } from '../../../utils/slug';
 import ImageUploadField from '../../../components/dashboard/ImageUploadField';
@@ -40,7 +42,7 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
     if (!form.judul.trim()) nextErrors.judul = 'Judul wajib diisi.';
     if (!form.slug.trim()) nextErrors.slug = 'Slug wajib diisi.';
     else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(form.slug.trim())) nextErrors.slug = 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.';
-    if (!form.deskripsi.trim()) nextErrors.deskripsi = 'Deskripsi wajib diisi.';
+    if (!richTextToPlain(form.deskripsi).trim()) nextErrors.deskripsi = 'Deskripsi wajib diisi.';
     if (form.instagram_url.trim() && !isValidInstagramUrl(form.instagram_url.trim())) nextErrors.instagram_url = 'URL harus HTTPS dan berasal dari instagram.com atau subdomainnya.';
     return nextErrors;
   };
@@ -102,7 +104,7 @@ const PrestasiForm = ({ initialData, onSubmit, onCancel, submitting }) => {
 
       <div>
         <label htmlFor="prestasi-deskripsi" className={labelClass}>Deskripsi *</label>
-        <textarea id="prestasi-deskripsi" value={form.deskripsi} onChange={(event) => updateField('deskripsi', event.target.value)} className={`${inputClass} min-h-40 resize-y`} rows="7" required />
+        <RichTextEditor disabled={submitting} aria-label="Isi konten" id="prestasi-deskripsi" value={form.deskripsi} onChange={(event) => updateField('deskripsi', event.target.value)} required />
         {errors.deskripsi && <p className="mt-1 text-xs text-primary-700">{errors.deskripsi}</p>}
       </div>
 

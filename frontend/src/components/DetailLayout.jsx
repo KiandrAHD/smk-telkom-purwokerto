@@ -1,3 +1,4 @@
+import RichContent from './RichContent';
 import { ArrowLeft, CalendarDays, ChevronRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
@@ -74,6 +75,7 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
           {t(item.lead)}
         </p>
 
+        {item.richBody && <RichContent value={item.richBody} className="mt-5 text-sm text-dark-700" />}
         <div className="mt-5 space-y-4">
           {item.body.map((paragraf) => (
             <p key={paragraf} className="text-xs sm:text-sm leading-relaxed text-dark-500">

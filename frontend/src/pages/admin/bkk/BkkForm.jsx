@@ -1,3 +1,4 @@
+import RichTextEditor from '../../../components/dashboard/RichTextEditor';
 import { useState } from 'react';
 import ImageUploadField from '../../../components/dashboard/ImageUploadField';
 
@@ -74,7 +75,7 @@ const BkkForm = ({ initialData, onSubmit, onCancel, submitting }) => {
 
       <div>
         <label htmlFor="bkk-deskripsi" className={labelClass}>Deskripsi</label>
-        <textarea id="bkk-deskripsi" value={form.deskripsi} onChange={(event) => updateField('deskripsi', event.target.value)} className={`${inputClass} min-h-32 resize-y`} rows="5" />
+        <RichTextEditor disabled={submitting} aria-label="Isi konten" id="bkk-deskripsi" value={form.deskripsi} onChange={(event) => updateField('deskripsi', event.target.value)} />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

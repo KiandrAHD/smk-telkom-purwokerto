@@ -1,0 +1,24 @@
+.rich-content { overflow-wrap: anywhere; line-height: 1.75; }
+.rich-content > * + * { margin-top: .8em; }
+.rich-content h2 { font-size: 1.5em; font-weight: 700; }
+.rich-content h3 { font-size: 1.25em; font-weight: 700; }
+.rich-content h4 { font-size: 1.1em; font-weight: 700; }
+.rich-content ul { list-style: disc; padding-left: 1.6em; }
+.rich-content ol { list-style: decimal; padding-left: 1.6em; }
+.rich-content li > p { margin: 0; }
+.rich-content blockquote { border-left: 3px solid #cd091d; padding-left: 1em; color: #596170; }
+.rich-content a { color: #a80719; text-decoration: underline; }
+.rich-content pre { white-space: pre-wrap; background: #f3f4f6; padding: .75em; border-radius: .5em; }
+.rich-content table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+.rich-content td, .rich-content th { border: 1px solid #cbd0d8; padding: .5em; min-width: 2em; vertical-align: top; }
+.rich-content th { background: #f3f4f6; font-weight: 700; }
+.rich-content hr { border: 0; border-top: 1px solid #cbd0d8; margin-block: 1em; }
+.rich-editor { border: 1px solid #d1d5db; border-radius: .75rem; background: white; overflow: hidden; }
+.rich-editor:focus-within { outline: 2px solid #cd091d; outline-offset: 2px; }
+.rich-editor-toolbar { display: flex; flex-wrap: wrap; gap: .25rem; padding: .5rem; border-bottom: 1px solid #e5e7eb; background: #f9fafb; }
+.rich-editor-toolbar button, .rich-editor-toolbar select { min-height: 36px; padding: .35rem .6rem; border: 1px solid transparent; border-radius: .35rem; font-size: .75rem; color: #303744; }
+.rich-editor-toolbar button:hover, .rich-editor-toolbar button[aria-pressed=true] { background: #fee9ec; color: #a80719; }
+.rich-editor-toolbar button:focus-visible, .rich-editor-toolbar select:focus-visible { outline: 2px solid #cd091d; }
+.rich-editor-toolbar button:disabled { opacity: .35; cursor: not-allowed; }
+.rich-editor .tiptap { min-height: 200px; max-height: 520px; overflow-y: auto; padding: 1rem; outline: none; font-size: .875rem; color: #232936; }
+.rich-editor-footer { padding: .5rem .75rem; border-top: 1px solid #e5e7eb; font-size: .7rem; color: #596170; }

@@ -1,3 +1,5 @@
+import RichTextEditor from '../../../components/dashboard/RichTextEditor';
+import { richTextToPlain } from '../../../utils/richText';
 import { useState } from 'react';
 import { slugify } from '../../../utils/slug';
 import ImageUploadField from '../../../components/dashboard/ImageUploadField';
@@ -57,7 +59,7 @@ const PengumumanForm = ({ initialData, onSubmit, onCancel, submitting }) => {
     else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(form.slug.trim())) {
       nextErrors.slug = 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.';
     }
-    if (!form.konten.trim()) nextErrors.konten = 'Konten wajib diisi.';
+    if (!richTextToPlain(form.konten).trim()) nextErrors.konten = 'Konten wajib diisi.';
     if (!form.status) nextErrors.status = 'Status wajib dipilih.';
     return nextErrors;
   };
@@ -116,7 +118,7 @@ const PengumumanForm = ({ initialData, onSubmit, onCancel, submitting }) => {
 
       <div>
         <label htmlFor="pengumuman-konten" className={labelClass}>Konten *</label>
-        <textarea id="pengumuman-konten" value={form.konten} onChange={(event) => updateField('konten', event.target.value)} className={`${inputClass} min-h-40 resize-y`} rows="7" required />
+        <RichTextEditor disabled={submitting} aria-label="Isi konten" id="pengumuman-konten" value={form.konten} onChange={(event) => updateField('konten', event.target.value)} required />
         {errors.konten && <p className="mt-1 text-xs text-primary-700">{errors.konten}</p>}
       </div>
 
