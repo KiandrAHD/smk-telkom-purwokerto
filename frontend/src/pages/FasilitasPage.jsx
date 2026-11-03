@@ -21,17 +21,17 @@ import headingIcon from '../assets/fasilitas/heading-icon.svg';
 import headingUnderline from '../assets/fasilitas/heading-underline.svg';
 import classroomIcon from '../assets/fasilitas/quick-classroom.svg';
 import tourIcon from '../assets/fasilitas/quick-tour.svg';
-import robotIcon from '../assets/fasilitas/quick-robot.svg';
-import sparkIcon from '../assets/fasilitas/quick-spark.svg';
-import sparkDot from '../assets/fasilitas/quick-dot.svg';
 import quickArrow from '../assets/fasilitas/quick-arrow.svg';
 import '../styles/fasilitas.css';
+
+const nexaIcon = '/assets/branding/nexa-mark.png';
+const nexttelIcon = '/assets/branding/nexttel-mark.png';
 
 const facilityQuickLinks = [
   { title: 'Ruang Kelas', desc: 'Ruang kelas nyaman berbasis teknologi', linkLabel: 'Lihat Sekarang', href: '/fasilitas?kategori=Kelas#daftar-fasilitas', image: classroomIcon },
   { title: 'School Tour', desc: 'Jelajahi fasilitas modern sekolah kami', linkLabel: 'Jelajah Sekarang', href: '#school-tour', image: tourIcon },
-  { ...quickLinks[1], image: robotIcon },
-  { ...quickLinks[2], title: 'NexTel', image: sparkIcon },
+  { ...quickLinks[1], image: nexaIcon },
+  { ...quickLinks[2], title: 'NexTel', image: nexttelIcon },
 ];
 
 function GroupTitle({ title, t }) {
@@ -155,8 +155,7 @@ export default function FasilitasPage() {
             <div className="grid grid-cols-1 divide-y divide-dark-200 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4">
               {facilityQuickLinks.map((item, index) => <div key={item.title} className={`quick-access-card flex min-w-0 gap-3 px-4 py-3 ${index % 2 ? 'sm:border-l sm:border-dark-200' : ''} ${index >= 2 ? 'sm:border-t sm:border-dark-200 lg:border-t-0' : ''} ${index === 2 ? 'lg:border-l lg:border-dark-200' : ''}`}>
                 <span aria-hidden="true" className="quick-access-icon relative flex size-10 shrink-0 items-center justify-center self-start rounded-lg bg-primary">
-                  <img src={item.image} alt="" className={`h-auto ${index === 0 ? 'w-[47%]' : index === 1 ? 'w-[57%]' : 'w-[66%]'}`} />
-                  {index === 3 && <><span className="absolute right-[18%] top-[20%] text-[7px] font-extrabold leading-none text-white">+</span><img src={sparkDot} alt="" className="absolute bottom-[24%] left-[16%] h-auto w-[10%]" /></>}
+                  <img src={item.image} alt="" className={`h-auto max-h-[80%] object-contain ${index === 0 ? 'w-[47%]' : index === 1 ? 'w-[57%]' : index === 2 ? 'w-[69%]' : 'w-[80%]'}`} />
                 </span>
                 <div className="quick-access-content min-w-0 flex-1">
                   <p className="quick-access-title font-heading font-bold text-dark-900">{t(item.title)}</p>
