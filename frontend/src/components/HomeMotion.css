@@ -29,6 +29,11 @@
 }
 .home-innovation-line { display: flex; flex-wrap: wrap; align-items: center; column-gap: .22em; }
 .home-innovation-line [data-innovation-word] { display: inline-block; }
+.innovation-character { color: #b3b3b3; white-space: pre; }
+.innovation-character.is-typed { color: inherit; }
+@media print {
+  .innovation-character { color: inherit !important; }
+}
 .home-innovation-box {
   position: relative;
   flex: none;
@@ -43,14 +48,14 @@
 }
 .home-innovation-size { display: block; visibility: hidden; }
 .home-innovation-window { position: absolute; inset: 0; overflow: hidden; }
-.home-innovation-reel { display: flex; width: 200%; height: 100%; will-change: transform; }
+.home-innovation-reel { display: flex; width: max-content; height: 100%; will-change: transform; }
 .home-innovation-reel > span {
   display: flex;
-  flex: 0 0 50%;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-inline: .2em;
+  padding-inline: .6em;
 }
 
 @media (prefers-reduced-motion: reduce) {
