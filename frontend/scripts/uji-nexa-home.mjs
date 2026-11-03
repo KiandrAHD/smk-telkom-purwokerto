@@ -22,7 +22,8 @@ try {
     assert.doesNotMatch(banner, /\bSTELA\b/);
     assert.equal(banner.includes('nexa-banner.png'), language === 'id', 'English must not display baked Indonesian text');
     const faq = await render('components/jurusan/JurusanFaqSection', language, { variant: 'home' });
-    assert.match(faq, /aria-expanded="true"/);
+    assert.doesNotMatch(faq, /aria-expanded="true"/);
+    assert.match(faq, /aria-expanded="false"/);
     assert.match(faq, /href="\/jurusan\/faq"/);
     assert.match(faq, /href="\/nexa"/);
     const stats = await render('components/HomeStatistics', language);

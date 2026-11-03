@@ -1,6 +1,7 @@
 import MainLayout from '../layouts/MainLayout';
 import Reveal from '../components/Reveal';
 import RibbonDivider from '../components/RibbonDivider';
+import WaveMarquee from '../components/WaveMarquee';
 import JurusanHeroSection from '../components/jurusan/JurusanHeroSection';
 import JurusanListSection from '../components/jurusan/JurusanListSection';
 import JurusanQuizSection from '../components/jurusan/JurusanQuizSection';
@@ -10,12 +11,13 @@ import JurusanShowcaseSection from '../components/jurusan/JurusanShowcaseSection
 import JurusanFaqSection from '../components/jurusan/JurusanFaqSection';
 
 const JurusanPage = () => (
-  <MainLayout>
+  <MainLayout showOpeningMarquee={false}>
     <JurusanHeroSection />
+    <RibbonDivider className="w-full min-h-12 sm:min-h-16" />
     <Reveal>
       <JurusanListSection />
     </Reveal>
-    <RibbonDivider className="min-h-12 sm:min-h-16" />
+    <WaveMarquee />
     <Reveal>
       <JurusanQuizSection />
     </Reveal>

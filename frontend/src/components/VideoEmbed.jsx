@@ -11,7 +11,7 @@ import schoolPoster from '../assets/tentang/profil-hero.jpg';
 // Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
 // sebelum pengunjung benar-benar memutar videonya.
 const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption, posterLoading = 'lazy', title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', appearance = 'default', playIcon, className = '' }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [diputar, setDiputar] = useState(false);
   const isAbout = appearance === 'about';
 
@@ -20,7 +20,9 @@ const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption,
       <div className={`relative w-full overflow-hidden ${rasio} ${layout === 'horizontal' ? 'rounded-[20px] lg:rounded-[1.0846vw]' : ''}`}>
         {diputar ? (
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
+            // YouTube owns branding/title overlays. modestbranding/showinfo no longer remove them.
+            // rel=0 limits recommendations to this channel; it does not disable them.
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&controls=1&fs=1&playsinline=1&iv_load_policy=3&hl=${language}`}
             title={t(title)}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

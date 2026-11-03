@@ -170,7 +170,7 @@ export default function FasilitasPage() {
         <CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} />
         <section id="daftar-fasilitas" aria-labelledby="fasilitas-title" className="relative isolate scroll-mt-28 bg-white py-8 lg:py-12">
         {['right', 'left'].map(side => <div key={side} aria-hidden="true" className={`facility-chain facility-chain--${side}`} />)}
-          <div className="mx-auto max-w-[1644px] px-4 sm:px-6 lg:px-10">
+          <div className="facility-content mx-auto max-w-[1644px]">
             <h2 id="fasilitas-title" className="mx-auto flex w-fit max-w-full items-center justify-center gap-2 font-heading text-2xl font-bold leading-tight text-black sm:gap-3 sm:text-3xl">
               <img src={headingIcon} alt="" aria-hidden="true" className="size-12 shrink-0 sm:size-16 lg:size-[clamp(4rem,5.52vw,6.375rem)]" />
               <span className="relative"><span className="text-[#cd091d]">{titleStart}</span> {titleEnd.join(' ')}<img src={headingUnderline} alt="" aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px w-full" /></span>
