@@ -12,7 +12,6 @@ import HeroQuickAccess from '../components/HeroQuickAccess';
 import SectionAccents from '../components/SectionAccents';
 import ContentImage from '../components/ContentImage';
 import heroFigma from '../assets/ekstrakurikuler/hero-figma.webp';
-import ribbon from '../assets/landing/ribbon-divider.png';
 import { ekstrakurikulerData } from '../data/dummyData';
 import { slugify } from '../utils/slug';
 
@@ -169,7 +168,6 @@ const CategorySection = ({ activeCategory, title, items, onSelect, onOpen }) => 
       className="relative overflow-hidden bg-white pb-8 lg:pb-12"
     >
       <SectionAccents variant="activities" />
-      <img src={ribbon} alt="" aria-hidden="true" width="1847" height="190" data-figma-node="59:337" className="pointer-events-none relative block h-auto w-full select-none" />
       <div className="relative z-10 mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:mt-12 lg:px-8">
         <CategoryTabs activeCategory={activeCategory} onSelect={onSelect} />
         <div className="mt-6 flex items-end justify-between gap-4">

@@ -1,4 +1,6 @@
 import MainLayout from '../layouts/MainLayout';
+import RibbonDivider from '../components/RibbonDivider';
+import WaveMarquee from '../components/WaveMarquee';
 import Reveal from '../components/Reveal';
 import TentangHeroSection from '../components/tentang/TentangHeroSection';
 import TentangStatsSection from '../components/tentang/TentangStatsSection';
@@ -8,14 +10,14 @@ import TentangTimelineSection from '../components/tentang/TentangTimelineSection
 import TentangKepalaSekolahSection from '../components/tentang/TentangKepalaSekolahSection';
 
 const ProfileSekolahPage = () => (
-  <MainLayout>
-    <>
-      <TentangHeroSection />
-      <TentangStatsSection />
-    </>
+  <MainLayout showOpeningMarquee={false}>
+    <TentangHeroSection />
+    <RibbonDivider />
     <Reveal>
       <TentangAboutSection />
     </Reveal>
+    <TentangStatsSection />
+    <WaveMarquee />
     <Reveal>
       <TentangVisiMisiSection />
     </Reveal>
