@@ -4,7 +4,7 @@ import { ArrowRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
 import SectionAccents from '../SectionAccents';
-import TeacherPhoto from '../TeacherPhoto';
+import TeacherCard from '../TeacherCard';
 import useSlidingPage from '../../hooks/useSlidingPage';
 import { kepalaSekolah } from '../../data/dummyData';
 import { schoolTeacherData as guruData } from '../../data/schoolTeacherData';
@@ -71,18 +71,9 @@ const TentangKepalaSekolahSection = () => {
                 to={`/profil-sekolah/guru/${slugify(guru.nama)}?from=profil-sekolah`}
                 className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none"
               >
-                <article className="h-full min-w-0">
-                  <TeacherPhoto teacher={guru} alt={guru.nama} loading={i < 4 ? 'eager' : 'lazy'} />
-                  <div className="px-1 pb-2 pt-2 [overflow-wrap:anywhere]">
-                    <h3 className="font-heading text-xs font-bold leading-relaxed text-primary">
-                      {t(guru.nama)}
-                    </h3>
-                    {guru.jabatan && <p className="mt-1 font-heading text-[11px] font-bold leading-relaxed text-dark-900">
-                      {t(guru.jabatan)}
-                    </p>}
-                    {guru.bidang && <p className="mt-1 text-[11px] leading-relaxed text-dark-500">{t(guru.bidang)}</p>}
-                  </div>
-                </article>
+                <TeacherCard teacher={guru} name={t(guru.nama)} role={t(guru.jabatan)} alt={guru.nama} loading={i < 4 ? 'eager' : 'lazy'}>
+                  {guru.bidang && <p className="text-[11px] leading-relaxed text-dark-500">{t(guru.bidang)}</p>}
+                </TeacherCard>
               </Link>
             ))}
           </div>
