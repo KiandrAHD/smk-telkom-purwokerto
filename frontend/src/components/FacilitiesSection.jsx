@@ -83,7 +83,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
       turning.current = true;
     }
     setActive((next + slides.length) % slides.length);
-  }, [active, slides.length]);
+  }, [active, slides]);
 
   const prepareNavigation = (event) => {
     event.preventDefault();
@@ -126,7 +126,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
   }, [active, navigate]);
 
   useLayoutEffect(() => {
-    const progress = active / (slides.length - 1);
+    const progress = defaultSlides.findIndex(slide => slide.name === slides[active].name) / (slides.length - 1);
     if (!slideState.current) {
       gsap.set(indicators.current, { '--facility-progress': progress, '--facility-line-opacity': 1 });
       return;
@@ -196,7 +196,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
     } else {
       slideAnimation.current.to(indicators.current, { '--facility-progress': progress, duration: 0.5, ease: 'power3.out' }, 0);
     }
-  }, [active, slides.length]);
+  }, [active, slides]);
 
   const showDetails = (category = 'Semua') => {
     navigatePage(category === 'Semua' ? '/fasilitas' : `/fasilitas?kategori=${encodeURIComponent(category)}`);
@@ -239,12 +239,15 @@ export default function FacilitiesSection({ variant = 'default' }) {
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
         <ol ref={indicators} style={{ '--facility-count': slides.length }} className="facilities-indicators relative flex min-w-[620px] justify-between gap-3 before:absolute before:left-12 before:right-12 before:top-6 before:h-px before:bg-dark-300">
-          {slides.map(({ name, Icon }, index) => <li key={name} className="relative z-10 flex-1 text-center">
-            <button type="button" aria-pressed={active === index} onClick={() => navigate(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
+          {defaultSlides.map(({ name, Icon }, position) => {
+            const index = slides.findIndex(slide => slide.name === name);
+            return <li key={name} className="relative z-10 flex-1 text-center">
+            <button type="button" data-facility-index={index} aria-pressed={active === index} onClick={() => navigate(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
               <span className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 transition-[background-color,border-color,color,scale] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none motion-reduce:scale-100 ${active === index ? 'scale-[1.04] border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
-              <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(index + 1).padStart(2, '0')}</span>
+              <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(position + 1).padStart(2, '0')}</span>
             </button>
-          </li>)}
+          </li>;
+          })}
         </ol>
       </div>
       <div className="facilities-actions-wrapper">

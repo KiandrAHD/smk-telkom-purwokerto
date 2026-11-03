@@ -11,23 +11,27 @@ const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const results = [], errors = [];
 try {
   for (const language of ['id', 'en']) {
-    for (const width of [1920, 1847, 1440, 1366, 768, 390, 375]) {
+    for (const width of [1920, 1847, 1440, 1366, 1024, 768, 390, 375]) {
       const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
       page.on('pageerror', error => errors.push(error.message));
-      // Isolate page geometry from live CMS availability; no backend writes.
-      await page.route('**/rest/v1/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
-      await page.addInitScript(lang => sessionStorage.setItem('smk-telkom-language', lang), language);
+      page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+      // Isolate visual QA from the live CMS; backend integration is tested separately.
+      await page.route('**/api/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+      await page.addInitScript(lang => {
+        sessionStorage.setItem('smk-telkom-language', lang);
+        localStorage.setItem('stela-reminder-dismissed-at', String(Date.now()));
+      }, language);
       await page.goto(`${process.env.QA_URL || 'http://127.0.0.1:4173'}/profil-sekolah`);
       await page.locator('.profile-about-panel').waitFor();
       await page.evaluate(() => document.fonts.ready);
-      for (const selector of ['#profil', '.profile-principles', '#perjalanan', '#guru', '[data-facilities-actions]']) {
+      for (const selector of ['#profil', '.profile-principles', '#perjalanan', '#guru', '#metode-pembelajaran', '[data-facilities-actions]']) {
         await page.locator(selector).scrollIntoViewIfNeeded();
       }
       await page.locator('#profil').scrollIntoViewIfNeeded();
       const geometry = await page.evaluate(() => {
         const rect = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top + window.scrollY, bottom: r.bottom + window.scrollY, width: r.width, height: r.height }; };
         const cards = [...document.querySelectorAll('.profile-value-card')];
-        const boxes = [...document.querySelectorAll('.profile-about-panel, .profile-value-card, .profile-milestone, .profile-video')];
+        const boxes = [...document.querySelectorAll('.profile-about-panel, .profile-value-card, .profile-milestone, .profile-video, .profile-learning-header, .profile-learning-method, .profile-learning-detail, .profile-learning-journey, .profile-learning-stages li')];
         return {
           overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
           cards: cards.map(rect), boxes: boxes.map(rect),
@@ -43,14 +47,36 @@ try {
       assert.equal(geometry.timelineCount, 5);
       assert.equal(geometry.heroStats, 1);
       assert.equal(geometry.facilities, 1);
+      assert.equal(await page.locator('#metode-pembelajaran').count(), 1);
+      assert.equal(await page.locator('.profile-learning-photo').count(), 2);
+      assert.equal(await page.locator('.profile-learning-stages > li').count(), 3);
+      assert.deepEqual(await page.locator('.profile-learning-platforms li').allTextContents(), ['LMS', 'JUARA', 'LIONS', 'DITA']);
+      assert.equal(await page.locator('#learning-title').innerText(), language === 'id' ? 'Belajar Aktif.\nBertumbuh Adaptif.' : 'Learn Actively.\nGrow Adaptively.');
+      const ordered = await page.evaluate(() => {
+        const top = selector => document.querySelector(selector).getBoundingClientRect().top;
+        return top('#guru') < top('#metode-pembelajaran') && top('#metode-pembelajaran') < top('#fasilitas');
+      });
+      assert(ordered, 'Learning methods follow teachers and precede facilities.');
       assert.deepEqual(geometry.clipped, [], `${width}/${language}: clipped content`);
       assert(geometry.boxes.every(r => r.left >= 0 && r.right <= width + 1));
       assert(geometry.assets.every(a => a.loaded && a.width > 0 && a.height > 0), 'Profile assets load and render.');
+      const undistorted = await page.locator('.profile-learning-photo').evaluateAll(images => images.every(image => Math.abs(image.clientWidth / image.clientHeight - image.naturalWidth / image.naturalHeight) < .02));
+      assert(undistorted, 'Learning photos preserve the Figma aspect ratios.');
+      const teacherNext = page.getByRole('button', { name: language === 'id' ? 'Guru berikutnya' : 'Next teachers', exact: true });
+      await teacherNext.click();
+      await page.waitForFunction(() => document.querySelectorAll('#guru [data-slide-indicator]')[1]?.getAttribute('aria-current') === 'true');
+      await page.getByRole('button', { name: language === 'id' ? 'Guru sebelumnya' : 'Previous teachers', exact: true }).click();
+      await page.waitForFunction(() => document.querySelectorAll('#guru [data-slide-indicator]')[0]?.getAttribute('aria-current') === 'true');
+      assert.match(await page.locator('#guru [data-sliding-page] a').first().getAttribute('href'), /^\/profil-sekolah\/guru\/.+\?from=profil-sekolah$/);
       await page.locator('.profile-milestone').nth(2).click();
       assert.equal(await page.locator('.profile-milestone').nth(2).getAttribute('aria-current'), 'step');
       const indicators = page.locator('.facilities-indicators button');
-      await indicators.last().click();
-      assert.equal(await indicators.last().getAttribute('aria-pressed'), 'true');
+      assert.deepEqual(await indicators.locator('span:nth-child(2)').allTextContents(), language === 'id'
+        ? ['Lab Jaringan', 'Ruang Kelas', 'Perpustakaan', 'Lab Komputer', 'Lab Robotik', 'Fasilitas Lainnya']
+        : ['Network Lab', 'Classroom', 'Library', 'Computer Lab', 'Robotics Lab', 'Other Facilities']);
+      // The visual indicator order follows Figma; the carousel retains its looping neighbors.
+      await page.locator('.facilities-indicators button[data-facility-index="5"]').click();
+      assert.equal(await page.locator('.facilities-indicators button[data-facility-index="5"]').getAttribute('aria-pressed'), 'true');
       await page.getByRole('button', { name: language === 'id' ? 'Fasilitas berikutnya' : 'Next facility', exact: true }).click();
       assert.equal(await indicators.first().getAttribute('aria-pressed'), 'true', 'Carousel wraps from last to first.');
       const tour = page.locator('[data-facilities-actions] a').first();
@@ -61,9 +87,10 @@ try {
       await page.locator('.profile-video button').click();
       assert.equal(await page.locator('.profile-video video[controls]').count(), 1);
       await page.reload();
-      for (const selector of ['#profil', '#perjalanan', '#guru', '[data-facilities-actions]']) await page.locator(selector).scrollIntoViewIfNeeded();
+      for (const selector of ['#profil', '#perjalanan', '#guru', '#metode-pembelajaran', '[data-facilities-actions]']) await page.locator(selector).scrollIntoViewIfNeeded();
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: join(output, `profile-${width}-${language}.png`), fullPage: true, animations: 'disabled' });
+      await page.locator('#metode-pembelajaran').screenshot({ path: join(output, `learning-${width}-${language}.png`), style: 'header:has(> nav) { position: static !important; }' });
       if (width === 1920 && language === 'id') {
         await page.locator('#profil').screenshot({ path: join(output, 'about-desktop.png') });
         await page.locator('.profile-principles').screenshot({ path: join(output, 'values-desktop.png') });
@@ -75,7 +102,7 @@ try {
   }
   const motionPage = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   motionPage.on('pageerror', error => errors.push(error.message));
-  await motionPage.route('**/rest/v1/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
+  await motionPage.route('**/api/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
   await motionPage.goto(`${process.env.QA_URL || 'http://127.0.0.1:4173'}/profil-sekolah`);
   await motionPage.locator('#fasilitas').scrollIntoViewIfNeeded();
   await motionPage.mouse.move(0, 0);
