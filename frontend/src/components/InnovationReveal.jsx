@@ -43,8 +43,8 @@ export default function InnovationReveal() {
     revealedRef.current = false;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      const reel = gsap.fromTo(root.querySelector('[data-innovation-reel]'), { xPercent: 0, yPercent: 0 }, {
-        xPercent: -50, duration: 0.85, repeat: -1, repeatDelay: 2.5, ease: 'power3.inOut', paused: true,
+      const reel = gsap.to(root.querySelector('[data-innovation-reel]'), {
+        xPercent: -50, duration: 8, repeat: -1, ease: 'none', paused: true,
       });
       let visible = false;
 
@@ -76,7 +76,7 @@ export default function InnovationReveal() {
             <span className="home-innovation-box">
               <span className="home-innovation-size">{phrase}</span>
               <span className="home-innovation-window"><span data-innovation-reel className="home-innovation-reel">
-                <span>{characters(phrase, visible, Array.from(lead).length + 1)}</span><span>{phrase}</span>
+                <span>{phrase}</span><span>{phrase}</span>
               </span></span>
             </span>
             {words(tail, visible, Array.from(`${lead} ${phrase} `).length)}

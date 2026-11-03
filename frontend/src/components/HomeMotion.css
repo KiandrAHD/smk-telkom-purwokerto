@@ -31,8 +31,6 @@
 .home-innovation-line [data-innovation-word] { display: inline-block; }
 .innovation-character { color: #b3b3b3; white-space: pre; }
 .innovation-character.is-typed { color: inherit; }
-.home-innovation-reel .innovation-character { color: rgb(255 255 255 / .3); }
-.home-innovation-reel .innovation-character.is-typed { color: white; }
 @media print {
   .innovation-character { color: inherit !important; }
 }
@@ -57,7 +55,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-inline: .2em;
+  padding-inline: .6em;
 }
 
 @media (prefers-reduced-motion: reduce) {
