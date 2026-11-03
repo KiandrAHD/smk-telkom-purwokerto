@@ -89,6 +89,7 @@ const DetailLayout = ({ item, backTo, backLabel, children }) => {
         {item.video && (
           <Reveal className="mt-8">
             <VideoEmbed
+              videoSrc={item.video.videoSrc}
               videoId={item.video.videoId}
               poster={item.video.poster || item.image}
               title={item.video.title}

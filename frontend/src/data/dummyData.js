@@ -172,10 +172,10 @@ export const quickLinks = [
 ];
 
 // ── Section Tentang (Beranda) ──
-// Video profil resmi sekolah di kanal YouTube SMK Telkom Purwokerto. Disimpan
-// sebagai satu konstanta karena dipakai di tiga halaman — Beranda, Tentang, dan
-// Prestasi. Ganti `videoId` di sini kalau videonya diperbarui.
+// Sumber profil bersama untuk Beranda, Tentang, dan Prestasi.
+// MP4 faststart dilayani sebagai aset statis, bukan bagian bundle JavaScript.
 export const videoProfilSekolah = {
+  videoSrc: '/videos/profil-sekolah-720p.mp4',
   videoId: 'w68QaEXd7iw',
   title: 'Video Profil SMK Telkom Purwokerto',
   desc: 'Mengenal program keahlian, fasilitas, dan keseharian belajar di SMK Telkom Purwokerto.',
