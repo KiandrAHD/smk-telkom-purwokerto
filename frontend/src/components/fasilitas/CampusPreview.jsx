@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronDown, ImageOff, X } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import useSlidingPage from '../../hooks/useSlidingPage';
+import { useLenis } from 'lenis/react';
 import accent from '../../assets/fasilitas/campus/detail/card-accent.svg';
 import cornerTop from '../../assets/fasilitas/campus/detail/corner-top.svg';
 import cornerBottom from '../../assets/fasilitas/campus/detail/corner-bottom.svg';
@@ -120,6 +121,7 @@ function FacilityContent({ facility, outgoing, initialRoomName }) {
 export default function CampusPreview({ facility, initialRoomName, closing, onClose, onList }) {
   const { t } = useLanguage();
   const close = useRef(null), preview = useRef(null);
+  const lenis = useLenis();
   const [displayed, setDisplayed] = useState({ facility, initialRoomName });
   const [outgoing, setOutgoing] = useState(null);
   // Keep the previous keyed content briefly so a hotspot change can crossfade without losing the map.
@@ -128,19 +130,30 @@ export default function CampusPreview({ facility, initialRoomName, closing, onCl
     setDisplayed({ facility, initialRoomName });
   }
   useEffect(() => {
+    const dialog = preview.current;
+    const trigger = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    lenis?.stop();
+    dialog.showModal();
     close.current?.focus({ preventScroll: true });
-    preview.current?.scrollIntoView({ block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-  }, []);
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      lenis?.start();
+      if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+    };
+  }, [lenis]);
   useEffect(() => {
     if (!outgoing) return undefined;
     const timer = setTimeout(() => setOutgoing(null), window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 260);
     return () => clearTimeout(timer);
   }, [outgoing]);
   return (
-    <aside ref={preview} id="campus-preview" role="dialog" aria-modal="false" aria-labelledby="campus-preview-title" data-campus-preview={facility.content.id} data-closing={closing} className="campus-preview relative overflow-hidden rounded-2xl border border-primary/40 bg-white shadow-card">
+    <dialog ref={preview} id="campus-preview" aria-modal="true" aria-labelledby="campus-preview-title" data-campus-preview={facility.content.id} data-closing={closing} data-lenis-prevent onCancel={event => { event.preventDefault(); onClose(); }} onClick={event => { if (event.target !== event.currentTarget) return; const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose(); }} className="campus-preview campus-preview-modal relative rounded-2xl border border-primary/40 bg-white shadow-card">
       <button ref={close} type="button" onClick={() => onClose()} aria-label={t('Tutup informasi fasilitas')} className="absolute right-2 top-2 z-40 grid size-11 place-items-center rounded-full bg-white text-dark-500 hover:bg-dark-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"><X className="size-5" aria-hidden="true" /></button>
       {outgoing && <FacilityContent key={`${outgoing.facility.content.id}:${outgoing.initialRoomName || ''}`} facility={{ ...outgoing.facility, onList }} initialRoomName={outgoing.initialRoomName} outgoing />}
       <FacilityContent key={`${displayed.facility.content.id}:${displayed.initialRoomName || ''}`} facility={{ ...displayed.facility, onList }} initialRoomName={displayed.initialRoomName} outgoing={false} />
-    </aside>
+    </dialog>
   );
 }
