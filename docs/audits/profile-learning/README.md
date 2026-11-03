@@ -53,5 +53,7 @@ Perbedaan shared component dicatat, bukan diperbaiki dengan redesign global yang
 - Lulus: tidak ada `pageerror` atau console bertipe `error` dalam matriks terisolasi.
 - QA visual memock `/api/**` sebagai array kosong. Ini bukan verifikasi backend live. Tanpa backend lokal, request `localhost:3000` menghasilkan connection refused.
 - `npm run lint`, `uji-profile-content.mjs`, `uji-facilities-actions.mjs`, `uji-floating-hero-structure.mjs`, dan `npx vite build --logLevel error` lulus.
-- `npm run build` awal berhenti saat prerender SEO karena backend `localhost:3000` tidak tersedia; kompilasi Vite sukses. Build CI offline dan build deployment dibahas terpisah pada perbaikan PR #97.
+- `npm run build` awal berhenti saat prerender SEO karena backend `localhost:3000` tidak tersedia; kompilasi Vite sukses.
+- Setelah perbaikan PR #97, `CI=true npm run build:ci` dan `node scripts/uji-seo.mjs --offline` lulus untuk 102 halaman. Output offline sengaja noindex dan tidak boleh dideploy.
+- PR #97: konflik `TentangPage.jsx` diselesaikan dengan mempertahankan satu WaveMarquee sesudah timeline. Parser aset prerender diperbaiki agar tidak memasukkan `)` dari CSS `url(...)` ke nama aset; regression test memeriksa mask logo produksi dan tidak adanya URL `/src/assets/`.
 - Tidak ada mobile frame khusus pada referensi yang diberikan; layout mobile diuji usability/geometry, bukan diklaim pixel-identical terhadap desain mobile yang tidak tersedia.
