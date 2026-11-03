@@ -1,5 +1,6 @@
 export default {
   'School Tour': 'School Tour',
+  'Lihat Fasilitas Lainnya': 'View More Facilities',
   'Jelajahi Sekarang': 'Explore Now',
   'Lihat Kegiatan': 'View Activities',
   'GLOBAL TECHNOPRENEUR': 'GLOBAL TECHNOPRENEUR',
