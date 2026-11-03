@@ -8,7 +8,7 @@ import { jurusanFaq } from '../../data/dummyData';
 const JurusanFaqSection = ({ variant = 'default' }) => {
   const { t, language } = useLanguage();
   const home = variant === 'home';
-  const [open, setOpen] = useState(home ? 0 : null);
+  const [open, setOpen] = useState(null);
   const id = useId();
   const copy = (indonesian, english) => language === 'en' ? english : indonesian;
 
