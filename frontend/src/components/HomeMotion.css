@@ -48,10 +48,10 @@
 }
 .home-innovation-size { display: block; visibility: hidden; }
 .home-innovation-window { position: absolute; inset: 0; overflow: hidden; }
-.home-innovation-reel { display: flex; width: 200%; height: 100%; will-change: transform; }
+.home-innovation-reel { display: flex; width: max-content; height: 100%; will-change: transform; }
 .home-innovation-reel > span {
   display: flex;
-  flex: 0 0 50%;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   height: 100%;
