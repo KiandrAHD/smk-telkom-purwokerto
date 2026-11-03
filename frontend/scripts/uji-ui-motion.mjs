@@ -47,8 +47,16 @@ try {
   assert.match(video, /controls=1&fs=1&playsinline=1&iv_load_policy=3&hl=/);
   assert.match(video, /allowFullScreen/);
   assert.doesNotMatch(video, /[?&](?:modestbranding|showinfo|autohide)=/);
+  const about = await source('components/AboutSection.jsx');
+  assert.match(about, /import '\.\/AboutSection\.css'/);
+  assert.match(about, /className="about-background pointer-events-none absolute/);
+  const aboutStyles = await source('components/AboutSection.css');
+  assert.match(aboutStyles, /\.about-background\s*\{/);
+  assert.match(aboutStyles, /-webkit-mask-image: linear-gradient\(/);
+  assert.match(aboutStyles, /\n {2}mask-image: linear-gradient\(/);
+  assert.match(aboutStyles, /to top,\s*transparent 0/);
   const hero = await source('components/HeroCarousel.css');
   assert.match(hero, /mask-composite: intersect/);
   assert.match(hero, /var\(--hero-artwork-mask/);
-  console.log('UI motion: ID/EN partner loops with focus-only pause control, closed FAQ defaults, facility chain gutters, Jurusan-only marquee order, supported video parameters and preserved Hero masks pass.');
+  console.log('UI motion: ID/EN partner loops with focus-only pause control, closed FAQ defaults, facility chain gutters, Jurusan-only marquee order, supported video parameters, About background fade and preserved Hero masks pass.');
 } finally { await server.close(); }

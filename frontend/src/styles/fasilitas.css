@@ -10,7 +10,7 @@
 .facility-chain {
   position: absolute;
   inset-block: 0;
-  width: clamp(6px, 2.11vw, 39px);
+  width: clamp(5px, 1.3vw, 24px);
   z-index: -1;
   pointer-events: none;
   background: url('../assets/fasilitas/page-accent.png') top center / 100% auto repeat-y;
@@ -21,5 +21,22 @@
   .facility-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (min-width: 64rem) {
-  .facility-filters { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(.75rem, 1.25vw, 1.4375rem); }
+  /* Figma 251:1018: x=120, width=1458, 23px gaps on an 1847px frame.
+     Position independently so the existing heading and card grid do not move. */
+  .facility-filters {
+    position: relative;
+    left: calc(50% - min(50vw, 923.5px) + min(6.497022vw, 120px));
+    width: min(78.93882vw, 1458px);
+    grid-template-columns: minmax(0, 187fr) minmax(0, 224fr) minmax(0, 177fr) minmax(0, 224fr) minmax(0, 142fr) minmax(0, 142fr) minmax(0, 224fr);
+    gap: min(1.245262vw, 23px);
+    margin-top: min(2.165674vw, 40px);
+  }
+  .facility-filters > button {
+    min-width: 0;
+    min-height: clamp(44px, 3.465078vw, 64px);
+  }
+  /* The design leaves 29px after Kelas, rather than the usual 23px. */
+  .facility-filters > button:nth-child(3) {
+    width: calc(100% - min(.324851vw, 6px));
+  }
 }

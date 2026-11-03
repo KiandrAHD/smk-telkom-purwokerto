@@ -1,0 +1,20 @@
+/* Fade only the decorative image so the next white section has no hard seam. */
+.about-background {
+  --about-background-fade: clamp(6rem, 12vw, 11rem);
+  -webkit-mask-image: linear-gradient(
+    to top,
+    transparent 0,
+    rgb(0 0 0 / 15%) calc(var(--about-background-fade) * .2),
+    rgb(0 0 0 / 50%) calc(var(--about-background-fade) * .5),
+    rgb(0 0 0 / 85%) calc(var(--about-background-fade) * .8),
+    #000 var(--about-background-fade)
+  );
+  mask-image: linear-gradient(
+    to top,
+    transparent 0,
+    rgb(0 0 0 / 15%) calc(var(--about-background-fade) * .2),
+    rgb(0 0 0 / 50%) calc(var(--about-background-fade) * .5),
+    rgb(0 0 0 / 85%) calc(var(--about-background-fade) * .8),
+    #000 var(--about-background-fade)
+  );
+}
