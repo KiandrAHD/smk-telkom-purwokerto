@@ -3,14 +3,10 @@ import { Play } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import schoolPoster from '../assets/tentang/profil-hero.jpg';
 
-// Pemutar video dengan pola "facade": yang dimuat pertama cuma gambar sampul,
-// iframe YouTube baru disisipkan setelah tombol putar ditekan. Alasannya bukan
-// gaya-gayaan — iframe YouTube menarik ratusan kilobyte skrip pihak ketiga, dan
-// memasangnya di beberapa halaman sekaligus membuat pemuatan awal terasa berat.
-//
-// Memakai domain youtube-nocookie agar tidak ada cookie pelacak yang dipasang
-// sebelum pengunjung benar-benar memutar videonya.
-const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption, posterLoading = 'lazy', title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', appearance = 'default', playIcon, className = '' }) => {
+// Facade: hanya poster yang dimuat sampai pengunjung menekan tombol putar.
+// File asli memakai kontrol browser tanpa branding penyedia; YouTube tetap
+// tersedia untuk video lain yang belum memiliki sumber langsung.
+const VideoEmbed = ({ videoSrc, videoId, poster, posterSrcSet, posterSizes, posterCaption, posterLoading = 'lazy', title, desc, rasio = 'aspect-video', showCaption = true, layout = 'stacked', appearance = 'default', playIcon, className = '' }) => {
   const { t, language } = useLanguage();
   const [diputar, setDiputar] = useState(false);
   const isAbout = appearance === 'about';
@@ -18,7 +14,17 @@ const VideoEmbed = ({ videoId, poster, posterSrcSet, posterSizes, posterCaption,
   return (
     <figure className={`${isAbout ? 'overflow-hidden rounded-[clamp(0.5rem,2.797cqw,1.25rem)] bg-white' : layout === 'horizontal' ? 'grid overflow-hidden rounded-[20px] bg-white shadow-[0_0_16px_rgba(0,0,0,0.25)] sm:grid-cols-[57.62%_1fr] lg:rounded-[1.0846vw]' : 'overflow-hidden rounded-2xl border border-dark-100 bg-dark-900 shadow-card'} ${className}`}>
       <div className={`relative w-full overflow-hidden ${rasio} ${layout === 'horizontal' ? 'rounded-[20px] lg:rounded-[1.0846vw]' : ''}`}>
-        {diputar ? (
+        {diputar ? videoSrc ? (
+          <video
+            src={videoSrc}
+            controls
+            autoPlay
+            playsInline
+            preload="none"
+            aria-label={t(title)}
+            className="absolute inset-0 h-full w-full bg-black object-contain"
+          />
+        ) : (
           <iframe
             // YouTube owns branding/title overlays. modestbranding/showinfo no longer remove them.
             // rel=0 limits recommendations to this channel; it does not disable them.

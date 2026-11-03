@@ -20,7 +20,7 @@ const PrestasiDukunganSection = () => {
             {language === 'en' ? 'Our' : 'Moment'} <span className="text-[#cd091d]">{language === 'en' ? 'Best' : 'Terbaik'}</span> {language === 'en' ? 'Moments' : 'Kami'}
           </h2>
           <div className="mt-5 lg:mt-[1.6811vw]">
-            <VideoEmbed videoId={videoHighlight.video.videoId} poster={videoHighlight.video.poster} title={t(videoHighlight.videoTitle)} desc={t(videoHighlight.videoDesc)} rasio="aspect-[535/404]" layout="horizontal" />
+            <VideoEmbed videoSrc={videoHighlight.video.videoSrc} videoId={videoHighlight.video.videoId} poster={videoHighlight.video.poster} title={t(videoHighlight.videoTitle)} desc={t(videoHighlight.videoDesc)} rasio="aspect-[535/404]" layout="horizontal" />
           </div>
         </div>
       </div>

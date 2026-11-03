@@ -26,11 +26,11 @@ const AboutSection = () => {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="[container-type:inline-size]">
       <div className="grid grid-cols-1 items-start gap-y-8 pl-[6.294%] lg:grid-cols-[minmax(0,715fr)_minmax(0,694fr)] lg:gap-x-[6.899cqw] lg:gap-y-0 lg:pl-[3.045%] lg:pr-[2.486%]">
-        {/* Video profil sekolah. Iframe YouTube baru dimuat setelah tombol putar
-            ditekan, jadi beranda tidak menarik skrip pihak ketiga sejak awal. */}
+        {/* Video profil asli baru dimuat setelah tombol putar ditekan. */}
         <Reveal className="relative isolate [container-type:inline-size] lg:mt-[2.362cqw]">
           <span aria-hidden="true" className="pointer-events-none absolute -left-[2.517%] -top-[3.357cqw] bottom-0 right-[0.14%] rounded-[clamp(0.5rem,2.797cqw,1.25rem)] bg-[#cd091d]" />
           <VideoEmbed
+            videoSrc={landingAbout.video.videoSrc}
             videoId={landingAbout.video.videoId}
             poster={berandaPoster}
             appearance="about"
