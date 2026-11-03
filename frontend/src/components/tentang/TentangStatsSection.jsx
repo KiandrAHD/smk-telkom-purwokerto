@@ -64,8 +64,6 @@ const TentangStatsSection = () => {
   }, []);
 
   return (
-    <section className="hero-stats-section relative z-10 bg-transparent">
-      <div className="hero-container">
         <div
           ref={ref}
           className="hero-floating hero-floating--stats"
@@ -89,8 +87,6 @@ const TentangStatsSection = () => {
             })}
           </div>
         </div>
-      </div>
-    </section>
   );
 };
 

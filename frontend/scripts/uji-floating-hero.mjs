@@ -14,7 +14,7 @@ const results = [], errors = [];
 page.on('pageerror', error => errors.push(error.message));
 await page.route('**/rest/v1/**', route => route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }));
 try {
-  for (const path of ['/jurusan', '/prestasi', '/bkk', '/pengumuman', '/']) {
+  for (const path of ['/profil-sekolah', '/jurusan', '/prestasi', '/bkk', '/pengumuman', '/']) {
     for (const width of [1920, 1440, 1280, 1024, 768, 375, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.goto(base + path);
