@@ -1,6 +1,7 @@
 import { useLanguage } from '../../context/LanguageContext';
 import { useId, useState } from 'react';
-import { ArrowRight, ArrowUpRight, CircleHelp, Minus, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CircleHelp } from 'lucide-react';
+import './JurusanFaqSection.css';
 import { Link } from 'react-router-dom';
 import { jurusanFaq } from '../../data/dummyData';
 
@@ -29,14 +30,17 @@ const JurusanFaqSection = ({ variant = 'default' }) => {
           <div className="mt-6 space-y-4">
             {jurusanFaq.items.map((item, i) => {
               const isOpen = i === open;
-              const Icon = isOpen ? Minus : Plus;
               return <div key={item.q} className={`rounded-xl border transition-colors ${isOpen ? 'border-primary/50 bg-primary-50/60' : 'border-dark-200 bg-white'}`}>
                 <h3><button type="button" onClick={() => setOpen(isOpen ? null : i)} aria-expanded={isOpen} aria-controls={`${id}-panel-${i}`} id={`${id}-question-${i}`} className="flex min-h-14 w-full items-center justify-between gap-4 px-5 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:px-6">
                   <span className="text-sm font-bold text-dark-900 sm:text-base">{t(item.q)}</span>
-                  <span className={`flex size-8 shrink-0 items-center justify-center rounded-full ${isOpen ? 'bg-primary text-white' : 'bg-primary-50 text-primary'}`}><Icon aria-hidden="true" className="size-4" /></span>
+                  <span data-open={isOpen} className={`faq-toggle flex size-8 shrink-0 items-center justify-center rounded-full ${isOpen ? 'bg-primary text-white' : 'bg-primary-50 text-primary'}`}><svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14" /><path className="faq-toggle-vertical" d="M12 5v14" /></svg></span>
                 </button></h3>
-                <div id={`${id}-panel-${i}`} role="region" aria-labelledby={`${id}-question-${i}`} hidden={!isOpen} className="mx-5 border-t border-primary/15 py-4 sm:mx-6">
-                  <p className="text-sm leading-relaxed text-dark-500 sm:text-base">{home && i === 0 ? copy('Materi coding berbeda di setiap jurusan. Kenali mata pelajaran dan kompetensi masing-masing jurusan untuk menemukan pilihan yang sesuai minatmu.', 'Coding content differs across majors. Explore the subjects and competencies of each major to find the right fit for your interests.') : t(item.a)}</p>
+                <div id={`${id}-panel-${i}`} role="region" aria-labelledby={`${id}-question-${i}`} aria-hidden={!isOpen} inert={!isOpen} data-open={isOpen} className="faq-panel">
+                  <div className="faq-panel-clip">
+                    <div className="mx-5 border-t border-primary/15 py-4 sm:mx-6">
+                      <p className="text-sm leading-relaxed text-dark-500 sm:text-base">{home && i === 0 ? copy('Materi coding berbeda di setiap jurusan. Kenali mata pelajaran dan kompetensi masing-masing jurusan untuk menemukan pilihan yang sesuai minatmu.', 'Coding content differs across majors. Explore the subjects and competencies of each major to find the right fit for your interests.') : t(item.a)}</p>
+                    </div>
+                  </div>
                 </div>
               </div>;
             })}

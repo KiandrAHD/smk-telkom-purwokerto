@@ -1,0 +1,21 @@
+/* Intrinsic height stays responsive to translated copy; transitions can reverse mid-flight. */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 320ms cubic-bezier(.22, 1, .36, 1), opacity 320ms ease, visibility 0s 320ms;
+}
+.faq-panel[data-open='true'] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.faq-panel-clip { min-height: 0; overflow: hidden; }
+.faq-toggle { transition: color 320ms ease, background-color 320ms ease; }
+.faq-toggle-vertical {
+  transform-origin: center;
+  transition: transform 320ms cubic-bezier(.22, 1, .36, 1), opacity 320ms ease;
+}
+.faq-toggle[data-open='true'] .faq-toggle-vertical { transform: rotate(90deg); opacity: 0; }
