@@ -14,7 +14,7 @@ import HeroBreadcrumb from '../components/HeroBreadcrumb';
 import { slugify } from '../utils/slug';
 import heroPhoto from '../assets/tentang/guru-page-hero.webp';
 import SectionAccents from '../components/SectionAccents';
-import TeacherPhoto from '../components/TeacherPhoto';
+import TeacherCard from '../components/TeacherCard';
 import useSlidingPage from '../hooks/useSlidingPage';
 import headmasterAccent from '../assets/tentang/kepala-sekolah-motif.svg';
 
@@ -74,21 +74,12 @@ export function GuruGrid({ teachers = tenagaPendidikData, id = 'guru', title = '
                   aria-label={t('Lihat profil {name}', { name: guru.nama })}
                   className="group relative block h-full rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                 >
-                  <article className="h-full bg-white transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transform-none">
-                    <div className="relative p-[10px]">
-                      <TeacherPhoto teacher={guru} alt={t('Foto {name}', { name: guru.nama })} />
-                      <div aria-hidden="true" className="guru-accent-horizontal-top pointer-events-none absolute inset-x-0 top-0 h-5 bg-repeat-x" />
-                      <div aria-hidden="true" className="guru-accent-horizontal pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-repeat-x" />
-                      <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 left-0 w-[21px] bg-repeat-y" />
-                      <div aria-hidden="true" className="guru-accent-vertical pointer-events-none absolute inset-y-0 right-0 w-[21px] bg-repeat-y" />
-                    </div>
-                    <div className="min-h-52 px-3 pb-3 pt-2 [overflow-wrap:anywhere]">
-                      <h3 className="min-h-[2lh] font-heading text-sm font-bold leading-snug text-primary sm:text-base">{guru.nama}</h3>
-                      <p className="mt-1 min-h-[2lh] text-xs font-semibold leading-relaxed text-dark-900">{teacherText(guru.jabatan)}</p>
-                      {guru.sourceFile && guru.mapel && <p className="mt-1 text-xs leading-relaxed text-dark-600">{t('Mata Pelajaran')}: {teacherText(guru.mapel)}</p>}
+                  <div className="h-full bg-white transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transform-none">
+                    <TeacherCard teacher={guru} role={teacherText(guru.jabatan)} alt={t('Foto {name}', { name: guru.nama })}>
+                      {guru.sourceFile && guru.mapel && <p className="text-xs leading-relaxed text-dark-600">{t('Mata Pelajaran')}: {teacherText(guru.mapel)}</p>}
                       <p className="mt-2 text-xs leading-relaxed text-dark-500">{teacherText(guru.deskripsi)}</p>
-                    </div>
-                  </article>
+                    </TeacherCard>
+                  </div>
                 </Link>
               </div>
             ))}

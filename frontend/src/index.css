@@ -60,21 +60,6 @@ body {
   overflow-x: hidden;
 }
 
-.guru-accent-horizontal {
-  background-image: url('./assets/tentang/guru-border-horizontal.svg');
-  background-size: 106px 20px;
-}
-
-.guru-accent-horizontal-top {
-  background-image: url('./assets/tentang/guru-border-top.svg');
-  background-size: 119px 20px;
-}
-
-.guru-accent-vertical {
-  background-image: url('./assets/tentang/guru-border-vertical.svg');
-  background-size: 21px 243px;
-}
-
 /* Figma motifs at 60% size, with groups anchored to the footer edges. */
 .site-footer {
   --footer-accent-gutter: clamp(1rem, 6.5vw, 8rem);
