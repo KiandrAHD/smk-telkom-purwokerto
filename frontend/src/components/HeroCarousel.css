@@ -27,8 +27,27 @@
 .hero-carousel .hero-carousel-slide .hero-panel--bleed .hero-image { object-fit: contain; object-position: right bottom; }
 .hero-carousel .hero-media--photo { display: grid; place-items: center; background: white; }
 .hero-carousel .hero-media--photo .hero-image { width: 100%; height: 100%; object-fit: contain; mask-image: none; }
+/* Fade the media container separately, keeping each artwork's SVG mask and crop intact. */
+.hero-carousel { --hero-edge-fade: linear-gradient(to bottom, transparent, rgb(0 0 0 / .5) 3%, black 9%); }
+.hero-carousel .hero-media,
+.hero-carousel .hero-background { mask-image: var(--hero-edge-fade); }
+.hero-carousel .hero-panel--careers { --hero-artwork-mask: url('../assets/banners/bkk-mask.svg'); }
+.hero-carousel .hero-panel--news { --hero-artwork-mask: url('../assets/banners/berita-mask.svg'); }
+.hero-carousel .hero-panel--achievements { --hero-artwork-mask: url('../assets/banners/prestasi-mask.svg'); }
+.hero-carousel .hero-grid > .hero-image {
+  mask-image: var(--hero-artwork-mask, linear-gradient(black, black)), var(--hero-edge-fade);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
+}
 @media (min-width: 64rem) {
-  .hero-carousel .hero-copy { background: linear-gradient(to right, white 90%, transparent); }
+  .hero-carousel { --hero-edge-fade: linear-gradient(to right, transparent, rgb(0 0 0 / .45) 6%, black 18%); }
+  .hero-carousel .hero-panel--departments { --hero-artwork-mask: linear-gradient(to right, transparent, black 24%); }
+}
+@media (min-width: 64rem) {
+  .hero-carousel .hero-panel--bleed::after {
+    background: linear-gradient(to right, white 28%, rgb(255 255 255 / .95) 33%, rgb(255 255 255 / .65) 39%, rgb(255 255 255 / .2) 47%, transparent 55%);
+  }
   .hero-carousel .hero-media--photo { width: 62%; padding: 1.5rem 1.5rem 3rem 0; }
   .hero-carousel .hero-media--photo .hero-image { border-radius: 1.75rem; }
   .hero-carousel .hero-profile-crop { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; transform: none; translate: none; }
