@@ -233,9 +233,6 @@ export default function FacilitiesSection() {
           <button type="button" aria-label={t('Fasilitas berikutnya')} onPointerDown={prepareNavigation} onClick={(event) => { prepareNavigation(event); navigate(adjacentSlide(active, 1)); }} className="absolute right-3 top-1/2 z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full sm:right-4"><img src={arrowNext} alt="" className="max-w-none rotate-180" /></button>
           <p aria-live="off" className="sr-only">{String(active + 1).padStart(2, '0')} — {t(slides[active].name)}</p>
         </div>
-        <div className="mt-4 flex justify-center text-xs font-semibold text-primary">
-          <Link to="/fasilitas" className="inline-flex min-h-11 items-center rounded-lg px-3 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-primary">{t('Lihat semua fasilitas')}</Link>
-        </div>
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
         <ol ref={indicators} style={{ '--facility-count': slides.length }} className="facilities-indicators relative flex min-w-[620px] justify-between gap-3 before:absolute before:left-12 before:right-12 before:top-6 before:h-px before:bg-dark-300">
@@ -246,6 +243,12 @@ export default function FacilitiesSection() {
             </button>
           </li>)}
         </ol>
+      </div>
+      <div className="facilities-actions-wrapper">
+        <div className="facilities-actions" data-facilities-actions>
+          <Link to="/fasilitas#school-tour" className="facilities-action facilities-action--primary">{t('School Tour')}</Link>
+          <Link to="/fasilitas" className="facilities-action facilities-action--secondary">{t('Lihat Fasilitas Lainnya')}</Link>
+        </div>
       </div>
     </section>
   );
