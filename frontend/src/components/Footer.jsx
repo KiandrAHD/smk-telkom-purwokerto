@@ -6,7 +6,7 @@ import VisitorCounter from './VisitorCounter';
 import { useSiteSettings } from '../context/SiteSettingsContext';
 import { footerData as defaults } from '../data/dummyData';
 import footerAccentFill from '../assets/footer/footer-motif-fill.svg';
-import competitionSupporters from '../assets/footer/competition-supporters.png';
+import flexboxLogo from '../assets/footer/flexbox-logo.webp';
 import { useLanguage } from '../context/LanguageContext';
 
 const socialIcons = {
@@ -14,14 +14,6 @@ const socialIcons = {
   youtube: FaYoutube,
   tiktok: FaTiktok,
 };
-
-const supporterLogos = [
-  { id: 'jagoan', name: 'Jagoan Hosting', href: 'https://www.jagoanhosting.com/' },
-  { id: 'komdigi', name: 'Kementerian Komunikasi dan Digital Republik Indonesia' },
-  { id: 'garuda', name: 'Garuda Spark Innovation Hub' },
-  { id: 'ngalup', name: 'NGALUP.CO' },
-  { id: 'jhic', name: 'Jagoan Hosting Innovation Competition 2026' },
-];
 
 const FooterAccent = ({ node }) => (
   <div className="footer-accent" data-figma-node={node}>
@@ -101,27 +93,20 @@ const Footer = () => {
               })}
             </div>
 
-            {/* Lima logo memakai bitmap asli; CSS hanya membatasi area putih tiap logo. */}
             <div className="mt-4 max-w-[280px]">
-              <h2 className="font-heading text-xs font-bold text-dark-900">Supported by</h2>
-              <ul className="footer-supporters mt-3" aria-label={t('Pendukung lomba')}>
-                {supporterLogos.map(({ id, name, href }) => {
-                  const logo = (
-                    <span className={`footer-supporter-logo footer-supporter-logo-${id}`}>
-                      <img src={competitionSupporters} alt={t(name)} loading="lazy" decoding="async" width="1920" height="1080" />
-                    </span>
-                  );
-                  return (
-                    <li key={id}>
-                      {href ? (
-                        <a href={href} target="_blank" rel="noopener noreferrer" className="footer-supporter-link" aria-label={t('Kunjungi {name}', { name })}>
-                          {logo}
-                        </a>
-                      ) : logo}
-                    </li>
-                  );
-                })}
-              </ul>
+              <h2 className="font-heading text-xs font-bold text-dark-900">Supported by:</h2>
+              <div className="mt-3 flex items-center gap-3">
+                <img
+                  src={flexboxLogo}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  width="192"
+                  height="190"
+                  className="h-auto w-12 shrink-0 object-contain"
+                />
+                <span className="font-heading text-base font-bold text-dark-900">Flexbox</span>
+              </div>
             </div>
 
           </div>
