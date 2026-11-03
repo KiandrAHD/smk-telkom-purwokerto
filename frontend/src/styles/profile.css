@@ -1,4 +1,67 @@
-/* Profile frame 314:2208, adapted to the site's containers and breakpoints. */
+/* Profile frame 316:1350, adapted to the site's containers and breakpoints. */
+.profile-learning { scroll-margin-top: 6rem; }
+.profile-learning-header { display: grid; gap: 1.5rem; margin-bottom: 2rem; }
+.profile-learning-eyebrow { margin-bottom: .5rem; color: var(--color-primary); font-size: .875rem; font-weight: 600; }
+.profile-learning h2 { font-family: var(--font-heading); font-size: clamp(1.75rem, 3.5vw, 4rem); font-weight: 800; line-height: 1.35; }
+.profile-learning h2 span { display: block; color: var(--color-primary); }
+.profile-learning-intro { padding-left: 1rem; border-left: 2px solid var(--color-dark-200); font-size: 1rem; line-height: 1.5; color: var(--color-dark-600); }
+.profile-learning-methods { display: grid; gap: 2rem; }
+.profile-learning-method, .profile-learning-detail > div { min-width: 0; }
+.profile-learning-photo { display: block; width: 100%; height: auto; border-radius: 1.25rem; }
+.profile-learning-detail { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); gap: 1rem; margin-top: 1rem; }
+.profile-learning-icon { width: 100%; height: 2.75rem; object-fit: contain; }
+.profile-learning-detail h3 { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 800; line-height: 1.4; }
+.profile-learning-detail p { margin-top: .375rem; font-size: .875rem; line-height: 1.5; color: var(--color-dark-600); }
+.profile-learning-platforms { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .75rem; }
+.profile-learning-platforms li { display: flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: .5rem .875rem; border-radius: .75rem; background: var(--color-dark-50); color: var(--color-primary); font-size: .875rem; font-weight: 800; }
+.profile-learning-journey { margin-top: 2.5rem; padding: 1.5rem; border: 2px solid var(--color-dark-200); border-radius: 1.25rem; }
+.profile-learning-journey > h3 { font-family: var(--font-heading); color: var(--color-primary); font-size: 1.25rem; font-weight: 800; line-height: 1.5; }
+.profile-learning-stages { display: grid; gap: 2rem; margin-top: 1.5rem; }
+.profile-learning-stages li { position: relative; display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); align-items: start; gap: 1rem; min-width: 0; }
+.profile-learning-stages img { width: 100%; height: auto; border-radius: .75rem; }
+.profile-learning-stages h4 { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 800; line-height: 1.35; }
+.profile-learning-stages p { margin-top: .25rem; font-size: .75rem; line-height: 1.5; color: var(--color-dark-600); }
+.profile-learning-stages .profile-learning-stage-title { color: var(--color-dark-900); font-size: .875rem; font-weight: 500; }
+@media (min-width: 48rem) {
+  .profile-learning-header { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: center; gap: 2rem; margin-bottom: 2.5rem; }
+  .profile-learning-methods { grid-template-columns: minmax(0, 852fr) minmax(0, 776fr); gap: 4%; }
+  .profile-learning-stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  .profile-learning-stages li { grid-template-columns: 2.75rem minmax(0, 1fr); gap: .75rem; }
+}
+@media (min-width: 64rem) {
+  .profile-learning { padding-bottom: 3rem; }
+  .profile-learning-header { padding-inline: .5rem; }
+  .profile-learning-intro { padding-left: 2rem; font-size: 1.25rem; }
+  .profile-learning-detail { grid-template-columns: 3.25rem minmax(0, 1fr); gap: 1.5rem; }
+  .profile-learning-icon { height: 3.25rem; }
+  .profile-learning-detail h3 { font-size: 1.375rem; }
+  .profile-learning-detail p { font-size: 1rem; }
+  .profile-learning-journey { padding: 1.5rem 2rem 2rem; }
+  .profile-learning-stages li:not(:last-child)::after { position: absolute; top: 1.5rem; right: 0; width: 22%; height: 1rem; background: url('../assets/tentang/profile/learning-connector.svg') center / contain no-repeat; content: ''; }
+  .profile-learning-stages li:not(:last-child) h4,
+  .profile-learning-stages li:not(:last-child) .profile-learning-stage-title { padding-right: 20%; }
+}
+@media (min-width: 103.75rem) {
+  .profile-learning > .profile-container { padding-inline: 3.625rem; }
+  .profile-learning-header { gap: 5rem; margin-bottom: 2.25rem; padding-top: 1rem; }
+  .profile-learning-eyebrow { font-size: 1.4375rem; }
+  .profile-learning-intro { padding-left: 3.25rem; font-size: 1.8125rem; line-height: 1.4; }
+  .profile-learning-methods { gap: 4%; }
+  .profile-learning-detail { grid-template-columns: 4.5rem minmax(0, 1fr); gap: 2.375rem; margin-top: 1.25rem; }
+  .profile-learning-icon { height: 4.25rem; }
+  .profile-learning-detail h3 { font-size: 2rem; line-height: 1.4; }
+  .profile-learning-detail p { font-size: 1.4375rem; line-height: 1.4; }
+  .profile-learning-platforms { gap: 1.5rem; }
+  .profile-learning-platforms li { min-height: 3.4375rem; padding-inline: 1.75rem; border-radius: .9375rem; font-size: 1.375rem; }
+  .profile-learning-journey { margin-top: 3.5rem; padding: 1.5rem 3rem 2rem; }
+  .profile-learning-journey > h3 { font-size: 2rem; }
+  .profile-learning-stages { gap: 3rem; margin-top: 1.75rem; }
+  .profile-learning-stages li { grid-template-columns: 5.4375rem minmax(0, 1fr); gap: 1.6875rem; }
+  .profile-learning-stages h4 { font-size: 1.875rem; }
+  .profile-learning-stages p { font-size: 1.125rem; }
+  .profile-learning-stages .profile-learning-stage-title { font-size: 1.3125rem; }
+  .profile-learning-stages li:not(:last-child)::after { top: 2.5rem; right: 0; }
+}
 .profile-section { background: white; padding-block: 1.5rem; }
 .profile-container { width: 100%; max-width: 80rem; margin-inline: auto; padding-inline: 1rem; }
 .profile-section-heading { margin-bottom: 1.5rem; font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; line-height: 1.35; color: var(--color-primary); }
