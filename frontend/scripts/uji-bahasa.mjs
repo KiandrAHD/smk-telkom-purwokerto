@@ -27,11 +27,17 @@ try {
   assert.equal(translate('constructor', 'en'), 'constructor');
   const { LanguageContext } = await server.ssrLoadModule('/src/context/LanguageContext.js');
   const { aboutStats, visiMisi, timelineData, kepalaSekolah, ctaMasukPpdb, navLinks } = await server.ssrLoadModule('/src/data/dummyData.js');
-  assert.deepEqual(navLinks.map(({ label }) => label), ['Beranda', 'Tentang', 'Jurusan', 'Prestasi', 'BKK', 'Informasi']);
+  assert.deepEqual(navLinks.map(({ label }) => label), ['Beranda', 'Tentang', 'Jurusan', 'Prestasi', 'Karier', 'Informasi', 'Layanan']);
   assert.deepEqual(navLinks[1].children.map(({ label, href }) => [label, href]), [
     ['Profil Sekolah', '/profil-sekolah'], ['Fasilitas Sekolah', '/fasilitas'], ['Profil Guru', '/profil-sekolah/guru'], ['Ekstrakurikuler', '/ekstrakurikuler'],
   ]);
   assert.deepEqual(navLinks[5].children.map(({ label, href }) => [label, href]), [['Berita', '/berita'], ['Pengumuman', '/pengumuman'], ['Kalender Kegiatan', '/kalender'], ['Informasi SPMB', '/spmb']]);
+  assert.deepEqual(navLinks[4].children.map(({ label, href }) => [label, href]), [['BKK', '/bkk'], ['Sinergi', '/sinergi']]);
+  assert.deepEqual(navLinks[6].children.map(({ label }) => label), ['Mylms', 'STARRY', 'DIGITS', 'SAKU', 'BISA', 'JUARA', 'LIONS', 'ADUAN']);
+  assert.equal(translate('Layanan', 'en'), 'Services');
+  assert.equal(translate('Submenu Layanan', 'en'), 'Services submenu');
+  assert.equal(translate('Karier', 'en'), 'Careers');
+  assert.equal(translate('Submenu Karier', 'en'), 'Careers submenu');
   assert.equal(translate('Kalender Kegiatan', 'en'), 'Calendar of Events');
   assert.equal(translate('Informasi SPMB', 'en'), 'SPMB Information');
   assert.equal(translate('Profil Guru', 'en'), 'Teacher Profiles');
@@ -58,6 +64,8 @@ try {
   assert.ok(nav.includes('>Study Programs<'));
   assert.ok(nav.includes('aria-controls="desktop-tentang-links"'));
   assert.ok(nav.includes('aria-controls="desktop-informasi-links"'));
+  assert.ok(nav.includes('aria-controls="desktop-karier-links"'));
+  assert.ok(nav.includes('>Careers<'));
   assert.ok(nav.includes('Switch to Indonesian'));
   const staticRibbon = render(createElement(RibbonDivider));
   assert.ok(staticRibbon.includes('ribbon-divider.png'));

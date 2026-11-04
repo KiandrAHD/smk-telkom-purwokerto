@@ -6,7 +6,7 @@ try {
   const { landingHeroSlides } = await server.ssrLoadModule('/src/data/landingHeroSlides.js');
   const { default: english } = await server.ssrLoadModule('/src/data/translations.js');
   const { navLinks } = await server.ssrLoadModule('/src/data/dummyData.js');
-  const destinations = navLinks.flatMap(link => link.children || [link]).map(link => link.href).sort();
+  const destinations = navLinks.flatMap(link => link.children || [link]).filter(link => !link.comingSoon && link.href?.startsWith('/')).map(link => link.href).sort();
   const heroDestinations = entries => entries.map(entry => entry.id === 'beranda' ? '/' : entry.content.primaryCta.href).sort();
   assert.deepEqual(heroDestinations(landingHeroSlides), destinations, 'Beranda only shows navbar pages, including every submenu');
   for (const [page, entries] of Object.entries(pageHeroSlides)) {
