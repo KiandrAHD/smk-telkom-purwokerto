@@ -16,6 +16,7 @@ const prefetchByHref = {
   '/jurusan': () => import('../pages/JurusanPage'),
   '/prestasi': () => import('../pages/PrestasiPage'),
   '/bkk': () => import('../pages/BkkPage'),
+  '/sinergi': () => import('../pages/SinergiPage'),
   '/berita': () => import('../pages/BeritaPage'),
   '/pengumuman': () => import('../pages/PengumumanPage'),
   '/kalender': () => import('../pages/KalenderPage'),
@@ -26,6 +27,12 @@ const prefetchByHref = {
 
 const prefetchRoute = (href) => {
   prefetchByHref[href]?.()?.catch(() => {}); // RouteErrorBoundary handles failures when navigating.
+};
+
+// External services open separately; planned services use local coming-soon pages.
+const SubmenuLink = ({ child, children, ...props }) => {
+  if (/^https?:\/\//.test(child.href)) return <a {...props} href={child.href} target="_blank" rel="noopener noreferrer">{children}</a>;
+  return <Link {...props} to={child.href}>{children}</Link>;
 };
 
 const Navbar = () => {
@@ -70,13 +77,13 @@ const Navbar = () => {
 
   const isActive = (link) =>
     link.children
-      ? link.children.some((child) => isSectionRoute(location.pathname, child.href))
+      ? link.children.some((child) => child.href?.startsWith('/') && isSectionRoute(location.pathname, child.href))
       : isSectionRoute(location.pathname, link.href);
 
   const currentPage = (href) => location.pathname === href ? 'page' : isSectionRoute(location.pathname, href) ? 'location' : undefined;
 
   const linkClass = (link) =>
-    `relative inline-flex items-center whitespace-nowrap py-1.5 text-sm font-medium tracking-normal transition-colors ${
+    `relative inline-flex items-center whitespace-nowrap py-1.5 text-[13px] font-medium tracking-[0.08em] transition-colors ${
       isActive(link) ? 'text-primary' : 'text-dark-600 hover:text-primary'
     }`;
 
@@ -87,15 +94,15 @@ const Navbar = () => {
 
   return (
     <header ref={headerRef} className="sticky top-0 z-[60] w-full bg-white font-sans">
-      <nav aria-label={t('Navigasi utama')} className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-[2.625rem]">
-        <div className="flex h-16 lg:h-20 items-center justify-between gap-3 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+      <nav aria-label={t('Navigasi utama')} className="mx-auto max-w-[1440px] px-6 sm:px-8">
+        <div className="flex h-16 lg:h-[88px] items-center justify-between gap-3">
           {/* Brand */}
           <Link to="/" aria-current={currentPage('/')} className="flex items-center gap-2.5 flex-shrink-0 xl:justify-self-start">
             <img src={navbarLogo} alt="SMK Telkom Purwokerto" width={257} height={74} className="h-[2.875rem] w-40 object-contain object-left lg:h-[3.25rem] lg:w-[11.25rem]" />
           </Link>
 
           {/* Desktop menu */}
-          <div className="hidden xl:flex xl:justify-self-center items-center gap-6">
+          <div className="hidden min-[1152px]:flex items-center gap-5 xl:gap-6">
             {navLinks.map((link) => {
               if (!link.children) {
                 return (
@@ -154,14 +161,15 @@ const Navbar = () => {
 
                   {openDropdown === link.label && (
                     <div
-                      className="navbar-dropdown-enter absolute left-1/2 top-full z-20 w-48 -translate-x-1/2 rounded-xl border border-dark-100 bg-white p-2"
+                      className="navbar-dropdown-enter absolute left-1/2 top-full z-20 max-h-[min(70dvh,32rem)] w-48 -translate-x-1/2 overflow-y-auto overscroll-contain rounded-xl border border-dark-100 bg-white p-2 shadow-lg"
+                      data-lenis-prevent
                       id={`desktop-${link.label.toLowerCase()}-links`}
                       aria-label={t(`Submenu ${link.label}`)}
                     >
                       {link.children.map((child) => (
-                        <Link
+                        <SubmenuLink
                           key={child.label}
-                          to={child.href}
+                          child={child}
                           aria-current={currentPage(child.href)}
                           onFocus={() => prefetchRoute(child.href)}
                           onMouseEnter={() => prefetchRoute(child.href)}
@@ -173,7 +181,7 @@ const Navbar = () => {
                           }`}
                         >
                           {t(child.label)}
-                        </Link>
+                        </SubmenuLink>
                       ))}
                     </div>
                   )}
@@ -183,11 +191,11 @@ const Navbar = () => {
           </div>
 
           {/* Desktop CTA */}
-          <div className="ml-auto flex shrink-0 items-center gap-2 xl:ml-0 xl:justify-self-end">
+          <div className="ml-auto flex shrink-0 items-center gap-3 min-[1152px]:ml-0">
             <LanguageToggle />
             <Link
               to={ctaMasukPpdb.href}
-              className="hidden xl:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="hidden min-[1152px]:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {t(ctaMasukPpdb.label)}
               <ArrowRight className="w-4 h-4" />
@@ -199,7 +207,7 @@ const Navbar = () => {
             type="button"
             ref={mobileTriggerRef}
             onClick={() => { setIsMobileOpen((open) => !open); setOpenDropdown(null); }}
-            className="xl:hidden flex h-11 w-11 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
+            className="min-[1152px]:hidden flex h-11 w-11 items-center justify-center rounded-lg text-dark-600 hover:bg-dark-50"
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
             aria-label={t(isMobileOpen ? 'Tutup menu' : 'Buka menu')}
@@ -210,7 +218,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMobileOpen && (
-          <div id="mobile-nav" data-lenis-prevent className="motion-menu-enter max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain lg:max-h-[calc(100dvh-5rem)] xl:hidden border-t border-dark-100 py-4">
+          <div id="mobile-nav" data-lenis-prevent className="motion-menu-enter max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain lg:max-h-[calc(100dvh-88px)] min-[1152px]:hidden border-t border-dark-100 py-4">
             <div className="flex flex-col gap-1">
               {navLinks.map((link) => {
                 if (!link.children) {
@@ -247,9 +255,9 @@ const Navbar = () => {
                     {openDropdown === link.label && (
                       <div id={`mobile-${link.label.toLowerCase()}-links`} className="motion-menu-enter ml-3 border-l border-dark-100 py-1 pl-2">
                         {link.children.map((child) => (
-                          <Link
+                          <SubmenuLink
                             key={child.label}
-                            to={child.href}
+                            child={child}
                             aria-current={currentPage(child.href)}
                             onFocus={() => prefetchRoute(child.href)}
                             onMouseEnter={() => prefetchRoute(child.href)}
@@ -260,7 +268,7 @@ const Navbar = () => {
                             className="block min-h-11 rounded-lg px-3 py-3 text-sm font-medium text-dark-600 hover:bg-dark-50 hover:text-primary"
                           >
                             {t(child.label)}
-                          </Link>
+                          </SubmenuLink>
                         ))}
                       </div>
                     )}

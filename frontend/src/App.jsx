@@ -16,6 +16,7 @@ const GuruDetailPage = lazy(() => import('./pages/GuruDetailPage'));
 const JurusanPage = lazy(() => import('./pages/JurusanPage'));
 const PrestasiPage = lazy(() => import('./pages/PrestasiPage'));
 const BkkPage = lazy(() => import('./pages/BkkPage'));
+const SinergiPage = lazy(() => import('./pages/SinergiPage'));
 const BeritaPage = lazy(() => import('./pages/BeritaPage'));
 const PengumumanPage = lazy(() => import('./pages/PengumumanPage'));
 const KalenderPage = lazy(() => import('./pages/KalenderPage'));
@@ -123,6 +124,9 @@ const App = () => {
         <Route path="/jurusan" element={<JurusanPage />} />
         <Route path="/prestasi" element={<PrestasiPage />} />
         <Route path="/bkk" element={<BkkPage />} />
+        <Route path="/sinergi" element={<SinergiPage />} />
+        <Route path="/layanan/digits" element={<SinergiPage title="DIGITS" category="Layanan" backHref={null} />} />
+        <Route path="/layanan/saku" element={<SinergiPage title="SAKU" category="Layanan" backHref={null} />} />
         <Route path="/berita" element={<BeritaPage />} />
         <Route path="/pengumuman" element={<PengumumanPage />} />
         <Route path="/kalender" element={<KalenderPage />} />

@@ -114,7 +114,13 @@ export const navLinks = [
   },
   { label: 'Jurusan', href: '/jurusan' },
   { label: 'Prestasi', href: '/prestasi' },
-  { label: 'BKK', href: '/bkk' },
+  {
+    label: 'Karier',
+    children: [
+      { label: 'BKK', href: '/bkk' },
+      { label: 'Sinergi', href: '/sinergi', comingSoon: true },
+    ],
+  },
   {
     label: 'Informasi',
     children: [
@@ -122,6 +128,20 @@ export const navLinks = [
       { label: 'Pengumuman', href: '/pengumuman' },
       { label: 'Kalender Kegiatan', href: '/kalender' },
       { label: 'Informasi SPMB', href: '/spmb' },
+    ],
+  },
+  {
+    label: 'Layanan',
+    children: [
+      // Only confirmed service URLs are enabled; credentials are never stored here.
+      { label: 'Mylms', href: 'https://mylms.telkomschools.sch.id/' },
+      { label: 'STARRY', href: 'https://starry.smktelkom-pwt.sch.id/' },
+      { label: 'DIGITS', href: '/layanan/digits', comingSoon: true },
+      { label: 'SAKU', href: '/layanan/saku', comingSoon: true },
+      { label: 'BISA', href: 'https://bisa.smktelkom-pwt.sch.id/' },
+      { label: 'JUARA', href: 'https://juara.smktelkom-pwt.sch.id/' },
+      { label: 'LIONS', href: 'https://lions.smktelkom-pwt.sch.id/' },
+      { label: 'ADUAN', href: 'https://aduan.smktelkom-pwt.sch.id/' },
     ],
   },
 ];
