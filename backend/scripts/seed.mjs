@@ -33,14 +33,21 @@ async function ensureAdmin() {
     console.log('Admin recovery dilewati: ADMIN_RECOVERY_EMAIL/ADMIN_RECOVERY_PASSWORD tidak di-set di .env');
     return;
   }
-  const existing = await prisma.admin.findUnique({ where: { email } });
-  if (existing) {
-    console.log(`Admin recovery dilewati: admin ${email} sudah ada.`);
+  // Admin adalah profil dari User (relasi 1-1). Email dan password hidup di User.
+  const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
+  const normalizedEmail = email.toLowerCase().trim();
+  const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail }, include: { admin: true } });
+  if (existingUser?.admin) {
+    console.log(`Admin recovery dilewati: admin ${normalizedEmail} sudah ada.`);
     return;
   }
-  const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
-  await prisma.admin.create({ data: { name, email, passwordHash } });
-  console.log(`Admin recovery dibuat: ${email}`);
+  await prisma.$transaction(async (tx) => {
+    const user = existingUser
+      ? await tx.user.update({ where: { id: existingUser.id }, data: { passwordHash, emailVerified: new Date(), role: 'admin' } })
+      : await tx.user.create({ data: { email: normalizedEmail, passwordHash, emailVerified: new Date(), role: 'admin' } });
+    await tx.admin.create({ data: { userId: user.id, nama: name } });
+  });
+  console.log(`Admin recovery dibuat: ${normalizedEmail}`);
   console.log('PENTING: Hapus ADMIN_RECOVERY_* dari .env dan ganti password segera setelah login pertama.');
 }
 

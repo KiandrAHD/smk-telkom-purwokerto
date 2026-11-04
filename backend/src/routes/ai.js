@@ -29,18 +29,34 @@ function hasilPenjelasan(result, language = 'id') {
 
 const DAILY_LIMITS = { stela: Number(process.env.STELA_MAKS_PER_HARI || 200), nexttel: Number(process.env.NEXTTEL_MAKS_PER_HARI || 200) };
 
-// Kuota dihitung per feature+hari (UTC). Jika batas tercapai, increment
-// dikembalikan agar kuota tidak "bocor" hanya karena percobaan ditolak.
-async function reserveQuota(feature, limit) {
-  const day = new Date(); day.setUTCHours(0, 0, 0, 0);
-  const key = { feature_day: { feature, day } };
+// Kuota dihitung per feature+hari (UTC). Satu statement atomik: increment
+// hanya terjadi bila masih di bawah limit, sehingga dua request bersamaan
+// tidak dapat melampaui kuota (race-safe).
+// affectedRows: 1 = insert baru, 2 = increment, 0 = limit tercapai (no-op).
+export async function reserveQuota(feature, limit, dayOverride) {
+  if (!Number.isFinite(limit) || limit <= 0) return false;
+  const day = dayOverride ? new Date(dayOverride) : new Date(); if (!dayOverride) day.setUTCHours(0, 0, 0, 0);
   try {
-    const row = await prisma.aiDailyAttempt.upsert({ where: key, create: { feature, day, attempts: 1 }, update: { attempts: { increment: 1 } } });
-    if (row.attempts > limit) {
-      await prisma.aiDailyAttempt.update({ where: key, data: { attempts: { decrement: 1 } } });
-      return false;
-    }
-    return true;
+    // Pastikan baris hari ini ada (idempoten, aman untuk request bersamaan).
+    await prisma.$executeRaw`
+      INSERT IGNORE INTO ai_daily_attempts (\`feature\`, \`day\`, \`attempts\`)
+      VALUES (${feature}, ${day}, 0)
+    `;
+    // Serialisasi per (feature, day) dengan row lock, lalu increment kondisional.
+    return await prisma.$transaction(async (tx) => {
+      const rows = await tx.$queryRaw`
+        SELECT attempts FROM ai_daily_attempts
+        WHERE \`feature\` = ${feature} AND \`day\` = ${day}
+        FOR UPDATE
+      `;
+      const attempts = Number(rows[0]?.attempts ?? 0);
+      if (attempts >= limit) return false;
+      await tx.$executeRaw`
+        UPDATE ai_daily_attempts SET attempts = attempts + 1
+        WHERE \`feature\` = ${feature} AND \`day\` = ${day}
+      `;
+      return true;
+    });
   } catch {
     return false;
   }

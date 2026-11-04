@@ -119,7 +119,8 @@ server {
     index index.html;
 
     location / {
-        try_files $uri $uri/ /index.html;
+        # app.html adalah SPA shell hasil prerender (fallback untuk rute dinamis).
+        try_files $uri $uri/ /app.html;
     }
 
     location /api/ {
@@ -196,20 +197,26 @@ Output: `backend/docs/etl-summary-<timestamp>.json`.
 ### 4.3 Backup & restore
 
 ```bash
-npm run db:backup              # backup + upload ke Supabase
-npm run db:backup -- --no-upload   # backup lokal saja
+npm run db:backup              # backup + upload ke Supabase (status REMOTE_VERIFIED)
+npm run db:backup -- --no-upload   # backup lokal saja (status LOCAL_CREATED)
 npm run db:backup:verify       # verifikasi checksum manifest terakhir
+npm run db:backup:verify -- backups/manifests/backup-2026-11-04.json --remote  # verifikasi remote
 npm run db:restore -- <file.enc> --db=<db_tujuan> --apply
+npm run db:restore -- --remote-date=2026-11-04 --db=<db_tujuan> --apply  # dari Supabase Storage
 ```
 
-Contoh restore ke database uji (bukan produksi):
+Contoh restore ke database uji (bukan produksi). Database harus **sudah dibuat** dan user
+pada `DATABASE_URL` harus punya privilege ke database tersebut:
 
 ```bash
 & 'D:\laragon\bin\mysql\mysql-8.4.3-winx64\bin\mysql.exe' -u root `
-  -e "CREATE DATABASE smk_telkom_purwokerto_restore_test CHARACTER SET utf8mb4;"
+  -e "CREATE DATABASE smk_restore_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; `
+      GRANT ALL PRIVILEGES ON smk_restore_test.* TO 'smk_app'@'localhost';"
 npm run db:restore -- backups/mysql/2026/11/mysql-backup-2026-11-04.sql.gz.enc `
-  --target-url="mysql://root@127.0.0.1:3306/smk_telkom_purwokerto_restore_test" --apply
+  --db=smk_restore_test --manifest=backups/manifests/backup-2026-11-04.json --apply
 ```
+
+Restore production memerlukan `--allow-production --confirm`.
 
 ---
 
@@ -242,7 +249,7 @@ curl -s http://127.0.0.1:3000/health | jq
 Respons sehat:
 
 ```json
-{ "ok": true, "database": "up", "version": "8.4.3", "uptime": 12345 }
+{ "ok": true, "service": "smk-backend", "uptime": 12345, "database": "up" }
 ```
 
 Jika database down, `/health` mengembalikan **503** dengan `database: "down"`.

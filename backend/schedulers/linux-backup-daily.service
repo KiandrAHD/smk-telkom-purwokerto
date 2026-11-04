@@ -7,6 +7,7 @@ Wants=network-online.target
 Type=oneshot
 # Sesuaikan WorkingDirectory dan path node sesuai instalasi VPS Anda.
 WorkingDirectory=/opt/smk-telkom-purwokerto/backend
+EnvironmentFile=/opt/smk-telkom-purwokerto/backend/.env
 ExecStart=/usr/bin/node scripts/backup.mjs
 # Backup mengunggah ke Supabase Storage; keluar kode != 0 jika env backup hilang di production.
 TimeoutStartSec=3600

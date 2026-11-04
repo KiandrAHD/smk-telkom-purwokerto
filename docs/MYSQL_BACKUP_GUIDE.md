@@ -147,9 +147,13 @@ Hasil nyata (dari `backups/manifests/backup-2026-11-04.json`):
     "database": { "key": "mysql/2026/11/mysql-backup-2026-11-04.sql.gz.enc", "size": 27712, "sha256": "51efb5..." },
     "uploads":  { "key": "uploads/uploads-backup-2026-11-04.tar.gz.enc",  "size": 2213059, "sha256": "2ce800..." }
   },
-  "status": "created"
+  "status": "LOCAL_CREATED"
 }
 ```
+
+Status backup: `LOCAL_CREATED` (file lokal selesai) → `REMOTE_UPLOADED`
+(objek + manifest terunggah) → `REMOTE_VERIFIED` (manifest remote dibaca ulang
+dan checksum objek cocok). Jika gagal: `FAILED`.
 
 Verifikasi checksum:
 
@@ -237,8 +241,8 @@ Template: `backend/schedulers/linux-backup-daily.service` dan `.timer`.
 sudo cp /opt/smk-telkom-purwokerto/backend/schedulers/linux-backup-daily.service /etc/systemd/system/
 sudo cp /opt/smk-telkom-purwokerto/backend/schedulers/linux-backup-daily.timer   /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now smk-backup.timer
-systemctl list-timers smk-backup.timer
+sudo systemctl enable --now linux-backup-daily.timer
+systemctl list-timers linux-backup-daily.timer
 ```
 
 Timer memakai `OnCalendar=*-*-* 19:00:00 UTC` = **02:00 WIB** (UTC+7).
@@ -259,11 +263,13 @@ Script menghapus file backup yang:
 - Lebih tua dari `BACKUP_RETENTION_DAYS` (default 30), DAN
 - Berada di `backups/mysql/`, `backups/uploads/`, atau `backups/manifests/`.
 
-Untuk remote, script memanggil Supabase Storage `list` + `delete` untuk prefix
-`mysql/`, `uploads/`, `manifests/`.
+Untuk remote, script menelusuri objek secara **rekursif** (folder bertingkat
+`mysql/YYYY/MM/`) dengan paginasi, lalu menghapus prefix `mysql/`, `uploads/`,
+`manifests/` yang tanggalnya lebih tua dari cutoff.
 
-> Retensi bersifat **berbasis tanggal pada nama file**. Backup lokal tetap
-> dipertahankan sesuai `mtime`.
+> Retensi memakai **tanggal pada nama file** dan zona `Asia/Jakarta`, baik untuk
+> backup lokal maupun remote. Error listing/delete dilaporkan dan membuat proses
+> keluar dengan kode non-zero.
 
 ---
 
@@ -289,17 +295,25 @@ curl -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
 ### 7.3 Verifikasi lalu restore
 
 ```bash
-npm run db:backup:verify backups/manifests/backup-2026-11-04.json
+npm run db:backup:verify -- backups/manifests/backup-2026-11-04.json
 
-# Tanpa --allow-production: script menolak menyentuh DB dengan nama sama
-# seperti DATABASE_URL produksi. Ini pengaman.
-node scripts/restore.mjs mysql-backup.sql.gz.enc --apply --allow-production
+# Restore ke database tujuan yang sudah disiapkan. Tanpa --allow-production,
+# script menolak database dengan nama sama seperti DATABASE_URL produksi.
+node scripts/restore.mjs mysql-backup.sql.gz.enc --db=smk_telkom_purwokerto \
+  --manifest=backup-2026-11-04.json --apply --allow-production --confirm
+```
+
+Atau langsung dari Supabase Storage (tanpa unduh manual):
+
+```bash
+node scripts/restore.mjs --remote-date=2026-11-04 --db=smk_telkom_purwokerto \
+  --apply --allow-production --confirm
 ```
 
 ### 7.4 Pulihkan file upload
 
 ```bash
-node scripts/restore.mjs uploads-backup-2026-11-04.tar.gz.enc --uploads-root=/var/lib/smk-telkom-purwokerto/uploads --apply
+node scripts/restore.mjs uploads-backup-2026-11-04.tar.gz.enc uploads --uploads-root=/var/lib/smk-telkom-purwokerto/uploads --apply --allow-production --confirm
 ```
 
 ### 7.5 Validasi pasca-restore

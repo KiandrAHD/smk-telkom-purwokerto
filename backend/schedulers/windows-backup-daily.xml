@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-16"?>
-<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/ scheduler/2006/core">
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/scheduler/2006/core">
   <RegistrationInfo>
     <Description>SMK Telkom Purwokerto — Daily encrypted MySQL + uploads backup at 02:00 WIB (Asia/Jakarta, UTC+7).</Description>
   </RegistrationInfo>
@@ -17,12 +17,15 @@
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
     <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
     <StartWhenAvailable>true</StartWhenAvailable>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
   </Settings>
   <Actions>
     <Exec>
-      <!-- Sesuaikan Command/Arguments dengan path Node dan backend Anda. -->
-      <Command>node</Command>
-      <Arguments>scripts/backup.mjs</Arguments>
+      <!-- Sesuaikan Command/Arguments/WorkingDirectory dengan instalasi Anda. -->
+      <!-- Command harus path absolut node.exe agar Task Scheduler tidak gagal. -->
+      <Command>C:\Program Files\nodejs\node.exe</Command>
+      <Arguments>scripts\backup.mjs</Arguments>
+      <!-- WorkingDirectory harus path absolut ke folder backend. -->
       <WorkingDirectory>D:\laragon\www\smk_project\backend</WorkingDirectory>
     </Exec>
   </Actions>
