@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/ scheduler/2006/core">
+  <RegistrationInfo>
+    <Description>SMK Telkom Purwokerto — Daily encrypted MySQL + uploads backup at 02:00 WIB (Asia/Jakarta, UTC+7).</Description>
+  </RegistrationInfo>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-01-01T02:00:00+07:00</StartBoundary>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Settings>
+    <Enabled>true</Enabled>
+    <AllowStartIfOnBatteries>false</AllowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
+    <StartWhenAvailable>true</StartWhenAvailable>
+  </Settings>
+  <Actions>
+    <Exec>
+      <!-- Sesuaikan Command/Arguments dengan path Node dan backend Anda. -->
+      <Command>node</Command>
+      <Arguments>scripts/backup.mjs</Arguments>
+      <WorkingDirectory>D:\laragon\www\smk_project\backend</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>

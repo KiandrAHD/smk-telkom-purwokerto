@@ -36,6 +36,6 @@ export async function saveAdminAccount({ full_name, email }) {
   const trimmedName = (full_name || '').trim();
   const trimmedEmail = (email || '').trim();
   if (!trimmedName || trimmedName.length > 150 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) throw new Error('Nama atau email akun tidak valid.');
-  const { user } = await api.get('/api/auth/me');
-  return { user: { ...user, email: trimmedEmail, user_metadata: { full_name: trimmedName } }, emailPending: false };
+  const saved = await api.post('/api/auth/account', { full_name: trimmedName, email: trimmedEmail });
+  return { user: { ...saved.user, user_metadata: { full_name: trimmedName } }, emailPending: Boolean(saved.emailPending), delivered: Boolean(saved.delivered) };
 }

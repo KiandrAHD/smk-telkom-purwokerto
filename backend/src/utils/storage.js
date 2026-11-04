@@ -2,19 +2,27 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { env } from '../config/env.js';
 
-const UPLOAD_ROOT = process.env.UPLOAD_ROOT || path.resolve('uploads');
+export const UPLOAD_ROOT = path.resolve(env.UPLOAD_ROOT || 'uploads');
 
-function localPath(...segments) {
-  const safe = segments.map((s) => s.replace(/[^a-zA-Z0-9_.-]/g, '_'));
-  return path.join(UPLOAD_ROOT, ...safe);
+const mediaBaseUrl = (env.MEDIA_BASE_URL || env.PUBLIC_STORAGE_URL || `http://localhost:${env.PORT}`).replace(/\/$/, '');
+
+function safeSegment(segment) {
+  return segment.replace(/[^a-zA-Z0-9_.-]/g, '_');
+}
+
+// Key boleh bersarang ("berita/foto.webp"); setiap segmen dibersihkan agar
+// tidak bisa keluar dari UPLOAD_ROOT (path traversal).
+function localPath(bucket, key) {
+  const parts = [bucket, ...String(key).split('/')].filter(Boolean).map(safeSegment);
+  return path.join(UPLOAD_ROOT, ...parts);
 }
 
 export const storage = {
-  async put(bucket, key, buffer, options = {}) {
+  async put(bucket, key, buffer) {
     const filePath = localPath(bucket, key);
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.writeFile(filePath, buffer, { mode: 0o640 });
-    return `${env.NODE_ENV === 'production' ? process.env.PUBLIC_STORAGE_URL || '/storage' : '/uploads'}/${bucket}/${key}`;
+    return `${mediaBaseUrl}/uploads/${bucket}/${String(key).split('/').map(encodeURIComponent).join('/')}`;
   },
   async get(bucket, key) {
     return fs.readFile(localPath(bucket, key));
