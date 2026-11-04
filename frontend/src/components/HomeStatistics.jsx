@@ -4,7 +4,7 @@ const statistics = [
   ['1030+', 'Siswa Aktif', 'Active Students'],
   ['57+', 'Guru Profesional', 'Professional Teachers'],
   ['59+', 'Prestasi 2025', 'Achievements in 2025'],
-  ['45+', 'Ruang Kelas & Labatorium', 'Classrooms & Laboratories'],
+  ['45+', 'Ruang Kelas & Laboratorium', 'Classrooms & Laboratories'],
 ];
 
 export default function HomeStatistics() {
