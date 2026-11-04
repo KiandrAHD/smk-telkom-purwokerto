@@ -45,3 +45,8 @@ Vercel build gagal karena `npm run build` menjalankan prerender SEO yang ketat. 
 - Tidak ada verified production backend URL.
 - Tidak ada verified Vercel project untuk repository ini pada authenticated CLI account.
 - Preview/Production deployment tidak dapat diverifikasi tanpa akses project Vercel dan backend production.
+
+## Catatan tambahan
+
+- `frontend/vercel.json` menetapkan rewrite SPA `/(.*)` → `/app.html`. File `dist/app.html` dihasilkan oleh `prerender-seo.mjs` sebagai fallback non-indexable, sehingga rewrite valid untuk build yang berhasil.
+- Root Directory Vercel **harus** `frontend`, bukan root repo, karena `frontend/vercel.json` dan `frontend/package.json` adalah sumber build.
