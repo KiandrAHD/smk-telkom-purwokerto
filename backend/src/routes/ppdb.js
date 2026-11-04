@@ -16,6 +16,25 @@ const applicationSchema = z.object({
   pilihan_jurusan: z.string().trim().min(1).max(120), nilai_rapor: z.record(z.string(), z.unknown()).nullable().optional(), dokumen_url: z.string().max(2048).nullable().optional(),
 });
 
+const mapApplication = (input) => ({
+  userId: input.userId,
+  namaLengkap: input.nama_lengkap,
+  nisn: input.nisn,
+  nik: input.nik,
+  asalSekolah: input.asal_sekolah,
+  tempatLahir: input.tempat_lahir,
+  tanggalLahir: input.tanggal_lahir,
+  jenisKelamin: input.jenis_kelamin,
+  agama: input.agama,
+  tahunLulus: input.tahun_lulus,
+  alamat: input.alamat,
+  noHp: input.no_hp,
+  email: input.email,
+  pilihanJurusan: input.pilihan_jurusan,
+  nilaiRapor: input.nilai_rapor,
+  dokumenUrl: input.dokumen_url,
+});
+
 ppdbRouter.get('/draft', asyncHandler(async (req, res) => {
   const data = await prisma.ppdbDraft.findUnique({ where: { userId: req.user.id } });
   res.json({ data });
@@ -35,7 +54,7 @@ ppdbRouter.post('/', asyncHandler(async (req, res) => {
   if (existing) throw conflict('Anda sudah memiliki pendaftaran.', 'duplicate_submission');
   const input = applicationSchema.parse(req.body);
   const data = await prisma.$transaction(async (tx) => {
-    const created = await tx.ppdb.create({ data: { ...input, userId: req.user.id } });
+    const created = await tx.ppdb.create({ data: mapApplication({ ...input, userId: req.user.id }) });
     await tx.ppdbDraft.deleteMany({ where: { userId: req.user.id } });
     return created;
   });

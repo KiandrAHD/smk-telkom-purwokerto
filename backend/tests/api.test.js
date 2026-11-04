@@ -1,7 +1,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { app } from '../src/app.js';
-import { prisma } from '../src/db.js';
+import { prisma, closeDatabase } from '../src/db.js';
 
 let server;
 let baseUrl;
@@ -39,7 +39,7 @@ after(async () => {
   await prisma.user.deleteMany({ where: { email: { startsWith: 'test-' } } });
   await prisma.berita.deleteMany({ where: { slug: { startsWith: 'test-' } } });
   await new Promise((r) => server.close(r));
-  await prisma.$disconnect();
+  await closeDatabase();
 });
 
 test('health endpoint responds', async () => {

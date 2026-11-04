@@ -11,6 +11,17 @@ import { parse } from 'parse5';
 // Explicit test-only build: no live database, no invented records, never deploy this output.
 const offline = process.argv.includes('--offline');
 if (offline && (process.env.CI !== 'true' || process.env.VERCEL)) throw new Error('SEO: --offline is restricted to non-Vercel CI tests.');
+// Prerender mode:
+//   strict     (default) - abort the build if public data cannot be fetched. Use for local/VPS builds
+//                          where the backend is guaranteed reachable, so broken feeds never ship.
+//   resilient  - if the public data source is unreachable at build time, still emit a working SPA:
+//                          static routes prerender without dynamic detail entries and are marked noindex,
+//                          while the browser fetches live content at runtime. Use for Vercel builds where
+//                          the separately deployed backend may not be reachable from the build sandbox.
+// Never invents records: an unreachable source yields empty lists, not fake content.
+const prerenderMode = (process.env.PRERENDER_MODE || 'strict').trim().toLowerCase();
+const resilient = prerenderMode === 'resilient';
+if (!['strict', 'resilient'].includes(prerenderMode)) throw new Error(`SEO: unknown PRERENDER_MODE "${prerenderMode}" (expected strict|resilient).`);
 const root = process.cwd();
 const dist = path.join(root, 'dist');
 const server = await createServer({ appType: 'custom', logLevel: 'error', server: { middlewareMode: true } });
@@ -32,6 +43,7 @@ try {
   const { profilGuruDetail } = await server.ssrLoadModule('/src/data/profilGuruData.js');
   const { default: DetailLayout } = await server.ssrLoadModule('/src/components/DetailLayout.jsx');
   const publicContent = {};
+  let degraded = false;
   const { toBeritaItem, toPengumumanItem, toPrestasiItem, toBkkItem } = await server.ssrLoadModule('/src/utils/publicContent.js');
   for (const [type, service, method, map] of [
     ['berita', 'beritaService', 'getPublishedBerita', toBeritaItem],
@@ -46,15 +58,27 @@ try {
     const module = await server.ssrLoadModule(`/src/services/${service}.js`);
     // Only existing public read APIs participate; a failed fetch must never publish dummy records.
     try { publicContent[type] = (await module[method]()).map(map); }
-    catch (cause) { throw new Error(`SEO: cannot prerender published ${type}; aborting instead of deploying loading-only pages. Retry when the public data source is available.`, { cause }); }
+    catch (cause) {
+      if (!resilient) throw new Error(`SEO: cannot prerender published ${type}; aborting instead of deploying loading-only pages. Retry when the public data source is available.`, { cause });
+      // Resilient Vercel build: keep the SPA functional with an empty list (browser fetches at runtime).
+      console.warn(`SEO: [resilient] public ${type} unavailable at build time (${cause?.message || cause}); prerendering empty feed, routes marked noindex.`);
+      publicContent[type] = [];
+      degraded = true;
+    }
   }
   let spmbData = { items: [], stats: null }, events = [];
   if (!offline) {
     const { getSpmbInformation, getSpmbStatistics } = await server.ssrLoadModule('/src/services/spmbInformationService.js');
     const { getEvents } = await server.ssrLoadModule('/src/services/eventService.js');
-    const [items, stats, rows] = await Promise.all([getSpmbInformation(true), getSpmbStatistics(), getEvents(true)]);
-    spmbData = { items, stats };
-    events = rows;
+    try {
+      const [items, stats, rows] = await Promise.all([getSpmbInformation(true), getSpmbStatistics(), getEvents(true)]);
+      spmbData = { items, stats };
+      events = rows;
+    } catch (cause) {
+      if (!resilient) throw cause;
+      console.warn(`SEO: [resilient] SPMB/events unavailable at build time (${cause?.message || cause}); prerendering empty feeds, routes marked noindex.`);
+      degraded = true;
+    }
   }
   const pages = {};
   for (const name of ['Landing', 'Berita', 'Pengumuman', 'Prestasi', 'Bkk', 'Spmb', 'Kalender']) pages[name] = (await server.ssrLoadModule(`/src/pages/${name}Page.jsx`)).default;
@@ -180,7 +204,12 @@ try {
     const description = PAGE_META[route]?.[1] || detailDescription({ title: plain(html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)[1]), lead: plain(html.match(/<h1\b[\s\S]*?<\/h1>[\s\S]*?<p\b[^>]*>([\s\S]*?)<\/p>/)?.[1] || '') });
     const breadcrumbs = breadcrumbsFrom(html, route);
     const article = publicContent.berita?.find(item => route === `/berita/${item.slug}`);
-    const metadata = pageMetadata({ pathname: route, title, description, school, breadcrumbs, article: article ? articleMetadata(article) : undefined });
+    // When the resilient build could not reach the public data source, dynamic-content routes contain
+    // loading placeholders at build time. Mark them noindex so search engines never index loading shells;
+    // the SPA fetches live content at runtime. Static routes keep their normal indexability.
+    const dynamicRoute = route === '/' || ['/berita', '/pengumuman', '/prestasi', '/bkk', '/spmb', '/kalender'].some(base => route === base || route.startsWith(`${base}/`));
+    const indexable = !(degraded && dynamicRoute);
+    const metadata = pageMetadata({ pathname: route, title, description, school, breadcrumbs, article: article ? articleMetadata(article) : undefined, indexable });
     // SSR uses source asset URLs; map them to the exact files emitted by the client build.
     html = html.replace(/\/src\/assets\/[^"'\s<>)]+/g, url => {
       const asset = manifest[url.slice(1).split('?')[0]];
@@ -202,7 +231,7 @@ try {
     await writeFile(path.join(dist, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>');
     console.warn('SEO: OFFLINE CI TEST OUTPUT ONLY. Public feeds are empty. Do not deploy dist.');
   }
-  console.log(`SEO: prerendered ${routes.length} public routes, generated sitemap, robots and school OG image.`);
+  console.log(`SEO: prerendered ${routes.length} public routes (mode=${prerenderMode}${degraded ? ', degraded: dynamic routes noindex' : ''}), generated sitemap, robots and school OG image.`);
 } finally {
   await server.close();
 }

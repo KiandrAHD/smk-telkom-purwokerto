@@ -8,6 +8,7 @@ import { createLogger, errorHandler, notFoundHandler } from './middleware/error.
 import { requireCsrf, csrfToken } from './middleware/csrf.js';
 import { HttpError } from './utils/http.js';
 import { authRouter } from './routes/auth.js';
+import { prisma } from './db.js';
 import { createContentRouter } from './routes/content.js';
 import { adminRouter } from './routes/admin.js';
 import { ppdbRouter } from './routes/ppdb.js';
@@ -37,7 +38,17 @@ const isSameOrigin = (req) => {
 app.use((req, _res, next) => (isSameOrigin(req) ? next() : next(new HttpError(403, 'Origin tidak diizinkan.', 'origin_rejected'))));
 app.use(requireCsrf);
 
-app.get('/health', (_req, res) => res.json({ ok: true, service: 'smk-backend' }));
+app.get('/health', async (_req, res) => {
+  const payload = { ok: true, service: 'smk-backend', uptime: Math.round(process.uptime()) };
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    payload.database = 'up';
+  } catch {
+    payload.database = 'down';
+    payload.ok = false;
+  }
+  res.status(payload.ok ? 200 : 503).json(payload);
+});
 app.get('/api/auth/csrf', csrfToken);
 app.use('/api/auth', authRouter);
 app.use('/api/berita', createContentRouter('berita'));

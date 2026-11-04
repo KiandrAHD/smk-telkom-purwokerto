@@ -1,50 +1,60 @@
 # Audit Migrasi MySQL SMK Telkom Purwokerto
 
-Tanggal audit: 2026-11-03
+Tanggal audit: 2026-11-04
 
-## Status
+## Ringkasan
 
-Migrasi **belum selesai**. Supabase tetap menjadi backend aktif dan tidak disentuh secara destruktif. Backend Express/Prisma di `backend/` masih berupa scaffold tanpa schema, server, route, atau test. Kredensial lokal berada di `backend/.env`; file tersebut tidak boleh di-commit.
+Backend Express + Prisma 7.10.1 sekarang berjalan pada MySQL lokal Laragon. Supabase tetap utuh; tidak ada tabel, data, storage, backup, atau Edge Function Supabase yang dihapus/diubah. Migrasi data belum dijalankan karena `SOURCE_DATABASE_URL` dan inventory storage Supabase belum tersedia.
+
+## Temuan dan perbaikan
+
+1. `backend/prisma/migrations/20261103000000_init/migration.sql` berukuran 0 byte. Dibuat ulang dari schema Prisma menggunakan `prisma migrate diff --from-empty --to-schema=prisma/schema.prisma --script`; hasil 9.6 KB berisi seluruh tabel, index, enum, dan FK.
+2. Prisma config sudah valid untuk Prisma 7: `prisma.config.ts` memakai `defineConfig`, `env("DATABASE_URL")`, schema, dan migrations path. `prisma@7.10.1` dan `@prisma/client@7.10.1` tetap dipertahankan.
+3. Prisma adapter menerima pool `mariadb` eksplisit agar koneksi MySQL stabil pada runtime dan test.
+4. Route content memetakan input frontend snake_case ke field Prisma camelCase.
+5. Route SPMB sebelumnya hanya memakai `requireAdmin`; sekarang memakai `requireAuth, requireAdmin`.
+6. Route PPDB memetakan field snake_case ke model Prisma camelCase sebelum create.
+7. Upload memvalidasi MIME type dan magic header PDF; frontend content upload memakai backend, bukan Supabase Storage.
+8. Health check sekarang memverifikasi koneksi DB dan mengembalikan 503 jika DB down.
+9. Statistik visitor menghapus query `groupBy` yang tidak digunakan.
 
 ## Inventaris fitur
 
-- Website publik: profil sekolah, guru, jurusan, fasilitas, berita, pengumuman, prestasi, BKK, kalender, galeri, ekstrakurikuler.
-- Admin: login, dashboard, CRUD berita, pengumuman, prestasi, BKK, jurusan/data terkait, kalender, SPMB, pengaturan website.
-- PPDB/SPMB: registrasi, verifikasi email, login peserta, formulir, draft, upload dokumen, submit, status, review admin, catatan admin.
-- AI: STELA dan NextTel melalui Supabase Edge Functions, termasuk quota, fallback, scoring, dan guard.
-- Storage: `content-images` (public) dan `ppdb-documents` (private).
-- Analytics: visitor counter dan statistik SPMB.
+- Public content: berita, pengumuman, prestasi, BKK.
+- Admin: login/session, dashboard, CRUD content, PPDB review, event, SPMB, settings.
+- PPDB: register, email token, session, draft, submit, status, document upload.
+- AI: STELA fallback dan quota, NextTel scoring dan quota.
+- Upload: `content-images` lokal/public dan `ppdb-documents` lokal/private.
+- Analytics: visitor counter dan SPMB statistics.
 
-## Sumber data dan aturan keamanan
+## Prisma status
 
-Supabase memiliki 15 migration PostgreSQL yang mencakup `admins`, `berita`, `pengumuman`, `prestasi`, `bkk`, `ppdb`, `ppdb_drafts`, `events`, `spmb_information`, `site_settings`, visitor/quota tables, RLS, triggers, RPC, dan Storage policies. RLS adalah boundary keamanan aktif. Tidak ada operasi DROP, TRUNCATE, delete, atau perubahan terhadap Supabase yang dilakukan oleh migrasi lokal ini.
+- `npx prisma -v`: pass, 7.10.1.
+- `npx prisma validate`: pass.
+- `npx prisma generate`: pass.
+- `npx prisma migrate status`: database up to date.
+- MySQL connection script: pass.
+- CRUD + transaction + FK smoke test: pass.
 
-Risiko yang wajib ditangani:
+## Security findings
 
-1. `backend/.env` berisi password MySQL dan `SESSION_SECRET`; jangan commit dan rotasi jika pernah terekspos.
-2. Upload PPDB harus private, owner/admin scoped, dan divalidasi server-side termasuk magic header PDF.
-3. Auth, role, status, quota, dan ownership tidak boleh dipercaya dari frontend.
-4. Data migration hanya boleh read-only dari Supabase, batch, idempotent, retryable, dan menghasilkan reconciliation report.
-5. Backup Supabase, backup MySQL, serta staging test membutuhkan tindakan operator dan kredensial yang belum tersedia.
+- Argon2id password hashing: present.
+- Session token stored hashed: present.
+- HTTP-only/lax session cookie and CSRF double-submit: present.
+- Helmet, CORS allowlist, rate limit, Zod validation: present.
+- PPDB document owner/admin authorization: present.
+- Production blockers: SMTP, AI provider, object storage, reverse proxy TLS, secret manager, and rate-limit strategy across multiple instances.
+- Local password was supplied during setup and placed only in ignored `backend/.env`; rotate it before production and never reuse it.
+- `npm audit` reports backend 2 moderate and frontend 10 vulnerabilities; review dependency advisories before deployment. No `npm audit fix --force` was run.
 
-## Rencana implementasi
+## Supabase mapping
 
-1. Bangun schema Prisma MySQL dengan UUID string, `utf8mb4`, foreign key, index, timestamps, dan soft-delete untuk entitas konten.
-2. Bangun Express API modular dengan Zod, Argon2id, HTTP-only session cookie, CSRF/origin protection, Helmet, CORS allowlist, rate limit, logging, dan centralized errors.
-3. Tambahkan storage abstraction local/private object storage.
-4. Tambahkan ETL read-only untuk PostgreSQL/Supabase dan manifest reconciliation.
-5. Ganti service frontend secara bertahap melalui API client terpusat setelah kontrak API dan auth siap; UI/routing dipertahankan.
-6. Port STELA/NextTel ke route backend tanpa memindahkan API key ke frontend.
-7. Tambahkan integration/security tests dan deployment docs untuk Vercel + VPS.
-8. Cutover hanya setelah staging, rekonsiliasi, backup, smoke test, dan rollback plan disetujui.
+See `docs/MYSQL_MIGRATION_PLAN.md`. Source data, auth, storage, RLS, and Edge Functions remain available as rollback/reference. ETL supports dry-run, batch processing, retry, upsert, count summary, and FK checks, but requires read-only Supabase credentials.
 
-## Blocker manual
+## Remaining blockers
 
-- Kredensial read-only Supabase dan daftar bucket/file belum tersedia.
-- SMTP/email verification provider belum dikonfigurasi untuk auth baru.
-- Provider AI secrets dan production storage belum tersedia.
-- Tidak boleh mengklaim data telah termigrasi sebelum ETL dijalankan dan laporan jumlah/integritas diverifikasi.
-
-## Audit paralel
-
-Audit repository, backend, frontend, security, dan QA dilakukan. Temuan utama: backend kosong, frontend masih memakai Supabase langsung, build lokal sebelumnya gagal karena dependency installation tidak lengkap, dan test backend masih placeholder. Supabase migrations dan data tetap dipertahankan.
+- No Supabase read-only connection string or storage inventory.
+- No verified auth password-hash compatibility.
+- No SMTP/production storage/AI credentials.
+- No VPS, DNS, TLS, or deployment authorization.
+- No production backup/cutover approval.

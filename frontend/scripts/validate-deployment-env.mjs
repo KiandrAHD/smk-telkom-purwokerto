@@ -27,4 +27,4 @@ if (errors.length) {
   console.error(`Deployment environment validation failed:\n- ${errors.join('\n- ')}`);
   process.exit(1);
 }
-console.log(`Deployment environment validated for ${isVercel ? 'Vercel' : 'production'} build.`);
+console.log(`Deployment environment validated for ${isVercel ? 'Vercel' : 'production'} build. Set Vercel Project Environment Variable PRERENDER_MODE=resilient to build when the backend is not reachable from the build sandbox.`);

@@ -6,7 +6,14 @@ import { badRequest, forbidden, notFound, asyncHandler } from '../utils/http.js'
 import { prisma } from '../db.js';
 
 export const uploadsRouter = express.Router();
-const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 }, storage: multer.memoryStorage() });
+const upload = multer({
+  limits: { fileSize: 10 * 1024 * 1024 },
+  storage: multer.memoryStorage(),
+  fileFilter: (_req, file, cb) => {
+    if (['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf'].includes(file.mimetype)) return cb(null, true);
+    cb(badRequest('Jenis file tidak diizinkan.'));
+  },
+});
 const images = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const pdf = 'application/pdf';
 

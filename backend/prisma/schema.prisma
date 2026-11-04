@@ -197,7 +197,7 @@ model Event {
   id              String        @id @default(uuid()) @db.Char(36)
   judul           String        @db.VarChar(180)
   ringkasan       String        @default("") @db.VarChar(500)
-  deskripsi       String        @default("") @db.Text
+  deskripsi       String        @db.Text
   kategori        EventCategory @default(kegiatan)
   tanggalMulai    DateTime      @map("tanggal_mulai") @db.Date
   waktuMulai      String?       @map("waktu_mulai") @db.VarChar(8)
@@ -218,7 +218,7 @@ model SpmbInformation {
   id                  String        @id @default(uuid()) @db.Char(36)
   jenis               SpmbKind
   judul               String        @db.VarChar(180)
-  deskripsi           String        @default("") @db.Text
+  deskripsi           String        @db.Text
   urutan              Int           @default(1)
   tanggalMulai        DateTime?     @map("tanggal_mulai") @db.Date
   tanggalSelesai      DateTime?     @map("tanggal_selesai") @db.Date
