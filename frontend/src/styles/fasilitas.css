@@ -13,10 +13,17 @@
   width: clamp(5px, 1.3vw, 24px);
   z-index: -1;
   pointer-events: none;
-  background: url('../assets/fasilitas/page-accent.png') top center / 100% auto repeat-y;
+  background: url('../assets/fasilitas/page-accent-solid.svg') top center / 100% auto repeat-y;
+  -webkit-mask-image: var(--chain-fade, linear-gradient(to right, transparent, black));
+  mask-image: var(--chain-fade, linear-gradient(to right, transparent, black));
 }
 .facility-chain--right { right: 0; }
-.facility-chain--left { left: 0; transform: scaleX(-1); }
+.facility-chain--left {
+  left: 0;
+  transform: scaleX(-1);
+  /* The mirrored pattern must still fade toward the screen's left edge. */
+  --chain-fade: linear-gradient(to left, transparent, black);
+}
 @media (min-width: 40rem) {
   .facility-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
