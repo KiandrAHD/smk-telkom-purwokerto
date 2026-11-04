@@ -275,8 +275,8 @@ const EkstrakurikulerPage = () => {
               <img
                 src={heroFigma}
                 alt={t("Siswa SMK Telkom Purwokerto mengeksplorasi teknologi")}
-                width="1920"
-                height="902"
+                width="2000"
+                height="1032"
                 fetchPriority="high"
                 className="hero-image"
               />
