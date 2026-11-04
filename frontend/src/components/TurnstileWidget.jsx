@@ -5,7 +5,7 @@ const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
 
 
 export async function verifyTurnstileToken(token) {
-  const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+  const backendUrl = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:3000' : '');
   const response = await fetch(`${backendUrl}/api/turnstile/verify`, {
     method: 'POST',
     credentials: 'include',

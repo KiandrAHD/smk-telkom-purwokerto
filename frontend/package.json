@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender-seo.mjs",
+    "build": "node scripts/validate-deployment-env.mjs && vite build && node scripts/prerender-seo.mjs",
     "build:ci": "vite build && node scripts/prerender-seo.mjs --offline",
     "seo:uji": "node scripts/uji-seo.mjs",
     "lint": "eslint .",

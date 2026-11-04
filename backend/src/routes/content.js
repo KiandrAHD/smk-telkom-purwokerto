@@ -23,8 +23,11 @@ export function createContentRouter(type) {
     ]);
     res.json({ data, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
   }));
-  router.get('/:id', optionalAuth, asyncHandler(async (req, res) => {
-    const where = req.isAdmin ? { id: req.params.id } : { id: req.params.id, ...def.publicWhere };
+  router.get('/:idOrSlug', optionalAuth, asyncHandler(async (req, res) => {
+    const identifier = req.params.idOrSlug;
+    const where = req.isAdmin
+      ? { OR: [{ id: identifier }, { slug: identifier }] }
+      : { OR: [{ id: identifier }, { slug: identifier }], ...def.publicWhere };
     const data = await prisma[def.model].findFirst({ where });
     if (!data) throw notFound();
     res.json({ data });

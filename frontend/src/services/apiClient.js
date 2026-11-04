@@ -1,6 +1,7 @@
 // API client terpusat untuk backend Node.js/MySQL.
 // Tidak ada lagi request langsung ke Supabase dari frontend.
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+const API_BASE_URL = (configuredApiBaseUrl || (import.meta.env.DEV ? 'http://localhost:3000' : '')).replace(/\/$/, '');
 
 export const apiSiap = Boolean(API_BASE_URL);
 
