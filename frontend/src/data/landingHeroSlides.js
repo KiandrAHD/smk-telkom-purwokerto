@@ -48,7 +48,7 @@ export const landingHeroSlides = [
   {
     id: 'ekstrakurikuler', name: 'Ekstrakurikuler',
     content: { title: 'Ekstrakurikuler', titleAccent: '', description: ekstrakurikulerData.subtitle, primaryCta: { label: 'Lihat Kegiatan', href: '/ekstrakurikuler' } },
-    media: { src: activities, width: 1920, height: 902, composition: 'activities', alt: 'Ekstrakurikuler' },
+    media: { src: activities, width: 2000, height: 1032, composition: 'activities', alt: 'Ekstrakurikuler' },
   },
   {
     id: 'bkk', name: 'BKK',

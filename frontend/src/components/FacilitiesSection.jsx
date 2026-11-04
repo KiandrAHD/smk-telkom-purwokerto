@@ -83,7 +83,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
       turning.current = true;
     }
     setActive((next + slides.length) % slides.length);
-  }, [active, slides.length]);
+  }, [active, slides]);
 
   const prepareNavigation = (event) => {
     event.preventDefault();
@@ -126,7 +126,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
   }, [active, navigate]);
 
   useLayoutEffect(() => {
-    const progress = active / (slides.length - 1);
+    const progress = defaultSlides.findIndex(slide => slide.name === slides[active].name) / (slides.length - 1);
     if (!slideState.current) {
       gsap.set(indicators.current, { '--facility-progress': progress, '--facility-line-opacity': 1 });
       return;
@@ -196,7 +196,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
     } else {
       slideAnimation.current.to(indicators.current, { '--facility-progress': progress, duration: 0.5, ease: 'power3.out' }, 0);
     }
-  }, [active, slides.length]);
+  }, [active, slides]);
 
   const showDetails = (category = 'Semua') => {
     navigatePage(category === 'Semua' ? '/fasilitas' : `/fasilitas?kategori=${encodeURIComponent(category)}`);
@@ -226,7 +226,7 @@ export default function FacilitiesSection({ variant = 'default' }) {
                   className={`relative aspect-[611/354] shrink-0 rounded-xl border-[3px] border-white bg-white shadow-card focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-primary ${Math.abs(offset) > 1 ? 'hidden' : offset === 0 ? 'z-10 w-full sm:w-[38%]' : `hidden sm:block sm:w-[33%] ${offset < 0 ? '-mr-4 -rotate-2' : '-ml-4 rotate-2'}`}`}>
                   <img src={slide.image} alt={t(slide.name)} width="611" height="354" loading="lazy" className="h-full w-full rounded-lg object-cover" />
                   <span data-slide-panel aria-hidden={offset !== 0} className={`pointer-events-none absolute -bottom-16 left-[7%] flex min-h-28 w-[86%] flex-col justify-center rounded-xl border-[3px] border-white bg-[#e72033] px-4 py-4 text-left text-white shadow-card lg:min-h-32 lg:px-6 ${offset === 0 ? 'opacity-100' : 'opacity-0'}`}><span className="font-heading text-sm font-bold leading-snug sm:text-base lg:text-xl">{t(slide.title ?? slide.name)}</span><span className="mt-1 text-xs leading-snug">{t(slide.preview ?? 'Ruang praktik untuk belajar mengatur, memasang, dan mengamankan jaringan komputer.')}</span></span>
-                  <span data-slide-preview aria-hidden={offset === 0} className={`pointer-events-none absolute inset-0 flex items-end rounded-lg bg-gradient-to-t from-primary/85 to-transparent p-4 text-left font-heading text-base font-bold leading-snug text-white lg:text-xl ${offset === 0 ? 'opacity-0' : 'opacity-100'}`}>{t(slide.name)}</span>
+                  <span data-slide-preview aria-hidden={offset === 0} className={`pointer-events-none absolute inset-0 flex items-end rounded-lg facilities-slide-preview p-4 text-left font-heading text-base font-bold leading-snug text-white lg:text-xl ${offset === 0 ? 'opacity-0' : 'opacity-100'}`}>{t(slide.name)}</span>
                 </button>
               );
             })}
@@ -239,12 +239,15 @@ export default function FacilitiesSection({ variant = 'default' }) {
       </div>
       <div className="mx-auto max-w-[1240px] overflow-x-auto px-6 py-9" data-lenis-prevent-horizontal>
         <ol ref={indicators} style={{ '--facility-count': slides.length }} className="facilities-indicators relative flex min-w-[620px] justify-between gap-3 before:absolute before:left-12 before:right-12 before:top-6 before:h-px before:bg-dark-300">
-          {slides.map(({ name, Icon }, index) => <li key={name} className="relative z-10 flex-1 text-center">
-            <button type="button" aria-pressed={active === index} onClick={() => navigate(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
+          {defaultSlides.map(({ name, Icon }, position) => {
+            const index = slides.findIndex(slide => slide.name === name);
+            return <li key={name} className="relative z-10 flex-1 text-center">
+            <button type="button" data-facility-index={index} aria-pressed={active === index} onClick={() => navigate(index)} className={`group w-full text-xs ${active === index ? 'font-bold text-primary' : 'text-dark-500'}`}>
               <span className={`relative mx-auto flex size-12 items-center justify-center rounded-full border-2 transition-[background-color,border-color,color,scale] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none motion-reduce:scale-100 ${active === index ? 'scale-[1.04] border-primary bg-primary text-white' : 'border-dark-400 bg-white group-hover:border-primary group-hover:text-primary'}`}><Icon className="size-5" /></span>
-              <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(index + 1).padStart(2, '0')}</span>
+              <span className="mt-3 block">{t(name)}</span><span className="mt-1 block text-[10px] text-dark-500">{String(position + 1).padStart(2, '0')}</span>
             </button>
-          </li>)}
+          </li>;
+          })}
         </ol>
       </div>
       <div className="facilities-actions-wrapper">

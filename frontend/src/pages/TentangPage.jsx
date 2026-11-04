@@ -9,6 +9,7 @@ import TentangAboutSection from '../components/tentang/TentangAboutSection';
 import TentangVisiMisiSection from '../components/tentang/TentangVisiMisiSection';
 import TentangTimelineSection from '../components/tentang/TentangTimelineSection';
 import TentangKepalaSekolahSection from '../components/tentang/TentangKepalaSekolahSection';
+import TentangMetodePembelajaranSection from '../components/tentang/TentangMetodePembelajaranSection';
 
 const ProfileSekolahPage = () => (
   <MainLayout showOpeningMarquee={false}>
@@ -26,6 +27,9 @@ const ProfileSekolahPage = () => (
     <WaveMarquee />
     <Reveal>
       <TentangKepalaSekolahSection />
+    </Reveal>
+    <Reveal>
+      <TentangMetodePembelajaranSection />
     </Reveal>
     <FacilitiesSection variant="profile" />
   </MainLayout>
