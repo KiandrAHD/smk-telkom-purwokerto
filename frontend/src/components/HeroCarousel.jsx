@@ -5,27 +5,28 @@ import HeroPanel from './HeroPanel';
 import './HeroCarousel.css';
 
 export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
-  const { t } = useLanguage();
-  const root = useRef(null), actions = useRef({});
+  const { t, language } = useLanguage();
+  const root = useRef(null), navigation = useRef(null), actions = useRef({});
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     const node = root.current;
     const panels = [...node.querySelectorAll('[data-hero-slide]')];
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let current = 0, timer, animation, pending = 0;
-    let moving = false, disposed = false, visible = false;
+    let current = 0, timer, animation, pending = null;
+    let moving = false, disposed = false, visible = false, interacting = false;
     const schedule = () => {
       window.clearTimeout(timer);
-      if (disposed || moving || preference.matches || document.hidden || !visible || node.querySelector(':focus-visible') || node.matches(':focus-visible')) return;
+      if (disposed || moving || interacting || preference.matches || document.hidden || !visible || node.querySelector(':focus-visible') || node.matches(':focus-visible')) return;
       timer = window.setTimeout(() => move(1), 6200);
     };
     const move = async direction => {
       window.clearTimeout(timer);
-      if (moving) { pending = direction; return; }
+      if (moving) { pending = () => move(direction); return; }
+      const next = (current + direction + panels.length) % panels.length;
+      if (next === current) { schedule(); return; }
       moving = true;
       node.dataset.heroMoving = 'true';
-      const next = (current + direction + panels.length) % panels.length;
       const outgoing = panels[current], incoming = panels[next];
       await Promise.all([...incoming.querySelectorAll('img')].map(image => {
         image.loading = 'eager';
@@ -46,14 +47,15 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
         node.dataset.heroMoving = 'false';
         incoming.inert = false;
         setActive(next);
-        if (pending) { const direction = pending; pending = 0; move(direction); }
+        if (pending) { const queued = pending; pending = null; queued(); }
         else schedule();
       };
       if (preference.matches) { complete(); return; }
-      gsap.set(incoming, { visibility: 'visible', xPercent: direction * 100 });
+      const sign = Math.sign(direction);
+      gsap.set(incoming, { visibility: 'visible', xPercent: sign * 100 });
       gsap.set([outgoing, incoming], { willChange: 'transform' });
       animation = gsap.timeline({ defaults: { duration: 0.8, ease: 'power3.inOut', force3D: true }, onComplete: complete })
-        .to(outgoing, { xPercent: -direction * 100 }, 0)
+        .to(outgoing, { xPercent: -sign * 100 }, 0)
         .to(incoming, { xPercent: 0 }, 0);
     };
     const finish = () => { pending = 0; animation?.progress(1); };
@@ -68,7 +70,11 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
     preference.addEventListener('change', mediaChanged);
     window.addEventListener('resize', finish);
     mediaChanged();
-    actions.current = { move };
+    const goTo = index => {
+      if (moving) { pending = () => goTo(index); return; }
+      move(index - current);
+    };
+    actions.current = { move, goTo, pause: () => { interacting = true; window.clearTimeout(timer); }, resume: () => { interacting = false; schedule(); } };
     // Load upcoming artwork after the opening image, then decode again before each transition.
     Promise.all([...panels[0].querySelectorAll('img')].map(image => image.decode().catch(() => {}))).then(() => {
       if (disposed) return;
@@ -88,14 +94,32 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
     };
   }, [slides.length]);
 
+  useEffect(() => {
+    const nav = navigation.current, button = nav?.children[active];
+    if (!button) return;
+    nav.scrollTo({ left: button.offsetLeft - (nav.clientWidth - button.offsetWidth) / 2, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, [active, language]);
+
   return <div ref={root} data-hero-carousel data-hero-index={active} data-hero-moving="false" className={`hero-carousel hero-carousel--${page} relative`} role="region" tabIndex={0} aria-roledescription={t('Karusel')} aria-label={t('Sorotan sekolah')} aria-describedby="hero-keyboard-instructions" onKeyDown={event => {
     if (!event.target.closest('input,textarea,select') && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) { event.preventDefault(); actions.current.move?.(event.key === 'ArrowRight' ? 1 : -1); }
   }}>
     <p id="hero-keyboard-instructions" className="sr-only">{t('Gunakan tombol panah kiri atau kanan untuk mengganti sorotan sekolah.')}</p>
     <div className="hero-carousel-viewport" aria-live="off">
-      {slides.map((slide, index) => <div key={slide.id} data-hero-slide={index} data-active={active === index} className="hero-carousel-slide" role="group" aria-roledescription={t('Slide')} aria-label={t('{number} dari {total}: {name}', { number: index + 1, total: slides.length, name: t(slide.name) })} aria-hidden={active !== index} inert={active !== index}>
+      {slides.map((slide, index) => <div key={slide.id} id={`hero-${page}-slide-${index}`} data-hero-slide={index} data-active={active === index} className="hero-carousel-slide" role="group" aria-roledescription={t('Slide')} aria-label={t('{number} dari {total}: {name}', { number: index + 1, total: slides.length, name: t(slide.name) })} aria-hidden={active !== index} inert={active !== index}>
         {index === 0 && opening ? opening : <HeroPanel content={slide.content} media={slide.media} carousel heading={index === 0 ? 'h1' : 'h2'} priority={index === 0} />}
       </div>)}
     </div>
+    {page === 'beranda' && <nav ref={navigation} className="hero-carousel-navigation" aria-label={t('Navigasi sorotan sekolah')}
+      onPointerEnter={event => { if (event.pointerType === 'mouse') actions.current.pause?.(); }} onPointerLeave={event => { if (event.pointerType === 'mouse') actions.current.resume?.(); }}
+      onPointerDown={event => { if (event.pointerType !== 'mouse') actions.current.pause?.(); }} onPointerUp={event => { if (event.pointerType !== 'mouse') actions.current.resume?.(); }} onPointerCancel={() => actions.current.resume?.()}
+      onKeyDown={event => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault(); event.stopPropagation();
+        const index = [...navigation.current.children].indexOf(event.target);
+        const next = event.key === 'Home' ? 0 : event.key === 'End' ? slides.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + slides.length) % slides.length;
+        navigation.current.children[next].focus({ preventScroll: true }); actions.current.goTo?.(next);
+      }}>
+      {slides.map((slide, index) => <button key={slide.id} type="button" aria-label={t(slide.name)} aria-pressed={active === index} aria-controls={`hero-${page}-slide-${index}`} onClick={() => actions.current.goTo?.(index)} />)}
+    </nav>}
   </div>;
 }

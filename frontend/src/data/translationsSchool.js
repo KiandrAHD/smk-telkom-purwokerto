@@ -32,6 +32,7 @@ export default {
   'Peta sekolah': 'School map',
   'Pengumuman sekolah': 'School announcements',
   'Sorotan sekolah': 'School highlights',
+  'Navigasi sorotan sekolah': 'School highlight navigation',
   'Slide': 'slide',
   'Gunakan tombol panah kiri atau kanan untuk mengganti sorotan sekolah.': 'Use the left or right arrow keys to change the school highlight.',
   '{number} dari {total}: {name}': '{number} of {total}: {name}',
