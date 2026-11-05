@@ -39,6 +39,13 @@ for(const [width,columns,perPage] of [[1847,4,8],[1440,4,8],[1280,4,8],[1024,3,6
    for(let row=0;row<layout.cards.length;row+=columns)assert.ok(Math.max(...layout.cards.slice(row,row+columns))-Math.min(...layout.cards.slice(row,row+columns))<1);
    const spacing=await root.evaluate(root=>{const descriptions=[...root.querySelectorAll('[data-profile-teacher-grid] .teacher-card-description')];return root.querySelector('[data-profile-teacher-pagination]').getBoundingClientRect().top-Math.max(...descriptions.map(n=>n.getBoundingClientRect().bottom));});
    assert.ok(spacing>=0 && spacing<=16,`Pagination must stay within 16px of descriptions, got ${spacing}`);
+   const nav=await root.locator('[data-profile-teacher-pagination]').boundingBox();
+   const cta=root.locator('a[href="/profil-sekolah/guru"]');
+   const ctaBox=await cta.boundingBox();
+   if(width>=640){
+    assert.ok(Math.abs(ctaBox.y+ctaBox.height/2-nav.y-nav.height/2)<1,'CTA and carousel controls must share a center line');
+    assert.ok(ctaBox.x>=nav.x+nav.width+11,'CTA must sit to the right of Next');
+   }else assert.ok(ctaBox.y>=nav.y+nav.height,'Mobile CTA may wrap below controls');
    assert.equal(await grid.locator('[data-teacher-border]').count(),names.length);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false);
    if(i===0)await root.screenshot({path:`${out}/${width}-${lang}.png`,style:'header.sticky,header.sticky *,.fixed.bottom-4 {visibility:hidden}'});
