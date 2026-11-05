@@ -46,5 +46,24 @@ try {
       await root.screenshot({ path: `${out}/${width}-${language}.png` });
     }
   }
-  assert.deepEqual(errors, []); console.log('PASS responsive ID/EN, reduced motion, no exceptions');
+  console.log('PASS responsive ID/EN, reduced motion');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const enter = async () => {
+    await root.evaluate(node => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await page.waitForFunction(() => document.querySelector('[data-innovation-reveal] [data-typewriter-complete="true"]'), null, { timeout: 7000 });
+  };
+  await enter();
+  for (const side of ['above', 'below', 'above']) {
+    await root.evaluate((node, side) => {
+      const top = node.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: side === 'above' ? top + node.offsetHeight + 100 : top - window.innerHeight - 100, behavior: 'instant' });
+    }, side);
+    await page.waitForFunction(() => document.querySelectorAll('[data-innovation-reveal] .is-typed').length === 0, null, { timeout: 3000 });
+    await enter();
+    const before = (await sample()).count;
+    await page.evaluate(() => window.scrollBy({ top: 12, behavior: 'instant' })); await sleep(100);
+    assert.equal((await sample()).count, before, 'Small scrolling does not reset the typewriter');
+  }
+  assert.deepEqual(errors, []); console.log('PASS typewriter replay in both scroll directions, no boundary jitter or exceptions');
 } finally { await browser.close(); }
