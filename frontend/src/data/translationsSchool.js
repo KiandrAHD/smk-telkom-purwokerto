@@ -1,4 +1,8 @@
 export default {
+  'hadir untuk menjawab tantangan dunia digital. Kami tidak mencetak “pekerja” atau “tukang servis”, melainkan': 'responds to the challenges of the digital world. We nurture more than “workers” or “repair technicians”: we develop',
+  'Kreator dan Inovator': 'Creators and Innovators',
+  '. Di sini, siswa dididik untuk menjadi pemimpin masa depan yang mampu menciptakan solusi digital untuk dunia.': '. Here, students learn to become future leaders who create digital solutions for the world.',
+  'Menyelenggarakan pendidikan berbasis industri yang adaptif terhadap kemajuan teknologi dan inovatif dalam pembelajaran, guna mencetak lulusan berkarakter unggul yang siap memelopori peradaban Society 5.0.': 'Provide industry-based education that adapts to technological progress and innovates in learning, nurturing graduates with outstanding character who are ready to pioneer Society 5.0.',
   'METODE PEMBELAJARAN': 'LEARNING METHODS',
   'Belajar Aktif.': 'Learn Actively.',
   'Bertumbuh Adaptif.': 'Grow Adaptively.',
