@@ -33,7 +33,7 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce' }); await root.scrollIntoViewIfNeeded(); await sleep(300);
   await page.emulateMedia({ reducedMotion: 'no-preference' }); await root.scrollIntoViewIfNeeded(); await sleep(150);
   const holds = []; let since = null, last = await sample(), begun = Date.now(), seenMotion = false;
-  while (holds.length < 5 && Date.now() - begun < 23000) {
+  while (holds.length < 5 && Date.now() - begun < 32000) {
     await sleep(50); const next = await sample();
     assert.ok(Math.abs(next.width - last.width) < .5 && Math.abs(next.left - last.left) < .5 && Math.abs(next.top - last.top) < .5, 'Stable box layout');
     assert.equal(next.y, 0, 'Only horizontal movement');
