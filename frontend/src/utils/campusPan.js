@@ -3,7 +3,7 @@ export const panLimit = (viewportWidth, imageWidth) => Math.max(0, imageWidth - 
 export const clampPan = (value, maximum) => Math.min(Math.max(0, value), maximum);
 export function campusGeometry(viewportWidth) {
   // Keep the original image ratio and pin coordinates in a compact, pannable canvas.
-  const width = Math.max(960, viewportWidth * 3142 / 1847);
+  const width = Math.min(1600, Math.max(960, viewportWidth * 1.25));
   const maximum = panLimit(viewportWidth, width);
   return { width, height: width * 1314 / 3142, maximum, initial: clampPan(83 * width / 3142, maximum), unit: width / 3142 };
 }
