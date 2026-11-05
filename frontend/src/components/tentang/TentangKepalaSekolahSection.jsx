@@ -85,8 +85,9 @@ const TentangKepalaSekolahSection = () => {
           <span className="sr-only" aria-live="polite">{t('Halaman {page} dari {total}', { page: currentPage + 1, total: pages })}</span>
 
           {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
+          <div className="mt-2 flex min-w-0 flex-col items-center justify-center gap-3 sm:flex-row">
           {pages > 1 && (
-          <div data-profile-teacher-pagination className="mt-2 flex items-center justify-center gap-2">
+          <div data-profile-teacher-pagination className="flex w-full min-w-0 items-center justify-center gap-2 sm:w-auto">
             <button
               type="button"
               onClick={() => goToPage(currentPage - 1)}
@@ -118,7 +119,7 @@ const TentangKepalaSekolahSection = () => {
             ><ChevronRight className="h-5 w-5" aria-hidden="true" /></button>
           </div>
           )}
-          <div className="mt-4 flex min-w-0 justify-center">
+          <div className="flex min-w-0 justify-center">
             <Link
               to="/profil-sekolah/guru"
               className="inline-flex max-w-full items-center gap-2 rounded-full border border-dark-200 bg-white px-4 py-2.5 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
@@ -126,6 +127,7 @@ const TentangKepalaSekolahSection = () => {
               {t("Lihat semua profil guru")}
               <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             </Link>
+          </div>
           </div>
         </div>
       </div>
