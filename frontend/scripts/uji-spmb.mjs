@@ -1,3 +1,4 @@
+import { OFFICIAL_ADMISSIONS_URL } from '../src/utils/admissions.js';
 import assert from 'node:assert/strict';
 import { canonicalAdmissionsPath, formatAdmissionsText } from '../src/utils/admissions.js';
 import { createServer } from 'vite';
@@ -32,7 +33,7 @@ try {
   assert.equal(translate('Kembali ke {label}', 'id', { label: 'PPDB' }), 'Kembali ke SPMB');
   assert.equal(translate('Kelola PPDB dari dashboard', 'id'), 'Kelola SPMB dari dashboard');
   const data = await server.ssrLoadModule('/src/data/dummyData.js');
-  assert.equal(data.ctaMasukPpdb.href, '/spmb/masuk');
+  assert.equal(data.ctaMasukPpdb.href, OFFICIAL_ADMISSIONS_URL);
   assert.ok(data.ppdbLangkahPortal.every(({ to }) => to.startsWith('/spmb/')));
   console.log('SPMB: routes, legacy redirects, query/hash preservation, bilingual terminology, and portal links pass.');
 } finally {

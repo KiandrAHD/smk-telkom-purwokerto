@@ -21,8 +21,6 @@ const prefetchByHref = {
   '/pengumuman': () => import('../pages/PengumumanPage'),
   '/kalender': () => import('../pages/KalenderPage'),
   '/nexttel': () => import('../pages/NextTelPage'),
-  '/spmb': () => import('../pages/SpmbPage'),
-  '/spmb/masuk': () => import('../pages/ppdb/LoginPage'),
 };
 
 const prefetchRoute = (href) => {
