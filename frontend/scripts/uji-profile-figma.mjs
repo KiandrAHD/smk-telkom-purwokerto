@@ -8,9 +8,10 @@ const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const page = await browser.newPage({ reducedMotion: 'reduce' });
 const errors = [];
 page.on('pageerror', error => errors.push(error.message));
+await page.addInitScript(() => localStorage.setItem('stela-reminder-dismissed-at', String(Date.now())));
 await page.route('**/api/**', route => route.fulfill({ contentType: 'application/json', body: '[]' }));
 try {
-  for (const width of [1847, 1440, 1024, 768, 390, 320]) {
+  for (const width of [1847, 1440, 1280, 1024, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 1100 });
     await page.goto(`${process.env.QA_URL || 'http://127.0.0.1:5181'}/profil-sekolah`);
     for (const language of ['id', 'en']) {
@@ -24,6 +25,16 @@ try {
       assert.notEqual(await principles.locator('.profile-value-card').first().evaluate(card => getComputedStyle(card, '::after').backgroundImage), 'none', 'The values must be connected by the red ribbon');
       const cards = await principles.locator('.profile-principle-card').first().boundingBox();
       assert.ok(cards.width > 200);
+      const aboutPanel = await page.locator('.profile-about-panel').boundingBox();
+      const visionGrid = await principles.locator('.profile-vision-grid').boundingBox();
+      assert.ok(Math.abs(aboutPanel.x - visionGrid.x) < 1 && Math.abs(aboutPanel.width - visionGrid.width) < 1, 'The redesign must share the existing About container width');
+      if (width < 1280) {
+        for (const card of await principles.locator('.profile-principle-card').all()) {
+          const description = await card.locator('.profile-principle-description').boundingBox();
+          const photo = await card.locator('.profile-principle-photo').boundingBox();
+          assert.ok(photo.y + photo.height * .25 > description.y + description.height, 'The readable copy must sit above the photo on smaller screens');
+        }
+      }
       const valueLayout = await principles.locator('.profile-values-grid').evaluate(grid => ({
         columns: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
         heights: [...grid.children].map(card => card.getBoundingClientRect().height),
@@ -39,7 +50,7 @@ try {
       assert.ok(Math.max(...valueLayout.heights) - Math.min(...valueLayout.heights) < 1);
       assert.ok(valueLayout.contained, `${width}/${language}: value text must fit its card`);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false, `${width}/${language}: page overflow`);
-      await principles.screenshot({ path: `${output}/principles-${width}-${language}.png`, style: 'header.sticky,.fixed.bottom-4 {visibility:hidden}' });
+      await principles.screenshot({ path: `${output}/principles-${width}-${language}.png`, style: 'header,.fixed.bottom-4 {visibility:hidden}' });
       const history = page.locator('#perjalanan');
       await history.scrollIntoViewIfNeeded();
       await history.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
@@ -56,7 +67,7 @@ try {
           assert.ok(milestones[i].x >= milestones[i - 1].right);
         } else assert.ok(milestones[i].y > milestones[i - 1].bottom);
       }
-      await history.screenshot({ path: `${output}/history-${width}-${language}.png`, style: 'header.sticky,.fixed.bottom-4 {visibility:hidden}' });
+      await history.screenshot({ path: `${output}/history-${width}-${language}.png`, style: 'header,.fixed.bottom-4 {visibility:hidden}' });
       console.log(`PASS profile vision, values, history ${width}/${language}`);
     }
   }
