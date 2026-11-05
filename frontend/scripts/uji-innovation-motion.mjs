@@ -15,27 +15,40 @@ const sample = () => root.evaluate(node => {
   const rect = box.getBoundingClientRect();
   const range = document.createRange(); range.selectNodeContents(reel.firstElementChild);
   const text = range.getBoundingClientRect();
+  const visibleWidth = [...reel.children].reduce((total, child) => {
+    range.selectNodeContents(child); const r = range.getBoundingClientRect();
+    return total + Math.max(0, Math.min(r.right, rect.right) - Math.max(r.left, rect.left));
+  }, 0);
   return { x: new window.DOMMatrixReadOnly(getComputedStyle(reel).transform).m41, width: rect.width,
-    left: rect.left, top: rect.top, full: text.left >= rect.left - .5 && text.right <= rect.right + .5,
-    count: node.querySelectorAll('.is-typed').length };
+    y: new window.DOMMatrixReadOnly(getComputedStyle(reel).transform).m42, visibleWidth,
+    opacity: getComputedStyle(reel).opacity, left: rect.left, top: rect.top, full: text.left >= rect.left - .5 && text.right <= rect.right + .5 };
 });
 try {
   await page.goto((process.env.QA_URL || 'http://127.0.0.1:5173') + '/');
   await root.scrollIntoViewIfNeeded(); await page.evaluate(() => document.fonts.ready);
   await page.emulateMedia({ reducedMotion: 'reduce' }); await sleep(100);
   assert.ok((await sample()).full, 'The whole phrase must fit at the centered stop');
+  for (const width of [1440, 390]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.emulateMedia({ reducedMotion: 'reduce' }); await root.scrollIntoViewIfNeeded(); await sleep(300);
   await page.emulateMedia({ reducedMotion: 'no-preference' }); await root.scrollIntoViewIfNeeded(); await sleep(150);
-  const holds = []; let since = null, last = await sample(), begun = Date.now();
-  while (holds.length < 3 && Date.now() - begun < 16000) {
+  const holds = []; let since = null, last = await sample(), begun = Date.now(), seenMotion = false;
+  while (holds.length < 5 && Date.now() - begun < 23000) {
     await sleep(50); const next = await sample();
     assert.ok(Math.abs(next.width - last.width) < .5 && Math.abs(next.left - last.left) < .5 && Math.abs(next.top - last.top) < .5, 'Stable box layout');
+    assert.equal(next.y, 0, 'Only horizontal movement');
+    assert.equal(next.opacity, '1'); assert.ok(next.visibleWidth > next.width * .5, 'Text must remain visible through every frame');
     if (Math.abs(next.x) < .1) {
-      assert.ok(next.full, 'No clipping during pause'); since ??= Date.now();
-    } else if (since !== null) { holds.push(Date.now() - since); since = null; }
+      assert.ok(next.full, 'No clipping during pause'); if (seenMotion) since ??= Date.now();
+    } else {
+      seenMotion = true;
+      if (since !== null) { holds.push(Date.now() - since); since = null; }
+    }
     last = next;
   }
-  assert.equal(holds.length, 3); assert.ok(holds.every(ms => ms >= 1500 && ms <= 2100), JSON.stringify(holds));
-  console.log('PASS three slide/pause cycles:', holds);
+  assert.equal(holds.length, 5); assert.ok(holds.every(ms => ms >= 1500 && ms <= 2100), JSON.stringify(holds));
+  console.log('PASS five slide/pause cycles:', width, holds);
+  }
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const language of ['id', 'en']) {
@@ -49,21 +62,39 @@ try {
   console.log('PASS responsive ID/EN, reduced motion');
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: 'no-preference' });
-  const enter = async () => {
-    await root.evaluate(node => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
-    await page.waitForFunction(() => document.querySelector('[data-innovation-reveal] [data-typewriter-complete="true"]'), null, { timeout: 7000 });
-  };
-  await enter();
-  for (const side of ['above', 'below', 'above']) {
-    await root.evaluate((node, side) => {
-      const top = node.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: side === 'above' ? top + node.offsetHeight + 100 : top - window.innerHeight - 100, behavior: 'instant' });
-    }, side);
-    await page.waitForFunction(() => document.querySelectorAll('[data-innovation-reveal] .is-typed').length === 0, null, { timeout: 3000 });
-    await enter();
-    const before = (await sample()).count;
-    await page.evaluate(() => window.scrollBy({ top: 12, behavior: 'instant' })); await sleep(100);
-    assert.equal((await sample()).count, before, 'Small scrolling does not reset the typewriter');
+  for (const path of ['/', '/profil-sekolah']) {
+    await page.goto((process.env.QA_URL || 'http://127.0.0.1:5173') + path);
+    await root.scrollIntoViewIfNeeded();
+    for (const width of [1440, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const language of ['id', 'en']) {
+        if (await page.locator('html').getAttribute('lang') !== language) await page.getByRole('button', { name: /^Switch to / }).first().click();
+        await root.scrollIntoViewIfNeeded(); await page.evaluate(() => document.fonts.ready);
+        const foreground = root.locator('[data-reveal-foreground]');
+        assert.ok(await foreground.count() >= 7, 'Restore the Vercel word reveal, not the character typewriter');
+        const move = async progress => {
+          await root.evaluate((node, progress) => window.scrollTo({ top: window.scrollY + node.getBoundingClientRect().top - .88 * window.innerHeight + progress * (node.offsetHeight + .4 * window.innerHeight), behavior: 'instant' }), progress);
+          await sleep(300);
+          return foreground.evaluateAll(words => words.map(word => +getComputedStyle(word).opacity));
+        };
+        for (let cycle = 0; cycle < 3; cycle++) {
+          const hidden = await move(-.5);
+          assert.ok(hidden.every(value => value < .01), 'Leaving above the viewport resets all words');
+          const partial = await move(.4);
+          assert.ok(partial.some(value => value > .99) && partial.some(value => value < .01), `Words reveal progressively with scroll: ${path} ${width} ${language} ${JSON.stringify(partial)}`);
+          const still = await foreground.evaluateAll(words => words.map(word => +getComputedStyle(word).opacity));
+          await sleep(150);
+          assert.deepEqual(await foreground.evaluateAll(words => words.map(word => +getComputedStyle(word).opacity)), still, 'Reveal holds its progress when scrolling stops');
+          assert.ok((await move(1.5)).every(value => value > .99), 'Words finish revealing before exiting above');
+          const reverse = await move(.4);
+          assert.ok(reverse.every((value, index) => Math.abs(value - partial[index]) < .03), 'Upward scrolling retraces the same reveal');
+        }
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        assert.ok((await move(0)).every(value => value > .99), 'Reduced motion keeps every word readable');
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+      }
+    }
   }
-  assert.deepEqual(errors, []); console.log('PASS typewriter replay in both scroll directions, no boundary jitter or exceptions');
+  assert.deepEqual(errors, []); console.log('PASS scroll word reveal, replay both directions, ID/EN, reduced motion and no exceptions');
 } finally { await browser.close(); }
