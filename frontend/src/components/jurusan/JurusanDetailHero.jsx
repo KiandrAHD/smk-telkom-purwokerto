@@ -1,3 +1,4 @@
+import { OFFICIAL_ADMISSIONS_URL } from '../../utils/admissions';
 import { ArrowRight, BadgeCheck, BookOpen, BriefcaseBusiness, ChevronRight, Monitor } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
@@ -46,7 +47,7 @@ export default function JurusanDetailHero({ item, design }) {
               ))}
             </Reveal>
             <Reveal className="mt-6 flex flex-wrap gap-3 delay-200">
-              <Link to="/spmb" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-semibold text-white transition-colors hover:bg-primary-800">{t('Masuk SPMB')}<ArrowRight aria-hidden="true" className="size-4" /></Link>
+              <Link to={OFFICIAL_ADMISSIONS_URL} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-semibold text-white transition-colors hover:bg-primary-800">{t('Masuk SPMB')}<ArrowRight aria-hidden="true" className="size-4" /></Link>
               <a href="#fasilitas-jurusan" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dark-200 bg-white px-5 py-3 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary">{t('Lihat Fasilitas')}<ArrowRight aria-hidden="true" className="size-4" /></a>
             </Reveal>
           </div>

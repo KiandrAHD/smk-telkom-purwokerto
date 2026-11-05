@@ -1,3 +1,4 @@
+import { OFFICIAL_ADMISSIONS_URL } from '../utils/admissions';
 import timDinacom2023 from '../assets/showcase/tim-dinacom-2023.jpeg';
 import worldOfAdventure from '../assets/showcase/world-of-adventure.jpeg';
 import rupantara from '../assets/showcase/rupantara.jpeg';
@@ -127,7 +128,7 @@ export const navLinks = [
       { label: 'Berita', href: '/berita' },
       { label: 'Pengumuman', href: '/pengumuman' },
       { label: 'Kalender Kegiatan', href: '/kalender' },
-      { label: 'Informasi SPMB', href: '/spmb' },
+      { label: 'Informasi SPMB', href: OFFICIAL_ADMISSIONS_URL },
     ],
   },
   {
@@ -150,9 +151,8 @@ export const navLinks = [
 // Tombol "Masuk PPDB" muncul di navbar (desktop dan laci mobile) serta di hero
 // beranda. Alamatnya disimpan sekali di sini supaya tidak ada lagi URL yang
 // ditulis ulang di tiga tempat dan berisiko beda sendiri saat diubah.
-// Tujuannya halaman masuk portal, bukan laman info /ppdb — di sana sudah ada
-// tautan "Daftar Akun Baru" untuk pendaftar yang belum punya akun.
-export const ctaMasukPpdb = { label: 'Masuk SPMB', href: '/spmb/masuk' };
+// Pendaftaran publik memakai portal resmi Telkom Schools.
+export const ctaMasukPpdb = { label: 'Masuk SPMB', href: OFFICIAL_ADMISSIONS_URL };
 
 export const landingHero = {
   hashtags: ['#DigitalSmartSchool', '#GlobalTechnopreneur'],
@@ -173,7 +173,7 @@ export const quickLinks = [
     title: 'SPMB',
     desc: 'Informasi pendaftaran siswa baru tahun ajaran 2026/2027',
     linkLabel: 'Daftar Sekarang',
-    href: '/spmb',
+    href: OFFICIAL_ADMISSIONS_URL,
   },
   {
     icon: 'bot',
@@ -365,7 +365,7 @@ export const ctaBanner = {
   title: 'Sudah Menemukan Jurusan yang Tepat?',
   description: 'Daftarkan dirimu sekarang dan mulai langkah pertama menuju masa depanmu!',
   ctaText: 'Daftar SPMB Sekarang',
-  href: '/spmb',
+  href: OFFICIAL_ADMISSIONS_URL,
 };
 
 /* =========================================================
@@ -539,7 +539,7 @@ export const footerData = {
   informasi: [
     { label: 'Berita', href: '/berita' },
     { label: 'Pengumuman', href: '/pengumuman' },
-    { label: 'SPMB', href: '/spmb' },
+    { label: 'SPMB', href: OFFICIAL_ADMISSIONS_URL },
     { label: 'NEXA AI', href: '/nexa' },
     { label: 'NextTel', href: '/nexttel' },
     { label: 'Kebijakan Privasi', href: '/kebijakan-privasi' },
@@ -1103,7 +1103,7 @@ export const ppdbBanner = {
   description:
     'Pendaftaran Peserta Didik Baru Tahun Ajaran 2027/2028 telah resmi dibuka, Segera daftar dan bergabung bersama kami',
   ctaText: '20 Mei 2026',
-  href: '/spmb',
+  href: OFFICIAL_ADMISSIONS_URL,
 };
 
 export const infoPenting = {
@@ -1946,7 +1946,7 @@ export const pengumumanDetail = [
     ],
     berkas: ['Rapor semester terakhir', 'Kartu keluarga', 'Akta kelahiran', 'Pas foto terbaru'],
     kontak: { nama: 'Panitia PPDB', detail: 'Ruang Tata Usaha, Senin-Jumat pukul 08.00-15.00' },
-    aksi: { label: 'Buka Laman PPDB', href: '/spmb' },
+    aksi: { label: 'Buka Laman PPDB', href: OFFICIAL_ADMISSIONS_URL },
   },
   {
     slug: 'ppdb-gelombang-1-dibuka',
@@ -1976,7 +1976,7 @@ export const pengumumanDetail = [
     ],
     berkas: ['Rapor semester 1-5', 'Kartu keluarga', 'Surat keterangan siswa', 'Pas foto terbaru'],
     kontak: { nama: 'Panitia PPDB', detail: 'Ruang Tata Usaha, Senin-Jumat pukul 08.00-15.00' },
-    aksi: { label: 'Buka Laman PPDB', href: '/spmb' },
+    aksi: { label: 'Buka Laman PPDB', href: OFFICIAL_ADMISSIONS_URL },
   },
   {
     slug: 'jadwal-ujian-tengah-semester',

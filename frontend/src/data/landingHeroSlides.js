@@ -1,3 +1,4 @@
+import { OFFICIAL_ADMISSIONS_URL } from '../utils/admissions';
 import { ctaMasukPpdb, heroData, jurusanHero, landingHero, prestasiHero, bkkHero, beritaHero, pengumumanHero, ekstrakurikulerData, ppdbMeta } from './dummyData';
 import facilities640 from '../assets/fasilitas/hero-640.webp';
 import facilities960 from '../assets/fasilitas/hero-960.webp';
@@ -72,7 +73,7 @@ export const landingHeroSlides = [
   },
   {
     id: 'spmb', name: 'Informasi SPMB',
-    content: { title: 'Wujudkan Mimpimu', titleAccent: 'di Dunia Digital', description: `Daftar SPMB SMK Telkom Purwokerto Tahun Ajaran ${ppdbMeta.tahun}/${Number(ppdbMeta.tahun) + 1} dan mulai langkah pertamamu menuju karier di bidang teknologi.`, primaryCta: { label: 'Informasi SPMB', href: '/spmb' } },
+    content: { title: 'Wujudkan Mimpimu', titleAccent: 'di Dunia Digital', description: `Daftar SPMB SMK Telkom Purwokerto Tahun Ajaran ${ppdbMeta.tahun}/${Number(ppdbMeta.tahun) + 1} dan mulai langkah pertamamu menuju karier di bidang teknologi.`, primaryCta: { label: 'Informasi SPMB', href: OFFICIAL_ADMISSIONS_URL } },
     media: { src: admissions, srcSet: `${admissions640} 640w, ${admissions960} 960w, ${admissions} 1248w`, width: 1248, height: 676, composition: 'admissions', alt: 'Informasi SPMB' },
   },
 ];
