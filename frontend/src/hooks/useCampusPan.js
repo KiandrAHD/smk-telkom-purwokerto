@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
-import { campusGeometry, clampPan, centerCampusPoint, gestureAxis, meaningfulPan, snapCampusPan } from '../utils/campusPan';
+import { campusGeometry, clampPan, centerCampusPoint, gestureAxis, meaningfulPan } from '../utils/campusPan';
 
 export default function useCampusPan({ viewport, stage, slider, previous, next }, onLearn) {
   const control = useRef(null);
@@ -35,14 +35,13 @@ export default function useCampusPan({ viewport, stage, slider, previous, next }
       };
       state.frame = requestAnimationFrame(tick);
     };
-    const endGesture = (snap = false) => {
+    const endGesture = () => {
       const gesture = state.gesture;
       if (!gesture) return;
       cancelAnimationFrame(state.dragFrame); state.dragFrame = 0;
       if (gesture.axis === 'horizontal') { position(gesture.pending); learn(gesture.scroll); state.suppressClick = true; }
       state.gesture = null; view.dataset.dragging = 'false';
       if (view.hasPointerCapture(gesture.id)) view.releasePointerCapture(gesture.id);
-      if (snap && gesture.axis === 'horizontal') to(snapCampusPan(gesture.pending, gesture.scroll, state.max, state.width));
     };
     const measure = () => {
       stop(); endGesture(); const fraction = state.fraction;
@@ -51,7 +50,7 @@ export default function useCampusPan({ viewport, stage, slider, previous, next }
       state.imageWidth = failed ? state.width : geometry.width; state.max = failed ? 0 : geometry.maximum;
       image.style.setProperty('width', `${state.imageWidth}px`); view.style.setProperty('height', `${failed ? 224 : geometry.height}px`);
       image.style.setProperty('--campus-unit', `${geometry.unit}px`); image.style.setProperty('--campus-scale', String(geometry.unit));
-      view.closest('.campus-explorer').style.setProperty('--campus-control-unit', `${geometry.unit}px`);
+      view.closest('.campus-explorer').style.setProperty('--campus-control-unit', `${state.width / 1847}px`);
       position(fraction === null ? geometry.initial : state.max * fraction);
     };
     const down = event => {
@@ -71,7 +70,7 @@ export default function useCampusPan({ viewport, stage, slider, previous, next }
       gesture.pending = gesture.scroll - dx;
       if (!state.dragFrame) state.dragFrame = requestAnimationFrame(() => { state.dragFrame = 0; if (state.gesture === gesture) { position(gesture.pending); learn(gesture.scroll); } });
     };
-    const up = event => { if (state.gesture?.id === event.pointerId) endGesture(event.type === 'pointerup'); };
+    const up = event => { if (state.gesture?.id === event.pointerId) endGesture(); };
     const click = event => { if (state.suppressClick && event.detail !== 0) { event.preventDefault(); event.stopPropagation(); state.suppressClick = false; } };
     const wheel = event => {
       if (!enabled() || state.max <= 0 || event.ctrlKey) return;

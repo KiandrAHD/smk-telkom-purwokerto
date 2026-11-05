@@ -3,19 +3,12 @@ export const panLimit = (viewportWidth, imageWidth) => Math.max(0, imageWidth - 
 export const clampPan = (value, maximum) => Math.min(Math.max(0, value), maximum);
 export function campusGeometry(viewportWidth) {
   // Keep the original image ratio and pin coordinates in a compact, pannable canvas.
-  const width = Math.min(1600, Math.max(960, viewportWidth * 1.25));
+  const width = Math.max(960, viewportWidth * 3142 / 1847);
   const maximum = panLimit(viewportWidth, width);
-  return { width, height: width * 727 / 2164, maximum, initial: clampPan(83 * width / 3142, maximum), unit: width / 3142 };
+  return { width, height: width * 1314 / 3142, maximum, initial: clampPan(83 * width / 3142, maximum), unit: width / 3142 };
 }
 export const centerCampusPoint = (x, imageWidth, viewportWidth) => clampPan(x * imageWidth - viewportWidth / 2, panLimit(viewportWidth, imageWidth));
 export const meaningfulPan = (start, current) => Math.abs(current - start) >= 24;
-export function snapCampusPan(value, start, maximum, viewportWidth) {
-  if (!maximum || Math.abs(value - start) < 24) return clampPan(start, maximum);
-  // Even camera stops include both map edges; pins and the slider still pan continuously.
-  const stops = Math.max(1, Math.ceil(maximum / (viewportWidth * 0.45)));
-  const step = maximum / stops;
-  return Math.round(clampPan(value, maximum) / step) * step;
-}
 export function gestureAxis(dx, dy) {
   if (Math.abs(dx) >= 8 && Math.abs(dx) > Math.abs(dy) * 1.1) return 'horizontal';
   if (Math.abs(dy) >= 8 && Math.abs(dy) > Math.abs(dx) * 1.1) return 'vertical';
