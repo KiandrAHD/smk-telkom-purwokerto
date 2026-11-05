@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import HeroPanel from './HeroPanel';
 import './HeroCarousel.css';
 
 export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
-  const { t, language } = useLanguage();
-  const root = useRef(null), navigation = useRef(null), actions = useRef({});
+  const { t } = useLanguage();
+  const root = useRef(null), actions = useRef({});
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -70,11 +71,7 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
     preference.addEventListener('change', mediaChanged);
     window.addEventListener('resize', finish);
     mediaChanged();
-    const goTo = index => {
-      if (moving) { pending = () => goTo(index); return; }
-      move(index - current);
-    };
-    actions.current = { move, goTo, pause: () => { interacting = true; window.clearTimeout(timer); }, resume: () => { interacting = false; schedule(); } };
+    actions.current = { move, pause: () => { interacting = true; window.clearTimeout(timer); }, resume: () => { interacting = false; schedule(); } };
     // Load upcoming artwork after the opening image, then decode again before each transition.
     Promise.all([...panels[0].querySelectorAll('img')].map(image => image.decode().catch(() => {}))).then(() => {
       if (disposed) return;
@@ -94,12 +91,6 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
     };
   }, [slides.length]);
 
-  useEffect(() => {
-    const nav = navigation.current, button = nav?.children[active];
-    if (!button) return;
-    nav.scrollTo({ left: button.offsetLeft - (nav.clientWidth - button.offsetWidth) / 2, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-  }, [active, language]);
-
   return <div ref={root} data-hero-carousel data-hero-index={active} data-hero-moving="false" className={`hero-carousel hero-carousel--${page} relative`} role="region" tabIndex={0} aria-roledescription={t('Karusel')} aria-label={t('Sorotan sekolah')} aria-describedby="hero-keyboard-instructions" onKeyDown={event => {
     if (!event.target.closest('input,textarea,select') && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')) { event.preventDefault(); actions.current.move?.(event.key === 'ArrowRight' ? 1 : -1); }
   }}>
@@ -109,17 +100,12 @@ export default function HeroCarousel({ slides, opening, page = 'beranda' }) {
         {index === 0 && opening ? opening : <HeroPanel content={slide.content} media={slide.media} carousel heading={index === 0 ? 'h1' : 'h2'} priority={index === 0} />}
       </div>)}
     </div>
-    {page === 'beranda' && <nav ref={navigation} className="hero-carousel-navigation" aria-label={t('Navigasi sorotan sekolah')}
+    {slides.length > 1 && <div className="hero-carousel-controls" role="group" aria-label={t('Navigasi sorotan sekolah')}
       onPointerEnter={event => { if (event.pointerType === 'mouse') actions.current.pause?.(); }} onPointerLeave={event => { if (event.pointerType === 'mouse') actions.current.resume?.(); }}
       onPointerDown={event => { if (event.pointerType !== 'mouse') actions.current.pause?.(); }} onPointerUp={event => { if (event.pointerType !== 'mouse') actions.current.resume?.(); }} onPointerCancel={() => actions.current.resume?.()}
-      onKeyDown={event => {
-        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-        event.preventDefault(); event.stopPropagation();
-        const index = [...navigation.current.children].indexOf(event.target);
-        const next = event.key === 'Home' ? 0 : event.key === 'End' ? slides.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + slides.length) % slides.length;
-        navigation.current.children[next].focus({ preventScroll: true }); actions.current.goTo?.(next);
-      }}>
-      {slides.map((slide, index) => <button key={slide.id} type="button" aria-label={t(slide.name)} aria-pressed={active === index} aria-controls={`hero-${page}-slide-${index}`} onClick={() => actions.current.goTo?.(index)} />)}
-    </nav>}
+      >
+      <button type="button" className="hero-carousel-previous" aria-label={t('Sorotan sebelumnya')} onClick={() => actions.current.move?.(-1)}><ChevronLeft aria-hidden="true" /></button>
+      <button type="button" className="hero-carousel-next" aria-label={t('Sorotan berikutnya')} onClick={() => actions.current.move?.(1)}><ChevronRight aria-hidden="true" /></button>
+    </div>}
   </div>;
 }

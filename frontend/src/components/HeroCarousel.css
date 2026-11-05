@@ -92,10 +92,11 @@
   .hero-carousel--guru .hero-carousel-profile-crop { width: auto; height: 100%; }
 }
 
-.hero-carousel-navigation { position: relative; display: flex; gap: 0; width: max-content; max-width: calc(100% - 24px); margin: 12px auto 0; padding: 4px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; z-index: 20; }
-.hero-carousel-navigation > button { position: relative; flex: 0 0 24px; width: 24px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
-.hero-carousel-navigation > button::before { content: ''; position: absolute; width: 10px; height: 10px; left: 50%; top: 50%; translate: -50% -50%; border-radius: 50%; background: var(--color-dark-300); }
-.hero-carousel-navigation > button[aria-pressed="true"]::before { background: var(--color-primary); }
-.hero-carousel-navigation > button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 0; }
-@media (min-width: 64rem) { .hero-carousel-navigation { position: absolute; left: 28px; bottom: calc(var(--hero-overlap) + 20px); max-width: calc(40% - 56px); margin: 0; } }
-@media (max-width: 63.999rem) { .hero-carousel--beranda + .hero-floating { margin-top: 16px; } }
+.hero-carousel-controls { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+.hero-carousel-controls > button { position: absolute; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--color-dark-200); border-radius: 50%; background: rgb(255 255 255 / .94); color: var(--color-primary); box-shadow: var(--shadow-soft); cursor: pointer; pointer-events: auto; }
+.hero-carousel-previous { left: -20px; }
+.hero-carousel-next { right: -20px; }
+.hero-carousel-controls > button > svg { width: 20px; height: 20px; }
+.hero-carousel-controls > button:hover { background: var(--color-primary); color: white; }
+.hero-carousel-controls > button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+@media (max-width: 63.999rem) { .hero-carousel-controls > button { width: 32px; height: 32px; } .hero-carousel-previous { left: -12px; } .hero-carousel-next { right: -12px; } }
