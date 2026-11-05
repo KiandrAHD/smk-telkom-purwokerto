@@ -75,6 +75,8 @@
 .hero-carousel--profil { --hero-carousel-ratio: 1600 / 751; }
 .hero-carousel--berita, .hero-carousel--prestasi, .hero-carousel--bkk { --hero-carousel-ratio: 1106 / 656; }
 .hero-carousel--fasilitas { --hero-carousel-ratio: 1144 / 679; }
+/* Crop the white footer baked into the home artwork inside its existing window. */
+.hero-carousel .hero-panel--students .hero-media > .hero-image { height: calc(100% + 4px); object-fit: cover; object-position: right top; }
 /* Keep composite artwork at its native ratio and fill the panel vertically.
    A narrow, bottom-aligned contain box otherwise leaves a hard blank strip above it. */
 @media (min-width: 64rem) {
