@@ -480,9 +480,9 @@ export const profilVideo = {
 
 export const timelineData = [
   {
-    year: '2012',
+    year: '1993',
     title: 'Sekolah Berdiri',
-    desc: 'SMK Telkom Purwokerto didirikan di Purwokerto.',
+    desc: 'Didirikan pada 30 Januari 1993 di Purwokerto.',
   },
   {
     year: '2016',

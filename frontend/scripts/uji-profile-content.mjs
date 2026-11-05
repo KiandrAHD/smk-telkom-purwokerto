@@ -8,6 +8,10 @@ try {
   const { translate } = await server.ssrLoadModule('/src/utils/language.js');
   const { learningMethods, learningStages } = await server.ssrLoadModule('/src/data/profileLearning.js');
   const learningComponent = await readFile(new URL('../src/components/tentang/TentangMetodePembelajaranSection.jsx', import.meta.url), 'utf8');
+  const principlesComponent = await readFile(new URL('../src/components/tentang/TentangVisiMisiSection.jsx', import.meta.url), 'utf8');
+  for (const [, text] of principlesComponent.matchAll(/t\('([^']+)'\)/g)) {
+    assert.notEqual(translate(text, 'en'), text, `Missing vision/mission translation: ${text}`);
+  }
   const learningLabels = [...learningComponent.matchAll(/t\('([^']+)'\)/g)].map(match => match[1]);
   for (const text of [...learningLabels, ...learningMethods.flatMap(method => [method.title, method.description, method.alt]), ...learningStages.flatMap(stage => [stage.grade, stage.title, stage.description])]) {
     assert.notEqual(translate(text, 'en'), text, `Missing learning translation: ${text}`);
@@ -19,7 +23,7 @@ try {
     assert.notEqual(translate(text, 'en'), text, `Missing English translation: ${text}`);
   }
   assert.deepEqual(nilaiStematel.map(v => v.title), ['Innovation', 'Character', 'Technology', 'Collaboration']);
-  assert.deepEqual(timelineData.map(v => v.year), ['2012', '2016', '2020', '2023', '2026']);
+  assert.deepEqual(timelineData.map(v => v.year), ['1993', '2016', '2020', '2023', '2026']);
   const page = await readFile(new URL('../src/pages/TentangPage.jsx', import.meta.url), 'utf8');
   const order = ['TentangHeroSection', 'RibbonDivider', 'TentangAboutSection', 'TentangVisiMisiSection', 'TentangTimelineSection', 'WaveMarquee', 'TentangKepalaSekolahSection', 'TentangMetodePembelajaranSection', 'FacilitiesSection'];
   const positions = order.map(name => page.indexOf(`<${name}`));
