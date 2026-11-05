@@ -14,12 +14,12 @@ const subscribeViewport = (notify) => {
   window.addEventListener('resize', notify);
   return () => window.removeEventListener('resize', notify);
 };
-const getPageSize = () => window.innerWidth >= 1280 ? 4 : window.innerWidth >= 400 ? 2 : 1;
+const getPageSize = () => window.innerWidth >= 1280 ? 8 : window.innerWidth >= 1024 ? 6 : window.innerWidth >= 640 ? 4 : window.innerWidth >= 400 ? 2 : 1;
 
 const TentangKepalaSekolahSection = () => {
   const { t } = useLanguage();
   const [page, setPage] = useState(0);
-  const perPage = useSyncExternalStore(subscribeViewport, getPageSize, () => 4);
+  const perPage = useSyncExternalStore(subscribeViewport, getPageSize, () => 8);
 
   const pages = Math.ceil(guruData.length / perPage);
   // Ketika viewport membesar, halaman terakhir tetap dibatasi ke rentang yang ada.
@@ -68,14 +68,14 @@ const TentangKepalaSekolahSection = () => {
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500">{t("Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.")} </p>
 
           <div ref={viewportRef} data-sliding-page className="relative mt-4 overflow-x-clip">
-          <div className="grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 xl:grid-cols-4 min-[1660px]:gap-5">
-            {shown.map((guru, i) => (
+          <div data-profile-teacher-grid className="grid auto-rows-fr grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-rows-2 lg:grid-cols-3 xl:grid-cols-4 min-[1660px]:gap-5">
+            {shown.map((guru) => (
               <Link
                 key={guru.nama}
                 to={`/profil-sekolah/guru/${slugify(guru.nama)}?from=profil-sekolah`}
                 className="block min-w-0 rounded-xl transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transform-none"
               >
-                <TeacherCard teacher={guru} name={t(guru.nama)} role={t(guru.jabatan)} alt={guru.nama} loading={i < 4 ? 'eager' : 'lazy'}>
+                <TeacherCard teacher={guru} name={t(guru.nama)} role={t(guru.jabatan)} alt={guru.nama} loading="eager">
                   {guru.bidang && <p className="text-[11px] leading-relaxed text-dark-500">{t(guru.bidang)}</p>}
                 </TeacherCard>
               </Link>
