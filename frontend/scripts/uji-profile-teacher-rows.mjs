@@ -19,6 +19,7 @@ for(const [width,columns,perPage] of [[1847,4,8],[1440,4,8],[1280,4,8],[1024,3,6
  for(const lang of ['id','en']) {
   if(await page.locator('html').getAttribute('lang')!==lang)await page.getByRole('button',{name:/^Switch to /}).first().click();
   const principal=root.locator('[data-principal-profile]');
+  await principal.locator('img').evaluateAll(images=>Promise.all(images.map(image=>{image.loading='eager';return image.decode();})));
   assert.equal(await principal.locator('[data-teacher-border] img').count(),4);
   assert.ok((await principal.innerText()).includes(kepalaSekolah.name));
   assert.ok((await principal.innerText()).includes(translate(kepalaSekolah.quoteFull,lang)));
@@ -32,9 +33,12 @@ for(const [width,columns,perPage] of [[1847,4,8],[1440,4,8],[1280,4,8],[1024,3,6
    assert.deepEqual(names,schoolTeacherData.slice(i*perPage,(i+1)*perPage).map(teacher=>translate(teacher.nama,lang)));
    assert.equal(await root.locator('[data-slide-indicator]').count(),Math.ceil(schoolTeacherData.length/perPage));
    assert.equal(await root.locator('[data-slide-indicator][aria-current="true"]').count(),1);
-   const layout=await grid.evaluate(grid=>({columns:getComputedStyle(grid).gridTemplateColumns.split(' ').length,rows:getComputedStyle(grid).gridTemplateRows.split(' ').length,cards:[...grid.children].map(c=>c.getBoundingClientRect().height)}));
-   assert.equal(layout.columns,columns);if(width>=640)assert.equal(layout.rows,2);
-   assert.ok(Math.max(...layout.cards)-Math.min(...layout.cards)<1);
+   const layout=await grid.evaluate(grid=>({columns:getComputedStyle(grid).gridTemplateColumns.split(' ').length,rows:getComputedStyle(grid).gridTemplateRows.split(' ').length,descriptionMinHeights:[...grid.querySelectorAll('.teacher-card-description')].map(n=>getComputedStyle(n).minHeight),cards:[...grid.children].map(c=>c.getBoundingClientRect().height)}));
+   assert.ok(layout.descriptionMinHeights.every(height=>height==='0px'));
+   assert.equal(layout.columns,columns);assert.equal(layout.rows,Math.ceil(names.length/columns));
+   for(let row=0;row<layout.cards.length;row+=columns)assert.ok(Math.max(...layout.cards.slice(row,row+columns))-Math.min(...layout.cards.slice(row,row+columns))<1);
+   const spacing=await root.evaluate(root=>{const descriptions=[...root.querySelectorAll('[data-profile-teacher-grid] .teacher-card-description')];return root.querySelector('[data-profile-teacher-pagination]').getBoundingClientRect().top-Math.max(...descriptions.map(n=>n.getBoundingClientRect().bottom));});
+   assert.ok(spacing>=0 && spacing<=16,`Pagination must stay within 16px of descriptions, got ${spacing}`);
    assert.equal(await grid.locator('[data-teacher-border]').count(),names.length);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false);
    if(i===0)await root.screenshot({path:`${out}/${width}-${lang}.png`,style:'header.sticky,header.sticky *,.fixed.bottom-4 {visibility:hidden}'});
@@ -49,6 +53,7 @@ await page.setViewportSize({width:1440,height:1100});await page.emulateMedia({re
 await root.getByRole('button',{name:'Next teachers',exact:true}).click();
 await page.waitForFunction(()=>!document.querySelector('#guru [data-motion-outgoing]'));
 assert.equal(await root.locator('[data-slide-indicator][aria-current="true"]').count(),1);
+assert.ok(Math.abs((await root.locator('[data-sliding-page]').boundingBox()).height-(await grid.boundingBox()).height)<1,'Completed animation must not reserve empty height');
 await page.setViewportSize({width:390,height:1100});await page.waitForTimeout(100);
 assert.equal(await grid.locator('.teacher-card').count(),1);
 assert.deepEqual(errors,[]);console.log('PASS animated transition, resize bounds and no exceptions');

@@ -67,8 +67,8 @@ const TentangKepalaSekolahSection = () => {
           <h2 className="min-w-0 font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Guru & Tenaga Pendidik")} </h2>
           <p className="mt-2 text-[11px] leading-relaxed text-dark-500">{t("Mata pelajaran mengikuti informasi terbaru; jabatan organisasi mengacu pada SK Pengawakan 2026/2027.")} </p>
 
-          <div ref={viewportRef} data-sliding-page className="relative mt-4 overflow-x-clip">
-          <div data-profile-teacher-grid className="grid auto-rows-fr grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-rows-2 lg:grid-cols-3 xl:grid-cols-4 min-[1660px]:gap-5">
+          <div ref={viewportRef} data-sliding-page className="relative mt-4 min-h-0! overflow-x-clip">
+          <div data-profile-teacher-grid className="grid [&_.teacher-card-description]:min-h-0! grid-cols-1 gap-4 min-[400px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 min-[1660px]:gap-5">
             {shown.map((guru) => (
               <Link
                 key={guru.nama}
@@ -86,7 +86,7 @@ const TentangKepalaSekolahSection = () => {
 
           {/* Indikator carousel — hanya muncul kalau gurunya lebih dari satu halaman */}
           {pages > 1 && (
-          <div className="mt-5 flex items-center justify-center gap-2">
+          <div data-profile-teacher-pagination className="mt-2 flex items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => goToPage(currentPage - 1)}
