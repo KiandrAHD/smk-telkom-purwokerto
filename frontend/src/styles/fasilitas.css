@@ -14,15 +14,14 @@
   z-index: -1;
   pointer-events: none;
   background: url('../assets/fasilitas/page-accent-solid.svg') top center / 100% auto repeat-y;
-  -webkit-mask-image: var(--chain-fade, linear-gradient(to right, transparent, black));
-  mask-image: var(--chain-fade, linear-gradient(to right, transparent, black));
+  -webkit-mask-image: linear-gradient(to right, black, transparent);
+  mask-image: linear-gradient(to right, black, transparent);
 }
 .facility-chain--right { right: 0; }
 .facility-chain--left {
   left: 0;
   transform: scaleX(-1);
-  /* The mirrored pattern must still fade toward the screen's left edge. */
-  --chain-fade: linear-gradient(to left, transparent, black);
+  /* Mirroring also reverses the mask, so both outer edges fade to transparent. */
 }
 @media (min-width: 40rem) {
   .facility-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
