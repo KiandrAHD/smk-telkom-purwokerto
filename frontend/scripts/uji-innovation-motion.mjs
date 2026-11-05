@@ -15,19 +15,29 @@ const sample = () => root.evaluate(node => {
   const rect = box.getBoundingClientRect();
   const range = document.createRange(); range.selectNodeContents(reel.firstElementChild);
   const text = range.getBoundingClientRect();
+  const visibleWidth = [...reel.children].reduce((total, child) => {
+    range.selectNodeContents(child); const r = range.getBoundingClientRect();
+    return total + Math.max(0, Math.min(r.right, rect.right) - Math.max(r.left, rect.left));
+  }, 0);
   return { x: new window.DOMMatrixReadOnly(getComputedStyle(reel).transform).m41, width: rect.width,
-    left: rect.left, top: rect.top, full: text.left >= rect.left - .5 && text.right <= rect.right + .5 };
+    y: new window.DOMMatrixReadOnly(getComputedStyle(reel).transform).m42, visibleWidth,
+    opacity: getComputedStyle(reel).opacity, left: rect.left, top: rect.top, full: text.left >= rect.left - .5 && text.right <= rect.right + .5 };
 });
 try {
   await page.goto((process.env.QA_URL || 'http://127.0.0.1:5173') + '/');
   await root.scrollIntoViewIfNeeded(); await page.evaluate(() => document.fonts.ready);
   await page.emulateMedia({ reducedMotion: 'reduce' }); await sleep(100);
   assert.ok((await sample()).full, 'The whole phrase must fit at the centered stop');
+  for (const width of [1440, 390]) {
+  await page.setViewportSize({ width, height: 1000 });
+  await page.emulateMedia({ reducedMotion: 'reduce' }); await root.scrollIntoViewIfNeeded(); await sleep(300);
   await page.emulateMedia({ reducedMotion: 'no-preference' }); await root.scrollIntoViewIfNeeded(); await sleep(150);
   const holds = []; let since = null, last = await sample(), begun = Date.now(), seenMotion = false;
-  while (holds.length < 3 && Date.now() - begun < 16000) {
+  while (holds.length < 5 && Date.now() - begun < 23000) {
     await sleep(50); const next = await sample();
     assert.ok(Math.abs(next.width - last.width) < .5 && Math.abs(next.left - last.left) < .5 && Math.abs(next.top - last.top) < .5, 'Stable box layout');
+    assert.equal(next.y, 0, 'Only horizontal movement');
+    assert.equal(next.opacity, '1'); assert.ok(next.visibleWidth > next.width * .5, 'Text must remain visible through every frame');
     if (Math.abs(next.x) < .1) {
       assert.ok(next.full, 'No clipping during pause'); if (seenMotion) since ??= Date.now();
     } else {
@@ -36,8 +46,9 @@ try {
     }
     last = next;
   }
-  assert.equal(holds.length, 3); assert.ok(holds.every(ms => ms >= 1500 && ms <= 2100), JSON.stringify(holds));
-  console.log('PASS three slide/pause cycles:', holds);
+  assert.equal(holds.length, 5); assert.ok(holds.every(ms => ms >= 1500 && ms <= 2100), JSON.stringify(holds));
+  console.log('PASS five slide/pause cycles:', width, holds);
+  }
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const language of ['id', 'en']) {
