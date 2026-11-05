@@ -5,7 +5,7 @@ import {
   BACKUP_MAGIC, IV_LENGTH, TAG_LENGTH, MIN_ENCRYPTED_SIZE,
   isValidBucketName, sha256Hex, parseEncryptionKey, keyFingerprint as fingerprintKey,
   encryptBuffer, decryptBuffer, backupDateOf, cutoffDate, ageExceedsRetention,
-  assertRestoreTargetAllowed, assertSafeRemotePath,
+  assertRestoreTargetAllowed, assertSafeRemotePath, withRetry,
 } from '../src/utils/backup.js';
 import { jakartaDateString } from '../src/utils/date.js';
 import { isUnsafeArchiveEntry } from '../scripts/archive-safe.mjs';
@@ -177,6 +177,44 @@ test('jakartaDateString menghasilkan tanggal Asia/Jakarta yang benar', () => {
   assert.equal(jakartaDateString(new Date('2026-11-04T16:59:59.000Z')), '2026-11-04');
   assert.equal(jakartaDateString(new Date('2026-11-04T17:00:00.000Z')), '2026-11-05');
   assert.equal(jakartaDateString(new Date('2026-01-01T00:00:00.000Z')), '2026-01-01');
+});
+
+test('withRetry mengembalikan hasil tanpa retry bila sukses', async () => {
+  let calls = 0;
+  const value = await withRetry(async () => { calls += 1; return 'ok'; }, { baseDelayMs: 1 });
+  assert.equal(value, 'ok');
+  assert.equal(calls, 1);
+});
+
+test('withRetry mengulang lalu berhasil', async () => {
+  let calls = 0;
+  const value = await withRetry(async () => {
+    calls += 1;
+    if (calls < 3) throw new Error('sementara');
+    return calls;
+  }, { attempts: 5, baseDelayMs: 1 });
+  assert.equal(value, 3);
+  assert.equal(calls, 3);
+});
+
+test('withRetry melempar error setelah percobaan habis', async () => {
+  let calls = 0;
+  await assert.rejects(
+    withRetry(async () => { calls += 1; throw new Error('gagal terus'); }, { attempts: 3, baseDelayMs: 1 }),
+    /gagal terus/,
+  );
+  assert.equal(calls, 3);
+});
+
+test('withRetry tidak mengulang error permanen (shouldRetry=false)', async () => {
+  let calls = 0;
+  await assert.rejects(
+    withRetry(async () => { calls += 1; const e = new Error('not found'); e.status = 404; throw e; }, {
+      attempts: 5, baseDelayMs: 1, shouldRetry: (e) => !(e.status >= 400 && e.status < 500),
+    }),
+    /not found/,
+  );
+  assert.equal(calls, 1);
 });
 
 test('isUnsafeArchiveEntry menolak path traversal/absolut', () => {

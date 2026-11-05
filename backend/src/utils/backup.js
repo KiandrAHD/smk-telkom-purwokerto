@@ -78,6 +78,24 @@ export function assertRestoreTargetAllowed({ targetName, productionName, allowPr
   if (!confirm) throw new Error('Restore production memerlukan --confirm selain --allow-production.');
 }
 
+// Menjalankan operasi jaringan dengan retry + backoff sederhana.
+// `shouldRetry(error, attempt)` boleh mengembalikan false untuk error permanen
+// (mis. HTTP 404/401) agar tidak diulang sia-sia.
+export async function withRetry(fn, { attempts = 3, baseDelayMs = 250, shouldRetry = () => true, onRetry } = {}) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await fn(attempt);
+    } catch (error) {
+      lastError = error;
+      if (attempt >= attempts || !shouldRetry(error, attempt)) break;
+      if (onRetry) onRetry(error, attempt);
+      await new Promise((resolve) => setTimeout(resolve, baseDelayMs * attempt));
+    }
+  }
+  throw lastError;
+}
+
 // Guard path object remote: menolak absolut, traversal, dan segmen kosong.
 export function assertSafeRemotePath(remotePath) {
   const normalized = String(remotePath).replaceAll('\\', '/');

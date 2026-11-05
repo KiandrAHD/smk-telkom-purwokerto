@@ -93,6 +93,8 @@ selalu dipertahankan.
 - Setiap objek diunggah hanya jika belum ada; jika sudah ada dengan isi yang
   sama, unggahan dilewati (idempoten). Jika sudah ada dengan isi berbeda,
   script menolak menimpa dan menandai backup gagal.
+- Panggilan jaringan (upload, unduh/verifikasi, list, delete retensi) memakai
+  retry dengan backoff; error 4xx tidak diulang, error jaringan/5xx diulang.
 - Manifest boleh ditimpa (upsert) karena workflow menulisnya dua kali.
 - Status akhir: `LOCAL_CREATED` -> `REMOTE_UPLOADED` -> `REMOTE_VERIFIED`.
   `REMOTE_UPLOADED` tidak sama dengan `REMOTE_VERIFIED`.

@@ -18,7 +18,7 @@ import mysql from 'mysql2/promise';
 import { assertSafeTarArchive } from './archive-safe.mjs';
 import {
   BACKUP_MAGIC, IV_LENGTH, TAG_LENGTH, MIN_ENCRYPTED_SIZE, sha256Hex,
-  parseEncryptionKey, keyFingerprint as fingerprintKey, assertRestoreTargetAllowed,
+  parseEncryptionKey, keyFingerprint as fingerprintKey, assertRestoreTargetAllowed, withRetry,
 } from '../src/utils/backup.js';
 
 const argv = process.argv.slice(2);
@@ -48,9 +48,15 @@ async function readRemote(remote) {
   const bucket = process.env.SUPABASE_BACKUP_BUCKET || '';
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!base || !bucket || !serviceKey) throw new Error('SUPABASE_URL, SUPABASE_BACKUP_BUCKET, SUPABASE_SERVICE_ROLE_KEY diperlukan untuk restore remote.');
-  const res = await fetch(`${base}/storage/v1/object/authenticated/${bucket}/${remote}`, { headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey } });
-  if (!res.ok) throw new Error(`Download remote ${remote} gagal: HTTP ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+  return withRetry(async () => {
+    const res = await fetch(`${base}/storage/v1/object/authenticated/${bucket}/${remote}`, { headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey } });
+    if (!res.ok) {
+      const error = new Error(`Download remote ${remote} gagal: HTTP ${res.status}`);
+      error.status = res.status;
+      throw error;
+    }
+    return Buffer.from(await res.arrayBuffer());
+  }, { shouldRetry: (error) => !(error.status >= 400 && error.status < 500) });
 }
 async function listRemote(prefix) {
   const base = String(process.env.SUPABASE_URL || '').replace(/\/$/, '');
@@ -59,9 +65,15 @@ async function listRemote(prefix) {
   if (!base || !bucket || !serviceKey) throw new Error('Kredensial Supabase Storage tidak lengkap.');
   const items = [];
   for (let offset = 0;; offset += 100) {
-    const res = await fetch(`${base}/storage/v1/object/list/${bucket}`, { method: 'POST', headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey, 'content-type': 'application/json' }, body: JSON.stringify({ prefix, limit: 100, offset, sortBy: { column: 'name', order: 'desc' } }) });
-    if (!res.ok) throw new Error(`List remote gagal: HTTP ${res.status}`);
-    const batch = await res.json();
+    const batch = await withRetry(async () => {
+      const res = await fetch(`${base}/storage/v1/object/list/${bucket}`, { method: 'POST', headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey, 'content-type': 'application/json' }, body: JSON.stringify({ prefix, limit: 100, offset, sortBy: { column: 'name', order: 'desc' } }) });
+      if (!res.ok) {
+        const error = new Error(`List remote gagal: HTTP ${res.status}`);
+        error.status = res.status;
+        throw error;
+      }
+      return res.json();
+    }, { shouldRetry: (error) => !(error.status >= 400 && error.status < 500) });
     if (!batch.length) break;
     for (const item of batch) {
       const full = `${prefix}/${item.name}`;

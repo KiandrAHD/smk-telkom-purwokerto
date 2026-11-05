@@ -29,7 +29,7 @@ kredensial eksternal tetap **BLOCKED**, bukan diklaim PASS.
 | Restore dari Supabase | BLOCKED | Butuh kredensial Supabase |
 | Guard restore (key salah, produksi, traversal) | PASS | Key salah → GCM auth gagal; produksi butuh flag |
 | Scheduler Windows/Linux | PASS Windows / NOT TESTED Linux | Task dibuat+eksekusi+log+lock; Linux hanya ditinjau |
-| Backend tests | PASS | 41/41 (termasuk 21 test util backup) |
+| Backend tests | PASS | 45/45 (termasuk 25 test util backup) |
 | Frontend lint/typecheck/build | PASS | eslint bersih, tsc bersih, 102 rute prerender |
 | Dependency Supabase runtime | PASS | 0 referensi di `backend/src` dan `frontend/src` |
 | Dokumentasi `backend/docs-mysql/` | PASS | 17 dokumen + README |
@@ -142,7 +142,21 @@ memiliki privilege ke database tersebut. Ini didokumentasikan di
 
 ---
 
-## 7. Kesimpulan
+## 7. Revisi 3 (2026-11-05) — Hardening Backup/Restore & Scheduler
+
+- Modul bersama `src/utils/backup.js` (enkripsi, fingerprint, retensi, guard
+  restore, validasi path, `withRetry`) + 25 unit test.
+- Bug lock `backup.mjs`: handler `exit` memakai `require()` di ESM sehingga lock
+  tidak pernah dibersihkan saat `process.exit()`; diperbaiki memakai `unlinkSync`.
+- Upload remote anti-overwrite: object data identik dilewati, isi berbeda ditolak;
+  manifest tetap boleh di-overwrite.
+- Retry + backoff untuk upload/unduh/list/delete; 4xx tidak diulang.
+- Restore memvalidasi fingerprint key manifest sebelum dekripsi.
+- Scheduler Windows: installer path-dynamic, wrapper logging, template XML
+  diperbaiki (namespace, elemen, urutan settings); diuji nyata pada host lokal.
+- Retensi: object tanpa tanggal tidak dihapus; backup hari ini selalu aman.
+
+## 8. Kesimpulan
 
 Aplikasi berjalan di atas **MySQL 8.4** sebagai database operasional. Tidak ada
 akses database Supabase saat runtime; Supabase hanya tujuan backup terenkripsi

@@ -16,7 +16,7 @@ import mysql from 'mysql2/promise';
 import { jakartaDateString } from '../src/utils/date.js';
 import {
   BACKUP_MAGIC, IV_LENGTH, sha256Hex, parseEncryptionKey, keyFingerprint as fingerprintKey,
-  isValidBucketName, assertSafeRemotePath, ageExceedsRetention,
+  isValidBucketName, assertSafeRemotePath, ageExceedsRetention, withRetry,
 } from '../src/utils/backup.js';
 
 const args = new Set(process.argv.slice(2));
@@ -126,23 +126,32 @@ async function uploadObject(remote, localFile, { contentType = 'application/octe
   const safe = assertSafeRemotePath(remote);
   const headers = { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY, 'content-type': contentType };
   if (upsert) headers['x-upsert'] = 'true';
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${safe}`, {
-    method: 'POST',
-    headers,
-    body: await fs.readFile(localFile),
-  });
-  if (!res.ok) throw new Error(`Upload ${safe} gagal: HTTP ${res.status} ${(await res.text()).slice(0, 300)}`);
+  const body = await fs.readFile(localFile);
+  await withRetry(async () => {
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${safe}`, { method: 'POST', headers, body });
+    if (!res.ok) {
+      const error = new Error(`Upload ${safe} gagal: HTTP ${res.status} ${(await res.text()).slice(0, 300)}`);
+      error.status = res.status;
+      throw error;
+    }
+  }, { shouldRetry: (error) => !(error.status >= 400 && error.status < 500), onRetry: (error, attempt) => log('backup_upload_retry', { key: safe, attempt, status: error.status }) });
 }
 
 // allowMissing=true mengembalikan null untuk objek yang benar-benar tidak ada (404/400).
 async function fetchRemoteObject(remote, { allowMissing = false } = {}) {
   const safe = assertSafeRemotePath(remote);
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/${BUCKET}/${safe}`, {
-    headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY },
-  });
-  if (allowMissing && (res.status === 404 || res.status === 400)) return null;
-  if (!res.ok) throw new Error(`Unduh ${safe} gagal: HTTP ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+  return withRetry(async () => {
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/${BUCKET}/${safe}`, {
+      headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY },
+    });
+    if (allowMissing && (res.status === 404 || res.status === 400)) return null;
+    if (!res.ok) {
+      const error = new Error(`Unduh ${safe} gagal: HTTP ${res.status}`);
+      error.status = res.status;
+      throw error;
+    }
+    return Buffer.from(await res.arrayBuffer());
+  }, { shouldRetry: (error) => !(error.status >= 400 && error.status < 500), onRetry: (error, attempt) => log('backup_download_retry', { key: safe, attempt, status: error.status }) });
 }
 
 // Memverifikasi objek remote terhadap checksum/ukuran lokal.
@@ -172,12 +181,19 @@ async function listRemoteObjects(prefix, out = []) {
   let offset = 0;
   const limit = 100; // Supabase Storage membatasi jumlah per request.
   for (;;) {
-    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/list/${BUCKET}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY, 'content-type': 'application/json' },
-      body: JSON.stringify({ prefix, limit, offset, sortBy: { column: 'name', order: 'asc' } }),
-    });
-    if (!res.ok) throw new Error(`List ${prefix} gagal: HTTP ${res.status} ${(await res.text()).slice(0, 200)}`);
+    const res = await withRetry(async () => {
+      const r = await fetch(`${SUPABASE_URL}/storage/v1/object/list/${BUCKET}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY, 'content-type': 'application/json' },
+        body: JSON.stringify({ prefix, limit, offset, sortBy: { column: 'name', order: 'asc' } }),
+      });
+      if (!r.ok) {
+        const error = new Error(`List ${prefix} gagal: HTTP ${r.status} ${(await r.text()).slice(0, 200)}`);
+        error.status = r.status;
+        throw error;
+      }
+      return r;
+    }, { shouldRetry: (error) => !(error.status >= 400 && error.status < 500) });
     const items = await res.json();
     if (!Array.isArray(items) || items.length === 0) break;
     for (const item of items) {
@@ -229,12 +245,18 @@ async function cleanupRemote() {
     // Hapus per batch agar payload tetap wajar.
     for (let i = 0; i < toDelete.length; i += 100) {
       const batch = toDelete.slice(i, i + 100);
-      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY, 'content-type': 'application/json' },
-        body: JSON.stringify({ prefixes: batch }),
-      });
-      if (!res.ok) throw new Error(`Hapus objek remote gagal: HTTP ${res.status} ${(await res.text()).slice(0, 200)}`);
+      await withRetry(async () => {
+        const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY, 'content-type': 'application/json' },
+          body: JSON.stringify({ prefixes: batch }),
+        });
+        if (!res.ok) {
+          const error = new Error(`Hapus objek remote gagal: HTTP ${res.status} ${(await res.text()).slice(0, 200)}`);
+          error.status = res.status;
+          throw error;
+        }
+      }, { shouldRetry: (error) => !(error.status >= 400 && error.status < 500) });
       deleted.push(...batch);
       log('backup_retention_deleted_remote', { objects: batch });
     }

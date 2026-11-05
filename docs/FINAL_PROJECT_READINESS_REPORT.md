@@ -18,7 +18,7 @@ akses infrastruktur produksi yang dilakukan.
 | Data terlindungi RLS/private PPDB | BLOCKED — perlu service role/admin source access |
 | Scheduler Windows | PASS — task lokal dibuat, dijalankan, log dan exit code diverifikasi |
 | Scheduler Linux | NOT TESTED — tidak ada Linux VM/container pada sesi ini |
-| Backend tests | PASS — 41/41 |
+| Backend tests | PASS — 45/45 |
 | Frontend lint/typecheck/build | PASS |
 | Dependency audit | PASS backend production; BLOCKED follow-up frontend dev-only `vite` high |
 | VPS deployment | NOT TESTED / BLOCKED — sengaja tidak dilakukan |
@@ -71,7 +71,7 @@ remote sudah terverifikasi.
 
 ### Regression / build
 
-- Backend: `npm test` → **41/41 PASS**.
+- Backend: `npm test` → **45/45 PASS**.
 - Frontend: `npm run lint` → PASS.
 - Frontend: `npm run typecheck` → PASS.
 - Frontend: `CI=true npm run build:ci` → PASS; 100 public routes prerendered.
