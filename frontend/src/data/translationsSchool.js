@@ -1,4 +1,5 @@
 export default {
+  'Didirikan pada 30 Januari 1993 di Purwokerto.': 'Founded on 30 January 1993 in Purwokerto.',
   'hadir untuk menjawab tantangan dunia digital. Kami tidak mencetak “pekerja” atau “tukang servis”, melainkan': 'responds to the challenges of the digital world. We nurture more than “workers” or “repair technicians”: we develop',
   'Kreator dan Inovator': 'Creators and Innovators',
   '. Di sini, siswa dididik untuk menjadi pemimpin masa depan yang mampu menciptakan solusi digital untuk dunia.': '. Here, students learn to become future leaders who create digital solutions for the world.',
