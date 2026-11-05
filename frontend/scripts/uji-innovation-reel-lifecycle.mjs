@@ -17,6 +17,7 @@ try {
     window.reelQA.original = window.reelQA.timeline();
   });
   assert.equal(await page.evaluate(() => Boolean(window.reelQA.original)), true, 'Inspect the actual application timeline');
+  assert.equal(await page.evaluate(() => window.reelQA.original.getChildren().find(t => t.vars.xPercent === -100).duration()), 2.4, 'Slide duration is 2.4 seconds');
   for (const fraction of [.95, .5, 1.2, .5, .95, .5]) {
     await root.evaluate((n, fraction) => window.scrollTo({ top: window.scrollY + n.getBoundingClientRect().top - window.innerHeight * fraction, behavior: 'instant' }), fraction);
     await page.waitForTimeout(150);
