@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { slugify } from '../../utils/slug';
 import SectionAccents from '../SectionAccents';
 import TeacherCard from '../TeacherCard';
+import TeacherCardBorder from '../TeacherCardBorder';
 import useSlidingPage from '../../hooks/useSlidingPage';
 import { kepalaSekolah } from '../../data/dummyData';
 import { schoolTeacherData as guruData } from '../../data/schoolTeacherData';
@@ -33,18 +34,21 @@ const TentangKepalaSekolahSection = () => {
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,38%)_minmax(0,1fr)] lg:px-8 min-[1660px]:max-w-[1621px] min-[1660px]:grid-cols-[610px_964px] min-[1660px]:gap-[47px] min-[1660px]:px-0">
         {/* Kepala Sekolah */}
-        <div className="flex min-w-0 flex-col rounded-2xl border border-dark-100 bg-white p-5 shadow-card sm:p-6 min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd]">
+        <div data-principal-profile className="flex min-w-0 flex-col rounded-2xl border border-dark-100 bg-white p-5 shadow-card sm:p-6 min-[1660px]:rounded-[20px] min-[1660px]:border-0 min-[1660px]:bg-[#fffdfd]">
           <h2 className="font-heading text-base font-extrabold text-primary min-[1660px]:text-[32px] min-[1660px]:leading-[40px]">{t("Kepala Sekolah")} </h2>
           <div className="mt-5 flex flex-1 flex-col justify-center gap-6">
-            <figure className="mx-auto grid w-full min-w-0 max-w-44 items-center gap-4 min-[400px]:max-w-none min-[400px]:grid-cols-[128px_minmax(0,1fr)] lg:grid-cols-[144px_minmax(0,1fr)] min-[1660px]:grid-cols-[176px_minmax(0,1fr)]">
+            <figure className="mx-auto flex w-full min-w-0 flex-col items-center gap-4">
+              <div className="relative isolate w-48 max-w-full p-[2%] sm:w-56 min-[1660px]:w-80">
               <img
                 src={kepalaSekolah.image}
                 alt={t(kepalaSekolah.name)}
                 loading="lazy"
                 decoding="async"
-                className="aspect-[3/4] w-full rounded-xl bg-dark-50 object-contain p-1"
+                className="aspect-[3/4] w-full bg-dark-50 object-contain p-1"
               />
-              <figcaption className="[overflow-wrap:anywhere]">
+              <TeacherCardBorder />
+              </div>
+              <figcaption className="w-full text-center [overflow-wrap:anywhere]">
                 <p className="font-heading text-base font-bold leading-snug text-primary min-[1660px]:text-lg">{t(kepalaSekolah.name)}</p>
                 <p className="mt-1 text-xs leading-relaxed text-dark-500">{t(kepalaSekolah.title)}</p>
               </figcaption>
