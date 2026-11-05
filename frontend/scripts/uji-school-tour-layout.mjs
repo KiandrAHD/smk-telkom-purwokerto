@@ -55,15 +55,17 @@ try {
         const wave = root.querySelector('[data-wave-marquee]').getBoundingClientRect();
         const track = root.querySelector('.campus-track');
         const scenery = root.querySelector('.campus-scenery');
+        const floor = root.querySelector('.campus-floor').getBoundingClientRect();
         return { viewWidth: view.width, navWidth: nav.width, navHeight: nav.height, centered: Math.abs(nav.x + nav.width / 2 - window.innerWidth / 2),
           waveBelow: wave.top >= nav.bottom, hintFits: hint.scrollWidth <= hint.clientWidth,
           roundedTrack: parseFloat(getComputedStyle(track).borderTopLeftRadius) >= track.getBoundingClientRect().height / 2,
+          floorCoversViewport: floor.left <= 0 && floor.right >= window.innerWidth,
           fullWidthWave: Math.abs(wave.width - window.innerWidth) < 1,
           fullWidthBackground: Math.abs(parseFloat(getComputedStyle(scenery, '::before').width) - window.innerWidth) < 1 && !scenery.closest('.campus-viewport'),
           overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth };
       });
       assert.ok(layout.viewWidth <= 1280 && layout.centered < 7);
-      assert.ok(layout.hintFits && layout.waveBelow && layout.roundedTrack && layout.fullWidthWave && layout.fullWidthBackground && !layout.overflow, JSON.stringify({ width, lang, layout }));
+      assert.ok(layout.hintFits && layout.waveBelow && layout.roundedTrack && layout.fullWidthWave && layout.fullWidthBackground && layout.floorCoversViewport && !layout.overflow, JSON.stringify({ width, lang, layout }));
       assert.ok(Math.abs(layout.navHeight - Math.max(28, 74 * layout.navWidth / 1334)) < 1);
       await page.locator('.campus-tour-composition').screenshot({ path: join(output, `tour-${width}-${lang}.png`), style: screenshotStyle });
       results.push({ width, lang, ...layout });
@@ -72,7 +74,7 @@ try {
   await page.setViewportSize({ width: 1440, height: 1100 });
   for (const [key, redX, handleX] of [['Home', 330, 539], ['End', 1082, 1291]]) {
     await slider(page).press(key);
-    await page.evaluate(() => new Promise(requestAnimationFrame));
+    await page.waitForTimeout(100);
     const measured = await page.locator('.campus-range').evaluate(range => {
       const view = document.querySelector('.campus-viewport').getBoundingClientRect(), unit = view.width / 1847;
       const rect = range.getBoundingClientRect(), red = getComputedStyle(range, '::after');

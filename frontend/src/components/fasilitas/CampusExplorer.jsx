@@ -23,7 +23,6 @@ import './CampusExplorer.css';
 function CampusDecorations() {
   return <div aria-hidden="true" className="pointer-events-none absolute inset-0">
     <img data-campus-motif="left" src={motif} alt="" width="500" height="500" className="campus-logo absolute" />
-    <img src={floor} alt="" className="campus-floor absolute" />
     <img src={decor} alt="" className="campus-bottom-decor absolute" />
     <img data-campus-motif="right" src={rightMotif} alt="" width="711" height="226" className="campus-right-motif absolute" />
   </div>;
@@ -79,7 +78,7 @@ export default function CampusExplorer({ request, onViewFacilities }) {
       </header>
       <p id="campus-instructions" className="sr-only">{t('Geser peta ke kiri atau kanan. Gunakan tombol arah, slider, atau tombol panah pada keyboard. Pilih titik untuk melihat informasi fasilitas.')}</p>
       <div className="relative mx-auto max-w-7xl">
-        {!failed && <div aria-hidden="true" className="campus-scenery pointer-events-none absolute inset-0"><div ref={scenery} className="campus-stage absolute aspect-[3142/1051] w-[960px]"><CampusDecorations /></div></div>}
+        {!failed && <div aria-hidden="true" className="campus-scenery pointer-events-none absolute inset-0"><div className="campus-floor absolute"><img src={floor} alt="" /></div><div ref={scenery} className="campus-stage absolute aspect-[3142/1051] w-[960px]"><CampusDecorations /></div></div>}
         <div ref={viewport} className="campus-viewport relative focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" role="region" aria-label={t('Peta kampus SMK Telkom Purwokerto')} aria-describedby="campus-instructions" tabIndex={ready ? 0 : -1} data-map-ready={ready && !failed} data-map-failed={failed} data-lenis-prevent-horizontal>
           <div ref={stage} data-campus-stage className={failed ? 'relative h-56 w-full' : 'campus-stage relative mx-auto aspect-[3142/1051] w-[960px]'}>
             {!failed && <><img key={retry} src={map} alt={t('Peta isometrik sekolah dengan bangunan beratap merah')} width="2164" height="727" loading="lazy" decoding="async" draggable="false" className="campus-map pointer-events-none relative z-10 block h-full w-full select-none" onLoad={() => setReady(true)} onError={() => { setFailed(true); setReady(false); }} />

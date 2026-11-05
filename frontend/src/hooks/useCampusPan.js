@@ -18,6 +18,8 @@ export default function useCampusPan({ viewport, stage, scenery, slider, previou
       image.style.setProperty('--campus-fraction', String(state.fraction || 0));
       image.style.setProperty('--campus-floor-pan', `${media.matches ? 0 : Math.min(16, state.position * 0.04)}px`);
       if (scenery.current) {
+        scenery.current.parentElement.style.setProperty('--campus-floor-pan', image.style.getPropertyValue('--campus-floor-pan'));
+        scenery.current.parentElement.style.setProperty('--campus-unit', image.style.getPropertyValue('--campus-unit'));
         for (const property of ['width', 'transform', '--campus-unit', '--campus-scale', '--campus-fraction', '--campus-floor-pan', '--campus-camera-x', '--campus-viewport-width']) scenery.current.style.setProperty(property, image.style.getPropertyValue(property));
       }
       view.dataset.pan = String(state.position); view.dataset.panMax = String(state.max); view.dataset.panInset = String(state.inset);
