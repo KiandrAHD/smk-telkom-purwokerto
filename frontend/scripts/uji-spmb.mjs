@@ -1,8 +1,11 @@
-import { OFFICIAL_ADMISSIONS_URL } from '../src/utils/admissions.js';
+import { OFFICIAL_ADMISSIONS_URL, isHiddenAdmissionsPath } from '../src/utils/admissions.js';
 import assert from 'node:assert/strict';
 import { canonicalAdmissionsPath, formatAdmissionsText } from '../src/utils/admissions.js';
 import { createServer } from 'vite';
 import { jawabanFaqCepat, kategoriPertanyaan, topikDiizinkan } from '../../supabase/functions/stela/inti.mjs';
+
+for (const path of ['/spmb', '/spmb/masuk', '/spmb/formulir', '/SPMB/masuk', '/%73pmb/masuk', '/ppdb', '/ppdb/status', '/ketentuan-spmb', '/lupa-sandi', '/auth/confirm']) assert(isHiddenAdmissionsPath(path));
+for (const path of ['/dashboard/spmb', '/dashboard/informasi-spmb', '/login', '/spmb-other', '/berita/spmb']) assert(!isHiddenAdmissionsPath(path));
 
 for (const step of ['masuk', 'daftar', 'verifikasi', 'atur-sandi', 'formulir', 'berkas', 'selesai', 'status', 'dokumen-peserta']) {
   assert.equal(canonicalAdmissionsPath(`/ppdb/${step}`), `/spmb/${step}`);
