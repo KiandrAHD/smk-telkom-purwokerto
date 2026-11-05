@@ -114,12 +114,25 @@
   .profile-principle-vision .profile-principle-description { max-width: 62%; }
   .profile-principle-mission .profile-principle-description { font-size: clamp(.875rem, 1.083vw, 1.25rem); }
 }
-.profile-vision-grid, .profile-values-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.profile-value-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--color-dark-100); border-radius: 1.25rem; background: white; box-shadow: var(--shadow-card); }
-.profile-value-icon { display: flex; align-items: center; height: 3rem; margin-bottom: 1rem; }
+.profile-principles-section .profile-section-heading, .profile-history .profile-section-heading { margin-bottom: clamp(1rem, 1.733vw, 2rem); font-family: var(--profile-font); font-size: clamp(1.5rem, 2.6vw, 3rem); line-height: 1.35; color: var(--profile-red); }
+.profile-values-grid { --values-gap: clamp(1rem, 4.87vw, 5.625rem); position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem var(--values-gap); }
+.profile-value-card { position: relative; display: flex; flex-direction: column; align-items: start; gap: .5rem; min-width: 0; padding: 1rem; border-radius: 1.25rem; background: white; box-shadow: 0 0 24px rgb(130 130 130 / .25); }
+.profile-value-card:nth-child(odd)::after { position: absolute; z-index: -1; top: calc(50% - .8125rem); left: 100%; width: var(--values-gap); height: 1.625rem; background: linear-gradient(#cd0b20 27%, #ae0013 27% 73%, #cd0b20 73%); content: ''; }
+.profile-value-icon { display: flex; flex: none; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; }
 .profile-value-icon img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.profile-value-card h3 { font-family: var(--font-heading); font-size: .875rem; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
-.profile-value-card p { margin-top: .75rem; font-size: .75rem; line-height: 1.5; color: var(--color-dark-600); }
+.profile-value-copy { min-width: 0; }
+.profile-value-card h3 { font-size: clamp(1rem, 1.733vw, 2rem); font-weight: 700; line-height: 1.25; }
+.profile-value-card p { max-width: 10.0625rem; font-size: clamp(.75rem, .813vw, .9375rem); font-weight: 500; line-height: 1.3; color: rgb(0 0 0 / .68); }
+@media (min-width: 40rem) {
+  .profile-value-card { flex-direction: row; align-items: center; gap: .25rem; min-height: 7rem; }
+}
+@media (min-width: 64rem) {
+  .profile-values-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .profile-value-card { min-height: clamp(7rem, 8.61vw, 9.9375rem); padding: clamp(.5rem, .87vw, 1rem); }
+  .profile-value-card:not(:last-child)::after { position: absolute; z-index: -1; top: calc(50% - .8125rem); left: 100%; width: var(--values-gap); height: 1.625rem; background: linear-gradient(#cd0b20 27%, #ae0013 27% 73%, #cd0b20 73%); content: ''; }
+  .profile-value-icon { width: clamp(3.5rem, 6.23vw, 7.1875rem); height: clamp(3.5rem, 6.23vw, 7.1875rem); }
+  .profile-value-card:nth-child(3) .profile-value-icon, .profile-value-card:nth-child(4) .profile-value-icon { width: clamp(3.5rem, 5.42vw, 6.25rem); }
+}
 .profile-history { scroll-margin-top: 6rem; padding-bottom: 3rem; }
 .profile-timeline { display: grid; gap: 1.5rem; padding: 1.5rem; border: 1px solid var(--color-dark-100); border-radius: 1.25rem; background: #fffdfd; box-shadow: var(--shadow-card); }
 .profile-timeline li { min-width: 0; }
@@ -139,7 +152,6 @@
   .profile-container { padding-inline: 1.5rem; }
   .profile-about-panel { padding: 2rem; }
   .profile-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .profile-values-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (min-width: 64rem) {
   .profile-section { padding-block: 2rem; }
@@ -147,9 +159,6 @@
   .profile-about-panel { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; padding: 2.5rem; }
   .profile-about-copy h2 { font-size: 1.875rem; }
   .profile-about-copy > p { font-size: 1rem; }
-  .profile-principles { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: 3rem; }
-  .profile-value-card { padding: 1rem; min-height: 13rem; }
-  .profile-values-grid { gap: .75rem; }
   .profile-timeline { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.25rem; padding: 2rem 1.5rem; }
   .profile-milestone { grid-template-columns: 2rem minmax(0, 1fr); gap: .5rem; }
   .profile-milestone-icon { width: 2rem; height: 2rem; }
@@ -168,13 +177,6 @@
   .profile-video > p { font-size: 2rem; }
   .profile-video-logo { width: 4rem; }
   .profile-section-heading { margin-bottom: 3rem; font-size: 2rem; }
-  .profile-principles { gap: 6rem; }
-  .profile-vision-grid { gap: 2rem; }
-  .profile-values-grid { gap: 1.5rem; }
-  .profile-value-card { min-height: 17.8125rem; padding: 1.5rem; }
-  .profile-value-icon { height: 5rem; }
-  .profile-value-card h3 { font-size: 1.25rem; }
-  .profile-value-card p { font-size: .9375rem; }
   .profile-timeline { min-height: 19.75rem; align-items: start; gap: 2rem; padding: 3.5rem 2rem 2rem; }
   .profile-milestone { grid-template-columns: 3.5rem minmax(0, 1fr); gap: .75rem; }
   .profile-milestone-icon { width: 3.5rem; height: 3.5rem; margin-top: 3rem; }
@@ -182,8 +184,4 @@
   .profile-milestone-title { font-size: 1.125rem; }
   .profile-milestone-description { font-size: .9375rem; }
   .profile-history { padding-bottom: 4rem; }
-}
-@media (max-width: 25rem) {
-  .profile-vision-grid { grid-template-columns: minmax(0, 1fr); }
-  .profile-value-card { padding: 1rem; }
 }

@@ -1,4 +1,4 @@
-/* global document, window */
+/* global document, window, getComputedStyle */
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
@@ -20,6 +20,7 @@ try {
       assert.equal(await principles.locator('.profile-principle-photo').count(), 2, 'Both vision/mission cards need their Figma photo');
       await principles.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
       assert.equal(await principles.locator('.profile-principle-tagline').count(), 2);
+      assert.notEqual(await principles.locator('.profile-value-card').first().evaluate(card => getComputedStyle(card, '::after').backgroundImage), 'none', 'The values must be connected by the red ribbon');
       const cards = await principles.locator('.profile-principle-card').first().boundingBox();
       assert.ok(cards.width > 200);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false, `${width}/${language}: page overflow`);

@@ -17,8 +17,10 @@ const Card = ({ icon, title, desc }) => {
   return (
     <article className="profile-value-card">
       <div className="profile-value-icon"><img src={icon} alt="" aria-hidden="true" /></div>
-      <h3>{t(title)}</h3>
-      <p>{t(desc)}</p>
+      <div className="profile-value-copy">
+        <h3>{t(title)}</h3>
+        <p>{t(desc)}</p>
+      </div>
     </article>
   );
 };
