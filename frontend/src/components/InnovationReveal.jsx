@@ -42,7 +42,7 @@ export default function InnovationReveal() {
     media.add('(prefers-reduced-motion: no-preference)', () => {
       const track = root.querySelector('[data-innovation-reel]');
       const reel = gsap.timeline({ repeat: -1, paused: true })
-        .to(track, { xPercent: -100, duration: 1.2, ease: 'power1.inOut' }, 1.8)
+        .to(track, { xPercent: -100, duration: 8, ease: 'none' }, 1.8)
         .set(track, { xPercent: 0 });
       let visible = false;
 

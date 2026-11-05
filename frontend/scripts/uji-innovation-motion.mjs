@@ -25,17 +25,19 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce' }); await sleep(100);
   assert.ok((await sample()).full, 'The whole phrase must fit at the centered stop');
   await page.emulateMedia({ reducedMotion: 'no-preference' }); await root.scrollIntoViewIfNeeded(); await sleep(150);
-  const holds = []; let since = null, last = await sample(), begun = Date.now();
-  while (holds.length < 3 && Date.now() - begun < 16000) {
+  const holds = [], departures = []; let since = null, last = await sample(), begun = Date.now();
+  while (holds.length < 3 && Date.now() - begun < 40000) {
     await sleep(50); const next = await sample();
     assert.ok(Math.abs(next.width - last.width) < .5 && Math.abs(next.left - last.left) < .5 && Math.abs(next.top - last.top) < .5, 'Stable box layout');
     if (Math.abs(next.x) < .1) {
       assert.ok(next.full, 'No clipping during pause'); since ??= Date.now();
-    } else if (since !== null) { holds.push(Date.now() - since); since = null; }
+    } else if (since !== null) { holds.push(Date.now() - since); departures.push(Date.now()); since = null; }
     last = next;
   }
   assert.equal(holds.length, 3); assert.ok(holds.every(ms => ms >= 1500 && ms <= 2100), JSON.stringify(holds));
-  console.log('PASS three slide/pause cycles:', holds);
+  assert.ok(departures.slice(1).every((time, i) => time - departures[i] >= 9500 && time - departures[i] <= 10200), 'Eight-second linear slide plus readable pause');
+  await page.waitForFunction(() => Math.abs(new window.DOMMatrixReadOnly(getComputedStyle(document.querySelector('[data-innovation-reel]')).transform).m41) < .1, null, { timeout: 10000 });
+  console.log('PASS three full eight-second slide/pause cycles:', holds);
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const language of ['id', 'en']) {
