@@ -29,8 +29,9 @@ export default function InnovationReveal() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setActive(true); observer.disconnect(); }
-    }, { threshold: 0.25 });
+      if (entry.intersectionRatio >= 0.25) setActive(true);
+      else if (!entry.isIntersecting) setActive(false);
+    }, { threshold: [0, 0.25] });
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
@@ -39,9 +40,10 @@ export default function InnovationReveal() {
     const root = ref.current;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      const reel = gsap.to(root.querySelector('[data-innovation-reel]'), {
-        xPercent: -50, duration: 8, repeat: -1, ease: 'none', paused: true,
-      });
+      const track = root.querySelector('[data-innovation-reel]');
+      const reel = gsap.timeline({ repeat: -1, paused: true })
+        .to(track, { xPercent: -100, duration: 1.2, ease: 'power1.inOut' }, 1.8)
+        .set(track, { xPercent: 0 });
       let visible = false;
 
       const sync = () => {
@@ -56,14 +58,14 @@ export default function InnovationReveal() {
       };
     }, root);
     return () => media.revert();
-  }, [language]);
+  }, [language, active]);
 
   return (
     <section ref={ref} data-innovation-reveal className="home-innovation bg-white" aria-labelledby="innovation-title">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2 id="innovation-title" className="home-innovation-title">
           <span className="sr-only">{t('Bukan sekadar belajar Teknologi')}. {phrase}. {t('Kami bikin karya nyata')}.</span>
-          <Typewriter key={language} text={`${lead} ${phrase} ${tail}`} active={active} reducedMotion={Boolean(reduced)} speed={35} cursor="" render={visible => <>
+          <Typewriter key={`${language}-${active}`} text={`${lead} ${phrase} ${tail}`} active={active} reducedMotion={Boolean(reduced)} speed={35} cursor="" render={visible => <>
           <span aria-hidden="true" className="home-innovation-line">{words(lead, visible)}</span>
           <span aria-hidden="true" className="home-innovation-line">
             <span className="home-innovation-box">
