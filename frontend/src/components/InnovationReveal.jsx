@@ -39,9 +39,10 @@ export default function InnovationReveal() {
     const root = ref.current;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      const reel = gsap.to(root.querySelector('[data-innovation-reel]'), {
-        xPercent: -50, duration: 8, repeat: -1, ease: 'none', paused: true,
-      });
+      const track = root.querySelector('[data-innovation-reel]');
+      const reel = gsap.timeline({ repeat: -1, paused: true })
+        .to(track, { xPercent: -100, duration: 1.2, ease: 'power1.inOut' }, 1.8)
+        .set(track, { xPercent: 0 });
       let visible = false;
 
       const sync = () => {
