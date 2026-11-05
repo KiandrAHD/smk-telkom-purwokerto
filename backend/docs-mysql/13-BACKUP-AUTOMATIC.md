@@ -9,34 +9,40 @@
 
 ## Windows
 
-File: `backend/schedulers/windows-backup-daily.xml`.
+File template: `backend/schedulers/windows-backup-daily.xml`
+Wrapper + logging: `backend/schedulers/run-backup.cmd`
+Installer: `backend/schedulers/install-windows-task.ps1`
 
-Install:
+Install (mengisi path Node & backend otomatis):
 
 ```powershell
-schtasks /create /tn "SMKDailyBackup" /xml backend\schedulers\windows-backup-daily.xml
+powershell -ExecutionPolicy Bypass -File schedulers\install-windows-task.ps1
+# opsional:
+#   -TaskName "SMK-Telkom-Backup-Daily" -Time "02:00" -RunNow
 ```
 
-Sesuaikan `WorkingDirectory` pada XML ke path backend project. Pastikan `node` dapat ditemukan oleh Task Scheduler (tambahkan ke PATH atau gunakan path absolut).
+Jangan mengimpor XML langsung: ganti dulu placeholder `__CMD_EXE__`,
+`__NODE_EXE__`, `__BACKEND_DIR__`, `__TIME__`, atau pakai installer di atas.
 
 Status:
 
 ```powershell
-schtasks /query /tn "SMKDailyBackup" /v
+schtasks /query /tn "SMK-Telkom-Backup-Daily" /v
 ```
 
 Jalankan manual:
 
 ```powershell
-schtasks /run /tn "SMKDailyBackup"
+schtasks /run /tn "SMK-Telkom-Backup-Daily"
 ```
 
 Disable/hapus:
 
 ```powershell
-schtasks /end /tn "SMKDailyBackup"
-schtasks /delete /tn "SMKDailyBackup" /f
+powershell -ExecutionPolicy Bypass -File schedulers\install-windows-task.ps1 -Unregister
 ```
+
+Log: `backend\logs\backup.log`.
 
 ## Linux
 
@@ -68,8 +74,25 @@ sudo systemctl start linux-backup-daily.service
 
 ## Pencegahan backup bersamaan
 
-Timer `Persistent=true` menjalankan backup yang tertunda hanya sekali. Task Scheduler `StartWhenAvailable=true` menjalankan backup yang terlewat saat komputer aktif kembali. Tidak ada dua instansi backup yang berjalan simultan karena scheduler memulai service oneshot.
+Dua lapis: scheduler (`MultipleInstancesPolicy=IgnoreNew` pada Windows,
+`Type=oneshot` pada systemd) dan lock eksklusif `.backup.lock` di `BACKUP_DIR`
+yang dibuat dengan `fs.open(..., 'wx')`. Jika lock sudah ada, backup kedua
+berhenti dengan pesan `Backup lain sedang berjalan` dan exit code != 0. Lock
+selalu dirilis lewat blok `finally` dan handler event `exit`.
 
 ## Retensi
 
-Backup berusia lebih dari 30 hari dihapus secara otomatis setelah backup harian selesai. Penentuan usia memakai zona `Asia/Jakarta`.
+Backup berusia lebih dari `BACKUP_RETENTION_DAYS` (default 30) dihapus otomatis
+setelah backup harian selesai, untuk file lokal dan objek Supabase Storage.
+Penentuan usia memakai tanggal pada nama objek dengan zona `Asia/Jakarta`.
+Objek tanpa tanggal backup tidak pernah dihapus otomatis, dan backup hari ini
+selalu dipertahankan.
+
+## Integritas unggahan remote
+
+- Setiap objek diunggah hanya jika belum ada; jika sudah ada dengan isi yang
+  sama, unggahan dilewati (idempoten). Jika sudah ada dengan isi berbeda,
+  script menolak menimpa dan menandai backup gagal.
+- Manifest boleh ditimpa (upsert) karena workflow menulisnya dua kali.
+- Status akhir: `LOCAL_CREATED` -> `REMOTE_UPLOADED` -> `REMOTE_VERIFIED`.
+  `REMOTE_UPLOADED` tidak sama dengan `REMOTE_VERIFIED`.

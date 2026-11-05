@@ -1,6 +1,6 @@
 # Laporan Implementasi Migrasi MySQL — SMK Telkom Purwokerto
 
-Diperbarui: 2026-11-04 (revisi 2). Status dinyatakan apa adanya; item tanpa
+Diperbarui: 2026-11-05 (revisi 3). Status dinyatakan apa adanya; item tanpa
 kredensial eksternal tetap **BLOCKED**, bukan diklaim PASS.
 
 ---
@@ -28,8 +28,8 @@ kredensial eksternal tetap **BLOCKED**, bukan diklaim PASS.
 | Restore dari backup lokal | PASS | DB test, semua count cocok manifest |
 | Restore dari Supabase | BLOCKED | Butuh kredensial Supabase |
 | Guard restore (key salah, produksi, traversal) | PASS | Key salah → GCM auth gagal; produksi butuh flag |
-| Scheduler Windows/Linux | CONFIG READY | Template diperbaiki; pengujian nyata scheduler belum dijalankan |
-| Backend tests | PASS | 19/19 |
+| Scheduler Windows/Linux | PASS Windows / NOT TESTED Linux | Task dibuat+eksekusi+log+lock; Linux hanya ditinjau |
+| Backend tests | PASS | 41/41 (termasuk 21 test util backup) |
 | Frontend lint/typecheck/build | PASS | eslint bersih, tsc bersih, 102 rute prerender |
 | Dependency Supabase runtime | PASS | 0 referensi di `backend/src` dan `frontend/src` |
 | Dokumentasi `backend/docs-mysql/` | PASS | 17 dokumen + README |

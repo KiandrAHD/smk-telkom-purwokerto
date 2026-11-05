@@ -16,6 +16,10 @@ import { pipeline } from 'node:stream/promises';
 import { createGunzip } from 'node:zlib';
 import mysql from 'mysql2/promise';
 import { assertSafeTarArchive } from './archive-safe.mjs';
+import {
+  BACKUP_MAGIC, IV_LENGTH, TAG_LENGTH, MIN_ENCRYPTED_SIZE, sha256Hex,
+  parseEncryptionKey, keyFingerprint as fingerprintKey, assertRestoreTargetAllowed,
+} from '../src/utils/backup.js';
 
 const argv = process.argv.slice(2);
 const positional = argv.filter((a) => !a.startsWith('--') && !['mysql', 'uploads', 'both'].includes(a));
@@ -31,15 +35,14 @@ const targetKind = flags.target
 if (!fileArg && !flags['remote-date']) { console.error('Gunakan file backup atau --remote-date=YYYY-MM-DD.'); process.exit(2); }
 if (!flags.apply) { console.error('Restore destruktif diblokir. Tambahkan --apply setelah target diverifikasi.'); process.exit(2); }
 
-const key = Buffer.from(process.env.BACKUP_ENCRYPTION_KEY || '', 'base64');
-if (key.length !== 32) throw new Error('BACKUP_ENCRYPTION_KEY harus base64 dari 32 byte (AES-256).');
-const keyFingerprint = crypto.createHash('sha256').update(key).digest('hex').slice(0, 16);
+const key = parseEncryptionKey(process.env.BACKUP_ENCRYPTION_KEY);
+const keyFingerprint = fingerprintKey(key);
 const root = path.resolve(process.env.BACKUP_DIR || 'backups');
 const work = path.join(root, '.restore');
 await fs.rm(work, { recursive: true, force: true });
 await fs.mkdir(work, { recursive: true });
 
-async function sha256Buffer(buffer) { return crypto.createHash('sha256').update(buffer).digest('hex'); }
+async function sha256Buffer(buffer) { return sha256Hex(buffer); }
 async function readRemote(remote) {
   const base = String(process.env.SUPABASE_URL || '').replace(/\/$/, '');
   const bucket = process.env.SUPABASE_BACKUP_BUCKET || '';
@@ -99,14 +102,24 @@ if (flags['remote-date']) {
   sourceRoot = path.dirname(input);
 }
 
+// Validasi manifest sebelum dekripsi apa pun: format enkripsi dan fingerprint key.
+if (manifest) {
+  if (manifest.encryption !== 'AES-256-GCM') throw new Error(`Format enkripsi tidak didukung: ${manifest.encryption}`);
+  if (manifest.keyFingerprint && manifest.keyFingerprint !== keyFingerprint) {
+    throw new Error(`Key fingerprint manifest (${manifest.keyFingerprint}) tidak cocok dengan BACKUP_ENCRYPTION_KEY aktif (${keyFingerprint}).`);
+  }
+}
+
 async function decrypt(input, output) {
   const raw = await fs.readFile(input);
-  if (raw.length < 36 || raw.subarray(0, 8).toString() !== 'SMKBACK1') throw new Error('Format backup tidak dikenal atau file tidak lengkap.');
-  const iv = raw.subarray(8, 20);
-  const tag = raw.subarray(-16);
+  if (raw.length < MIN_ENCRYPTED_SIZE || !raw.subarray(0, BACKUP_MAGIC.length).equals(BACKUP_MAGIC)) {
+    throw new Error('Format backup tidak dikenal atau file tidak lengkap.');
+  }
+  const iv = raw.subarray(BACKUP_MAGIC.length, BACKUP_MAGIC.length + IV_LENGTH);
+  const tag = raw.subarray(raw.length - TAG_LENGTH);
   const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
   decipher.setAuthTag(tag);
-  await pipeline(createReadStream(input, { start: 20, end: raw.length - 17 }), decipher, createWriteStream(output));
+  await pipeline(createReadStream(input, { start: BACKUP_MAGIC.length + IV_LENGTH, end: raw.length - TAG_LENGTH - 1 }), decipher, createWriteStream(output));
 }
 
 const selected = new Set();
@@ -153,8 +166,12 @@ for (const kind of selected) {
     if (!targetUrl) throw new Error('Tentukan --db=nama_database atau --target-url.');
     const target = new URL(targetUrl);
     const productionName = new URL(process.env.DATABASE_URL).pathname.slice(1);
-    if (target.pathname.slice(1) === productionName && !flags['allow-production']) throw new Error(`Menolak database production "${productionName}". Gunakan --allow-production setelah backup diverifikasi.`);
-    if (target.pathname.slice(1) === productionName && !flags.confirm) throw new Error('Restore production memerlukan --confirm selain --allow-production.');
+    assertRestoreTargetAllowed({
+      targetName: target.pathname.slice(1),
+      productionName,
+      allowProduction: Boolean(flags['allow-production']),
+      confirm: Boolean(flags.confirm),
+    });
     const conn = await mysql.createConnection({ host: target.hostname, port: Number(target.port || 3306), user: decodeURIComponent(target.username), password: decodeURIComponent(target.password), database: target.pathname.slice(1) });
     const [before] = await conn.query('SHOW TABLES');
     await conn.end();

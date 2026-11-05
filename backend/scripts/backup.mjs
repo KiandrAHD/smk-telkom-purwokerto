@@ -7,13 +7,17 @@
 import 'dotenv/config';
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
-import { createReadStream, createWriteStream } from 'node:fs';
+import { createReadStream, createWriteStream, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { pipeline } from 'node:stream/promises';
 import { createGzip } from 'node:zlib';
 import mysql from 'mysql2/promise';
 import { jakartaDateString } from '../src/utils/date.js';
+import {
+  BACKUP_MAGIC, IV_LENGTH, sha256Hex, parseEncryptionKey, keyFingerprint as fingerprintKey,
+  isValidBucketName, assertSafeRemotePath, ageExceedsRetention,
+} from '../src/utils/backup.js';
 
 const args = new Set(process.argv.slice(2));
 const NO_UPLOAD = args.has('--no-upload');
@@ -21,9 +25,8 @@ const root = path.resolve(process.env.BACKUP_DIR || 'backups');
 const uploadRoot = path.resolve(process.env.UPLOAD_ROOT || 'uploads');
 const date = jakartaDateString(new Date());
 const retention = Number(process.env.BACKUP_RETENTION_DAYS || 30);
-const key = Buffer.from(process.env.BACKUP_ENCRYPTION_KEY || '', 'base64');
-if (key.length !== 32) throw new Error('BACKUP_ENCRYPTION_KEY harus base64 dari 32 byte (AES-256).');
-const keyFingerprint = crypto.createHash('sha256').update(key).digest('hex').slice(0, 16);
+const key = parseEncryptionKey(process.env.BACKUP_ENCRYPTION_KEY);
+const keyFingerprint = fingerprintKey(key);
 
 const dbUrl = new URL(process.env.DATABASE_URL);
 const database = dbUrl.pathname.slice(1);
@@ -34,7 +37,25 @@ await fs.mkdir(work, { recursive: true });
 const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const BUCKET = process.env.SUPABASE_BACKUP_BUCKET || '';
+if (BUCKET && !isValidBucketName(BUCKET)) {
+  throw new Error('SUPABASE_BACKUP_BUCKET tidak valid. Gunakan nama bucket Storage yang aman.');
+}
 const remoteReady = Boolean(SUPABASE_URL && SERVICE_KEY && BUCKET);
+const lockPath = path.join(root, '.backup.lock');
+let lockHandle;
+try {
+  await fs.mkdir(root, { recursive: true });
+  lockHandle = await fs.open(lockPath, 'wx');
+  await lockHandle.writeFile(JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }));
+} catch (error) {
+  if (error.code === 'EEXIST') throw new Error(`Backup lain sedang berjalan: ${lockPath}`);
+  throw error;
+}
+async function releaseLock() {
+  try { await lockHandle?.close(); } finally { await fs.rm(lockPath, { force: true }); }
+}
+// process.exit() melewati blok finally, jadi lock juga dirilis lewat event 'exit'.
+process.once('exit', () => { try { unlinkSync(lockPath); } catch {} });
 
 function log(event, extra = {}) {
   console.log(JSON.stringify({ event, ...extra }));
@@ -47,11 +68,11 @@ async function sha256(file) {
 }
 
 async function encryptFile(input, output) {
-  const iv = crypto.randomBytes(12);
+  const iv = crypto.randomBytes(IV_LENGTH);
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
   const out = createWriteStream(output);
   await new Promise((resolve, reject) => { out.once('open', resolve); out.once('error', reject); });
-  out.write(Buffer.from('SMKBACK1'));
+  out.write(BACKUP_MAGIC);
   out.write(iv);
   await pipeline(createReadStream(input), cipher, out);
   await fs.appendFile(output, cipher.getAuthTag());
@@ -101,25 +122,26 @@ async function tableCounts() {
   return counts;
 }
 
-async function uploadObject(remote, localFile, contentType = 'application/octet-stream') {
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${remote}`, {
+async function uploadObject(remote, localFile, { contentType = 'application/octet-stream', upsert = false } = {}) {
+  const safe = assertSafeRemotePath(remote);
+  const headers = { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY, 'content-type': contentType };
+  if (upsert) headers['x-upsert'] = 'true';
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${safe}`, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SERVICE_KEY}`,
-      apikey: SERVICE_KEY,
-      'content-type': contentType,
-      'x-upsert': 'true',
-    },
+    headers,
     body: await fs.readFile(localFile),
   });
-  if (!res.ok) throw new Error(`Upload ${remote} gagal: HTTP ${res.status} ${(await res.text()).slice(0, 300)}`);
+  if (!res.ok) throw new Error(`Upload ${safe} gagal: HTTP ${res.status} ${(await res.text()).slice(0, 300)}`);
 }
 
-async function fetchRemoteObject(remote) {
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/${BUCKET}/${remote}`, {
+// allowMissing=true mengembalikan null untuk objek yang benar-benar tidak ada (404/400).
+async function fetchRemoteObject(remote, { allowMissing = false } = {}) {
+  const safe = assertSafeRemotePath(remote);
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/authenticated/${BUCKET}/${safe}`, {
     headers: { Authorization: `Bearer ${SERVICE_KEY}`, apikey: SERVICE_KEY },
   });
-  if (!res.ok) throw new Error(`Unduh ${remote} gagal: HTTP ${res.status}`);
+  if (allowMissing && (res.status === 404 || res.status === 400)) return null;
+  if (!res.ok) throw new Error(`Unduh ${safe} gagal: HTTP ${res.status}`);
   return Buffer.from(await res.arrayBuffer());
 }
 
@@ -127,8 +149,22 @@ async function fetchRemoteObject(remote) {
 async function verifyRemote(remote, localSha, localSize) {
   const buffer = await fetchRemoteObject(remote);
   if (buffer.length !== localSize) throw new Error(`Ukuran objek ${remote} tidak cocok (${buffer.length} != ${localSize}).`);
-  const digest = crypto.createHash('sha256').update(buffer).digest('hex');
+  const digest = sha256Hex(buffer);
   if (digest !== localSha) throw new Error(`Checksum objek ${remote} tidak cocok.`);
+}
+
+// Idempoten dan aman: object data yang sudah ada tidak pernah ditimpa isi berbeda.
+async function ensureUploaded(remote, localFile, sha, size, contentType) {
+  const existing = await fetchRemoteObject(remote, { allowMissing: true });
+  if (existing) {
+    if (existing.length === size && sha256Hex(existing) === sha) {
+      log('backup_object_already_present', { key: remote });
+      return;
+    }
+    throw new Error(`Objek remote ${remote} sudah ada dengan isi berbeda; menolak menimpa.`);
+  }
+  await uploadObject(remote, localFile, { contentType });
+  await verifyRemote(remote, sha, size);
 }
 
 // Menelusuri objek backup secara rekursif (folder bertingkat) + paginasi.
@@ -156,20 +192,7 @@ async function listRemoteObjects(prefix, out = []) {
   return out;
 }
 
-// Tanggal cutoff retensi dalam zona Asia/Jakarta (today - retention days).
-function cutoffDate(today = date) {
-  const d = new Date(`${today}T00:00:00.000Z`);
-  d.setUTCDate(d.getUTCDate() - retention);
-  return jakartaDateString(d);
-}
-function ageExceedsRetention(dateStr) {
-  return dateStr < cutoffDate();
-}
-
-function backupDateOf(objectPath) {
-  const match = objectPath.match(/(\d{4}-\d{2}-\d{2})/);
-  return match ? match[1] : null;
-}
+// Retensi: object tanpa tanggal backup tidak dihapus otomatis (lihat ageExceedsRetention).
 
 async function cleanupLocal() {
   const deleted = [];
@@ -179,13 +202,10 @@ async function cleanupLocal() {
     for (const entry of entries) {
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) await walk(full);
-      else {
-        const d = backupDateOf(entry.name);
-        if (d && ageExceedsRetention(d)) {
-          await fs.unlink(full);
-          deleted.push(path.relative(root, full).replaceAll('\\', '/'));
-          log('backup_retention_deleted_local', { file: path.relative(root, full) });
-        }
+      else if (ageExceedsRetention(entry.name, date, retention)) {
+        await fs.unlink(full);
+        deleted.push(path.relative(root, full).replaceAll('\\', '/'));
+        log('backup_retention_deleted_local', { file: path.relative(root, full) });
       }
     }
   }
@@ -202,8 +222,7 @@ async function cleanupRemote() {
   for (const prefix of ['mysql', 'uploads', 'manifests']) {
     const objects = await listRemoteObjects(prefix);
     for (const objectPath of objects) {
-      const d = backupDateOf(objectPath);
-      if (d && ageExceedsRetention(d)) toDelete.push(objectPath);
+      if (ageExceedsRetention(objectPath, date, retention)) toDelete.push(objectPath);
     }
   }
   if (toDelete.length) {
@@ -297,8 +316,7 @@ if (NO_UPLOAD) {
   try {
     // 1) Upload + verifikasi setiap objek database/uploads.
     for (const [name, obj] of Object.entries(manifest.objects)) {
-      await uploadObject(obj.key, path.join(root, obj.key), 'application/octet-stream');
-      await verifyRemote(obj.key, obj.sha256, obj.size);
+      await ensureUploaded(obj.key, path.join(root, obj.key), obj.sha256, obj.size, 'application/octet-stream');
       log('backup_object_uploaded_verified', { object: name, key: obj.key });
     }
     // 2) Tandai REMOTE_UPLOADED lalu unggah manifest.
@@ -306,7 +324,7 @@ if (NO_UPLOAD) {
     manifest.finishedAt = new Date().toISOString();
     await writeManifest();
     const manifestKey = `manifests/backup-${date}.json`;
-    await uploadObject(manifestKey, manifestPath, 'application/json');
+    await uploadObject(manifestKey, manifestPath, { contentType: 'application/json', upsert: true });
     // 3) Verifikasi manifest remote sebelum menyatakan sukses.
     const remoteManifest = await fetchRemoteObject(manifestKey);
     const parsed = JSON.parse(remoteManifest.toString('utf8'));
@@ -316,7 +334,7 @@ if (NO_UPLOAD) {
     manifest.verifiedAt = new Date().toISOString();
     manifest.finishedAt = manifest.verifiedAt;
     await writeManifest();
-    await uploadObject(manifestKey, manifestPath, 'application/json');
+    await uploadObject(manifestKey, manifestPath, { contentType: 'application/json', upsert: true });
     const finalManifest = JSON.parse((await fetchRemoteObject(manifestKey)).toString('utf8'));
     if (finalManifest.status !== 'REMOTE_VERIFIED') throw new Error(`Manifest remote final tidak terverifikasi: ${finalManifest.status}`);
     log('backup_remote_verified', { manifest: manifestKey, objects: Object.keys(manifest.objects) });
@@ -347,4 +365,6 @@ try {
 } catch (error) {
   console.error(JSON.stringify({ level: 'error', event: 'backup_retention_failed', message: error.message }));
   process.exitCode = 1;
+} finally {
+  await releaseLock();
 }

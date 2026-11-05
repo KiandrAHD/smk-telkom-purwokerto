@@ -6,11 +6,11 @@ import 'dotenv/config';
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { BACKUP_MAGIC, sha256Hex, parseEncryptionKey, keyFingerprint as fingerprintKey } from '../src/utils/backup.js';
 
 const root = path.resolve(process.env.BACKUP_DIR || 'backups');
-const key = Buffer.from(process.env.BACKUP_ENCRYPTION_KEY || '', 'base64');
-if (key.length !== 32) throw new Error('BACKUP_ENCRYPTION_KEY harus base64 dari 32 byte (AES-256).');
-const keyFingerprint = crypto.createHash('sha256').update(key).digest('hex').slice(0, 16);
+const key = parseEncryptionKey(process.env.BACKUP_ENCRYPTION_KEY);
+const keyFingerprint = fingerprintKey(key);
 
 const argv = process.argv.slice(2);
 const remote = argv.includes('--remote');
@@ -40,10 +40,10 @@ async function fetchRemote(remoteKey) {
 const results = [];
 for (const [name, object] of Object.entries(manifest.objects || {})) {
   const data = remote ? await fetchRemote(object.key) : await fs.readFile(path.join(root, object.key));
-  const digest = crypto.createHash('sha256').update(data).digest('hex');
+  const digest = sha256Hex(data);
   if (data.length !== object.size) throw new Error(`Ukuran tidak cocok: ${object.key} (${data.length} != ${object.size})`);
   if (digest !== object.sha256) throw new Error(`Checksum tidak cocok: ${object.key}`);
-  if (data.subarray(0, 8).toString() !== 'SMKBACK1') throw new Error(`Header enkripsi tidak valid: ${object.key}`);
+  if (!data.subarray(0, BACKUP_MAGIC.length).equals(BACKUP_MAGIC)) throw new Error(`Header enkripsi tidak valid: ${object.key}`);
   results.push({ name, key: object.key, size: object.size, status: 'PASS' });
 }
 
