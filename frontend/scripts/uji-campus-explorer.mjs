@@ -5,11 +5,11 @@ try {
   const { campusGeometry, clampPan, panLimit, centerCampusPoint, gestureAxis, meaningfulPan, readCampusHint, saveCampusHint, campusHintKey } = await server.ssrLoadModule('/src/utils/campusPan.js');
   const desktop = campusGeometry(1280);
   assert.equal(desktop.width, 1600);
-  assert.ok(Math.abs(desktop.initial - 83 * desktop.width / 3142) < 0.00001);
-  assert.equal(desktop.maximum, 320);
+  assert.equal(desktop.initial, 0); assert.equal(desktop.inset, 83 * desktop.unit);
+  assert.ok(Math.abs(desktop.maximum - (320 - 125 * desktop.unit)) < 1e-9);
   assert.equal(desktop.height, 1600 * 1314 / 3142);
   const mobile = campusGeometry(390);
-  assert.equal(mobile.width, 960); assert.equal(mobile.maximum, 570);
+  assert.equal(mobile.width, 960); assert.ok(Math.abs(mobile.maximum - (570 - 125 * mobile.unit)) < 1e-9);
   assert.ok(Math.abs(mobile.height / mobile.width - 1314 / 3142) < 0.00001);
   assert.equal(campusGeometry(3840).maximum, 0);
   assert.equal(campusGeometry(3840).initial, 0);

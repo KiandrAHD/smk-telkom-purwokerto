@@ -1,3 +1,4 @@
+import WaveMarquee from '../components/WaveMarquee';
 import PageHeroCarousel from '../components/PageHeroCarousel';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -129,7 +130,7 @@ export default function FasilitasPage() {
   };
 
   return (
-    <MainLayout>
+    <MainLayout showOpeningMarquee={false}>
         <section aria-labelledby="fasilitas-hero-title" className="school-hero hero-container">
           <PageHeroCarousel page="fasilitas"><div className="hero-panel hero-panel--background hero-panel--floating hero-panel--bleed hero-panel--facilities">
             <div className="hero-background relative aspect-[1144/679]">
@@ -166,7 +167,7 @@ export default function FasilitasPage() {
             </div>
           </div>
         </section>
-        <CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} />
+        <div className="campus-tour-composition"><CampusExplorer request={mapRequest} onViewFacilities={viewCampusList} /><WaveMarquee schoolTour /></div>
         <section id="daftar-fasilitas" aria-labelledby="fasilitas-title" className="relative isolate scroll-mt-28 bg-white py-8 lg:py-12">
         {['right', 'left'].map(side => <div key={side} aria-hidden="true" className={`facility-chain facility-chain--${side}`} />)}
           <div className="facility-content mx-auto max-w-[1644px]">
