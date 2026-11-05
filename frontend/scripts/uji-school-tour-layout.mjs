@@ -72,7 +72,7 @@ try {
     }
   }
   await page.setViewportSize({ width: 1440, height: 1100 });
-  for (const [key, redX, handleX] of [['Home', 330, 539], ['End', 1082, 1291]]) {
+  for (const [key, redX, handleX] of [['Home', 330, 539], ['End', 1086, 1295]]) {
     await slider(page).press(key);
     await page.waitForTimeout(100);
     const measured = await page.locator('.campus-range').evaluate(range => {
