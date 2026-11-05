@@ -25,7 +25,7 @@ export default function InnovationReveal() {
       // A remount or media change must not inherit an offscreen or hidden reel.
       gsap.set(track, { x: 0, y: 0, xPercent: 0, yPercent: 0, opacity: 1, visibility: 'visible' });
       const reel = gsap.timeline({ repeat: -1, paused: true })
-        .to(track, { xPercent: -100, duration: 1.2, ease: 'power1.inOut' }, 1.8)
+        .to(track, { xPercent: -100, duration: 2.4, ease: 'power1.inOut' }, 1.8)
         .set(track, { xPercent: 0 });
       let visible = false;
 
