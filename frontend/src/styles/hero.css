@@ -15,7 +15,7 @@
 .hero-panel:where(:not(.hero-panel--detail)) .hero-copy > a, .hero-panel:where(:not(.hero-panel--detail)) .hero-copy > div > a { font-size: var(--text-figma-label); font-weight: 600; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
 .hero-panel:where(:not(.hero-panel--detail)) .hero-copy > div > a + a { font-weight: 700; }
 .hero-panel:where(:not(.hero-panel--detail)) .hero-copy [data-hero-badges] span { font-size: clamp(.625rem, .746cqw, .8125rem); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
-.hero-panel--school .hero-copy [aria-current="page"] { font-family: var(--font-inter); font-size: .625rem; font-weight: 800; line-height: normal; letter-spacing: .12em; }
+:is(.hero-panel--school, .hero-panel--teachers, .hero-panel--facilities, .hero-panel--activities) .hero-copy [aria-current="page"] { font-family: var(--font-inter); font-size: .625rem; font-weight: 800; line-height: normal; letter-spacing: .12em; }
 .hero-panel--school .hero-copy :is(h1, h2) { font-size: clamp(1.75rem, 3.157cqw, 3.4375rem); }
 .hero-panel--school .hero-copy > p, .hero-panel--teachers .hero-copy > p { font-size: var(--text-figma-body); }
 .hero-panel--teachers .hero-copy :is(h1, h2), .hero-panel--activities .hero-copy :is(h1, h2) { font-family: var(--font-poppins); font-size: clamp(1.75rem, 3.674cqw, 4rem); font-weight: 600; }
