@@ -14,7 +14,7 @@
 .site-footer .footer-brand-name { font-family: var(--font-jakarta); font-size: clamp(1rem, 2.172cqw, 2.25rem); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-heading); }
 .site-footer .footer-link-heading { font-family: var(--font-jakarta); font-size: clamp(.875rem, 1.207cqw, 1.25rem); font-weight: 800; line-height: normal; }
 .site-footer .footer-link-list, .site-footer .footer-link-list a, .site-footer .footer-contact-list, .site-footer .footer-tagline { font-size: clamp(.75rem, .966cqw, 1rem); font-weight: 500; line-height: 1.5625; }
-.footer-bottom-bar > div { font-size: clamp(.6875rem, .966cqw, 1rem); font-weight: 400; line-height: normal; }
+.footer-bottom-bar > div > * { font-size: clamp(.6875rem, .966cqw, 1rem); font-weight: 400; line-height: normal; }
 
 .figma-cta { container-type: inline-size; }
 .figma-cta h2 { font-size: clamp(1.125rem, 2.365cqw, 2.25rem); font-weight: 700; line-height: normal; }
