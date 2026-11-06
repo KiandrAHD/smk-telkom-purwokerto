@@ -6,6 +6,8 @@ The active Latin stylesheet registers the original Jakarta variable font as 200â
 
 Downloaded from the Google Fonts CSS2 response used by the application on 2026-10-03. Original WOFF2 bytes remain unchanged. The active `font-faces-optimized.css` declares the verified variable ranges and static weights; `font-faces.css` preserves the complete original subset catalog.
 
+The four program detail frames use Arimo for their overview. The original Arimo v36 Latin files provide normal 400â€“700 and bold italic 700. Their font faces are declared in the stylesheet for program detail pages and use the [Arimo license](Arimo-OFL.txt).
+
 `sources.json` records original gstatic URLs and SHA-256 hashes. Each family retains its SIL Open Font License in the adjacent `*-OFL.txt`. Binary font files are served separately by Vite: unused subsets and weights are not embedded into the critical stylesheet. The shared HTML entry preloads only the canonical Jakarta Latin face.
 
 These files are intentional runtime assets, including the subsets that are not requested by the current Indonesian/English homepage. Preserve them when cleaning assets; removing them changes the original glyph coverage.

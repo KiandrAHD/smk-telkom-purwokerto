@@ -1,3 +1,23 @@
+@font-face {
+  font-family: Arimo;
+  src: url('../assets/fonts/arimo-v36-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Arimo;
+  src: url('../assets/fonts/arimo-v36-latin-bold-italic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+.detail-jurusan-overview { font-family: Arimo, Arial, sans-serif; }
+.detail-jurusan-content h2 { font-family: var(--font-poppins); font-size: clamp(1.25rem, calc(min(100vw, 80rem) * .02755), 3rem); font-weight: 700; line-height: normal; letter-spacing: var(--tracking-figma-heading); }
+.hero-panel--detail [data-hero-badges] span { font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
+
 /* The four Figma hero photographs are separate from the transparent red wave. */
 .hero-panel--detail { --hero-media-width: 50%; }
 .hero-panel--detail .detail-hero-art { aspect-ratio: 445 / 347; }

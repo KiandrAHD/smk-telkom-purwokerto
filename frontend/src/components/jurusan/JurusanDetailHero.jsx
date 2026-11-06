@@ -30,15 +30,15 @@ export default function JurusanDetailHero({ item, design }) {
               <HeroBadges />
             </Reveal>
             <Reveal className="delay-100">
-              <h1 id="jurusan-detail-title" className="mt-3 max-w-[26rem] font-heading text-2xl font-extrabold leading-tight tracking-tight text-dark-900 sm:text-3xl lg:text-[1.75rem] xl:text-[2rem]">
+              <h1 id="jurusan-detail-title" className="mt-3 max-w-[26rem] font-heading text-2xl font-extrabold leading-[normal] tracking-figma-heading text-dark-900 sm:text-3xl lg:text-[1.75rem] xl:text-[2rem]">
                 {name.slice(0, lastSpace)}<br />
                 {name.slice(lastSpace + 1)} <span className="text-primary">({design.code})</span>
               </h1>
-              <p className="mt-4 max-w-md text-xs leading-relaxed text-dark-500 sm:text-sm lg:text-xs">{t(design.description)}</p>
+              <p className="mt-4 max-w-md text-xs font-medium leading-[normal] tracking-figma-copy text-dark-500 sm:text-sm lg:text-xs">{t(design.description)}</p>
             </Reveal>
             <Reveal className="mt-5 grid grid-cols-2 gap-x-3 gap-y-4 xl:grid-cols-4 delay-200">
               {features.map(([Icon, label], index) => (
-                <div key={label} className={`flex min-w-0 flex-col gap-2 text-[11px] font-medium leading-relaxed text-dark-600 ${index < features.length - 1 ? 'xl:border-r xl:border-dark-200 xl:pr-2' : ''}`}>
+                <div key={label} className={`flex min-w-0 flex-col gap-2 text-[11px] font-medium leading-[normal] tracking-figma-copy text-dark-600 ${index < features.length - 1 ? 'xl:border-r xl:border-dark-200 xl:pr-2' : ''}`}>
                   <span className="flex size-9 items-center justify-center rounded-full bg-primary-50">
                     <Icon aria-hidden="true" className="size-5 text-primary" />
                   </span>
@@ -47,8 +47,8 @@ export default function JurusanDetailHero({ item, design }) {
               ))}
             </Reveal>
             <Reveal className="mt-6 flex flex-wrap gap-3 delay-200">
-              <Link to={OFFICIAL_ADMISSIONS_URL} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-semibold text-white transition-colors hover:bg-primary-800">{t('Masuk SPMB')}<ArrowRight aria-hidden="true" className="size-4" /></Link>
-              <a href="#fasilitas-jurusan" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dark-200 bg-white px-5 py-3 text-xs font-semibold text-dark-700 transition-colors hover:border-primary hover:text-primary">{t('Lihat Fasilitas')}<ArrowRight aria-hidden="true" className="size-4" /></a>
+              <Link to={OFFICIAL_ADMISSIONS_URL} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-semibold leading-[normal] tracking-figma-copy text-white transition-colors hover:bg-primary-800">{t('Masuk SPMB')}<ArrowRight aria-hidden="true" className="size-4" /></Link>
+              <a href="#fasilitas-jurusan" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-dark-200 bg-white px-5 py-3 text-xs font-bold leading-[normal] tracking-figma-copy text-dark-700 transition-colors hover:border-primary hover:text-primary">{t('Lihat Fasilitas')}<ArrowRight aria-hidden="true" className="size-4" /></a>
             </Reveal>
           </div>
           <div className="hero-background detail-hero-art">
