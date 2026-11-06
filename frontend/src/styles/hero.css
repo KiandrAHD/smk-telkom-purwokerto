@@ -10,17 +10,17 @@
 .hero-panel { position: relative; aspect-ratio: auto; border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent); border-radius: var(--hero-radius); background: white; padding: .75rem; }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: stretch; }
 .hero-copy { min-width: 0; position: relative; z-index: 10; padding: 1.5rem .75rem; }
-.hero-copy h1, .hero-copy h2 { overflow-wrap: anywhere; font-family: var(--font-jakarta); font-size: var(--text-figma-page); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-heading); }
-.hero-copy > p { font-size: clamp(.75rem, .804cqw, .875rem); font-weight: 500; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
-.hero-copy > a, .hero-copy > div > a { font-size: clamp(.75rem, .861cqw, .9375rem); font-weight: 600; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
-.hero-copy > div > a + a { font-weight: 700; }
-.hero-copy [data-hero-badges] span { font-size: clamp(.625rem, .746cqw, .8125rem); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
+.hero-panel:not(.hero-panel--detail) .hero-copy h1, .hero-panel:not(.hero-panel--detail) .hero-copy h2 { overflow-wrap: anywhere; font-family: var(--font-jakarta); font-size: var(--text-figma-page); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-heading); }
+.hero-panel:not(.hero-panel--detail) .hero-copy > p { font-size: clamp(.75rem, .804cqw, .875rem); font-weight: 500; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
+.hero-panel:not(.hero-panel--detail) .hero-copy > a, .hero-panel:not(.hero-panel--detail) .hero-copy > div > a { font-size: clamp(.75rem, .861cqw, .9375rem); font-weight: 600; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
+.hero-panel:not(.hero-panel--detail) .hero-copy > div > a + a { font-weight: 700; }
+.hero-panel:not(.hero-panel--detail) .hero-copy [data-hero-badges] span { font-size: clamp(.625rem, .746cqw, .8125rem); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
 .hero-panel--school .hero-copy [aria-current="page"] { font-family: var(--font-inter); font-size: .625rem; font-weight: 800; line-height: normal; letter-spacing: .12em; }
-.hero-panel--school .hero-copy h1 { font-size: clamp(1.75rem, 3.157cqw, 3.4375rem); }
+.hero-panel--school .hero-copy :is(h1, h2) { font-size: clamp(1.75rem, 3.157cqw, 3.4375rem); }
 .hero-panel--school .hero-copy > p, .hero-panel--teachers .hero-copy > p { font-size: clamp(.875rem, .918cqw, 1rem); }
-.hero-panel--teachers .hero-copy h1, .hero-panel--activities .hero-copy h1 { font-family: var(--font-poppins); font-size: clamp(1.75rem, 3.674cqw, 4rem); font-weight: 600; }
+.hero-panel--teachers .hero-copy :is(h1, h2), .hero-panel--activities .hero-copy :is(h1, h2) { font-family: var(--font-poppins); font-size: clamp(1.75rem, 3.674cqw, 4rem); font-weight: 600; }
 .hero-panel--activities .hero-copy > p { font-family: var(--font-poppins); font-size: clamp(.875rem, 1.148cqw, 1.25rem); font-weight: 400; letter-spacing: .05em; }
-.hero-panel--calendar .hero-copy h1 { font-family: var(--font-poppins); font-weight: 600; }
+.hero-panel--calendar .hero-copy :is(h1, h2) { font-family: var(--font-poppins); font-weight: 600; }
 .hero-grid > .hero-image, .hero-media { width: 100%; min-height: 0; aspect-ratio: 1208 / 679; border-radius: 1.75rem; overflow: hidden; }
 .hero-image { display: block; object-fit: cover; object-position: center; }
 .hero-media > .hero-image { position: absolute; inset: 0; width: 100%; height: 100%; }
