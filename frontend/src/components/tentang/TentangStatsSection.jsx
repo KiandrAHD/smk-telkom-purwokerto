@@ -31,7 +31,7 @@ const TentangStatsSection = () => {
   return (
         <div
           ref={ref}
-          className="hero-floating hero-floating--stats"
+          className="hero-floating hero-floating--stats [container-type:inline-size]"
         >
           <div className="grid grid-cols-2 gap-y-1 px-2 py-2 sm:px-3 lg:grid-cols-4 lg:divide-x lg:divide-dark-100 lg:py-3">
             {aboutStats.map((stat) => {
@@ -42,10 +42,10 @@ const TentangStatsSection = () => {
                     <Icon aria-hidden="true" className="h-4 w-4 text-white sm:h-5 sm:w-5" />
                   </span>
                   <div className="min-w-0">
-                    <p className="font-heading text-xl font-extrabold text-dark-900">
+                    <p className="font-heading text-[clamp(1.25rem,2.296cqw,2.5rem)] font-extrabold tracking-[.05em] text-dark-900">
                       <CountUp value={stat.value} run={visible} duration={900} />
                     </p>
-                    <p className="text-[10px] leading-relaxed text-dark-500 sm:text-[11px]">{t(stat.label)}</p>
+                    <p className="text-[clamp(.625rem,1.148cqw,1.25rem)] font-medium tracking-[.08em] leading-normal text-dark-500">{t(stat.label)}</p>
                   </div>
                 </div>
               );

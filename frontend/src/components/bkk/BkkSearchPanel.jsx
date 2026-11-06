@@ -6,7 +6,7 @@ import companyOutline from '../../assets/bkk/search/company-outline.png';
 import talentImage from '../../assets/bkk/search/talent.png';
 import talentPhoto from '../../assets/bkk/search/talent-photo.png';
 
-const controlClass = 'h-11 w-full min-w-0 rounded-md border border-dark-400 bg-white px-3 text-xs text-dark-700 outline-none placeholder:text-dark-600 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 lg:h-12';
+const controlClass = 'h-11 w-full min-w-0 rounded-md border border-dark-400 bg-white px-3 text-[12.47px] font-semibold leading-[normal] tracking-[.08em] text-dark-700 outline-none placeholder:text-dark-600 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 lg:h-12';
 
 const BkkSearchPanel = ({ talent = false, items, filters, onChange, onSubmit, resultsId }) => {
   const { t } = useLanguage();
@@ -49,7 +49,7 @@ const BkkSearchPanel = ({ talent = false, items, filters, onChange, onSubmit, re
             </div>
           )}
         </div>
-        <h2 id={`${id}-title`} className="min-w-0 break-words pb-1 font-heading text-lg font-extrabold leading-snug tracking-wide text-dark-900 sm:text-2xl lg:text-[28px]">
+        <h2 id={`${id}-title`} className="min-w-0 break-words pb-1 font-heading text-lg font-extrabold leading-[normal] tracking-[.05em] text-dark-900 sm:text-2xl lg:text-[27.72px]">
           {headingStart}<span className="text-primary">{accent}</span>{headingEnd}
         </h2>
       </div>
@@ -62,7 +62,7 @@ const BkkSearchPanel = ({ talent = false, items, filters, onChange, onSubmit, re
         {select('lokasi', 'Lokasi', lokasiOptions)}
         {select('kategori', 'Kategori', categories)}
         {select('tipe', 'Tipe Pekerjaan', tipeOptions)}
-        <button type="submit" aria-controls={resultsId} className="min-h-11 rounded-md bg-primary px-4 py-3 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:min-h-12">
+        <button type="submit" aria-controls={resultsId} className="min-h-11 rounded-md bg-primary px-4 py-3 text-[16.63px] font-semibold leading-[normal] tracking-[.08em] text-white transition-colors hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:min-h-12">
           {t(talent ? 'Cari Talenta' : 'Cari Lowongan')}
         </button>
       </form>
@@ -70,7 +70,7 @@ const BkkSearchPanel = ({ talent = false, items, filters, onChange, onSubmit, re
       <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1" role="group" aria-label={t('Kategori')}>
         {['', ...categories].map((category) => (
           <button key={category} type="button" aria-pressed={filters.kategori === category} aria-controls={resultsId} onClick={() => onChange({ ...filters, kategori: category })} className="group min-h-11 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-            <span className={`block rounded-full border px-3 py-1.5 text-xs font-semibold tracking-wider transition-colors ${filters.kategori === category ? 'border-primary bg-primary text-white' : 'border-dark-300 bg-white text-dark-600 group-hover:border-primary group-hover:text-primary'}`}>
+            <span className={`block rounded-full border px-3 py-1.5 leading-[normal] font-semibold tracking-[.12em] ${category ? 'text-[13.86px]' : 'text-[16.63px]'} transition-colors ${filters.kategori === category ? 'border-primary bg-primary text-white' : 'border-dark-300 bg-white text-dark-600 group-hover:border-primary group-hover:text-primary'}`}>
               {t(category || 'Semua')}
             </span>
           </button>

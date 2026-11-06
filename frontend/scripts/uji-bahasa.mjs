@@ -52,6 +52,7 @@ try {
   const { default: FormInput } = await server.ssrLoadModule('/src/components/dashboard/FormInput.jsx');
   const { default: Navbar } = await server.ssrLoadModule('/src/components/Navbar.jsx');
   const { default: RibbonDivider } = await server.ssrLoadModule('/src/components/RibbonDivider.jsx');
+  const { default: WaveMarquee } = await server.ssrLoadModule('/src/components/WaveMarquee.jsx');
   const { default: Footer } = await server.ssrLoadModule('/src/components/Footer.jsx');
   const { default: Teachers } = await server.ssrLoadModule('/src/components/tentang/TentangKepalaSekolahSection.jsx');
   const value = { language: 'en', locale: 'en-US', t: (text, vars) => translate(text, 'en', vars), setLanguage: () => {} };
@@ -70,9 +71,10 @@ try {
   assert.ok(nav.includes('Switch to Indonesian'));
   const staticRibbon = render(createElement(RibbonDivider));
   assert.ok(staticRibbon.includes('ribbon-divider.png'));
-  assert.ok(!staticRibbon.includes('beranda-ribbon-track'), 'Shared ribbon stays static by default.');
-  const animatedRibbon = render(createElement(RibbonDivider, { animated: true }));
-  assert.equal((animatedRibbon.match(/class="beranda-ribbon-group /g) ?? []).length, 2, 'Only the explicit Beranda variant repeats for a seamless loop.');
+  assert.ok(!staticRibbon.includes('data-wave-marquee'), 'The decorative ribbon stays static.');
+  const waveMarquee = render(createElement(WaveMarquee));
+  assert.match(waveMarquee, /data-wave-marquee/);
+  assert.ok((waveMarquee.match(/<textPath data-wave-text/g) ?? []).length > 1, 'The shared wave repeats its text for a seamless loop.');
   const footer = render(createElement(Footer));
   assert.equal((footer.match(/class="footer-accent"/g) ?? []).length, 8);
   assert.ok(footer.includes('Staff &amp; Admin Access'));

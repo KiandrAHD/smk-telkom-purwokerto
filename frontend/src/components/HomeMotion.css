@@ -1,17 +1,9 @@
-@font-face {
-  font-family: 'Home Motion Jakarta';
-  font-style: normal;
-  font-weight: 600 800;
-  font-display: swap;
-  src: url('../assets/fonts/plusjakartasans-v12-LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2') format('woff2');
-}
-
 .home-wave { padding-block: 1rem; }
 .home-wave-canvas {
   display: block;
   width: max(100%, 900px);
   height: auto;
-  font-family: 'Home Motion Jakarta', var(--font-sans);
+  font-family: var(--font-jakarta);
   font-size: 48px;
   font-weight: 800;
   fill: white;
@@ -19,12 +11,13 @@
 .home-wave:not([data-ready='true']) .home-wave-canvas { visibility: hidden; }
 
 .home-innovation { padding-block: clamp(1.5rem, 4vw, 4rem) clamp(3rem, 6vw, 6rem); }
+.home-innovation > div { container-type: inline-size; }
 .home-innovation-title {
-  font-family: 'Home Motion Jakarta', var(--font-sans);
+  font-family: var(--font-jakarta);
   font-weight: 600;
-  font-size: clamp(1.5rem, 4.3vw, 4rem);
-  line-height: 1.45;
-  letter-spacing: -0.035em;
+  font-size: var(--text-figma-display);
+  line-height: normal;
+  letter-spacing: 0;
   color: #000;
 }
 .home-innovation-line { display: flex; flex-wrap: wrap; align-items: center; column-gap: .22em; }
@@ -44,7 +37,7 @@
   background: #cd091d;
   color: white;
   white-space: nowrap;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 .home-innovation-size { display: block; visibility: hidden; }
 .home-innovation-window { position: absolute; inset: 0; overflow: hidden; }
