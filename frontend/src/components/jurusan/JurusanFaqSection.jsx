@@ -13,7 +13,7 @@ const JurusanFaqSection = ({ variant = 'default' }) => {
   const copy = (indonesian, english) => language === 'en' ? english : indonesian;
 
   return (
-    <section id="faq-jurusan" className={`bg-white ${home ? 'py-16 lg:py-24' : 'py-8 lg:py-12'}`}>
+    <section id="faq-jurusan" className={`bg-white ${home ? 'py-16 lg:py-24' : 'jurusan-faq-listing py-8 lg:py-12'}`}>
       <div className={`mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 lg:px-8 ${home ? 'lg:grid-cols-[minmax(0,1fr)_minmax(0,1.95fr)] lg:gap-16' : ''}`}>
         {home && <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/50 bg-primary-50 px-4 py-1 text-xs font-bold uppercase tracking-wide text-primary"><CircleHelp aria-hidden="true" className="size-4" />{copy('Pusat Bantuan', 'Help Center')}</p>
