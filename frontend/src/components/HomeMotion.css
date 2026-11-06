@@ -15,7 +15,7 @@
 .home-innovation-title {
   font-family: var(--font-jakarta);
   font-weight: 600;
-  font-size: clamp(1.5rem, 6.209cqw, 6rem);
+  font-size: var(--text-figma-display);
   line-height: normal;
   letter-spacing: 0;
   color: #000;

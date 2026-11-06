@@ -11,7 +11,7 @@
   --font-heading: 'Poppins', 'Inter', system-ui, sans-serif;
 
   /* Figma roles scale within the existing component containers. */
-  --text-figma-display: clamp(2rem, 5.511cqw, 6rem);
+  --text-figma-display: clamp(1.5rem, 6.209cqw, 6rem);
   --text-figma-page: clamp(1.75rem, 2.755cqw, 3rem);
   --text-figma-section: clamp(1.5rem, 2.296cqw, 2.5rem);
   --text-figma-card: clamp(1rem, 1.378cqw, 1.5rem);
