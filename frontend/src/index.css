@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import './assets/fonts/font-faces-optimized.css';
+@import './styles/typography.css';
 
 @theme {
   --font-jakarta: 'Plus Jakarta Sans', 'Jakarta Fallback', Arial, sans-serif;

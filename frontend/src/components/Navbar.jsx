@@ -81,7 +81,7 @@ const Navbar = () => {
   const currentPage = (href) => location.pathname === href ? 'page' : isSectionRoute(location.pathname, href) ? 'location' : undefined;
 
   const linkClass = (link) =>
-    `relative inline-flex items-center whitespace-nowrap py-1.5 text-[13px] font-medium tracking-[0.08em] transition-colors ${
+    `navbar-link relative inline-flex items-center whitespace-nowrap py-1.5 transition-colors ${
       isActive(link) ? 'text-primary' : 'text-dark-600 hover:text-primary'
     }`;
 
@@ -91,7 +91,7 @@ const Navbar = () => {
     ) : null;
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-[60] w-full bg-white font-sans">
+    <header ref={headerRef} className="site-navbar sticky top-0 z-[60] w-full bg-white font-sans">
       <nav aria-label={t('Navigasi utama')} className="mx-auto max-w-[1440px] px-6 sm:px-8">
         <div className="flex h-16 lg:h-[88px] items-center justify-between gap-3">
           {/* Brand */}
@@ -193,7 +193,7 @@ const Navbar = () => {
             <LanguageToggle />
             <Link
               to={ctaMasukPpdb.href}
-              className="hidden min-[1152px]:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="navbar-cta hidden min-[1152px]:inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-6 py-3 text-white transition-colors hover:bg-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {t(ctaMasukPpdb.label)}
               <ArrowRight className="w-4 h-4" />
