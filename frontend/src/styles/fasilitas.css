@@ -18,7 +18,8 @@
 }
 .facility-filters > button {
   font-family: var(--font-poppins);
-  font-size: clamp(12px, 1.299405vw, 24px);
+  /* Reserve existing button padding at the narrow desktop breakpoint. */
+  font-size: clamp(12px, calc(1.44vw - 2.6px), 24px);
   line-height: normal;
   letter-spacing: .05em;
 }
