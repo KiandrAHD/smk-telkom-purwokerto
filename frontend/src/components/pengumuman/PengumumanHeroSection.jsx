@@ -15,7 +15,7 @@ import { pengumumanHero, pengumumanStats } from '../../data/dummyData';
 const PengumumanHeroSection = () => {
   const { t } = useLanguage();
   return (
-  <section className="school-hero">
+  <section className="school-hero school-hero--announcement">
     <div className="hero-container">
       <PageHeroCarousel page="pengumuman"><div className="hero-panel hero-panel--floating hero-panel--bleed hero-panel--announcement">
         <div className="hero-grid">
