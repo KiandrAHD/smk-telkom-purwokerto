@@ -11,6 +11,17 @@
 .site-navbar .navbar-dropdown-enter a { font-family: var(--font-jakarta); }
 .site-navbar #mobile-nav :is(a, button) { font-weight: 600; line-height: normal; letter-spacing: var(--tracking-figma-copy); }
 
+/* Keep longer English labels inside the existing desktop navigation. */
+@media (min-width: 72rem) and (max-width: 89.999rem) {
+  .site-navbar .navbar-link { font-size: clamp(.75rem, 1.148cqw, .8125rem); }
+  .site-navbar .navbar-cta { font-size: .875rem; }
+  .site-navbar .language-toggle { font-size: .75rem; }
+}
+@media (min-width: 72rem) and (max-width: 79.999rem) {
+  .site-navbar .navbar-link { font-size: .75rem; letter-spacing: var(--tracking-figma-heading); }
+  .site-navbar .navbar-cta { letter-spacing: var(--tracking-figma-label); }
+}
+
 .site-footer .footer-brand-name { font-family: var(--font-jakarta); font-size: clamp(1rem, 2.172cqw, 2.25rem); font-weight: 800; line-height: normal; letter-spacing: var(--tracking-figma-heading); }
 .site-footer .footer-link-heading { font-family: var(--font-jakarta); font-size: clamp(.875rem, 1.207cqw, 1.25rem); font-weight: 800; line-height: normal; }
 .site-footer .footer-link-list, .site-footer .footer-link-list a, .site-footer .footer-contact-list, .site-footer .footer-tagline { font-size: clamp(.75rem, .966cqw, 1rem); font-weight: 500; line-height: 1.5625; }
