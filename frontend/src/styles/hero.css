@@ -65,6 +65,9 @@
   .hero-panel.hero-grid { min-height: var(--hero-height); }
   .hero-grid { min-height: calc(var(--hero-height) - 2rem - 2px); grid-template-columns: minmax(0, 38fr) minmax(0, 62fr); gap: 1rem; }
   .hero-copy { padding: 1rem; }
+  /* Scale these titles to the existing copy column so the source line breaks and stats fit. */
+  .hero-panel--students .hero-copy :is(h1, h2) { font-size: clamp(1.5rem, 2.5cqw, 3rem); }
+  .hero-panel--activities .hero-copy :is(h1, h2) { font-size: clamp(1.5rem, 2.9cqw, 4rem); }
   .hero-panel--floating .hero-copy { padding-bottom: 3rem; }
   .hero-grid > .hero-image, .hero-media { height: 100%; min-height: 0; aspect-ratio: auto; }
   .hero-grid > .hero-image { max-height: calc(var(--hero-height) - 2rem - 2px); }
