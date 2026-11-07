@@ -155,7 +155,7 @@ export const navLinks = [
 export const ctaMasukPpdb = { label: 'Masuk SPMB', href: OFFICIAL_ADMISSIONS_URL };
 
 export const landingHero = {
-  hashtags: ['#DigitalSmartSchool', '#GlobalTechnopreneur'],
+  hashtags: ['#NextGen', '#GlobalTechnopreneur'],
   title: 'Bangun Masa Depanmu',
   titleAccent: 'Bersama Teknologi',
   description:
@@ -277,7 +277,7 @@ export const prestasiData = {
 };
 
 export const ekstrakurikulerData = {
-  eyebrow: '#DigitalSmartSchool',
+  eyebrow: '#NextGen',
   title: 'EKSTRAKURIKULER',
   subtitle: 'Eksplorasi Minat & Bakat',
   heroImage: heroEkstrakurikuler,
@@ -386,7 +386,7 @@ export const heroData = {
   ctaText: 'Daftar Sekarang',
   // Panel merah + foto gedung + pill hashtag + 3 poin keunggulan menyatu jadi satu aset Figma.
   image: profilHero,
-  hashtag: '#DigitalSmartSchool',
+  hashtag: '#NextGen',
   badges: [
     {
       title: 'Berinovasi',
@@ -496,7 +496,7 @@ export const timelineData = [
   },
   {
     year: '2023',
-    title: 'Digital Smart School',
+    title: 'Next Gen',
     desc: 'Transformasi digital dalam pembelajaran dan manajemen sekolah.',
   },
   {

@@ -45,7 +45,7 @@ try {
   for (const [id, en] of [['Beranda', 'Home'], ['Tentang', 'About'], ['Profil Sekolah', 'School Profile'], ['Guru', 'Teachers'], ['Ekstrakurikuler', 'Extracurricular Activities'], ['Navigasi jurusan', 'Study Programs'], ['Prestasi', 'Achievements'], ['BKK', 'BKK'], ['Informasi', 'Information'], ['Berita', 'News'], ['Pengumuman', 'Announcements']]) assert.equal(translate(id, 'en'), en);
   const profileTexts = [...aboutStats.map((item) => item.label), ...Object.values(visiMisi), ...timelineData.flatMap((item) => [item.title, item.desc]), kepalaSekolah.quote, kepalaSekolah.quoteFull, kepalaSekolah.ctaText, ctaMasukPpdb.label];
   for (const text of profileTexts) {
-    if (['Digital Smart School', 'AI & Future Ready'].includes(text)) continue;
+    if (['Next Gen', 'AI & Future Ready'].includes(text)) continue;
     assert.notEqual(translate(text, 'en'), text, `Profile English translation missing: ${text}`);
     assert.equal(translate(text, 'id'), text, 'Indonesian content must remain unchanged.');
   }
