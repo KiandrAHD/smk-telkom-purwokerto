@@ -18,6 +18,7 @@ import dot from '../../assets/fasilitas/campus/node-205-1142.svg';
 import sliderLeft from '../../assets/fasilitas/campus/node-205-1164.svg';
 import sliderRight from '../../assets/fasilitas/campus/tour-arrow-right.svg';
 import decor from '../../assets/fasilitas/campus/tour-decor.svg';
+import accent from '../../assets/fasilitas/campus/tour-accent-left.svg';
 import './CampusExplorer.css';
 
 function CampusDecorations() {
@@ -72,10 +73,14 @@ export default function CampusExplorer({ request, onViewFacilities }) {
   }, [request, ready, pan, select]);
   return <section ref={root} id="school-tour" aria-labelledby="school-tour-title" data-campus-explorer className="campus-explorer scroll-mt-28 bg-white" onKeyDown={event => { if (event.key === 'Escape' && active) { event.preventDefault(); close(); } }}>
     <div>
+      <div className="campus-intro relative">
+      <img src={accent} alt="" aria-hidden="true" className="campus-accent campus-accent-left pointer-events-none absolute" />
+      <img src={accent} alt="" aria-hidden="true" className="campus-accent campus-accent-right pointer-events-none absolute" />
       <header className="campus-heading text-center">
         <div className="campus-heading-title flex items-center justify-center"><span aria-hidden="true" className="relative block h-8 w-4"><img src={leftTop} alt="" className="campus-petal-left-top absolute left-0 top-0 size-4" /><img src={leftPetal} alt="" className="campus-petal-left-bottom absolute bottom-0 left-0 size-4" /></span><h2 id="school-tour-title" className="font-heading text-2xl font-extrabold leading-tight text-black sm:text-3xl">School Tour</h2><span aria-hidden="true" className="relative block h-8 w-4"><img src={rightTop} alt="" className="campus-petal-right-top absolute right-0 top-0 size-4" /><img src={rightPetal} alt="" className="campus-petal-right-bottom absolute bottom-0 right-0 size-4" /></span></div>
         <p className="mt-2 text-sm font-semibold text-dark-800">{t('Menjelajahi Stematel')}</p>
       </header>
+      </div>
       <p id="campus-instructions" className="sr-only">{t('Geser peta ke kiri atau kanan. Gunakan tombol arah, slider, atau tombol panah pada keyboard. Pilih titik untuk melihat informasi fasilitas.')}</p>
       <div className="relative mx-auto max-w-7xl">
         {!failed && <div aria-hidden="true" className="campus-scenery pointer-events-none absolute inset-0"><div className="campus-floor absolute"><img src={floor} alt="" /></div><div ref={scenery} className="campus-stage absolute aspect-[3142/1051] w-[960px]"><CampusDecorations /></div></div>}
