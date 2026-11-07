@@ -3,6 +3,14 @@
 .campus-tour-composition { position: relative; width: 100%; overflow-x: clip; --campus-layout-unit: calc(min(100vw,1280px) / 1847); }
 .campus-explorer { position: relative; width: 100%; max-width: 1280px; margin-inline: auto; --campus-control-unit: var(--campus-layout-unit); }
 .campus-heading { position: relative; left: calc(14 * var(--campus-control-unit)); box-sizing: border-box; width: max(256px,calc(663 * var(--campus-control-unit))); min-height: max(76px,calc(197 * var(--campus-control-unit))); margin: 0 auto; padding: max(12px,calc(41 * var(--campus-control-unit))) 12px max(14px,calc(46 * var(--campus-control-unit))); border-radius: max(28px,calc(80 * var(--campus-control-unit))); background: rgb(255 255 255 / .2); box-shadow: 0 0 6px rgb(0 0 0 / .15); }
+.campus-accent { --campus-accent-size: max(112px,calc(401.72 * var(--campus-control-unit))); top: calc(3.77 * var(--campus-control-unit)); width: var(--campus-accent-size); height: var(--campus-accent-size); max-width: none; }
+.campus-accent-left { left: calc(50% - 50vw - var(--campus-accent-size) / 2); }
+.campus-accent-right { right: calc(50% - 50vw - var(--campus-accent-size) / 2); transform: scaleX(-1); }
+.campus-versions { position: relative; left: calc(17 * var(--campus-control-unit)); gap: max(8px,calc(11 * var(--campus-control-unit))); margin-top: max(20px,calc(90 * var(--campus-control-unit))); }
+.campus-version { width: max(132px,calc(385 * var(--campus-control-unit))); min-height: max(44px,calc(110 * var(--campus-control-unit))); padding: 0 8px; border: max(2px,calc(3 * var(--campus-control-unit))) solid var(--color-primary,#cd091d); border-radius: max(28px,calc(80 * var(--campus-control-unit))); background: white; box-shadow: 0 0 6px rgb(0 0 0 / .25); color: var(--color-primary,#cd091d); font-family: var(--font-jakarta); font-size: max(15px,calc(48 * var(--campus-control-unit))); font-weight: 800; letter-spacing: .1em; white-space: nowrap; transition: background-color .2s, color .2s; }
+.campus-version:hover { background: rgb(205 9 29 / .1); }
+.campus-version[aria-pressed="true"] { background: var(--color-primary,#cd091d); color: white; }
+.campus-360 { padding-inline: 1rem; margin-block: max(20px,calc(56 * var(--campus-control-unit))) 2rem; }
 .campus-heading-title { height: max(30px,calc(76 * var(--campus-control-unit))); gap: max(8px,calc(16 * var(--campus-control-unit))); }
 .campus-heading h2 { font-family: var(--font-jakarta); font-size: max(24px,calc(60 * var(--campus-control-unit))); line-height: 1.267; letter-spacing: .1em; }
 .campus-heading p { margin-top: 0; font-family: var(--font-jakarta); font-size: max(14px,calc(36 * var(--campus-control-unit))); font-weight: 800; line-height: .9444; letter-spacing: .05em; color: black; }

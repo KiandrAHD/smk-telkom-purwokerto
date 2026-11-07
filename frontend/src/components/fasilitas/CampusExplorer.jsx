@@ -18,7 +18,12 @@ import dot from '../../assets/fasilitas/campus/node-205-1142.svg';
 import sliderLeft from '../../assets/fasilitas/campus/node-205-1164.svg';
 import sliderRight from '../../assets/fasilitas/campus/tour-arrow-right.svg';
 import decor from '../../assets/fasilitas/campus/tour-decor.svg';
+import accent from '../../assets/fasilitas/campus/tour-accent-left.svg';
 import './CampusExplorer.css';
+
+// Set to an embeddable 360° tour URL (e.g. a Google Street View or Kuula embed) to enable the 360° view.
+const tour360 = import.meta.env.VITE_SCHOOL_TOUR_360_URL?.trim();
+const versions = [['3d', 'Versi 3D'], ['360', 'Versi 360°']];
 
 function CampusDecorations() {
   return <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -31,6 +36,9 @@ function CampusDecorations() {
 export default function CampusExplorer({ request, onViewFacilities }) {
   const { t } = useLanguage();
   const [learned, setLearned] = useState(readCampusHint);
+  const [mode, setMode] = useState('3d'), [seenRequest, setSeenRequest] = useState(request);
+  // A "show on map" request from the facility list always needs the 3D map.
+  if (request !== seenRequest) { setSeenRequest(request); setMode('3d'); }
   const [active, setActive] = useState(null), [closing, setClosing] = useState(false), [ready, setReady] = useState(false), [failed, setFailed] = useState(false), [retry, setRetry] = useState(0), [located, setLocated] = useState(null);
   const root = useRef(null), closeTimer = useRef(null), highlightTimer = useRef(null), lastTrigger = useRef(null), restoringFocus = useRef(false);
   const lastRequest = useRef(null), selectionIntent = useRef(0);
@@ -53,7 +61,7 @@ export default function CampusExplorer({ request, onViewFacilities }) {
       }
     }, reduced() ? 0 : 280);
   };
-  useEffect(() => { pan.refresh(); }, [ready, failed, pan]);
+  useEffect(() => { pan.refresh(); }, [ready, failed, pan, mode]);
   useEffect(() => () => { clearTimeout(closeTimer.current); clearTimeout(highlightTimer.current); }, []);
   useEffect(() => {
     if (!request || !ready || lastRequest.current === request) return;
@@ -72,12 +80,23 @@ export default function CampusExplorer({ request, onViewFacilities }) {
   }, [request, ready, pan, select]);
   return <section ref={root} id="school-tour" aria-labelledby="school-tour-title" data-campus-explorer className="campus-explorer scroll-mt-28 bg-white" onKeyDown={event => { if (event.key === 'Escape' && active) { event.preventDefault(); close(); } }}>
     <div>
+      <div className="campus-intro relative">
+      <img src={accent} alt="" aria-hidden="true" className="campus-accent campus-accent-left pointer-events-none absolute" />
+      <img src={accent} alt="" aria-hidden="true" className="campus-accent campus-accent-right pointer-events-none absolute" />
       <header className="campus-heading text-center">
         <div className="campus-heading-title flex items-center justify-center"><span aria-hidden="true" className="relative block h-8 w-4"><img src={leftTop} alt="" className="campus-petal-left-top absolute left-0 top-0 size-4" /><img src={leftPetal} alt="" className="campus-petal-left-bottom absolute bottom-0 left-0 size-4" /></span><h2 id="school-tour-title" className="font-heading text-2xl font-extrabold leading-tight text-black sm:text-3xl">School Tour</h2><span aria-hidden="true" className="relative block h-8 w-4"><img src={rightTop} alt="" className="campus-petal-right-top absolute right-0 top-0 size-4" /><img src={rightPetal} alt="" className="campus-petal-right-bottom absolute bottom-0 right-0 size-4" /></span></div>
         <p className="mt-2 text-sm font-semibold text-dark-800">{t('Menjelajahi Stematel')}</p>
       </header>
+      <div role="group" aria-label={t('Pilih versi School Tour')} className="campus-versions flex justify-center">
+        {versions.map(([id, label]) => <button key={id} type="button" aria-pressed={mode === id} onClick={() => { if (id !== mode) { close(false); setMode(id); } }} className="campus-version focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{t(label)}</button>)}
+      </div>
+      </div>
       <p id="campus-instructions" className="sr-only">{t('Geser peta ke kiri atau kanan. Gunakan tombol arah, slider, atau tombol panah pada keyboard. Pilih titik untuk melihat informasi fasilitas.')}</p>
-      <div className="relative mx-auto max-w-7xl">
+      {mode === '360' && <div className="campus-360 relative mx-auto max-w-7xl">{tour360
+        ? <iframe src={tour360} title={t('Tur 360° SMK Telkom Purwokerto')} allow="accelerometer; gyroscope; fullscreen; xr-spatial-tracking" allowFullScreen loading="lazy" className="aspect-video w-full rounded-2xl border-0 shadow-card" />
+        : <div role="status" className="flex aspect-video max-h-96 w-full flex-col items-center justify-center gap-3 rounded-2xl bg-dark-50 px-6 text-center text-sm text-dark-500"><p>{t('Tur 360° belum tersedia. Silakan jelajahi sekolah melalui Versi 3D.')}</p><button type="button" onClick={() => setMode('3d')} className="min-h-11 rounded-lg border border-dark-200 px-4 text-xs font-semibold text-primary">{t('Buka Versi 3D')}</button></div>}
+      </div>}
+      <div hidden={mode !== '3d'} className="relative mx-auto max-w-7xl">
         {!failed && <div aria-hidden="true" className="campus-scenery pointer-events-none absolute inset-0"><div className="campus-floor absolute"><img src={floor} alt="" /></div><div ref={scenery} className="campus-stage absolute aspect-[3142/1051] w-[960px]"><CampusDecorations /></div></div>}
         <div ref={viewport} className="campus-viewport relative focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" role="region" aria-label={t('Peta kampus SMK Telkom Purwokerto')} aria-describedby="campus-instructions" tabIndex={ready ? 0 : -1} data-map-ready={ready && !failed} data-map-failed={failed} data-lenis-prevent-horizontal>
           <div ref={stage} data-campus-stage className={failed ? 'relative h-56 w-full' : 'campus-stage relative mx-auto aspect-[3142/1051] w-[960px]'}>
@@ -96,7 +115,7 @@ export default function CampusExplorer({ request, onViewFacilities }) {
           </div>
         </div>
       </div>
-      <div data-map-failed={failed} data-preview-open={active !== null} className="campus-controls relative z-30">
+      <div hidden={mode !== '3d'} data-map-failed={failed} data-preview-open={active !== null} className="campus-controls relative z-30">
         <div className="campus-navigation relative bg-white">
           <button ref={previous} type="button" disabled={!ready} onClick={() => pan.by(-0.45)} aria-label={t('Geser peta ke kiri')} className="grid size-11 shrink-0 place-items-center rounded-full text-primary hover:bg-primary-50 focus-visible:outline-2 focus-visible:outline-primary disabled:text-dark-300"><ArrowLeft className="size-4" /></button>
           <div className="campus-range relative">
