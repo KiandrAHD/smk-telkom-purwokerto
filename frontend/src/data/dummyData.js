@@ -159,7 +159,7 @@ export const landingHero = {
   title: 'Bangun Masa Depanmu',
   titleAccent: 'Bersama Teknologi',
   description:
-    'SMK Telkom Purwokerto mencetak generasi digital yang siap bersaing di dunia industri melalui pembelajaran berbasis teknologi, kreativitas, dan karakter',
+    'SMK Telkom Purwokerto mencetak generasi digital yang siap bersaing di industri lewat teknologi, kreativitas, dan karakter.',
   primaryCta: ctaMasukPpdb,
   secondaryCta: { label: 'Lihat Jurusan', href: '/jurusan' },
   // Panel merah + foto + watermark "TELKOM" sudah menyatu jadi satu aset dari Figma.
