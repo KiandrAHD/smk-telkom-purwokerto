@@ -19,7 +19,7 @@ try {
   assert.deepEqual(learningMethods[1].platforms, ['LMS', 'JUARA', 'LIONS', 'DITA']);
   assert.equal(learningStages.length, 3);
   for (const text of [aboutDescription.title, aboutDescription.text, aboutDescription.ctaText, visiMisi.visi, visiMisi.misi, ...nilaiStematel.map(v => v.desc), ...timelineData.flatMap(v => [v.title, v.desc])]) {
-    if (['Digital Smart School', 'AI & Future Ready'].includes(text)) continue;
+    if (['Next Gen', 'AI & Future Ready'].includes(text)) continue;
     assert.notEqual(translate(text, 'en'), text, `Missing English translation: ${text}`);
   }
   assert.deepEqual(nilaiStematel.map(v => v.title), ['Innovation', 'Character', 'Technology', 'Collaboration']);
