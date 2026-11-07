@@ -3,6 +3,10 @@
   --hero-height: 29rem;
   --hero-overlap: 2.5rem;
   --hero-radius: 2rem;
+  --hero-gap-sm: .625rem;
+  --hero-gap-md: .75rem;
+  --hero-gap-lg: 1.25rem;
+  --hero-clearance: 1.5rem;
   padding-top: 1rem;
   padding-bottom: 1.5rem;
 }
@@ -117,6 +121,12 @@
 }
 .hero-panel--bleed .hero-grid { gap: 0; }
 .hero-panel--bleed .hero-copy { padding: 1.5rem; }
+/* Shared vertical rhythm for the copy column of every full-bleed hero (carousel slides and page heroes). */
+.hero-panel--bleed .hero-copy > nav { margin-bottom: var(--hero-gap-md); }
+.hero-panel--bleed .hero-copy > [data-hero-badges] + :is(h1, h2) { margin-top: var(--hero-gap-md); }
+.hero-panel--bleed .hero-copy > :is(h1, h2) + p { margin-top: var(--hero-gap-sm); }
+.hero-panel--bleed .hero-copy > p + :is(a, div, label), .hero-panel--bleed .hero-copy > label + div { margin-top: var(--hero-gap-lg); }
+.hero-panel--bleed .hero-copy > .grid { row-gap: var(--hero-gap-md); }
 .hero-panel--bleed .hero-image,
 .hero-panel--bleed .hero-media,
 .hero-panel--bleed .hero-background { border-radius: 0; }
@@ -156,8 +166,9 @@
 @media (min-width: 64rem) {
   .hero-panel--bleed { padding: 0; }
   .hero-panel--bleed .hero-grid { min-height: calc(var(--hero-height) - 2px); grid-template-columns: minmax(0, 38fr) minmax(0, 62fr); }
-  .hero-panel--bleed .hero-copy { padding: 2rem; }
-  .hero-panel--bleed.hero-panel--floating .hero-copy { padding-bottom: 4rem; }
+  .hero-panel--bleed .hero-copy { padding: 1.5rem 2rem 2rem; }
+  /* Keep the content clear of the floating cards that overlap the panel's bottom edge. */
+  .hero-panel--bleed:is(.hero-panel--floating, .hero-panel--activities) .hero-copy { padding-bottom: calc(var(--hero-overlap) + var(--hero-clearance)); }
   .hero-panel--facilities .hero-copy { width: 40%; }
   .hero-panel--bleed .hero-grid > .hero-image,
   .hero-panel--bleed .hero-media,

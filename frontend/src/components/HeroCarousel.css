@@ -103,16 +103,13 @@
 .hero-carousel-controls > button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
 @media (max-width: 63.999rem) { .hero-carousel-controls > button { width: 32px; height: 32px; } .hero-carousel-previous { left: -12px; } .hero-carousel-next { right: -12px; } }
 
-/* One type scale for every carousel slide, so titles, copy and CTAs read the same whichever slide is showing.
+/* One type scale for every carousel slide, so titles and copy read the same whichever slide is showing.
    Selectors out-rank the per-page overrides in hero.css (Poppins teachers/activities, larger school/announcement titles).
-   The copy column reserves a fixed number of title and description lines per breakpoint, so the CTA never jumps between slides. */
-.hero-carousel .hero-panel--slide { --hero-title-lines: 3; --hero-copy-lines: 4; }
-.hero-carousel .hero-panel--slide .hero-copy :is(h1, h2) { min-height: calc(var(--hero-title-lines) * 1.2em); font-family: var(--font-jakarta); font-size: clamp(1.625rem, 2.5cqw, 2.75rem); font-weight: 800; line-height: 1.2; letter-spacing: var(--tracking-figma-heading); text-wrap: balance; }
-.hero-carousel .hero-panel--slide .hero-copy > p { min-height: calc(var(--hero-copy-lines) * 1.65em); max-width: 28rem; font-family: var(--font-jakarta); font-size: var(--text-figma-body); font-weight: 500; line-height: 1.65; letter-spacing: var(--tracking-figma-copy); text-wrap: pretty; }
-@media (min-width: 40rem) { .hero-carousel .hero-panel--slide { --hero-title-lines: 2; --hero-copy-lines: 3; } }
+   Vertical rhythm comes from the shared --hero-gap-* tokens in hero.css. */
+.hero-carousel .hero-panel--slide .hero-copy :is(h1, h2) { font-family: var(--font-jakarta); font-size: clamp(1.625rem, 2.5cqw, 2.75rem); font-weight: 800; line-height: 1.2; letter-spacing: var(--tracking-figma-heading); text-wrap: balance; }
+.hero-carousel .hero-panel--slide .hero-copy > p { max-width: 28rem; font-family: var(--font-jakarta); font-size: var(--text-figma-body); font-weight: 500; line-height: 1.65; letter-spacing: var(--tracking-figma-copy); text-wrap: pretty; }
 @media (min-width: 64rem) and (max-width: 79.999rem) {
-  /* The copy column is narrow here: ease the type and reserve a fourth description line. */
-  .hero-carousel .hero-panel--slide { --hero-copy-lines: 4; }
+  /* The copy column is narrow here; ease the type so descriptions stay short. */
   .hero-carousel .hero-panel--slide .hero-copy :is(h1, h2) { font-size: clamp(1.375rem, 2.5cqw, 1.75rem); }
   .hero-carousel .hero-panel--slide .hero-copy > p { font-size: .8125rem; letter-spacing: .08em; }
 }
